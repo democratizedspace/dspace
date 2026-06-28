@@ -1,8 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { buildPromptMetrics } from '../src/utils/promptMetrics.js';
-import { buildFocusedGameDataContext } from '../src/utils/gameDataRetrieval.js';
+import { buildFocusedGameDataContext, __testables } from '../src/utils/gameDataRetrieval.js';
 
 describe('buildFocusedGameDataContext', () => {
+    it('normalizes punctuation, hyphenation, plurals, and DSPACE resource tokens', () => {
+        const { normalize, tokensFor } = __testables();
+
+        expect(normalize('d-Solar / d_Watt, GREEN-PLAs')).toContain('dsolar');
+        expect(tokensFor('BENCHIES and rockets')).toEqual(
+            expect.arrayContaining(['benchy', 'rocket'])
+        );
+        expect(tokensFor('dPrint dLaunch dWatt dSolar')).toEqual(
+            expect.arrayContaining(['dprint', 'dlaunch', 'dwatt', 'dsolar'])
+        );
+    });
+
     it('selects green PLA item and owned state', () => {
         const result = buildFocusedGameDataContext({
             query: 'do I have enough green PLA?',
@@ -60,6 +72,17 @@ describe('buildFocusedGameDataContext', () => {
         expect(result.block).toMatch(/rocket/i);
         expect(result.block).toMatch(/Benchy/i);
         expect(result.block).toMatch(/Consumes:/);
+        expect(result.meta.reasonCodes).toEqual(expect.arrayContaining(['direct-entity-hit']));
+    });
+
+    it('matches common aliases to bounded item and process entities', () => {
+        const benchy = buildFocusedGameDataContext({ query: 'what process makes a benchy?' });
+        const rocket = buildFocusedGameDataContext({ query: 'Can I craft a rocket?' });
+
+        expect(benchy.meta.selectedProcessIds).toContain('3dprint-benchy');
+        expect(benchy.meta.selectedItemIds).toContain('7892ffc6-c651-445f-946b-7edc998cf389');
+        expect(rocket.meta.selectedProcessIds).toContain('3dprint-rocket');
+        expect(rocket.meta.selectedItemIds).toContain('5322b85e-b47d-4ea4-b515-318f91abc7df');
     });
 
     it('matches process inputs and outputs by item names', () => {
@@ -70,6 +93,24 @@ describe('buildFocusedGameDataContext', () => {
         expect(result.block).toContain('Relevant processes:');
         expect(result.meta.selectedProcessIds).toContain('launch-rocket');
         expect(result.block).toContain('dLaunch');
+        expect(result.meta.reasonCodes).toContain('resource-token-hit');
+    });
+
+    it('traverses from process to required, consumed, and created items without broad expansion', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what does 3dprint-benchy consume and create?',
+            options: { maxItems: 8, maxProcesses: 1, maxQuests: 2 },
+        });
+
+        expect(result.meta.selectedProcessIds).toEqual(['3dprint-benchy']);
+        expect(result.meta.selectedItemIds).toEqual(
+            expect.arrayContaining([
+                'd3590107-25ff-4de5-af3a-46e2497bfc52',
+                '7892ffc6-c651-445f-946b-7edc998cf389',
+            ])
+        );
+        expect(result.meta.selectedItemCount).toBeLessThanOrEqual(8);
+        expect(result.block).toContain('Relevant relationships:');
     });
 
     it('selects a preflight quest and reward data', () => {
