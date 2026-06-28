@@ -2,7 +2,63 @@ import { describe, expect, it } from 'vitest';
 import { buildPromptMetrics } from '../src/utils/promptMetrics.js';
 import { buildFocusedGameDataContext } from '../src/utils/gameDataRetrieval.js';
 
+import { __testables } from '../src/utils/gameDataRetrieval.js';
+
 describe('buildFocusedGameDataContext', () => {
+    it('normalizes aliases, resources, punctuation, hyphens, and plurals', () => {
+        const { expandAliases, tokensFor } = __testables();
+
+        expect(expandAliases('GREEN-PLA/benchies')).toContain('green pla filament');
+        expect(tokensFor('dSolar, dWatt, dPrint and dLaunch')).toEqual(
+            expect.arrayContaining(['solar', 'watt', 'print', 'launch'])
+        );
+        expect(tokensFor('BENCHIES')).toContain('benchy');
+    });
+
+    it('traverses from a created item to making processes', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'What process makes a Benchy?',
+            options: { maxProcesses: 3, maxItems: 5, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedProcessIds).toContain('3dprint-benchy');
+        expect(result.meta.reasonCodes).toContain('process-creates-match');
+        expect(result.block).toContain('Relevant relationships:');
+        expect(result.meta.selectedProcessCount).toBeLessThanOrEqual(3);
+    });
+
+    it('traverses from a process to required, consumed, and created items', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'Can I make 3dprint-rocket?',
+            gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 100 } },
+        });
+
+        expect(result.meta.selectedProcessIds).toContain('3dprint-rocket');
+        expect(result.block).toContain('green PLA filament');
+        expect(result.block).toContain('3D printed model rocket');
+        expect(result.block).toContain('Consumes:');
+    });
+
+    it('selects resource token items and matching owned balances', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'How much dSolar and dWatt do I have for dPrint or dLaunch?',
+            gameState: {
+                inventory: {
+                    'b02ecff5-1f7d-4247-a09d-7d6cd6bb218a': 2,
+                    '061fd221-404a-4bd1-9432-3e25b0f17a2c': 50,
+                    '071ba424-3940-4c80-a782-5d7ea4d829ff': 7,
+                    'eb9c2a75-a87a-4171-8bc3-088e75936bcf': 1,
+                },
+            },
+        });
+
+        expect(result.meta.reasonCodes).toContain('resource-token-hit');
+        expect(result.block).toContain('dSolar');
+        expect(result.block).toContain('dWatt');
+        expect(result.block).toContain('dPrint');
+        expect(result.block).toContain('dLaunch');
+    });
+
     it('selects green PLA item and owned state', () => {
         const result = buildFocusedGameDataContext({
             query: 'do I have enough green PLA?',
@@ -113,7 +169,7 @@ describe('buildFocusedGameDataContext', () => {
 
         expect(result.block).toContain('Relevant processes:');
         expect(result.block).toContain('3dprint-rocket');
-        expect(result.meta.reasonCodes).toContain('recent-context-expanded');
+        expect(result.meta.reasonCodes).toContain('followup-entity-carryover');
     });
 
     it('returns achievement state for direct achievement requests without unrelated filler', () => {

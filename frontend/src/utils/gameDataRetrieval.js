@@ -78,19 +78,49 @@ const STOPWORDS = new Set([
 const itemById = new Map(items.map((item) => [item.id, item]));
 const processById = new Map(processes.map((process) => [process.id, process]));
 
+const RESOURCE_ALIASES = ['dUSD', 'dBI', 'dWatt', 'dSolar', 'dPrint', 'dLaunch', 'dWind'];
+const SMALL_ALIASES = new Map([
+    ['benchy', ['benchy calibration model', 'benchy calibration boat']],
+    ['rocket', ['model rocket', '3d printed rocket', '3d print rocket']],
+    ['green pla', ['green pla filament']],
+]);
+
 const normalize = (value) =>
     String(value || '')
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
         .toLowerCase()
         .replace(/[-_/]+/g, ' ')
-        .replace(/[^a-z0-9]+/g, ' ')
+        .replace(/[^a-z0-9]+/gi, ' ')
         .replace(/\s+/g, ' ')
         .trim();
 
+const singularize = (token) => {
+    if (token.endsWith('ies') && token.length > 4) return `${token.slice(0, -3)}y`;
+    if (token.endsWith('es') && token.length > 3) return token.slice(0, -2);
+    if (token.endsWith('s') && token.length > 3) return token.slice(0, -1);
+    return token;
+};
+
+const expandAliases = (value) => {
+    const base = normalize(value);
+    const aliases = [];
+    for (const resource of RESOURCE_ALIASES) {
+        if (new RegExp(`\\b${normalize(resource)}\\b`, 'i').test(base)) aliases.push(resource);
+    }
+    for (const [needle, expansions] of SMALL_ALIASES.entries()) {
+        if (base.includes(needle)) aliases.push(...expansions);
+    }
+    return normalize([base, ...aliases].join(' '));
+};
+
 const tokensFor = (value) =>
-    normalize(value)
+    expandAliases(value)
         .split(' ')
         .filter((token) => token.length >= 2 && !STOPWORDS.has(token))
-        .flatMap((token) => (token.endsWith('ies') ? [token, `${token.slice(0, -3)}y`] : [token]));
+        .flatMap((token) => {
+            const singular = singularize(token);
+            return singular === token ? [token] : [token, singular];
+        });
 
 const truncate = (value, max) => {
     const text = String(value || '')
@@ -147,6 +177,16 @@ const stringifyFields = (value) => {
 
 const itemEntryText = (entries = []) =>
     entries.map((entry) => [stringifyFields(entry), itemName(entry?.id)].join(' ')).join(' ');
+
+const itemIdsFromEntries = (entries = []) =>
+    entries.map((entry) => entry?.id).filter((id) => typeof id === 'string' && id.length > 0);
+
+const processItemIds = (process) =>
+    new Set([
+        ...itemIdsFromEntries(process.requireItems),
+        ...itemIdsFromEntries(process.consumeItems),
+        ...itemIdsFromEntries(process.createItems),
+    ]);
 
 const processText = (process) =>
     [
@@ -249,7 +289,7 @@ export function buildFocusedGameDataContext({
     const vagueFollowup = isVagueProcessQuery(latest) || isVagueEntityFollowup(latest);
     const rewardFollowup =
         isVagueEntityFollowup(latest) && /\b(rewards?|give|gives)\b/i.test(latest);
-    const queryText = normalize(`${latest} ${vagueFollowup ? recent : ''}`);
+    const queryText = expandAliases(`${latest} ${vagueFollowup ? recent : ''}`);
     const queryTokens = [...new Set(tokensFor(queryText))];
     const reasonCodes = [];
 
@@ -285,7 +325,9 @@ export function buildFocusedGameDataContext({
         };
     }
 
-    if (vagueFollowup) reasonCodes.push('recent-context-expanded');
+    if (vagueFollowup) reasonCodes.push('followup-entity-carryover');
+    if (RESOURCE_ALIASES.some((resource) => queryText.includes(normalize(resource))))
+        reasonCodes.push('resource-token-hit');
     if (wantsRemainingQuests(latest)) reasonCodes.push('remaining-quest-state');
     if (wantsInventory(latest)) reasonCodes.push('inventory-summary-request');
     if (achievementIntent) reasonCodes.push('achievement-state-request');
@@ -325,8 +367,68 @@ export function buildFocusedGameDataContext({
         }
         selectedQuests = selectedQuests.slice(0, caps.maxQuests);
     }
+    const addItem = (id, reason) => {
+        const item = itemById.get(id);
+        if (item && !selectedItems.some((entry) => entry.id === id)) {
+            selectedItems.push(item);
+            reasonCodes.push(reason);
+        }
+    };
+    const addProcess = (process, reason) => {
+        if (process && !selectedProcesses.some((entry) => entry.id === process.id)) {
+            selectedProcesses.push(process);
+            reasonCodes.push(reason);
+        }
+    };
+    const addQuest = (quest, reason) => {
+        if (quest && !selectedQuests.some((entry) => entry.id === quest.id)) {
+            selectedQuests.push(quest);
+            reasonCodes.push(reason);
+        }
+    };
+
+    for (const item of selectedItems.slice(0, caps.maxItems)) {
+        for (const process of processes) {
+            const relatedIds = processItemIds(process);
+            if (!relatedIds.has(item.id)) continue;
+            const creates = itemIdsFromEntries(process.createItems).includes(item.id);
+            const consumes = itemIdsFromEntries(process.consumeItems).includes(item.id);
+            addProcess(
+                process,
+                creates
+                    ? 'process-creates-match'
+                    : consumes
+                      ? 'process-consumes-match'
+                      : 'process-requires-match'
+            );
+            if (selectedProcesses.length >= caps.maxProcesses) break;
+        }
+    }
+    for (const process of selectedProcesses.slice(0, caps.maxProcesses)) {
+        for (const id of processItemIds(process)) addItem(id, 'process-item-relationship');
+    }
+    for (const quest of selectedQuests.slice(0, caps.maxQuests)) {
+        for (const prereqId of quest.requiresQuests || [])
+            addQuest(getBuiltInQuest(prereqId), 'quest-prereq-match');
+        for (const reward of [...(quest.rewards || []), ...(quest.rewardItems || [])]) {
+            if (reward?.id) addItem(reward.id, 'quest-reward-match');
+        }
+    }
+    for (const item of selectedItems.slice(0, caps.maxItems)) {
+        for (const quest of questRecords()) {
+            const rewards = [...(quest.rewards || []), ...(quest.rewardItems || [])];
+            if (rewards.some((reward) => reward?.id === item.id))
+                addQuest(quest, 'quest-reward-match');
+        }
+    }
+    selectedItems = selectedItems.slice(0, caps.maxItems);
+    selectedProcesses = selectedProcesses.slice(0, caps.maxProcesses);
+    selectedQuests = selectedQuests.slice(0, caps.maxQuests);
+
+    if (selectedItems.length || selectedProcesses.length || selectedQuests.length)
+        reasonCodes.push('direct-entity-hit');
+
     if (rewardFollowup && selectedQuests.length > 0) {
-        selectedItems = [];
         selectedProcesses = [];
     }
 
@@ -362,6 +464,7 @@ export function buildFocusedGameDataContext({
         .filter(
             (entry) =>
                 wantsInventory(latest) ||
+                selectedItems.some((item) => item.id === entry.id) ||
                 scoreRecord(
                     entry,
                     `${entry.id} ${entry.name} ${itemById.get(entry.id)?.description || ''}`,
@@ -379,10 +482,10 @@ export function buildFocusedGameDataContext({
         caps.maxTotalChars
     );
     if (inventoryEntries.length > 0) {
-        reasonCodes.push('matched-owned-inventory');
+        reasonCodes.push('owned-inventory-hit');
         appendLine(
             lines,
-            `Relevant inventory: ${inventoryEntries.map((e) => `${e.name} [${e.id}]=${formatCount(e.count)}`).join('; ')}`,
+            `Relevant inventory: owned ${inventoryEntries.map((e) => `${e.name} [${e.id}]=${formatCount(e.count)}`).join('; ')}`,
             caps.maxTotalChars
         );
         sources.push({
@@ -456,6 +559,33 @@ export function buildFocusedGameDataContext({
             ...selectedAchievements.map((a) => ({ type: 'achievement', id: a.id, label: a.title }))
         );
     }
+    if (selectedProcesses.length > 0 || selectedQuests.length > 0) {
+        const relationships = [];
+        for (const process of selectedProcesses) {
+            relationships.push(
+                `${process.id}: requires ${formatItemList(process.requireItems) || 'none listed'}; consumes ${formatItemList(process.consumeItems) || 'none listed'}; creates ${formatItemList(process.createItems) || 'none listed'}`
+            );
+        }
+        for (const quest of selectedQuests) {
+            relationships.push(
+                `${quest.id}: prereqs ${(quest.requiresQuests || []).join(', ') || 'none listed'}; rewards ${formatQuestRewards(quest.rewards) || formatItemList(quest.rewardItems) || 'none listed'}`
+            );
+        }
+        appendLine(
+            lines,
+            `Relevant relationships: ${relationships.slice(0, 6).join(' | ')}`,
+            caps.maxTotalChars
+        );
+    }
+    if (vagueFollowup) {
+        appendLine(
+            lines,
+            selectedProcesses.length || selectedQuests.length || selectedItems.length
+                ? 'Relevant follow-up context: entity candidates were recovered from the immediately recent chat only; ask a clarifying question if these do not match the player’s “it/that”.'
+                : 'Relevant follow-up context: no clear prior entity was recovered; ask a clarifying question instead of using broad catalog data.',
+            caps.maxTotalChars
+        );
+    }
     if (
         (wantsRemainingQuests(latest) || playerStateSummary?.slices?.remainingQuests?.length) &&
         selectedQuests.length > 0
@@ -494,5 +624,5 @@ export function buildFocusedGameDataContext({
 }
 
 export function __testables() {
-    return { normalize, tokensFor, scoreRecord };
+    return { normalize, expandAliases, tokensFor, scoreRecord };
 }
