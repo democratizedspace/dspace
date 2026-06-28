@@ -15,6 +15,28 @@ describe('buildFocusedGameDataContext', () => {
         expect(tokensFor('BENCHIES')).toContain('benchy');
     });
 
+    it('matches compact lowercase resource tokens and avoids small-alias substrings', () => {
+        const { expandAliases, tokensFor } = __testables();
+
+        expect(tokensFor('how much dsolar and dwatt do I have?')).toEqual(
+            expect.arrayContaining(['solar', 'watt'])
+        );
+        expect(expandAliases('what quests are in the rocketry category?')).not.toContain(
+            'model rocket'
+        );
+    });
+
+    it('keeps verb tokens intact when singularizing plurals', () => {
+        const { tokensFor } = __testables();
+
+        expect(tokensFor('what process creates or requires boxes')).toEqual(
+            expect.arrayContaining(['creates', 'requires', 'boxes', 'box'])
+        );
+        expect(tokensFor('what process creates or requires boxes')).not.toEqual(
+            expect.arrayContaining(['creat', 'requir'])
+        );
+    });
+
     it('traverses from a created item to making processes', () => {
         const result = buildFocusedGameDataContext({
             query: 'What process makes a Benchy?',
@@ -37,6 +59,27 @@ describe('buildFocusedGameDataContext', () => {
         expect(result.block).toContain('green PLA filament');
         expect(result.block).toContain('3D printed model rocket');
         expect(result.block).toContain('Consumes:');
+    });
+
+    it('selects quests that grant matched items through dialogue options', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what quest gives the NEMA 17 stepper motor pair?',
+            options: { maxQuests: 6, maxItems: 6, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedItemIds).toContain('648aee3c-907e-4cd1-a361-49c4bd771102');
+        expect(result.meta.selectedQuestIds).toContain('energy/solar-tracker');
+        expect(result.block).toContain('NEMA 17 stepper motor pair');
+    });
+
+    it('only emits traversal reason codes for entities kept within caps', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what process makes a Benchy?',
+            options: { maxProcesses: 0, maxItems: 5, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedProcessIds).toEqual([]);
+        expect(result.meta.reasonCodes).not.toContain('process-creates-match');
     });
 
     it('selects resource token items and matching owned balances', () => {
