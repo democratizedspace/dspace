@@ -15,6 +15,45 @@ describe('buildFocusedGameDataContext', () => {
         expect(result.meta.selectedInventoryIds).toContain('d3590107-25ff-4de5-af3a-46e2497bfc52');
     });
 
+    it('normalizes punctuation, plurals, aliases, and resource tokens', () => {
+        const greenPla = buildFocusedGameDataContext({ query: 'Do I have GREEN-PLAs?' });
+        const benchy = buildFocusedGameDataContext({ query: 'what process makes benchies?' });
+        const rocket = buildFocusedGameDataContext({ query: 'can I craft rockets?' });
+        const resource = buildFocusedGameDataContext({ query: 'how do I get dSolar and dWatt?' });
+
+        expect(greenPla.meta.selectedItemIds).toContain('d3590107-25ff-4de5-af3a-46e2497bfc52');
+        expect(benchy.block).toMatch(/Benchy/i);
+        expect(benchy.meta.selectedProcessIds).toContain('3dprint-benchy');
+        expect(rocket.block).toMatch(/rocket/i);
+        expect(resource.block).toMatch(/dSolar|dWatt/);
+        expect(resource.meta.reasonCodes).toContain('resource-token-hit');
+    });
+
+    it('traverses shallow item, process, quest, and owned inventory relationships', () => {
+        const fromItem = buildFocusedGameDataContext({
+            query: 'what can use green PLA filament?',
+            gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 91 } },
+        });
+        const fromProcess = buildFocusedGameDataContext({
+            query: 'what does 3dprint-benchy consume?',
+        });
+        const fromQuest = buildFocusedGameDataContext({
+            query: 'what rewards does preflight check give?',
+        });
+
+        expect(fromItem.meta.selectedProcessIds).toContain('3dprint-rocket');
+        expect(fromItem.block).toContain('Relevant relationships:');
+        expect(fromItem.block).toContain('green PLA filament');
+        expect(fromItem.meta.selectedInventoryIds).toContain(
+            'd3590107-25ff-4de5-af3a-46e2497bfc52'
+        );
+        expect(fromProcess.block).toMatch(/Requires:|Consumes:|Creates:/);
+        expect(fromProcess.block).toMatch(/PLA filament|Benchy/i);
+        expect(fromQuest.meta.selectedQuestIds).toContain('rocketry/preflight-check');
+        expect(fromQuest.block).toMatch(/Rewards:|Reward items:|Prereqs:/);
+        expect(fromItem.meta.selectedProcessCount).toBeLessThanOrEqual(6);
+    });
+
     it('includes bounded owned inventory for pure inventory requests', () => {
         const result = buildFocusedGameDataContext({
             query: 'what do I have?',
