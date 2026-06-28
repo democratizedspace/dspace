@@ -391,6 +391,12 @@ describe('token.place API v1 client', () => {
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
         // Verify full path produces more messages than token-lite's fixed [system, user] pair.
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+        const messages = decrypted.api_v1_request.messages;
+        expect(messages.at(-1)).toMatchObject({
+            role: 'user',
+            content: 'What should I build next?',
+        });
+        expect(messages.at(-2).content).toContain('Answer focus:');
     });
 
     test('default token.place mode includes docs RAG for route questions', async () => {
@@ -408,9 +414,15 @@ describe('token.place API v1 client', () => {
         expect(searchDocsRag).toHaveBeenCalledTimes(1);
         const { body } = getFetchCallByPath('/api/v1/relay/requests');
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
-        const serializedMessages = JSON.stringify(decrypted.api_v1_request.messages);
+        const messages = decrypted.api_v1_request.messages;
+        const serializedMessages = JSON.stringify(messages);
         expect(serializedMessages).toContain('Docs grounding canary for gamesaves.');
-        expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+        expect(messages.length).toBeGreaterThan(2);
+        expect(messages.at(-1)).toMatchObject({
+            role: 'user',
+            content: 'where do I import a gamesave?',
+        });
+        expect(messages.at(-2).content).toContain('Answer focus:');
     });
 
     test('token-lite setting sends a tiny decrypted API v1 message set', async () => {
