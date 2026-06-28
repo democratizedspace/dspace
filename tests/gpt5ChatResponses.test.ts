@@ -115,7 +115,7 @@ describe('gpt-5 chat responses integration', () => {
 
     const payload = JSON.parse(init?.body ?? '{}');
     expect(payload.model).toBe('gpt-5.2');
-    expect(payload.input).toHaveLength(4);
+    expect(payload.input).toHaveLength(5);
     expect(payload.input[0].role).toBe('system');
     if (!dchatPersona) {
       throw new Error('Expected to find the default dChat persona');
@@ -126,7 +126,9 @@ describe('gpt-5 chat responses integration', () => {
     expect(payload.input[1].content[0].text).toContain('PlayerState');
     expect(payload.input[2].role).toBe('system');
     expect(payload.input[2].content[0].text).toContain('Quest facts');
-    expect(payload.input[3]).toEqual({
+    expect(payload.input[3].role).toBe('system');
+    expect(payload.input[3].content[0].text).toContain('Answer the final user message directly.');
+    expect(payload.input[4]).toEqual({
       role: 'user',
       content: [
         {
