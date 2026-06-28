@@ -85,7 +85,8 @@ describe('buildDchatKnowledgePack', () => {
 
         expect(highlights).toContain('compact bounded live-state highlights');
         expect((highlights?.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
-        expect((pack.summary.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
+        expect(pack.focusedGameData?.selectedInventoryCount).toBeLessThanOrEqual(8);
+        expect((pack.summary.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(24);
     });
 
     it('does not add arbitrary live inventory highlights for unrelated progress questions', () => {

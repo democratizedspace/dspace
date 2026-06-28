@@ -45,7 +45,6 @@ const STOPWORDS = new Set([
     'items',
     'inventory',
     'about',
-    'that',
     'would',
     'want',
     'need',
@@ -146,14 +145,17 @@ const stringifyFields = (value) => {
     return '';
 };
 
+const itemEntryText = (entries = []) =>
+    entries.map((entry) => [stringifyFields(entry), itemName(entry?.id)].join(' ')).join(' ');
+
 const processText = (process) =>
     [
         process.id,
         process.title,
         process.description,
-        stringifyFields(process.requireItems),
-        stringifyFields(process.consumeItems),
-        stringifyFields(process.createItems),
+        itemEntryText(process.requireItems),
+        itemEntryText(process.consumeItems),
+        itemEntryText(process.createItems),
         process.duration,
     ].join(' ');
 
@@ -173,9 +175,10 @@ const questText = (quest) =>
 const scoreRecord = (record, haystackText, queryTokens, queryText) => {
     const haystack = normalize(haystackText);
     if (!haystack || queryTokens.length === 0) return 0;
+    const haystackWords = new Set(haystack.split(' '));
     let score = 0;
     for (const token of queryTokens) {
-        if (haystack.split(' ').includes(token)) score += 2;
+        if (haystackWords.has(token)) score += 2;
         else if (haystack.includes(token)) score += 1;
     }
     const title = normalize(record.title || record.name || record.id);
@@ -200,6 +203,7 @@ const wantsRemainingQuests = (text) =>
         text
     );
 const wantsInventory = (text) => /\binventory\b|\bwhat do i have\b/i.test(text);
+const wantsAchievements = (text) => /\bachievements?\b|\bunlocked\b.*\bachievements?\b/i.test(text);
 
 const activeProcessIds = (gameState = {}, playerStateSummary) => {
     const fromSummary = playerStateSummary?.slices?.activeProcesses?.map((entry) => entry.id) || [];
@@ -242,7 +246,14 @@ export function buildFocusedGameDataContext({
     const queryTokens = [...new Set(tokensFor(queryText))];
     const reasonCodes = [];
 
-    if (queryTokens.length === 0 && !wantsRemainingQuests(latest) && !wantsInventory(latest)) {
+    const achievementIntent = wantsAchievements(latest);
+
+    if (
+        queryTokens.length === 0 &&
+        !wantsRemainingQuests(latest) &&
+        !wantsInventory(latest) &&
+        !achievementIntent
+    ) {
         return {
             block: '',
             sources: [],
@@ -253,6 +264,12 @@ export function buildFocusedGameDataContext({
                 selectedQuestCount: 0,
                 selectedProcessCount: 0,
                 selectedAchievementCount: 0,
+                selectedInventoryCount: 0,
+                selectedItemIds: [],
+                selectedQuestIds: [],
+                selectedProcessIds: [],
+                selectedAchievementIds: [],
+                selectedInventoryIds: [],
                 renderedChars: 0,
                 caps,
                 truncated: false,
@@ -263,6 +280,7 @@ export function buildFocusedGameDataContext({
     if (isVagueProcessQuery(latest)) reasonCodes.push('recent-context-expanded');
     if (wantsRemainingQuests(latest)) reasonCodes.push('remaining-quest-state');
     if (wantsInventory(latest)) reasonCodes.push('inventory-summary-request');
+    if (achievementIntent) reasonCodes.push('achievement-state-request');
 
     const inventoryOnlyQuery = wantsInventory(latest) && queryTokens.length === 0;
     const selectedItems = inventoryOnlyQuery
@@ -301,22 +319,32 @@ export function buildFocusedGameDataContext({
     }
 
     const achievements = evaluateAchievements(gameState || {});
-    const selectedAchievements =
-        queryTokens.length > 0
-            ? selectScored(
-                  achievements,
-                  (a) => [a.id, a.title, a.description, stringifyFields(a.progress)].join(' '),
-                  queryTokens,
-                  queryText,
-                  caps.maxAchievements
-              )
-            : achievements
-                  .filter(
-                      (achievement) => achievement.unlocked || achievement.progress?.percent > 0
-                  )
-                  .slice(0, caps.maxAchievements);
+    const achievementStateEntries = achievements.filter(
+        (achievement) => achievement.unlocked || achievement.progress?.percent > 0
+    );
+    const shouldReturnAchievementState =
+        achievementIntent && (queryTokens.length === 0 || /\bunlocked\b/i.test(latest));
+    const selectedAchievements = shouldReturnAchievementState
+        ? achievementStateEntries.slice(0, caps.maxAchievements)
+        : queryTokens.length > 0
+          ? selectScored(
+                achievements,
+                (a) =>
+                    [
+                        a.id,
+                        a.title,
+                        a.description,
+                        a.unlocked ? 'achievement unlocked earned complete' : '',
+                        a.progress?.percent > 0 ? 'achievement progress in progress' : '',
+                        stringifyFields(a.progress),
+                    ].join(' '),
+                queryTokens,
+                queryText,
+                caps.maxAchievements
+            )
+          : [];
 
-    const inventoryEntries = (inventoryOnlyQuery ? [] : Object.entries(gameState?.inventory || {}))
+    const inventoryEntries = Object.entries(gameState?.inventory || {})
         .filter(([, count]) => typeof count === 'number' && Number.isFinite(count) && count > 0)
         .map(([id, count]) => ({ id, name: itemName(id), count }))
         .filter(
@@ -347,7 +375,7 @@ export function buildFocusedGameDataContext({
         );
         sources.push({
             type: 'state',
-            id: 'local-game-state',
+            id: 'focused-inventory',
             label: 'Relevant inventory',
             detail: `${inventoryEntries.length} bounded owned entries`,
         });

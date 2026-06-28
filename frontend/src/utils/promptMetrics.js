@@ -27,37 +27,35 @@ const normalizeIndexes = (value) => {
     return [];
 };
 
-const numberOrZero = (value) => (Number.isFinite(value) ? Number(value) : 0);
+const numberOrZero = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
+const stringList = (value, max = 12) =>
+    Array.isArray(value) ? value.slice(0, max).map((entry) => String(entry)) : [];
 
 const sanitizeFocusedGameData = (focused) => {
     if (!focused || typeof focused !== 'object') return null;
     return {
         included: Boolean(focused.included),
-        reasonCodes: Array.isArray(focused.reasonCodes) ? focused.reasonCodes.slice(0, 12) : [],
+        reasonCodes: stringList(focused.reasonCodes),
         selectedItemCount: numberOrZero(focused.selectedItemCount),
         selectedQuestCount: numberOrZero(focused.selectedQuestCount),
         selectedProcessCount: numberOrZero(focused.selectedProcessCount),
         selectedAchievementCount: numberOrZero(focused.selectedAchievementCount),
         selectedInventoryCount: numberOrZero(focused.selectedInventoryCount),
-        selectedItemIds: Array.isArray(focused.selectedItemIds)
-            ? focused.selectedItemIds.slice(0, 12)
-            : [],
-        selectedQuestIds: Array.isArray(focused.selectedQuestIds)
-            ? focused.selectedQuestIds.slice(0, 12)
-            : [],
-        selectedProcessIds: Array.isArray(focused.selectedProcessIds)
-            ? focused.selectedProcessIds.slice(0, 12)
-            : [],
+        selectedItemIds: stringList(focused.selectedItemIds),
+        selectedQuestIds: stringList(focused.selectedQuestIds),
+        selectedProcessIds: stringList(focused.selectedProcessIds),
+        selectedAchievementIds: stringList(focused.selectedAchievementIds),
+        selectedInventoryIds: stringList(focused.selectedInventoryIds),
         renderedChars: numberOrZero(focused.renderedChars),
         caps: focused.caps
             ? {
-                  maxItems: focused.caps.maxItems,
-                  maxQuests: focused.caps.maxQuests,
-                  maxProcesses: focused.caps.maxProcesses,
-                  maxAchievements: focused.caps.maxAchievements,
-                  maxTotalChars: focused.caps.maxTotalChars,
-                  maxEntityChars: focused.caps.maxEntityChars,
-                  maxSources: focused.caps.maxSources,
+                  maxItems: numberOrZero(focused.caps.maxItems),
+                  maxQuests: numberOrZero(focused.caps.maxQuests),
+                  maxProcesses: numberOrZero(focused.caps.maxProcesses),
+                  maxAchievements: numberOrZero(focused.caps.maxAchievements),
+                  maxTotalChars: numberOrZero(focused.caps.maxTotalChars),
+                  maxEntityChars: numberOrZero(focused.caps.maxEntityChars),
+                  maxSources: numberOrZero(focused.caps.maxSources),
               }
             : null,
         truncated: Boolean(focused.truncated),
