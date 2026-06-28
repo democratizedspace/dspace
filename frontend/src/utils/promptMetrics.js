@@ -31,6 +31,15 @@ const numberOrZero = (value) => (Number.isFinite(Number(value)) ? Number(value) 
 const stringList = (value, max = 12) =>
     Array.isArray(value) ? value.slice(0, max).map((entry) => String(entry)) : [];
 
+const sanitizeAnswerFocus = (value) => ({
+    included: Boolean(value?.included),
+    characterCount: numberOrZero(value?.characterCount),
+    placementIndex: Number.isInteger(value?.placementIndex) ? value.placementIndex : -1,
+    latestUserMessageIndex: Number.isInteger(value?.latestUserMessageIndex)
+        ? value.latestUserMessageIndex
+        : -1,
+});
+
 const sanitizeFocusedGameData = (focused) => {
     if (!focused || typeof focused !== 'object') return null;
     return {
@@ -135,6 +144,7 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
                 ? null
                 : Number(metadata.ragDurationMs),
         focusedGameData: sanitizeFocusedGameData(metadata.contextPlan?.focusedGameData),
+        answerFocus: sanitizeAnswerFocus(metadata.answerFocus),
         docsRag: metadata.contextPlan
             ? (() => {
                   const status =

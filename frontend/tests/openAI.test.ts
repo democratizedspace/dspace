@@ -642,6 +642,43 @@ describe('buildChatPrompt', () => {
         expect(payload.promptMetrics.docsRag.status).toBe('skipped');
     });
 
+    it('adds answer-focus before the latest user message for player-state full prompts', async () => {
+        const latest = { role: 'user', content: 'what quest do I have left?' };
+        const payload = await buildChatPrompt([latest], { includePromptMetrics: true });
+        const messages = payload.combinedMessages;
+        const latestIndex = messages.lastIndexOf(latest);
+        const focusIndex = messages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+        const playerStateIndex = messages.findIndex((message) =>
+            message.content?.includes('PlayerState')
+        );
+        const knowledgeIndex = messages.findIndex((message) =>
+            message.content?.includes('DSPACE knowledge base')
+        );
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(focusIndex).toBeGreaterThan(knowledgeIndex);
+        expect(focusIndex).toBeGreaterThan(playerStateIndex);
+        expect(focusIndex).toBe(latestIndex - 1);
+        expect(messages.at(-1)).toBe(latest);
+        expect(messages[focusIndex].role).toBe('system');
+        expect(messages[focusIndex].content).not.toContain(latest.content);
+        expect(messages[focusIndex].content).not.toContain('PlayerStateCompact');
+        expect(messages[focusIndex].content).not.toContain('DSPACE knowledge base');
+        expect(messages[focusIndex].content).not.toContain('Docs grounding');
+        expect(payload.promptMetrics.answerFocus).toEqual({
+            included: true,
+            characterCount: messages[focusIndex].content.length,
+            placementIndex: focusIndex,
+            latestUserMessageIndex: latestIndex,
+        });
+        expect(JSON.stringify(payload.promptMetrics.answerFocus)).not.toContain(latest.content);
+        expect(JSON.stringify(payload.promptMetrics.answerFocus)).not.toContain(
+            messages[focusIndex].content
+        );
+    });
+
     it('exposes only safe PlayerState summary fields in prompt metrics', async () => {
         vi.mocked(loadGameState).mockReturnValueOnce({
             openAI: {},
@@ -727,6 +764,102 @@ Docs grounding (gitSha: test):
         expect(searchDocsRag).toHaveBeenCalled();
         expect(prompt).toContain('Docs grounding');
         expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+
+        const focusIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+        const latestIndex = payload.combinedMessages.length - 1;
+        const docsIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Docs grounding')
+        );
+
+        expect(focusIndex).toBeGreaterThan(docsIndex);
+        expect(focusIndex).toBe(latestIndex - 1);
+        expect(payload.combinedMessages.at(-1)).toEqual({
+            role: 'user',
+            content: 'where do I import a gamesave?',
+        });
+    });
+
+    it('keeps focused game-data context and adds answer-focus for resource comparison prompts', async () => {
+        vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
+            summary:
+                'Focused game data:\nRelevant processes:\n- 3D print a model rocket\n- 3D print a Benchy',
+            sources: [{ type: 'process', id: 'benchy', label: 'Benchy' }],
+            focusedGameData: {
+                included: true,
+                selectedProcessCount: 2,
+                selectedItemCount: 0,
+                selectedQuestCount: 0,
+                selectedAchievementCount: 0,
+                selectedInventoryCount: 1,
+                selectedProcessIds: ['print-rocket', 'benchy'],
+                renderedChars: 90,
+                reasonCodes: ['focused-game-data'],
+            },
+        });
+        const latest = {
+            role: 'user',
+            content: "I'd like to make a 3D printed rocket and 10 benchies. Is it enough for that?",
+        };
+
+        const payload = await buildChatPrompt([latest], { includePromptMetrics: true });
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+        const focusIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.promptMetrics.focusedGameData).toEqual(
+            expect.objectContaining({ included: true, selectedProcessCount: 2 })
+        );
+        expect(prompt).toContain('Focused game data:');
+        expect(prompt).not.toContain('Complete item catalog');
+        expect(prompt).not.toContain('Complete quest catalog');
+        expect(focusIndex).toBe(payload.combinedMessages.length - 2);
+        expect(payload.combinedMessages.at(-1)).toBe(latest);
+    });
+
+    it('keeps answer-focus out of minimal prompts and reports safe metrics', async () => {
+        const payload = await buildChatPrompt([{ role: 'user', content: 'hi' }], {
+            includePromptMetrics: true,
+        });
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('minimal');
+        expect(prompt).not.toContain('PlayerState');
+        expect(prompt).not.toContain('DSPACE knowledge base');
+        expect(prompt).not.toContain('Docs grounding');
+        expect(prompt).not.toContain('Answer the final user message directly.');
+        expect(payload.contextSources).toEqual([]);
+        expect(payload.promptMetrics.answerFocus).toEqual({
+            included: false,
+            characterCount: 0,
+            placementIndex: -1,
+            latestUserMessageIndex: -1,
+        });
+    });
+
+    it('preserves selected persona identity when answer-focus is added', async () => {
+        const persona = {
+            id: 'sydney',
+            name: 'Sydney',
+            systemPrompt: 'You are Sydney, a careful mission planner.',
+            welcomeMessage: 'Sydney here.',
+        };
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'what quest do I have left?' }],
+            { persona }
+        );
+        const systemPrompt = payload.combinedMessages[0].content;
+        const focusMessage = payload.combinedMessages.find((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+
+        expect(systemPrompt).toContain('You are Sydney');
+        expect(focusMessage?.content).toBeTruthy();
+        expect(focusMessage.content).not.toContain('dChat');
+        expect(focusMessage.content).not.toContain('You are');
     });
 
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
@@ -945,6 +1078,19 @@ Docs grounding (gitSha: test):
         expect(payload.contextPlan.includeDocsRag).toBe(true);
         expect(prompt).toContain('Docs grounding');
         expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+
+        const focusIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+        const latestIndex = payload.combinedMessages.length - 1;
+        const docsIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Docs grounding')
+        );
+
+        expect(focusIndex).toBeGreaterThan(docsIndex);
+        expect(focusIndex).toBe(latestIndex - 1);
+        expect(payload.combinedMessages.at(-1)).toBe(messages.at(-1));
+
         expect(payload.contextPlan.docsRagRenderedChars).toBeLessThanOrEqual(
             payload.contextPlan.docsRagBudget.maxChars
         );
