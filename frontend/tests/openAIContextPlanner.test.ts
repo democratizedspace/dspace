@@ -127,6 +127,86 @@ describe('buildChatPrompt context planning', () => {
         expect(payload.contextSources).toEqual([]);
     });
 
+    it('adds answer focus after full context and before the latest user message', async () => {
+        const latest = { role: 'user', content: 'what quest do I have left?' };
+        const payload = await buildChatPrompt([latest], { includePromptMetrics: true });
+        const messages = payload.combinedMessages;
+        const latestIndex = messages.lastIndexOf(latest);
+        const focusIndex = messages.findIndex((message) =>
+            message.content.includes('Answer the final user message directly')
+        );
+        const playerStateIndex = messages.findIndex((message) =>
+            message.content.includes('PlayerState')
+        );
+        const knowledgeIndex = messages.findIndex((message) =>
+            message.content.includes('DSPACE knowledge base')
+        );
+        const focusContent = messages[focusIndex]?.content || '';
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(focusIndex).toBeGreaterThan(knowledgeIndex);
+        expect(focusIndex).toBeGreaterThan(playerStateIndex);
+        expect(focusIndex).toBe(latestIndex - 1);
+        expect(messages.at(-1)).toBe(latest);
+        expect(focusContent.length).toBeLessThan(700);
+        expect(focusContent).toContain(
+            'Use PlayerState, focused game data, and docs grounding only when relevant.'
+        );
+        expect(focusContent).not.toContain(latest.content);
+        expect(focusContent).not.toContain('{');
+        expect(focusContent).not.toContain('Docs grounding');
+        expect(focusContent).not.toContain('DSPACE knowledge base');
+        expect(payload.promptMetrics.answerFocus).toEqual({
+            included: true,
+            characterCount: focusContent.length,
+            placementIndex: focusIndex,
+            latestUserMessageIndex: latestIndex,
+        });
+        expect(JSON.stringify(payload.promptMetrics.answerFocus)).not.toContain(latest.content);
+        expect(JSON.stringify(payload.promptMetrics.answerFocus)).not.toContain(focusContent);
+    });
+
+    it('places answer focus after docs grounding and keeps latest gamesave question final', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText:
+                '---\nDocs grounding (gitSha: test):\n- [route] Backups — /docs/backups#top\n  import saves\n---',
+            sources: [{ type: 'doc', id: 'backups', label: 'Backups', url: '/docs/backups#top' }],
+            sourcesMeta: { results: [{ id: 'backups' }] },
+        });
+        const latest = { role: 'user', content: 'where do I import a gamesave?' };
+        const payload = await buildChatPrompt([latest], { includePromptMetrics: true });
+        const messages = payload.combinedMessages;
+        const latestIndex = messages.lastIndexOf(latest);
+        const focusIndex = messages.findIndex((message) =>
+            message.content.includes('Answer the final user message directly')
+        );
+        const docsIndex = messages.findIndex((message) =>
+            message.content.includes('Docs grounding')
+        );
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(docsIndex).toBeGreaterThan(-1);
+        expect(focusIndex).toBeGreaterThan(docsIndex);
+        expect(focusIndex).toBe(latestIndex - 1);
+        expect(messages.at(-1)).toBe(latest);
+    });
+
+    it('keeps answer focus out of minimal prompts and minimal metrics', async () => {
+        const latest = { role: 'user', content: 'hi' };
+        const payload = await buildChatPrompt([latest], { includePromptMetrics: true });
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('minimal');
+        expect(prompt).not.toContain('Answer the final user message directly');
+        expect(payload.promptMetrics.answerFocus).toEqual({
+            included: false,
+            characterCount: 0,
+            placementIndex: -1,
+            latestUserMessageIndex: -1,
+        });
+    });
+
     it('preserves Hydro persona and full grounding when planner selects full', async () => {
         const payload = await buildChatPrompt(
             [{ role: 'user', content: 'what quest do I have left?' }],

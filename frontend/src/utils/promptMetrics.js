@@ -62,6 +62,15 @@ const sanitizeFocusedGameData = (focused) => {
     };
 };
 
+const sanitizeAnswerFocus = (answerFocus) => ({
+    included: Boolean(answerFocus?.included),
+    characterCount: numberOrZero(answerFocus?.characterCount),
+    placementIndex: Number.isInteger(answerFocus?.placementIndex) ? answerFocus.placementIndex : -1,
+    latestUserMessageIndex: Number.isInteger(answerFocus?.latestUserMessageIndex)
+        ? answerFocus.latestUserMessageIndex
+        : -1,
+});
+
 const sanitizePlayerStateSummary = (summary) => {
     if (!summary || typeof summary !== 'object') return null;
 
@@ -164,6 +173,7 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
               })()
             : null,
         contextPlan: metadata.contextPlan || null,
+        answerFocus: sanitizeAnswerFocus(metadata.answerFocus),
         playerStateSummary: sanitizePlayerStateSummary(metadata.playerStateSummary),
     };
 };
