@@ -2,14 +2,134 @@ import { describe, expect, it } from 'vitest';
 import { buildPromptMetrics } from '../src/utils/promptMetrics.js';
 import { buildFocusedGameDataContext } from '../src/utils/gameDataRetrieval.js';
 
+import { __testables } from '../src/utils/gameDataRetrieval.js';
+
 describe('buildFocusedGameDataContext', () => {
+    it('normalizes aliases, resources, punctuation, hyphens, and plurals', () => {
+        const { expandAliases, tokensFor } = __testables();
+
+        expect(expandAliases('GREEN-PLA/benchies')).toContain('green pla filament');
+        expect(tokensFor('dSolar, dWatt, dPrint and dLaunch')).toEqual(
+            expect.arrayContaining(['solar', 'watt', 'print', 'launch'])
+        );
+        expect(tokensFor('dusd dbi dwatt dsolar dprint dlaunch dwind')).toEqual(
+            expect.arrayContaining(['usd', 'bi', 'watt', 'solar', 'print', 'launch', 'wind'])
+        );
+        expect(tokensFor('D-USD D BI D-WATT D SOLAR D-PRINT DLAUNCH D-WIND')).toEqual(
+            expect.arrayContaining(['usd', 'bi', 'watt', 'solar', 'print', 'launch', 'wind'])
+        );
+        expect(tokensFor('BENCHIES')).toContain('benchy');
+    });
+
+    it('matches compact lowercase resource tokens and avoids small-alias substrings', () => {
+        const { expandAliases, tokensFor } = __testables();
+
+        expect(tokensFor('how much dsolar and dwatt do I have?')).toEqual(
+            expect.arrayContaining(['solar', 'watt'])
+        );
+        expect(expandAliases('what quests are in the rocketry category?')).not.toContain(
+            'model rocket'
+        );
+        expect(expandAliases('show me the workbench')).not.toContain('benchy calibration model');
+        expect(expandAliases('show me a bench')).not.toContain('benchy calibration model');
+    });
+
+    it('keeps verb tokens intact when singularizing plurals', () => {
+        const { tokensFor } = __testables();
+
+        expect(tokensFor('what process creates or requires boxes')).toEqual(
+            expect.arrayContaining(['creates', 'requires', 'boxes', 'box'])
+        );
+        expect(tokensFor('what process creates or requires boxes')).not.toEqual(
+            expect.arrayContaining(['creat', 'requir'])
+        );
+    });
+
+    it('traverses from a created item to making processes', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'What process makes a Benchy?',
+            options: { maxProcesses: 3, maxItems: 5, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedProcessIds).toContain('3dprint-benchy');
+        expect(result.meta.reasonCodes).toContain('process-creates-match');
+        expect(result.block).toContain('Relevant relationships:');
+        expect(result.meta.selectedProcessCount).toBeLessThanOrEqual(3);
+    });
+
+    it('traverses from a process to required, consumed, and created items', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'Can I make 3dprint-rocket?',
+            gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 100 } },
+        });
+
+        expect(result.meta.selectedProcessIds).toContain('3dprint-rocket');
+        expect(result.block).toContain('green PLA filament');
+        expect(result.block).toContain('3D printed model rocket');
+        expect(result.block).toContain('Consumes:');
+    });
+
+    it('selects quests that grant matched items through dialogue options', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what quest gives the NEMA 17 stepper motor pair?',
+            options: { maxQuests: 6, maxItems: 6, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedItemIds).toContain('648aee3c-907e-4cd1-a361-49c4bd771102');
+        expect(result.meta.selectedQuestIds).toContain('energy/solar-tracker');
+        expect(result.block).toContain('NEMA 17 stepper motor pair');
+    });
+
+    it('retains reward-matching quests without duplicate eviction under tiny quest caps', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what quest gives the NEMA 17 stepper motor pair?',
+            options: { maxQuests: 1, maxItems: 6, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedQuestIds).toEqual(['energy/solar-tracker']);
+        expect(new Set(result.meta.selectedQuestIds).size).toBe(
+            result.meta.selectedQuestIds.length
+        );
+        expect(result.meta.reasonCodes).toContain('quest-reward-match');
+    });
+
+    it('only emits traversal reason codes for entities kept within caps', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what process makes a Benchy?',
+            options: { maxProcesses: 0, maxItems: 5, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedProcessIds).toEqual([]);
+        expect(result.meta.reasonCodes).not.toContain('process-creates-match');
+    });
+
+    it('selects resource token items and matching owned balances', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'How much dSolar and dWatt do I have for dPrint or dLaunch?',
+            gameState: {
+                inventory: {
+                    'b02ecff5-1f7d-4247-a09d-7d6cd6bb218a': 2,
+                    '061fd221-404a-4bd1-9432-3e25b0f17a2c': 50,
+                    '071ba424-3940-4c80-a782-5d7ea4d829ff': 7,
+                    'eb9c2a75-a87a-4171-8bc3-088e75936bcf': 1,
+                },
+            },
+        });
+
+        expect(result.meta.reasonCodes).toContain('resource-token-hit');
+        expect(result.block).toContain('dSolar');
+        expect(result.block).toContain('dWatt');
+        expect(result.block).toContain('dPrint');
+        expect(result.block).toContain('dLaunch');
+    });
+
     it('selects green PLA item and owned state', () => {
         const result = buildFocusedGameDataContext({
             query: 'do I have enough green PLA?',
             gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 13 } },
         });
 
-        expect(result.block).toContain('Relevant inventory:');
+        expect(result.block).toContain('Relevant owned inventory:');
         expect(result.block).toContain('green PLA filament');
         expect(result.sources.some((source) => source.type === 'item')).toBe(true);
         expect(result.meta.selectedInventoryIds).toContain('d3590107-25ff-4de5-af3a-46e2497bfc52');
@@ -26,7 +146,7 @@ describe('buildFocusedGameDataContext', () => {
             },
         });
 
-        expect(result.block).toContain('Relevant inventory:');
+        expect(result.block).toContain('Relevant owned inventory:');
         expect(result.block).toContain('white PLA filament');
         expect(result.meta.selectedInventoryCount).toBe(2);
         expect(result.meta.selectedInventoryIds).toContain('58580f6f-f3be-4be0-80b9-f6f8bf0b05a6');
@@ -113,7 +233,39 @@ describe('buildFocusedGameDataContext', () => {
 
         expect(result.block).toContain('Relevant processes:');
         expect(result.block).toContain('3dprint-rocket');
-        expect(result.meta.reasonCodes).toContain('recent-context-expanded');
+        expect(result.meta.reasonCodes).toContain('followup-entity-carryover');
+    });
+
+    it('includes owned inventory selected through process requirements', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'Can I make 3dprint-rocket?',
+            gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 42 } },
+            options: { maxProcesses: 2, maxItems: 6, maxTotalChars: 9000 },
+        });
+
+        expect(result.block).toContain('Relevant owned inventory:');
+        expect(result.block).toContain(
+            'green PLA filament [d3590107-25ff-4de5-af3a-46e2497bfc52]=42'
+        );
+        expect(result.meta.selectedInventoryIds).toContain('d3590107-25ff-4de5-af3a-46e2497bfc52');
+    });
+
+    it('uses prior entity context for make/build/that/those follow-ups', () => {
+        for (const query of [
+            'can I make that?',
+            'can I build that?',
+            'what about 10 of those?',
+            'what does that consume?',
+        ]) {
+            const result = buildFocusedGameDataContext({
+                query,
+                messages: [{ role: 'user', content: 'Tell me about 3D print a Benchy' }],
+                options: { maxProcesses: 3, maxItems: 5, maxTotalChars: 9000 },
+            });
+
+            expect(result.meta.reasonCodes).toContain('followup-entity-carryover');
+            expect(result.meta.selectedProcessIds).toContain('3dprint-benchy');
+        }
     });
 
     it('returns achievement state for direct achievement requests without unrelated filler', () => {
