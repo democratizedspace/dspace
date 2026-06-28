@@ -27,7 +27,40 @@ const normalizeIndexes = (value) => {
     return [];
 };
 
-const numberOrZero = (value) => (Number.isFinite(value) ? Number(value) : 0);
+const numberOrZero = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
+const stringList = (value, max = 12) =>
+    Array.isArray(value) ? value.slice(0, max).map((entry) => String(entry)) : [];
+
+const sanitizeFocusedGameData = (focused) => {
+    if (!focused || typeof focused !== 'object') return null;
+    return {
+        included: Boolean(focused.included),
+        reasonCodes: stringList(focused.reasonCodes),
+        selectedItemCount: numberOrZero(focused.selectedItemCount),
+        selectedQuestCount: numberOrZero(focused.selectedQuestCount),
+        selectedProcessCount: numberOrZero(focused.selectedProcessCount),
+        selectedAchievementCount: numberOrZero(focused.selectedAchievementCount),
+        selectedInventoryCount: numberOrZero(focused.selectedInventoryCount),
+        selectedItemIds: stringList(focused.selectedItemIds),
+        selectedQuestIds: stringList(focused.selectedQuestIds),
+        selectedProcessIds: stringList(focused.selectedProcessIds),
+        selectedAchievementIds: stringList(focused.selectedAchievementIds),
+        selectedInventoryIds: stringList(focused.selectedInventoryIds),
+        renderedChars: numberOrZero(focused.renderedChars),
+        caps: focused.caps
+            ? {
+                  maxItems: numberOrZero(focused.caps.maxItems),
+                  maxQuests: numberOrZero(focused.caps.maxQuests),
+                  maxProcesses: numberOrZero(focused.caps.maxProcesses),
+                  maxAchievements: numberOrZero(focused.caps.maxAchievements),
+                  maxTotalChars: numberOrZero(focused.caps.maxTotalChars),
+                  maxEntityChars: numberOrZero(focused.caps.maxEntityChars),
+                  maxSources: numberOrZero(focused.caps.maxSources),
+              }
+            : null,
+        truncated: Boolean(focused.truncated),
+    };
+};
 
 const sanitizePlayerStateSummary = (summary) => {
     if (!summary || typeof summary !== 'object') return null;
@@ -101,6 +134,7 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
             metadata.ragDurationMs === undefined || metadata.ragDurationMs === null
                 ? null
                 : Number(metadata.ragDurationMs),
+        focusedGameData: sanitizeFocusedGameData(metadata.contextPlan?.focusedGameData),
         docsRag: metadata.contextPlan
             ? (() => {
                   const status =
