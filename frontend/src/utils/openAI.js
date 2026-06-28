@@ -9,6 +9,7 @@ import { buildPromptMetrics } from './promptMetrics.js';
 import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
+import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -790,6 +791,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
         role: 'assistant',
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
     };
+    const answerFocusMessage = buildAnswerFocusMessage({
+        latestUserMessage,
+        contextPlan: contextPlanMetadata,
+    });
+    const latestUserMessageSourceIndex = latestUserMessage
+        ? normalizedMessages.lastIndexOf(latestUserMessage)
+        : -1;
 
     let combinedMessages = [...normalizedMessages];
 
@@ -804,6 +812,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
+        if (answerFocusMessage) {
+            combinedMessages.push(answerFocusMessage);
+        }
         combinedMessages.push(openingMessage);
     } else {
         combinedMessages = [systemMessage];
@@ -816,7 +827,16 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
-        combinedMessages = [...combinedMessages, ...normalizedMessages];
+        if (answerFocusMessage && latestUserMessageSourceIndex !== -1) {
+            combinedMessages = [
+                ...combinedMessages,
+                ...normalizedMessages.slice(0, latestUserMessageSourceIndex),
+                answerFocusMessage,
+                ...normalizedMessages.slice(latestUserMessageSourceIndex),
+            ];
+        } else {
+            combinedMessages = [...combinedMessages, ...normalizedMessages];
+        }
     }
 
     const ragMessages = new Set([knowledgeMessage, docsRagMessage].filter(Boolean));
@@ -846,6 +866,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         const latestUserMessageIndex = latestUserMessage
             ? combinedMessages.lastIndexOf(latestUserMessage)
             : -1;
+        const answerFocusMessageIndex = indexOfMessage(answerFocusMessage);
         const chatHistoryIndexes = combinedMessages
             .map((message, index) => ({ message, index }))
             .filter(
@@ -870,6 +891,12 @@ export const buildChatPrompt = async (messages, options = {}) => {
                 playerState: playerStateMessageIndex,
                 chatHistory: chatHistoryIndexes,
                 latestUserMessage: latestUserMessageIndex,
+            },
+            answerFocus: {
+                included: Boolean(answerFocusMessage),
+                characterCount: answerFocusMessage?.content?.length || 0,
+                placementIndex: answerFocusMessageIndex,
+                latestUserMessageIndex,
             },
         });
     }

@@ -391,6 +391,12 @@ describe('token.place API v1 client', () => {
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
         // Verify full path produces more messages than token-lite's fixed [system, user] pair.
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+        const messages = decrypted.api_v1_request.messages;
+        const focusIndex = messages.findIndex((message) =>
+            message.content.includes('Answer the final user message directly.')
+        );
+        expect(focusIndex).toBe(messages.length - 2);
+        expect(messages.at(-1)).toEqual({ role: 'user', content: 'What should I build next?' });
     });
 
     test('default token.place mode includes docs RAG for route questions', async () => {
@@ -411,6 +417,13 @@ describe('token.place API v1 client', () => {
         const serializedMessages = JSON.stringify(decrypted.api_v1_request.messages);
         expect(serializedMessages).toContain('Docs grounding canary for gamesaves.');
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+        expect(decrypted.api_v1_request.messages.at(-2).content).toContain(
+            'Answer the final user message directly.'
+        );
+        expect(decrypted.api_v1_request.messages.at(-1)).toEqual({
+            role: 'user',
+            content: 'where do I import a gamesave?',
+        });
     });
 
     test('token-lite setting sends a tiny decrypted API v1 message set', async () => {
