@@ -55,6 +55,9 @@ const sanitizeFocusedGameData = (focused) => {
         selectedProcessIds: stringList(focused.selectedProcessIds),
         selectedAchievementIds: stringList(focused.selectedAchievementIds),
         selectedInventoryIds: stringList(focused.selectedInventoryIds),
+        directSelectedItemIds: stringList(focused.directSelectedItemIds),
+        directSelectedQuestIds: stringList(focused.directSelectedQuestIds),
+        directSelectedProcessIds: stringList(focused.directSelectedProcessIds),
         renderedChars: numberOrZero(focused.renderedChars),
         caps: focused.caps
             ? {
@@ -68,6 +71,8 @@ const sanitizeFocusedGameData = (focused) => {
               }
             : null,
         truncated: Boolean(focused.truncated),
+        truncatedSources: Boolean(focused.truncatedSources),
+        truncatedChars: Boolean(focused.truncatedChars),
     };
 };
 
