@@ -134,6 +134,23 @@ describe('buildDchatKnowledgePack', () => {
         expect(highlights).toContain('dUSD (x25)');
     });
 
+    it('keeps compact quest progress alongside focused chat context', () => {
+        const pack = buildDchatKnowledgePack(
+            {
+                quests: {
+                    'welcome/howtodoquests': { finished: true },
+                },
+                inventory: { '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 2 },
+            },
+            { latestUserMessage: 'How is my white PLA filament inventory and quest progress?' }
+        );
+
+        expect(pack.summary).toContain('Quest progress:');
+        expect(pack.summary).toContain('welcome/howtodoquests: finished');
+        expect(pack.summary).toContain('white PLA filament');
+        expect(pack.sources.some((entry) => entry.detail?.includes('quest progress'))).toBe(true);
+    });
+
     it('keeps query-relevant live inventory in compact highlights', () => {
         const pack = buildDchatKnowledgePack(
             { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 13 } },

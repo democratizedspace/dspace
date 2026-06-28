@@ -331,6 +331,14 @@ export function buildDchatKnowledgePack(gameState = {}, options = {}) {
         sources.push(...(focusedContext.sources || []));
     }
 
+    const questProgressSummary = summarizeQuestProgress(gameState);
+    if (questProgressSummary.length > 0) {
+        knowledgeSections.push(
+            `${dchatKnowledgeScaffolding.questProgress}: ${questProgressSummary.join(' | ')}`
+        );
+        stateDetails.push('quest progress');
+    }
+
     const processProgressSummary = summarizeProcessProgress(gameState);
     if (processProgressSummary.length > 0) {
         knowledgeSections.push(
