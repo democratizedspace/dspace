@@ -642,6 +642,92 @@ describe('buildChatPrompt', () => {
         expect(payload.promptMetrics.docsRag.status).toBe('skipped');
     });
 
+    it('inserts answer focus after full-mode context and before the latest user message', async () => {
+        const latest = { role: 'user', content: 'what quest do I have left?' };
+        const payload = await buildChatPrompt([latest], { includePromptMetrics: true });
+        const answerFocusIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+        const latestUserMessageIndex = payload.combinedMessages.lastIndexOf(latest);
+        const playerStateIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('PlayerState')
+        );
+        const knowledgeIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('DSPACE knowledge base')
+        );
+        const focusContent = payload.combinedMessages[answerFocusIndex]?.content || '';
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(answerFocusIndex).toBeGreaterThan(-1);
+        expect(playerStateIndex).toBeGreaterThan(-1);
+        expect(knowledgeIndex).toBeGreaterThan(-1);
+        expect(answerFocusIndex).toBeGreaterThan(playerStateIndex);
+        expect(answerFocusIndex).toBeGreaterThan(knowledgeIndex);
+        expect(answerFocusIndex).toBe(latestUserMessageIndex - 1);
+        expect(payload.combinedMessages.at(-1)).toBe(latest);
+        expect(focusContent.length).toBeLessThanOrEqual(700);
+        expect(focusContent).toContain('Answer the final user message directly.');
+        expect(focusContent).not.toContain(latest.content);
+        expect(focusContent).not.toContain('PlayerStateCompact');
+        expect(focusContent).not.toContain('DSPACE knowledge base');
+        expect(focusContent).not.toContain('Docs grounding');
+        expect(payload.promptMetrics.answerFocus).toEqual({
+            included: true,
+            characterCount: focusContent.length,
+            placementIndex: answerFocusIndex,
+            latestUserMessageIndex,
+        });
+        expect(JSON.stringify(payload.promptMetrics.answerFocus)).not.toContain(latest.content);
+        expect(JSON.stringify(payload.promptMetrics.answerFocus)).not.toContain(focusContent);
+    });
+
+    it('keeps focused game data context and appends answer focus without broad catalog dumps', async () => {
+        vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
+            summary:
+                'Focused game data:\n- Process: 3D print a 100 mm model rocket\n- Item: Benchy\n',
+            sources: [{ type: 'process', id: 'print-rocket', label: '3D print rocket' }],
+            focusedGameData: {
+                included: true,
+                reasonCodes: ['focused-query'],
+                selectedItemCount: 1,
+                selectedQuestCount: 0,
+                selectedProcessCount: 1,
+                selectedAchievementCount: 0,
+                selectedInventoryCount: 0,
+                selectedItemIds: ['benchy'],
+                selectedQuestIds: [],
+                selectedProcessIds: ['print-rocket'],
+                selectedAchievementIds: [],
+                selectedInventoryIds: [],
+                renderedChars: 78,
+                caps: { maxItems: 6, maxQuests: 4, maxProcesses: 4, maxAchievements: 2 },
+                truncated: false,
+            },
+        });
+
+        const latest = {
+            role: 'user',
+            content: 'I’d like to make a 3D printed rocket and 10 benchies. Is it enough for that?',
+        };
+        const payload = await buildChatPrompt([latest], { includePromptMetrics: true });
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+        const answerFocusIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+        const knowledgeIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Focused game data:')
+        );
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.promptMetrics.focusedGameData.included).toBe(true);
+        expect(prompt).toContain('Focused game data:');
+        expect(prompt).toContain('3D print a 100 mm model rocket');
+        expect(prompt).not.toContain('Full item catalog');
+        expect(prompt).not.toContain('Full quest catalog');
+        expect(answerFocusIndex).toBeGreaterThan(knowledgeIndex);
+        expect(payload.combinedMessages.at(-1)).toBe(latest);
+    });
+
     it('exposes only safe PlayerState summary fields in prompt metrics', async () => {
         vi.mocked(loadGameState).mockReturnValueOnce({
             openAI: {},
@@ -727,6 +813,15 @@ Docs grounding (gitSha: test):
         expect(searchDocsRag).toHaveBeenCalled();
         expect(prompt).toContain('Docs grounding');
         expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+
+        const answerFocusIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+        const docsIndex = payload.combinedMessages.findIndex((message) =>
+            message.content?.includes('Docs grounding')
+        );
+        expect(answerFocusIndex).toBeGreaterThan(docsIndex);
+        expect(payload.combinedMessages.at(-1)?.content).toBe('where do I import a gamesave?');
     });
 
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {

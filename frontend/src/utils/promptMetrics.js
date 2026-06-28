@@ -88,6 +88,28 @@ const sanitizePlayerStateSummary = (summary) => {
     return safeSummary;
 };
 
+const sanitizeAnswerFocus = (answerFocus) => {
+    if (!answerFocus || typeof answerFocus !== 'object') {
+        return {
+            included: false,
+            characterCount: 0,
+            placementIndex: -1,
+            latestUserMessageIndex: -1,
+        };
+    }
+
+    return {
+        included: Boolean(answerFocus.included),
+        characterCount: numberOrZero(answerFocus.characterCount),
+        placementIndex: Number.isInteger(answerFocus.placementIndex)
+            ? answerFocus.placementIndex
+            : -1,
+        latestUserMessageIndex: Number.isInteger(answerFocus.latestUserMessageIndex)
+            ? answerFocus.latestUserMessageIndex
+            : -1,
+    };
+};
+
 export const buildPromptMetrics = (promptPayload, metadata = {}) => {
     const messages = Array.isArray(promptPayload?.combinedMessages)
         ? promptPayload.combinedMessages
@@ -163,6 +185,7 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
                   };
               })()
             : null,
+        answerFocus: sanitizeAnswerFocus(metadata.answerFocus),
         contextPlan: metadata.contextPlan || null,
         playerStateSummary: sanitizePlayerStateSummary(metadata.playerStateSummary),
     };
