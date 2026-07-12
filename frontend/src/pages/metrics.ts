@@ -1,4 +1,4 @@
-import { getMetricsStatus, register } from '../utils/metrics.js';
+import { ensureMetricsInitialized, register } from '../utils/metrics.js';
 
 export const prerender = false;
 
@@ -16,7 +16,7 @@ export async function GET({ request }: { request: Request }) {
         }
     }
 
-    const status = getMetricsStatus();
+    const status = await ensureMetricsInitialized();
     if (!status.available) {
         return new Response('metrics unavailable\n', {
             status: 503,

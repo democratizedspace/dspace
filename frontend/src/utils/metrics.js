@@ -1,3 +1,4 @@
+const isBrowserRuntime = typeof process === 'undefined' || !process.versions?.node;
 const defaultLoader = () => import(/* @vite-ignore */ 'prom-client');
 
 const HTTP_BUCKETS = [0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 30];
@@ -18,6 +19,7 @@ const OUTCOMES = new Set([
 ]);
 const PROVIDERS = new Set(['tokenplace', 'openai', 'none', 'unknown']);
 const DEPENDENCIES = new Set(['tokenplace', 'openai']);
+const HTTP_METHODS = new Set(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']);
 
 let register;
 let metricsAvailable = false;
@@ -31,15 +33,38 @@ const globalState = () => {
 
 const sanitizeEnum = (value, allowed, fallback) =>
     allowed.has(String(value || '').toLowerCase()) ? String(value).toLowerCase() : fallback;
+const postClientMetric = (kind, labels) => {
+    if (!isBrowserRuntime) return;
+    const body = JSON.stringify({ kind, ...labels });
+    const url = '/api/metrics/dchat';
+    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+        navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
+        return;
+    }
+    if (typeof fetch === 'function') {
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body,
+            keepalive: true,
+        }).catch(() => {});
+    }
+};
 
 export const normalizeOutcome = (value) => sanitizeEnum(value, OUTCOMES, 'unknown_error');
 export const normalizeProvider = (value) => sanitizeEnum(value, PROVIDERS, 'unknown');
 export const normalizeDependency = (value) => sanitizeEnum(value, DEPENDENCIES, 'tokenplace');
+export const normalizeHttpMethod = (value) => {
+    const method = String(value || 'GET').toUpperCase();
+    return HTTP_METHODS.has(method) ? method : 'UNKNOWN';
+};
 
 export const statusClassFor = (status) => {
     const numeric = Number(status);
-    if (!Number.isFinite(numeric) || numeric < 100) return 'unknown';
-    return `${Math.floor(numeric / 100)}xx`;
+    if (numeric >= 200 && numeric < 300) return '2xx';
+    if (numeric >= 400 && numeric < 500) return '4xx';
+    if (numeric >= 500 && numeric < 600) return '5xx';
+    return 'unknown';
 };
 
 export const outcomeFromStatus = (status) => {
@@ -101,13 +126,9 @@ export const normalizeRoute = (urlOrPath) => {
             ? '/inventory/item/[itemId]/edit'
             : '/inventory/item/[itemId]';
     if (/^\/processes\/[^/]+$/.test(pathname)) return '/processes/[processId]';
+    if (/^\/process\/[^/]+$/.test(pathname)) return '/process/[slug]';
     if (/^\/quests\/[^/]+\/[^/]+$/.test(pathname)) return '/quests/[pathId]/[questId]';
-    return (
-        pathname
-            .split('/')
-            .map((part) => (/^[0-9a-f-]{8,}$/i.test(part) || /^\d+$/.test(part) ? '[id]' : part))
-            .join('/') || '/unknown'
-    );
+    return '/unknown';
 };
 
 const getOrCreateMetric = (constructors, registerInstance, type, config) => {
@@ -127,6 +148,15 @@ const loadBuildInfo = () => ({
 });
 
 async function initMetrics(loader = defaultLoader) {
+    if (isBrowserRuntime) {
+        metricsAvailable = false;
+        metricHandles = null;
+        register = {
+            contentType: 'text/plain; charset=utf-8',
+            metrics: async () => '# dspace metrics unavailable in browser runtime\n',
+        };
+        return;
+    }
     try {
         const prom = await loader();
         const { Registry, collectDefaultMetrics, Counter, Histogram, Gauge } = prom;
@@ -198,7 +228,12 @@ async function initMetrics(loader = defaultLoader) {
     }
 }
 
-await initMetrics();
+let initMetricsPromise = isBrowserRuntime ? Promise.resolve() : initMetrics();
+
+export const ensureMetricsInitialized = async () => {
+    await initMetricsPromise;
+    return getMetricsStatus();
+};
 
 const secondsSince = (start) => Math.max(0, (performance.now() - start) / 1000);
 
@@ -213,7 +248,7 @@ export const recordHttpRequest = ({
 }) => {
     if (!metricsAvailable || !metricHandles || route === '/metrics') return;
     const labels = {
-        method: String(method || 'GET').toUpperCase(),
+        method: normalizeHttpMethod(method),
         route: normalizeRoute(route),
         status_class: statusClassFor(status),
         outcome: normalizeOutcome(outcome || outcomeFromStatus(status)),
@@ -251,10 +286,21 @@ export const recordDchatRequest = ({
     outcome = 'unknown_error',
     durationSeconds = 0,
 }) => {
+    const labels = {
+        provider: normalizeProvider(provider),
+        outcome: normalizeOutcome(outcome),
+        durationSeconds,
+    };
+    if (isBrowserRuntime) {
+        postClientMetric('dchat', labels);
+        return;
+    }
     if (!metricsAvailable || !metricHandles) return;
-    const labels = { provider: normalizeProvider(provider), outcome: normalizeOutcome(outcome) };
-    metricHandles.dchatRequests.inc(labels, 1);
-    metricHandles.dchatDuration.observe(labels, durationSeconds);
+    metricHandles.dchatRequests.inc({ provider: labels.provider, outcome: labels.outcome }, 1);
+    metricHandles.dchatDuration.observe(
+        { provider: labels.provider, outcome: labels.outcome },
+        durationSeconds
+    );
 };
 
 export const recordDependencyRequest = ({
@@ -262,13 +308,24 @@ export const recordDependencyRequest = ({
     outcome = 'unknown_error',
     durationSeconds = 0,
 }) => {
-    if (!metricsAvailable || !metricHandles) return;
     const labels = {
         dependency: normalizeDependency(dependency),
         outcome: normalizeOutcome(outcome),
+        durationSeconds,
     };
-    metricHandles.dependencyRequests.inc(labels, 1);
-    metricHandles.dependencyDuration.observe(labels, durationSeconds);
+    if (isBrowserRuntime) {
+        postClientMetric('dependency', labels);
+        return;
+    }
+    if (!metricsAvailable || !metricHandles) return;
+    metricHandles.dependencyRequests.inc(
+        { dependency: labels.dependency, outcome: labels.outcome },
+        1
+    );
+    metricHandles.dependencyDuration.observe(
+        { dependency: labels.dependency, outcome: labels.outcome },
+        durationSeconds
+    );
 };
 
 export const instrumentDchatOperation = async (provider, operation) => {
@@ -311,4 +368,4 @@ export const instrumentDependencyOperation = async (dependency, operation) => {
     }
 };
 
-export { register, initMetrics, OUTCOMES, PROVIDERS, DEPENDENCIES };
+export { register, initMetrics, OUTCOMES, PROVIDERS, DEPENDENCIES, HTTP_METHODS };

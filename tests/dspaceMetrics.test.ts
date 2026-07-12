@@ -129,6 +129,11 @@ describe('DSPACE application metrics', () => {
             '/docs/[slug]'
         );
         expect(metrics.statusClassFor(503)).toBe('5xx');
+        expect(metrics.statusClassFor(302)).toBe('unknown');
+        expect(metrics.statusClassFor(102)).toBe('unknown');
+        expect(metrics.normalizeRoute('/reset/user-secret-123')).toBe('/unknown');
+        expect(metrics.normalizeRoute('/process/launch-rocket')).toBe('/process/[slug]');
+        expect(metrics.normalizeHttpMethod('X_USER_SECRET')).toBe('UNKNOWN');
         expect(metrics.outcomeFromStatus(429)).toBe('rate_limited');
         expect(metrics.normalizeProvider('arbitrary-provider')).toBe('unknown');
         expect(metrics.normalizeDependency('arbitrary-dependency')).toBe('tokenplace');
@@ -148,6 +153,8 @@ describe('DSPACE application metrics', () => {
 
         const text = await metrics.register.metrics();
         expect(text).toContain('route="/quests/[pathId]/[questId]"');
+        expect(text).not.toContain('status_class="3xx"');
+        expect(text).not.toContain('status_class="1xx"');
         expect(text).not.toContain('request_id=secret');
         expect(text).not.toContain('route="/metrics"');
     });
@@ -157,8 +164,11 @@ describe('DSPACE application metrics', () => {
 
         for (let i = 0; i < 75; i += 1) {
             metrics.recordHttpRequest({
-                method: 'GET',
-                route: `/quests/path-${i}/quest-${i}?request_id=request-secret-789&user=user-secret-123&url=https://evil.example/unique/path`,
+                method: i % 3 ? 'GET' : `X_USER_SECRET_${i}`,
+                route:
+                    i % 2
+                        ? `/quests/path-${i}/quest-${i}?request_id=request-secret-789&user=user-secret-123&url=https://evil.example/unique/path`
+                        : `/reset/user-secret-${i}`,
                 status: i % 2 ? 200 : 500,
                 outcome: i % 2 ? 'success' : 'server_error',
                 durationSeconds: 0.001,
@@ -176,6 +186,8 @@ describe('DSPACE application metrics', () => {
         expect(labelValuesFor(text, 'dspace_http_requests_total', 'route')).toContain(
             '/quests/[pathId]/[questId]'
         );
+        expect(labelValuesFor(text, 'dspace_http_requests_total', 'route')).toContain('/unknown');
+        expect(labelValuesFor(text, 'dspace_http_requests_total', 'method')).toContain('UNKNOWN');
         expect(labelValuesFor(text, 'dspace_dchat_requests_total', 'provider').has('unknown')).toBe(
             true
         );
@@ -188,6 +200,46 @@ describe('DSPACE application metrics', () => {
         }
         expect(text).not.toContain('provider-42');
         expect(text).not.toContain('exception-message-secret-42');
+    });
+
+    it('accepts bounded browser dChat metric reports through the server registry endpoint', async () => {
+        const metrics = await importMetrics();
+        const endpoint = await import('../frontend/src/pages/api/metrics/dchat');
+
+        const response = await endpoint.POST({
+            request: new Request('http://dspace.local/api/metrics/dchat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    kind: 'dchat',
+                    provider: 'browser-secret-provider',
+                    outcome: 'success',
+                    durationSeconds: 0.25,
+                }),
+            }),
+        });
+        expect(response.status).toBe(204);
+
+        const dependencyResponse = await endpoint.POST({
+            request: new Request('http://dspace.local/api/metrics/dchat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    kind: 'dependency',
+                    dependency: 'tokenplace',
+                    outcome: 'server_error',
+                    durationSeconds: 0.5,
+                }),
+            }),
+        });
+        expect(dependencyResponse.status).toBe(204);
+
+        const text = await metrics.register.metrics();
+        expect(text).toContain('dspace_dchat_requests_total{provider="unknown",outcome="success"}');
+        expect(text).toContain(
+            'dspace_dependency_requests_total{dependency="tokenplace",outcome="server_error"}'
+        );
+        expect(text).not.toContain('browser-secret-provider');
     });
 
     it('exports stable low-cardinality build and instrumentation gauges', async () => {
