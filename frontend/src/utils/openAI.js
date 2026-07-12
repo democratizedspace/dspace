@@ -567,13 +567,13 @@ async function createChatResponse(openai, input) {
             const hasFallback = index < models.length - 1;
             recordDependencyRequest({
                 dependency: 'openai',
-                outcome:
-                    hasFallback && isModelAccessError(error)
-                        ? 'fallback_unavailable'
-                        : outcomeFromError(error),
+                outcome: outcomeFromError(error),
                 durationSeconds: secondsSinceMetricsStart(attemptStart),
             });
             if (!hasFallback || !isModelAccessError(error)) {
+                if (!hasFallback && isModelAccessError(error)) {
+                    error.metricsOutcome = 'fallback_unavailable';
+                }
                 throw error;
             }
         }

@@ -668,7 +668,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     if ([404, 410].includes(response.status)) {
         recordDependencyRequest({
             dependency: 'tokenplace',
-            outcome: 'fallback_unavailable',
+            outcome: 'dependency_failure',
             durationSeconds: secondsSinceMetricsStart(metricsStart),
         });
         return { terminalSelectedServerFailure: true };
@@ -929,17 +929,21 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
     if (contextEstimate.overLimit) throw createTokenPlaceContextBudgetError(contextEstimate);
 
     const baseAttemptOptions = { ...options, model, contextTier: contextEstimate.selectedTier };
+    let fallbackUsed = false;
     let attempt = await runRelayAttempt(baseUrl, sanitizedMessages, baseAttemptOptions);
     if (attempt?.terminalSelectedServerFailure) {
+        fallbackUsed = true;
         attempt = await runRelayAttempt(baseUrl, sanitizedMessages, {
             ...baseAttemptOptions,
             requestId: undefined,
             cancelToken: undefined,
         });
         if (attempt?.terminalSelectedServerFailure) {
-            throw createMalformedTokenPlaceResponseError(
+            const error = createMalformedTokenPlaceResponseError(
                 'No token.place compute node is available.'
             );
+            error.metricsOutcome = 'fallback_unavailable';
+            throw error;
         }
     }
 
@@ -951,17 +955,21 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
             requestId: undefined,
             cancelToken: undefined,
         };
+        fallbackUsed = true;
         let retry = await runRelayAttempt(baseUrl, sanitizedMessages, retryAttemptOptions);
         if (retry?.terminalSelectedServerFailure) {
+            fallbackUsed = true;
             retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
                 ...retryAttemptOptions,
                 requestId: undefined,
                 cancelToken: undefined,
             });
             if (retry?.terminalSelectedServerFailure) {
-                throw createMalformedTokenPlaceResponseError(
+                const error = createMalformedTokenPlaceResponseError(
                     'No token.place compute node is available.'
                 );
+                error.metricsOutcome = 'fallback_unavailable';
+                throw error;
             }
         }
         attempt = {

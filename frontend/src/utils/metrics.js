@@ -36,32 +36,8 @@ const globalState = () => {
 
 const sanitizeEnum = (value, allowed, fallback) =>
     allowed.has(String(value || '').toLowerCase()) ? String(value).toLowerCase() : fallback;
-const postClientMetric = (kind, labels) => {
-    try {
-        if (!isBrowserRuntime) return;
-        const body = JSON.stringify({ kind, ...labels });
-        const url =
-            typeof window !== 'undefined' && window.location?.origin
-                ? `${window.location.origin}/metrics`
-                : '/metrics';
-        if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-            navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
-            return;
-        }
-        if (typeof fetch === 'function') {
-            Promise.resolve(
-                fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body,
-                    keepalive: true,
-                })
-            ).catch(() => {});
-        }
-    } catch {
-        // Browser delivery is best-effort and must never affect chat behavior.
-    }
-};
+// Browser runtimes cannot write trusted operational metrics. Only server-controlled
+// provider boundaries update the Prometheus registry exposed by GET /metrics.
 
 export const normalizeOutcome = (value) => sanitizeEnum(value, OUTCOMES, 'unknown_error');
 export const normalizeProvider = (value) => sanitizeEnum(value, PROVIDERS, 'unknown');
@@ -90,6 +66,7 @@ export const outcomeFromStatus = (status) => {
 };
 
 export const outcomeFromError = (error) => {
+    if (error?.metricsOutcome) return normalizeOutcome(error.metricsOutcome);
     const status = Number(error?.status ?? error?.statusCode ?? error?.response?.status);
     const type = String(
         error?.type ?? error?.code ?? error?.name ?? error?.message ?? ''
@@ -317,10 +294,7 @@ export const recordDchatRequest = ({
         outcome: normalizeOutcome(outcome),
         durationSeconds,
     };
-    if (isBrowserRuntime) {
-        postClientMetric('dchat', labels);
-        return;
-    }
+    if (isBrowserRuntime) return;
     if (!metricsAvailable || !metricHandles) return;
     try {
         metricHandles.dchatRequests.inc({ provider: labels.provider, outcome: labels.outcome }, 1);
@@ -343,10 +317,7 @@ export const recordDependencyRequest = ({
         outcome: normalizeOutcome(outcome),
         durationSeconds,
     };
-    if (isBrowserRuntime) {
-        postClientMetric('dependency', labels);
-        return;
-    }
+    if (isBrowserRuntime) return;
     if (!metricsAvailable || !metricHandles) return;
     try {
         metricHandles.dependencyRequests.inc(

@@ -4,13 +4,19 @@ import {
     buildRuntimeConfigResponse,
 } from './utils/runtimeEndpoints';
 import { logServerError } from './utils/serverLogger';
-import { recordHttpRequest, normalizeRoute, outcomeFromStatus } from './utils/metrics.js';
+import {
+    ensureMetricsInitialized,
+    recordHttpRequest,
+    normalizeRoute,
+    outcomeFromStatus,
+} from './utils/metrics.js';
 
 export interface MiddlewareContext {
     request: Request;
 }
 
 export const onRequest = async (context: MiddlewareContext, next: () => Promise<Response>) => {
+    await ensureMetricsInitialized();
     const { pathname } = new URL(context.request.url);
     const requestStartedAt = performance.now();
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
