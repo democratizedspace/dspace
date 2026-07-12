@@ -1,8 +1,9 @@
 # DSPACE v3.1.0 Observability Release Gate
 
 This design turns observability into an explicit DSPACE v3.1.0 release requirement. It is a
-planning and QA contract only: it does not implement new metrics, dashboards, alerts, exporters,
-Helm templates, or version metadata.
+planning and QA contract. The application runtime now implements the first privacy-safe
+DSPACE metric families, but dashboards, alerts, exporters, Helm templates, and live Sugarkube
+scrape evidence remain separate release work.
 
 Status: v3.1.0 is not treated as shipped by this document. The repository metadata still reports
 `package.json` version `3.0.1`, and the active GHCR Helm publishing workflow packages
@@ -19,16 +20,65 @@ smallest useful v3.1.0 release slice.
 
 ## Repository evidence inventory
 
-| Area                          | Evidence                                                                                                                                          | Classification                          | v3.1.0 implication                                                                                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Runtime version               | `package.json` is `3.0.1`.                                                                                                                        | Implemented for v3.0.1; v3.1.0 missing. | Do not claim v3.1.0 shipped until release metadata and immutable artifacts exist.                                                                               |
-| Metrics route                 | `frontend/src/pages/metrics.ts` exposes `/metrics` and optionally requires `Authorization: Bearer <METRICS_TOKEN>`.                               | Partial.                                | Endpoint exists, but staging/prod scrape behavior and public exposure controls still need evidence.                                                             |
-| Metric implementation         | `frontend/src/utils/metrics.js` initializes `prom-client` default process metrics only, with a fallback text response.                            | Partial.                                | Process/runtime basics may exist; DSPACE-specific HTTP, dChat, token.place, fallback, and build-info metrics are missing until implemented elsewhere.           |
-| Local monitoring scaffold     | `infra/monitoring/` contains local Prometheus, Grafana dashboard, and alert examples.                                                             | Legacy/local scaffold.                  | Useful as reference only; not the canonical Sugarkube release gate. Metric names and thresholds are not sufficient for v3.1.0.                                  |
-| Canonical GHCR chart          | `.github/workflows/ci-helm.yml` packages and publishes `charts/dspace` to `oci://ghcr.io/democratizedspace/charts/dspace`.                        | Implemented v3.0.1 path.                | `charts/dspace` is the canonical chart path for the current GHCR/Sugarkube release path.                                                                        |
-| Canonical chart scrape config | `charts/dspace` has Service, Deployment, and probes, but no ServiceMonitor, metrics service port, PrometheusRule, or scrape values.               | Missing.                                | v3.1.0 blocker: add or otherwise identify the canonical scrape configuration before promotion.                                                                  |
-| Duplicate chart tree          | `deploy/charts/dspace` contains ServiceMonitor, PrometheusRule, NetworkPolicy, and metrics values, but is not packaged by the GHCR Helm workflow. | Partial legacy/experimental duplicate.  | Do not update both chart trees blindly. Either migrate the needed scrape contract into `charts/dspace` or explicitly retarget release automation before v3.1.0. |
-| Environment values            | `deploy/env/{dev,int,prod}/values.yaml` exist for the duplicate deploy chart.                                                                     | Legacy/partial.                         | Not canonical release evidence unless the release path changes and automation points at that chart.                                                             |
+| Area                          | Evidence                                                                                                                                                       | Classification                                | v3.1.0 implication                                                                                                                                              |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime version               | `package.json` is `3.0.1`.                                                                                                                                     | Implemented for v3.0.1; v3.1.0 missing.       | Do not claim v3.1.0 shipped until release metadata and immutable artifacts exist.                                                                               |
+| Metrics route                 | `frontend/src/pages/metrics.ts` exposes `/metrics` and optionally requires `Authorization: Bearer <METRICS_TOKEN>`.                                            | Partial.                                      | Endpoint exists, but staging/prod scrape behavior and public exposure controls still need evidence.                                                             |
+| Metric implementation         | `frontend/src/utils/metrics.js` initializes `prom-client` default process metrics plus DSPACE HTTP, dChat, dependency, build-info, and instrumentation gauges. | Implemented in source; live evidence missing. | Source emits the canonical metric families with bounded labels. Staging/prod scrape behavior still needs Sugarkube evidence.                                    |
+| Local monitoring scaffold     | `infra/monitoring/` contains local Prometheus, Grafana dashboard, and alert examples.                                                                          | Legacy/local scaffold.                        | Useful as reference only; not the canonical Sugarkube release gate. Metric names and thresholds are not sufficient for v3.1.0.                                  |
+| Canonical GHCR chart          | `.github/workflows/ci-helm.yml` packages and publishes `charts/dspace` to `oci://ghcr.io/democratizedspace/charts/dspace`.                                     | Implemented v3.0.1 path.                      | `charts/dspace` is the canonical chart path for the current GHCR/Sugarkube release path.                                                                        |
+| Canonical chart scrape config | `charts/dspace` has Service, Deployment, and probes, but no ServiceMonitor, metrics service port, PrometheusRule, or scrape values.                            | Missing.                                      | v3.1.0 blocker: add or otherwise identify the canonical scrape configuration before promotion.                                                                  |
+| Duplicate chart tree          | `deploy/charts/dspace` contains ServiceMonitor, PrometheusRule, NetworkPolicy, and metrics values, but is not packaged by the GHCR Helm workflow.              | Partial legacy/experimental duplicate.        | Do not update both chart trees blindly. Either migrate the needed scrape contract into `charts/dspace` or explicitly retarget release automation before v3.1.0. |
+| Environment values            | `deploy/env/{dev,int,prod}/values.yaml` exist for the duplicate deploy chart.                                                                                  | Legacy/partial.                               | Not canonical release evidence unless the release path changes and automation points at that chart.                                                             |
+
+## Implemented application metric families
+
+The source-level instrumentation emits these Prometheus families from `/metrics` when
+`prom-client` initializes successfully:
+
+- `dspace_http_requests_total{method,route,status_class,outcome}`
+- `dspace_http_request_duration_seconds{method,route,status_class,outcome}`
+- `dspace_dchat_requests_total{provider,outcome}`
+- `dspace_dchat_request_duration_seconds{provider,outcome}`
+- `dspace_dependency_requests_total{dependency,outcome}`
+- `dspace_dependency_request_duration_seconds{dependency,outcome}`
+- `dspace_build_info{version,revision}` fixed at `1`
+- `dspace_instrumentation_up` fixed at `1` after successful initialization
+
+Implemented label values are intentionally bounded. Routes are route templates or fixed groups,
+status is a class such as `2xx` or `5xx`, providers are `tokenplace`, `openai`, `none`, or
+`unknown`, and outcomes are selected from `success`, `timeout`, `rate_limited`,
+`validation_error`, `malformed_response`, `dependency_failure`, `server_error`,
+`fallback_used`, `fallback_unavailable`, or `unknown_error`. `/metrics` is excluded from HTTP
+request instrumentation. If metrics initialization fails, `/metrics` returns an explicit
+non-success response instead of a misleading placeholder body.
+
+### PromQL examples
+
+```promql
+# HTTP request rate by normalized route and outcome
+sum by (route, outcome) (rate(dspace_http_requests_total[5m]))
+
+# HTTP 5xx error ratio
+sum(rate(dspace_http_requests_total{status_class="5xx"}[5m]))
+  /
+sum(rate(dspace_http_requests_total[5m]))
+
+# p95 HTTP latency by route
+histogram_quantile(
+  0.95,
+  sum by (le, route) (rate(dspace_http_request_duration_seconds_bucket[5m]))
+)
+
+# dChat outcomes by provider
+sum by (provider, outcome) (rate(dspace_dchat_requests_total[5m]))
+
+# token.place dependency outcomes
+sum by (outcome) (rate(dspace_dependency_requests_total{dependency="tokenplace"}[5m]))
+```
+
+The examples above describe implemented source behavior. They are not live Sugarkube scrape
+evidence until captured from a deployed staging or production target.
 
 ## Canonical Helm chart decision
 
@@ -70,8 +120,8 @@ Every requirement below is classified as one of:
       includes tested bearer-token Secret wiring; if a cluster-only metrics service or NetworkPolicy
       is used instead, public ingress must not route to `/metrics`.
 - [ ] Release/build identity is available with bounded labels, for example
-      `dspace_build_info{version,revision,release,environment}` with value `1` or equivalent
-      relabeled metadata.
+      `dspace_build_info{version,revision}` with value `1`; Helm release and environment may be
+      added by Prometheus relabeling rather than application labels.
 
 ### Required staging evidence
 

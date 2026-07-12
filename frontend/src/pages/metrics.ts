@@ -1,4 +1,4 @@
-import { register } from '../utils/metrics.js';
+import { isMetricsReady, register } from '../utils/metrics.js';
 
 export const prerender = false;
 
@@ -16,8 +16,22 @@ export async function GET({ request }: { request: Request }) {
         }
     }
 
-    const metrics = await register.metrics();
-    return new Response(metrics, {
-        headers: { 'Content-Type': register.contentType },
-    });
+    if (!isMetricsReady()) {
+        return new Response('metrics unavailable\n', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+        });
+    }
+
+    try {
+        const metrics = await register.metrics();
+        return new Response(metrics, {
+            headers: { 'Content-Type': register.contentType },
+        });
+    } catch {
+        return new Response('metrics unavailable\n', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+        });
+    }
 }
