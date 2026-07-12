@@ -18,11 +18,13 @@ const hasBrowserHeldOpenAIKey = (options = {}) =>
 
 const shouldUseServerChatProxy = (options = {}) =>
     isBrowser &&
-    options?.serverChatProxy === true &&
+    options?.serverChatProxy !== false &&
     !hasBrowserHeldOpenAIKey(options) &&
     (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
 
 const callServerChat = async (provider, messages, options = {}) => {
+    // Browser calls use the server-controlled provider boundary only when doing so does not
+    // move browser-held OpenAI credentials or prebuilt game-state prompt payloads to the server.
     const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

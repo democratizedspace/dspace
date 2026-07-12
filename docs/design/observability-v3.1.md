@@ -107,8 +107,10 @@ templates or fixed route groups, maps unmatched paths to `/unknown`, maps status
 `2xx`, `4xx`, `5xx`, or `unknown`, and bounds method/provider/dependency/outcome labels. Browser
 token.place helpers keep relay plaintext, encryption, and private-key material in the browser;
 browser OpenAI helpers do not forward prompt payloads or browser-held API keys to the DSPACE server.
-The optional `/api/chat` route accepts only sanitized OpenAI requests and rejects token.place or
-credential-bearing payloads. Browser metric reports are not accepted; `POST /metrics` is
+When no browser-held OpenAI key or prebuilt prompt payload is present, browser OpenAI helpers
+default to the sanitized `/api/chat` server boundary; otherwise they stay local to preserve the
+credential boundary. The optional `/api/chat` route rejects token.place or credential-bearing
+payloads. Browser metric reports are not accepted; `POST /metrics` is
 non-writable and returns `405`, so only trusted server instrumentation can mutate the registry
 scraped by Prometheus. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
 successful placeholder. Metrics write failures are isolated from game functionality and do not
