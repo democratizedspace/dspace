@@ -4,6 +4,9 @@ export const prerender = false;
 
 const MAX_BODY_BYTES = 64 * 1024;
 
+const getServerOpenAIKey = () =>
+    process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
+
 const readBoundedJson = async (request: Request) => {
     const contentType = request.headers.get('content-type') || '';
     if (!contentType.toLowerCase().includes('application/json')) {
@@ -39,13 +42,25 @@ export async function POST({ request }: { request: Request }) {
         if (provider !== 'openai') {
             return Response.json({ error: 'unsupported_provider' }, { status: 400 });
         }
-        if (body?.options?.promptPayload || body?.options?.gameState || body?.apiKey) {
+        if (
+            body?.options?.promptPayload ||
+            body?.options?.gameState ||
+            body?.options?.serverOpenAIApiKey ||
+            body?.apiKey
+        ) {
             return Response.json({ error: 'sensitive_payload_rejected' }, { status: 400 });
+        }
+        const serverOpenAIApiKey = getServerOpenAIKey(); // scan-secrets: ignore
+        if (!serverOpenAIApiKey) {
+            return Response.json({ error: 'server_openai_unconfigured' }, { status: 503 });
         }
         const messages = Array.isArray(body?.messages) ? body.messages : [];
         // Do not accept browser-held game state or credentials here. token.place stays entirely
         // browser-side so relay plaintext and private keys never cross into DSPACE server handling.
-        const result = await GPT5ChatV2(messages, { serverChatProxy: true });
+        const result = await GPT5ChatV2(messages, {
+            serverChatProxy: true,
+            serverOpenAIApiKey,
+        });
         return Response.json(result);
     } catch (error) {
         const payload = sanitizeError(error);

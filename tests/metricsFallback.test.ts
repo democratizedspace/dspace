@@ -262,6 +262,8 @@ describe('DSPACE application metrics', () => {
         const previousClient = (
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
         ).__DSpaceOpenAIClient;
+        const previousOpenAIKey = process.env.OPENAI_API_KEY;
+        process.env.OPENAI_API_KEY = 'test-server-openai-key'; // scan-secrets: ignore
         (
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
         ).__DSpaceOpenAIClient = class MockOpenAIClient {
@@ -306,6 +308,21 @@ describe('DSPACE application metrics', () => {
             });
             expect(tokenPlaceResponse.status).toBe(400);
 
+            delete process.env.OPENAI_API_KEY;
+            const unconfiguredResponse = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        messages: [{ role: 'user', content: 'hello' }],
+                    }),
+                }),
+            });
+            expect(unconfiguredResponse.status).toBe(503);
+            expect(calls).toHaveLength(0);
+            process.env.OPENAI_API_KEY = 'test-server-openai-key'; // scan-secrets: ignore
+
             const response = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
@@ -336,6 +353,11 @@ describe('DSPACE application metrics', () => {
                 (
                     globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
                 ).__DSpaceOpenAIClient = previousClient;
+            }
+            if (previousOpenAIKey === undefined) {
+                delete process.env.OPENAI_API_KEY;
+            } else {
+                process.env.OPENAI_API_KEY = previousOpenAIKey; // scan-secrets: ignore
             }
         }
     });

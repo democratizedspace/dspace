@@ -953,7 +953,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
 const runGPT5Chat = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const { combinedMessages, gameState, contextSources } = promptPayload;
-    const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
+    const apiKey = // scan-secrets: ignore
+        !isBrowser && options.serverOpenAIApiKey
+            ? options.serverOpenAIApiKey
+            : gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
@@ -970,7 +973,10 @@ const runGPT5Chat = async (messages, options = {}) => {
 const runGPT5ChatV2 = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const { combinedMessages, gameState, contextSources } = promptPayload;
-    const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
+    const apiKey = // scan-secrets: ignore
+        !isBrowser && options.serverOpenAIApiKey
+            ? options.serverOpenAIApiKey
+            : gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
