@@ -10,7 +10,7 @@ import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
-import { instrumentDchatOperation, instrumentDependencyOperation } from './metrics.js';
+import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -544,6 +544,8 @@ export const getOpenAIErrorSummary = (error) => {
     return { type: 'unknown', message: defaultOpenAIErrorMessage };
 };
 
+const secondsSinceMetricsStart = (start) => Math.max(0, (performance.now() - start) / 1000);
+
 async function createChatResponse(openai, input) {
     const { defaultModel: resolvedModel, fallbackModels: resolvedFallbackModels } =
         getChatModelConfig();
@@ -552,10 +554,25 @@ async function createChatResponse(openai, input) {
     for (let index = 0; index < models.length; index += 1) {
         const model = models[index];
 
+        const attemptStart = performance.now();
         try {
-            return await openai.responses.create({ model, input });
+            const response = await openai.responses.create({ model, input });
+            recordDependencyRequest({
+                dependency: 'openai',
+                outcome: index > 0 ? 'fallback_used' : 'success',
+                durationSeconds: secondsSinceMetricsStart(attemptStart),
+            });
+            return { response, fallbackUsed: index > 0 };
         } catch (error) {
             const hasFallback = index < models.length - 1;
+            recordDependencyRequest({
+                dependency: 'openai',
+                outcome:
+                    hasFallback && isModelAccessError(error)
+                        ? 'fallback_unavailable'
+                        : outcomeFromError(error),
+                durationSeconds: secondsSinceMetricsStart(attemptStart),
+            });
             if (!hasFallback || !isModelAccessError(error)) {
                 throw error;
             }
@@ -912,11 +929,14 @@ const runGPT5Chat = async (messages, options = {}) => {
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
-    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const { response, fallbackUsed } = await createChatResponse(
+        openai,
+        combinedMessages.map(toResponseMessage)
+    );
     const outputText = toOutputText(response);
     const { text } = validateChatResponseText(outputText, { contextSources });
 
-    return text;
+    return fallbackUsed ? { text, metricsOutcome: 'fallback_used' } : text;
 };
 
 const runGPT5ChatV2 = async (messages, options = {}) => {
@@ -926,22 +946,25 @@ const runGPT5ChatV2 = async (messages, options = {}) => {
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
-    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const { response, fallbackUsed } = await createChatResponse(
+        openai,
+        combinedMessages.map(toResponseMessage)
+    );
     const outputText = toOutputText(response);
     const { text } = validateChatResponseText(outputText, { contextSources });
 
     return {
         text,
         contextSources: Array.isArray(contextSources) ? contextSources : [],
+        ...(fallbackUsed ? { metricsOutcome: 'fallback_used' } : {}),
     };
 };
 
 export const GPT5Chat = async (messages, options = {}) =>
-    instrumentDchatOperation('openai', () =>
-        instrumentDependencyOperation('openai', () => runGPT5Chat(messages, options))
-    );
+    instrumentDchatOperation('openai', async () => {
+        const result = await runGPT5Chat(messages, options);
+        return typeof result === 'object' && result?.text ? result : { text: result };
+    }).then((result) => result.text);
 
 export const GPT5ChatV2 = async (messages, options = {}) =>
-    instrumentDchatOperation('openai', () =>
-        instrumentDependencyOperation('openai', () => runGPT5ChatV2(messages, options))
-    );
+    instrumentDchatOperation('openai', () => runGPT5ChatV2(messages, options));

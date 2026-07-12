@@ -1,4 +1,7 @@
-const isBrowserRuntime = typeof process === 'undefined' || !process.versions?.node;
+import { isBrowser } from './ssr.js';
+import { getAppGitSha } from './buildInfo.js';
+
+const isBrowserRuntime = isBrowser && (typeof process === 'undefined' || !process.versions?.node);
 const defaultLoader = () => import(/* @vite-ignore */ 'prom-client');
 
 const HTTP_BUCKETS = [0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 30];
@@ -18,7 +21,7 @@ const OUTCOMES = new Set([
     'unknown_error',
 ]);
 const PROVIDERS = new Set(['tokenplace', 'openai', 'none', 'unknown']);
-const DEPENDENCIES = new Set(['tokenplace', 'openai']);
+const DEPENDENCIES = new Set(['tokenplace', 'openai', 'unknown']);
 const HTTP_METHODS = new Set(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']);
 
 let register;
@@ -34,26 +37,35 @@ const globalState = () => {
 const sanitizeEnum = (value, allowed, fallback) =>
     allowed.has(String(value || '').toLowerCase()) ? String(value).toLowerCase() : fallback;
 const postClientMetric = (kind, labels) => {
-    if (!isBrowserRuntime) return;
-    const body = JSON.stringify({ kind, ...labels });
-    const url = '/api/metrics/dchat';
-    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-        navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
-        return;
-    }
-    if (typeof fetch === 'function') {
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body,
-            keepalive: true,
-        }).catch(() => {});
+    try {
+        if (!isBrowserRuntime) return;
+        const body = JSON.stringify({ kind, ...labels });
+        const url =
+            typeof window !== 'undefined' && window.location?.origin
+                ? `${window.location.origin}/metrics`
+                : '/metrics';
+        if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+            navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
+            return;
+        }
+        if (typeof fetch === 'function') {
+            Promise.resolve(
+                fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body,
+                    keepalive: true,
+                })
+            ).catch(() => {});
+        }
+    } catch {
+        // Browser delivery is best-effort and must never affect chat behavior.
     }
 };
 
 export const normalizeOutcome = (value) => sanitizeEnum(value, OUTCOMES, 'unknown_error');
 export const normalizeProvider = (value) => sanitizeEnum(value, PROVIDERS, 'unknown');
-export const normalizeDependency = (value) => sanitizeEnum(value, DEPENDENCIES, 'tokenplace');
+export const normalizeDependency = (value) => sanitizeEnum(value, DEPENDENCIES, 'unknown');
 export const normalizeHttpMethod = (value) => {
     const method = String(value || 'GET').toUpperCase();
     return HTTP_METHODS.has(method) ? method : 'UNKNOWN';
@@ -84,6 +96,8 @@ export const outcomeFromError = (error) => {
     ).toLowerCase();
     if (status === 408 || type.includes('abort') || type.includes('timeout')) return 'timeout';
     if (status === 429 || type.includes('rate')) return 'rate_limited';
+    if (type.includes('fallback_unavailable') || type.includes('no token.place compute node'))
+        return 'fallback_unavailable';
     if (type.includes('malformed')) return 'malformed_response';
     if (status >= 400 && status < 500) return 'validation_error';
     if (status >= 500 || type.includes('server')) return 'server_error';
@@ -139,11 +153,12 @@ const getOrCreateMetric = (constructors, registerInstance, type, config) => {
 };
 
 const loadBuildInfo = () => ({
-    version: process.env.DSPACE_VERSION || process.env.npm_package_version || '3.0.1',
+    version: process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown',
     revision:
         process.env.DSPACE_REVISION ||
         process.env.GITHUB_SHA ||
         process.env.SOURCE_VERSION ||
+        getAppGitSha() ||
         'unknown',
 });
 
@@ -214,6 +229,13 @@ async function initMetrics(loader = defaultLoader) {
             }),
         };
         const build = loadBuildInfo();
+        if (typeof metricHandles.buildInfo.remove === 'function') {
+            try {
+                metricHandles.buildInfo.remove();
+            } catch {
+                // Duplicate-import safety: older prom-client versions may not support remove().
+            }
+        }
         metricHandles.buildInfo.set(build, 1);
         metricHandles.instrumentationUp.set(1);
         metricsAvailable = true;
@@ -254,8 +276,12 @@ export const recordHttpRequest = ({
         outcome: normalizeOutcome(outcome || outcomeFromStatus(status)),
     };
     if (labels.route === '/metrics') return;
-    metricHandles.httpRequests.inc(labels, 1);
-    metricHandles.httpDuration.observe(labels, durationSeconds);
+    try {
+        metricHandles.httpRequests.inc(labels, 1);
+        metricHandles.httpDuration.observe(labels, durationSeconds);
+    } catch {
+        // Metrics must never affect the application response.
+    }
 };
 
 export const instrumentHttpRequest = async ({ request, route }, fn) => {
@@ -296,11 +322,15 @@ export const recordDchatRequest = ({
         return;
     }
     if (!metricsAvailable || !metricHandles) return;
-    metricHandles.dchatRequests.inc({ provider: labels.provider, outcome: labels.outcome }, 1);
-    metricHandles.dchatDuration.observe(
-        { provider: labels.provider, outcome: labels.outcome },
-        durationSeconds
-    );
+    try {
+        metricHandles.dchatRequests.inc({ provider: labels.provider, outcome: labels.outcome }, 1);
+        metricHandles.dchatDuration.observe(
+            { provider: labels.provider, outcome: labels.outcome },
+            durationSeconds
+        );
+    } catch {
+        // Metrics must never affect the application response.
+    }
 };
 
 export const recordDependencyRequest = ({
@@ -318,14 +348,18 @@ export const recordDependencyRequest = ({
         return;
     }
     if (!metricsAvailable || !metricHandles) return;
-    metricHandles.dependencyRequests.inc(
-        { dependency: labels.dependency, outcome: labels.outcome },
-        1
-    );
-    metricHandles.dependencyDuration.observe(
-        { dependency: labels.dependency, outcome: labels.outcome },
-        durationSeconds
-    );
+    try {
+        metricHandles.dependencyRequests.inc(
+            { dependency: labels.dependency, outcome: labels.outcome },
+            1
+        );
+        metricHandles.dependencyDuration.observe(
+            { dependency: labels.dependency, outcome: labels.outcome },
+            durationSeconds
+        );
+    } catch {
+        // Metrics must never affect the application response.
+    }
 };
 
 export const instrumentDchatOperation = async (provider, operation) => {

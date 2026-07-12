@@ -17,7 +17,7 @@ import {
     createTokenPlaceHttpError,
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
-import { instrumentDchatOperation, instrumentDependencyOperation } from './metrics.js';
+import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
@@ -437,12 +437,21 @@ const randomBase64Url = (bytes = 18) =>
         .replace(/\//g, '_')
         .replace(/=+$/g, '');
 
+const secondsSinceMetricsStart = (start) => Math.max(0, (performance.now() - start) / 1000);
+
 const fetchJson = async (url, init, unavailableMessage) => {
+    const metricsStart = performance.now();
     let response;
     try {
         response = await fetch(url, { ...init, credentials: 'omit' });
     } catch (error) {
-        throw createTokenPlaceNetworkError(error);
+        const wrapped = createTokenPlaceNetworkError(error);
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(wrapped),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw wrapped;
     }
     if (!response.ok) {
         const payload = await parseErrorPayload(response);
@@ -452,14 +461,31 @@ const fetchJson = async (url, init, unavailableMessage) => {
             response.statusText || unavailableMessage
         );
         if (response.status >= 500) err.message = unavailableMessage;
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(err),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
         throw err;
     }
     try {
-        return await response.json();
+        const data = await response.json();
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'success',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        return data;
     } catch {
-        throw createMalformedTokenPlaceResponseError(
+        const err = createMalformedTokenPlaceResponseError(
             'Malformed token.place relay response: invalid JSON.'
         );
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'malformed_response',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw err;
     }
 };
 
@@ -612,6 +638,7 @@ export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
+    const metricsStart = performance.now();
     let response;
     try {
         response = await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
@@ -622,24 +649,65 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
             credentials: 'omit',
         });
     } catch (error) {
-        throw createTokenPlaceNetworkError(error);
+        const wrapped = createTokenPlaceNetworkError(error);
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(wrapped),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw wrapped;
     }
-    if (response.status === 202) return { ready: false };
-    if ([404, 410].includes(response.status)) return { terminalSelectedServerFailure: true };
+    if (response.status === 202) {
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'success',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        return { ready: false };
+    }
+    if ([404, 410].includes(response.status)) {
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'fallback_unavailable',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        return { terminalSelectedServerFailure: true };
+    }
     if (!response.ok) {
         const payload = await parseErrorPayload(response);
-        if (response.status >= 500)
-            throw createTokenPlaceHttpError(
-                response.status,
-                payload,
-                'token.place relay is unavailable.'
-            );
-        throw createTokenPlaceHttpError(response.status, payload, response.statusText);
+        const err =
+            response.status >= 500
+                ? createTokenPlaceHttpError(
+                      response.status,
+                      payload,
+                      'token.place relay is unavailable.'
+                  )
+                : createTokenPlaceHttpError(response.status, payload, response.statusText);
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(err),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw err;
     }
     try {
-        return { ready: true, data: await response.json() };
+        const data = await response.json();
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'success',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        return { ready: true, data };
     } catch {
-        throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');
+        const err = createMalformedTokenPlaceResponseError(
+            'Malformed encrypted token.place response.'
+        );
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'malformed_response',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw err;
     }
 };
 
@@ -930,9 +998,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
 };
 
 export const TokenPlaceChatV2 = async (messages, options = {}) =>
-    instrumentDchatOperation('tokenplace', () =>
-        instrumentDependencyOperation('tokenplace', () => runTokenPlaceChatV2(messages, options))
-    );
+    instrumentDchatOperation('tokenplace', () => runTokenPlaceChatV2(messages, options));
 
 export const tokenPlaceChat = async (messages, options = {}) => {
     const result = await TokenPlaceChatV2(messages, options);

@@ -105,8 +105,9 @@ avoids duplicate registration during repeated imports, tests, and hot reload:
 Source instrumentation excludes `/metrics` HTTP self-scrapes, normalizes route labels to route
 templates or fixed route groups, maps unmatched paths to `/unknown`, maps status labels only to
 `2xx`, `4xx`, `5xx`, or `unknown`, and bounds method/provider/dependency/outcome labels. Browser
-dChat and token.place helpers report only bounded provider/dependency/outcome/duration fields to a
-server metrics endpoint so Prometheus scrapes the server registry rather than a browser-local
+dChat and token.place helpers report only bounded provider/dependency/outcome/duration fields to
+`POST /metrics`, which rejects oversized, cross-origin, malformed, extra-field, non-finite, and
+out-of-enum payloads, so Prometheus scrapes the server registry rather than a browser-local
 registry. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
 successful placeholder. Metrics write failures are isolated from game functionality and do not
 expose secrets.
