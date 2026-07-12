@@ -4,6 +4,7 @@ import {
     buildRuntimeConfigResponse,
 } from './utils/runtimeEndpoints';
 import { logServerError } from './utils/serverLogger';
+import { recordHttpRequest, normalizeRoute, outcomeFromStatus } from './utils/metrics.js';
 
 export interface MiddlewareContext {
     request: Request;
@@ -11,6 +12,7 @@ export interface MiddlewareContext {
 
 export const onRequest = async (context: MiddlewareContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
+    const requestStartedAt = performance.now();
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
 
     let response: Response;
@@ -24,6 +26,15 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             message: 'Unhandled error while processing request',
             error,
         });
+        if (pathname !== '/metrics') {
+            recordHttpRequest({
+                method: context.request.method,
+                route: normalizeRoute(pathname),
+                status: 500,
+                outcome: 'server_error',
+                durationSeconds: Math.max(0, (performance.now() - requestStartedAt) / 1000),
+            });
+        }
         throw error;
     }
 
@@ -52,18 +63,42 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
         }
 
+        if (pathname !== '/metrics') {
+            recordHttpRequest({
+                method: context.request.method,
+                route: normalizeRoute(pathname),
+                status: response.status,
+                outcome: outcomeFromStatus(response.status),
+                durationSeconds: Math.max(0, (performance.now() - requestStartedAt) / 1000),
+            });
+        }
+
         return response;
     }
 
+    let fallbackResponse: Response;
     switch (pathname) {
         case '/config.json':
-            return buildRuntimeConfigResponse();
+            fallbackResponse = buildRuntimeConfigResponse();
+            break;
         case '/healthz':
         case '/health':
-            return buildHealthResponse();
+            fallbackResponse = buildHealthResponse();
+            break;
         case '/livez':
-            return buildLivezResponse();
+            fallbackResponse = buildLivezResponse();
+            break;
         default:
-            return response;
+            fallbackResponse = response;
     }
+
+    recordHttpRequest({
+        method: context.request.method,
+        route: normalizeRoute(pathname),
+        status: fallbackResponse.status,
+        outcome: outcomeFromStatus(fallbackResponse.status),
+        durationSeconds: Math.max(0, (performance.now() - requestStartedAt) / 1000),
+    });
+
+    return fallbackResponse;
 };

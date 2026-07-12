@@ -6,8 +6,10 @@ describe('metrics util', () => {
         await mod.initMetrics(() => {
             throw new Error('module not found');
         });
-        expect(mod.register.contentType).toBe('text/plain');
+        expect(mod.getMetricsStatus().available).toBe(false);
+        expect(mod.register.contentType).toBe('text/plain; charset=utf-8');
         const metrics = await mod.register.metrics();
-        expect(metrics).toContain('metrics unavailable');
+        expect(metrics).toContain('dspace metrics unavailable');
+        await mod.initMetrics();
     });
 });

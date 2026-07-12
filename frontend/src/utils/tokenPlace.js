@@ -17,6 +17,7 @@ import {
     createTokenPlaceHttpError,
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
+import { instrumentDchatOperation, instrumentDependencyOperation } from './metrics.js';
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
@@ -839,7 +840,7 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
     };
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) => {
+const runTokenPlaceChatV2 = async (messages, options = {}) => {
     await ready;
     const promptPayload = await resolveTokenPlacePromptPayload(messages, options);
     const contextSources = Array.isArray(promptPayload.contextSources)
@@ -927,6 +928,11 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         },
     };
 };
+
+export const TokenPlaceChatV2 = async (messages, options = {}) =>
+    instrumentDchatOperation('tokenplace', () =>
+        instrumentDependencyOperation('tokenplace', () => runTokenPlaceChatV2(messages, options))
+    );
 
 export const tokenPlaceChat = async (messages, options = {}) => {
     const result = await TokenPlaceChatV2(messages, options);

@@ -10,6 +10,7 @@ import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
+import { instrumentDchatOperation, instrumentDependencyOperation } from './metrics.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -904,7 +905,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
     return promptPayload;
 };
 
-export const GPT5Chat = async (messages, options = {}) => {
+const runGPT5Chat = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const { combinedMessages, gameState, contextSources } = promptPayload;
     const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
@@ -918,7 +919,7 @@ export const GPT5Chat = async (messages, options = {}) => {
     return text;
 };
 
-export const GPT5ChatV2 = async (messages, options = {}) => {
+const runGPT5ChatV2 = async (messages, options = {}) => {
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const { combinedMessages, gameState, contextSources } = promptPayload;
     const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
@@ -934,3 +935,13 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
         contextSources: Array.isArray(contextSources) ? contextSources : [],
     };
 };
+
+export const GPT5Chat = async (messages, options = {}) =>
+    instrumentDchatOperation('openai', () =>
+        instrumentDependencyOperation('openai', () => runGPT5Chat(messages, options))
+    );
+
+export const GPT5ChatV2 = async (messages, options = {}) =>
+    instrumentDchatOperation('openai', () =>
+        instrumentDependencyOperation('openai', () => runGPT5ChatV2(messages, options))
+    );

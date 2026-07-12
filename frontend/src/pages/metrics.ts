@@ -1,4 +1,4 @@
-import { register } from '../utils/metrics.js';
+import { getMetricsStatus, register } from '../utils/metrics.js';
 
 export const prerender = false;
 
@@ -14,6 +14,14 @@ export async function GET({ request }: { request: Request }) {
         if (auth !== `Bearer ${token}`) {
             return new Response('Unauthorized', { status: 401 });
         }
+    }
+
+    const status = getMetricsStatus();
+    if (!status.available) {
+        return new Response('metrics unavailable\n', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+        });
     }
 
     const metrics = await register.metrics();
