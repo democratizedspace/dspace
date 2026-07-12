@@ -11,6 +11,26 @@ import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
 import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
+import { isBrowser } from './ssr.js';
+
+const shouldUseServerChatProxy = () =>
+    isBrowser && (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+
+const callServerChat = async (provider, messages, options) => {
+    const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, messages, options }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        const error = new Error(payload?.message || 'Chat request failed');
+        error.name = payload?.type || 'ChatRequestError';
+        if (Number.isFinite(Number(payload?.status))) error.status = Number(payload.status);
+        throw error;
+    }
+    return payload;
+};
 
 const resolveOpenAIClient = () => {
     if (
@@ -961,10 +981,14 @@ const runGPT5ChatV2 = async (messages, options = {}) => {
 };
 
 export const GPT5Chat = async (messages, options = {}) =>
-    instrumentDchatOperation('openai', async () => {
-        const result = await runGPT5Chat(messages, options);
-        return typeof result === 'object' && result?.text ? result : { text: result };
-    }).then((result) => result.text);
+    shouldUseServerChatProxy()
+        ? (await callServerChat('openai', messages, options)).text
+        : instrumentDchatOperation('openai', async () => {
+              const result = await runGPT5Chat(messages, options);
+              return typeof result === 'object' && result?.text ? result : { text: result };
+          }).then((result) => result.text);
 
 export const GPT5ChatV2 = async (messages, options = {}) =>
-    instrumentDchatOperation('openai', () => runGPT5ChatV2(messages, options));
+    shouldUseServerChatProxy()
+        ? callServerChat('openai', messages, options)
+        : instrumentDchatOperation('openai', () => runGPT5ChatV2(messages, options));

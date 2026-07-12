@@ -18,6 +18,26 @@ import {
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
 import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
+import { isBrowser } from './ssr.js';
+
+const shouldUseServerChatProxy = () =>
+    isBrowser && (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+
+const callServerChat = async (provider, messages, options) => {
+    const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, messages, options }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        const error = new Error(payload?.message || 'Chat request failed');
+        error.name = payload?.type || 'ChatRequestError';
+        if (Number.isFinite(Number(payload?.status))) error.status = Number(payload.status);
+        throw error;
+    }
+    return payload;
+};
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
@@ -1006,7 +1026,9 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
 };
 
 export const TokenPlaceChatV2 = async (messages, options = {}) =>
-    instrumentDchatOperation('tokenplace', () => runTokenPlaceChatV2(messages, options));
+    shouldUseServerChatProxy()
+        ? callServerChat('token-place', messages, options)
+        : instrumentDchatOperation('tokenplace', () => runTokenPlaceChatV2(messages, options));
 
 export const tokenPlaceChat = async (messages, options = {}) => {
     const result = await TokenPlaceChatV2(messages, options);

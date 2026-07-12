@@ -255,6 +255,65 @@ describe('DSPACE application metrics', () => {
         expect(after).not.toContain('prompt-secret-456');
     });
 
+    it('records browser chat traffic through the server-controlled chat route', async () => {
+        const metrics = await importMetrics();
+        const endpoint = await import('../frontend/src/pages/api/chat');
+        const calls: Array<{ model: string }> = [];
+        const previousClient = (
+            globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
+        ).__DSpaceOpenAIClient;
+        (
+            globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
+        ).__DSpaceOpenAIClient = class MockOpenAIClient {
+            responses = {
+                create: async ({ model }: { model: string }) => {
+                    calls.push({ model });
+                    return { output_text: 'Server routed answer' };
+                },
+            };
+        };
+
+        try {
+            const response = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        messages: [{ role: 'user', content: 'hello' }],
+                        options: {
+                            promptPayload: {
+                                combinedMessages: [{ role: 'user', content: 'hello' }],
+                                gameState: { openAI: { apiKey: 'test-key' } }, // scan-secrets: ignore
+                                contextSources: [],
+                            },
+                        },
+                    }),
+                }),
+            });
+
+            expect(response.status).toBe(200);
+            await expect(response.json()).resolves.toMatchObject({ text: 'Server routed answer' });
+            expect(calls).toHaveLength(1);
+            const text = await metrics.register.metrics();
+            expect(text).toContain(
+                'dspace_dchat_requests_total{provider="openai",outcome="success"}'
+            );
+            expect(text).toContain(
+                'dspace_dependency_requests_total{dependency="openai",outcome="success"}'
+            );
+        } finally {
+            if (previousClient === undefined) {
+                delete (globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown })
+                    .__DSpaceOpenAIClient;
+            } else {
+                (
+                    globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
+                ).__DSpaceOpenAIClient = previousClient;
+            }
+        }
+    });
+
     it('exports stable low-cardinality build and instrumentation gauges', async () => {
         const metrics = await importMetrics();
         const text = await metrics.register.metrics();
