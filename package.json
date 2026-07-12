@@ -97,7 +97,8 @@
   },
   "dependencies": {
     "@dspace/feature-flags": "file:packages/feature-flags",
-    "openai": "^5.16.0"
+    "openai": "^5.16.0",
+    "prom-client": "^15.1.0"
   },
   "overrides": {
     "caniuse-lite": ">=1.0.30001792",

@@ -10,6 +10,7 @@ import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
+import { withDchatMetrics, withDependencyMetrics } from './metrics.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -552,7 +553,9 @@ async function createChatResponse(openai, input) {
         const model = models[index];
 
         try {
-            return await openai.responses.create({ model, input });
+            return await withDependencyMetrics('openai', () =>
+                openai.responses.create({ model, input })
+            );
         } catch (error) {
             const hasFallback = index < models.length - 1;
             if (!hasFallback || !isModelAccessError(error)) {
@@ -911,7 +914,9 @@ export const GPT5Chat = async (messages, options = {}) => {
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
-    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const response = await withDchatMetrics('openai', () =>
+        createChatResponse(openai, combinedMessages.map(toResponseMessage))
+    );
     const outputText = toOutputText(response);
     const { text } = validateChatResponseText(outputText, { contextSources });
 
@@ -925,7 +930,9 @@ export const GPT5ChatV2 = async (messages, options = {}) => {
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
-    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const response = await withDchatMetrics('openai', () =>
+        createChatResponse(openai, combinedMessages.map(toResponseMessage))
+    );
     const outputText = toOutputText(response);
     const { text } = validateChatResponseText(outputText, { contextSources });
 

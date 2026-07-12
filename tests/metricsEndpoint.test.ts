@@ -35,6 +35,17 @@ describe('metrics endpoint', () => {
         delete process.env.METRICS_TOKEN;
     });
 
+    it('returns 503 when metrics initialization failed', async () => {
+        const mod = await import('../frontend/src/utils/metrics.js');
+        await mod.initMetrics(() => {
+            throw new Error('module not found');
+        });
+        const res = await metricsGET({ request: new Request(url) });
+        expect(res.status).toBe(503);
+        expect(await res.text()).toContain('metrics unavailable');
+        await mod.initMetrics();
+    });
+
     it('is not prerendered', () => {
         expect(prerender).toBe(false);
     });

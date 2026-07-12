@@ -17,6 +17,7 @@ import {
     createTokenPlaceHttpError,
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
+import { withDchatMetrics, withDependencyMetrics } from './metrics.js';
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
@@ -547,10 +548,12 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
     if (options.model) params.set('model', options.model);
     if (options.contextTier) params.set('context_tier', options.contextTier);
     const suffix = params.toString() ? `?${params}` : '';
-    const data = await fetchJson(
-        `${baseUrl}/api/v1/relay/servers/next${suffix}`,
-        { method: 'GET', signal: options.signal },
-        'token.place relay is unavailable.'
+    const data = await withDependencyMetrics('tokenplace', () =>
+        fetchJson(
+            `${baseUrl}/api/v1/relay/servers/next${suffix}`,
+            { method: 'GET', signal: options.signal },
+            'token.place relay is unavailable.'
+        )
     );
     const rawKey = data?.server_public_key || data?.serverPublicKey || data?.public_key;
     if (!rawKey)
@@ -597,15 +600,17 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
 };
 
 export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}) =>
-    fetchJson(
-        `${baseUrl}/api/v1/relay/requests`,
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-            signal: options.signal,
-        },
-        'token.place relay is unavailable.'
+    withDependencyMetrics('tokenplace', () =>
+        fetchJson(
+            `${baseUrl}/api/v1/relay/requests`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+                signal: options.signal,
+            },
+            'token.place relay is unavailable.'
+        )
     );
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -613,13 +618,15 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     let response;
     try {
-        response = await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-            signal: options.signal,
-            credentials: 'omit',
-        });
+        response = await withDependencyMetrics('tokenplace', () =>
+            fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+                signal: options.signal,
+                credentials: 'omit',
+            })
+        );
     } catch (error) {
         throw createTokenPlaceNetworkError(error);
     }
@@ -839,94 +846,96 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
     };
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) => {
-    await ready;
-    const promptPayload = await resolveTokenPlacePromptPayload(messages, options);
-    const contextSources = Array.isArray(promptPayload.contextSources)
-        ? promptPayload.contextSources
-        : [];
-    const baseUrl = resolveTokenPlaceBaseUrl({
-        url: options.url,
-        state: promptPayload.gameState,
-        runtimeUrl: options.runtimeUrl,
-    });
-
-    const model = getTokenPlaceChatModel(options);
-    const sanitizedMessages = sanitizeTokenPlaceMessages(promptPayload.combinedMessages);
-    const contextEstimate = estimateTokenPlaceContextForSanitizedMessages(sanitizedMessages, {
-        reservedOutputTokens: options.reservedOutputTokens,
-        safetyMarginTokens: options.safetyMarginTokens,
-    });
-    if (contextEstimate.overLimit) throw createTokenPlaceContextBudgetError(contextEstimate);
-
-    const baseAttemptOptions = { ...options, model, contextTier: contextEstimate.selectedTier };
-    let attempt = await runRelayAttempt(baseUrl, sanitizedMessages, baseAttemptOptions);
-    if (attempt?.terminalSelectedServerFailure) {
-        attempt = await runRelayAttempt(baseUrl, sanitizedMessages, {
-            ...baseAttemptOptions,
-            requestId: undefined,
-            cancelToken: undefined,
+export const TokenPlaceChatV2 = async (messages, options = {}) =>
+    withDchatMetrics('tokenplace', async () => {
+        await ready;
+        const promptPayload = await resolveTokenPlacePromptPayload(messages, options);
+        const contextSources = Array.isArray(promptPayload.contextSources)
+            ? promptPayload.contextSources
+            : [];
+        const baseUrl = resolveTokenPlaceBaseUrl({
+            url: options.url,
+            state: promptPayload.gameState,
+            runtimeUrl: options.runtimeUrl,
         });
-        if (attempt?.terminalSelectedServerFailure) {
-            throw createMalformedTokenPlaceResponseError(
-                'No token.place compute node is available.'
-            );
-        }
-    }
 
-    let data = attempt.apiResponse;
-    if (shouldRetryContextOverflow(data, attempt.diagnostics)) {
-        const retryAttemptOptions = {
-            ...baseAttemptOptions,
-            contextTier: '64k-full',
-            requestId: undefined,
-            cancelToken: undefined,
-        };
-        let retry = await runRelayAttempt(baseUrl, sanitizedMessages, retryAttemptOptions);
-        if (retry?.terminalSelectedServerFailure) {
-            retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
-                ...retryAttemptOptions,
+        const model = getTokenPlaceChatModel(options);
+        const sanitizedMessages = sanitizeTokenPlaceMessages(promptPayload.combinedMessages);
+        const contextEstimate = estimateTokenPlaceContextForSanitizedMessages(sanitizedMessages, {
+            reservedOutputTokens: options.reservedOutputTokens,
+            safetyMarginTokens: options.safetyMarginTokens,
+        });
+        if (contextEstimate.overLimit) throw createTokenPlaceContextBudgetError(contextEstimate);
+
+        const baseAttemptOptions = { ...options, model, contextTier: contextEstimate.selectedTier };
+        let attempt = await runRelayAttempt(baseUrl, sanitizedMessages, baseAttemptOptions);
+        if (attempt?.terminalSelectedServerFailure) {
+            attempt = await runRelayAttempt(baseUrl, sanitizedMessages, {
+                ...baseAttemptOptions,
                 requestId: undefined,
                 cancelToken: undefined,
             });
-            if (retry?.terminalSelectedServerFailure) {
+            if (attempt?.terminalSelectedServerFailure) {
                 throw createMalformedTokenPlaceResponseError(
                     'No token.place compute node is available.'
                 );
             }
         }
-        attempt = {
-            ...retry,
-            diagnostics: { ...retry.diagnostics, escalationRetry: true },
-        };
-        data = retry.apiResponse;
-    }
 
-    throwStructuredTokenPlaceApiError(data);
-    const outputText = extractTokenPlaceAssistantText(data);
-    const { text } = validateChatResponseText(outputText, { contextSources });
+        let data = attempt.apiResponse;
+        if (shouldRetryContextOverflow(data, attempt.diagnostics)) {
+            const retryAttemptOptions = {
+                ...baseAttemptOptions,
+                contextTier: '64k-full',
+                requestId: undefined,
+                cancelToken: undefined,
+            };
+            let retry = await runRelayAttempt(baseUrl, sanitizedMessages, retryAttemptOptions);
+            if (retry?.terminalSelectedServerFailure) {
+                retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
+                    ...retryAttemptOptions,
+                    requestId: undefined,
+                    cancelToken: undefined,
+                });
+                if (retry?.terminalSelectedServerFailure) {
+                    throw createMalformedTokenPlaceResponseError(
+                        'No token.place compute node is available.'
+                    );
+                }
+            }
+            attempt = {
+                ...retry,
+                diagnostics: { ...retry.diagnostics, escalationRetry: true },
+            };
+            data = retry.apiResponse;
+        }
 
-    return {
-        text,
-        contextSources,
-        usage: data?.usage,
-        metadata: {
-            ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
-            tokenPlaceContext: {
-                requestedTier: attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
-                relaySelectedTier: attempt.diagnostics?.relaySelectedTier,
-                finalActiveTier: getApiErrorActiveTier(data),
-                spillover: Boolean(attempt.diagnostics?.spillover),
-                escalationRetry: Boolean(attempt.diagnostics?.escalationRetry),
-                estimatorVersion: contextEstimate.estimatorVersion,
-                estimatedPromptTokens: contextEstimate.estimatedPromptTokens,
-                reservedOutputTokens: contextEstimate.reservedOutputTokens,
-                timeoutClass: attempt.diagnostics?.timeoutClass,
-                safeErrorCode: getApiErrorCode(data),
+        throwStructuredTokenPlaceApiError(data);
+        const outputText = extractTokenPlaceAssistantText(data);
+        const { text } = validateChatResponseText(outputText, { contextSources });
+
+        return {
+            text,
+            contextSources,
+            usage: data?.usage,
+            metadata: {
+                ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
+                tokenPlaceContext: {
+                    requestedTier:
+                        attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
+                    relaySelectedTier: attempt.diagnostics?.relaySelectedTier,
+                    finalActiveTier: getApiErrorActiveTier(data),
+                    spillover: Boolean(attempt.diagnostics?.spillover),
+                    escalationRetry: Boolean(attempt.diagnostics?.escalationRetry),
+                    estimatorVersion: contextEstimate.estimatorVersion,
+                    estimatedPromptTokens: contextEstimate.estimatedPromptTokens,
+                    reservedOutputTokens: contextEstimate.reservedOutputTokens,
+                    timeoutClass: attempt.diagnostics?.timeoutClass,
+                    safeErrorCode: getApiErrorCode(data),
+                },
             },
-        },
-    };
-};
+        };
+    });
 
 export const tokenPlaceChat = async (messages, options = {}) => {
     const result = await TokenPlaceChatV2(messages, options);

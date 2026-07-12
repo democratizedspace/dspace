@@ -4,6 +4,7 @@ import {
     buildRuntimeConfigResponse,
 } from './utils/runtimeEndpoints';
 import { logServerError } from './utils/serverLogger';
+import { normalizeRoute, recordHttpRequest } from './utils/metrics.js';
 
 export interface MiddlewareContext {
     request: Request;
@@ -11,6 +12,7 @@ export interface MiddlewareContext {
 
 export const onRequest = async (context: MiddlewareContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
+    const startedAt = performance.now();
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
 
     let response: Response;
@@ -23,6 +25,13 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             method: context.request.method,
             message: 'Unhandled error while processing request',
             error,
+        });
+        recordHttpRequest({
+            method: context.request.method,
+            route: normalizeRoute(pathname),
+            status: 500,
+            outcome: 'server_error',
+            durationSeconds: (performance.now() - startedAt) / 1000,
         });
         throw error;
     }
@@ -52,18 +61,59 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
         }
 
+        recordHttpRequest({
+            method: context.request.method,
+            route: normalizeRoute(pathname),
+            status: response.status,
+            outcome:
+                response.status >= 500
+                    ? 'server_error'
+                    : response.status >= 400
+                      ? 'validation_error'
+                      : 'success',
+            durationSeconds: (performance.now() - startedAt) / 1000,
+        });
         return response;
     }
 
     switch (pathname) {
         case '/config.json':
-            return buildRuntimeConfigResponse();
+            response = buildRuntimeConfigResponse();
+            break;
         case '/healthz':
         case '/health':
-            return buildHealthResponse();
+            response = buildHealthResponse();
+            break;
         case '/livez':
-            return buildLivezResponse();
+            response = buildLivezResponse();
+            break;
         default:
+            recordHttpRequest({
+                method: context.request.method,
+                route: normalizeRoute(pathname),
+                status: response.status,
+                outcome:
+                    response.status >= 500
+                        ? 'server_error'
+                        : response.status >= 400
+                          ? 'validation_error'
+                          : 'success',
+                durationSeconds: (performance.now() - startedAt) / 1000,
+            });
             return response;
     }
+
+    recordHttpRequest({
+        method: context.request.method,
+        route: normalizeRoute(pathname),
+        status: response.status,
+        outcome:
+            response.status >= 500
+                ? 'server_error'
+                : response.status >= 400
+                  ? 'validation_error'
+                  : 'success',
+        durationSeconds: (performance.now() - startedAt) / 1000,
+    });
+    return response;
 };

@@ -16,6 +16,14 @@ export async function GET({ request }: { request: Request }) {
         }
     }
 
+    if (register.unavailable) {
+        const metrics = await register.metrics();
+        return new Response(metrics, {
+            status: 503,
+            headers: { 'Content-Type': register.contentType },
+        });
+    }
+
     const metrics = await register.metrics();
     return new Response(metrics, {
         headers: { 'Content-Type': register.contentType },
