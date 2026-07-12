@@ -668,7 +668,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     if ([404, 410].includes(response.status)) {
         recordDependencyRequest({
             dependency: 'tokenplace',
-            outcome: 'fallback_unavailable',
+            outcome: 'dependency_failure',
             durationSeconds: secondsSinceMetricsStart(metricsStart),
         });
         return { terminalSelectedServerFailure: true };
@@ -929,17 +929,21 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
     if (contextEstimate.overLimit) throw createTokenPlaceContextBudgetError(contextEstimate);
 
     const baseAttemptOptions = { ...options, model, contextTier: contextEstimate.selectedTier };
+    let fallbackUsed = false;
     let attempt = await runRelayAttempt(baseUrl, sanitizedMessages, baseAttemptOptions);
     if (attempt?.terminalSelectedServerFailure) {
+        fallbackUsed = true;
         attempt = await runRelayAttempt(baseUrl, sanitizedMessages, {
             ...baseAttemptOptions,
             requestId: undefined,
             cancelToken: undefined,
         });
         if (attempt?.terminalSelectedServerFailure) {
-            throw createMalformedTokenPlaceResponseError(
+            const error = createMalformedTokenPlaceResponseError(
                 'No token.place compute node is available.'
             );
+            error.type = 'fallback_unavailable';
+            throw error;
         }
     }
 
@@ -951,6 +955,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
             requestId: undefined,
             cancelToken: undefined,
         };
+        fallbackUsed = true;
         let retry = await runRelayAttempt(baseUrl, sanitizedMessages, retryAttemptOptions);
         if (retry?.terminalSelectedServerFailure) {
             retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
@@ -959,9 +964,11 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
                 cancelToken: undefined,
             });
             if (retry?.terminalSelectedServerFailure) {
-                throw createMalformedTokenPlaceResponseError(
+                const error = createMalformedTokenPlaceResponseError(
                     'No token.place compute node is available.'
                 );
+                error.type = 'fallback_unavailable';
+                throw error;
             }
         }
         attempt = {
@@ -978,6 +985,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
     return {
         text,
         contextSources,
+        ...(fallbackUsed ? { metricsOutcome: 'fallback_used' } : {}),
         usage: data?.usage,
         metadata: {
             ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),

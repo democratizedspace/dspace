@@ -4,7 +4,12 @@ import {
     buildRuntimeConfigResponse,
 } from './utils/runtimeEndpoints';
 import { logServerError } from './utils/serverLogger';
-import { recordHttpRequest, normalizeRoute, outcomeFromStatus } from './utils/metrics.js';
+import {
+    ensureMetricsInitialized,
+    recordHttpRequest,
+    normalizeRoute,
+    outcomeFromStatus,
+} from './utils/metrics.js';
 
 export interface MiddlewareContext {
     request: Request;
@@ -13,6 +18,8 @@ export interface MiddlewareContext {
 export const onRequest = async (context: MiddlewareContext, next: () => Promise<Response>) => {
     const { pathname } = new URL(context.request.url);
     const requestStartedAt = performance.now();
+    const metricsStatus =
+        pathname === '/metrics' ? { available: false } : await ensureMetricsInitialized();
     const handledPaths = new Set(['/config.json', '/healthz', '/health', '/livez']);
 
     let response: Response;
@@ -26,7 +33,7 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             message: 'Unhandled error while processing request',
             error,
         });
-        if (pathname !== '/metrics') {
+        if (pathname !== '/metrics' && metricsStatus.available) {
             recordHttpRequest({
                 method: context.request.method,
                 route: normalizeRoute(pathname),
@@ -63,7 +70,7 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
         }
 
-        if (pathname !== '/metrics') {
+        if (pathname !== '/metrics' && metricsStatus.available) {
             recordHttpRequest({
                 method: context.request.method,
                 route: normalizeRoute(pathname),
@@ -92,13 +99,15 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             fallbackResponse = response;
     }
 
-    recordHttpRequest({
-        method: context.request.method,
-        route: normalizeRoute(pathname),
-        status: fallbackResponse.status,
-        outcome: outcomeFromStatus(fallbackResponse.status),
-        durationSeconds: Math.max(0, (performance.now() - requestStartedAt) / 1000),
-    });
+    if (metricsStatus.available) {
+        recordHttpRequest({
+            method: context.request.method,
+            route: normalizeRoute(pathname),
+            status: fallbackResponse.status,
+            outcome: outcomeFromStatus(fallbackResponse.status),
+            durationSeconds: Math.max(0, (performance.now() - requestStartedAt) / 1000),
+        });
+    }
 
     return fallbackResponse;
 };

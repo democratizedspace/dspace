@@ -1401,7 +1401,7 @@ ${ragExcerpt.repeat(4000)}`,
 
         global.fetch = makeRelayFetch({ retrieveStatuses: [404, 404] });
         await expect(tokenPlaceChat([], { pollIntervalMs: 1 })).rejects.toMatchObject({
-            type: 'malformed',
+            type: 'fallback_unavailable',
             message: 'No token.place compute node is available.',
         });
     });

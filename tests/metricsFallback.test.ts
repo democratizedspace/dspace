@@ -214,7 +214,7 @@ describe('DSPACE application metrics', () => {
     expect(text).not.toContain('exception-message-secret-42');
   });
 
-  it('accepts bounded browser dChat metric reports through the server registry endpoint', async () => {
+  it('rejects browser dChat metric reports at the trusted server registry boundary', async () => {
     const metrics = await importMetrics();
     const endpoint = await import('../frontend/src/pages/metrics');
 
@@ -230,7 +230,7 @@ describe('DSPACE application metrics', () => {
         }),
       }),
     });
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(405);
 
     const dependencyResponse = await endpoint.POST({
       request: new Request('http://dspace.local/metrics', {
@@ -244,13 +244,13 @@ describe('DSPACE application metrics', () => {
         }),
       }),
     });
-    expect(dependencyResponse.status).toBe(204);
+    expect(dependencyResponse.status).toBe(405);
 
     const text = await metrics.register.metrics();
-    expect(text).toContain(
+    expect(text).not.toContain(
       'dspace_dchat_requests_total{provider="unknown",outcome="success"}'
     );
-    expect(text).toContain(
+    expect(text).not.toContain(
       'dspace_dependency_requests_total{dependency="tokenplace",outcome="server_error"}'
     );
     const rejected = await endpoint.POST({
@@ -269,7 +269,7 @@ describe('DSPACE application metrics', () => {
         }),
       }),
     });
-    expect(rejected.status).toBe(400);
+    expect(rejected.status).toBe(405);
     expect(text).not.toContain('browser-secret-provider');
   });
 

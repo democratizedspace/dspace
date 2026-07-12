@@ -36,31 +36,9 @@ const globalState = () => {
 
 const sanitizeEnum = (value, allowed, fallback) =>
     allowed.has(String(value || '').toLowerCase()) ? String(value).toLowerCase() : fallback;
-const postClientMetric = (kind, labels) => {
-    try {
-        if (!isBrowserRuntime) return;
-        const body = JSON.stringify({ kind, ...labels });
-        const url =
-            typeof window !== 'undefined' && window.location?.origin
-                ? `${window.location.origin}/metrics`
-                : '/metrics';
-        if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-            navigator.sendBeacon(url, new Blob([body], { type: 'application/json' }));
-            return;
-        }
-        if (typeof fetch === 'function') {
-            Promise.resolve(
-                fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body,
-                    keepalive: true,
-                })
-            ).catch(() => {});
-        }
-    } catch {
-        // Browser delivery is best-effort and must never affect chat behavior.
-    }
+const postClientMetric = () => {
+    // Browser-reported operational metrics are intentionally dropped. The shared
+    // Prometheus registry is trusted only at server-controlled HTTP/provider boundaries.
 };
 
 export const normalizeOutcome = (value) => sanitizeEnum(value, OUTCOMES, 'unknown_error');
@@ -374,6 +352,7 @@ export const instrumentDchatOperation = async (provider, operation) => {
         outcome = outcomeFromError(error);
         throw error;
     } finally {
+        if (!isBrowserRuntime) await ensureMetricsInitialized();
         recordDchatRequest({
             provider: normalizedProvider,
             outcome,
@@ -394,6 +373,7 @@ export const instrumentDependencyOperation = async (dependency, operation) => {
         outcome = outcomeFromError(error);
         throw error;
     } finally {
+        if (!isBrowserRuntime) await ensureMetricsInitialized();
         recordDependencyRequest({
             dependency: normalizedDependency,
             outcome,
