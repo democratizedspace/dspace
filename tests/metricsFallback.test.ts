@@ -8,6 +8,6 @@ describe('metrics util', () => {
         });
         expect(mod.register.contentType).toBe('text/plain');
         const metrics = await mod.register.metrics();
-        expect(metrics).toContain('metrics unavailable');
+        expect(metrics).toContain('metrics initialization failed');
     });
 });

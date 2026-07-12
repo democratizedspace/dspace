@@ -224,3 +224,76 @@ maintainer explicitly changes the scope:
 - [ ] Broad business analytics beyond safe operational counters.
 - [ ] High-cardinality client-side debugging telemetry.
 - [ ] Production threshold tuning after at least one measured production week.
+
+## Implemented application metrics slice (source behavior)
+
+This repository now implements the smallest production runtime metrics slice in application source
+without changing the canonical Helm chart. The `/metrics` endpoint emits Prometheus text only when
+`prom-client` initializes successfully; initialization failure returns an explicit non-success
+contract instead of a misleading placeholder. Application metrics are intentionally independent from
+Chat success paths: instrumentation failures are swallowed by bounded recording helpers and must not
+expose prompts, responses, credentials, save data, request IDs, URLs, IP addresses, or exception
+text.
+
+Implemented DSPACE-specific metric families:
+
+- `dspace_http_requests_total{method,route,status_class,outcome}`
+- `dspace_http_request_duration_seconds{method,route,status_class,outcome}`
+- `dspace_dchat_requests_total{provider,outcome}`
+- `dspace_dchat_request_duration_seconds{provider,outcome}`
+- `dspace_dependency_requests_total{dependency,outcome}`
+- `dspace_dependency_request_duration_seconds{dependency,outcome}`
+- `dspace_build_info{version,revision}`
+- `dspace_instrumentation_up`
+
+Implemented source label bounds:
+
+- HTTP `route` is normalized to fixed routes or route templates such as `/docs/[slug]`,
+  `/inventory/item/[itemId]`, `/processes/[processId]`, and `/quests/[pathId]/[questId]`.
+  `/metrics` is excluded from HTTP request instrumentation to avoid self-scrape distortion.
+- HTTP `status_class` is reduced to values such as `2xx`, `4xx`, and `5xx`.
+- dChat `provider` is normalized to `tokenplace`, `openai`, `none`, or `unknown`.
+- Dependency `dependency` is bounded to the implemented dependency paths `tokenplace` and `openai`.
+- `outcome` is normalized to the bounded vocabulary `success`, `timeout`, `rate_limited`,
+  `validation_error`, `malformed_response`, `dependency_failure`, `server_error`, `fallback_used`,
+  `fallback_unavailable`, or `unknown_error`.
+- `dspace_build_info` exposes only `version` and `revision`; deployment, release, namespace, and
+  environment identity should be added by Prometheus/Kubernetes labels or future chart work rather
+  than expanding the application metric label set in this slice.
+
+Live Sugarkube scrape evidence is still separate from this source implementation. Before treating
+v3.1.0 observability as shipped, QA must collect staging Prometheus target discovery, scrape auth or
+network-policy evidence, representative PromQL results, dashboard evidence, and a privacy review of
+scraped output from the deployed candidate.
+
+### PromQL examples for the implemented metric names
+
+```promql
+# HTTP request rate by route template and status class
+sum by (route, status_class) (rate(dspace_http_requests_total[5m]))
+
+# HTTP 5xx error ratio
+sum(rate(dspace_http_requests_total{status_class="5xx"}[5m]))
+  /
+sum(rate(dspace_http_requests_total[5m]))
+
+# HTTP p95 latency
+histogram_quantile(
+  0.95,
+  sum by (le, route) (rate(dspace_http_request_duration_seconds_bucket[5m]))
+)
+
+# dChat outcomes by provider
+sum by (provider, outcome) (rate(dspace_dchat_requests_total[5m]))
+
+# token.place dependency outcomes
+sum by (outcome) (rate(dspace_dependency_requests_total{dependency="tokenplace"}[5m]))
+
+# token.place dependency p95 latency
+histogram_quantile(
+  0.95,
+  sum by (le, outcome) (
+    rate(dspace_dependency_request_duration_seconds_bucket{dependency="tokenplace"}[5m])
+  )
+)
+```

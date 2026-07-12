@@ -4,6 +4,12 @@ import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
+import {
+    classifyErrorOutcome,
+    metricsTimer,
+    recordDchatRequest,
+    recordDependencyRequest,
+} from './metrics.js';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
 import { buildPromptMetrics } from './promptMetrics.js';
 import { planChatContext } from './chatContextPlanner.js';
@@ -911,7 +917,23 @@ export const GPT5Chat = async (messages, options = {}) => {
     const OpenAIClient = resolveOpenAIClient();
     const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
-    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+    const dependencyElapsed = metricsTimer();
+    let response;
+    try {
+        response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+        recordDependencyRequest({
+            dependency: 'openai',
+            outcome: 'success',
+            durationSeconds: dependencyElapsed(),
+        });
+    } catch (error) {
+        recordDependencyRequest({
+            dependency: 'openai',
+            outcome: classifyErrorOutcome(error),
+            durationSeconds: dependencyElapsed(),
+        });
+        throw error;
+    }
     const outputText = toOutputText(response);
     const { text } = validateChatResponseText(outputText, { contextSources });
 
@@ -919,18 +941,44 @@ export const GPT5Chat = async (messages, options = {}) => {
 };
 
 export const GPT5ChatV2 = async (messages, options = {}) => {
-    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
-    const { combinedMessages, gameState, contextSources } = promptPayload;
-    const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
-    const OpenAIClient = resolveOpenAIClient();
-    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
+    const elapsed = metricsTimer();
+    let outcome = 'unknown_error';
+    try {
+        const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
+        const { combinedMessages, gameState, contextSources } = promptPayload;
+        const apiKey = gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
+        const OpenAIClient = resolveOpenAIClient();
+        const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
 
-    const response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
-    const outputText = toOutputText(response);
-    const { text } = validateChatResponseText(outputText, { contextSources });
+        const dependencyElapsed = metricsTimer();
+        let response;
+        try {
+            response = await createChatResponse(openai, combinedMessages.map(toResponseMessage));
+            recordDependencyRequest({
+                dependency: 'openai',
+                outcome: 'success',
+                durationSeconds: dependencyElapsed(),
+            });
+        } catch (error) {
+            recordDependencyRequest({
+                dependency: 'openai',
+                outcome: classifyErrorOutcome(error),
+                durationSeconds: dependencyElapsed(),
+            });
+            throw error;
+        }
+        const outputText = toOutputText(response);
+        const { text } = validateChatResponseText(outputText, { contextSources });
 
-    return {
-        text,
-        contextSources: Array.isArray(contextSources) ? contextSources : [],
-    };
+        outcome = 'success';
+        return {
+            text,
+            contextSources: Array.isArray(contextSources) ? contextSources : [],
+        };
+    } catch (error) {
+        outcome = classifyErrorOutcome(error);
+        throw error;
+    } finally {
+        recordDchatRequest({ provider: 'openai', outcome, durationSeconds: elapsed() });
+    }
 };
