@@ -18,10 +18,8 @@ import {
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
 import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
-import { isBrowser } from './ssr.js';
-
-const shouldUseServerChatProxy = () =>
-    isBrowser && (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+// token.place relay encryption and client key material must remain in the browser.
+const shouldUseServerChatProxy = () => false;
 
 const callServerChat = async (provider, messages, options) => {
     const response = await fetch('/api/chat', {

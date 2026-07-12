@@ -105,10 +105,12 @@ avoids duplicate registration during repeated imports, tests, and hot reload:
 Source instrumentation excludes `/metrics` HTTP self-scrapes, normalizes route labels to route
 templates or fixed route groups, maps unmatched paths to `/unknown`, maps status labels only to
 `2xx`, `4xx`, `5xx`, or `unknown`, and bounds method/provider/dependency/outcome labels. Browser
-dChat and token.place helpers proxy real chat operations through the same-origin `/api/chat` server
-route so provider/dependency attempts are recorded at a server-controlled boundary. Browser metric
-reports are not accepted; `POST /metrics` is non-writable and returns `405`, so only trusted
-server instrumentation can mutate the registry scraped by Prometheus. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
+token.place helpers keep relay plaintext, encryption, and private-key material in the browser;
+browser OpenAI helpers do not forward prompt payloads or browser-held API keys to the DSPACE server.
+The optional `/api/chat` route accepts only sanitized OpenAI requests and rejects token.place or
+credential-bearing payloads. Browser metric reports are not accepted; `POST /metrics` is
+non-writable and returns `405`, so only trusted server instrumentation can mutate the registry
+scraped by Prometheus. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
 successful placeholder. Metrics write failures are isolated from game functionality and do not
 expose secrets.
 

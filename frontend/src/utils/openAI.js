@@ -13,14 +13,20 @@ import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
 import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
 import { isBrowser } from './ssr.js';
 
-const shouldUseServerChatProxy = () =>
-    isBrowser && (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+const hasBrowserHeldOpenAIKey = (options = {}) =>
+    Boolean(options?.promptPayload?.gameState?.openAI?.apiKey); // scan-secrets: ignore
 
-const callServerChat = async (provider, messages, options) => {
+const shouldUseServerChatProxy = (options = {}) =>
+    isBrowser &&
+    options?.serverChatProxy === true &&
+    !hasBrowserHeldOpenAIKey(options) &&
+    (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+
+const callServerChat = async (provider, messages, options = {}) => {
     const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider, messages, options }),
+        body: JSON.stringify({ provider, messages, options: { serverChatProxy: true } }),
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
@@ -981,7 +987,7 @@ const runGPT5ChatV2 = async (messages, options = {}) => {
 };
 
 export const GPT5Chat = async (messages, options = {}) =>
-    shouldUseServerChatProxy()
+    shouldUseServerChatProxy(options)
         ? (await callServerChat('openai', messages, options)).text
         : instrumentDchatOperation('openai', async () => {
               const result = await runGPT5Chat(messages, options);
@@ -989,6 +995,6 @@ export const GPT5Chat = async (messages, options = {}) =>
           }).then((result) => result.text);
 
 export const GPT5ChatV2 = async (messages, options = {}) =>
-    shouldUseServerChatProxy()
+    shouldUseServerChatProxy(options)
         ? callServerChat('openai', messages, options)
         : instrumentDchatOperation('openai', () => runGPT5ChatV2(messages, options));

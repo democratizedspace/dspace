@@ -1,10 +1,8 @@
 import { GPT5ChatV2 } from '../../utils/openAI.js';
-import { TokenPlaceChatV2 } from '../../utils/tokenPlace.js';
 
 export const prerender = false;
 
-const MAX_BODY_BYTES = 256 * 1024;
-const PROVIDERS = new Set(['openai', 'token-place', 'tokenplace']);
+const MAX_BODY_BYTES = 64 * 1024;
 
 const readBoundedJson = async (request: Request) => {
     const contentType = request.headers.get('content-type') || '';
@@ -38,15 +36,16 @@ export async function POST({ request }: { request: Request }) {
     try {
         const body = await readBoundedJson(request);
         const provider = String(body?.provider || '').toLowerCase();
-        if (!PROVIDERS.has(provider)) {
-            return Response.json({ error: 'invalid_provider' }, { status: 400 });
+        if (provider !== 'openai') {
+            return Response.json({ error: 'unsupported_provider' }, { status: 400 });
+        }
+        if (body?.options?.promptPayload || body?.options?.gameState || body?.apiKey) {
+            return Response.json({ error: 'sensitive_payload_rejected' }, { status: 400 });
         }
         const messages = Array.isArray(body?.messages) ? body.messages : [];
-        const options = body?.options && typeof body.options === 'object' ? body.options : {};
-        const result =
-            provider === 'openai'
-                ? await GPT5ChatV2(messages, options)
-                : await TokenPlaceChatV2(messages, options);
+        // Do not accept browser-held game state or credentials here. token.place stays entirely
+        // browser-side so relay plaintext and private keys never cross into DSPACE server handling.
+        const result = await GPT5ChatV2(messages, { serverChatProxy: true });
         return Response.json(result);
     } catch (error) {
         const payload = sanitizeError(error);

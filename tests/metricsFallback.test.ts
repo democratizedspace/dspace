@@ -255,7 +255,7 @@ describe('DSPACE application metrics', () => {
         expect(after).not.toContain('prompt-secret-456');
     });
 
-    it('records browser chat traffic through the server-controlled chat route', async () => {
+    it('rejects sensitive chat proxy payloads and records sanitized server chat traffic', async () => {
         const metrics = await importMetrics();
         const endpoint = await import('../frontend/src/pages/api/chat');
         const calls: Array<{ model: string }> = [];
@@ -274,7 +274,7 @@ describe('DSPACE application metrics', () => {
         };
 
         try {
-            const response = await endpoint.POST({
+            const rejected = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -288,6 +288,32 @@ describe('DSPACE application metrics', () => {
                                 contextSources: [],
                             },
                         },
+                    }),
+                }),
+            });
+            expect(rejected.status).toBe(400);
+            expect(calls).toHaveLength(0);
+
+            const tokenPlaceResponse = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        provider: 'token-place',
+                        messages: [{ role: 'user', content: 'hello' }],
+                    }),
+                }),
+            });
+            expect(tokenPlaceResponse.status).toBe(400);
+
+            const response = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        messages: [{ role: 'user', content: 'hello' }],
+                        options: { serverChatProxy: true },
                     }),
                 }),
             });
