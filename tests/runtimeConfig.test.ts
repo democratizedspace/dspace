@@ -14,6 +14,7 @@ const ORIGINAL_CHAT_PROXY_CREDENTIAL = process.env['DSPACE_CHAT_PROXY_TOKEN']; /
 const ORIGINAL_RATE_LIMIT_URL = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
 const ORIGINAL_RATE_LIMIT_CREDENTIAL =
   process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
+const ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
 
 describe('runtime endpoints', () => {
   beforeEach(() => {
@@ -26,6 +27,7 @@ describe('runtime endpoints', () => {
     delete process.env['DSPACE_CHAT_PROXY_TOKEN'];
     delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
     delete process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'];
+    delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
   });
 
   afterEach(() => {
@@ -79,6 +81,7 @@ describe('runtime endpoints', () => {
 
     if (ORIGINAL_RATE_LIMIT_CREDENTIAL === undefined) {
       delete process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'];
+    delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
     } else {
       process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = ORIGINAL_RATE_LIMIT_CREDENTIAL;
     }
@@ -106,6 +109,11 @@ describe('runtime endpoints', () => {
     process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
     process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = 'test-rate-limit-token'; // scan-secrets: ignore
 
+    response = await getRuntimeConfig();
+    body = await response.json();
+    expect(body.tokenPlace.relayProxyAvailable).toBe(false);
+
+    process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
     response = await getRuntimeConfig();
     body = await response.json();
     expect(body.tokenPlace.relayProxyAvailable).toBe(true);

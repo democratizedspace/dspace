@@ -205,8 +205,9 @@ export async function POST({ request }: { request: Request }) {
     try {
         // Trust boundary: this endpoint spends the server OpenAI credential. The shared signing
         // secret never leaves the server; browser requests must be same-origin, carry a valid
-        // HttpOnly session cookie minted by the SSR chat page, and stay within bounded
-        // shared Redis-compatible atomic rate limits before any provider dispatch. Browser-held OpenAI keys
+        // HttpOnly session cookie minted by the SSR chat page only after explicit
+        // operator usage authorization, and stay within bounded shared Redis-compatible
+        // atomic rate limits before any provider dispatch. Browser-held OpenAI keys
         // are never accepted here; token.place relay requests may carry only routing fields and
         // ciphertext.
         if (!isSameOriginRequest(request)) {

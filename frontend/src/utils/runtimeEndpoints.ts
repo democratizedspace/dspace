@@ -30,6 +30,20 @@ const hasChatProxyRateLimitConfig = () =>
             process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN
     );
 
+const isExplicitPublicChatProxyAccessEnabled = () =>
+    ['1', 'true', 'yes'].includes(
+        String(process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS || '')
+            .trim()
+            .toLowerCase()
+    );
+
+const hasCompleteChatProxyUsageAuthorization = () =>
+    Boolean(
+        getChatProxySigningSecret() &&
+            hasChatProxyRateLimitConfig() &&
+            isExplicitPublicChatProxyAccessEnabled()
+    );
+
 export function resolveRuntimeTokenPlaceConfig() {
     return {
         url: resolveTokenPlaceBaseUrl({
@@ -37,7 +51,7 @@ export function resolveRuntimeTokenPlaceConfig() {
             state: {},
         }),
         model: getTokenPlaceChatModel({ model: process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL }),
-        relayProxyAvailable: Boolean(getChatProxySigningSecret() && hasChatProxyRateLimitConfig()),
+        relayProxyAvailable: hasCompleteChatProxyUsageAuthorization(),
     };
 }
 
@@ -54,7 +68,10 @@ const signChatProxySession = (
 
 export function createChatProxySessionCookie(now = Date.now()) {
     const secret = getChatProxySigningSecret(); // scan-secrets: ignore
-    if (!secret) return null;
+    // Usage authorization: anonymous chat proxy sessions are minted only when an
+    // operator explicitly opts in to public proxy access and shared rate limits are
+    // configured. A signing secret alone is not authorization to spend provider capacity.
+    if (!secret || !hasCompleteChatProxyUsageAuthorization()) return null;
     const id = randomBytes(16).toString('base64url');
     const expiresAt = Math.floor(now / 1000) + CHAT_PROXY_SESSION_TTL_SECONDS;
     const signature = signChatProxySession(id, expiresAt, secret);
@@ -63,7 +80,7 @@ export function createChatProxySessionCookie(now = Date.now()) {
 
 export function verifyChatProxySessionCookie(value: string | null, now = Date.now()) {
     const secret = getChatProxySigningSecret(); // scan-secrets: ignore
-    if (!secret || !value) return null;
+    if (!secret || !value || !hasCompleteChatProxyUsageAuthorization()) return null;
     const parts = value.split('.');
     if (parts.length !== 3) return null;
     const [id, expiresAtText, signature] = parts;
@@ -82,9 +99,7 @@ export { CHAT_PROXY_SESSION_COOKIE, CHAT_PROXY_SESSION_TTL_SECONDS };
 export function resolveRuntimeOpenAIChatProxyConfig() {
     const serverOpenAIKey = process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
     return {
-        enabled: Boolean(
-            getChatProxySigningSecret() && hasChatProxyRateLimitConfig() && serverOpenAIKey
-        ),
+        enabled: Boolean(hasCompleteChatProxyUsageAuthorization() && serverOpenAIKey),
     };
 }
 

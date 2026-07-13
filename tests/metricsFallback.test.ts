@@ -267,6 +267,7 @@ describe('DSPACE application metrics', () => {
         const previousChatProxyCredential = process.env.DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
         const previousRateLimitUrl = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
         const previousRateLimitToken = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN; // scan-secrets: ignore
+        const previousPublicAccess = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
         const previousFetch = global.fetch;
         const rateLimitCounts = new Map<string, number>();
         const relayCalls: string[] = [];
@@ -292,6 +293,7 @@ describe('DSPACE application metrics', () => {
         process.env.DSPACE_CHAT_PROXY_TOKEN = 'test-chat-proxy-token'; // scan-secrets: ignore
         process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
         process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN = 'test-rate-limit-token'; // scan-secrets: ignore
+        process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
         endpoint.resetChatProxyRateLimitForTests();
         const chatCookie = () =>
             `${runtime.CHAT_PROXY_SESSION_COOKIE}=${runtime.createChatProxySessionCookie()}`;
@@ -544,6 +546,11 @@ describe('DSPACE application metrics', () => {
                 delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN;
             } else {
                 process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN = previousRateLimitToken; // scan-secrets: ignore
+            }
+            if (previousPublicAccess === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = previousPublicAccess;
             }
             global.fetch = previousFetch;
         }
