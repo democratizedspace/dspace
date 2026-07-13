@@ -87,6 +87,7 @@
     let providerMetadata = null;
     $: runtimeTokenPlaceUrl = tokenPlace?.url ?? null;
     $: runtimeTokenPlaceModel = tokenPlace?.model ?? null;
+    $: tokenPlaceRelayProxyAvailable = Boolean(tokenPlace?.relayProxyAvailable);
     $: openAIProxyAvailable = Boolean(openAIChatProxy?.enabled);
     let playerStateSummary = {
         included: false,
@@ -234,6 +235,7 @@
                           promptPayload: debugPayload,
                           runtimeUrl: runtimeTokenPlaceUrl,
                           runtimeModel: runtimeTokenPlaceModel,
+                          relayMetricBoundaryAvailable: tokenPlaceRelayProxyAvailable,
                       });
             providerUsage = aiResponse?.usage ?? null;
             providerMetadata = aiResponse?.metadata ?? null;

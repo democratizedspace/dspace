@@ -440,8 +440,10 @@ const randomBase64Url = (bytes = 18) =>
 
 const secondsSinceMetricsStart = (start) => Math.max(0, (performance.now() - start) / 1000);
 
-const canUseTokenPlaceRelayMetricBoundary = () =>
-    isBrowser && (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+const canUseTokenPlaceRelayMetricBoundary = (options = {}) =>
+    Boolean(options.relayMetricBoundaryAvailable) &&
+    isBrowser &&
+    (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
 
 const postTokenPlaceRelayMetricBoundary = async (operation, payload, signal) =>
     fetch('/api/chat', {
@@ -451,12 +453,19 @@ const postTokenPlaceRelayMetricBoundary = async (operation, payload, signal) =>
         signal,
     });
 
-const fetchJson = async (url, init, unavailableMessage, relayOperation, relayPayload) => {
+const fetchJson = async (
+    url,
+    init,
+    unavailableMessage,
+    relayOperation,
+    relayPayload,
+    options = {}
+) => {
     const metricsStart = performance.now();
     let response;
     try {
         response =
-            canUseTokenPlaceRelayMetricBoundary() && relayOperation
+            canUseTokenPlaceRelayMetricBoundary(options) && relayOperation
                 ? await postTokenPlaceRelayMetricBoundary(
                       relayOperation,
                       relayPayload,
@@ -598,7 +607,8 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
         { method: 'GET', signal: options.signal },
         'token.place relay is unavailable.',
         'select',
-        { model: options.model, contextTier: options.contextTier }
+        { model: options.model, contextTier: options.contextTier },
+        options
     );
     const rawKey = data?.server_public_key || data?.serverPublicKey || data?.public_key;
     if (!rawKey)
@@ -655,7 +665,8 @@ export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}
         },
         'token.place relay is unavailable.',
         'dispatch',
-        body
+        body,
+        options
     );
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -664,7 +675,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     const metricsStart = performance.now();
     let response;
     try {
-        response = canUseTokenPlaceRelayMetricBoundary()
+        response = canUseTokenPlaceRelayMetricBoundary(options)
             ? await postTokenPlaceRelayMetricBoundary('retrieve', body, options.signal)
             : await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
                   method: 'POST',

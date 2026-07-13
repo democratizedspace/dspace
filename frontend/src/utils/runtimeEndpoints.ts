@@ -31,6 +31,7 @@ export function resolveRuntimeTokenPlaceConfig() {
             state: {},
         }),
         model: getTokenPlaceChatModel({ model: process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL }),
+        relayProxyAvailable: Boolean(getChatProxySigningSecret()),
     };
 }
 

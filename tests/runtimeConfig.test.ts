@@ -66,6 +66,7 @@ describe('runtime endpoints', () => {
     expect(body.tokenPlace).toStrictEqual({
       url: 'https://token.place',
       model: 'llama-3.1-8b-instruct',
+      relayProxyAvailable: false,
     });
   });
 
@@ -79,6 +80,7 @@ describe('runtime endpoints', () => {
     expect(body.tokenPlace).toStrictEqual({
       url: 'https://staging.token.place',
       model: 'staging-chat-model',
+      relayProxyAvailable: false,
     });
   });
 
