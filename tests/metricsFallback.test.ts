@@ -265,8 +265,33 @@ describe('DSPACE application metrics', () => {
         ).__DSpaceOpenAIClient;
         const previousOpenAIKey = process.env.OPENAI_API_KEY;
         const previousChatProxyCredential = process.env.DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
+        const previousRateLimitUrl = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+        const previousRateLimitToken = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN; // scan-secrets: ignore
+        const previousFetch = global.fetch;
+        const rateLimitCounts = new Map<string, number>();
+        const relayCalls: string[] = [];
+        global.fetch = async (url, init) => {
+            const href = String(url);
+            if (href.startsWith('https://redis.example.test')) {
+                const body = JSON.parse(String(init?.body || '[]'));
+                const key = body?.[0]?.[1] || 'unknown';
+                const count = (rateLimitCounts.get(key) || 0) + 1;
+                rateLimitCounts.set(key, count);
+                return new Response(JSON.stringify([{ result: count }, { result: 1 }]), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            }
+            relayCalls.push(href);
+            return new Response(JSON.stringify({ server_public_key: 'relay-public-key' }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        };
         process.env.OPENAI_API_KEY = 'test-server-openai-key'; // scan-secrets: ignore
         process.env.DSPACE_CHAT_PROXY_TOKEN = 'test-chat-proxy-token'; // scan-secrets: ignore
+        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
+        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN = 'test-rate-limit-token'; // scan-secrets: ignore
         endpoint.resetChatProxyRateLimitForTests();
         const chatCookie = () =>
             `${runtime.CHAT_PROXY_SESSION_COOKIE}=${runtime.createChatProxySessionCookie()}`;
@@ -352,15 +377,6 @@ describe('DSPACE application metrics', () => {
             expect(invalidCookieResponse.status).toBe(403);
             expect(calls).toHaveLength(0);
 
-            const previousFetch = global.fetch;
-            const relayCalls: string[] = [];
-            global.fetch = async (url) => {
-                relayCalls.push(String(url));
-                return new Response(JSON.stringify({ server_public_key: 'relay-public-key' }), {
-                    status: 200,
-                    headers: { 'Content-Type': 'application/json' },
-                });
-            };
             const unauthenticatedRelay = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
@@ -391,7 +407,6 @@ describe('DSPACE application metrics', () => {
             });
             expect(authenticatedRelay.status).toBe(200);
             expect(relayCalls).toHaveLength(1);
-            global.fetch = previousFetch;
 
             delete process.env.OPENAI_API_KEY;
             const unconfiguredResponse = await endpoint.POST({
@@ -466,7 +481,12 @@ describe('DSPACE application metrics', () => {
             });
             expect(overLimit.status).toBe(429);
             expect(calls).toHaveLength(21);
-            expect(endpoint.getChatProxyRateLimitStateForTests().bucketCount).toBeGreaterThan(0);
+            expect(endpoint.getChatProxyRateLimitStateForTests()).toMatchObject({
+                bucketCount: 0,
+                shared: true,
+            });
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(true);
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':global:'))).toBe(true);
 
             const text = await metrics.register.metrics();
             expect(text).toContain(
@@ -494,6 +514,17 @@ describe('DSPACE application metrics', () => {
             } else {
                 process.env.DSPACE_CHAT_PROXY_TOKEN = previousChatProxyCredential; // scan-secrets: ignore
             }
+            if (previousRateLimitUrl === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = previousRateLimitUrl;
+            }
+            if (previousRateLimitToken === undefined) { // scan-secrets: ignore
+                delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN = previousRateLimitToken; // scan-secrets: ignore
+            }
+            global.fetch = previousFetch;
         }
     });
 

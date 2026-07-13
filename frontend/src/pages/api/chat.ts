@@ -15,11 +15,16 @@ const getServerOpenAIKey = () =>
     process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
 
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_TTL_SECONDS = Math.ceil(RATE_LIMIT_WINDOW_MS / 1000);
 const RATE_LIMIT_MAX = Number(process.env.DSPACE_CHAT_PROXY_SESSION_LIMIT || 20);
 const GLOBAL_RATE_LIMIT_MAX = Number(process.env.DSPACE_CHAT_PROXY_GLOBAL_LIMIT || 200);
-const MAX_RATE_LIMIT_BUCKETS = Number(process.env.DSPACE_CHAT_PROXY_MAX_BUCKETS || 256);
-const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
-let globalRateLimitBucket: { count: number; resetAt: number } | null = null;
+
+type SharedRateLimitResult = { allowed: boolean; unavailable?: boolean };
+
+const getSharedRateLimitConfig = () => ({
+    url: process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL || '',
+    token: process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN || '', // scan-secrets: ignore
+});
 
 const isSameOriginRequest = (request: Request) => {
     const origin = request.headers.get('origin');
@@ -40,44 +45,56 @@ const readCookie = (request: Request, name: string) => {
     return null;
 };
 
-const cleanupRateLimitBuckets = (now = Date.now()) => {
-    for (const [sessionId, bucket] of rateLimitBuckets) {
-        if (bucket.resetAt <= now) rateLimitBuckets.delete(sessionId);
-    }
-    while (rateLimitBuckets.size > MAX_RATE_LIMIT_BUCKETS) {
-        const oldestSessionId = rateLimitBuckets.keys().next().value;
-        if (!oldestSessionId) break;
-        rateLimitBuckets.delete(oldestSessionId);
+const parseRedisPipelineCount = (payload: unknown) => {
+    if (!Array.isArray(payload)) return Number.NaN;
+    const first = payload[0] as { result?: unknown } | unknown[] | undefined;
+    if (Array.isArray(first)) return Number(first[1]);
+    return Number((first as { result?: unknown } | undefined)?.result);
+};
+
+const incrementSharedRateLimitKey = async (key: string, limit: number) => {
+    if (limit <= 0) return { allowed: false };
+    const { url, token } = getSharedRateLimitConfig();
+    if (!url || !token) return { allowed: false, unavailable: true };
+    try {
+        const response = await fetch(`${url.replace(/\/$/, '')}/pipeline`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify([
+                ['INCR', key],
+                ['EXPIRE', key, RATE_LIMIT_TTL_SECONDS, 'NX'],
+            ]),
+        });
+        if (!response.ok) return { allowed: false, unavailable: true };
+        const count = parseRedisPipelineCount(await response.json());
+        if (!Number.isFinite(count)) return { allowed: false, unavailable: true };
+        return { allowed: count <= limit };
+    } catch {
+        return { allowed: false, unavailable: true };
     }
 };
 
-const consumeRateLimit = (sessionId: string, now = Date.now()) => {
-    cleanupRateLimitBuckets(now);
-    if (!globalRateLimitBucket || globalRateLimitBucket.resetAt <= now) {
-        globalRateLimitBucket = { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
-    }
-    if (globalRateLimitBucket.count >= GLOBAL_RATE_LIMIT_MAX) return false;
-
-    const bucket = rateLimitBuckets.get(sessionId);
-    if (!bucket || bucket.resetAt <= now) {
-        if (RATE_LIMIT_MAX <= 0) return false;
-        rateLimitBuckets.set(sessionId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-        globalRateLimitBucket.count += 1;
-        return true;
-    }
-    if (bucket.count >= RATE_LIMIT_MAX) return false;
-    bucket.count += 1;
-    globalRateLimitBucket.count += 1;
-    return true;
+const consumeRateLimit = async (sessionId: string): Promise<SharedRateLimitResult> => {
+    const minuteWindow = Math.floor(Date.now() / RATE_LIMIT_WINDOW_MS);
+    const session = await incrementSharedRateLimitKey(
+        `dspace:chat-proxy:session:${minuteWindow}:${sessionId}`,
+        RATE_LIMIT_MAX
+    );
+    if (!session.allowed || session.unavailable) return session;
+    return incrementSharedRateLimitKey(
+        `dspace:chat-proxy:global:${minuteWindow}`,
+        GLOBAL_RATE_LIMIT_MAX
+    );
 };
 
-export const resetChatProxyRateLimitForTests = () => {
-    rateLimitBuckets.clear();
-    globalRateLimitBucket = null;
-};
+export const resetChatProxyRateLimitForTests = () => {};
 export const getChatProxyRateLimitStateForTests = () => ({
-    bucketCount: rateLimitBuckets.size,
-    globalCount: globalRateLimitBucket?.count || 0,
+    bucketCount: 0,
+    globalCount: 0,
+    shared: Boolean(getSharedRateLimitConfig().url && getSharedRateLimitConfig().token),
 });
 
 const readBoundedJson = async (request: Request) => {
@@ -170,7 +187,7 @@ export async function POST({ request }: { request: Request }) {
         // Trust boundary: this endpoint spends the server OpenAI credential. The shared signing
         // secret never leaves the server; browser requests must be same-origin, carry a valid
         // HttpOnly session cookie minted by the SSR chat page, and stay within bounded
-        // per-session/global rate limits before any provider dispatch. Browser-held OpenAI keys
+        // shared Redis-compatible atomic rate limits before any provider dispatch. Browser-held OpenAI keys
         // are never accepted here; token.place relay requests may carry only routing fields and
         // ciphertext.
         if (!isSameOriginRequest(request)) {
@@ -182,7 +199,11 @@ export async function POST({ request }: { request: Request }) {
         if (!sessionId) {
             return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
         }
-        if (!consumeRateLimit(sessionId)) {
+        const rateLimit = await consumeRateLimit(sessionId);
+        if (rateLimit.unavailable) {
+            return Response.json({ error: 'chat_proxy_rate_limit_unavailable' }, { status: 503 });
+        }
+        if (!rateLimit.allowed) {
             return Response.json({ error: 'chat_proxy_rate_limited' }, { status: 429 });
         }
         const body = await readBoundedJson(request);

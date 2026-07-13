@@ -114,8 +114,8 @@ use the sanitized `/api/chat` server boundary when the server has both a chat-pr
 and an OpenAI credential configured; the SSR chat page mints an HttpOnly, session-scoped cookie,
 without serializing the shared secret into hydrated browser props. Calls with browser-held keys stay
 local to preserve the credential boundary. The `/api/chat` route requires same-origin
-requests with that valid session cookie and applies bounded per-session and global rate limits with expired-bucket cleanup before dispatching either OpenAI or token.place relay operations; it rejects
-credential-bearing OpenAI payloads and returns `503` when no server OpenAI credential is
+requests with that valid session cookie and applies shared Redis-compatible atomic per-session and global rate limits before dispatching either OpenAI or token.place relay operations; it fails closed with `503` when the shared rate-limit backend is unavailable, rejects
+credential-bearing OpenAI payloads, and returns `503` when no server OpenAI credential is
 configured for sanitized OpenAI proxy traffic. Browser metric reports are not accepted; `POST /metrics` is non-writable
 and returns `405`, so only trusted server instrumentation can mutate the registry
 scraped by Prometheus. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
