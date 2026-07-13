@@ -352,6 +352,47 @@ describe('DSPACE application metrics', () => {
             expect(invalidCookieResponse.status).toBe(403);
             expect(calls).toHaveLength(0);
 
+            const previousFetch = global.fetch;
+            const relayCalls: string[] = [];
+            global.fetch = async (url) => {
+                relayCalls.push(String(url));
+                return new Response(JSON.stringify({ server_public_key: 'relay-public-key' }), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            };
+            const unauthenticatedRelay = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Origin: 'http://dspace.local' },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'select',
+                        payload: { model: 'open-model', contextTier: 'small' },
+                    }),
+                }),
+            });
+            expect(unauthenticatedRelay.status).toBe(403);
+            expect(relayCalls).toHaveLength(0);
+            const authenticatedRelay = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'select',
+                        payload: { model: 'open-model', contextTier: 'small' },
+                    }),
+                }),
+            });
+            expect(authenticatedRelay.status).toBe(200);
+            expect(relayCalls).toHaveLength(1);
+            global.fetch = previousFetch;
+
             delete process.env.OPENAI_API_KEY;
             const unconfiguredResponse = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {

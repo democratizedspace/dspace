@@ -169,10 +169,21 @@ export async function POST({ request }: { request: Request }) {
     try {
         // Trust boundary: this endpoint spends the server OpenAI credential. The shared signing
         // secret never leaves the server; browser requests must be same-origin, carry a valid
-        // HttpOnly session cookie minted by the SSR chat page, and stay within a small per-session
-        // rate limit. Browser-held OpenAI keys are never accepted here; token.place relay requests may carry only routing fields and ciphertext.
+        // HttpOnly session cookie minted by the SSR chat page, and stay within bounded
+        // per-session/global rate limits before any provider dispatch. Browser-held OpenAI keys
+        // are never accepted here; token.place relay requests may carry only routing fields and
+        // ciphertext.
         if (!isSameOriginRequest(request)) {
             return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
+        }
+        const sessionId = verifyChatProxySessionCookie(
+            readCookie(request, CHAT_PROXY_SESSION_COOKIE)
+        );
+        if (!sessionId) {
+            return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
+        }
+        if (!consumeRateLimit(sessionId)) {
+            return Response.json({ error: 'chat_proxy_rate_limited' }, { status: 429 });
         }
         const body = await readBoundedJson(request);
         const provider = String(body?.provider || '').toLowerCase();
@@ -190,12 +201,6 @@ export async function POST({ request }: { request: Request }) {
         if (provider !== 'openai') {
             return Response.json({ error: 'unsupported_provider' }, { status: 400 });
         }
-        const sessionId = verifyChatProxySessionCookie(
-            readCookie(request, CHAT_PROXY_SESSION_COOKIE)
-        );
-        if (!sessionId) {
-            return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
-        }
         if (
             body?.options?.promptPayload ||
             body?.options?.gameState ||
@@ -207,9 +212,6 @@ export async function POST({ request }: { request: Request }) {
         const serverOpenAIApiKey = getServerOpenAIKey(); // scan-secrets: ignore
         if (!serverOpenAIApiKey) {
             return Response.json({ error: 'server_openai_unconfigured' }, { status: 503 });
-        }
-        if (!consumeRateLimit(sessionId)) {
-            return Response.json({ error: 'chat_proxy_rate_limited' }, { status: 429 });
         }
         const messages = Array.isArray(body?.messages) ? body.messages : [];
         // Do not accept browser-held game state or credentials here. token.place plaintext and

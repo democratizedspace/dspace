@@ -13,11 +13,12 @@ import {
 
 const tokenPlace = resolveRuntimeTokenPlaceConfig();
 const openAIChatProxy = resolveRuntimeOpenAIChatProxyConfig();
-if (openAIChatProxy.enabled) {
+const chatProxySessionCookie = createChatProxySessionCookie();
+if (chatProxySessionCookie || openAIChatProxy.enabled) {
     const existingSessionCookie = Astro.cookies.get(CHAT_PROXY_SESSION_COOKIE)?.value;
     const sessionCookie = verifyChatProxySessionCookie(existingSessionCookie || null)
         ? existingSessionCookie
-        : createChatProxySessionCookie();
+        : chatProxySessionCookie;
     if (sessionCookie) {
         Astro.cookies.set(CHAT_PROXY_SESSION_COOKIE, sessionCookie, {
             httpOnly: true,
