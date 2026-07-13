@@ -13,13 +13,27 @@ import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
 import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
 import { isBrowser } from './ssr.js';
 
-const hasBrowserHeldOpenAIKey = (options = {}) =>
-    Boolean(options?.promptPayload?.gameState?.openAI?.apiKey); // scan-secrets: ignore
+const hasBrowserHeldOpenAIKey = (options = {}) => {
+    if (options?.promptPayload?.gameState?.openAI?.apiKey) return true; // scan-secrets: ignore
+    if (!isBrowser) return false;
+    try {
+        return Boolean(loadGameState()?.openAI?.apiKey); // scan-secrets: ignore
+    } catch {
+        return false;
+    }
+};
+
+const getBrowserChatProxyCredential = () => {
+    if (!isBrowser) return '';
+    const token = globalThis.__DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
+    return typeof token === 'string' ? token : ''; // scan-secrets: ignore
+};
 
 const shouldUseServerChatProxy = (options = {}) =>
     isBrowser &&
     options?.serverChatProxy !== false &&
     !hasBrowserHeldOpenAIKey(options) &&
+    Boolean(getBrowserChatProxyCredential()) &&
     (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
 
 const callServerChat = async (provider, messages, options = {}) => {
@@ -27,7 +41,10 @@ const callServerChat = async (provider, messages, options = {}) => {
     // move browser-held OpenAI credentials or prebuilt game-state prompt payloads to the server.
     const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-DSPACE-Chat-Proxy-Token': getBrowserChatProxyCredential(),
+        },
         body: JSON.stringify({ provider, messages, options: { serverChatProxy: true } }),
     });
     const payload = await response.json().catch(() => ({}));

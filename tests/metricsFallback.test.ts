@@ -263,7 +263,9 @@ describe('DSPACE application metrics', () => {
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
         ).__DSpaceOpenAIClient;
         const previousOpenAIKey = process.env.OPENAI_API_KEY;
+        const previousChatProxyCredential = process.env.DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
         process.env.OPENAI_API_KEY = 'test-server-openai-key'; // scan-secrets: ignore
+        process.env.DSPACE_CHAT_PROXY_TOKEN = 'test-chat-proxy-token'; // scan-secrets: ignore
         (
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
         ).__DSpaceOpenAIClient = class MockOpenAIClient {
@@ -279,7 +281,10 @@ describe('DSPACE application metrics', () => {
             const rejected = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                    },
                     body: JSON.stringify({
                         provider: 'openai',
                         messages: [{ role: 'user', content: 'hello' }],
@@ -299,7 +304,10 @@ describe('DSPACE application metrics', () => {
             const tokenPlaceResponse = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                    },
                     body: JSON.stringify({
                         provider: 'token-place',
                         messages: [{ role: 'user', content: 'hello' }],
@@ -308,11 +316,43 @@ describe('DSPACE application metrics', () => {
             });
             expect(tokenPlaceResponse.status).toBe(400);
 
+            const unauthorizedResponse = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        messages: [{ role: 'user', content: 'hello' }],
+                    }),
+                }),
+            });
+            expect(unauthorizedResponse.status).toBe(403);
+            expect(calls).toHaveLength(0);
+
+            const replayedWrongTokenResponse = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-DSPACE-Chat-Proxy-Token': 'wrong-token',
+                    },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        messages: [{ role: 'user', content: 'hello' }],
+                    }),
+                }),
+            });
+            expect(replayedWrongTokenResponse.status).toBe(403);
+            expect(calls).toHaveLength(0);
+
             delete process.env.OPENAI_API_KEY;
             const unconfiguredResponse = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                    },
                     body: JSON.stringify({
                         provider: 'openai',
                         messages: [{ role: 'user', content: 'hello' }],
@@ -326,7 +366,10 @@ describe('DSPACE application metrics', () => {
             const response = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                    },
                     body: JSON.stringify({
                         provider: 'openai',
                         messages: [{ role: 'user', content: 'hello' }],
@@ -358,6 +401,11 @@ describe('DSPACE application metrics', () => {
                 delete process.env.OPENAI_API_KEY;
             } else {
                 process.env.OPENAI_API_KEY = previousOpenAIKey; // scan-secrets: ignore
+            }
+            if (previousChatProxyCredential === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_TOKEN;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_TOKEN = previousChatProxyCredential; // scan-secrets: ignore
             }
         }
     });

@@ -7,6 +7,8 @@ const MAX_BODY_BYTES = 64 * 1024;
 const getServerOpenAIKey = () =>
     process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
 
+const getChatProxyToken = () => process.env.DSPACE_CHAT_PROXY_TOKEN || ''; // scan-secrets: ignore
+
 const readBoundedJson = async (request: Request) => {
     const contentType = request.headers.get('content-type') || '';
     if (!contentType.toLowerCase().includes('application/json')) {
@@ -37,6 +39,14 @@ const sanitizeError = (error: unknown) => {
 
 export async function POST({ request }: { request: Request }) {
     try {
+        // Trust boundary: this endpoint spends the server OpenAI credential, so every request
+        // must present a server-configured bearer-style token. Browser-held OpenAI keys and
+        // token.place relay secrets are never accepted here.
+        const expectedToken = getChatProxyToken(); // scan-secrets: ignore
+        const suppliedToken = request.headers.get('x-dspace-chat-proxy-token') || ''; // scan-secrets: ignore
+        if (!expectedToken || suppliedToken !== expectedToken) {
+            return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
+        }
         const body = await readBoundedJson(request);
         const provider = String(body?.provider || '').toLowerCase();
         if (provider !== 'openai') {
