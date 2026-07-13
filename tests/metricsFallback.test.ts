@@ -410,6 +410,94 @@ describe('DSPACE application metrics', () => {
             expect(authenticatedRelay.status).toBe(200);
             expect(relayCalls).toHaveLength(1);
 
+            const authenticatedDispatch = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'dispatch',
+                        payload: {
+                            server_public_key: 'server',
+                            client_public_key: 'client',
+                            request_id: 'request',
+                            protocol: 'tokenplace_api_v1_relay_e2ee',
+                            version: '1',
+                            ciphertext: 'ciphertext',
+                            cipherkey: 'cipherkey',
+                            iv: 'iv',
+                            cancel_token: 'cancel-placeholder', // scan-secrets: ignore
+                        },
+                    }),
+                }),
+            });
+            expect(authenticatedDispatch.status).toBe(200);
+            const authenticatedRetrieve = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'retrieve',
+                        payload: { client_public_key: 'client', request_id: 'request' },
+                    }),
+                }),
+            });
+            expect(authenticatedRetrieve.status).toBe(200);
+            expect(relayCalls).toHaveLength(3);
+
+            const tokenPlaceMetricsBeforeInvalidPayload = await metrics.register.metrics();
+            const tokenPlaceLinesBeforeInvalidPayload =
+                getMetricLines(tokenPlaceMetricsBeforeInvalidPayload, 'dspace_dchat_requests_total')
+                    .join('\n') +
+                getMetricLines(
+                    tokenPlaceMetricsBeforeInvalidPayload,
+                    'dspace_dependency_requests_total'
+                ).join('\n');
+            for (const payload of [
+                { model: 'open-model', contextTier: 'small', messages: [{ content: 'plain' }] },
+                { client_public_key: 'client', request_id: 'request', privateKey: 'secret' },
+                { outcome: 'success', durationSeconds: 0.25, gameState: { inventory: [] } },
+            ]) {
+                const invalidPayloadResponse = await endpoint.POST({
+                    request: new Request('http://dspace.local/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Origin: 'http://dspace.local',
+                            Cookie: chatCookie(),
+                        },
+                        body: JSON.stringify({
+                            provider: 'tokenplace',
+                            operation: payload.outcome ? 'complete' : 'select',
+                            payload,
+                        }),
+                    }),
+                });
+                expect(invalidPayloadResponse.status).toBe(400);
+            }
+            expect(relayCalls).toHaveLength(3);
+            const tokenPlaceMetricsAfterInvalidPayload = await metrics.register.metrics();
+            const tokenPlaceLinesAfterInvalidPayload =
+                getMetricLines(tokenPlaceMetricsAfterInvalidPayload, 'dspace_dchat_requests_total')
+                    .join('\n') +
+                getMetricLines(
+                    tokenPlaceMetricsAfterInvalidPayload,
+                    'dspace_dependency_requests_total'
+                ).join('\n');
+            expect(tokenPlaceLinesAfterInvalidPayload).toBe(tokenPlaceLinesBeforeInvalidPayload);
+            expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('plain');
+            expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('secret');
+            expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('inventory');
+
             const tokenPlaceComplete = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
@@ -426,7 +514,7 @@ describe('DSPACE application metrics', () => {
                 }),
             });
             expect(tokenPlaceComplete.status).toBe(200);
-            expect(relayCalls).toHaveLength(1);
+            expect(relayCalls).toHaveLength(3);
 
             delete process.env.OPENAI_API_KEY;
             const unconfiguredResponse = await endpoint.POST({

@@ -1534,6 +1534,7 @@ ${ragExcerpt.repeat(4000)}`,
             TokenPlaceChatV2([{ role: 'user', content: 'hello retry' }])
         ).resolves.toMatchObject({
             text: 'retried reply',
+            metricsOutcome: 'fallback_used',
             metadata: { tokenPlaceContext: { escalationRetry: true } },
         });
 
@@ -1583,6 +1584,7 @@ ${ragExcerpt.repeat(4000)}`,
             })
         ).resolves.toMatchObject({
             text: 'retried after disconnect',
+            metricsOutcome: 'fallback_used',
             metadata: {
                 tokenPlaceContext: {
                     requestedTier: '64k-full',

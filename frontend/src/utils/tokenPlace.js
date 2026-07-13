@@ -1034,6 +1034,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
 
     return {
         text,
+        ...(fallbackUsed ? { metricsOutcome: 'fallback_used' } : {}),
         contextSources,
         usage: data?.usage,
         metadata: {

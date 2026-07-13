@@ -114,9 +114,71 @@ const readBoundedJson = async (request: Request) => {
     return JSON.parse(text);
 };
 
+const TOKEN_PLACE_PAYLOAD_KEYS: Record<string, Set<string>> = {
+    select: new Set(['model', 'contextTier']),
+    dispatch: new Set([
+        'server_public_key',
+        'client_public_key',
+        'request_id',
+        'protocol',
+        'version',
+        'ciphertext',
+        'chat_history',
+        'cipherkey',
+        'iv',
+        'auth_tag',
+        'cancel_token',
+    ]),
+    retrieve: new Set(['client_public_key', 'request_id']),
+    complete: new Set(['outcome', 'durationSeconds']),
+};
+
+const TOKEN_PLACE_PROHIBITED_PAYLOAD_KEYS = new Set([
+    'apiKey',
+    'api_key',
+    'authorization',
+    'credential',
+    'credentials',
+    'gameState',
+    'game_state',
+    'inventory',
+    'messages',
+    'modelName',
+    'plaintext',
+    'privateKey',
+    'private_key',
+    'prompt',
+    'promptPayload',
+    'secret',
+    'serverOpenAIApiKey',
+    'token',
+]);
+
+const validateTokenPlaceRelayPayload = (operation: string, payload: unknown) => {
+    const allowedKeys = TOKEN_PLACE_PAYLOAD_KEYS[operation];
+    if (!allowedKeys || !payload || typeof payload !== 'object' || Array.isArray(payload)) {
+        return false;
+    }
+    for (const key of Object.keys(payload)) {
+        if (!allowedKeys.has(key) || TOKEN_PLACE_PROHIBITED_PAYLOAD_KEYS.has(key)) return false;
+    }
+    if (operation === 'complete') {
+        const body = payload as { outcome?: unknown; durationSeconds?: unknown };
+        return (
+            (body.outcome === undefined || typeof body.outcome === 'string') &&
+            typeof body.durationSeconds === 'number' &&
+            Number.isFinite(body.durationSeconds)
+        );
+    }
+    return true;
+};
+
 const recordTokenPlaceRelay = async (operation: string, payload: unknown, signal?: AbortSignal) => {
     if (!TOKEN_PLACE_RELAY_OPERATIONS.has(operation)) {
         return Response.json({ error: 'unsupported_tokenplace_operation' }, { status: 400 });
+    }
+    if (!validateTokenPlaceRelayPayload(operation, payload)) {
+        return Response.json({ error: 'invalid_tokenplace_payload' }, { status: 400 });
     }
     if (operation === 'complete') {
         const body = payload as { outcome?: unknown; durationSeconds?: unknown };
