@@ -1,11 +1,6 @@
 import { GPT5ChatV2 } from '../../utils/openAI.js';
 import { npcPersonas } from '../../data/npcPersonas.js';
-import {
-    recordDependencyRequest,
-    recordDchatRequest,
-    normalizeOutcome,
-    outcomeFromStatus,
-} from '../../utils/metrics.js';
+import { recordDependencyRequest, outcomeFromStatus } from '../../utils/metrics.js';
 import { resolveTokenPlaceBaseUrl } from '../../utils/tokenPlace.js';
 import {
     CHAT_PROXY_SESSION_COOKIE,
@@ -192,17 +187,10 @@ const recordTokenPlaceRelay = async (operation: string, payload: unknown, signal
         return Response.json({ error: 'invalid_tokenplace_payload' }, { status: 400 });
     }
     if (operation === 'complete') {
-        const body = payload as { outcome?: unknown; durationSeconds?: unknown };
-        recordDchatRequest({
-            provider: 'tokenplace',
-            outcome: normalizeOutcome(
-                typeof body?.outcome === 'string' ? body.outcome : 'unknown_error'
-            ),
-            durationSeconds:
-                typeof body?.durationSeconds === 'number' && Number.isFinite(body.durationSeconds)
-                    ? Math.max(0, Math.min(30, body.durationSeconds))
-                    : 0,
-        });
+        // Client-reported completion outcomes are not recorded to the server registry.
+        // Server-observed relay dependency metrics from dispatch and retrieve are the
+        // authoritative signal; accepting client-asserted outcomes would allow any
+        // authorized browser to fabricate arbitrary metric values.
         return Response.json({ ok: true });
     }
     const baseUrl = resolveTokenPlaceBaseUrl({
@@ -292,15 +280,28 @@ export async function POST({ request }: { request: Request }) {
         if (!sessionId) {
             return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
         }
-        const rateLimit = await consumeRateLimit(sessionId);
-        if (rateLimit.unavailable) {
-            return Response.json({ error: 'chat_proxy_rate_limit_unavailable' }, { status: 503 });
-        }
-        if (!rateLimit.allowed) {
-            return Response.json({ error: 'chat_proxy_rate_limited' }, { status: 429 });
-        }
+        // Parse the body before rate-limiting so that oversized or malformed requests are
+        // rejected without consuming a rate-limit token.
         const body = await readBoundedJson(request);
         const provider = String(body?.provider || '').toLowerCase();
+        const operation = String(body?.operation || '').toLowerCase();
+        // For token.place, only dispatch initiates an expensive model call; select, retrieve,
+        // and complete are sub-operations of a single logical chat. Counting each sub-operation
+        // against the session limit would allow normal polling to exhaust the allowance before
+        // the chat completes. For all other providers (OpenAI) every request is rate-limited.
+        const isRateLimitedOperation = provider !== 'tokenplace' || operation === 'dispatch';
+        if (isRateLimitedOperation) {
+            const rateLimit = await consumeRateLimit(sessionId);
+            if (rateLimit.unavailable) {
+                return Response.json(
+                    { error: 'chat_proxy_rate_limit_unavailable' },
+                    { status: 503 }
+                );
+            }
+            if (!rateLimit.allowed) {
+                return Response.json({ error: 'chat_proxy_rate_limited' }, { status: 429 });
+            }
+        }
         if (provider === 'tokenplace') {
             // token.place browser traffic keeps encryption and private keys client-side; this
             // boundary forwards only routing fields or ciphertext so server metrics can observe

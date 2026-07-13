@@ -268,7 +268,8 @@ describe('DSPACE application metrics', () => {
         const previousRateLimitUrl = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
         const previousRateLimitValue = process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
         const previousPublicAccess = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
-        const previousAuthorizationValue = process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
+        const previousAuthorizationValue =
+            process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
         const previousFetch = global.fetch;
         const rateLimitCounts = new Map<string, number>();
         const relayCalls: string[] = [];
@@ -462,8 +463,10 @@ describe('DSPACE application metrics', () => {
 
             const tokenPlaceMetricsBeforeInvalidPayload = await metrics.register.metrics();
             const tokenPlaceLinesBeforeInvalidPayload =
-                getMetricLines(tokenPlaceMetricsBeforeInvalidPayload, 'dspace_dchat_requests_total')
-                    .join('\n') +
+                getMetricLines(
+                    tokenPlaceMetricsBeforeInvalidPayload,
+                    'dspace_dchat_requests_total'
+                ).join('\n') +
                 getMetricLines(
                     tokenPlaceMetricsBeforeInvalidPayload,
                     'dspace_dependency_requests_total'
@@ -493,8 +496,10 @@ describe('DSPACE application metrics', () => {
             expect(relayCalls).toHaveLength(3);
             const tokenPlaceMetricsAfterInvalidPayload = await metrics.register.metrics();
             const tokenPlaceLinesAfterInvalidPayload =
-                getMetricLines(tokenPlaceMetricsAfterInvalidPayload, 'dspace_dchat_requests_total')
-                    .join('\n') +
+                getMetricLines(
+                    tokenPlaceMetricsAfterInvalidPayload,
+                    'dspace_dchat_requests_total'
+                ).join('\n') +
                 getMetricLines(
                     tokenPlaceMetricsAfterInvalidPayload,
                     'dspace_dependency_requests_total'
@@ -604,6 +609,34 @@ describe('DSPACE application metrics', () => {
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(true);
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':global:'))).toBe(true);
 
+            // Token.place sub-operations (select, retrieve, complete) are part of a single
+            // logical chat; only dispatch should consume a rate-limit token. Verifying with the
+            // already-exhausted reusableCookie: non-dispatch ops succeed without hitting Redis.
+            rateLimitCounts.clear();
+            for (const [op, pl] of [
+                ['select', { model: 'open-model', contextTier: 'small' }],
+                ['retrieve', { client_public_key: 'client', request_id: 'req2' }],
+                ['complete', { outcome: 'success', durationSeconds: 0.1 }],
+            ]) {
+                const nonDispatch = await endpoint.POST({
+                    request: new Request('http://dspace.local/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Origin: 'http://dspace.local',
+                            Cookie: reusableCookie,
+                        },
+                        body: JSON.stringify({
+                            provider: 'tokenplace',
+                            operation: op,
+                            payload: pl,
+                        }),
+                    }),
+                });
+                expect(nonDispatch.status).toBe(200);
+            }
+            expect(rateLimitCounts.size).toBe(0);
+
             const text = await metrics.register.metrics();
             expect(text).toContain(
                 'dspace_dchat_requests_total{provider="openai",outcome="success"}'
@@ -611,8 +644,10 @@ describe('DSPACE application metrics', () => {
             expect(text).toContain(
                 'dspace_dependency_requests_total{dependency="openai",outcome="success"}'
             );
+            // token.place dChat outcomes are not recorded from client-asserted complete reports;
+            // server-observed relay dependency metrics are the authoritative signal.
             expect(text).toContain(
-                'dspace_dchat_requests_total{provider="tokenplace",outcome="success"}'
+                'dspace_dependency_requests_total{dependency="tokenplace",outcome="success"}'
             );
         } finally {
             if (previousClient === undefined) {
@@ -641,7 +676,8 @@ describe('DSPACE application metrics', () => {
             if (previousRateLimitValue === undefined) {
                 delete process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'];
             } else {
-                process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] = previousRateLimitValue; // scan-secrets: ignore
+                process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] =
+                    previousRateLimitValue; // scan-secrets: ignore
             }
             if (previousPublicAccess === undefined) {
                 delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
@@ -651,7 +687,8 @@ describe('DSPACE application metrics', () => {
             if (previousAuthorizationValue === undefined) {
                 delete process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'];
             } else {
-                process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = previousAuthorizationValue; // scan-secrets: ignore
+                process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
+                    previousAuthorizationValue; // scan-secrets: ignore
             }
             global.fetch = previousFetch;
         }
