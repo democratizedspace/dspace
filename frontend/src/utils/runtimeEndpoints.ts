@@ -27,7 +27,7 @@ function parseTelemetryEnabled(flags: FeatureFlagParseResult): boolean {
 const hasChatProxyRateLimitConfig = () =>
     Boolean(
         process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL &&
-        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN
+            process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN
     );
 
 const isExplicitPublicChatProxyAccessEnabled = () =>
@@ -43,9 +43,9 @@ const hasChatProxyAuthorizationConfig = () =>
 const hasCompleteChatProxyUsageAuthorization = () =>
     Boolean(
         getChatProxySigningSecret() &&
-        hasChatProxyRateLimitConfig() &&
-        isExplicitPublicChatProxyAccessEnabled() &&
-        hasChatProxyAuthorizationConfig()
+            hasChatProxyRateLimitConfig() &&
+            isExplicitPublicChatProxyAccessEnabled() &&
+            hasChatProxyAuthorizationConfig()
     );
 
 export function resolveRuntimeTokenPlaceConfig() {
