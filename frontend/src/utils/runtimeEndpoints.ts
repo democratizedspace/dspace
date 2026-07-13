@@ -33,6 +33,15 @@ export function resolveRuntimeTokenPlaceConfig() {
     };
 }
 
+export function resolveRuntimeOpenAIChatProxyConfig() {
+    const token = process.env.DSPACE_CHAT_PROXY_TOKEN || ''; // scan-secrets: ignore
+    const serverOpenAIKey = process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
+    return {
+        enabled: Boolean(token && serverOpenAIKey),
+        token,
+    };
+}
+
 function buildHeaders(): HeadersInit {
     return {
         'Content-Type': 'application/json; charset=utf-8',

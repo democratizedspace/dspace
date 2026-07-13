@@ -48,6 +48,7 @@
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
     export let tokenPlace = null;
+    export let openAIChatProxy = null;
 
     const message = writable('');
     const messageHistory = writable([]);
@@ -86,6 +87,7 @@
     let providerMetadata = null;
     $: runtimeTokenPlaceUrl = tokenPlace?.url ?? null;
     $: runtimeTokenPlaceModel = tokenPlace?.model ?? null;
+    $: openAIProxyAvailable = Boolean(openAIChatProxy?.enabled && openAIChatProxy?.token);
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -191,7 +193,9 @@
         providerMetadata = null;
         const selectedProvider = activeProvider;
         const currentState = loadGameState();
-        if (selectedProvider === 'openai' && !currentState?.openAI?.apiKey) {
+        const useOpenAIProxy =
+            selectedProvider === 'openai' && !currentState?.openAI?.apiKey && openAIProxyAvailable;
+        if (selectedProvider === 'openai' && !currentState?.openAI?.apiKey && !useOpenAIProxy) {
             const fallback =
                 'OpenAI is selected in Settings, but no API key is saved. Add your key on /settings to use OpenAI, or switch back to token.place.';
             errorBanner = {
@@ -212,12 +216,19 @@
         }
 
         try {
+            const openAIOptions = useOpenAIProxy
+                ? {
+                      persona: currentPersona,
+                      serverChatProxy: true,
+                      chatProxyToken: openAIChatProxy.token, // scan-secrets: ignore
+                  }
+                : {
+                      persona: currentPersona,
+                      promptPayload: debugPayload,
+                  };
             const aiResponse =
                 selectedProvider === 'openai'
-                    ? await GPT5ChatV2(historyForApi, {
-                          persona: currentPersona,
-                          promptPayload: debugPayload,
-                      })
+                    ? await GPT5ChatV2(historyForApi, openAIOptions)
                     : await TokenPlaceChatV2(historyForApi, {
                           persona: currentPersona,
                           promptPayload: debugPayload,

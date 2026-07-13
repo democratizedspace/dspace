@@ -2,12 +2,16 @@
 import Page from '../../components/Page.astro';
 import TokenBadge from '../dchat/TokenBadge.svelte';
 import Integrations from './svelte/Integrations.svelte';
-import { resolveRuntimeTokenPlaceConfig } from '../../utils/runtimeEndpoints';
+import {
+    resolveRuntimeOpenAIChatProxyConfig,
+    resolveRuntimeTokenPlaceConfig,
+} from '../../utils/runtimeEndpoints';
 
 const tokenPlace = resolveRuntimeTokenPlaceConfig();
+const openAIChatProxy = resolveRuntimeOpenAIChatProxyConfig();
 ---
 
 <Page title="Chat" message="Talk with the game NPCs" columns="1">
     <TokenBadge client:load />
-    <Integrations client:idle tokenPlace={tokenPlace} />
+    <Integrations client:idle tokenPlace={tokenPlace} openAIChatProxy={openAIChatProxy} />
 </Page>
