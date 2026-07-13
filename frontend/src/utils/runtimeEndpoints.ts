@@ -107,7 +107,7 @@ export function verifyChatProxySessionCookie(value: string | null, now = Date.no
     const parts = value.split('.');
     if (parts.length !== 3) return null;
     const [id, expiresAtText, signature] = parts;
-    if (!/^[A-Za-z0-9_-]{16,96}$/.test(id)) return null;
+    if (!/^[A-Za-z0-9_-]{22}_[A-Za-z0-9_-]{22}$/.test(id)) return null;
     const expiresAt = Number(expiresAtText);
     if (!Number.isInteger(expiresAt) || expiresAt <= Math.floor(now / 1000)) return null;
     const expected = signChatProxySession(id, expiresAt, secret);
@@ -115,8 +115,7 @@ export function verifyChatProxySessionCookie(value: string | null, now = Date.no
     const expectedBuffer = Buffer.from(expected);
     if (actualBuffer.length !== expectedBuffer.length) return null;
     if (!timingSafeEqual(actualBuffer, expectedBuffer)) return null;
-    const identity = id.split('_')[0];
-    return /^[A-Za-z0-9_-]{16,32}$/.test(identity) ? identity : null;
+    return id.slice(0, 22);
 }
 
 export { CHAT_PROXY_SESSION_COOKIE, CHAT_PROXY_SESSION_TTL_SECONDS };
