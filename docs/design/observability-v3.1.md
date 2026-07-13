@@ -105,14 +105,16 @@ avoids duplicate registration during repeated imports, tests, and hot reload:
 Source instrumentation excludes `/metrics` HTTP self-scrapes, normalizes route labels to route
 templates or fixed route groups, maps unmatched paths to `/unknown`, maps status labels only to
 `2xx`, `4xx`, `5xx`, or `unknown`, and bounds method/provider/dependency/outcome labels. Browser
-token.place helpers keep relay plaintext, encryption, and private-key material in the browser;
-browser OpenAI helpers do not forward prompt payloads or browser-held API keys to the DSPACE server.
+token.place helpers keep relay plaintext, encryption, and private-key material in the browser while
+forwarding only safe routing fields and ciphertext through the server relay boundary so actual
+token.place dependency attempts can be observed in the server registry; browser OpenAI helpers do
+not forward prompt payloads or browser-held API keys to the DSPACE server.
 When no browser-held OpenAI key or prebuilt prompt payload is present, browser OpenAI helpers
 use the sanitized `/api/chat` server boundary when the server has both a chat-proxy signing secret
 and an OpenAI credential configured; the SSR chat page mints an HttpOnly, session-scoped cookie,
 without serializing the shared secret into hydrated browser props. Calls with browser-held keys stay
 local to preserve the credential boundary. The optional `/api/chat` route requires same-origin
-requests with that valid session cookie, applies a bounded per-session rate limit, rejects
+requests with that valid session cookie, applies bounded per-session and global rate limits with expired-bucket cleanup, rejects
 token.place or credential-bearing payloads, and returns `503` when no server OpenAI credential is
 configured. Browser metric reports are not accepted; `POST /metrics` is non-writable
 and returns `405`, so only trusted server instrumentation can mutate the registry

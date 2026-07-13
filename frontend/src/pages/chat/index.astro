@@ -6,6 +6,7 @@ import {
     CHAT_PROXY_SESSION_COOKIE,
     CHAT_PROXY_SESSION_TTL_SECONDS,
     createChatProxySessionCookie,
+    verifyChatProxySessionCookie,
     resolveRuntimeOpenAIChatProxyConfig,
     resolveRuntimeTokenPlaceConfig,
 } from '../../utils/runtimeEndpoints';
@@ -13,7 +14,10 @@ import {
 const tokenPlace = resolveRuntimeTokenPlaceConfig();
 const openAIChatProxy = resolveRuntimeOpenAIChatProxyConfig();
 if (openAIChatProxy.enabled) {
-    const sessionCookie = createChatProxySessionCookie();
+    const existingSessionCookie = Astro.cookies.get(CHAT_PROXY_SESSION_COOKIE)?.value;
+    const sessionCookie = verifyChatProxySessionCookie(existingSessionCookie || null)
+        ? existingSessionCookie
+        : createChatProxySessionCookie();
     if (sessionCookie) {
         Astro.cookies.set(CHAT_PROXY_SESSION_COOKIE, sessionCookie, {
             httpOnly: true,

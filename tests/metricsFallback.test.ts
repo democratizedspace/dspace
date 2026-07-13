@@ -390,6 +390,43 @@ describe('DSPACE application metrics', () => {
             expect(response.status).toBe(200);
             await expect(response.json()).resolves.toMatchObject({ text: 'Server routed answer' });
             expect(calls).toHaveLength(1);
+
+            const reusableCookie = chatCookie();
+            for (let index = 0; index < 20; index += 1) {
+                const limitedOk = await endpoint.POST({
+                    request: new Request('http://dspace.local/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Origin: 'http://dspace.local',
+                            Cookie: reusableCookie,
+                        },
+                        body: JSON.stringify({
+                            provider: 'openai',
+                            messages: [{ role: 'user', content: `hello ${index}` }],
+                        }),
+                    }),
+                });
+                expect(limitedOk.status).toBe(200);
+            }
+            const overLimit = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: reusableCookie,
+                    },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        messages: [{ role: 'user', content: 'over limit' }],
+                    }),
+                }),
+            });
+            expect(overLimit.status).toBe(429);
+            expect(calls).toHaveLength(21);
+            expect(endpoint.getChatProxyRateLimitStateForTests().bucketCount).toBeGreaterThan(0);
+
             const text = await metrics.register.metrics();
             expect(text).toContain(
                 'dspace_dchat_requests_total{provider="openai",outcome="success"}'

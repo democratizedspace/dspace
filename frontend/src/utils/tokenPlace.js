@@ -18,24 +18,7 @@ import {
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
 import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
-// token.place relay encryption and client key material must remain in the browser.
-const shouldUseServerChatProxy = () => false;
-
-const callServerChat = async (provider, messages, options) => {
-    const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider, messages, options }),
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) {
-        const error = new Error(payload?.message || 'Chat request failed');
-        error.name = payload?.type || 'ChatRequestError';
-        if (Number.isFinite(Number(payload?.status))) error.status = Number(payload.status);
-        throw error;
-    }
-    return payload;
-};
+import { isBrowser } from './ssr.js';
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
@@ -457,11 +440,29 @@ const randomBase64Url = (bytes = 18) =>
 
 const secondsSinceMetricsStart = (start) => Math.max(0, (performance.now() - start) / 1000);
 
-const fetchJson = async (url, init, unavailableMessage) => {
+const canUseTokenPlaceRelayMetricBoundary = () =>
+    isBrowser && (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+
+const postTokenPlaceRelayMetricBoundary = async (operation, payload, signal) =>
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'tokenplace', operation, payload }),
+        signal,
+    });
+
+const fetchJson = async (url, init, unavailableMessage, relayOperation, relayPayload) => {
     const metricsStart = performance.now();
     let response;
     try {
-        response = await fetch(url, { ...init, credentials: 'omit' });
+        response =
+            canUseTokenPlaceRelayMetricBoundary() && relayOperation
+                ? await postTokenPlaceRelayMetricBoundary(
+                      relayOperation,
+                      relayPayload,
+                      init?.signal
+                  )
+                : await fetch(url, { ...init, credentials: 'omit' });
     } catch (error) {
         const wrapped = createTokenPlaceNetworkError(error);
         recordDependencyRequest({
@@ -595,7 +596,9 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
     const data = await fetchJson(
         `${baseUrl}/api/v1/relay/servers/next${suffix}`,
         { method: 'GET', signal: options.signal },
-        'token.place relay is unavailable.'
+        'token.place relay is unavailable.',
+        'select',
+        { model: options.model, contextTier: options.contextTier }
     );
     const rawKey = data?.server_public_key || data?.serverPublicKey || data?.public_key;
     if (!rawKey)
@@ -650,7 +653,9 @@ export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}
             body: JSON.stringify(body),
             signal: options.signal,
         },
-        'token.place relay is unavailable.'
+        'token.place relay is unavailable.',
+        'dispatch',
+        body
     );
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -659,13 +664,15 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     const metricsStart = performance.now();
     let response;
     try {
-        response = await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-            signal: options.signal,
-            credentials: 'omit',
-        });
+        response = canUseTokenPlaceRelayMetricBoundary()
+            ? await postTokenPlaceRelayMetricBoundary('retrieve', body, options.signal)
+            : await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(body),
+                  signal: options.signal,
+                  credentials: 'omit',
+              });
     } catch (error) {
         const wrapped = createTokenPlaceNetworkError(error);
         recordDependencyRequest({
@@ -1024,9 +1031,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
 };
 
 export const TokenPlaceChatV2 = async (messages, options = {}) =>
-    shouldUseServerChatProxy()
-        ? callServerChat('token-place', messages, options)
-        : instrumentDchatOperation('tokenplace', () => runTokenPlaceChatV2(messages, options));
+    instrumentDchatOperation('tokenplace', () => runTokenPlaceChatV2(messages, options));
 
 export const tokenPlaceChat = async (messages, options = {}) => {
     const result = await TokenPlaceChatV2(messages, options);
