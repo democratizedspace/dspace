@@ -15,6 +15,7 @@ const ORIGINAL_RATE_LIMIT_URL = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_U
 const ORIGINAL_RATE_LIMIT_CREDENTIAL =
   process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
 const ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+const ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE = process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
 
 describe('runtime endpoints', () => {
   beforeEach(() => {
@@ -28,6 +29,7 @@ describe('runtime endpoints', () => {
     delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
     delete process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'];
     delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+    delete process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'];
   });
 
   afterEach(() => {
@@ -114,6 +116,11 @@ describe('runtime endpoints', () => {
     expect(body.tokenPlace.relayProxyAvailable).toBe(false);
 
     process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
+    response = await getRuntimeConfig();
+    body = await response.json();
+    expect(body.tokenPlace.relayProxyAvailable).toBe(false);
+
+    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = 'authorized-test-user'; // scan-secrets: ignore
     response = await getRuntimeConfig();
     body = await response.json();
     expect(body.tokenPlace.relayProxyAvailable).toBe(true);

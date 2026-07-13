@@ -259,15 +259,16 @@ describe('DSPACE application metrics', () => {
         const metrics = await importMetrics();
         const endpoint = await import('../frontend/src/pages/api/chat');
         const runtime = await import('../frontend/src/utils/runtimeEndpoints');
-        const calls: Array<{ model: string }> = [];
+        const calls: Array<{ model: string; input?: unknown }> = [];
         const previousClient = (
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
         ).__DSpaceOpenAIClient;
         const previousOpenAIKey = process.env.OPENAI_API_KEY;
         const previousChatProxyCredential = process.env.DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
         const previousRateLimitUrl = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
-        const previousRateLimitToken = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN; // scan-secrets: ignore
+        const previousRateLimitValue = process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
         const previousPublicAccess = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+        const previousAuthorizationValue = process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
         const previousFetch = global.fetch;
         const rateLimitCounts = new Map<string, number>();
         const relayCalls: string[] = [];
@@ -292,17 +293,22 @@ describe('DSPACE application metrics', () => {
         process.env.OPENAI_API_KEY = 'test-server-openai-key'; // scan-secrets: ignore
         process.env.DSPACE_CHAT_PROXY_TOKEN = 'test-chat-proxy-token'; // scan-secrets: ignore
         process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
-        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN = 'test-rate-limit-token'; // scan-secrets: ignore
+        process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] = 'test-rate-limit-token'; // scan-secrets: ignore
         process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
+        process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = 'authorized-test-user'; // scan-secrets: ignore
         endpoint.resetChatProxyRateLimitForTests();
+        const authorizedRequest = new Request('http://dspace.local/chat', {
+            headers: { 'x-dspace-chat-proxy-authorization': 'authorized-test-user' },
+        });
+        const authorizedIdentity = runtime.getAuthorizedChatProxyIdentity(authorizedRequest);
         const chatCookie = () =>
-            `${runtime.CHAT_PROXY_SESSION_COOKIE}=${runtime.createChatProxySessionCookie()}`;
+            `${runtime.CHAT_PROXY_SESSION_COOKIE}=${runtime.createChatProxySessionCookie(authorizedIdentity)}`;
         (
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
         ).__DSpaceOpenAIClient = class MockOpenAIClient {
             responses = {
-                create: async ({ model }: { model: string }) => {
-                    calls.push({ model });
+                create: async ({ model, input }: { model: string; input?: unknown }) => {
+                    calls.push({ model, input });
                     return { output_text: 'Server routed answer' };
                 },
             };
@@ -546,7 +552,7 @@ describe('DSPACE application metrics', () => {
                     body: JSON.stringify({
                         provider: 'openai',
                         messages: [{ role: 'user', content: 'hello' }],
-                        options: { serverChatProxy: true },
+                        options: { serverChatProxy: true, personaId: 'sydney' },
                     }),
                 }),
             });
@@ -554,7 +560,9 @@ describe('DSPACE application metrics', () => {
             expect(response.status).toBe(200);
             await expect(response.json()).resolves.toMatchObject({ text: 'Server routed answer' });
             expect(calls).toHaveLength(1);
+            expect(JSON.stringify(calls[0].input)).toContain('You are Sydney');
 
+            rateLimitCounts.clear();
             const reusableCookie = chatCookie();
             for (let index = 0; index < 20; index += 1) {
                 const limitedOk = await endpoint.POST({
@@ -630,15 +638,20 @@ describe('DSPACE application metrics', () => {
             } else {
                 process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = previousRateLimitUrl;
             }
-            if (previousRateLimitToken === undefined) { // scan-secrets: ignore
-                delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN;
+            if (previousRateLimitValue === undefined) {
+                delete process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'];
             } else {
-                process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN = previousRateLimitToken; // scan-secrets: ignore
+                process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] = previousRateLimitValue; // scan-secrets: ignore
             }
             if (previousPublicAccess === undefined) {
                 delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
             } else {
                 process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = previousPublicAccess;
+            }
+            if (previousAuthorizationValue === undefined) {
+                delete process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'];
+            } else {
+                process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = previousAuthorizationValue; // scan-secrets: ignore
             }
             global.fetch = previousFetch;
         }

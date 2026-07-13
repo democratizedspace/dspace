@@ -27,7 +27,7 @@ function parseTelemetryEnabled(flags: FeatureFlagParseResult): boolean {
 const hasChatProxyRateLimitConfig = () =>
     Boolean(
         process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL &&
-            process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN
+        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN
     );
 
 const isExplicitPublicChatProxyAccessEnabled = () =>
@@ -37,11 +37,15 @@ const isExplicitPublicChatProxyAccessEnabled = () =>
             .toLowerCase()
     );
 
+const hasChatProxyAuthorizationConfig = () =>
+    Boolean(process.env.DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN); // scan-secrets: ignore
+
 const hasCompleteChatProxyUsageAuthorization = () =>
     Boolean(
         getChatProxySigningSecret() &&
-            hasChatProxyRateLimitConfig() &&
-            isExplicitPublicChatProxyAccessEnabled()
+        hasChatProxyRateLimitConfig() &&
+        isExplicitPublicChatProxyAccessEnabled() &&
+        hasChatProxyAuthorizationConfig()
     );
 
 export function resolveRuntimeTokenPlaceConfig() {
@@ -66,13 +70,32 @@ const signChatProxySession = (
     secret: string // scan-secrets: ignore
 ) => createHmac('sha256', secret).update(`${id}.${expiresAt}`).digest('base64url');
 
-export function createChatProxySessionCookie(now = Date.now()) {
+const chatProxyAuthorizationIdentity = (request: Request) => {
+    const expected = process.env.DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN || ''; // scan-secrets: ignore
+    const actual = request.headers.get('x-dspace-chat-proxy-authorization') || '';
+    if (!expected || !actual) return null;
+    const expectedBuffer = Buffer.from(expected);
+    const actualBuffer = Buffer.from(actual);
+    if (expectedBuffer.length !== actualBuffer.length) return null;
+    if (!timingSafeEqual(actualBuffer, expectedBuffer)) return null;
+    return createHmac('sha256', getChatProxySigningSecret())
+        .update(expected)
+        .digest('base64url')
+        .slice(0, 22);
+};
+
+export function getAuthorizedChatProxyIdentity(request: Request) {
+    if (!hasCompleteChatProxyUsageAuthorization()) return null;
+    return chatProxyAuthorizationIdentity(request);
+}
+
+export function createChatProxySessionCookie(identity: string | null, now = Date.now()) {
     const secret = getChatProxySigningSecret(); // scan-secrets: ignore
-    // Usage authorization: anonymous chat proxy sessions are minted only when an
-    // operator explicitly opts in to public proxy access and shared rate limits are
-    // configured. A signing secret alone is not authorization to spend provider capacity.
-    if (!secret || !hasCompleteChatProxyUsageAuthorization()) return null;
-    const id = randomBytes(16).toString('base64url');
+    // Usage authorization: proxy sessions are minted only after an explicit operator-defined
+    // authorization header is presented; public access, shared rate limits, and a signing
+    // secret alone are not authorization to spend provider capacity.
+    if (!secret || !identity || !hasCompleteChatProxyUsageAuthorization()) return null;
+    const id = `${identity}_${randomBytes(16).toString('base64url')}`;
     const expiresAt = Math.floor(now / 1000) + CHAT_PROXY_SESSION_TTL_SECONDS;
     const signature = signChatProxySession(id, expiresAt, secret);
     return `${id}.${expiresAt}.${signature}`;
@@ -84,14 +107,16 @@ export function verifyChatProxySessionCookie(value: string | null, now = Date.no
     const parts = value.split('.');
     if (parts.length !== 3) return null;
     const [id, expiresAtText, signature] = parts;
-    if (!/^[A-Za-z0-9_-]{16,64}$/.test(id)) return null;
+    if (!/^[A-Za-z0-9_-]{16,96}$/.test(id)) return null;
     const expiresAt = Number(expiresAtText);
     if (!Number.isInteger(expiresAt) || expiresAt <= Math.floor(now / 1000)) return null;
     const expected = signChatProxySession(id, expiresAt, secret);
     const actualBuffer = Buffer.from(signature);
     const expectedBuffer = Buffer.from(expected);
     if (actualBuffer.length !== expectedBuffer.length) return null;
-    return timingSafeEqual(actualBuffer, expectedBuffer) ? id : null;
+    if (!timingSafeEqual(actualBuffer, expectedBuffer)) return null;
+    const identity = id.split('_')[0];
+    return /^[A-Za-z0-9_-]{16,32}$/.test(identity) ? identity : null;
 }
 
 export { CHAT_PROXY_SESSION_COOKIE, CHAT_PROXY_SESSION_TTL_SECONDS };

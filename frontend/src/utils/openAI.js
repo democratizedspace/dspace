@@ -38,7 +38,15 @@ const callServerChat = async (provider, messages, options = {}) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ provider, messages, options: { serverChatProxy: true } }),
+        body: JSON.stringify({
+            provider,
+            messages,
+            options: {
+                serverChatProxy: true,
+                personaId:
+                    typeof options?.persona?.id === 'string' ? options.persona.id : undefined,
+            },
+        }),
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {

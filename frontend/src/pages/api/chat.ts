@@ -1,4 +1,5 @@
 import { GPT5ChatV2 } from '../../utils/openAI.js';
+import { npcPersonas } from '../../data/npcPersonas.js';
 import {
     recordDependencyRequest,
     recordDchatRequest,
@@ -18,6 +19,16 @@ const TOKEN_PLACE_RELAY_OPERATIONS = new Set(['select', 'dispatch', 'retrieve', 
 
 const getServerOpenAIKey = () =>
     process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
+
+const resolvePersonaOption = (value: unknown) => {
+    if (value === undefined || value === null || value === '') return undefined;
+    if (typeof value !== 'string' || !/^[a-z0-9-]{1,64}$/.test(value)) {
+        throw Object.assign(new Error('Invalid persona'), { status: 400 });
+    }
+    const persona = npcPersonas.find((candidate) => candidate.id === value);
+    if (!persona) throw Object.assign(new Error('Invalid persona'), { status: 400 });
+    return persona;
+};
 
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_TTL_SECONDS = Math.ceil(RATE_LIMIT_WINDOW_MS / 1000);
@@ -317,11 +328,13 @@ export async function POST({ request }: { request: Request }) {
             return Response.json({ error: 'server_openai_unconfigured' }, { status: 503 });
         }
         const messages = Array.isArray(body?.messages) ? body.messages : [];
+        const persona = resolvePersonaOption(body?.options?.personaId);
         // Do not accept browser-held game state or credentials here. token.place plaintext and
         // private keys stay browser-side; only ciphertext relay traffic may cross this server.
         const result = await GPT5ChatV2(messages, {
             serverChatProxy: true,
             serverOpenAIApiKey,
+            ...(persona ? { persona } : {}),
         });
         return Response.json(result);
     } catch (error) {

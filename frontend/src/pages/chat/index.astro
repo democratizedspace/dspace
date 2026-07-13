@@ -6,19 +6,23 @@ import {
     CHAT_PROXY_SESSION_COOKIE,
     CHAT_PROXY_SESSION_TTL_SECONDS,
     createChatProxySessionCookie,
+    getAuthorizedChatProxyIdentity,
     verifyChatProxySessionCookie,
     resolveRuntimeOpenAIChatProxyConfig,
     resolveRuntimeTokenPlaceConfig,
 } from '../../utils/runtimeEndpoints';
 
+const authorizedProxyIdentity = getAuthorizedChatProxyIdentity(Astro.request);
+const existingSessionCookie = Astro.cookies.get(CHAT_PROXY_SESSION_COOKIE)?.value;
+const existingSessionIdentity = verifyChatProxySessionCookie(existingSessionCookie || null);
 const tokenPlace = resolveRuntimeTokenPlaceConfig();
 const openAIChatProxy = resolveRuntimeOpenAIChatProxyConfig();
-const chatProxySessionCookie = createChatProxySessionCookie();
-if (chatProxySessionCookie || openAIChatProxy.enabled) {
-    const existingSessionCookie = Astro.cookies.get(CHAT_PROXY_SESSION_COOKIE)?.value;
-    const sessionCookie = verifyChatProxySessionCookie(existingSessionCookie || null)
-        ? existingSessionCookie
-        : chatProxySessionCookie;
+const proxyAvailableForRequest = Boolean(authorizedProxyIdentity || existingSessionIdentity);
+tokenPlace.relayProxyAvailable = tokenPlace.relayProxyAvailable && proxyAvailableForRequest;
+openAIChatProxy.enabled = openAIChatProxy.enabled && proxyAvailableForRequest;
+const chatProxySessionCookie = createChatProxySessionCookie(authorizedProxyIdentity);
+if (chatProxySessionCookie || openAIChatProxy.enabled || tokenPlace.relayProxyAvailable) {
+    const sessionCookie = existingSessionIdentity ? existingSessionCookie : chatProxySessionCookie;
     if (sessionCookie) {
         Astro.cookies.set(CHAT_PROXY_SESSION_COOKIE, sessionCookie, {
             httpOnly: true,
