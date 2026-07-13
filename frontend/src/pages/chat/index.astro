@@ -3,12 +3,27 @@ import Page from '../../components/Page.astro';
 import TokenBadge from '../dchat/TokenBadge.svelte';
 import Integrations from './svelte/Integrations.svelte';
 import {
+    CHAT_PROXY_SESSION_COOKIE,
+    CHAT_PROXY_SESSION_TTL_SECONDS,
+    createChatProxySessionCookie,
     resolveRuntimeOpenAIChatProxyConfig,
     resolveRuntimeTokenPlaceConfig,
 } from '../../utils/runtimeEndpoints';
 
 const tokenPlace = resolveRuntimeTokenPlaceConfig();
 const openAIChatProxy = resolveRuntimeOpenAIChatProxyConfig();
+if (openAIChatProxy.enabled) {
+    const sessionCookie = createChatProxySessionCookie();
+    if (sessionCookie) {
+        Astro.cookies.set(CHAT_PROXY_SESSION_COOKIE, sessionCookie, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: Astro.url.protocol === 'https:',
+            path: '/api/chat',
+            maxAge: CHAT_PROXY_SESSION_TTL_SECONDS,
+        });
+    }
+}
 ---
 
 <Page title="Chat" message="Talk with the game NPCs" columns="1">

@@ -1,4 +1,8 @@
 import { GPT5ChatV2 } from '../../utils/openAI.js';
+import {
+    CHAT_PROXY_SESSION_COOKIE,
+    verifyChatProxySessionCookie,
+} from '../../utils/runtimeEndpoints';
 
 export const prerender = false;
 
@@ -7,7 +11,41 @@ const MAX_BODY_BYTES = 64 * 1024;
 const getServerOpenAIKey = () =>
     process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
 
-const getChatProxyToken = () => process.env.DSPACE_CHAT_PROXY_TOKEN || ''; // scan-secrets: ignore
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX = 20;
+const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
+
+const isSameOriginRequest = (request: Request) => {
+    const origin = request.headers.get('origin');
+    if (!origin) return false;
+    try {
+        return new URL(origin).origin === new URL(request.url).origin;
+    } catch {
+        return false;
+    }
+};
+
+const readCookie = (request: Request, name: string) => {
+    const cookieHeader = request.headers.get('cookie') || '';
+    for (const part of cookieHeader.split(';')) {
+        const [rawName, ...rawValue] = part.trim().split('=');
+        if (rawName === name) return rawValue.join('=');
+    }
+    return null;
+};
+
+const consumeRateLimit = (sessionId: string, now = Date.now()) => {
+    const bucket = rateLimitBuckets.get(sessionId);
+    if (!bucket || bucket.resetAt <= now) {
+        rateLimitBuckets.set(sessionId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+        return true;
+    }
+    if (bucket.count >= RATE_LIMIT_MAX) return false;
+    bucket.count += 1;
+    return true;
+};
+
+export const resetChatProxyRateLimitForTests = () => rateLimitBuckets.clear();
 
 const readBoundedJson = async (request: Request) => {
     const contentType = request.headers.get('content-type') || '';
@@ -39,13 +77,21 @@ const sanitizeError = (error: unknown) => {
 
 export async function POST({ request }: { request: Request }) {
     try {
-        // Trust boundary: this endpoint spends the server OpenAI credential, so every request
-        // must present a server-configured bearer-style token. Browser-held OpenAI keys and
-        // token.place relay secrets are never accepted here.
-        const expectedToken = getChatProxyToken(); // scan-secrets: ignore
-        const suppliedToken = request.headers.get('x-dspace-chat-proxy-token') || ''; // scan-secrets: ignore
-        if (!expectedToken || suppliedToken !== expectedToken) {
+        // Trust boundary: this endpoint spends the server OpenAI credential. The shared signing
+        // secret never leaves the server; browser requests must be same-origin, carry a valid
+        // HttpOnly session cookie minted by the SSR chat page, and stay within a small per-session
+        // rate limit. Browser-held OpenAI keys and token.place relay secrets are never accepted here.
+        if (!isSameOriginRequest(request)) {
             return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
+        }
+        const sessionId = verifyChatProxySessionCookie(
+            readCookie(request, CHAT_PROXY_SESSION_COOKIE)
+        );
+        if (!sessionId) {
+            return Response.json({ error: 'chat_proxy_unauthorized' }, { status: 403 });
+        }
+        if (!consumeRateLimit(sessionId)) {
+            return Response.json({ error: 'chat_proxy_rate_limited' }, { status: 429 });
         }
         const body = await readBoundedJson(request);
         const provider = String(body?.provider || '').toLowerCase();

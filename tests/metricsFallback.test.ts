@@ -219,7 +219,7 @@ describe('DSPACE application metrics', () => {
         for (const request of [
             new Request('http://dspace.local/metrics', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Origin: 'http://dspace.local' },
                 body: JSON.stringify({
                     kind: 'dchat',
                     provider: 'unknown',
@@ -258,6 +258,7 @@ describe('DSPACE application metrics', () => {
     it('rejects sensitive chat proxy payloads and records sanitized server chat traffic', async () => {
         const metrics = await importMetrics();
         const endpoint = await import('../frontend/src/pages/api/chat');
+        const runtime = await import('../frontend/src/utils/runtimeEndpoints');
         const calls: Array<{ model: string }> = [];
         const previousClient = (
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
@@ -266,6 +267,9 @@ describe('DSPACE application metrics', () => {
         const previousChatProxyCredential = process.env.DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
         process.env.OPENAI_API_KEY = 'test-server-openai-key'; // scan-secrets: ignore
         process.env.DSPACE_CHAT_PROXY_TOKEN = 'test-chat-proxy-token'; // scan-secrets: ignore
+        endpoint.resetChatProxyRateLimitForTests();
+        const chatCookie = () =>
+            `${runtime.CHAT_PROXY_SESSION_COOKIE}=${runtime.createChatProxySessionCookie()}`;
         (
             globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown }
         ).__DSpaceOpenAIClient = class MockOpenAIClient {
@@ -283,7 +287,8 @@ describe('DSPACE application metrics', () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
                     },
                     body: JSON.stringify({
                         provider: 'openai',
@@ -306,7 +311,8 @@ describe('DSPACE application metrics', () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
                     },
                     body: JSON.stringify({
                         provider: 'token-place',
@@ -319,7 +325,7 @@ describe('DSPACE application metrics', () => {
             const unauthorizedResponse = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', Origin: 'http://dspace.local' },
                     body: JSON.stringify({
                         provider: 'openai',
                         messages: [{ role: 'user', content: 'hello' }],
@@ -329,12 +335,13 @@ describe('DSPACE application metrics', () => {
             expect(unauthorizedResponse.status).toBe(403);
             expect(calls).toHaveLength(0);
 
-            const replayedWrongTokenResponse = await endpoint.POST({
+            const invalidCookieResponse = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-DSPACE-Chat-Proxy-Token': 'wrong-token',
+                        Origin: 'http://dspace.local',
+                        Cookie: `${runtime.CHAT_PROXY_SESSION_COOKIE}=bad.cookie.value`,
                     },
                     body: JSON.stringify({
                         provider: 'openai',
@@ -342,7 +349,7 @@ describe('DSPACE application metrics', () => {
                     }),
                 }),
             });
-            expect(replayedWrongTokenResponse.status).toBe(403);
+            expect(invalidCookieResponse.status).toBe(403);
             expect(calls).toHaveLength(0);
 
             delete process.env.OPENAI_API_KEY;
@@ -351,7 +358,8 @@ describe('DSPACE application metrics', () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
                     },
                     body: JSON.stringify({
                         provider: 'openai',
@@ -368,7 +376,8 @@ describe('DSPACE application metrics', () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-DSPACE-Chat-Proxy-Token': 'test-chat-proxy-token',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
                     },
                     body: JSON.stringify({
                         provider: 'openai',

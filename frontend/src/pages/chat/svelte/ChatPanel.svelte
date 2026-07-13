@@ -87,7 +87,7 @@
     let providerMetadata = null;
     $: runtimeTokenPlaceUrl = tokenPlace?.url ?? null;
     $: runtimeTokenPlaceModel = tokenPlace?.model ?? null;
-    $: openAIProxyAvailable = Boolean(openAIChatProxy?.enabled && openAIChatProxy?.token);
+    $: openAIProxyAvailable = Boolean(openAIChatProxy?.enabled);
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -220,7 +220,7 @@
                 ? {
                       persona: currentPersona,
                       serverChatProxy: true,
-                      chatProxyToken: openAIChatProxy.token, // scan-secrets: ignore
+                      serverChatProxyAvailable: true,
                   }
                 : {
                       persona: currentPersona,

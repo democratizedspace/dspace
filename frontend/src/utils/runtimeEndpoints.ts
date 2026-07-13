@@ -2,6 +2,7 @@ import type { FeatureFlagParseResult } from '@dspace/feature-flags';
 import { parseFeatureFlags, readBooleanOverride } from '@dspace/feature-flags';
 import { resolveTokenPlaceBaseUrl, getTokenPlaceChatModel } from './tokenPlace.js';
 import { logServerError } from './serverLogger';
+import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     const envOverride = readBooleanOverride(process.env.DSPACE_OFFLINE_WORKER_ENABLED);
@@ -33,12 +34,48 @@ export function resolveRuntimeTokenPlaceConfig() {
     };
 }
 
+const CHAT_PROXY_SESSION_COOKIE = 'dspace_chat_proxy_session';
+const CHAT_PROXY_SESSION_TTL_SECONDS = 60 * 60;
+
+const getChatProxySigningSecret = () => process.env.DSPACE_CHAT_PROXY_TOKEN || ''; // scan-secrets: ignore
+
+const signChatProxySession = (
+    id: string,
+    expiresAt: number,
+    secret: string // scan-secrets: ignore
+) => createHmac('sha256', secret).update(`${id}.${expiresAt}`).digest('base64url');
+
+export function createChatProxySessionCookie(now = Date.now()) {
+    const secret = getChatProxySigningSecret(); // scan-secrets: ignore
+    if (!secret) return null;
+    const id = randomBytes(16).toString('base64url');
+    const expiresAt = Math.floor(now / 1000) + CHAT_PROXY_SESSION_TTL_SECONDS;
+    const signature = signChatProxySession(id, expiresAt, secret);
+    return `${id}.${expiresAt}.${signature}`;
+}
+
+export function verifyChatProxySessionCookie(value: string | null, now = Date.now()) {
+    const secret = getChatProxySigningSecret(); // scan-secrets: ignore
+    if (!secret || !value) return null;
+    const parts = value.split('.');
+    if (parts.length !== 3) return null;
+    const [id, expiresAtText, signature] = parts;
+    if (!/^[A-Za-z0-9_-]{16,64}$/.test(id)) return null;
+    const expiresAt = Number(expiresAtText);
+    if (!Number.isInteger(expiresAt) || expiresAt <= Math.floor(now / 1000)) return null;
+    const expected = signChatProxySession(id, expiresAt, secret);
+    const actualBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expected);
+    if (actualBuffer.length !== expectedBuffer.length) return null;
+    return timingSafeEqual(actualBuffer, expectedBuffer) ? id : null;
+}
+
+export { CHAT_PROXY_SESSION_COOKIE, CHAT_PROXY_SESSION_TTL_SECONDS };
+
 export function resolveRuntimeOpenAIChatProxyConfig() {
-    const token = process.env.DSPACE_CHAT_PROXY_TOKEN || ''; // scan-secrets: ignore
     const serverOpenAIKey = process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
     return {
-        enabled: Boolean(token && serverOpenAIKey),
-        token,
+        enabled: Boolean(getChatProxySigningSecret() && serverOpenAIKey),
     };
 }
 

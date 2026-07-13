@@ -23,23 +23,11 @@ const hasBrowserHeldOpenAIKey = (options = {}) => {
     }
 };
 
-const getBrowserChatProxyCredential = () => {
-    if (!isBrowser) return '';
-    const token = globalThis.__DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
-    return typeof token === 'string' ? token : ''; // scan-secrets: ignore
-};
-
-const getChatProxyCredential = (options = {}) => {
-    const optionToken = options?.chatProxyToken; // scan-secrets: ignore
-    if (typeof optionToken === 'string' && optionToken) return optionToken; // scan-secrets: ignore
-    return getBrowserChatProxyCredential();
-};
-
 const shouldUseServerChatProxy = (options = {}) =>
     isBrowser &&
     options?.serverChatProxy !== false &&
+    options?.serverChatProxyAvailable === true &&
     !hasBrowserHeldOpenAIKey(options) &&
-    Boolean(getChatProxyCredential(options)) &&
     (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
 
 const callServerChat = async (provider, messages, options = {}) => {
@@ -49,7 +37,6 @@ const callServerChat = async (provider, messages, options = {}) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-DSPACE-Chat-Proxy-Token': getChatProxyCredential(options),
         },
         body: JSON.stringify({ provider, messages, options: { serverChatProxy: true } }),
     });
