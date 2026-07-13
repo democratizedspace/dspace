@@ -104,26 +104,53 @@ avoids duplicate registration during repeated imports, tests, and hot reload:
 
 Source instrumentation excludes `/metrics` HTTP self-scrapes, normalizes route labels to route
 templates or fixed route groups, maps unmatched paths to `/unknown`, maps status labels only to
-`2xx`, `4xx`, `5xx`, or `unknown`, and bounds method/provider/dependency/outcome labels. Browser
-token.place helpers keep relay plaintext, encryption, and private-key material in the browser while
-forwarding only safe routing fields and ciphertext through the server relay boundary so actual
-token.place dependency attempts and one bounded terminal token.place dChat outcome can be
-observed in the server registry; the relay proxy is advertised only when an operator explicitly enables public chat-proxy access, the signing secret, and
-shared rate-limit backend are configured so incomplete or unauthorized deployments keep the direct browser relay
-path. Browser OpenAI helpers do
-not forward prompt payloads or browser-held API keys to the DSPACE server.
-When no browser-held OpenAI key or prebuilt prompt payload is present, browser OpenAI helpers
-use the sanitized `/api/chat` server boundary when the server has explicit public chat-proxy access enabled, a chat-proxy signing secret,
-shared rate limits, and an OpenAI credential configured; the SSR chat page mints an HttpOnly, session-scoped cookie,
-without serializing the shared secret into hydrated browser props. Calls with browser-held keys stay
-local to preserve the credential boundary. The `/api/chat` route requires same-origin
-requests with that valid session cookie and applies shared Redis-compatible atomic per-session and global rate limits before dispatching either OpenAI or token.place relay operations or accepting token.place terminal outcomes; it fails closed with `503` when the shared rate-limit backend is unavailable, rejects
-credential-bearing OpenAI payloads, and returns `503` when no server OpenAI credential is
-configured for sanitized OpenAI proxy traffic. Browser metric reports are not accepted; `POST /metrics` is non-writable
-and returns `405`, so only trusted server instrumentation can mutate the registry
-scraped by Prometheus. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
-successful placeholder. Metrics write failures are isolated from game functionality and do not
-expose secrets.
+`2xx`, `4xx`, `5xx`, or `unknown`, and bounds method/provider/dependency/outcome labels.
+
+#### Chat relay proxy: authorization model and observability boundary
+
+The chat relay proxy is **optional and default-disabled**. It is active only when an operator
+explicitly configures all four required environment variables:
+
+| Variable | Purpose |
+| --- | --- |
+| `DSPACE_CHAT_PROXY_TOKEN` | HMAC signing secret for HttpOnly session cookies |
+| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL` | Redis-compatible shared rate-limit backend URL |
+| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN` | Redis-compatible shared rate-limit backend token |
+| `DSPACE_CHAT_PROXY_PUBLIC_ACCESS` | Must be set to `true` (explicit operator opt-in) |
+| `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN` | ****** a trusted entry point must supply via `x-dspace-chat-proxy-authorization` |
+
+When any of these is absent, `relayProxyAvailable` is `false` in `/config.json`, the browser chat
+client retains the direct token.place relay path, and browser-held OpenAI keys stay local. There is
+no anonymous or implicit activation.
+
+**Authorization header and session minting.** A trusted upstream entry point (for example an
+authenticated reverse-proxy or load-balancer injection layer) must supply
+`x-dspace-chat-proxy-authorization: <value>` on the initial SSR chat page request. The value is
+compared in constant time against `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN`. On match, the SSR page
+mints an HttpOnly, same-site session cookie signed with `DSPACE_CHAT_PROXY_TOKEN`; the shared
+secret is never serialized into hydrated browser props or JavaScript. The authorization value must
+never appear in URLs, query parameters, or client-side hydrated state.
+
+**Rate-limit identity binding.** The session identity used as the per-session rate-limit key is
+derived as an HMAC of the matched authorization token value, not from a user-supplied string or
+session ID. This means rate-limit keys are deterministic for the same authorized entry point but
+cannot be forged by callers who do not know the shared secret.
+
+**`/api/chat` enforcement.** The `/api/chat` route requires a same-origin request with a valid
+signed session cookie. It applies shared Redis-compatible atomic per-session and global rate limits
+before any provider dispatch. The route fails closed with `503` when the shared rate-limit backend
+is unavailable, rejects credential-bearing OpenAI payloads, and returns `503` when no server
+OpenAI credential is configured for sanitized OpenAI proxy traffic.
+
+**Observability scope.** Browser token.place helpers keep relay plaintext, encryption, and
+private-key material in the browser, forwarding only safe routing fields and ciphertext through the
+server relay boundary so actual token.place dependency attempts and one bounded terminal dChat
+outcome can be observed in the server registry. Browser metric reports are not accepted;
+`POST /metrics` is non-writable and returns `405`, so only trusted server instrumentation can
+mutate the registry scraped by Prometheus. Browser-held OpenAI key traffic does not pass through
+the server and is intentionally not observable in the server registry. If metrics initialization
+fails, `/metrics` returns `503` instead of a misleading successful placeholder. Metrics write
+failures are isolated from game functionality and do not expose secrets.
 
 ### v3.1.0 release blockers
 

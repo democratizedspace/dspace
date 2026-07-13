@@ -89,9 +89,20 @@ describe('runtime endpoints', () => {
 
     if (ORIGINAL_RATE_LIMIT_CREDENTIAL === undefined) {
       delete process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'];
-    delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
     } else {
       process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = ORIGINAL_RATE_LIMIT_CREDENTIAL;
+    }
+
+    if (ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS === undefined) {
+      delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+    } else {
+      process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS;
+    }
+
+    if (ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE === undefined) {
+      delete process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'];
+    } else {
+      process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE;
     }
   });
 
