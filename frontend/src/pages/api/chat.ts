@@ -1,5 +1,10 @@
 import { GPT5ChatV2 } from '../../utils/openAI.js';
-import { recordDependencyRequest, outcomeFromStatus } from '../../utils/metrics.js';
+import {
+    recordDependencyRequest,
+    recordDchatRequest,
+    normalizeOutcome,
+    outcomeFromStatus,
+} from '../../utils/metrics.js';
 import { resolveTokenPlaceBaseUrl } from '../../utils/tokenPlace.js';
 import {
     CHAT_PROXY_SESSION_COOKIE,
@@ -9,7 +14,7 @@ import {
 export const prerender = false;
 
 const MAX_BODY_BYTES = 64 * 1024;
-const TOKEN_PLACE_RELAY_OPERATIONS = new Set(['select', 'dispatch', 'retrieve']);
+const TOKEN_PLACE_RELAY_OPERATIONS = new Set(['select', 'dispatch', 'retrieve', 'complete']);
 
 const getServerOpenAIKey = () =>
     process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
@@ -112,6 +117,20 @@ const readBoundedJson = async (request: Request) => {
 const recordTokenPlaceRelay = async (operation: string, payload: unknown, signal?: AbortSignal) => {
     if (!TOKEN_PLACE_RELAY_OPERATIONS.has(operation)) {
         return Response.json({ error: 'unsupported_tokenplace_operation' }, { status: 400 });
+    }
+    if (operation === 'complete') {
+        const body = payload as { outcome?: unknown; durationSeconds?: unknown };
+        recordDchatRequest({
+            provider: 'tokenplace',
+            outcome: normalizeOutcome(
+                typeof body?.outcome === 'string' ? body.outcome : 'unknown_error'
+            ),
+            durationSeconds:
+                typeof body?.durationSeconds === 'number' && Number.isFinite(body.durationSeconds)
+                    ? Math.max(0, Math.min(30, body.durationSeconds))
+                    : 0,
+        });
+        return Response.json({ ok: true });
     }
     const baseUrl = resolveTokenPlaceBaseUrl({
         url: process.env.DSPACE_TOKEN_PLACE_URL,

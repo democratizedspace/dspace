@@ -24,6 +24,12 @@ function parseTelemetryEnabled(flags: FeatureFlagParseResult): boolean {
     return flagOverride ?? false;
 }
 
+const hasChatProxyRateLimitConfig = () =>
+    Boolean(
+        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL &&
+            process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN
+    );
+
 export function resolveRuntimeTokenPlaceConfig() {
     return {
         url: resolveTokenPlaceBaseUrl({
@@ -31,7 +37,7 @@ export function resolveRuntimeTokenPlaceConfig() {
             state: {},
         }),
         model: getTokenPlaceChatModel({ model: process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL }),
-        relayProxyAvailable: Boolean(getChatProxySigningSecret()),
+        relayProxyAvailable: Boolean(getChatProxySigningSecret() && hasChatProxyRateLimitConfig()),
     };
 }
 
@@ -76,7 +82,9 @@ export { CHAT_PROXY_SESSION_COOKIE, CHAT_PROXY_SESSION_TTL_SECONDS };
 export function resolveRuntimeOpenAIChatProxyConfig() {
     const serverOpenAIKey = process.env.OPENAI_API_KEY || process.env.DSPACE_OPENAI_API_KEY || ''; // scan-secrets: ignore
     return {
-        enabled: Boolean(getChatProxySigningSecret() && serverOpenAIKey),
+        enabled: Boolean(
+            getChatProxySigningSecret() && hasChatProxyRateLimitConfig() && serverOpenAIKey
+        ),
     };
 }
 

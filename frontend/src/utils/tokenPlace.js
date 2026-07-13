@@ -453,6 +453,19 @@ const postTokenPlaceRelayMetricBoundary = async (operation, payload, signal) =>
         signal,
     });
 
+const postTokenPlaceChatOutcome = async (outcome, durationSeconds, options = {}) => {
+    if (!canUseTokenPlaceRelayMetricBoundary(options)) return;
+    try {
+        await postTokenPlaceRelayMetricBoundary(
+            'complete',
+            { outcome, durationSeconds },
+            options.signal
+        );
+    } catch {
+        // Chat outcome delivery is best effort and must never alter chat behavior.
+    }
+};
+
 const fetchJson = async (
     url,
     init,
@@ -1041,8 +1054,27 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
     };
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) =>
-    instrumentDchatOperation('tokenplace', () => runTokenPlaceChatV2(messages, options));
+export const TokenPlaceChatV2 = async (messages, options = {}) => {
+    const started = performance.now();
+    try {
+        const result = await instrumentDchatOperation('tokenplace', () =>
+            runTokenPlaceChatV2(messages, options)
+        );
+        await postTokenPlaceChatOutcome(
+            result?.metricsOutcome || 'success',
+            secondsSinceMetricsStart(started),
+            options
+        );
+        return result;
+    } catch (error) {
+        await postTokenPlaceChatOutcome(
+            outcomeFromError(error),
+            secondsSinceMetricsStart(started),
+            options
+        );
+        throw error;
+    }
+};
 
 export const tokenPlaceChat = async (messages, options = {}) => {
     const result = await TokenPlaceChatV2(messages, options);

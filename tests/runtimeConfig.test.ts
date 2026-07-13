@@ -10,6 +10,10 @@ const ORIGINAL_TELEMETRY = process.env.DSPACE_TELEMETRY_ENABLED;
 const ORIGINAL_VERSION = process.env.DSPACE_VERSION;
 const ORIGINAL_TOKEN_PLACE_URL = process.env.DSPACE_TOKEN_PLACE_URL;
 const ORIGINAL_TOKEN_PLACE_MODEL = process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
+const ORIGINAL_CHAT_PROXY_CREDENTIAL = process.env['DSPACE_CHAT_PROXY_TOKEN']; // scan-secrets: ignore
+const ORIGINAL_RATE_LIMIT_URL = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+const ORIGINAL_RATE_LIMIT_CREDENTIAL =
+  process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
 
 describe('runtime endpoints', () => {
   beforeEach(() => {
@@ -19,6 +23,9 @@ describe('runtime endpoints', () => {
     delete process.env.DSPACE_VERSION;
     delete process.env.DSPACE_TOKEN_PLACE_URL;
     delete process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
+    delete process.env['DSPACE_CHAT_PROXY_TOKEN'];
+    delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+    delete process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'];
   });
 
   afterEach(() => {
@@ -57,6 +64,24 @@ describe('runtime endpoints', () => {
     } else {
       process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL = ORIGINAL_TOKEN_PLACE_MODEL;
     }
+
+    if (ORIGINAL_CHAT_PROXY_CREDENTIAL === undefined) {
+      delete process.env['DSPACE_CHAT_PROXY_TOKEN'];
+    } else {
+      process.env['DSPACE_CHAT_PROXY_TOKEN'] = ORIGINAL_CHAT_PROXY_CREDENTIAL;
+    }
+
+    if (ORIGINAL_RATE_LIMIT_URL === undefined) {
+      delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+    } else {
+      process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = ORIGINAL_RATE_LIMIT_URL;
+    }
+
+    if (ORIGINAL_RATE_LIMIT_CREDENTIAL === undefined) {
+      delete process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'];
+    } else {
+      process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = ORIGINAL_RATE_LIMIT_CREDENTIAL;
+    }
   });
 
   it('exposes production token.place defaults when runtime env is absent', async () => {
@@ -68,6 +93,22 @@ describe('runtime endpoints', () => {
       model: 'llama-3.1-8b-instruct',
       relayProxyAvailable: false,
     });
+  });
+
+
+  it('only advertises chat relay proxy when the complete shared boundary is configured', async () => {
+    process.env['DSPACE_CHAT_PROXY_TOKEN'] = 'test-chat-proxy-token'; // scan-secrets: ignore
+
+    let response = await getRuntimeConfig();
+    let body = await response.json();
+    expect(body.tokenPlace.relayProxyAvailable).toBe(false);
+
+    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
+    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = 'test-rate-limit-token'; // scan-secrets: ignore
+
+    response = await getRuntimeConfig();
+    body = await response.json();
+    expect(body.tokenPlace.relayProxyAvailable).toBe(true);
   });
 
   it('exposes normalized runtime token.place URL and model overrides', async () => {

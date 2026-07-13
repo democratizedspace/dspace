@@ -408,6 +408,24 @@ describe('DSPACE application metrics', () => {
             expect(authenticatedRelay.status).toBe(200);
             expect(relayCalls).toHaveLength(1);
 
+            const tokenPlaceComplete = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'complete',
+                        payload: { outcome: 'success', durationSeconds: 0.25 },
+                    }),
+                }),
+            });
+            expect(tokenPlaceComplete.status).toBe(200);
+            expect(relayCalls).toHaveLength(1);
+
             delete process.env.OPENAI_API_KEY;
             const unconfiguredResponse = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
@@ -494,6 +512,9 @@ describe('DSPACE application metrics', () => {
             );
             expect(text).toContain(
                 'dspace_dependency_requests_total{dependency="openai",outcome="success"}'
+            );
+            expect(text).toContain(
+                'dspace_dchat_requests_total{provider="tokenplace",outcome="success"}'
             );
         } finally {
             if (previousClient === undefined) {
