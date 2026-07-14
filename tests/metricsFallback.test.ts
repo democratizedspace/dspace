@@ -762,7 +762,9 @@ describe('DSPACE application metrics', () => {
             }
             // select and retrieve hit :subop: keys; main :session: and :global: are untouched
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':subop:'))).toBe(true);
-            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(false);
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(
+                false
+            );
             // complete (with a fresh dispatch to get a valid correlation token) is bounded by
             // the correlation token, not a counter
             rateLimitCounts.clear();
@@ -813,7 +815,9 @@ describe('DSPACE application metrics', () => {
             expect(completeWithToken.status).toBe(200);
             // complete did not hit any INCR rate-limit counter (bounded by correlation token)
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':subop:'))).toBe(false);
-            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(false);
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(
+                false
+            );
 
             const text = await metrics.register.metrics();
             expect(text).toContain(
@@ -972,10 +976,9 @@ describe('DSPACE application metrics', () => {
             const metricsBeforeRejected = await metrics.register.metrics();
             const metricLinesBeforeRejected =
                 getMetricLines(metricsBeforeRejected, 'dspace_dchat_requests_total').join('\n') +
-                getMetricLines(
-                    metricsBeforeRejected,
-                    'dspace_dependency_requests_total'
-                ).join('\n');
+                getMetricLines(metricsBeforeRejected, 'dspace_dependency_requests_total').join(
+                    '\n'
+                );
             const upstreamCountBeforeRejected = upstreamRequests.length;
             const rateLimitCountBeforeRejected = [...rateLimitCounts.values()].reduce(
                 (total, count) => total + count,
@@ -1006,15 +1009,151 @@ describe('DSPACE application metrics', () => {
             const metricsAfterRejected = await metrics.register.metrics();
             const metricLinesAfterRejected =
                 getMetricLines(metricsAfterRejected, 'dspace_dchat_requests_total').join('\n') +
-                getMetricLines(
-                    metricsAfterRejected,
-                    'dspace_dependency_requests_total'
-                ).join('\n');
+                getMetricLines(metricsAfterRejected, 'dspace_dependency_requests_total').join('\n');
             expect(metricLinesAfterRejected).toBe(metricLinesBeforeRejected);
             expect(upstreamRequests).toHaveLength(upstreamCountBeforeRejected);
             expect([...rateLimitCounts.values()].reduce((total, count) => total + count, 0)).toBe(
                 rateLimitCountBeforeRejected
             );
+        } finally {
+            global.fetch = previousFetch;
+            if (previousChatProxyCredential === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_TOKEN;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_TOKEN = previousChatProxyCredential; // scan-secrets: ignore
+            }
+            if (previousRateLimitUrl === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = previousRateLimitUrl;
+            }
+            if (previousRateLimitValue === undefined) {
+                delete process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'];
+            } else {
+                process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] =
+                    previousRateLimitValue; // scan-secrets: ignore
+            }
+            if (previousPublicAccess === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = previousPublicAccess;
+            }
+            if (previousAuthorizationValue === undefined) {
+                delete process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'];
+            } else {
+                process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
+                    previousAuthorizationValue; // scan-secrets: ignore
+            }
+        }
+    });
+
+    it('stops reading the body stream at the 2 MiB dispatch ceiling (chunked-stream regression)', async () => {
+        const endpoint = await import('../frontend/src/pages/api/chat');
+        const runtime = await import('../frontend/src/utils/runtimeEndpoints');
+        const previousFetch = global.fetch;
+        const previousChatProxyCredential = process.env.DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
+        const previousRateLimitUrl = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+        const previousRateLimitValue = process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
+        const previousPublicAccess = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+        const previousAuthorizationValue =
+            process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
+
+        process.env.DSPACE_CHAT_PROXY_TOKEN = 'test-chunked-ceiling-token'; // scan-secrets: ignore
+        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
+        process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] = 'test-chunked-rate-token'; // scan-secrets: ignore
+        process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
+        process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = 'authorized-chunked-user'; // scan-secrets: ignore
+
+        const rateLimitCounts = new Map<string, number>();
+        global.fetch = async (url, init) => {
+            const href = String(url);
+            if (href.startsWith('https://redis.example.test')) {
+                const commands = JSON.parse(String(init?.body || '[]')) as unknown[][];
+                const results = commands.map((cmd) => {
+                    const [command, key] = cmd as string[];
+                    if (command === 'INCR') {
+                        const count = (rateLimitCounts.get(key) || 0) + 1;
+                        rateLimitCounts.set(key, count);
+                        return { result: count };
+                    }
+                    return { result: 1 };
+                });
+                return new Response(JSON.stringify(results), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            }
+            return new Response(JSON.stringify({ accepted: true }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        };
+
+        const authorizedIdentity = runtime.getAuthorizedChatProxyIdentity(
+            new Request('http://dspace.local/chat', {
+                headers: { 'x-dspace-chat-proxy-authorization': 'authorized-chunked-user' },
+            })
+        );
+        const cookie = `${runtime.CHAT_PROXY_SESSION_COOKIE}=${runtime.createChatProxySessionCookie(authorizedIdentity)}`;
+
+        try {
+            const TOKEN_PLACE_DISPATCH_MAX_BODY_BYTES = 2 * 1024 * 1024;
+            const CHUNK_SIZE = 64 * 1024;
+
+            // Build an over-ceiling body (≈ 3 MiB) encoded as a dispatch JSON payload.
+            const overCeilingBody = new TextEncoder().encode(
+                JSON.stringify({
+                    provider: 'tokenplace',
+                    operation: 'dispatch',
+                    payload: { ciphertext: 'x'.repeat(3 * 1024 * 1024) },
+                })
+            );
+
+            let bytesPulled = 0;
+            let streamCanceled = false;
+            let streamOffset = 0;
+
+            const trackingStream = new ReadableStream<Uint8Array>({
+                pull(controller) {
+                    if (streamOffset >= overCeilingBody.byteLength) {
+                        controller.close();
+                        return;
+                    }
+                    const chunk = overCeilingBody.slice(streamOffset, streamOffset + CHUNK_SIZE);
+                    streamOffset += chunk.byteLength;
+                    bytesPulled += chunk.byteLength;
+                    controller.enqueue(chunk);
+                },
+                cancel() {
+                    streamCanceled = true;
+                },
+            });
+
+            const response = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: cookie,
+                    },
+                    body: trackingStream,
+                    // duplex is required for streaming request bodies in Node.js fetch
+                    ...({ duplex: 'half' } as object),
+                }),
+            });
+
+            // The body exceeds the 2 MiB ceiling so the endpoint must reject it.
+            expect(response.status).toBe(413);
+
+            // Reading must have stopped before the full body was consumed.
+            expect(bytesPulled).toBeLessThan(overCeilingBody.byteLength);
+            // At most one extra chunk beyond the ceiling may be read before stopping.
+            expect(bytesPulled).toBeLessThanOrEqual(
+                TOKEN_PLACE_DISPATCH_MAX_BODY_BYTES + CHUNK_SIZE
+            );
+            // The stream must have been cancelled to signal upstream to stop sending.
+            expect(streamCanceled).toBe(true);
         } finally {
             global.fetch = previousFetch;
             if (previousChatProxyCredential === undefined) {

@@ -232,16 +232,54 @@ const readBoundedJson = async (request: Request): Promise<ChatRequestBody> => {
     if (!contentType.toLowerCase().includes('application/json')) {
         throw Object.assign(new Error('Unsupported content type'), { status: 415 });
     }
-    const text = await request.text();
-    const byteLength = new TextEncoder().encode(text).length;
-    if (byteLength > TOKEN_PLACE_DISPATCH_MAX_BODY_BYTES) {
+
+    if (!request.body) {
+        throw Object.assign(new Error('Empty request body'), { status: 400 });
+    }
+
+    // Read the body stream chunk-by-chunk, cancelling as soon as we exceed the absolute
+    // 2 MiB ceiling. This prevents arbitrarily large bodies from being fully buffered even
+    // when the client omits or misreports Content-Length.
+    const reader = request.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let totalBytes = 0;
+    let overCeiling = false;
+
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            if (value) {
+                totalBytes += value.byteLength;
+                if (totalBytes > TOKEN_PLACE_DISPATCH_MAX_BODY_BYTES) {
+                    overCeiling = true;
+                    break;
+                }
+                chunks.push(value);
+            }
+        }
+    } finally {
+        await reader.cancel().catch(() => {});
+    }
+
+    if (overCeiling) {
         throw Object.assign(new Error('Chat request too large'), { status: 413 });
     }
+
+    // Assemble buffered chunks and parse as JSON.
+    const merged = new Uint8Array(totalBytes);
+    let mergeOffset = 0;
+    for (const chunk of chunks) {
+        merged.set(chunk, mergeOffset);
+        mergeOffset += chunk.byteLength;
+    }
+    const text = new TextDecoder().decode(merged);
+
     let body: unknown;
     try {
         body = JSON.parse(text);
     } catch (error) {
-        if (byteLength > MAX_BODY_BYTES) {
+        if (totalBytes > MAX_BODY_BYTES) {
             throw Object.assign(new Error('Chat request too large'), { status: 413 });
         }
         throw error;
@@ -252,7 +290,7 @@ const readBoundedJson = async (request: Request): Promise<ChatRequestBody> => {
         typeof candidate === 'object' &&
         String(candidate.provider || '').toLowerCase() === 'tokenplace' &&
         String(candidate.operation || '').toLowerCase() === 'dispatch';
-    if (byteLength > MAX_BODY_BYTES && !isTokenPlaceDispatch) {
+    if (totalBytes > MAX_BODY_BYTES && !isTokenPlaceDispatch) {
         throw Object.assign(new Error('Chat request too large'), { status: 413 });
     }
     return body as ChatRequestBody;
