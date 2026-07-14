@@ -15,6 +15,7 @@ import {
 export const prerender = false;
 
 const MAX_BODY_BYTES = 64 * 1024;
+const TOKEN_PLACE_DISPATCH_MAX_BODY_BYTES = 2 * 1024 * 1024;
 const TOKEN_PLACE_RELAY_OPERATIONS = new Set(['select', 'dispatch', 'retrieve', 'complete']);
 
 const getServerOpenAIKey = () =>
@@ -46,6 +47,20 @@ const RETRIEVE_LIMIT_PER_WINDOW = Number(process.env.DSPACE_CHAT_PROXY_SUBOP_RET
 const CORREL_TTL_SECONDS = 300;
 
 type SharedRateLimitResult = { allowed: boolean; unavailable?: boolean };
+
+type ChatRequestBody = {
+    provider?: unknown;
+    operation?: unknown;
+    payload?: unknown;
+    messages?: unknown;
+    apiKey?: unknown;
+    options?: {
+        promptPayload?: unknown;
+        gameState?: unknown;
+        serverOpenAIApiKey?: unknown;
+        personaId?: unknown;
+    };
+};
 
 const getSharedRateLimitConfig = () => ({
     url: process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL || '',
@@ -212,16 +227,35 @@ export const getChatProxyRateLimitStateForTests = () => ({
     shared: Boolean(getSharedRateLimitConfig().url && getSharedRateLimitConfig().token),
 });
 
-const readBoundedJson = async (request: Request) => {
+const readBoundedJson = async (request: Request): Promise<ChatRequestBody> => {
     const contentType = request.headers.get('content-type') || '';
     if (!contentType.toLowerCase().includes('application/json')) {
         throw Object.assign(new Error('Unsupported content type'), { status: 415 });
     }
     const text = await request.text();
-    if (new TextEncoder().encode(text).length > MAX_BODY_BYTES) {
+    const byteLength = new TextEncoder().encode(text).length;
+    if (byteLength > TOKEN_PLACE_DISPATCH_MAX_BODY_BYTES) {
         throw Object.assign(new Error('Chat request too large'), { status: 413 });
     }
-    return JSON.parse(text);
+    let body: unknown;
+    try {
+        body = JSON.parse(text);
+    } catch (error) {
+        if (byteLength > MAX_BODY_BYTES) {
+            throw Object.assign(new Error('Chat request too large'), { status: 413 });
+        }
+        throw error;
+    }
+    const candidate = body as { provider?: unknown; operation?: unknown } | null;
+    const isTokenPlaceDispatch =
+        candidate &&
+        typeof candidate === 'object' &&
+        String(candidate.provider || '').toLowerCase() === 'tokenplace' &&
+        String(candidate.operation || '').toLowerCase() === 'dispatch';
+    if (byteLength > MAX_BODY_BYTES && !isTokenPlaceDispatch) {
+        throw Object.assign(new Error('Chat request too large'), { status: 413 });
+    }
+    return body as ChatRequestBody;
 };
 
 const TOKEN_PLACE_PAYLOAD_KEYS: Record<string, Set<string>> = {

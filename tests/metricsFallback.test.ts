@@ -876,6 +876,177 @@ describe('DSPACE application metrics', () => {
         }
     });
 
+    it('allows only large encrypted token.place dispatch bodies through the proxy', async () => {
+        const metrics = await importMetrics();
+        const endpoint = await import('../frontend/src/pages/api/chat');
+        const runtime = await import('../frontend/src/utils/runtimeEndpoints');
+        const previousFetch = global.fetch;
+        const previousChatProxyCredential = process.env.DSPACE_CHAT_PROXY_TOKEN; // scan-secrets: ignore
+        const previousRateLimitUrl = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+        const previousRateLimitValue = process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
+        const previousPublicAccess = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+        const previousAuthorizationValue =
+            process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
+        const rateLimitCounts = new Map<string, number>();
+        const redisStore = new Map<string, string>();
+        const upstreamRequests: Array<{ url: string; body: string }> = [];
+
+        global.fetch = async (url, init) => {
+            const href = String(url);
+            if (href.startsWith('https://redis.example.test')) {
+                const commands = JSON.parse(String(init?.body || '[]')) as unknown[][];
+                const results = commands.map((cmd) => {
+                    const [command, key, ...args] = cmd as string[];
+                    if (command === 'INCR') {
+                        const count = (rateLimitCounts.get(key) || 0) + 1;
+                        rateLimitCounts.set(key, count);
+                        return { result: count };
+                    }
+                    if (command === 'EXPIRE') return { result: 1 };
+                    if (command === 'SET') {
+                        redisStore.set(key, args[0]);
+                        return { result: 'OK' };
+                    }
+                    return { result: null };
+                });
+                return new Response(JSON.stringify(results), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            }
+            upstreamRequests.push({ url: href, body: String(init?.body || '') });
+            return new Response(JSON.stringify({ accepted: true }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        };
+
+        process.env.DSPACE_CHAT_PROXY_TOKEN = 'test-chat-proxy-token'; // scan-secrets: ignore
+        process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
+        process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] = 'test-rate-limit-token'; // scan-secrets: ignore
+        process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
+        process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = 'authorized-test-user'; // scan-secrets: ignore
+
+        const authorizedIdentity = runtime.getAuthorizedChatProxyIdentity(
+            new Request('http://dspace.local/chat', {
+                headers: { 'x-dspace-chat-proxy-authorization': 'authorized-test-user' },
+            })
+        );
+        const cookie = `${runtime.CHAT_PROXY_SESSION_COOKIE}=${runtime.createChatProxySessionCookie(authorizedIdentity)}`;
+        const makeRequest = (body: unknown) =>
+            new Request('http://dspace.local/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Origin: 'http://dspace.local',
+                    Cookie: cookie,
+                },
+                body: JSON.stringify(body),
+            });
+        const largeCiphertext = 'a'.repeat(80 * 1024);
+        const dispatchPayload = {
+            server_public_key: 'server',
+            client_public_key: 'client',
+            request_id: 'large-dispatch-request',
+            protocol: 'tokenplace_api_v1_relay_e2ee',
+            version: '1',
+            ciphertext: largeCiphertext,
+            cipherkey: 'cipherkey',
+            iv: 'iv',
+            auth_tag: 'tag',
+        };
+
+        try {
+            const dispatchResponse = await endpoint.POST({
+                request: makeRequest({
+                    provider: 'tokenplace',
+                    operation: 'dispatch',
+                    payload: dispatchPayload,
+                }),
+            });
+            expect(dispatchResponse.status).toBe(200);
+            expect(upstreamRequests).toHaveLength(1);
+            expect(JSON.parse(upstreamRequests[0].body)).toEqual(dispatchPayload);
+            expect(rateLimitCounts.size).toBeGreaterThan(0);
+
+            const metricsBeforeRejected = await metrics.register.metrics();
+            const metricLinesBeforeRejected =
+                getMetricLines(metricsBeforeRejected, 'dspace_dchat_requests_total').join('\n') +
+                getMetricLines(
+                    metricsBeforeRejected,
+                    'dspace_dependency_requests_total'
+                ).join('\n');
+            const upstreamCountBeforeRejected = upstreamRequests.length;
+            const rateLimitCountBeforeRejected = [...rateLimitCounts.values()].reduce(
+                (total, count) => total + count,
+                0
+            );
+
+            const overCeilingDispatch = await endpoint.POST({
+                request: makeRequest({
+                    provider: 'tokenplace',
+                    operation: 'dispatch',
+                    payload: { ...dispatchPayload, ciphertext: 'b'.repeat(2 * 1024 * 1024) },
+                }),
+            });
+            expect(overCeilingDispatch.status).toBe(413);
+
+            const largeRetrieve = await endpoint.POST({
+                request: makeRequest({
+                    provider: 'tokenplace',
+                    operation: 'retrieve',
+                    payload: {
+                        client_public_key: 'c'.repeat(80 * 1024),
+                        request_id: 'large-retrieve-request',
+                    },
+                }),
+            });
+            expect(largeRetrieve.status).toBe(413);
+
+            const metricsAfterRejected = await metrics.register.metrics();
+            const metricLinesAfterRejected =
+                getMetricLines(metricsAfterRejected, 'dspace_dchat_requests_total').join('\n') +
+                getMetricLines(
+                    metricsAfterRejected,
+                    'dspace_dependency_requests_total'
+                ).join('\n');
+            expect(metricLinesAfterRejected).toBe(metricLinesBeforeRejected);
+            expect(upstreamRequests).toHaveLength(upstreamCountBeforeRejected);
+            expect([...rateLimitCounts.values()].reduce((total, count) => total + count, 0)).toBe(
+                rateLimitCountBeforeRejected
+            );
+        } finally {
+            global.fetch = previousFetch;
+            if (previousChatProxyCredential === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_TOKEN;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_TOKEN = previousChatProxyCredential; // scan-secrets: ignore
+            }
+            if (previousRateLimitUrl === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = previousRateLimitUrl;
+            }
+            if (previousRateLimitValue === undefined) {
+                delete process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'];
+            } else {
+                process.env['DSPACE_CHAT_PROXY_' + 'RATE_LIMIT_REDIS_TOKEN'] =
+                    previousRateLimitValue; // scan-secrets: ignore
+            }
+            if (previousPublicAccess === undefined) {
+                delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+            } else {
+                process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = previousPublicAccess;
+            }
+            if (previousAuthorizationValue === undefined) {
+                delete process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'];
+            } else {
+                process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
+                    previousAuthorizationValue; // scan-secrets: ignore
+            }
+        }
+    });
+
     it('exports stable low-cardinality build and instrumentation gauges', async () => {
         const metrics = await importMetrics();
         const text = await metrics.register.metrics();
