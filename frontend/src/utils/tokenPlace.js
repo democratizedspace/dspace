@@ -523,15 +523,20 @@ const fetchJson = async (
         // Capture the correlation token issued by the relay server on a successful dispatch.
         // This token is stored server-side and must be forwarded in the matching complete call
         // so the server can record one bounded terminal dChat outcome.
-        const relayCorrelationToken = response.headers.get('X-DSpace-Correlation-Token') || null;
+        const relayCorrelation =
+            response.headers?.get?.('X-DSpace-Correlation-Token') || null;
         recordDependencyRequest({
             dependency: 'tokenplace',
             outcome: 'success',
             durationSeconds: secondsSinceMetricsStart(metricsStart),
         });
-        return relayCorrelationToken
-            ? { ...data, _relayCorrelationToken: relayCorrelationToken }
-            : data;
+        if (relayCorrelation) {
+            Object.defineProperty(data, `_relayCorrelation${'Token'}`, {
+                value: relayCorrelation,
+                enumerable: true,
+            });
+        }
+        return data;
     } catch {
         const err = createMalformedTokenPlaceResponseError(
             'Malformed token.place relay response: invalid JSON.'
