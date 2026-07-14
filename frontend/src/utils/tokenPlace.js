@@ -518,12 +518,11 @@ const fetchJson = async (
         });
         throw err;
     }
+    // Capture the correlation token before parsing so post-dispatch malformed JSON can still
+    // consume the server-owned logical-operation state with one bounded terminal outcome.
+    const relayCorrelation = response.headers?.get?.('X-DSpace-Correlation-Token') || null;
     try {
         const data = await response.json();
-        // Capture the correlation token issued by the relay server on a successful dispatch.
-        // This token is stored server-side and must be forwarded in the matching complete call
-        // so the server can record one bounded terminal dChat outcome.
-        const relayCorrelation = response.headers?.get?.('X-DSpace-Correlation-Token') || null;
         recordDependencyRequest({
             dependency: 'tokenplace',
             outcome: 'success',
@@ -540,6 +539,7 @@ const fetchJson = async (
         const err = createMalformedTokenPlaceResponseError(
             'Malformed token.place relay response: invalid JSON.'
         );
+        attachRelayCorrelation(err, relayCorrelation);
         recordDependencyRequest({
             dependency: 'tokenplace',
             outcome: 'malformed_response',
@@ -953,7 +953,10 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
     // It is forwarded in the complete call so the server can record one terminal dChat outcome.
     const relayCorrelation = dispatched?._relayCorrelationToken || null; // scan-secrets: ignore
     if (dispatched?.accepted === false) {
-        throw createMalformedTokenPlaceResponseError('token.place relay rejected the request.');
+        throw attachRelayCorrelation(
+            createMalformedTokenPlaceResponseError('token.place relay rejected the request.'),
+            relayCorrelation
+        );
     }
     try {
         const encryptedResponse = await pollTokenPlaceRelayResponse(
@@ -968,7 +971,9 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
                 ),
             }
         );
-        if (encryptedResponse?.terminalSelectedServerFailure) return encryptedResponse;
+        if (encryptedResponse?.terminalSelectedServerFailure) {
+            return { ...encryptedResponse, correlationToken: relayCorrelation }; // scan-secrets: ignore
+        }
         let responseEnvelope;
         try {
             responseEnvelope = await decryptTokenPlaceEnvelope(
@@ -1040,6 +1045,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
                 'No token.place compute node is available.'
             );
             error.metricsOutcome = 'fallback_unavailable';
+            attachRelayCorrelation(error, activeCorrelation);
             throw error;
         }
     }
@@ -1054,6 +1060,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
         };
         fallbackUsed = true;
         let retry = await runRelayAttempt(baseUrl, sanitizedMessages, retryAttemptOptions);
+        activeCorrelation = retry?.correlationToken || null; // scan-secrets: ignore
         if (retry?.terminalSelectedServerFailure) {
             fallbackUsed = true;
             retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
@@ -1061,11 +1068,13 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
                 requestId: undefined,
                 cancelToken: undefined,
             });
+            activeCorrelation = retry?.correlationToken || null; // scan-secrets: ignore
             if (retry?.terminalSelectedServerFailure) {
                 const error = createMalformedTokenPlaceResponseError(
                     'No token.place compute node is available.'
                 );
                 error.metricsOutcome = 'fallback_unavailable';
+                attachRelayCorrelation(error, activeCorrelation);
                 throw error;
             }
         }

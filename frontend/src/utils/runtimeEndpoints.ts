@@ -101,6 +101,16 @@ export function createChatProxySessionCookie(identity: string | null, now = Date
     return `${id}.${expiresAt}.${signature}`;
 }
 
+export function chatProxySessionCookieOptions(protocol: string) {
+    return {
+        httpOnly: true,
+        sameSite: 'lax' as const,
+        secure: protocol === 'https:',
+        path: '/',
+        maxAge: CHAT_PROXY_SESSION_TTL_SECONDS,
+    };
+}
+
 export function verifyChatProxySessionCookie(value: string | null, now = Date.now()) {
     const secret = getChatProxySigningSecret(); // scan-secrets: ignore
     if (!secret || !value || !hasCompleteChatProxyUsageAuthorization()) return null;

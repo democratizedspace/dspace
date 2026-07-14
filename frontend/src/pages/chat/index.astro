@@ -5,6 +5,7 @@ import Integrations from './svelte/Integrations.svelte';
 import {
     CHAT_PROXY_SESSION_COOKIE,
     CHAT_PROXY_SESSION_TTL_SECONDS,
+    chatProxySessionCookieOptions,
     createChatProxySessionCookie,
     getAuthorizedChatProxyIdentity,
     verifyChatProxySessionCookie,
@@ -25,10 +26,7 @@ if (chatProxySessionCookie || openAIChatProxy.enabled || tokenPlace.relayProxyAv
     const sessionCookie = existingSessionIdentity ? existingSessionCookie : chatProxySessionCookie;
     if (sessionCookie) {
         Astro.cookies.set(CHAT_PROXY_SESSION_COOKIE, sessionCookie, {
-            httpOnly: true,
-            sameSite: 'lax',
-            secure: Astro.url.protocol === 'https:',
-            path: '/api/chat',
+            ...chatProxySessionCookieOptions(Astro.url.protocol),
             maxAge: CHAT_PROXY_SESSION_TTL_SECONDS,
         });
     }

@@ -6,6 +6,7 @@ import { GET as getRuntimeConfig } from '../frontend/src/pages/config.json.ts';
 import { GET as getHealthz } from '../frontend/src/pages/healthz.ts';
 import { GET as getLivez } from '../frontend/src/pages/livez.ts';
 import {
+  chatProxySessionCookieOptions,
   createChatProxySessionCookie,
   verifyChatProxySessionCookie,
 } from '../frontend/src/utils/runtimeEndpoints.ts';
@@ -157,6 +158,17 @@ describe('runtime endpoints', () => {
     const cookie = createChatProxySessionCookie(identity, 1_700_000_000_000);
     expect(cookie).toMatch(/^[A-Za-z0-9_-]{22}_[A-Za-z0-9_-]{22}\.[0-9]+\.[A-Za-z0-9_-]+$/);
     expect(verifyChatProxySessionCookie(cookie, 1_700_000_001_000)).toBe(identity);
+  });
+
+  it('scopes chat proxy session cookies so both SSR chat and API requests can read them', () => {
+    expect(chatProxySessionCookieOptions('https:')).toStrictEqual({
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      path: '/',
+      maxAge: 60 * 60,
+    });
+    expect(chatProxySessionCookieOptions('http:')).toMatchObject({ secure: false, path: '/' });
   });
 
   it('rejects legacy anonymous chat proxy session IDs', () => {

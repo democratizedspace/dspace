@@ -59,6 +59,8 @@ const makeRelayFetch = ({
     selectedWindowTokens,
     selectedModelSupport,
     replyForRetrieve = null,
+    dispatchCorrelationValue = null,
+    dispatchJson = () => Promise.resolve({ accepted }),
 } = {}) => {
     let retrieveCount = 0;
     let selectionCount = 0;
@@ -95,7 +97,21 @@ const makeRelayFetch = ({
             };
         }
         if (urlPathEndsWith(url, '/api/v1/relay/requests')) {
-            return { ok: true, status: 200, json: () => Promise.resolve({ accepted }) };
+            return {
+                ok: true,
+                status: 200,
+                headers: dispatchCorrelationValue
+                    ? {
+                          get: (name) =>
+                              name === 'X-DSpace-Correlation-Token'
+                                  ? typeof dispatchCorrelationValue === 'function'
+                                      ? dispatchCorrelationValue()
+                                      : dispatchCorrelationValue
+                                  : null,
+                      }
+                    : undefined,
+                json: dispatchJson,
+            };
         }
         if (urlPathEndsWith(url, '/api/v1/relay/responses/retrieve')) {
             const status = retrieveStatuses[Math.min(retrieveCount, retrieveStatuses.length - 1)];
@@ -1323,6 +1339,46 @@ ${ragExcerpt.repeat(4000)}`,
         ).toBe(false);
     });
 
+    test('post-dispatch accepted false preserves the relay correlation token', async () => {
+        global.fetch = makeRelayFetch({
+            accepted: false,
+            dispatchCorrelationValue: 'dispatch-correlation-accepted-false',
+        });
+
+        let thrownError;
+        try {
+            await TokenPlaceChatV2([{ role: 'user', content: 'hello' }]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'malformed',
+            message: 'token.place relay rejected the request.',
+        });
+        expect(thrownError?.correlationToken).toBe('dispatch-correlation-accepted-false');
+    });
+
+    test('post-dispatch malformed JSON preserves the relay correlation token', async () => {
+        global.fetch = makeRelayFetch({
+            dispatchCorrelationValue: 'dispatch-correlation-invalid-json',
+            dispatchJson: () => Promise.reject(new SyntaxError('bad json')),
+        });
+
+        let thrownError;
+        try {
+            await TokenPlaceChatV2([{ role: 'user', content: 'hello' }]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'malformed',
+            message: 'Malformed token.place relay response: invalid JSON.',
+        });
+        expect(thrownError?.correlationToken).toBe('dispatch-correlation-invalid-json');
+    });
+
     test('decrypted envelope validation rejects unsafe/mismatched shapes', () => {
         const base = {
             protocol: 'tokenplace_api_v1_relay_e2ee',
@@ -1404,6 +1460,34 @@ ${ragExcerpt.repeat(4000)}`,
             type: 'malformed',
             message: 'No token.place compute node is available.',
         });
+    });
+
+    test('fallback unavailable preserves the last post-dispatch correlation token', async () => {
+        let dispatchCount = 0;
+        global.fetch = makeRelayFetch({
+            retrieveStatuses: [404, 404],
+            dispatchCorrelationValue: () => {
+                dispatchCount += 1;
+                return `dispatch-correlation-${dispatchCount}`;
+            },
+            dispatchJson: () => {
+                return Promise.resolve({ accepted: true });
+            },
+        });
+
+        let thrownError;
+        try {
+            await TokenPlaceChatV2([], { pollIntervalMs: 1 });
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'malformed',
+            message: 'No token.place compute node is available.',
+            metricsOutcome: 'fallback_unavailable',
+        });
+        expect(thrownError?.correlationToken).toBe('dispatch-correlation-2');
     });
 
     test('requests estimated context tier, encrypts routing metadata, and records spillover diagnostics', async () => {

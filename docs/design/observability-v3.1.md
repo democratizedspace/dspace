@@ -109,15 +109,15 @@ templates or fixed route groups, maps unmatched paths to `/unknown`, maps status
 #### Chat relay proxy: authorization model and observability boundary
 
 The chat relay proxy is **optional and default-disabled**. It is active only when an operator
-explicitly configures all four required environment variables:
+explicitly configures all five required environment variables:
 
-| Variable | Purpose |
-| --- | --- |
-| `DSPACE_CHAT_PROXY_TOKEN` | HMAC signing secret for HttpOnly session cookies |
-| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL` | Redis-compatible shared rate-limit backend URL (also used for correlation token storage) |
-| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN` | Redis-compatible shared rate-limit backend token |
-| `DSPACE_CHAT_PROXY_PUBLIC_ACCESS` | Must be set to `true` (explicit operator opt-in) |
-| `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN` | Shared secret; a trusted entry point must supply via `x-dspace-chat-proxy-authorization` |
+| Variable                                   | Purpose                                                                                  |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `DSPACE_CHAT_PROXY_TOKEN`                  | HMAC signing secret for HttpOnly session cookies                                         |
+| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL`   | Redis-compatible shared rate-limit backend URL (also used for correlation token storage) |
+| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN` | Redis-compatible shared rate-limit backend token                                         |
+| `DSPACE_CHAT_PROXY_PUBLIC_ACCESS`          | Must be set to `true` (explicit operator opt-in)                                         |
+| `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN`    | Shared secret; a trusted entry point must supply via `x-dspace-chat-proxy-authorization` |
 
 When any of these is absent, `relayProxyAvailable` is `false` in `/config.json`, the browser chat
 client retains the direct token.place relay path, and browser-held OpenAI keys stay local. There is
@@ -148,7 +148,7 @@ server relay boundary so actual token.place dependency attempts and one bounded 
 outcome can be observed in the server registry.
 
 **Correlation token system.** When a rate-limited `dispatch` operation succeeds at the server relay
-boundary, `/api/chat` issues an opaque correlation token stored in the shared Redis-compatible
+boundary and returns parseable JSON, `/api/chat` issues an opaque correlation token stored in the shared Redis-compatible
 backend with a short TTL (300 seconds), bound to the verified session identity. The client receives
 the token via the `X-DSpace-Correlation-Token` response header. To report a terminal dChat outcome,
 the client calls `complete` and includes the correlation token. The server atomically consumes the
@@ -156,8 +156,7 @@ token (`GETDEL`), verifies session ownership, derives the duration from the serv
 timestamp, and records one bounded `dspace_dchat_requests_total` and
 `dspace_dchat_request_duration_seconds` observation. Missing, expired, replayed, or cross-session
 tokens return `400` and do not mutate the registry. The correlation token is never used as a metric
-label and never appears in `/metrics` output. A failed `dispatch` records a terminal dChat failure
-immediately without issuing a correlation token.
+label and never appears in `/metrics` output. Dispatch failures recorded before a correlation token exists record a terminal dChat failure immediately without issuing a correlation token; post-dispatch failures consume the issued correlation token with a bounded failure outcome.
 
 **Per-operation sub-budgets.** `select` and `retrieve` sub-operations of a logical token.place chat
 have separate per-session rate-limit counters with higher limits (defaults: 60/min for `select`,
