@@ -523,8 +523,7 @@ const fetchJson = async (
         // Capture the correlation token issued by the relay server on a successful dispatch.
         // This token is stored server-side and must be forwarded in the matching complete call
         // so the server can record one bounded terminal dChat outcome.
-        const relayCorrelation =
-            response.headers?.get?.('X-DSpace-Correlation-Token') || null;
+        const relayCorrelation = response.headers?.get?.('X-DSpace-Correlation-Token') || null;
         recordDependencyRequest({
             dependency: 'tokenplace',
             outcome: 'success',
