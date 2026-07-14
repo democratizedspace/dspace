@@ -453,12 +453,21 @@ const postTokenPlaceRelayMetricBoundary = async (operation, payload, signal) =>
         signal,
     });
 
-const postTokenPlaceChatOutcome = async (outcome, durationSeconds, options = {}) => {
+const postTokenPlaceChatOutcome = async (
+    outcome,
+    durationSeconds,
+    options = {},
+    correlationToken = null
+) => {
     if (!canUseTokenPlaceRelayMetricBoundary(options)) return;
     try {
         await postTokenPlaceRelayMetricBoundary(
             'complete',
-            { outcome, durationSeconds },
+            {
+                outcome,
+                durationSeconds,
+                ...(correlationToken ? { correlationToken } : {}),
+            },
             options.signal
         );
     } catch {
@@ -511,12 +520,18 @@ const fetchJson = async (
     }
     try {
         const data = await response.json();
+        // Capture the correlation token issued by the relay server on a successful dispatch.
+        // This token is stored server-side and must be forwarded in the matching complete call
+        // so the server can record one bounded terminal dChat outcome.
+        const relayCorrelationToken = response.headers.get('X-DSpace-Correlation-Token') || null;
         recordDependencyRequest({
             dependency: 'tokenplace',
             outcome: 'success',
             durationSeconds: secondsSinceMetricsStart(metricsStart),
         });
-        return data;
+        return relayCorrelationToken
+            ? { ...data, _relayCorrelationToken: relayCorrelationToken }
+            : data;
     } catch {
         const err = createMalformedTokenPlaceResponseError(
             'Malformed token.place relay response: invalid JSON.'
@@ -916,6 +931,9 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
         },
         options
     );
+    // Capture the relay correlation token issued by the server on a successful dispatch.
+    // It is forwarded in the complete call so the server can record one terminal dChat outcome.
+    const relayCorrelationToken = dispatched?._relayCorrelationToken || null;
     if (dispatched?.accepted === false) {
         throw createMalformedTokenPlaceResponseError('token.place relay rejected the request.');
     }
@@ -947,6 +965,7 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
     });
     return {
         apiResponse,
+        correlationToken: relayCorrelationToken,
         diagnostics: {
             requestedTier: options.contextTier,
             relaySelectedTier: server.selectedContextTier,
@@ -1035,6 +1054,9 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
     return {
         text,
         ...(fallbackUsed ? { metricsOutcome: 'fallback_used' } : {}),
+        // Forward the correlation token from the final successful dispatch so TokenPlaceChatV2
+        // can include it in the complete call and the server records one terminal dChat outcome.
+        correlationToken: attempt.correlationToken || null,
         contextSources,
         usage: data?.usage,
         metadata: {
@@ -1061,13 +1083,18 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         const result = await instrumentDchatOperation('tokenplace', () =>
             runTokenPlaceChatV2(messages, options)
         );
+        // Forward the correlation token so the server can record exactly one terminal dChat
+        // outcome and prevents client-fabricated completions from mutating the registry.
         await postTokenPlaceChatOutcome(
             result?.metricsOutcome || 'success',
             secondsSinceMetricsStart(started),
-            options
+            options,
+            result?.correlationToken || null
         );
         return result;
     } catch (error) {
+        // On failure the server already recorded a terminal dChat outcome at the dispatch
+        // boundary (or the dispatch itself failed), so no correlation token is available.
         await postTokenPlaceChatOutcome(
             outcomeFromError(error),
             secondsSinceMetricsStart(started),
