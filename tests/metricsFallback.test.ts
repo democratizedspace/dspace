@@ -272,15 +272,40 @@ describe('DSPACE application metrics', () => {
             process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
         const previousFetch = global.fetch;
         const rateLimitCounts = new Map<string, number>();
+        const redisStore = new Map<string, string>();
         const relayCalls: string[] = [];
+        let lastCorrelationToken: string | null = null;
         global.fetch = async (url, init) => {
             const href = String(url);
             if (href.startsWith('https://redis.example.test')) {
-                const body = JSON.parse(String(init?.body || '[]'));
-                const key = body?.[0]?.[1] || 'unknown';
-                const count = (rateLimitCounts.get(key) || 0) + 1;
-                rateLimitCounts.set(key, count);
-                return new Response(JSON.stringify([{ result: count }, { result: 1 }]), {
+                const commands = JSON.parse(String(init?.body || '[]')) as unknown[][];
+                const results = commands.map((cmd) => {
+                    const [command, key, ...args] = cmd as string[];
+                    if (command === 'INCR') {
+                        const count = (rateLimitCounts.get(key) || 0) + 1;
+                        rateLimitCounts.set(key, count);
+                        return { result: count };
+                    }
+                    if (command === 'EXPIRE') {
+                        return { result: 1 };
+                    }
+                    if (command === 'SET') {
+                        // SET key value [EX ttl] [NX]
+                        const isNX = args.includes('NX');
+                        if (isNX && redisStore.has(key)) {
+                            return { result: null };
+                        }
+                        redisStore.set(key, args[0]);
+                        return { result: 'OK' };
+                    }
+                    if (command === 'GETDEL') {
+                        const value = redisStore.get(key) ?? null;
+                        redisStore.delete(key);
+                        return { result: value };
+                    }
+                    return { result: null };
+                });
+                return new Response(JSON.stringify(results), {
                     status: 200,
                     headers: { 'Content-Type': 'application/json' },
                 });
@@ -443,6 +468,13 @@ describe('DSPACE application metrics', () => {
                 }),
             });
             expect(authenticatedDispatch.status).toBe(200);
+            // Dispatch success: server issues a correlation token in a response header.
+            // The token proves a server-observed dispatch happened for this session.
+            lastCorrelationToken = authenticatedDispatch.headers.get('X-DSpace-Correlation-Token');
+            expect(lastCorrelationToken).toBeTruthy();
+            // Correlation token must not appear in metrics output (not a label).
+            const metricsAfterDispatch = await metrics.register.metrics();
+            expect(metricsAfterDispatch).not.toContain(lastCorrelationToken);
             const authenticatedRetrieve = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
@@ -472,8 +504,11 @@ describe('DSPACE application metrics', () => {
                     'dspace_dependency_requests_total'
                 ).join('\n');
             for (const payload of [
+                // select with extra disallowed key
                 { model: 'open-model', contextTier: 'small', messages: [{ content: 'plain' }] },
+                // retrieve with prohibited key
                 { client_public_key: 'client', request_id: 'request', privateKey: 'secret' },
+                // complete without required correlationToken (has gameState which is also disallowed)
                 { outcome: 'success', durationSeconds: 0.25, gameState: { inventory: [] } },
             ]) {
                 const invalidPayloadResponse = await endpoint.POST({
@@ -493,6 +528,23 @@ describe('DSPACE application metrics', () => {
                 });
                 expect(invalidPayloadResponse.status).toBe(400);
             }
+            // complete with missing correlationToken also returns 400 (validation)
+            const completeMissingToken = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'complete',
+                        payload: { outcome: 'success' },
+                    }),
+                }),
+            });
+            expect(completeMissingToken.status).toBe(400);
             expect(relayCalls).toHaveLength(3);
             const tokenPlaceMetricsAfterInvalidPayload = await metrics.register.metrics();
             const tokenPlaceLinesAfterInvalidPayload =
@@ -509,6 +561,25 @@ describe('DSPACE application metrics', () => {
             expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('secret');
             expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('inventory');
 
+            // complete with a wrong/replayed/cross-session correlation token returns 400
+            const completeWrongToken = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'complete',
+                        payload: { correlationToken: 'nonexistent-token', outcome: 'success' },
+                    }),
+                }),
+            });
+            expect(completeWrongToken.status).toBe(400);
+
+            // complete with valid correlation token records one terminal dChat outcome
             const tokenPlaceComplete = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
@@ -520,12 +591,36 @@ describe('DSPACE application metrics', () => {
                     body: JSON.stringify({
                         provider: 'tokenplace',
                         operation: 'complete',
-                        payload: { outcome: 'success', durationSeconds: 0.25 },
+                        payload: { correlationToken: lastCorrelationToken, outcome: 'success' },
                     }),
                 }),
             });
             expect(tokenPlaceComplete.status).toBe(200);
             expect(relayCalls).toHaveLength(3);
+
+            // Replay prevention: the same correlation token cannot be used a second time
+            const replayComplete = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'complete',
+                        payload: { correlationToken: lastCorrelationToken, outcome: 'success' },
+                    }),
+                }),
+            });
+            expect(replayComplete.status).toBe(400);
+
+            // After valid complete, dChat metric for tokenplace is populated
+            const metricsAfterComplete = await metrics.register.metrics();
+            expect(metricsAfterComplete).toContain(
+                'dspace_dchat_requests_total{provider="tokenplace",outcome="success"}'
+            );
 
             delete process.env.OPENAI_API_KEY;
             const unconfiguredResponse = await endpoint.POST({
@@ -609,14 +704,44 @@ describe('DSPACE application metrics', () => {
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(true);
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':global:'))).toBe(true);
 
-            // Token.place sub-operations (select, retrieve, complete) are part of a single
-            // logical chat; only dispatch should consume a rate-limit token. Verifying with the
-            // already-exhausted reusableCookie: non-dispatch ops succeed without hitting Redis.
+            // Token.place sub-operations: dispatch consumes the main session quota; select and
+            // retrieve have separate per-operation sub-budgets (not the main dispatch limit);
+            // complete is bounded by the correlation token (one per dispatch). Verify with the
+            // already-exhausted reusableCookie that dispatch still fails (main limit) but select
+            // and retrieve use their own sub-budget counters (not the main :session: key).
+            // Do NOT clear rateLimitCounts here — the exhausted session state must persist.
+            redisStore.clear();
+            // Dispatch is rate-limited and should fail because the main quota is exhausted
+            const exhaustedDispatch = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: reusableCookie,
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'dispatch',
+                        payload: {
+                            server_public_key: 'server',
+                            client_public_key: 'client',
+                            request_id: 'req-exhaust',
+                            protocol: 'tokenplace_api_v1_relay_e2ee',
+                            version: '1',
+                            ciphertext: 'ct',
+                            cipherkey: 'ck',
+                            iv: 'iv',
+                        },
+                    }),
+                }),
+            });
+            expect(exhaustedDispatch.status).toBe(429);
+            // select and retrieve use sub-op budget keys (contain :subop:), not :session: or :global:
             rateLimitCounts.clear();
             for (const [op, pl] of [
-                ['select', { model: 'open-model', contextTier: 'small' }],
-                ['retrieve', { client_public_key: 'client', request_id: 'req2' }],
-                ['complete', { outcome: 'success', durationSeconds: 0.1 }],
+                ['select', { model: 'open-model', contextTier: 'small' }] as const,
+                ['retrieve', { client_public_key: 'client', request_id: 'req2' }] as const,
             ]) {
                 const nonDispatch = await endpoint.POST({
                     request: new Request('http://dspace.local/api/chat', {
@@ -635,7 +760,60 @@ describe('DSPACE application metrics', () => {
                 });
                 expect(nonDispatch.status).toBe(200);
             }
-            expect(rateLimitCounts.size).toBe(0);
+            // select and retrieve hit :subop: keys; main :session: and :global: are untouched
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':subop:'))).toBe(true);
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(false);
+            // complete (with a fresh dispatch to get a valid correlation token) is bounded by
+            // the correlation token, not a counter
+            rateLimitCounts.clear();
+            // Use the main cookie (not reusableCookie) which has capacity for dispatch
+            const freshDispatch = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'dispatch',
+                        payload: {
+                            server_public_key: 'server2',
+                            client_public_key: 'client2',
+                            request_id: 'req-fresh',
+                            protocol: 'tokenplace_api_v1_relay_e2ee',
+                            version: '1',
+                            ciphertext: 'ct2',
+                            cipherkey: 'ck2',
+                            iv: 'iv2',
+                        },
+                    }),
+                }),
+            });
+            expect(freshDispatch.status).toBe(200);
+            const freshCorrToken = freshDispatch.headers.get('X-DSpace-Correlation-Token');
+            expect(freshCorrToken).toBeTruthy();
+            rateLimitCounts.clear();
+            const completeWithToken = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'complete',
+                        payload: { correlationToken: freshCorrToken, outcome: 'success' },
+                    }),
+                }),
+            });
+            expect(completeWithToken.status).toBe(200);
+            // complete did not hit any INCR rate-limit counter (bounded by correlation token)
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':subop:'))).toBe(false);
+            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(false);
 
             const text = await metrics.register.metrics();
             expect(text).toContain(
@@ -644,8 +822,12 @@ describe('DSPACE application metrics', () => {
             expect(text).toContain(
                 'dspace_dependency_requests_total{dependency="openai",outcome="success"}'
             );
-            // token.place dChat outcomes are not recorded from client-asserted complete reports;
-            // server-observed relay dependency metrics are the authoritative signal.
+            // token.place dChat outcome is now recorded via server-owned correlation token:
+            // the complete operation verifies a server-observed dispatch and records one
+            // bounded terminal outcome in the server registry.
+            expect(text).toContain(
+                'dspace_dchat_requests_total{provider="tokenplace",outcome="success"}'
+            );
             expect(text).toContain(
                 'dspace_dependency_requests_total{dependency="tokenplace",outcome="success"}'
             );

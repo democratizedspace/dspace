@@ -114,10 +114,10 @@ explicitly configures all four required environment variables:
 | Variable | Purpose |
 | --- | --- |
 | `DSPACE_CHAT_PROXY_TOKEN` | HMAC signing secret for HttpOnly session cookies |
-| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL` | Redis-compatible shared rate-limit backend URL |
+| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL` | Redis-compatible shared rate-limit backend URL (also used for correlation token storage) |
 | `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN` | Redis-compatible shared rate-limit backend token |
 | `DSPACE_CHAT_PROXY_PUBLIC_ACCESS` | Must be set to `true` (explicit operator opt-in) |
-| `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN` | ****** a trusted entry point must supply via `x-dspace-chat-proxy-authorization` |
+| `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN` | Shared secret; a trusted entry point must supply via `x-dspace-chat-proxy-authorization` |
 
 When any of these is absent, `relayProxyAvailable` is `false` in `/config.json`, the browser chat
 client retains the direct token.place relay path, and browser-held OpenAI keys stay local. There is
@@ -145,12 +145,33 @@ OpenAI credential is configured for sanitized OpenAI proxy traffic.
 **Observability scope.** Browser token.place helpers keep relay plaintext, encryption, and
 private-key material in the browser, forwarding only safe routing fields and ciphertext through the
 server relay boundary so actual token.place dependency attempts and one bounded terminal dChat
-outcome can be observed in the server registry. Browser metric reports are not accepted;
-`POST /metrics` is non-writable and returns `405`, so only trusted server instrumentation can
-mutate the registry scraped by Prometheus. Browser-held OpenAI key traffic does not pass through
-the server and is intentionally not observable in the server registry. If metrics initialization
-fails, `/metrics` returns `503` instead of a misleading successful placeholder. Metrics write
-failures are isolated from game functionality and do not expose secrets.
+outcome can be observed in the server registry.
+
+**Correlation token system.** When a rate-limited `dispatch` operation succeeds at the server relay
+boundary, `/api/chat` issues an opaque correlation token stored in the shared Redis-compatible
+backend with a short TTL (300 seconds), bound to the verified session identity. The client receives
+the token via the `X-DSpace-Correlation-Token` response header. To report a terminal dChat outcome,
+the client calls `complete` and includes the correlation token. The server atomically consumes the
+token (`GETDEL`), verifies session ownership, derives the duration from the server-owned dispatch
+timestamp, and records one bounded `dspace_dchat_requests_total` and
+`dspace_dchat_request_duration_seconds` observation. Missing, expired, replayed, or cross-session
+tokens return `400` and do not mutate the registry. The correlation token is never used as a metric
+label and never appears in `/metrics` output. A failed `dispatch` records a terminal dChat failure
+immediately without issuing a correlation token.
+
+**Per-operation sub-budgets.** `select` and `retrieve` sub-operations of a logical token.place chat
+have separate per-session rate-limit counters with higher limits (defaults: 60/min for `select`,
+200/min for `retrieve`, configurable via `DSPACE_CHAT_PROXY_SUBOP_SELECT_LIMIT` and
+`DSPACE_CHAT_PROXY_SUBOP_RETRIEVE_LIMIT`). This prevents normal polling from exhausting the main
+dispatch quota while still bounding per-session abuse potential. The `complete` operation is bounded
+by the correlation token (one per dispatch), so it has no separate counter.
+
+Browser metric reports are not accepted; `POST /metrics` is non-writable and returns `405`, so only
+trusted server instrumentation can mutate the registry scraped by Prometheus. Browser-held OpenAI
+key traffic does not pass through the server and is intentionally not observable in the server
+registry. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
+successful placeholder. Metrics write failures are isolated from game functionality and do not expose
+secrets.
 
 ### v3.1.0 release blockers
 
