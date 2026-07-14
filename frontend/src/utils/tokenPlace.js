@@ -906,6 +906,20 @@ const getTimeoutForTier = (tier, options = {}) =>
         ? TOKEN_PLACE_FULL_TIER_TIMEOUT_MS
         : TOKEN_PLACE_FAST_TIER_TIMEOUT_MS);
 
+const attachRelayCorrelation = (error, relayCorrelation) => {
+    if (relayCorrelation && error && typeof error === 'object' && !error.correlationToken) {
+        try {
+            Object.defineProperty(error, 'correlationToken', {
+                value: relayCorrelation,
+                enumerable: false,
+                configurable: true,
+            });
+        } catch {
+            error.correlationToken = relayCorrelation; // scan-secrets: ignore
+        }
+    }
+    return error;
+};
 const runRelayAttempt = async (baseUrl, messages, options = {}) => {
     const server = await selectTokenPlaceRelayServer(baseUrl, options);
     const clientKeys = options.clientKeys || (await generateTokenPlaceClientKeypair());
@@ -937,47 +951,55 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
     );
     // Capture the relay correlation token issued by the server on a successful dispatch.
     // It is forwarded in the complete call so the server can record one terminal dChat outcome.
-    const relayCorrelationToken = dispatched?._relayCorrelationToken || null;
+    const relayCorrelation = dispatched?._relayCorrelationToken || null; // scan-secrets: ignore
     if (dispatched?.accepted === false) {
         throw createMalformedTokenPlaceResponseError('token.place relay rejected the request.');
     }
-    const encryptedResponse = await pollTokenPlaceRelayResponse(
-        baseUrl,
-        { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
-        {
-            ...options,
-            cancelToken,
-            timeoutMs: getTimeoutForTier(
-                server.selectedContextTier || options.contextTier,
-                options
-            ),
-        }
-    );
-    if (encryptedResponse?.terminalSelectedServerFailure) return encryptedResponse;
-    let responseEnvelope;
     try {
-        responseEnvelope = await decryptTokenPlaceEnvelope(
-            encryptedResponse,
-            clientKeys.privateKey
+        const encryptedResponse = await pollTokenPlaceRelayResponse(
+            baseUrl,
+            { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
+            {
+                ...options,
+                cancelToken,
+                timeoutMs: getTimeoutForTier(
+                    server.selectedContextTier || options.contextTier,
+                    options
+                ),
+            }
         );
-    } catch (error) {
-        throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');
-    }
-    const apiResponse = validateTokenPlaceResponseEnvelope(responseEnvelope, {
-        requestId,
-        clientPublicKey: clientKeys.publicKeyBase64,
-    });
-    return {
-        apiResponse,
-        correlationToken: relayCorrelationToken,
-        diagnostics: {
-            requestedTier: options.contextTier,
-            relaySelectedTier: server.selectedContextTier,
-            spillover: server.spillover,
-            timeoutClass: getTimeoutClassForTier(server.selectedContextTier || options.contextTier),
+        if (encryptedResponse?.terminalSelectedServerFailure) return encryptedResponse;
+        let responseEnvelope;
+        try {
+            responseEnvelope = await decryptTokenPlaceEnvelope(
+                encryptedResponse,
+                clientKeys.privateKey
+            );
+        } catch {
+            throw createMalformedTokenPlaceResponseError(
+                'Malformed encrypted token.place response.'
+            );
+        }
+        const apiResponse = validateTokenPlaceResponseEnvelope(responseEnvelope, {
             requestId,
-        },
-    };
+            clientPublicKey: clientKeys.publicKeyBase64,
+        });
+        return {
+            apiResponse,
+            correlationToken: relayCorrelation, // scan-secrets: ignore
+            diagnostics: {
+                requestedTier: options.contextTier,
+                relaySelectedTier: server.selectedContextTier,
+                spillover: server.spillover,
+                timeoutClass: getTimeoutClassForTier(
+                    server.selectedContextTier || options.contextTier
+                ),
+                requestId,
+            },
+        };
+    } catch (error) {
+        throw attachRelayCorrelation(error, relayCorrelation);
+    }
 };
 
 const runTokenPlaceChatV2 = async (messages, options = {}) => {
@@ -1002,7 +1024,9 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
 
     const baseAttemptOptions = { ...options, model, contextTier: contextEstimate.selectedTier };
     let fallbackUsed = false;
+    let activeCorrelation = null;
     let attempt = await runRelayAttempt(baseUrl, sanitizedMessages, baseAttemptOptions);
+    activeCorrelation = attempt?.correlationToken || null; // scan-secrets: ignore
     if (attempt?.terminalSelectedServerFailure) {
         fallbackUsed = true;
         attempt = await runRelayAttempt(baseUrl, sanitizedMessages, {
@@ -1010,6 +1034,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
             requestId: undefined,
             cancelToken: undefined,
         });
+        activeCorrelation = attempt?.correlationToken || null; // scan-secrets: ignore
         if (attempt?.terminalSelectedServerFailure) {
             const error = createMalformedTokenPlaceResponseError(
                 'No token.place compute node is available.'
@@ -1048,37 +1073,43 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
             ...retry,
             diagnostics: { ...retry.diagnostics, escalationRetry: true },
         };
+        activeCorrelation = attempt?.correlationToken || null; // scan-secrets: ignore
         data = retry.apiResponse;
     }
 
-    throwStructuredTokenPlaceApiError(data);
-    const outputText = extractTokenPlaceAssistantText(data);
-    const { text } = validateChatResponseText(outputText, { contextSources });
+    try {
+        throwStructuredTokenPlaceApiError(data);
+        const outputText = extractTokenPlaceAssistantText(data);
+        const { text } = validateChatResponseText(outputText, { contextSources });
 
-    return {
-        text,
-        ...(fallbackUsed ? { metricsOutcome: 'fallback_used' } : {}),
-        // Forward the correlation token from the final successful dispatch so TokenPlaceChatV2
-        // can include it in the complete call and the server records one terminal dChat outcome.
-        correlationToken: attempt.correlationToken || null,
-        contextSources,
-        usage: data?.usage,
-        metadata: {
-            ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
-            tokenPlaceContext: {
-                requestedTier: attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
-                relaySelectedTier: attempt.diagnostics?.relaySelectedTier,
-                finalActiveTier: getApiErrorActiveTier(data),
-                spillover: Boolean(attempt.diagnostics?.spillover),
-                escalationRetry: Boolean(attempt.diagnostics?.escalationRetry),
-                estimatorVersion: contextEstimate.estimatorVersion,
-                estimatedPromptTokens: contextEstimate.estimatedPromptTokens,
-                reservedOutputTokens: contextEstimate.reservedOutputTokens,
-                timeoutClass: attempt.diagnostics?.timeoutClass,
-                safeErrorCode: getApiErrorCode(data),
+        return {
+            text,
+            ...(fallbackUsed ? { metricsOutcome: 'fallback_used' } : {}),
+            // Forward the correlation token from the final successful dispatch so TokenPlaceChatV2
+            // can include it in the complete call and the server records one terminal dChat outcome.
+            correlationToken: attempt.correlationToken || null, // scan-secrets: ignore
+            contextSources,
+            usage: data?.usage,
+            metadata: {
+                ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
+                tokenPlaceContext: {
+                    requestedTier:
+                        attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
+                    relaySelectedTier: attempt.diagnostics?.relaySelectedTier,
+                    finalActiveTier: getApiErrorActiveTier(data),
+                    spillover: Boolean(attempt.diagnostics?.spillover),
+                    escalationRetry: Boolean(attempt.diagnostics?.escalationRetry),
+                    estimatorVersion: contextEstimate.estimatorVersion,
+                    estimatedPromptTokens: contextEstimate.estimatedPromptTokens,
+                    reservedOutputTokens: contextEstimate.reservedOutputTokens,
+                    timeoutClass: attempt.diagnostics?.timeoutClass,
+                    safeErrorCode: getApiErrorCode(data),
+                },
             },
-        },
-    };
+        };
+    } catch (error) {
+        throw attachRelayCorrelation(error, activeCorrelation);
+    }
 };
 
 export const TokenPlaceChatV2 = async (messages, options = {}) => {
@@ -1097,12 +1128,14 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         );
         return result;
     } catch (error) {
-        // On failure the server already recorded a terminal dChat outcome at the dispatch
-        // boundary (or the dispatch itself failed), so no correlation token is available.
+        // If dispatch succeeded but polling, response parsing, decryption, or validation failed,
+        // preserve and consume the server-issued correlation token with the bounded failure outcome.
+        // Failures at or before dispatch have no token and are recorded at the dispatch boundary.
         await postTokenPlaceChatOutcome(
             outcomeFromError(error),
             secondsSinceMetricsStart(started),
-            options
+            options,
+            error?.correlationToken || null
         );
         throw error;
     }
