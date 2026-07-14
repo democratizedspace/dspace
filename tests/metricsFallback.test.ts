@@ -25,6 +25,12 @@ const labelValuesFor = (text: string, name: string, label: string) => {
     );
 };
 
+const metricValueForLine = (text: string, prefix: string) => {
+    const line = text.split('\n').find((candidate) => candidate.startsWith(prefix));
+    if (!line) return 0;
+    return Number(line.trim().split(/\s+/).at(-1) || 0);
+};
+
 describe('DSPACE application metrics', () => {
     beforeEach(async () => {
         const metrics = await importMetrics();
@@ -134,6 +140,10 @@ describe('DSPACE application metrics', () => {
         expect(metrics.statusClassFor(302)).toBe('unknown');
         expect(metrics.statusClassFor(102)).toBe('unknown');
         expect(metrics.normalizeRoute('/reset/user-secret-123')).toBe('/unknown');
+        expect(metrics.normalizeRoute('/api/chat')).toBe('/api/chat');
+        expect(metrics.normalizeRoute('https://dspace.local/api/chat?opaque=value')).toBe(
+            '/api/chat'
+        );
         expect(metrics.normalizeRoute('/process/launch-rocket')).toBe('/process/[slug]');
         expect(metrics.normalizeHttpMethod('X_USER_SECRET')).toBe('UNKNOWN');
         expect(metrics.outcomeFromStatus(429)).toBe('rate_limited');
@@ -148,6 +158,12 @@ describe('DSPACE application metrics', () => {
         });
         metrics.recordHttpRequest({
             method: 'get',
+            route: '/api/chat?request_id=secret',
+            status: 200,
+            durationSeconds: 0.01,
+        });
+        metrics.recordHttpRequest({
+            method: 'get',
             route: '/metrics',
             status: 200,
             durationSeconds: 0.01,
@@ -155,6 +171,7 @@ describe('DSPACE application metrics', () => {
 
         const text = await metrics.register.metrics();
         expect(text).toContain('route="/quests/[pathId]/[questId]"');
+        expect(text).toContain('route="/api/chat"');
         expect(text).not.toContain('status_class="3xx"');
         expect(text).not.toContain('status_class="1xx"');
         expect(text).not.toContain('request_id=secret');
@@ -277,6 +294,7 @@ describe('DSPACE application metrics', () => {
         let lastCorrelationToken: string | null = null;
         let getdelCount = 0;
         let redisUnavailable = false;
+        let rejectNextCorrelationStore = false;
         global.fetch = async (url, init) => {
             const href = String(url);
             if (href.startsWith('https://redis.example.test')) {
@@ -296,6 +314,10 @@ describe('DSPACE application metrics', () => {
                     }
                     if (command === 'SET') {
                         // SET key value [EX ttl] [NX]
+                        if (rejectNextCorrelationStore) {
+                            rejectNextCorrelationStore = false;
+                            return { result: null };
+                        }
                         const isNX = args.includes('NX');
                         if (isNX && redisStore.has(key)) {
                             return { result: null };
@@ -430,6 +452,43 @@ describe('DSPACE application metrics', () => {
             });
             expect(unauthenticatedRelay.status).toBe(403);
             expect(relayCalls).toHaveLength(0);
+
+            const malformedJson = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: '{"provider":"openai",',
+                }),
+            });
+            expect(malformedJson.status).toBe(400);
+            const malformedPayload = await malformedJson.json();
+            expect(JSON.stringify(malformedPayload)).not.toContain('SyntaxError');
+            expect(JSON.stringify(malformedPayload)).not.toContain('provider');
+            expect(calls).toHaveLength(0);
+            expect(relayCalls).toHaveLength(0);
+
+            const oversizedOpenAi = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'openai',
+                        messages: [{ role: 'user', content: 'x'.repeat(80 * 1024) }],
+                    }),
+                }),
+            });
+            expect(oversizedOpenAi.status).toBe(413);
+            expect(calls).toHaveLength(0);
+            expect(relayCalls).toHaveLength(0);
+
             const authenticatedRelay = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
@@ -567,6 +626,81 @@ describe('DSPACE application metrics', () => {
             expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('secret');
             expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('inventory');
 
+            const terminalFailureBeforeStoreFailure = getMetricLines(
+                tokenPlaceMetricsAfterInvalidPayload,
+                'dspace_dchat_requests_total{provider="tokenplace"'
+            );
+            const dependencyFailureBeforeStoreFailure = metricValueForLine(
+                tokenPlaceMetricsAfterInvalidPayload,
+                'dspace_dchat_requests_total{provider="tokenplace",outcome="dependency_failure"}'
+            );
+            rejectNextCorrelationStore = true;
+            const correlationStoreFailure = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'dispatch',
+                        payload: {
+                            server_public_key: 'server',
+                            client_public_key: 'client',
+                            request_id: 'request-store-failure',
+                            protocol: 'tokenplace_api_v1_relay_e2ee',
+                            version: '1',
+                            ciphertext: 'ciphertext-store-failure',
+                            cipherkey: 'cipherkey',
+                            iv: 'iv',
+                            cancel_token: 'cancel-placeholder', // scan-secrets: ignore
+                        },
+                    }),
+                }),
+            });
+            expect(correlationStoreFailure.status).toBe(503);
+            expect(correlationStoreFailure.headers.get('X-DSpace-Correlation-Token')).toBeNull();
+            const correlationStoreFailurePayload = await correlationStoreFailure.json();
+            expect(correlationStoreFailurePayload).toEqual({
+                error: 'chat_proxy_correlation_unavailable',
+            });
+            expect(JSON.stringify(correlationStoreFailurePayload)).not.toContain(
+                'request-store-failure'
+            );
+            expect(JSON.stringify(correlationStoreFailurePayload)).not.toContain(
+                'ciphertext-store-failure'
+            );
+            const metricsAfterStoreFailure = await metrics.register.metrics();
+            const terminalFailureAfterStoreFailure = getMetricLines(
+                metricsAfterStoreFailure,
+                'dspace_dchat_requests_total{provider="tokenplace"'
+            );
+            expect(terminalFailureAfterStoreFailure.length).toBe(
+                terminalFailureBeforeStoreFailure.length
+            );
+            expect(
+                metricValueForLine(
+                    metricsAfterStoreFailure,
+                    'dspace_dchat_requests_total{provider="tokenplace",outcome="dependency_failure"}'
+                )
+            ).toBe(dependencyFailureBeforeStoreFailure + 1);
+            expect(
+                metricValueForLine(
+                    metricsAfterStoreFailure,
+                    'dspace_dchat_requests_total{provider="tokenplace",outcome="server_error"}'
+                )
+            ).toBe(
+                metricValueForLine(
+                    tokenPlaceMetricsAfterInvalidPayload,
+                    'dspace_dchat_requests_total{provider="tokenplace",outcome="server_error"}'
+                )
+            );
+            expect(metricsAfterStoreFailure).not.toContain('request-store-failure');
+            expect(metricsAfterStoreFailure).not.toContain('ciphertext-store-failure');
+            const relayCallsAfterStoreFailure = relayCalls.length;
+
             // complete with a wrong/replayed/cross-session correlation token returns 400
             const completeWrongToken = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
@@ -603,7 +737,7 @@ describe('DSPACE application metrics', () => {
                 }),
             });
             expect(tokenPlaceComplete.status).toBe(200);
-            expect(relayCalls).toHaveLength(3);
+            expect(relayCalls).toHaveLength(relayCallsAfterStoreFailure);
             expect(getdelCount).toBe(2);
 
             // Replay prevention: the same correlation token cannot be used a second time

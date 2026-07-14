@@ -291,7 +291,7 @@ const readBoundedJson = async (request: Request): Promise<ChatRequestBody> => {
         if (totalBytes > MAX_BODY_BYTES) {
             throw Object.assign(new Error('Chat request too large'), { status: 413 });
         }
-        throw error;
+        throw Object.assign(new Error('Invalid JSON'), { status: 400 });
     }
     const candidate = body as { provider?: unknown; operation?: unknown } | null;
     const isTokenPlaceDispatch =
@@ -479,9 +479,19 @@ const recordTokenPlaceRelay = async (
             // metric label or returned through /metrics.
             const corrToken = generateCorrelationToken();
             const stored = await storeCorrelationToken(sessionId, corrToken, dispatchStartedAt);
-            if (stored) {
-                responseHeaders.set('X-DSpace-Correlation-Token', corrToken);
+            if (!stored) {
+                const durationSeconds = Math.max(0, (performance.now() - started) / 1000);
+                recordDchatRequest({
+                    provider: 'tokenplace',
+                    outcome: 'dependency_failure',
+                    durationSeconds,
+                });
+                return Response.json(
+                    { error: 'chat_proxy_correlation_unavailable' },
+                    { status: 503 }
+                );
             }
+            responseHeaders.set('X-DSpace-Correlation-Token', corrToken);
         } else if (operation === 'dispatch' && !upstream.ok) {
             // A failed dispatch is a terminal dChat outcome: no client-reported complete will
             // follow, so record the dChat failure now.

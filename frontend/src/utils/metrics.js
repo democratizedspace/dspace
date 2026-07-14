@@ -97,6 +97,7 @@ export const normalizeRoute = (urlOrPath) => {
         pathname = String(urlOrPath || '/unknown').split('?')[0] || '/unknown';
     }
     if (pathname === '/metrics') return '/metrics';
+    if (pathname === '/api/chat') return '/api/chat';
     if (pathname === '/') return '/';
     if (
         [
