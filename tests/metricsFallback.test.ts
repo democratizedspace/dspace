@@ -275,9 +275,14 @@ describe('DSPACE application metrics', () => {
         const redisStore = new Map<string, string>();
         const relayCalls: string[] = [];
         let lastCorrelationToken: string | null = null;
+        let getdelCount = 0;
+        let redisUnavailable = false;
         global.fetch = async (url, init) => {
             const href = String(url);
             if (href.startsWith('https://redis.example.test')) {
+                if (redisUnavailable) {
+                    return new Response('unavailable', { status: 503 });
+                }
                 const commands = JSON.parse(String(init?.body || '[]')) as unknown[][];
                 const results = commands.map((cmd) => {
                     const [command, key, ...args] = cmd as string[];
@@ -299,6 +304,7 @@ describe('DSPACE application metrics', () => {
                         return { result: 'OK' };
                     }
                     if (command === 'GETDEL') {
+                        getdelCount += 1;
                         const value = redisStore.get(key) ?? null;
                         redisStore.delete(key);
                         return { result: value };
@@ -578,6 +584,7 @@ describe('DSPACE application metrics', () => {
                 }),
             });
             expect(completeWrongToken.status).toBe(400);
+            expect(getdelCount).toBe(1);
 
             // complete with valid correlation token records one terminal dChat outcome
             const tokenPlaceComplete = await endpoint.POST({
@@ -597,6 +604,7 @@ describe('DSPACE application metrics', () => {
             });
             expect(tokenPlaceComplete.status).toBe(200);
             expect(relayCalls).toHaveLength(3);
+            expect(getdelCount).toBe(2);
 
             // Replay prevention: the same correlation token cannot be used a second time
             const replayComplete = await endpoint.POST({
@@ -615,12 +623,38 @@ describe('DSPACE application metrics', () => {
                 }),
             });
             expect(replayComplete.status).toBe(400);
+            expect(getdelCount).toBe(3);
 
             // After valid complete, dChat metric for tokenplace is populated
             const metricsAfterComplete = await metrics.register.metrics();
             expect(metricsAfterComplete).toContain(
                 'dspace_dchat_requests_total{provider="tokenplace",outcome="success"}'
             );
+
+            const getdelBeforeUnavailableComplete = getdelCount;
+            redisUnavailable = true;
+            const unavailableComplete = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: chatCookie(),
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'complete',
+                        payload: {
+                            ['correlation' + 'Token']:
+                                'random-correlation-while-budget-unavailable',
+                            outcome: 'success',
+                        },
+                    }),
+                }),
+            });
+            redisUnavailable = false;
+            expect(unavailableComplete.status).toBe(503);
+            expect(getdelCount).toBe(getdelBeforeUnavailableComplete);
 
             delete process.env.OPENAI_API_KEY;
             const unconfiguredResponse = await endpoint.POST({
@@ -765,8 +799,9 @@ describe('DSPACE application metrics', () => {
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(
                 false
             );
-            // complete (with a fresh dispatch to get a valid correlation token) is bounded by
-            // the correlation token, not a counter
+            // complete (with a fresh dispatch to get a valid correlation token) consumes a
+            // separate complete-attempt sub-budget before the single-use correlation token,
+            // without touching the main dispatch/session quota.
             rateLimitCounts.clear();
             // Use the main cookie (not reusableCookie) which has capacity for dispatch
             const freshDispatch = await endpoint.POST({
@@ -813,8 +848,9 @@ describe('DSPACE application metrics', () => {
                 }),
             });
             expect(completeWithToken.status).toBe(200);
-            // complete did not hit any INCR rate-limit counter (bounded by correlation token)
-            expect([...rateLimitCounts.keys()].some((key) => key.includes(':subop:'))).toBe(false);
+            expect(
+                [...rateLimitCounts.keys()].some((key) => key.includes(':subop:complete:'))
+            ).toBe(true);
             expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(
                 false
             );
@@ -835,6 +871,71 @@ describe('DSPACE application metrics', () => {
             expect(text).toContain(
                 'dspace_dependency_requests_total{dependency="tokenplace",outcome="success"}'
             );
+
+            // Validly shaped but nonexistent/replayed complete tokens have a separate
+            // per-session attempt budget before GETDEL. Once exhausted, requests return 429
+            // without more GETDEL calls, without touching upstream, and without mutating metrics.
+            const completeBudgetCookie = chatCookie();
+            const metricsBeforeCompleteBudget = await metrics.register.metrics();
+            const dchatLinesBeforeCompleteBudget = getMetricLines(
+                metricsBeforeCompleteBudget,
+                'dspace_dchat_requests_total'
+            ).join('\n');
+            const getdelBeforeBudgetExhaustion = getdelCount;
+            let firstBudgetLimitedStatus = 0;
+            for (let index = 0; index < 150; index += 1) {
+                const randomComplete = await endpoint.POST({
+                    request: new Request('http://dspace.local/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Origin: 'http://dspace.local',
+                            Cookie: completeBudgetCookie,
+                        },
+                        body: JSON.stringify({
+                            provider: 'tokenplace',
+                            operation: 'complete',
+                            payload: {
+                                ['correlation' + 'Token']:
+                                    `random-or-replayed-correlation-${index}`,
+                                outcome: 'success',
+                            },
+                        }),
+                    }),
+                });
+                if (randomComplete.status === 429) {
+                    firstBudgetLimitedStatus = randomComplete.status;
+                    break;
+                }
+                expect(randomComplete.status).toBe(400);
+            }
+            expect(firstBudgetLimitedStatus).toBe(429);
+            const getdelAfterBudgetExhaustion = getdelCount;
+            const budgetLimitedComplete = await endpoint.POST({
+                request: new Request('http://dspace.local/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Origin: 'http://dspace.local',
+                        Cookie: completeBudgetCookie,
+                    },
+                    body: JSON.stringify({
+                        provider: 'tokenplace',
+                        operation: 'complete',
+                        payload: {
+                            ['correlation' + 'Token']: 'another-random-correlation-after-budget',
+                            outcome: 'success',
+                        },
+                    }),
+                }),
+            });
+            expect(budgetLimitedComplete.status).toBe(429);
+            expect(getdelCount).toBe(getdelAfterBudgetExhaustion);
+            expect(getdelAfterBudgetExhaustion).toBeGreaterThan(getdelBeforeBudgetExhaustion);
+            const metricsAfterCompleteBudget = await metrics.register.metrics();
+            expect(
+                getMetricLines(metricsAfterCompleteBudget, 'dspace_dchat_requests_total').join('\n')
+            ).toBe(dchatLinesBeforeCompleteBudget);
         } finally {
             if (previousClient === undefined) {
                 delete (globalThis as typeof globalThis & { __DSpaceOpenAIClient?: unknown })

@@ -36,15 +36,19 @@ const RATE_LIMIT_TTL_SECONDS = Math.ceil(RATE_LIMIT_WINDOW_MS / 1000);
 const RATE_LIMIT_MAX = Number(process.env.DSPACE_CHAT_PROXY_SESSION_LIMIT || 20);
 const GLOBAL_RATE_LIMIT_MAX = Number(process.env.DSPACE_CHAT_PROXY_GLOBAL_LIMIT || 200);
 
+// Correlation tokens are stored in the shared Redis backend with a TTL. The token proves that
+// a rate-limited dispatch was server-observed before a client-reported complete is accepted.
+const CORREL_TTL_SECONDS = 300;
+
 // Per-operation sub-budgets for token.place polling sub-operations. These counters are
 // separate from the main dispatch budget to prevent normal select/retrieve polling from
 // exhausting the logical-chat quota, while still bounding per-session abuse potential.
 const SELECT_LIMIT_PER_WINDOW = Number(process.env.DSPACE_CHAT_PROXY_SUBOP_SELECT_LIMIT || 60);
 const RETRIEVE_LIMIT_PER_WINDOW = Number(process.env.DSPACE_CHAT_PROXY_SUBOP_RETRIEVE_LIMIT || 200);
-
-// Correlation tokens are stored in the shared Redis backend with a TTL. The token proves that
-// a rate-limited dispatch was server-observed before a client-reported complete is accepted.
-const CORREL_TTL_SECONDS = 300;
+const COMPLETE_LIMIT_PER_WINDOW = Number(
+    process.env.DSPACE_CHAT_PROXY_SUBOP_COMPLETE_LIMIT ||
+        RATE_LIMIT_MAX * (CORREL_TTL_SECONDS / RATE_LIMIT_TTL_SECONDS + 1)
+);
 
 type SharedRateLimitResult = { allowed: boolean; unavailable?: boolean };
 
@@ -138,7 +142,12 @@ const consumeSubOperationBudget = async (
     sessionId: string,
     operation: string
 ): Promise<SharedRateLimitResult> => {
-    const limit = operation === 'select' ? SELECT_LIMIT_PER_WINDOW : RETRIEVE_LIMIT_PER_WINDOW;
+    const limit =
+        operation === 'select'
+            ? SELECT_LIMIT_PER_WINDOW
+            : operation === 'retrieve'
+              ? RETRIEVE_LIMIT_PER_WINDOW
+              : COMPLETE_LIMIT_PER_WINDOW;
     if (limit <= 0) return { allowed: false };
     const { url, token } = getSharedRateLimitConfig();
     if (!url || !token) return { allowed: false, unavailable: true };
@@ -380,9 +389,19 @@ const recordTokenPlaceRelay = async (
     }
     if (operation === 'complete') {
         // complete requires a correlation token proving that a rate-limited dispatch was
-        // server-observed for this session. The token is atomically consumed (GETDEL) so
-        // replayed or cross-session complete calls are rejected. Duration is derived from the
-        // server-owned dispatch timestamp; client-supplied durationSeconds is ignored.
+        // server-observed for this session. A separate per-session complete attempt budget is
+        // consumed before GETDEL so syntactically valid random/replayed tokens cannot hammer the
+        // shared Redis backend indefinitely. Valid completions remain single-use via GETDEL,
+        // while invalid/replayed attempts are separately bounded without consuming the main
+        // dispatch allowance. Duration is derived from the server-owned dispatch timestamp;
+        // client-supplied durationSeconds is ignored.
+        const completeBudget = await consumeSubOperationBudget(sessionId, operation);
+        if (completeBudget.unavailable) {
+            return Response.json({ error: 'chat_proxy_rate_limit_unavailable' }, { status: 503 });
+        }
+        if (!completeBudget.allowed) {
+            return Response.json({ error: 'chat_proxy_rate_limited' }, { status: 429 });
+        }
         const corrToken = (payload as Record<string, unknown>).correlationToken;
         const stored = await consumeCorrelationToken(sessionId, corrToken);
         if (!stored) {
@@ -400,8 +419,8 @@ const recordTokenPlaceRelay = async (
     }
     // select and retrieve are polling sub-operations of a single logical chat. They have
     // separate bounded per-session budgets that are higher than the dispatch limit, to allow
-    // normal polling without exhausting the logical-chat quota. complete is bounded by the
-    // correlation token (one per dispatch), so it has no separate counter.
+    // normal polling without exhausting the logical-chat quota. complete has a separate attempt
+    // budget before GETDEL in addition to the single-use correlation token.
     if (operation === 'select' || operation === 'retrieve') {
         const subBudget = await consumeSubOperationBudget(sessionId, operation);
         if (subBudget.unavailable) {
