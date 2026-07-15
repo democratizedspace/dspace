@@ -453,25 +453,48 @@ const postTokenPlaceRelayMetricBoundary = async (operation, payload, signal) =>
         signal,
     });
 
+const TOKEN_PLACE_COMPLETION_RETRY_DELAYS_MS = [250, 1_000, 5_000, 15_000, 60_000];
+
+const sleepForCompletionRetry = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const shouldRetryTokenPlaceCompletion = (response) =>
+    !response || response.status === 408 || response.status === 429 || response.status >= 500;
+
+const sendTokenPlaceChatOutcome = async (payload, options = {}) => {
+    try {
+        return await postTokenPlaceRelayMetricBoundary('complete', payload, options.signal);
+    } catch {
+        return null;
+    }
+};
+
+const retryTokenPlaceChatOutcome = async (payload, options = {}, retryDelaysMs = []) => {
+    for (const delayMs of retryDelaysMs) {
+        await sleepForCompletionRetry(delayMs);
+        const response = await sendTokenPlaceChatOutcome(payload, options);
+        if (!shouldRetryTokenPlaceCompletion(response)) return;
+    }
+};
+
 const postTokenPlaceChatOutcome = async (
     outcome,
     durationSeconds,
     options = {},
     correlationToken = null
 ) => {
-    if (!canUseTokenPlaceRelayMetricBoundary(options)) return;
-    try {
-        await postTokenPlaceRelayMetricBoundary(
-            'complete',
-            {
-                outcome,
-                durationSeconds,
-                ...(correlationToken ? { correlationToken } : {}),
-            },
-            options.signal
-        );
-    } catch {
-        // Chat outcome delivery is best effort and must never alter chat behavior.
+    if (!canUseTokenPlaceRelayMetricBoundary(options) || !correlationToken) return;
+    const payload = {
+        outcome,
+        durationSeconds,
+        correlationToken,
+    };
+    const retryDelaysMs =
+        options.tokenPlaceCompletionRetryDelaysMs || TOKEN_PLACE_COMPLETION_RETRY_DELAYS_MS;
+    const response = await sendTokenPlaceChatOutcome(payload, options);
+    if (shouldRetryTokenPlaceCompletion(response)) {
+        retryTokenPlaceChatOutcome(payload, options, retryDelaysMs).catch(() => {
+            // Chat outcome delivery is best effort and must never alter chat behavior.
+        });
     }
 };
 
