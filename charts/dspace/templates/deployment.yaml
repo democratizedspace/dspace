@@ -1,3 +1,6 @@
+{{- if and .Values.metrics.enabled (not .Values.metrics.auth.existingSecret) }}
+{{- fail "metrics.enabled=true requires metrics.auth.existingSecret so /metrics is authenticated whenever it is served" }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,6 +37,15 @@ spec:
               value: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
             - name: DSPACE_ENV
               value: {{ .Values.environment | default "production" | quote }}
+            - name: METRICS_ENABLED
+              value: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
+          {{- if and .Values.metrics.enabled .Values.metrics.auth.existingSecret }}
+            - name: METRICS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.metrics.auth.existingSecret | quote }}
+                  key: {{ .Values.metrics.auth.secretKey | default "token" | quote }}
+          {{- end }}
           {{- if .Values.env }}
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}

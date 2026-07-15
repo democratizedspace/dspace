@@ -12,6 +12,31 @@ service:
   type: ClusterIP
   port: 8080
 
+metrics:
+  enabled: false
+  path: /metrics
+  auth:
+    existingSecret: ""
+    secretKey: token
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels:
+    release: kube-prometheus-stack
+  targetLabels:
+    - app.kubernetes.io/name
+    - app.kubernetes.io/instance
+    - app.kubernetes.io/managed-by
+    - dspace.dev/app
+    - dspace.dev/environment
+    - dspace.dev/release
+    - dspace.dev/cluster
+  relabelings: []
+  metricRelabelings: []
+  cluster: sugarkube
+
 ingress:
   enabled: false
   className: traefik

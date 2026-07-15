@@ -6,7 +6,17 @@ const url = 'http://dspace.local/metrics';
 
 describe('metrics endpoint', () => {
     beforeEach(() => {
+        delete process.env.METRICS_ENABLED;
         delete process.env.METRICS_TOKEN;
+    });
+
+    it('returns 404 when metrics are explicitly disabled by the runtime environment', async () => {
+        process.env.METRICS_ENABLED = 'false';
+
+        const res = await metricsGET({ request: new Request(url) });
+
+        expect(res.status).toBe(404);
+        expect(await res.text()).toBe('metrics disabled\n');
     });
 
     it('returns metrics without auth when no token is set', async () => {
@@ -32,6 +42,7 @@ describe('metrics endpoint', () => {
     });
 
     afterEach(() => {
+        delete process.env.METRICS_ENABLED;
         delete process.env.METRICS_TOKEN;
     });
 
