@@ -1,0 +1,59 @@
+{{- if and .Values.serviceMonitor.enabled .Values.metrics.enabled }}
+{{- $metricsSecret := .Values.metrics.auth.existingSecret | default "" -}}
+{{- if not $metricsSecret -}}
+{{- fail "metrics.auth.existingSecret is required when serviceMonitor.enabled and metrics.enabled are true" -}}
+{{- end -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "dspace.selectorLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  targetLabels:
+    - app.kubernetes.io/name
+    - app.kubernetes.io/instance
+    {{- range .Values.serviceMonitor.targetLabels }}
+    {{- if and (ne . "app.kubernetes.io/name") (ne . "app.kubernetes.io/instance") }}
+    - {{ . | quote }}
+    {{- end }}
+    {{- end }}
+  endpoints:
+    - port: http
+      path: {{ .Values.metrics.path | quote }}
+      interval: {{ .Values.serviceMonitor.interval | quote }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout | quote }}
+      scheme: http
+      authorization:
+        type: Bearer
+        credentials:
+          name: {{ $metricsSecret | quote }}
+          key: {{ .Values.metrics.auth.secretKey | quote }}
+      relabelings:
+        - targetLabel: app
+          replacement: {{ include "dspace.name" . | quote }}
+        - sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: namespace
+        - targetLabel: environment
+          replacement: {{ .Values.environment | default "production" | quote }}
+        - targetLabel: release
+          replacement: {{ .Release.Name | quote }}
+        - targetLabel: cluster
+          replacement: {{ .Values.serviceMonitor.cluster | default "sugarkube" | quote }}
+        {{- with .Values.serviceMonitor.relabelings }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.serviceMonitor.metricRelabelings }}
+      metricRelabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

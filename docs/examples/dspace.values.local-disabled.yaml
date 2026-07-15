@@ -1,0 +1,6 @@
+# Local/default observability mode: no ServiceMonitor and no metrics Secret required.
+metrics:
+  enabled: false
+
+serviceMonitor:
+  enabled: false

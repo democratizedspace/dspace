@@ -1,12 +1,11 @@
 # DSPACE Helm chart
 
 The `charts/dspace` Helm chart deploys the DSPACE application with sensible defaults for
-Traefik-based ingress, HTTP health checks, and optional configuration via ConfigMaps or Secrets.
-It is a lightweight chart intended for direct Helm usage; Flux-managed environments continue to
-use the existing production chart at `deploy/charts/dspace/`, which includes additional features
-like network policies, metrics, and production ingress/TLS automation. The chart uses the
-application container port `8080` by default, matching the `Dockerfile` `EXPOSE` and health check
-settings.
+Traefik-based ingress, HTTP health checks, optional configuration via ConfigMaps or Secrets, and an
+explicit opt-in Prometheus scrape contract. This chart is the canonical GHCR/Sugarkube chart path;
+do not rely on `deploy/charts/dspace/` for release scrape behavior unless release automation is
+intentionally migrated. The chart uses the application container port `8080` by default, matching
+the `Dockerfile` `EXPOSE` and health check settings.
 
 ## Key values
 
@@ -17,6 +16,21 @@ settings.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
 - `service.port`: Container and service port. Defaults to `8080`.
+- `metrics.enabled`: Enable the application `/metrics` endpoint contract. Defaults to `false`.
+- `metrics.path`: Metrics scrape path. Defaults to `/metrics`.
+- `metrics.auth.existingSecret`: Existing Secret name used for the bearer credential. Empty by
+  default, so the default render does not require a Secret.
+- `metrics.auth.secretKey`: Secret key read for `METRICS_TOKEN` and Prometheus bearer
+  authorization. Defaults to `token`.
+- `serviceMonitor.enabled`: Render one Prometheus Operator `ServiceMonitor` only when explicitly
+  enabled. Defaults to `false`.
+- `serviceMonitor.interval` / `serviceMonitor.scrapeTimeout`: Defaults to `30s` and `10s`. Keep
+  the timeout below the interval.
+- `serviceMonitor.additionalLabels`: Labels for Prometheus discovery. The Sugarkube-compatible
+  default is `release: kube-prometheus-stack`.
+- `serviceMonitor.cluster`, `serviceMonitor.targetLabels`, `serviceMonitor.relabelings`, and
+  `serviceMonitor.metricRelabelings`: Bounded metadata hooks for cluster, app, namespace,
+  environment, release, and any future operator-approved relabeling.
 - `ingress.enabled`: Enable Traefik ingress. Defaults to `false`.
 - `ingress.host`: Hostname routed to the service. Required when ingress is enabled.
 - `ingress.className`: Ingress class name. Defaults to `traefik`.
@@ -26,7 +40,7 @@ settings.
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
   `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-  RuntimeDefault`.
+RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
@@ -49,6 +63,45 @@ Lint the chart and render the manifests with development values:
 npm run helm:lint
 npm run helm:template
 ```
+
+## Metrics scrape modes
+
+Default/local rendering keeps metrics disabled and does not require a metrics Secret:
+
+```bash
+helm template dspace charts/dspace -f docs/examples/dspace.values.local-disabled.yaml
+```
+
+Sugarkube staging can opt into the authenticated scrape contract with a pre-created Secret:
+
+```bash
+helm template dspace charts/dspace -f docs/examples/dspace.values.sugarkube-staging-metrics.yaml
+```
+
+When both `metrics.enabled` and `metrics.auth.existingSecret` are set, the Deployment injects
+`METRICS_TOKEN` from `secretKeyRef`. When `serviceMonitor.enabled` is also set, the chart renders
+exactly one `ServiceMonitor` that selects the current DSPACE Service by Helm release labels, scrapes
+the named `http` port at `metrics.path`, and wires the same Secret through the Prometheus Operator
+`authorization.credentials` bearer-token fields used by kube-prometheus-stack 58.2.0. The public
+Ingress still routes the normal application prefix only; it does not create a Prometheus, Grafana,
+separate metrics ingress, or unauthenticated metrics bypass. Because the application Prefix ingress
+can reach `/metrics`, keep application-side token authentication enabled for staging and production.
+
+Internal success check after deploying staging values:
+
+```bash
+kubectl -n monitoring port-forward svc/kube-prometheus-stack-prometheus 9090:9090
+curl -fsS 'http://127.0.0.1:9090/api/v1/query?query=up%7Bapp%3D%22dspace%22%2Cenvironment%3D%22staging%22%7D'
+```
+
+Public denial check from outside the cluster:
+
+```bash
+curl -i https://dspace-staging.example.com/metrics
+```
+
+The public check must return `401` or another deliberate denial unless a request supplies the
+approved bearer credential through trusted operational tooling.
 
 ## Install example
 

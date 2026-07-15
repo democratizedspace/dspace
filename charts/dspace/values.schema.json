@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "path": { "type": "string", "pattern": "^/" },
+        "auth": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "existingSecret": { "type": "string" },
+            "secretKey": { "type": "string", "minLength": 1 }
+          },
+          "required": ["existingSecret", "secretKey"]
+        }
+      },
+      "required": ["enabled", "path", "auth"]
+    },
+    "serviceMonitor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "interval": { "type": "string", "pattern": "^[0-9]+(ms|s|m|h)$" },
+        "scrapeTimeout": { "type": "string", "pattern": "^[0-9]+(ms|s|m|h)$" },
+        "additionalLabels": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean"] }
+        },
+        "cluster": { "type": "string" },
+        "targetLabels": { "type": "array", "items": { "type": "string" } },
+        "relabelings": { "type": "array", "items": { "type": "object" } },
+        "metricRelabelings": { "type": "array", "items": { "type": "object" } }
+      },
+      "required": [
+        "enabled",
+        "interval",
+        "scrapeTimeout",
+        "additionalLabels",
+        "cluster",
+        "targetLabels",
+        "relabelings",
+        "metricRelabelings"
+      ]
+    }
+  }
+}

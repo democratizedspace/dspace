@@ -1,0 +1,18 @@
+# Sugarkube staging scrape mode. The Secret must be created out-of-band in the
+# DSPACE namespace; this file intentionally contains only a fake Secret name.
+environment: staging
+
+metrics:
+  enabled: true
+  path: /metrics
+  auth:
+    existingSecret: dspace-staging-metrics-auth
+    secretKey: token
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels:
+    release: kube-prometheus-stack
+  cluster: sugarkube-staging
