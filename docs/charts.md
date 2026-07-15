@@ -19,7 +19,8 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `metrics.enabled`: Enables application-side metrics configuration. Defaults to `false`.
 - `metrics.path`: Prometheus scrape path. Defaults to `/metrics`.
 - `metrics.auth.existingSecret`: Existing Secret name that contains the bearer token for
-  `METRICS_TOKEN`. Defaults to empty, so no Secret is required for default rendering.
+  `METRICS_TOKEN`. Defaults to empty, so no Secret is required for default rendering; it is
+  required when `metrics.enabled=true`.
 - `metrics.auth.secretKey`: Secret key for the bearer token. Defaults to `token`.
 - `serviceMonitor.enabled`: Renders a `monitoring.coreos.com/v1` `ServiceMonitor` only when set to
   `true`. Defaults to `false`.
@@ -94,9 +95,10 @@ serviceMonitor:
 The normal public ingress still routes `/` to the DSPACE service and does not create a separate
 metrics ingress, Prometheus ingress, or Grafana ingress. When chart metrics are disabled, the
 Deployment sets `METRICS_ENABLED=false` so the application deliberately returns `404` for `/metrics`,
-including through a public Prefix ingress. Public metrics deployments should opt in with
-`metrics.enabled=true` and `metrics.auth.existingSecret` so the application receives `METRICS_TOKEN`
-and denies unauthenticated public requests while Prometheus scrapes with the Secret. Optional
+including through a public Prefix ingress. Public metrics deployments must opt in with
+`metrics.enabled=true` and `metrics.auth.existingSecret`; the chart fails rendering if metrics are
+enabled without a Secret so the application receives `METRICS_TOKEN` and denies unauthenticated
+public requests while Prometheus scrapes with the Secret. Optional
 NetworkPolicy hardening can be added later, but application-side authentication remains required for
 public Prefix ingress deployments.
 

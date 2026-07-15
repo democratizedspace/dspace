@@ -123,6 +123,12 @@ describe('canonical dspace helm chart metrics contract', () => {
         expect(serviceMonitor.spec).not.toHaveProperty('targetLabels');
     });
 
+    it('fails rendering when metrics are enabled without an authentication Secret', () => {
+        expect(() => render(['--set', 'metrics.enabled=true'])).toThrow(
+            /metrics\.enabled=true requires metrics\.auth\.existingSecret/
+        );
+    });
+
     it('allows public ingress without metrics auth while disabling the runtime metrics endpoint', () => {
         const manifest = render([
             '--set',

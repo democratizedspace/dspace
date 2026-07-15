@@ -1,3 +1,6 @@
+{{- if and .Values.metrics.enabled (not .Values.metrics.auth.existingSecret) }}
+{{- fail "metrics.enabled=true requires metrics.auth.existingSecret so /metrics is authenticated whenever it is served" }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
