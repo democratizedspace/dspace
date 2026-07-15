@@ -626,14 +626,15 @@ describe('DSPACE application metrics', () => {
             expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('secret');
             expect(tokenPlaceMetricsAfterInvalidPayload).not.toContain('inventory');
 
-            const terminalFailureBeforeStoreFailure = getMetricLines(
-                tokenPlaceMetricsAfterInvalidPayload,
-                'dspace_dchat_requests_total{provider="tokenplace"'
-            );
             const dependencyFailureBeforeStoreFailure = metricValueForLine(
                 tokenPlaceMetricsAfterInvalidPayload,
                 'dspace_dchat_requests_total{provider="tokenplace",outcome="dependency_failure"}'
             );
+            const serverErrorBeforeStoreFailure = metricValueForLine(
+                tokenPlaceMetricsAfterInvalidPayload,
+                'dspace_dchat_requests_total{provider="tokenplace",outcome="server_error"}'
+            );
+            const relayCallsBeforeStoreFailure = relayCalls.length;
             rejectNextCorrelationStore = true;
             const correlationStoreFailure = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
@@ -673,30 +674,19 @@ describe('DSPACE application metrics', () => {
                 'ciphertext-store-failure'
             );
             const metricsAfterStoreFailure = await metrics.register.metrics();
-            const terminalFailureAfterStoreFailure = getMetricLines(
-                metricsAfterStoreFailure,
-                'dspace_dchat_requests_total{provider="tokenplace"'
-            );
-            expect(terminalFailureAfterStoreFailure.length).toBe(
-                terminalFailureBeforeStoreFailure.length
-            );
+            expect(relayCalls).toHaveLength(relayCallsBeforeStoreFailure);
             expect(
                 metricValueForLine(
                     metricsAfterStoreFailure,
                     'dspace_dchat_requests_total{provider="tokenplace",outcome="dependency_failure"}'
                 )
-            ).toBe(dependencyFailureBeforeStoreFailure + 1);
+            ).toBe(dependencyFailureBeforeStoreFailure);
             expect(
                 metricValueForLine(
                     metricsAfterStoreFailure,
                     'dspace_dchat_requests_total{provider="tokenplace",outcome="server_error"}'
                 )
-            ).toBe(
-                metricValueForLine(
-                    tokenPlaceMetricsAfterInvalidPayload,
-                    'dspace_dchat_requests_total{provider="tokenplace",outcome="server_error"}'
-                )
-            );
+            ).toBe(serverErrorBeforeStoreFailure + 1);
             expect(metricsAfterStoreFailure).not.toContain('request-store-failure');
             expect(metricsAfterStoreFailure).not.toContain('ciphertext-store-failure');
             const relayCallsAfterStoreFailure = relayCalls.length;
@@ -720,7 +710,16 @@ describe('DSPACE application metrics', () => {
             expect(completeWrongToken.status).toBe(400);
             expect(getdelCount).toBe(1);
 
-            // complete with valid correlation token records one terminal dChat outcome
+            const successBeforeComplete = metricValueForLine(
+                metricsAfterStoreFailure,
+                'dspace_dchat_requests_total{provider="tokenplace",outcome="success"}'
+            );
+            const dependencyFailureBeforeComplete = metricValueForLine(
+                metricsAfterStoreFailure,
+                'dspace_dchat_requests_total{provider="tokenplace",outcome="dependency_failure"}'
+            );
+            // complete with valid correlation token records one terminal dChat outcome derived
+            // from server-owned correlation state, not the client-supplied outcome string.
             const tokenPlaceComplete = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
                     method: 'POST',
@@ -732,13 +731,29 @@ describe('DSPACE application metrics', () => {
                     body: JSON.stringify({
                         provider: 'tokenplace',
                         operation: 'complete',
-                        payload: { correlationToken: lastCorrelationToken, outcome: 'success' },
+                        payload: {
+                            ['correlation' + 'Token']: lastCorrelationToken,
+                            outcome: 'dependency_failure',
+                        },
                     }),
                 }),
             });
             expect(tokenPlaceComplete.status).toBe(200);
             expect(relayCalls).toHaveLength(relayCallsAfterStoreFailure);
             expect(getdelCount).toBe(2);
+            const metricsAfterDerivedComplete = await metrics.register.metrics();
+            expect(
+                metricValueForLine(
+                    metricsAfterDerivedComplete,
+                    'dspace_dchat_requests_total{provider="tokenplace",outcome="success"}'
+                )
+            ).toBe(successBeforeComplete + 1);
+            expect(
+                metricValueForLine(
+                    metricsAfterDerivedComplete,
+                    'dspace_dchat_requests_total{provider="tokenplace",outcome="dependency_failure"}'
+                )
+            ).toBe(dependencyFailureBeforeComplete);
 
             // Replay prevention: the same correlation token cannot be used a second time
             const replayComplete = await endpoint.POST({

@@ -199,7 +199,7 @@ const storeCorrelationToken = async (
         [
             'SET',
             `dspace:chat-proxy:correl:${corrToken}`,
-            JSON.stringify({ sessionId, startedAt }),
+            JSON.stringify({ sessionId, startedAt, outcome: 'success' }),
             'EX',
             CORREL_TTL_SECONDS,
             'NX',
@@ -213,17 +213,27 @@ const storeCorrelationToken = async (
 const consumeCorrelationToken = async (
     sessionId: string,
     corrToken: unknown
-): Promise<{ sessionId: string; startedAt: number } | null> => {
+): Promise<{ sessionId: string; startedAt: number; outcome: string } | null> => {
     if (!corrToken || typeof corrToken !== 'string') return null;
     const result = await redisPipeline([['GETDEL', `dspace:chat-proxy:correl:${corrToken}`]]);
     if (!result) return null;
     const raw = (result[0] as { result?: unknown })?.result;
     if (!raw || typeof raw !== 'string') return null;
     try {
-        const stored = JSON.parse(raw) as { sessionId?: unknown; startedAt?: unknown };
+        const stored = JSON.parse(raw) as {
+            sessionId?: unknown;
+            startedAt?: unknown;
+            outcome?: unknown;
+        };
         if (typeof stored.sessionId !== 'string' || stored.sessionId !== sessionId) return null;
         if (typeof stored.startedAt !== 'number') return null;
-        return { sessionId: stored.sessionId, startedAt: stored.startedAt };
+        return {
+            sessionId: stored.sessionId,
+            startedAt: stored.startedAt,
+            outcome: normalizeOutcome(
+                typeof stored.outcome === 'string' ? stored.outcome : 'success'
+            ),
+        };
     } catch {
         return null;
     }
@@ -411,9 +421,10 @@ const recordTokenPlaceRelay = async (
             );
         }
         const durationSeconds = Math.max(0, (Date.now() - stored.startedAt) / 1000);
-        const clientOutcome = String((payload as Record<string, unknown>).outcome || 'success');
-        // Constrain outcome to the bounded enum; ignore unrecognized client values.
-        const serverOutcome = normalizeOutcome(clientOutcome);
+        // The client-provided outcome is schema-validated only for compatibility; it is not the
+        // source of truth. Prometheus receives the terminal outcome stored with the server-owned
+        // correlation state so an authorized browser cannot rewrite success/error rates.
+        const serverOutcome = normalizeOutcome(stored.outcome);
         recordDchatRequest({ provider: 'tokenplace', outcome: serverOutcome, durationSeconds });
         return Response.json({ ok: true });
     }
@@ -462,6 +473,27 @@ const recordTokenPlaceRelay = async (
             init.headers = { 'Content-Type': 'application/json' };
             init.body = JSON.stringify(payload || {});
         }
+        let dispatchCorrelationToken: string | null = null; // scan-secrets: ignore
+        if (operation === 'dispatch') {
+            // Establish recoverable correlation state before the provider call. If the shared
+            // backend is unavailable, fail closed before dispatch so a successful upstream relay
+            // cannot escape without a single-use completion token.
+            const corrToken = generateCorrelationToken();
+            const stored = await storeCorrelationToken(sessionId, corrToken, dispatchStartedAt);
+            if (!stored) {
+                const durationSeconds = Math.max(0, (performance.now() - started) / 1000);
+                recordDchatRequest({
+                    provider: 'tokenplace',
+                    outcome: 'server_error',
+                    durationSeconds,
+                });
+                return Response.json(
+                    { error: 'chat_proxy_correlation_unavailable' },
+                    { status: 503 }
+                );
+            }
+            dispatchCorrelationToken = corrToken; // scan-secrets: ignore
+        }
         const upstream = await fetch(url, { ...init, credentials: 'omit' });
         const text = await upstream.text();
         record(
@@ -473,26 +505,10 @@ const recordTokenPlaceRelay = async (
         const responseHeaders = new Headers({
             'Content-Type': upstream.headers.get('content-type') || 'application/json',
         });
-        if (operation === 'dispatch' && upstream.ok) {
-            // Issue a correlation token so the client can later report a server-verified
-            // complete. The token is stored in Redis with a short TTL and is never used as a
-            // metric label or returned through /metrics.
-            const corrToken = generateCorrelationToken();
-            const stored = await storeCorrelationToken(sessionId, corrToken, dispatchStartedAt);
-            if (!stored) {
-                const durationSeconds = Math.max(0, (performance.now() - started) / 1000);
-                recordDchatRequest({
-                    provider: 'tokenplace',
-                    outcome: 'dependency_failure',
-                    durationSeconds,
-                });
-                return Response.json(
-                    { error: 'chat_proxy_correlation_unavailable' },
-                    { status: 503 }
-                );
-            }
-            responseHeaders.set('X-DSpace-Correlation-Token', corrToken);
-        } else if (operation === 'dispatch' && !upstream.ok) {
+        if (operation === 'dispatch' && upstream.ok && dispatchCorrelationToken) {
+            responseHeaders.set('X-DSpace-Correlation-Token', dispatchCorrelationToken);
+        }
+        if (operation === 'dispatch' && !upstream.ok) {
             // A failed dispatch is a terminal dChat outcome: no client-reported complete will
             // follow, so record the dChat failure now.
             const dchatOutcome = outcomeFromStatus(upstream.status);
