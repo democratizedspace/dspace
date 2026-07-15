@@ -84,7 +84,7 @@ describe('canonical dspace helm chart metrics contract', () => {
         );
     });
 
-    it('injects METRICS_TOKEN from the existing Secret without rendering a token value', () => {
+    it('injects metrics runtime env from chart values without rendering a token value', () => {
         const manifest = render([
             '--set',
             'metrics.enabled=true',
@@ -95,6 +95,7 @@ describe('canonical dspace helm chart metrics contract', () => {
         ]);
         const deployment = docs(manifest).find((doc) => doc.kind === 'Deployment');
         const env = deployment.spec.template.spec.containers[0].env;
+        expect(env).toContainEqual({ name: 'METRICS_ENABLED', value: 'true' });
         expect(env).toContainEqual({
             name: 'METRICS_TOKEN',
             valueFrom: {
@@ -122,10 +123,19 @@ describe('canonical dspace helm chart metrics contract', () => {
         expect(serviceMonitor.spec).not.toHaveProperty('targetLabels');
     });
 
-    it('fails public ingress rendering without a metrics token Secret', () => {
-        expect(() =>
-            render(['--set', 'ingress.enabled=true', '--set', 'ingress.host=dspace.example.test'])
-        ).toThrow(/public Prefix ingress cannot expose unauthenticated \/metrics/);
+    it('allows public ingress without metrics auth while disabling the runtime metrics endpoint', () => {
+        const manifest = render([
+            '--set',
+            'ingress.enabled=true',
+            '--set',
+            'ingress.host=dspace.example.test',
+        ]);
+        const rendered = docs(manifest);
+        expect(rendered.filter((doc) => doc.kind === 'Ingress')).toHaveLength(1);
+        const deployment = rendered.find((doc) => doc.kind === 'Deployment');
+        const env = deployment.spec.template.spec.containers[0].env;
+        expect(env).toContainEqual({ name: 'METRICS_ENABLED', value: 'false' });
+        expect(env).not.toContainEqual(expect.objectContaining({ name: 'METRICS_TOKEN' }));
     });
 
     it('does not create a public metrics ingress or monitoring UI ingress', () => {

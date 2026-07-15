@@ -8,6 +8,13 @@ export const prerender = false;
  * `Authorization: Bearer <token>` or they'll receive 401.
  */
 export async function GET({ request }: { request: Request }) {
+    if (process.env.METRICS_ENABLED === 'false') {
+        return new Response('metrics disabled\n', {
+            status: 404,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+        });
+    }
+
     const token = process.env.METRICS_TOKEN;
     if (token) {
         const auth = request.headers.get('authorization');

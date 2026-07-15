@@ -52,9 +52,9 @@ RuntimeDefault`.
 - `probes.liveness` / `probes.readiness`: Probe timing defaults (`initialDelaySeconds`,
   `periodSeconds`, `timeoutSeconds`, `failureThreshold`).
 
-For development, `charts/dspace/values.dev.yaml` enables ingress, references a placeholder metrics
-Secret required by the public-ingress safety check, and sets a placeholder host:
-`dspace-v3.example.dev`. Pre-create or override the Secret and host for your own environment.
+For development, `charts/dspace/values.dev.yaml` enables ingress and sets a placeholder host:
+`dspace-v3.example.dev`. Override the host for your own environment. Metrics remain disabled in
+dev values unless you opt in with your own Secret.
 
 ## Metrics and ServiceMonitor examples
 
@@ -92,9 +92,10 @@ serviceMonitor:
 ```
 
 The normal public ingress still routes `/` to the DSPACE service and does not create a separate
-metrics ingress, Prometheus ingress, or Grafana ingress. Because the public Prefix ingress can reach
-`/metrics`, the chart fails rendering when `ingress.enabled=true` unless `metrics.enabled=true` and
-`metrics.auth.existingSecret` are both set. That ensures the application receives `METRICS_TOKEN`
+metrics ingress, Prometheus ingress, or Grafana ingress. When chart metrics are disabled, the
+Deployment sets `METRICS_ENABLED=false` so the application deliberately returns `404` for `/metrics`,
+including through a public Prefix ingress. Public metrics deployments should opt in with
+`metrics.enabled=true` and `metrics.auth.existingSecret` so the application receives `METRICS_TOKEN`
 and denies unauthenticated public requests while Prometheus scrapes with the Secret. Optional
 NetworkPolicy hardening can be added later, but application-side authentication remains required for
 public Prefix ingress deployments.
@@ -105,7 +106,7 @@ Verification commands for an installed staging release, using fake names here as
 # Internal success from inside the cluster with the mounted token
 kubectl -n dspace exec deploy/dspace -- sh -c 'wget -qO- --header="Authorization: Bearer $METRICS_TOKEN" http://dspace:8080/metrics | head'
 
-# Public denial without a token should be 401 or another deliberate denial
+# Public denial without a token should be 401 when metrics auth is enabled, or 404 when disabled
 curl -i https://staging.democratized.space/metrics
 
 # Prometheus Operator discovery should show the single ServiceMonitor selected by the release label

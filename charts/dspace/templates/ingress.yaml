@@ -1,7 +1,4 @@
 {{- if .Values.ingress.enabled }}
-{{- if not (and .Values.metrics.enabled .Values.metrics.auth.existingSecret) }}
-{{- fail "ingress.enabled requires metrics.enabled=true and metrics.auth.existingSecret so the public Prefix ingress cannot expose unauthenticated /metrics" }}
-{{- end }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

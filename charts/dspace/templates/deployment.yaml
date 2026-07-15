@@ -34,6 +34,8 @@ spec:
               value: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
             - name: DSPACE_ENV
               value: {{ .Values.environment | default "production" | quote }}
+            - name: METRICS_ENABLED
+              value: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
           {{- if and .Values.metrics.enabled .Values.metrics.auth.existingSecret }}
             - name: METRICS_TOKEN
               valueFrom:
