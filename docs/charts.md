@@ -40,8 +40,8 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `serviceAccount.create`: Create a service account for the deployment. Defaults to `true` with
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
-  `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-RuntimeDefault`.
+  `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and
+  `seccompProfile: RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
@@ -105,14 +105,16 @@ public Prefix ingress deployments.
 Verification commands for an installed staging release, using fake names here as examples:
 
 ```bash
-# Internal success from inside the cluster with the mounted token
-kubectl -n dspace exec deploy/dspace -- sh -c 'wget -qO- --header="Authorization: Bearer $METRICS_TOKEN" http://dspace:8080/metrics | head'
+# Prometheus Operator discovery should show the single ServiceMonitor selected by the release label
+kubectl -n dspace get servicemonitor dspace -l release=kube-prometheus-stack -o yaml
+
+# Internal success: query Prometheus for the discovered and scraped DSPACE staging target
+kubectl -n monitoring port-forward svc/kube-prometheus-stack-prometheus 9090:9090
+curl -fsS --get 'http://127.0.0.1:9090/api/v1/query' \
+  --data-urlencode 'query=up{app="dspace",environment="staging"}'
 
 # Public denial without a token should be 401 when metrics auth is enabled, or 404 when disabled
 curl -i https://staging.democratized.space/metrics
-
-# Prometheus Operator discovery should show the single ServiceMonitor selected by the release label
-kubectl -n dspace get servicemonitor dspace -l release=kube-prometheus-stack -o yaml
 ```
 
 ## Common commands
