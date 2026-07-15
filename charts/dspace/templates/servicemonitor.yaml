@@ -1,0 +1,59 @@
+{{- if .Values.serviceMonitor.enabled }}
+{{- if not .Values.metrics.enabled }}
+{{- fail "serviceMonitor.enabled requires metrics.enabled=true so the application metrics endpoint is intentionally configured" }}
+{{- end }}
+{{- if not .Values.metrics.auth.existingSecret }}
+{{- fail "serviceMonitor.enabled requires metrics.auth.existingSecret so Prometheus can authenticate to /metrics" }}
+{{- end }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "dspace.selectorLabels" . | nindent 6 }}
+  targetLabels:
+    {{- toYaml .Values.serviceMonitor.targetLabels | nindent 4 }}
+  endpoints:
+    - port: http
+      path: {{ .Values.metrics.path | default "/metrics" | quote }}
+      interval: {{ .Values.serviceMonitor.interval | default "30s" | quote }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout | default "10s" | quote }}
+      {{- if and .Values.metrics.enabled .Values.metrics.auth.existingSecret }}
+      bearerTokenSecret:
+        name: {{ .Values.metrics.auth.existingSecret | quote }}
+        key: {{ .Values.metrics.auth.secretKey | default "token" | quote }}
+      {{- end }}
+      relabelings:
+        - action: replace
+          targetLabel: app
+          replacement: {{ include "dspace.name" . | quote }}
+        - action: replace
+          targetLabel: environment
+          replacement: {{ .Values.environment | default "production" | quote }}
+        - action: replace
+          targetLabel: namespace
+          replacement: {{ .Release.Namespace | quote }}
+        - action: replace
+          targetLabel: release
+          replacement: {{ .Release.Name | quote }}
+        - action: replace
+          targetLabel: cluster
+          replacement: {{ .Values.serviceMonitor.cluster | default "sugarkube" | quote }}
+        {{- with .Values.serviceMonitor.relabelings }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.serviceMonitor.metricRelabelings }}
+      metricRelabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
