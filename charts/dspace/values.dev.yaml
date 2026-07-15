@@ -3,6 +3,11 @@ replicaCount: 1
 image:
   pullPolicy: IfNotPresent
 
+metrics:
+  enabled: true
+  auth:
+    existingSecret: dspace-dev-metrics-token # pre-create or override for public ingress
+
 ingress:
   enabled: true
   host: dspace-v3.example.dev # replace with your dev domain

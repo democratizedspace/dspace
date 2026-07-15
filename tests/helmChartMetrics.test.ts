@@ -3,9 +3,13 @@ import { describe, expect, it } from 'vitest';
 import YAML from 'yaml';
 
 function render(args: string[] = []) {
-    return execFileSync('helm', ['template', 'dspace', 'charts/dspace', '--namespace', 'dspace', ...args], {
-        encoding: 'utf8',
-    });
+    return execFileSync(
+        'helm',
+        ['template', 'dspace', 'charts/dspace', '--namespace', 'dspace', ...args],
+        {
+            encoding: 'utf8',
+        }
+    );
 }
 
 function docs(manifest: string) {
@@ -60,11 +64,23 @@ describe('canonical dspace helm chart metrics contract', () => {
         expect(serviceMonitor.spec.endpoints[0].relabelings).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ targetLabel: 'app', replacement: 'dspace' }),
-                expect.objectContaining({ targetLabel: 'environment', replacement: 'staging' }),
-                expect.objectContaining({ targetLabel: 'namespace', replacement: 'dspace' }),
-                expect.objectContaining({ targetLabel: 'release', replacement: 'dspace' }),
-                expect.objectContaining({ targetLabel: 'cluster', replacement: 'sugarkube' }),
-            ]),
+                expect.objectContaining({
+                    targetLabel: 'environment',
+                    replacement: 'staging',
+                }),
+                expect.objectContaining({
+                    targetLabel: 'namespace',
+                    replacement: 'dspace',
+                }),
+                expect.objectContaining({
+                    targetLabel: 'release',
+                    replacement: 'dspace',
+                }),
+                expect.objectContaining({
+                    targetLabel: 'cluster',
+                    replacement: 'sugarkube',
+                }),
+            ])
         );
     });
 
@@ -89,6 +105,27 @@ describe('canonical dspace helm chart metrics contract', () => {
             },
         });
         expect(manifest).not.toMatch(/super-secret|actual-token|bearer-value/i);
+    });
+
+    it('renders a ServiceMonitor when targetLabels are explicitly null', () => {
+        const manifest = render([
+            '--set',
+            'metrics.enabled=true',
+            '--set',
+            'metrics.auth.existingSecret=dspace-staging-metrics-token',
+            '--set',
+            'serviceMonitor.enabled=true',
+            '--set-json',
+            'serviceMonitor.targetLabels=null',
+        ]);
+        const serviceMonitor = docs(manifest).find((doc) => doc.kind === 'ServiceMonitor');
+        expect(serviceMonitor.spec).not.toHaveProperty('targetLabels');
+    });
+
+    it('fails public ingress rendering without a metrics token Secret', () => {
+        expect(() =>
+            render(['--set', 'ingress.enabled=true', '--set', 'ingress.host=dspace.example.test'])
+        ).toThrow(/public Prefix ingress cannot expose unauthenticated \/metrics/);
     });
 
     it('does not create a public metrics ingress or monitoring UI ingress', () => {

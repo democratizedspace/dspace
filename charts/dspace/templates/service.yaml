@@ -7,7 +7,9 @@ metadata:
     dspace.dev/app: {{ include "dspace.name" . | quote }}
     dspace.dev/environment: {{ .Values.environment | default "production" | quote }}
     dspace.dev/release: {{ .Release.Name | quote }}
+    {{- if .Values.serviceMonitor.enabled }}
     dspace.dev/cluster: {{ .Values.serviceMonitor.cluster | default "sugarkube" | quote }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

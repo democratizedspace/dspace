@@ -21,18 +21,18 @@ spec:
   selector:
     matchLabels:
       {{- include "dspace.selectorLabels" . | nindent 6 }}
+  {{- with .Values.serviceMonitor.targetLabels }}
   targetLabels:
-    {{- toYaml .Values.serviceMonitor.targetLabels | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   endpoints:
     - port: http
       path: {{ .Values.metrics.path | default "/metrics" | quote }}
       interval: {{ .Values.serviceMonitor.interval | default "30s" | quote }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout | default "10s" | quote }}
-      {{- if and .Values.metrics.enabled .Values.metrics.auth.existingSecret }}
       bearerTokenSecret:
         name: {{ .Values.metrics.auth.existingSecret | quote }}
         key: {{ .Values.metrics.auth.secretKey | default "token" | quote }}
-      {{- end }}
       relabelings:
         - action: replace
           targetLabel: app

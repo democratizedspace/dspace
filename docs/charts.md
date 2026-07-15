@@ -27,6 +27,8 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `serviceMonitor.additionalLabels`: Labels for Prometheus Operator discovery. Defaults to
   `release: kube-prometheus-stack`, matching Sugarkube's current kube-prometheus-stack release
   label convention.
+- `serviceMonitor.cluster`: Cluster metadata label used by the ServiceMonitor relabeling contract
+  and, when ServiceMonitor is enabled, the Service target labels. Defaults to `sugarkube`.
 - `serviceMonitor.relabelings`: Optional bounded target relabel hooks appended after the chart's
   default `app`, `environment`, `namespace`, `release`, and `cluster` relabels.
 - `ingress.enabled`: Enable Traefik ingress. Defaults to `false`.
@@ -38,7 +40,7 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
   `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-  RuntimeDefault`.
+RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
@@ -50,8 +52,9 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `probes.liveness` / `probes.readiness`: Probe timing defaults (`initialDelaySeconds`,
   `periodSeconds`, `timeoutSeconds`, `failureThreshold`).
 
-For development, `charts/dspace/values.dev.yaml` enables ingress and sets a placeholder host:
-`dspace-v3.example.dev`. Override this host for your own environment.
+For development, `charts/dspace/values.dev.yaml` enables ingress, references a placeholder metrics
+Secret required by the public-ingress safety check, and sets a placeholder host:
+`dspace-v3.example.dev`. Pre-create or override the Secret and host for your own environment.
 
 ## Metrics and ServiceMonitor examples
 
@@ -60,9 +63,9 @@ development:
 
 ```yaml
 metrics:
-  enabled: false
+    enabled: false
 serviceMonitor:
-  enabled: false
+    enabled: false
 ```
 
 Sugarkube staging can opt in with a pre-created Secret. The chart never stores or renders the token
@@ -74,27 +77,27 @@ required for this contract and `bearerTokenSecret` remains compatible with older
 ```yaml
 environment: staging
 metrics:
-  enabled: true
-  path: /metrics
-  auth:
-    existingSecret: dspace-staging-metrics-token
-    secretKey: token
+    enabled: true
+    path: /metrics
+    auth:
+        existingSecret: dspace-staging-metrics-token
+        secretKey: token
 serviceMonitor:
-  enabled: true
-  interval: 30s
-  scrapeTimeout: 10s
-  additionalLabels:
-    release: kube-prometheus-stack
-  cluster: sugarkube
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    additionalLabels:
+        release: kube-prometheus-stack
+    cluster: sugarkube
 ```
 
 The normal public ingress still routes `/` to the DSPACE service and does not create a separate
 metrics ingress, Prometheus ingress, or Grafana ingress. Because the public Prefix ingress can reach
-`/metrics`, staging and production metrics must set `metrics.enabled=true` and
-`metrics.auth.existingSecret` so the application receives `METRICS_TOKEN` and denies unauthenticated
-public requests while Prometheus scrapes with the Secret. Optional NetworkPolicy hardening can be
-added later, but application-side authentication remains required for public Prefix ingress
-deployments.
+`/metrics`, the chart fails rendering when `ingress.enabled=true` unless `metrics.enabled=true` and
+`metrics.auth.existingSecret` are both set. That ensures the application receives `METRICS_TOKEN`
+and denies unauthenticated public requests while Prometheus scrapes with the Secret. Optional
+NetworkPolicy hardening can be added later, but application-side authentication remains required for
+public Prefix ingress deployments.
 
 Verification commands for an installed staging release, using fake names here as examples:
 
