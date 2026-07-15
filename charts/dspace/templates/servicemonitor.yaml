@@ -1,0 +1,56 @@
+{{- if and .Values.metrics.enabled .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "dspace.selectorLabels" . | nindent 6 }}
+  targetLabels:
+    - app.kubernetes.io/name
+    - app.kubernetes.io/instance
+    - app.kubernetes.io/managed-by
+    - dspace.io/environment
+    - dspace.io/cluster
+  endpoints:
+    - port: http
+      path: {{ .Values.metrics.path | quote }}
+      interval: {{ .Values.serviceMonitor.interval | quote }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout | quote }}
+      scheme: http
+      honorLabels: false
+      {{- if .Values.metrics.auth.existingSecret }}
+      authorization:
+        type: Bearer
+        credentials:
+          name: {{ .Values.metrics.auth.existingSecret | quote }}
+          key: {{ .Values.metrics.auth.secretKey | quote }}
+      {{- end }}
+      relabelings:
+        - targetLabel: app
+          replacement: {{ include "dspace.name" . | quote }}
+        - sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: namespace
+        - targetLabel: environment
+          replacement: {{ .Values.environment | default "production" | quote }}
+        - targetLabel: release
+          replacement: {{ .Release.Name | quote }}
+        - targetLabel: cluster
+          replacement: {{ .Values.cluster | default "sugarkube" | quote }}
+        {{- with .Values.serviceMonitor.relabelings }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.serviceMonitor.metricRelabelings }}
+      metricRelabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

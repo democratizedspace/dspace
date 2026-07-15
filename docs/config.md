@@ -75,13 +75,13 @@ Flux consumption details:
   release succeeds. Tune graceful shutdowns by adjusting
   `values.terminationGracePeriodSeconds` (default `30`) so in-flight requests finish before pods
   exit.
-- **Prometheus ServiceMonitor**: Disabled by default. Set `serviceMonitor.enabled=true` in
-  environment values to create a `ServiceMonitor` that scrapes the dedicated `metrics` port (9464)
-  at `/metrics`, tags the resource with `release: kube-prometheus-stack`, and defaults discovery to
-  the Helm release namespace while still allowing `namespaceSelector` overrides when the target
-  Service lives elsewhere. When metrics are enabled, the Helm `NetworkPolicy` also admits traffic
-  from the namespace configured via `networkPolicy.metricsScraper` (default `monitoring`) so the
-  collector can reach the metrics port.
+- **Prometheus ServiceMonitor**: Disabled by default in the canonical `charts/dspace` chart. Set
+  both `metrics.enabled=true` and `serviceMonitor.enabled=true`, and reference an existing Secret
+  with `metrics.auth.existingSecret`, to create one `ServiceMonitor` that scrapes the named `http`
+  service port at `/metrics`, tags the resource with `release: kube-prometheus-stack`, and wires
+  bearer-token authentication through the Prometheus Operator `authorization.credentials` Secret
+  reference. The public application ingress is not modified or split for metrics; when that ingress
+  can route `/metrics`, application-side `METRICS_TOKEN` authentication remains required.
 - **Logs**: The container emits structured JSON logs (fields: `time`, `level`, `msg`, etc.) and
   includes feature-flag metadata during startup and shutdown. For v3.0.0 launch readiness, rely on
   these operational logs in staging/prod; centralized error-reporting aggregation is deferred to a
@@ -129,8 +129,9 @@ The container listens on port `8080` internally. The Helm chart configures:
   `cert-manager.io/cluster-issuer: letsencrypt-dns01`. Each environment overlay now pins the
   `className` and annotation alongside its host list and TLS secret name so TLS stays intact even if
   chart defaults change.
-- A default-deny `NetworkPolicy` that allows ingress from Traefik for web traffic and, when metrics
-  are enabled, from the Prometheus namespace specified by `values.networkPolicy.metricsScraper`.
+- The canonical chart does not enable a metrics-specific `NetworkPolicy` by default. Use
+  application-side metrics authentication for public prefix ingress protection and add network
+  policy separately only when it can preserve normal application traffic.
   DNS egress to `kube-dns` stays open; use `values.networkPolicy.extraIngress` or
   `values.networkPolicy.extraEgress` to permit additional peers as needed.
 

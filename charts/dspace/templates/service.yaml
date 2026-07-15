@@ -4,6 +4,8 @@ metadata:
   name: {{ include "dspace.fullname" . }}
   labels:
     {{- include "dspace.labels" . | nindent 4 }}
+    dspace.io/environment: {{ .Values.environment | default "production" | quote }}
+    dspace.io/cluster: {{ .Values.cluster | default "" | quote }}
 spec:
   type: {{ .Values.service.type }}
   ports:
