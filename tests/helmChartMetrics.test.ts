@@ -2,6 +2,8 @@ import { execFileSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 import YAML from 'yaml';
 
+const HELM_RENDER_TEST_TIMEOUT_MS = 30000;
+
 function render(args: string[] = []) {
     return execFileSync(
         'helm',
@@ -26,7 +28,7 @@ describe('canonical dspace helm chart metrics contract', () => {
         expect(manifest).not.toContain('kind: ServiceMonitor');
         expect(manifest).not.toContain('METRICS_TOKEN');
         expect(manifest).not.toContain('bearerTokenSecret');
-    });
+    }, HELM_RENDER_TEST_TIMEOUT_MS);
 
     it('renders exactly one authenticated ServiceMonitor when explicitly enabled', () => {
         const manifest = render([
@@ -82,7 +84,7 @@ describe('canonical dspace helm chart metrics contract', () => {
                 }),
             ])
         );
-    });
+    }, HELM_RENDER_TEST_TIMEOUT_MS);
 
     it('injects metrics runtime env from chart values without rendering a token value', () => {
         const manifest = render([
@@ -106,7 +108,7 @@ describe('canonical dspace helm chart metrics contract', () => {
             },
         });
         expect(manifest).not.toMatch(/super-secret|actual-token|bearer-value/i);
-    });
+    }, HELM_RENDER_TEST_TIMEOUT_MS);
 
     it('renders a ServiceMonitor when targetLabels are explicitly null', () => {
         const manifest = render([
@@ -121,13 +123,13 @@ describe('canonical dspace helm chart metrics contract', () => {
         ]);
         const serviceMonitor = docs(manifest).find((doc) => doc.kind === 'ServiceMonitor');
         expect(serviceMonitor.spec).not.toHaveProperty('targetLabels');
-    });
+    }, HELM_RENDER_TEST_TIMEOUT_MS);
 
     it('fails rendering when metrics are enabled without an authentication Secret', () => {
         expect(() => render(['--set', 'metrics.enabled=true'])).toThrow(
             /metrics\.enabled=true requires metrics\.auth\.existingSecret/
         );
-    });
+    }, HELM_RENDER_TEST_TIMEOUT_MS);
 
     it('allows public ingress without metrics auth while disabling the runtime metrics endpoint', () => {
         const manifest = render([
@@ -142,7 +144,7 @@ describe('canonical dspace helm chart metrics contract', () => {
         const env = deployment.spec.template.spec.containers[0].env;
         expect(env).toContainEqual({ name: 'METRICS_ENABLED', value: 'false' });
         expect(env).not.toContainEqual(expect.objectContaining({ name: 'METRICS_TOKEN' }));
-    });
+    }, HELM_RENDER_TEST_TIMEOUT_MS);
 
     it('does not create a public metrics ingress or monitoring UI ingress', () => {
         const manifest = render([
@@ -164,5 +166,5 @@ describe('canonical dspace helm chart metrics contract', () => {
         expect(ingressYaml).not.toContain('prometheus');
         expect(ingressYaml).not.toContain('grafana');
         expect(ingressYaml).not.toMatch(/path:\s+\/metrics/);
-    });
+    }, HELM_RENDER_TEST_TIMEOUT_MS);
 });
