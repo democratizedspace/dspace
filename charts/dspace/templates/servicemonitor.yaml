@@ -1,0 +1,51 @@
+{{- if and .Values.serviceMonitor.enabled .Values.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "dspace.selectorLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  targetLabels:
+    - app.kubernetes.io/name
+    - app.kubernetes.io/instance
+    - app.kubernetes.io/version
+  endpoints:
+    - port: http
+      path: {{ .Values.metrics.path | quote }}
+      interval: {{ .Values.serviceMonitor.interval | quote }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout | quote }}
+      scheme: http
+      {{- if .Values.metrics.auth.existingSecret }}
+      authorization:
+        type: Bearer
+        credentials:
+          name: {{ .Values.metrics.auth.existingSecret | quote }}
+          key: {{ .Values.metrics.auth.secretKey | quote }}
+      {{- end }}
+      relabelings:
+        - targetLabel: app
+          replacement: {{ include "dspace.name" . | quote }}
+        - targetLabel: environment
+          replacement: {{ .Values.environment | default "production" | quote }}
+        - targetLabel: namespace
+          replacement: {{ .Release.Namespace | quote }}
+        - targetLabel: release
+          replacement: {{ .Release.Name | quote }}
+        {{- if .Values.serviceMonitor.cluster }}
+        - targetLabel: cluster
+          replacement: {{ .Values.serviceMonitor.cluster | quote }}
+        {{- end }}
+        {{- with .Values.serviceMonitor.relabelings }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+{{- end }}

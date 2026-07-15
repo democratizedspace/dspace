@@ -12,6 +12,22 @@ service:
   type: ClusterIP
   port: 8080
 
+metrics:
+  enabled: false
+  path: /metrics
+  auth:
+    existingSecret: ""
+    secretKey: token
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels:
+    release: kube-prometheus-stack
+  cluster: ""
+  relabelings: []
+
 ingress:
   enabled: false
   className: traefik

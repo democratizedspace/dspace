@@ -2,11 +2,10 @@
 
 The `charts/dspace` Helm chart deploys the DSPACE application with sensible defaults for
 Traefik-based ingress, HTTP health checks, and optional configuration via ConfigMaps or Secrets.
-It is a lightweight chart intended for direct Helm usage; Flux-managed environments continue to
-use the existing production chart at `deploy/charts/dspace/`, which includes additional features
-like network policies, metrics, and production ingress/TLS automation. The chart uses the
-application container port `8080` by default, matching the `Dockerfile` `EXPOSE` and health check
-settings.
+It is the canonical chart packaged by the GHCR Helm publishing workflow for direct Helm and
+Sugarkube usage; do not rely on the duplicate `deploy/charts/dspace/` tree for canonical release
+evidence. The chart uses the application container port `8080` by default, matching the
+`Dockerfile` `EXPOSE` and health check settings.
 
 ## Key values
 
@@ -26,7 +25,7 @@ settings.
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
   `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-  RuntimeDefault`.
+RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
@@ -37,6 +36,12 @@ settings.
   (liveness) and `/healthz` (readiness) respectively.
 - `probes.liveness` / `probes.readiness`: Probe timing defaults (`initialDelaySeconds`,
   `periodSeconds`, `timeoutSeconds`, `failureThreshold`).
+- `metrics.enabled`: Enable the application `/metrics` endpoint guard wiring. Defaults to `false`.
+- `metrics.auth.existingSecret` / `metrics.auth.secretKey`: Existing Secret reference used to
+  inject `METRICS_TOKEN`; no token value belongs in chart values.
+- `serviceMonitor.enabled`: Render one Prometheus Operator `ServiceMonitor`. Defaults to `false`.
+- `serviceMonitor.additionalLabels`: Extra labels for discovery, defaulting to
+  `release: kube-prometheus-stack`.
 
 For development, `charts/dspace/values.dev.yaml` enables ingress and sets a placeholder host:
 `dspace-v3.example.dev`. Override this host for your own environment.
@@ -86,3 +91,59 @@ When installing from the OCI registry, you will not have access to
 `charts/dspace/values.dev.yaml` unless you clone the repository. To customize values, either
 provide your own file with `-f <your-values.yaml>` or use `--set` flags as shown above.
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
+
+## Metrics and Prometheus ServiceMonitor
+
+The canonical chart keeps the metrics scrape contract disabled by default so local installs and
+existing releases do not need a metrics Secret:
+
+```yaml
+metrics:
+  enabled: false
+  path: /metrics
+  auth:
+    existingSecret: ''
+    secretKey: token
+serviceMonitor:
+  enabled: false
+```
+
+For Sugarkube staging, create a Kubernetes Secret out of band and reference only its fake example
+name from values. Do not place the token value in Helm values, rendered templates, docs, or logs.
+The ServiceMonitor uses Prometheus Operator `authorization.credentials` Secret wiring, labels the
+resource for kube-prometheus-stack discovery, selects only the DSPACE Service from this Helm
+release, and scrapes the named `http` application port at `/metrics`:
+
+```yaml
+metrics:
+  enabled: true
+  path: /metrics
+  auth:
+    existingSecret: dspace-metrics-token-example
+    secretKey: token
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels:
+    release: kube-prometheus-stack
+  cluster: sugarkube-staging
+  relabelings: []
+```
+
+The chart does not create Prometheus, Grafana, a metrics Ingress, or a separate metrics Service.
+If the public Prefix ingress can reach `/metrics`, the application-side `METRICS_TOKEN` guard is
+still required. Prometheus can scrape with the Secret while unauthenticated public requests should
+receive `401` or another deliberate denial.
+
+Verification examples:
+
+```bash
+# Internal success from a trusted operator shell; keep the token out of command history when possible.
+METRICS_TOKEN="$(kubectl -n dspace get secret dspace-metrics-token-example -o jsonpath='{.data.token}' | base64 -d)"
+kubectl -n dspace run dspace-metrics-check --rm -i --restart=Never --image=curlimages/curl:8.10.1 -- \
+  curl -fsS -H "Authorization: Bearer ${METRICS_TOKEN}" http://dspace:8080/metrics
+
+# Public denial through the normal public ingress.
+curl -i https://dspace-staging.example.com/metrics
+```

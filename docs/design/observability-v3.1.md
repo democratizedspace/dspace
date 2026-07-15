@@ -27,7 +27,7 @@ smallest useful v3.1.0 release slice.
 | Metric implementation         | `frontend/src/utils/metrics.js` initializes the shared `prom-client` registry, default process metrics, DSPACE HTTP metrics, dChat metrics, dependency metrics, build info, and instrumentation health. | Implemented source behavior; live evidence pending. | Application source emits the canonical privacy-safe metric families. Staging/prod scrape behavior, chart wiring, dashboards, and alerts still need evidence.    |
 | Local monitoring scaffold     | `infra/monitoring/` contains local Prometheus, Grafana dashboard, and alert examples.                                                                                                                   | Legacy/local scaffold.                              | Useful as reference only; not the canonical Sugarkube release gate. Metric names and thresholds are not sufficient for v3.1.0.                                  |
 | Canonical GHCR chart          | `.github/workflows/ci-helm.yml` packages and publishes `charts/dspace` to `oci://ghcr.io/democratizedspace/charts/dspace`.                                                                              | Implemented v3.0.1 path.                            | `charts/dspace` is the canonical chart path for the current GHCR/Sugarkube release path.                                                                        |
-| Canonical chart scrape config | `charts/dspace` has Service, Deployment, and probes, but no ServiceMonitor, metrics service port, PrometheusRule, or scrape values.                                                                     | Missing.                                            | v3.1.0 blocker: add or otherwise identify the canonical scrape configuration before promotion.                                                                  |
+| Canonical chart scrape config | `charts/dspace` has Service, Deployment, probes, disabled-by-default metrics values, existing-Secret `METRICS_TOKEN` wiring, and an opt-in ServiceMonitor.                                              | Implemented chart contract; live evidence pending.  | ServiceMonitor rendering is explicit and uses Prometheus Operator `authorization.credentials` Secret wiring for token-authenticated scrapes.                    |
 | Duplicate chart tree          | `deploy/charts/dspace` contains ServiceMonitor, PrometheusRule, NetworkPolicy, and metrics values, but is not packaged by the GHCR Helm workflow.                                                       | Partial legacy/experimental duplicate.              | Do not update both chart trees blindly. Either migrate the needed scrape contract into `charts/dspace` or explicitly retarget release automation before v3.1.0. |
 | Environment values            | `deploy/env/{dev,int,prod}/values.yaml` exist for the duplicate deploy chart.                                                                                                                           | Legacy/partial.                                     | Not canonical release evidence unless the release path changes and automation points at that chart.                                                             |
 
@@ -59,15 +59,15 @@ Every requirement below is classified as one of:
 
 - [ ] Staging and production expose a Prometheus-compatible DSPACE endpoint for in-cluster
       scraping.
-- [ ] The canonical scrape configuration is in, or explicitly referenced by, `charts/dspace`.
-- [ ] The canonical chart renders a ServiceMonitor or equivalent discovery mechanism compatible
+- [x] The canonical scrape configuration is in, or explicitly referenced by, `charts/dspace`.
+- [x] The canonical chart renders a ServiceMonitor or equivalent discovery mechanism compatible
       with Sugarkube's Prometheus operator labels.
 - [ ] Discovery labels include the Sugarkube-compatible monitoring release label selected by the
       cluster operator, plus stable app labels for `app=dspace`, namespace, environment, cluster,
       and Helm release identity through metric labels or Prometheus relabeling.
 - [ ] Authentication and network behavior allow Prometheus in the cluster to scrape metrics without
       exposing a privileged metrics surface publicly.
-- [ ] If `METRICS_TOKEN` remains the endpoint guard, the ServiceMonitor or equivalent scrape config
+- [x] If `METRICS_TOKEN` remains the endpoint guard, the ServiceMonitor or equivalent scrape config
       includes tested bearer-token Secret wiring; if a cluster-only metrics service or NetworkPolicy
       is used instead, public ingress must not route to `/metrics`.
 - [x] Application source exposes release/build identity with bounded labels:
