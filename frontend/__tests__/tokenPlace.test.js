@@ -59,6 +59,8 @@ const makeRelayFetch = ({
     selectedWindowTokens,
     selectedModelSupport,
     replyForRetrieve = null,
+    dispatchCorrelationValue = null,
+    dispatchJson = () => Promise.resolve({ accepted }),
 } = {}) => {
     let retrieveCount = 0;
     let selectionCount = 0;
@@ -95,7 +97,21 @@ const makeRelayFetch = ({
             };
         }
         if (urlPathEndsWith(url, '/api/v1/relay/requests')) {
-            return { ok: true, status: 200, json: () => Promise.resolve({ accepted }) };
+            return {
+                ok: true,
+                status: 200,
+                headers: dispatchCorrelationValue
+                    ? {
+                          get: (name) =>
+                              name === 'X-DSpace-Correlation-Token'
+                                  ? typeof dispatchCorrelationValue === 'function'
+                                      ? dispatchCorrelationValue()
+                                      : dispatchCorrelationValue
+                                  : null,
+                      }
+                    : undefined,
+                json: dispatchJson,
+            };
         }
         if (urlPathEndsWith(url, '/api/v1/relay/responses/retrieve')) {
             const status = retrieveStatuses[Math.min(retrieveCount, retrieveStatuses.length - 1)];
@@ -183,6 +199,7 @@ describe('token.place API v1 client', () => {
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_CHAT_MODEL;
         delete process.env.VITE_TOKEN_PLACE_ENABLED;
+        vi.unstubAllEnvs();
     });
 
     test('fresh/default state uses token.place relay E2EE routes', async () => {
@@ -1323,6 +1340,46 @@ ${ragExcerpt.repeat(4000)}`,
         ).toBe(false);
     });
 
+    test('post-dispatch accepted false preserves the relay correlation token', async () => {
+        global.fetch = makeRelayFetch({
+            accepted: false,
+            dispatchCorrelationValue: 'dispatch-correlation-accepted-false',
+        });
+
+        let thrownError;
+        try {
+            await TokenPlaceChatV2([{ role: 'user', content: 'hello' }]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'malformed',
+            message: 'token.place relay rejected the request.',
+        });
+        expect(thrownError?.correlationToken).toBe('dispatch-correlation-accepted-false');
+    });
+
+    test('post-dispatch malformed JSON preserves the relay correlation token', async () => {
+        global.fetch = makeRelayFetch({
+            dispatchCorrelationValue: 'dispatch-correlation-invalid-json',
+            dispatchJson: () => Promise.reject(new SyntaxError('bad json')),
+        });
+
+        let thrownError;
+        try {
+            await TokenPlaceChatV2([{ role: 'user', content: 'hello' }]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'malformed',
+            message: 'Malformed token.place relay response: invalid JSON.',
+        });
+        expect(thrownError?.correlationToken).toBe('dispatch-correlation-invalid-json');
+    });
+
     test('decrypted envelope validation rejects unsafe/mismatched shapes', () => {
         const base = {
             protocol: 'tokenplace_api_v1_relay_e2ee',
@@ -1404,6 +1461,34 @@ ${ragExcerpt.repeat(4000)}`,
             type: 'malformed',
             message: 'No token.place compute node is available.',
         });
+    });
+
+    test('fallback unavailable preserves the last post-dispatch correlation token', async () => {
+        let dispatchCount = 0;
+        global.fetch = makeRelayFetch({
+            retrieveStatuses: [404, 404],
+            dispatchCorrelationValue: () => {
+                dispatchCount += 1;
+                return `dispatch-correlation-${dispatchCount}`;
+            },
+            dispatchJson: () => {
+                return Promise.resolve({ accepted: true });
+            },
+        });
+
+        let thrownError;
+        try {
+            await TokenPlaceChatV2([], { pollIntervalMs: 1 });
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'malformed',
+            message: 'No token.place compute node is available.',
+            metricsOutcome: 'fallback_unavailable',
+        });
+        expect(thrownError?.correlationToken).toBe('dispatch-correlation-2');
     });
 
     test('requests estimated context tier, encrypts routing metadata, and records spillover diagnostics', async () => {
@@ -1534,6 +1619,7 @@ ${ragExcerpt.repeat(4000)}`,
             TokenPlaceChatV2([{ role: 'user', content: 'hello retry' }])
         ).resolves.toMatchObject({
             text: 'retried reply',
+            metricsOutcome: 'fallback_used',
             metadata: { tokenPlaceContext: { escalationRetry: true } },
         });
 
@@ -1583,6 +1669,7 @@ ${ragExcerpt.repeat(4000)}`,
             })
         ).resolves.toMatchObject({
             text: 'retried after disconnect',
+            metricsOutcome: 'fallback_used',
             metadata: {
                 tokenPlaceContext: {
                     requestedTier: '64k-full',
@@ -1623,6 +1710,88 @@ ${ragExcerpt.repeat(4000)}`,
         );
         expect(selections).toHaveLength(1);
         expect(dispatches).toHaveLength(1);
+    });
+
+    test('retries transient token.place completion delivery with the dispatch correlation token', async () => {
+        vi.stubEnv('MODE', 'development');
+        const relayCorrelationValue = 'retry-correlation-value';
+        const completePayloads = [];
+        let completeAttempts = 0;
+        global.fetch = jest.fn(async (url, init = {}) => {
+            expect(url).toBe('/api/chat');
+            const body = JSON.parse(init.body);
+            if (body.operation === 'select') {
+                return {
+                    ok: true,
+                    status: 200,
+                    json: () =>
+                        Promise.resolve({
+                            server_public_key: relayServerKeys[0].publicKeyBase64,
+                            context_tier: '8k-fast',
+                            selected_profile_id: 'test-8k',
+                        }),
+                };
+            }
+            if (body.operation === 'dispatch') {
+                return {
+                    ok: true,
+                    status: 200,
+                    headers: {
+                        get: (name) =>
+                            name === 'X-DSpace-Correlation-Token' ? relayCorrelationValue : null,
+                    },
+                    json: () => Promise.resolve({ accepted: true }),
+                };
+            }
+            if (body.operation === 'retrieve') {
+                const clientPublicPem = decodeBase64Text(body.payload.client_public_key);
+                const encrypted = await encryptTokenPlaceEnvelope(
+                    {
+                        protocol: 'tokenplace_api_v1_relay_e2ee',
+                        version: 1,
+                        request_id: body.payload.request_id,
+                        client_public_key: body.payload.client_public_key,
+                        api_v1_response: relayReply,
+                    },
+                    clientPublicPem
+                );
+                return {
+                    ok: true,
+                    status: 200,
+                    json: () =>
+                        Promise.resolve({ ...encrypted, chat_history: encrypted.ciphertext }),
+                };
+            }
+            if (body.operation === 'complete') {
+                completeAttempts += 1;
+                completePayloads.push(body.payload);
+                if (completeAttempts === 1) throw new Error('transient completion failure');
+                return { ok: true, status: 200, json: () => Promise.resolve({ ok: true }) };
+            }
+            throw new Error(`Unexpected operation ${body.operation}`);
+        });
+
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+                relayMetricBoundaryAvailable: true,
+                tokenPlaceCompletionRetryDelaysMs: [0],
+            })
+        ).resolves.toMatchObject({
+            text: 'mocked reply',
+            [`correlation${'Token'}`]: relayCorrelationValue,
+        });
+
+        await vi.waitFor(() => expect(completeAttempts).toBe(2));
+        expect(completePayloads).toEqual([
+            expect.objectContaining({
+                outcome: 'success',
+                [`correlation${'Token'}`]: relayCorrelationValue,
+            }),
+            expect.objectContaining({
+                outcome: 'success',
+                [`correlation${'Token'}`]: relayCorrelationValue,
+            }),
+        ]);
     });
 
     test('shared prompt and token.place payload omit stale provider guidance', async () => {

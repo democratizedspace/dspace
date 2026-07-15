@@ -2,12 +2,38 @@
 import Page from '../../components/Page.astro';
 import TokenBadge from '../dchat/TokenBadge.svelte';
 import Integrations from './svelte/Integrations.svelte';
-import { resolveRuntimeTokenPlaceConfig } from '../../utils/runtimeEndpoints';
+import {
+    CHAT_PROXY_SESSION_COOKIE,
+    CHAT_PROXY_SESSION_TTL_SECONDS,
+    chatProxySessionCookieOptions,
+    createChatProxySessionCookie,
+    getAuthorizedChatProxyIdentity,
+    verifyChatProxySessionCookie,
+    resolveRuntimeOpenAIChatProxyConfig,
+    resolveRuntimeTokenPlaceConfig,
+} from '../../utils/runtimeEndpoints';
 
+const authorizedProxyIdentity = getAuthorizedChatProxyIdentity(Astro.request);
+const existingSessionCookie = Astro.cookies.get(CHAT_PROXY_SESSION_COOKIE)?.value;
+const existingSessionIdentity = verifyChatProxySessionCookie(existingSessionCookie || null);
 const tokenPlace = resolveRuntimeTokenPlaceConfig();
+const openAIChatProxy = resolveRuntimeOpenAIChatProxyConfig();
+const proxyAvailableForRequest = Boolean(authorizedProxyIdentity || existingSessionIdentity);
+tokenPlace.relayProxyAvailable = tokenPlace.relayProxyAvailable && proxyAvailableForRequest;
+openAIChatProxy.enabled = openAIChatProxy.enabled && proxyAvailableForRequest;
+const chatProxySessionCookie = createChatProxySessionCookie(authorizedProxyIdentity);
+if (chatProxySessionCookie || openAIChatProxy.enabled || tokenPlace.relayProxyAvailable) {
+    const sessionCookie = existingSessionIdentity ? existingSessionCookie : chatProxySessionCookie;
+    if (sessionCookie) {
+        Astro.cookies.set(CHAT_PROXY_SESSION_COOKIE, sessionCookie, {
+            ...chatProxySessionCookieOptions(Astro.url.protocol),
+            maxAge: CHAT_PROXY_SESSION_TTL_SECONDS,
+        });
+    }
+}
 ---
 
 <Page title="Chat" message="Talk with the game NPCs" columns="1">
     <TokenBadge client:load />
-    <Integrations client:idle tokenPlace={tokenPlace} />
+    <Integrations client:idle tokenPlace={tokenPlace} openAIChatProxy={openAIChatProxy} />
 </Page>

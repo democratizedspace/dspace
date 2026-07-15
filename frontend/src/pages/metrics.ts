@@ -1,4 +1,4 @@
-import { register } from '../utils/metrics.js';
+import { ensureMetricsInitialized, register } from '../utils/metrics.js';
 
 export const prerender = false;
 
@@ -16,8 +16,26 @@ export async function GET({ request }: { request: Request }) {
         }
     }
 
+    const status = await ensureMetricsInitialized();
+    if (!status.available) {
+        return new Response('metrics unavailable\n', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+        });
+    }
+
     const metrics = await register.metrics();
     return new Response(metrics, {
         headers: { 'Content-Type': register.contentType },
+    });
+}
+
+// Trust boundary: browser/provider clients are untrusted for operational metrics.
+// POST /metrics is intentionally non-writable so only server-controlled code paths
+// can mutate the Prometheus registry served by the authenticated GET handler.
+export async function POST(_context?: { request?: Request }) {
+    return new Response('metrics ingestion disabled\n', {
+        status: 405,
+        headers: { Allow: 'GET', 'Content-Type': 'text/plain; charset=utf-8' },
     });
 }

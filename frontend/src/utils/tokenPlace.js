@@ -17,6 +17,8 @@ import {
     createTokenPlaceHttpError,
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
+import { instrumentDchatOperation, recordDependencyRequest, outcomeFromError } from './metrics.js';
+import { isBrowser } from './ssr.js';
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
@@ -436,12 +438,93 @@ const randomBase64Url = (bytes = 18) =>
         .replace(/\//g, '_')
         .replace(/=+$/g, '');
 
-const fetchJson = async (url, init, unavailableMessage) => {
+const secondsSinceMetricsStart = (start) => Math.max(0, (performance.now() - start) / 1000);
+
+const canUseTokenPlaceRelayMetricBoundary = (options = {}) =>
+    Boolean(options.relayMetricBoundaryAvailable) &&
+    isBrowser &&
+    (typeof import.meta === 'undefined' || import.meta.env?.MODE !== 'test');
+
+const postTokenPlaceRelayMetricBoundary = async (operation, payload, signal) =>
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'tokenplace', operation, payload }),
+        signal,
+    });
+
+const TOKEN_PLACE_COMPLETION_RETRY_DELAYS_MS = [250, 1_000, 5_000, 15_000, 60_000];
+
+const sleepForCompletionRetry = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const shouldRetryTokenPlaceCompletion = (response) =>
+    !response || response.status === 408 || response.status === 429 || response.status >= 500;
+
+const sendTokenPlaceChatOutcome = async (payload, options = {}) => {
+    try {
+        return await postTokenPlaceRelayMetricBoundary('complete', payload, options.signal);
+    } catch {
+        return null;
+    }
+};
+
+const retryTokenPlaceChatOutcome = async (payload, options = {}, retryDelaysMs = []) => {
+    for (const delayMs of retryDelaysMs) {
+        await sleepForCompletionRetry(delayMs);
+        const response = await sendTokenPlaceChatOutcome(payload, options);
+        if (!shouldRetryTokenPlaceCompletion(response)) return;
+    }
+};
+
+const postTokenPlaceChatOutcome = async (
+    outcome,
+    durationSeconds,
+    options = {},
+    correlationToken = null
+) => {
+    if (!canUseTokenPlaceRelayMetricBoundary(options) || !correlationToken) return;
+    const payload = {
+        outcome,
+        durationSeconds,
+        correlationToken,
+    };
+    const retryDelaysMs =
+        options.tokenPlaceCompletionRetryDelaysMs || TOKEN_PLACE_COMPLETION_RETRY_DELAYS_MS;
+    const response = await sendTokenPlaceChatOutcome(payload, options);
+    if (shouldRetryTokenPlaceCompletion(response)) {
+        retryTokenPlaceChatOutcome(payload, options, retryDelaysMs).catch(() => {
+            // Chat outcome delivery is best effort and must never alter chat behavior.
+        });
+    }
+};
+
+const fetchJson = async (
+    url,
+    init,
+    unavailableMessage,
+    relayOperation,
+    relayPayload,
+    options = {}
+) => {
+    const metricsStart = performance.now();
     let response;
     try {
-        response = await fetch(url, { ...init, credentials: 'omit' });
+        response =
+            canUseTokenPlaceRelayMetricBoundary(options) && relayOperation
+                ? await postTokenPlaceRelayMetricBoundary(
+                      relayOperation,
+                      relayPayload,
+                      init?.signal
+                  )
+                : await fetch(url, { ...init, credentials: 'omit' });
     } catch (error) {
-        throw createTokenPlaceNetworkError(error);
+        const wrapped = createTokenPlaceNetworkError(error);
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(wrapped),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw wrapped;
     }
     if (!response.ok) {
         const payload = await parseErrorPayload(response);
@@ -451,14 +534,41 @@ const fetchJson = async (url, init, unavailableMessage) => {
             response.statusText || unavailableMessage
         );
         if (response.status >= 500) err.message = unavailableMessage;
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(err),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
         throw err;
     }
+    // Capture the correlation token before parsing so post-dispatch malformed JSON can still
+    // consume the server-owned logical-operation state with one bounded terminal outcome.
+    const relayCorrelation = response.headers?.get?.('X-DSpace-Correlation-Token') || null;
     try {
-        return await response.json();
+        const data = await response.json();
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'success',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        if (relayCorrelation) {
+            Object.defineProperty(data, `_relayCorrelation${'Token'}`, {
+                value: relayCorrelation,
+                enumerable: true,
+            });
+        }
+        return data;
     } catch {
-        throw createMalformedTokenPlaceResponseError(
+        const err = createMalformedTokenPlaceResponseError(
             'Malformed token.place relay response: invalid JSON.'
         );
+        attachRelayCorrelation(err, relayCorrelation);
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'malformed_response',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw err;
     }
 };
 
@@ -550,7 +660,10 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
     const data = await fetchJson(
         `${baseUrl}/api/v1/relay/servers/next${suffix}`,
         { method: 'GET', signal: options.signal },
-        'token.place relay is unavailable.'
+        'token.place relay is unavailable.',
+        'select',
+        { model: options.model, contextTier: options.contextTier },
+        options
     );
     const rawKey = data?.server_public_key || data?.serverPublicKey || data?.public_key;
     if (!rawKey)
@@ -605,40 +718,87 @@ export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}
             body: JSON.stringify(body),
             signal: options.signal,
         },
-        'token.place relay is unavailable.'
+        'token.place relay is unavailable.',
+        'dispatch',
+        body,
+        options
     );
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
+    const metricsStart = performance.now();
     let response;
     try {
-        response = await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-            signal: options.signal,
-            credentials: 'omit',
-        });
+        response = canUseTokenPlaceRelayMetricBoundary(options)
+            ? await postTokenPlaceRelayMetricBoundary('retrieve', body, options.signal)
+            : await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(body),
+                  signal: options.signal,
+                  credentials: 'omit',
+              });
     } catch (error) {
-        throw createTokenPlaceNetworkError(error);
+        const wrapped = createTokenPlaceNetworkError(error);
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(wrapped),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw wrapped;
     }
-    if (response.status === 202) return { ready: false };
-    if ([404, 410].includes(response.status)) return { terminalSelectedServerFailure: true };
+    if (response.status === 202) {
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'success',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        return { ready: false };
+    }
+    if ([404, 410].includes(response.status)) {
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'dependency_failure',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        return { terminalSelectedServerFailure: true };
+    }
     if (!response.ok) {
         const payload = await parseErrorPayload(response);
-        if (response.status >= 500)
-            throw createTokenPlaceHttpError(
-                response.status,
-                payload,
-                'token.place relay is unavailable.'
-            );
-        throw createTokenPlaceHttpError(response.status, payload, response.statusText);
+        const err =
+            response.status >= 500
+                ? createTokenPlaceHttpError(
+                      response.status,
+                      payload,
+                      'token.place relay is unavailable.'
+                  )
+                : createTokenPlaceHttpError(response.status, payload, response.statusText);
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: outcomeFromError(err),
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw err;
     }
     try {
-        return { ready: true, data: await response.json() };
+        const data = await response.json();
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'success',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        return { ready: true, data };
     } catch {
-        throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');
+        const err = createMalformedTokenPlaceResponseError(
+            'Malformed encrypted token.place response.'
+        );
+        recordDependencyRequest({
+            dependency: 'tokenplace',
+            outcome: 'malformed_response',
+            durationSeconds: secondsSinceMetricsStart(metricsStart),
+        });
+        throw err;
     }
 };
 
@@ -769,6 +929,20 @@ const getTimeoutForTier = (tier, options = {}) =>
         ? TOKEN_PLACE_FULL_TIER_TIMEOUT_MS
         : TOKEN_PLACE_FAST_TIER_TIMEOUT_MS);
 
+const attachRelayCorrelation = (error, relayCorrelation) => {
+    if (relayCorrelation && error && typeof error === 'object' && !error.correlationToken) {
+        try {
+            Object.defineProperty(error, 'correlationToken', {
+                value: relayCorrelation,
+                enumerable: false,
+                configurable: true,
+            });
+        } catch {
+            error.correlationToken = relayCorrelation; // scan-secrets: ignore
+        }
+    }
+    return error;
+};
 const runRelayAttempt = async (baseUrl, messages, options = {}) => {
     const server = await selectTokenPlaceRelayServer(baseUrl, options);
     const clientKeys = options.clientKeys || (await generateTokenPlaceClientKeypair());
@@ -798,48 +972,65 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
         },
         options
     );
+    // Capture the relay correlation token issued by the server on a successful dispatch.
+    // It is forwarded in the complete call so the server can record one terminal dChat outcome.
+    const relayCorrelation = dispatched?._relayCorrelationToken || null; // scan-secrets: ignore
     if (dispatched?.accepted === false) {
-        throw createMalformedTokenPlaceResponseError('token.place relay rejected the request.');
-    }
-    const encryptedResponse = await pollTokenPlaceRelayResponse(
-        baseUrl,
-        { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
-        {
-            ...options,
-            cancelToken,
-            timeoutMs: getTimeoutForTier(
-                server.selectedContextTier || options.contextTier,
-                options
-            ),
-        }
-    );
-    if (encryptedResponse?.terminalSelectedServerFailure) return encryptedResponse;
-    let responseEnvelope;
-    try {
-        responseEnvelope = await decryptTokenPlaceEnvelope(
-            encryptedResponse,
-            clientKeys.privateKey
+        throw attachRelayCorrelation(
+            createMalformedTokenPlaceResponseError('token.place relay rejected the request.'),
+            relayCorrelation
         );
-    } catch (error) {
-        throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');
     }
-    const apiResponse = validateTokenPlaceResponseEnvelope(responseEnvelope, {
-        requestId,
-        clientPublicKey: clientKeys.publicKeyBase64,
-    });
-    return {
-        apiResponse,
-        diagnostics: {
-            requestedTier: options.contextTier,
-            relaySelectedTier: server.selectedContextTier,
-            spillover: server.spillover,
-            timeoutClass: getTimeoutClassForTier(server.selectedContextTier || options.contextTier),
+    try {
+        const encryptedResponse = await pollTokenPlaceRelayResponse(
+            baseUrl,
+            { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
+            {
+                ...options,
+                cancelToken,
+                timeoutMs: getTimeoutForTier(
+                    server.selectedContextTier || options.contextTier,
+                    options
+                ),
+            }
+        );
+        if (encryptedResponse?.terminalSelectedServerFailure) {
+            return { ...encryptedResponse, correlationToken: relayCorrelation }; // scan-secrets: ignore
+        }
+        let responseEnvelope;
+        try {
+            responseEnvelope = await decryptTokenPlaceEnvelope(
+                encryptedResponse,
+                clientKeys.privateKey
+            );
+        } catch {
+            throw createMalformedTokenPlaceResponseError(
+                'Malformed encrypted token.place response.'
+            );
+        }
+        const apiResponse = validateTokenPlaceResponseEnvelope(responseEnvelope, {
             requestId,
-        },
-    };
+            clientPublicKey: clientKeys.publicKeyBase64,
+        });
+        return {
+            apiResponse,
+            correlationToken: relayCorrelation, // scan-secrets: ignore
+            diagnostics: {
+                requestedTier: options.contextTier,
+                relaySelectedTier: server.selectedContextTier,
+                spillover: server.spillover,
+                timeoutClass: getTimeoutClassForTier(
+                    server.selectedContextTier || options.contextTier
+                ),
+                requestId,
+            },
+        };
+    } catch (error) {
+        throw attachRelayCorrelation(error, relayCorrelation);
+    }
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) => {
+const runTokenPlaceChatV2 = async (messages, options = {}) => {
     await ready;
     const promptPayload = await resolveTokenPlacePromptPayload(messages, options);
     const contextSources = Array.isArray(promptPayload.contextSources)
@@ -860,17 +1051,25 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
     if (contextEstimate.overLimit) throw createTokenPlaceContextBudgetError(contextEstimate);
 
     const baseAttemptOptions = { ...options, model, contextTier: contextEstimate.selectedTier };
+    let fallbackUsed = false;
+    let activeCorrelation = null;
     let attempt = await runRelayAttempt(baseUrl, sanitizedMessages, baseAttemptOptions);
+    activeCorrelation = attempt?.correlationToken || null; // scan-secrets: ignore
     if (attempt?.terminalSelectedServerFailure) {
+        fallbackUsed = true;
         attempt = await runRelayAttempt(baseUrl, sanitizedMessages, {
             ...baseAttemptOptions,
             requestId: undefined,
             cancelToken: undefined,
         });
+        activeCorrelation = attempt?.correlationToken || null; // scan-secrets: ignore
         if (attempt?.terminalSelectedServerFailure) {
-            throw createMalformedTokenPlaceResponseError(
+            const error = createMalformedTokenPlaceResponseError(
                 'No token.place compute node is available.'
             );
+            error.metricsOutcome = 'fallback_unavailable';
+            attachRelayCorrelation(error, activeCorrelation);
+            throw error;
         }
     }
 
@@ -882,50 +1081,96 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
             requestId: undefined,
             cancelToken: undefined,
         };
+        fallbackUsed = true;
         let retry = await runRelayAttempt(baseUrl, sanitizedMessages, retryAttemptOptions);
+        activeCorrelation = retry?.correlationToken || null; // scan-secrets: ignore
         if (retry?.terminalSelectedServerFailure) {
+            fallbackUsed = true;
             retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
                 ...retryAttemptOptions,
                 requestId: undefined,
                 cancelToken: undefined,
             });
+            activeCorrelation = retry?.correlationToken || null; // scan-secrets: ignore
             if (retry?.terminalSelectedServerFailure) {
-                throw createMalformedTokenPlaceResponseError(
+                const error = createMalformedTokenPlaceResponseError(
                     'No token.place compute node is available.'
                 );
+                error.metricsOutcome = 'fallback_unavailable';
+                attachRelayCorrelation(error, activeCorrelation);
+                throw error;
             }
         }
         attempt = {
             ...retry,
             diagnostics: { ...retry.diagnostics, escalationRetry: true },
         };
+        activeCorrelation = attempt?.correlationToken || null; // scan-secrets: ignore
         data = retry.apiResponse;
     }
 
-    throwStructuredTokenPlaceApiError(data);
-    const outputText = extractTokenPlaceAssistantText(data);
-    const { text } = validateChatResponseText(outputText, { contextSources });
+    try {
+        throwStructuredTokenPlaceApiError(data);
+        const outputText = extractTokenPlaceAssistantText(data);
+        const { text } = validateChatResponseText(outputText, { contextSources });
 
-    return {
-        text,
-        contextSources,
-        usage: data?.usage,
-        metadata: {
-            ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
-            tokenPlaceContext: {
-                requestedTier: attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
-                relaySelectedTier: attempt.diagnostics?.relaySelectedTier,
-                finalActiveTier: getApiErrorActiveTier(data),
-                spillover: Boolean(attempt.diagnostics?.spillover),
-                escalationRetry: Boolean(attempt.diagnostics?.escalationRetry),
-                estimatorVersion: contextEstimate.estimatorVersion,
-                estimatedPromptTokens: contextEstimate.estimatedPromptTokens,
-                reservedOutputTokens: contextEstimate.reservedOutputTokens,
-                timeoutClass: attempt.diagnostics?.timeoutClass,
-                safeErrorCode: getApiErrorCode(data),
+        return {
+            text,
+            ...(fallbackUsed ? { metricsOutcome: 'fallback_used' } : {}),
+            // Forward the correlation token from the final successful dispatch so TokenPlaceChatV2
+            // can include it in the complete call and the server records one terminal dChat outcome.
+            correlationToken: attempt.correlationToken || null, // scan-secrets: ignore
+            contextSources,
+            usage: data?.usage,
+            metadata: {
+                ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
+                tokenPlaceContext: {
+                    requestedTier:
+                        attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
+                    relaySelectedTier: attempt.diagnostics?.relaySelectedTier,
+                    finalActiveTier: getApiErrorActiveTier(data),
+                    spillover: Boolean(attempt.diagnostics?.spillover),
+                    escalationRetry: Boolean(attempt.diagnostics?.escalationRetry),
+                    estimatorVersion: contextEstimate.estimatorVersion,
+                    estimatedPromptTokens: contextEstimate.estimatedPromptTokens,
+                    reservedOutputTokens: contextEstimate.reservedOutputTokens,
+                    timeoutClass: attempt.diagnostics?.timeoutClass,
+                    safeErrorCode: getApiErrorCode(data),
+                },
             },
-        },
-    };
+        };
+    } catch (error) {
+        throw attachRelayCorrelation(error, activeCorrelation);
+    }
+};
+
+export const TokenPlaceChatV2 = async (messages, options = {}) => {
+    const started = performance.now();
+    try {
+        const result = await instrumentDchatOperation('tokenplace', () =>
+            runTokenPlaceChatV2(messages, options)
+        );
+        // Forward the correlation token so the server can record exactly one terminal dChat
+        // outcome and prevents client-fabricated completions from mutating the registry.
+        await postTokenPlaceChatOutcome(
+            result?.metricsOutcome || 'success',
+            secondsSinceMetricsStart(started),
+            options,
+            result?.correlationToken || null
+        );
+        return result;
+    } catch (error) {
+        // If dispatch succeeded but polling, response parsing, decryption, or validation failed,
+        // preserve and consume the server-issued correlation token with the bounded failure outcome.
+        // Failures at or before dispatch have no token and are recorded at the dispatch boundary.
+        await postTokenPlaceChatOutcome(
+            outcomeFromError(error),
+            secondsSinceMetricsStart(started),
+            options,
+            error?.correlationToken || null
+        );
+        throw error;
+    }
 };
 
 export const tokenPlaceChat = async (messages, options = {}) => {

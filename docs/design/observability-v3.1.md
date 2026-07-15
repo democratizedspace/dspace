@@ -1,8 +1,9 @@
 # DSPACE v3.1.0 Observability Release Gate
 
 This design turns observability into an explicit DSPACE v3.1.0 release requirement. It is a
-planning and QA contract only: it does not implement new metrics, dashboards, alerts, exporters,
-Helm templates, or version metadata.
+planning and QA contract. The application runtime now implements the first privacy-safe
+Prometheus metrics slice, but dashboards, alerts, canonical Helm scrape templates, and live
+Sugarkube scrape evidence remain release-gated work.
 
 Status: v3.1.0 is not treated as shipped by this document. The repository metadata still reports
 `package.json` version `3.0.1`, and the active GHCR Helm publishing workflow packages
@@ -19,16 +20,16 @@ smallest useful v3.1.0 release slice.
 
 ## Repository evidence inventory
 
-| Area                          | Evidence                                                                                                                                          | Classification                          | v3.1.0 implication                                                                                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Runtime version               | `package.json` is `3.0.1`.                                                                                                                        | Implemented for v3.0.1; v3.1.0 missing. | Do not claim v3.1.0 shipped until release metadata and immutable artifacts exist.                                                                               |
-| Metrics route                 | `frontend/src/pages/metrics.ts` exposes `/metrics` and optionally requires `Authorization: Bearer <METRICS_TOKEN>`.                               | Partial.                                | Endpoint exists, but staging/prod scrape behavior and public exposure controls still need evidence.                                                             |
-| Metric implementation         | `frontend/src/utils/metrics.js` initializes `prom-client` default process metrics only, with a fallback text response.                            | Partial.                                | Process/runtime basics may exist; DSPACE-specific HTTP, dChat, token.place, fallback, and build-info metrics are missing until implemented elsewhere.           |
-| Local monitoring scaffold     | `infra/monitoring/` contains local Prometheus, Grafana dashboard, and alert examples.                                                             | Legacy/local scaffold.                  | Useful as reference only; not the canonical Sugarkube release gate. Metric names and thresholds are not sufficient for v3.1.0.                                  |
-| Canonical GHCR chart          | `.github/workflows/ci-helm.yml` packages and publishes `charts/dspace` to `oci://ghcr.io/democratizedspace/charts/dspace`.                        | Implemented v3.0.1 path.                | `charts/dspace` is the canonical chart path for the current GHCR/Sugarkube release path.                                                                        |
-| Canonical chart scrape config | `charts/dspace` has Service, Deployment, and probes, but no ServiceMonitor, metrics service port, PrometheusRule, or scrape values.               | Missing.                                | v3.1.0 blocker: add or otherwise identify the canonical scrape configuration before promotion.                                                                  |
-| Duplicate chart tree          | `deploy/charts/dspace` contains ServiceMonitor, PrometheusRule, NetworkPolicy, and metrics values, but is not packaged by the GHCR Helm workflow. | Partial legacy/experimental duplicate.  | Do not update both chart trees blindly. Either migrate the needed scrape contract into `charts/dspace` or explicitly retarget release automation before v3.1.0. |
-| Environment values            | `deploy/env/{dev,int,prod}/values.yaml` exist for the duplicate deploy chart.                                                                     | Legacy/partial.                         | Not canonical release evidence unless the release path changes and automation points at that chart.                                                             |
+| Area                          | Evidence                                                                                                                                                                                                | Classification                                      | v3.1.0 implication                                                                                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime version               | `package.json` is `3.0.1`.                                                                                                                                                                              | Implemented for v3.0.1; v3.1.0 missing.             | Do not claim v3.1.0 shipped until release metadata and immutable artifacts exist.                                                                               |
+| Metrics route                 | `frontend/src/pages/metrics.ts` exposes `/metrics` and optionally requires `Authorization: Bearer <METRICS_TOKEN>`.                                                                                     | Partial.                                            | Endpoint exists, but staging/prod scrape behavior and public exposure controls still need evidence.                                                             |
+| Metric implementation         | `frontend/src/utils/metrics.js` initializes the shared `prom-client` registry, default process metrics, DSPACE HTTP metrics, dChat metrics, dependency metrics, build info, and instrumentation health. | Implemented source behavior; live evidence pending. | Application source emits the canonical privacy-safe metric families. Staging/prod scrape behavior, chart wiring, dashboards, and alerts still need evidence.    |
+| Local monitoring scaffold     | `infra/monitoring/` contains local Prometheus, Grafana dashboard, and alert examples.                                                                                                                   | Legacy/local scaffold.                              | Useful as reference only; not the canonical Sugarkube release gate. Metric names and thresholds are not sufficient for v3.1.0.                                  |
+| Canonical GHCR chart          | `.github/workflows/ci-helm.yml` packages and publishes `charts/dspace` to `oci://ghcr.io/democratizedspace/charts/dspace`.                                                                              | Implemented v3.0.1 path.                            | `charts/dspace` is the canonical chart path for the current GHCR/Sugarkube release path.                                                                        |
+| Canonical chart scrape config | `charts/dspace` has Service, Deployment, and probes, but no ServiceMonitor, metrics service port, PrometheusRule, or scrape values.                                                                     | Missing.                                            | v3.1.0 blocker: add or otherwise identify the canonical scrape configuration before promotion.                                                                  |
+| Duplicate chart tree          | `deploy/charts/dspace` contains ServiceMonitor, PrometheusRule, NetworkPolicy, and metrics values, but is not packaged by the GHCR Helm workflow.                                                       | Partial legacy/experimental duplicate.              | Do not update both chart trees blindly. Either migrate the needed scrape contract into `charts/dspace` or explicitly retarget release automation before v3.1.0. |
+| Environment values            | `deploy/env/{dev,int,prod}/values.yaml` exist for the duplicate deploy chart.                                                                                                                           | Legacy/partial.                                     | Not canonical release evidence unless the release path changes and automation points at that chart.                                                             |
 
 ## Canonical Helm chart decision
 
@@ -69,9 +70,10 @@ Every requirement below is classified as one of:
 - [ ] If `METRICS_TOKEN` remains the endpoint guard, the ServiceMonitor or equivalent scrape config
       includes tested bearer-token Secret wiring; if a cluster-only metrics service or NetworkPolicy
       is used instead, public ingress must not route to `/metrics`.
-- [ ] Release/build identity is available with bounded labels, for example
-      `dspace_build_info{version,revision,release,environment}` with value `1` or equivalent
-      relabeled metadata.
+- [x] Application source exposes release/build identity with bounded labels:
+      `dspace_build_info{version,revision}` with value `1`. Helm release, environment, cluster,
+      namespace, and image digest labels must come from Prometheus target labels or relabeling, not
+      application labels.
 
 ### Required staging evidence
 
@@ -85,19 +87,106 @@ Every requirement below is classified as one of:
 
 ## Required metric families
 
+### Implemented application-source behavior
+
+The runtime source emits these canonical families from the existing `prom-client` registry and
+avoids duplicate registration during repeated imports, tests, and hot reload:
+
+- `dspace_http_requests_total{method,route,status_class,outcome}`.
+- `dspace_http_request_duration_seconds{method,route,status_class,outcome}` with buckets `0.05`,
+  `0.1`, `0.25`, `0.5`, `1`, `2.5`, `5`, `10`, and `30`.
+- `dspace_dchat_requests_total{provider,outcome}`.
+- `dspace_dchat_request_duration_seconds{provider,outcome}`.
+- `dspace_dependency_requests_total{dependency,outcome}`.
+- `dspace_dependency_request_duration_seconds{dependency,outcome}`.
+- `dspace_build_info{version,revision}` fixed at `1`.
+- `dspace_instrumentation_up` fixed at `1` after successful metrics initialization.
+
+Source instrumentation excludes `/metrics` HTTP self-scrapes, normalizes route labels to route
+templates or fixed route groups, maps unmatched paths to `/unknown`, maps status labels only to
+`2xx`, `4xx`, `5xx`, or `unknown`, and bounds method/provider/dependency/outcome labels.
+
+#### Chat relay proxy: authorization model and observability boundary
+
+The chat relay proxy is **optional and default-disabled**. It is active only when an operator
+explicitly configures all five required environment variables:
+
+| Variable                                   | Purpose                                                                                  |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `DSPACE_CHAT_PROXY_TOKEN`                  | HMAC signing secret for HttpOnly session cookies                                         |
+| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL`   | Redis-compatible shared rate-limit backend URL (also used for correlation token storage) |
+| `DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN` | Redis-compatible shared rate-limit backend token                                         |
+| `DSPACE_CHAT_PROXY_PUBLIC_ACCESS`          | Must be set to `true` (explicit operator opt-in)                                         |
+| `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN`    | Shared secret; a trusted entry point must supply via `x-dspace-chat-proxy-authorization` |
+
+When any of these is absent, `relayProxyAvailable` is `false` in `/config.json`, the browser chat
+client retains the direct token.place relay path, and browser-held OpenAI keys stay local. There is
+no anonymous or implicit activation.
+
+**Authorization header and session minting.** A trusted upstream entry point (for example an
+authenticated reverse-proxy or load-balancer injection layer) must supply
+`x-dspace-chat-proxy-authorization: <value>` on the initial SSR chat page request. The value is
+compared in constant time against `DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN`. On match, the SSR page
+mints an HttpOnly, same-site session cookie signed with `DSPACE_CHAT_PROXY_TOKEN`; the shared
+secret is never serialized into hydrated browser props or JavaScript. The authorization value must
+never appear in URLs, query parameters, or client-side hydrated state.
+
+**Rate-limit identity binding.** The session identity used as the per-session rate-limit key is
+derived as an HMAC of the matched authorization token value, not from a user-supplied string or
+session ID. This means rate-limit keys are deterministic for the same authorized entry point but
+cannot be forged by callers who do not know the shared secret.
+
+**`/api/chat` enforcement.** The `/api/chat` route requires a same-origin request with a valid
+signed session cookie. It applies shared Redis-compatible atomic per-session and global rate limits
+before any provider dispatch. The route fails closed with `503` when the shared rate-limit backend
+is unavailable, rejects credential-bearing OpenAI payloads, and returns `503` when no server
+OpenAI credential is configured for sanitized OpenAI proxy traffic.
+
+**Observability scope.** Browser token.place helpers keep relay plaintext, encryption, and
+private-key material in the browser, forwarding only safe routing fields and ciphertext through the
+server relay boundary so actual token.place dependency attempts and one bounded terminal dChat
+outcome can be observed in the server registry.
+
+**Correlation token system.** When a rate-limited `dispatch` operation succeeds at the server relay
+boundary and returns parseable JSON, `/api/chat` issues an opaque correlation token stored in the shared Redis-compatible
+backend with a short TTL (300 seconds), bound to the verified session identity. The client receives
+the token via the `X-DSpace-Correlation-Token` response header. To report a terminal dChat outcome,
+the client calls `complete` and includes the correlation token. The server atomically consumes the
+token (`GETDEL`), verifies session ownership, derives the duration from the server-owned dispatch
+timestamp, and records one bounded `dspace_dchat_requests_total` and
+`dspace_dchat_request_duration_seconds` observation. Missing, expired, replayed, or cross-session
+tokens return `400` and do not mutate the registry. The correlation token is never used as a metric
+label and never appears in `/metrics` output. Dispatch failures recorded before a correlation token exists record a terminal dChat failure immediately without issuing a correlation token; post-dispatch failures consume the issued correlation token with a bounded failure outcome.
+
+**Per-operation sub-budgets.** `select` and `retrieve` sub-operations of a logical token.place chat
+have separate per-session rate-limit counters with higher limits (defaults: 60/min for `select`,
+200/min for `retrieve`, configurable via `DSPACE_CHAT_PROXY_SUBOP_SELECT_LIMIT` and
+`DSPACE_CHAT_PROXY_SUBOP_RETRIEVE_LIMIT`). This prevents normal polling from exhausting the main
+dispatch quota while still bounding per-session abuse potential. The `complete` operation is bounded
+by the correlation token (one per dispatch), so it has no separate counter.
+
+Browser metric reports are not accepted; `POST /metrics` is non-writable and returns `405`, so only
+trusted server instrumentation can mutate the registry scraped by Prometheus. Browser-held OpenAI
+key traffic does not pass through the server and is intentionally not observable in the server
+registry. If metrics initialization fails, `/metrics` returns `503` instead of a misleading
+successful placeholder. Metrics write failures are isolated from game functionality and do not expose
+secrets.
+
 ### v3.1.0 release blockers
 
-- [ ] HTTP request totals, using bounded labels: method, route group, status class, and outcome.
-- [ ] HTTP request latency histograms in seconds, using bounded route groups instead of raw URLs.
+- [x] Application source: HTTP request totals, using bounded labels: method, route group, status class, and outcome.
+- [x] Application source: HTTP request latency histograms in seconds, using bounded route groups instead of raw URLs.
 - [ ] Process/runtime health from safe server-side collection: process CPU, memory, event-loop or
       runtime saturation where available, and process start time.
-- [ ] dChat request totals by bounded provider category and bounded outcome category.
-- [ ] dChat latency histograms by bounded provider category and outcome category.
-- [ ] token.place dependency metrics for successes, timeouts, rate limits, malformed responses, and
+- [x] Application source: dChat request totals by bounded provider category and bounded outcome category.
+- [x] Application source: dChat latency histograms by bounded provider category and outcome category.
+- [x] Application source: token.place dependency metrics for successes, timeouts, rate limits, malformed responses, and
       server failures.
-- [ ] Provider-selection failures and fallback behavior where measurable on the server, with
+- [x] Application source: Provider-selection failures and fallback behavior where measurable on the server, with
       bounded outcome labels only.
-- [ ] Deployment/release information through build-info or equivalent low-cardinality labels.
+- [x] Application source: Deployment/release information through build-info low-cardinality labels.
+- [ ] Live Sugarkube evidence: each source metric family above must be observed through the
+      canonical staging scrape path before production promotion.
 
 ### Required staging evidence
 
@@ -107,6 +196,33 @@ Every requirement below is classified as one of:
 - [ ] PromQL returns dChat totals and latency after a staging token.place Chat request.
 - [ ] PromQL returns token.place dependency outcomes after controlled success and error-path checks.
 - [ ] PromQL returns release/build identity for the candidate image digest or SHA under test.
+
+## PromQL examples
+
+Use these queries against staging after canonical scrape wiring is in place. They are examples for
+implemented source metrics, not evidence that Sugarkube is already scraping them.
+
+```promql
+# Request rate by normalized route and status class
+sum by (route, status_class) (rate(dspace_http_requests_total[5m]))
+
+# HTTP 5xx error ratio
+sum(rate(dspace_http_requests_total{status_class="5xx"}[5m]))
+  /
+sum(rate(dspace_http_requests_total[5m]))
+
+# HTTP p95 latency by route template
+histogram_quantile(
+  0.95,
+  sum by (le, route) (rate(dspace_http_request_duration_seconds_bucket[5m]))
+)
+
+# dChat outcomes by provider
+sum by (provider, outcome) (rate(dspace_dchat_requests_total[5m]))
+
+# token.place dependency outcomes
+sum by (outcome) (rate(dspace_dependency_requests_total{dependency="tokenplace"}[5m]))
+```
 
 ## Privacy and cardinality constraints
 
