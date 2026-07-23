@@ -36,6 +36,17 @@ const runGuard = (fixtureRoot: string) =>
         encoding: 'utf8',
     });
 
+const writeChangedText = (path: string, current: string, next: string) => {
+    expect(next).not.toBe(current);
+    writeFileSync(path, next);
+};
+
+const replaceFixtureText = (path: string, search: string | RegExp, replacement: string) => {
+    const current = readFileSync(path, 'utf8');
+    const next = current.replace(search, replacement);
+    writeChangedText(path, current, next);
+};
+
 describe('DSPACE release coordinates', () => {
     const chartContent = readFileSync(chartPath, 'utf8');
     const valuesContent = readFileSync(valuesPath, 'utf8');
@@ -76,7 +87,11 @@ describe('DSPACE release coordinates', () => {
     it('rejects representative coordinate mismatches without scanning historical docs', () => {
         const fixtureRoot = copyCoordinateFixture();
         try {
-            writeFileSync(join(fixtureRoot, 'docs', 'apps', 'dspace.version'), '3.0.1\n');
+            writeChangedText(
+                join(fixtureRoot, 'docs', 'apps', 'dspace.version'),
+                readFileSync(join(fixtureRoot, 'docs', 'apps', 'dspace.version'), 'utf8'),
+                '3.0.1\n'
+            );
             const result = runGuard(fixtureRoot);
             expect(result.status).not.toBe(0);
             expect(result.stderr).toContain("docs/apps/dspace.version mismatch: found '3.0.1'");
@@ -89,12 +104,13 @@ describe('DSPACE release coordinates', () => {
     it('reports labeled failures when JSON coordinates are missing', () => {
         const fixtureRoot = copyCoordinateFixture();
         try {
-            const packageLock = JSON.parse(readFileSync(join(fixtureRoot, 'package-lock.json'), 'utf8'));
+            const packageLockFile = join(fixtureRoot, 'package-lock.json');
+            const current = readFileSync(packageLockFile, 'utf8');
+            const packageLock = JSON.parse(current);
+            expect(packageLock.version).toBe('3.1.0');
+            expect(packageLock.packages[''].version).toBe('3.1.0');
             delete packageLock.packages[''].version;
-            writeFileSync(
-                join(fixtureRoot, 'package-lock.json'),
-                `${JSON.stringify(packageLock, null, 2)}\n`
-            );
+            writeChangedText(packageLockFile, current, `${JSON.stringify(packageLock, null, 2)}\n`);
 
             const result = runGuard(fixtureRoot);
             expect(result.status).not.toBe(0);
@@ -110,12 +126,84 @@ describe('DSPACE release coordinates', () => {
     it('reports labeled failures when docs/apps/dspace.version has no strict semver line', () => {
         const fixtureRoot = copyCoordinateFixture();
         try {
-            writeFileSync(join(fixtureRoot, 'docs', 'apps', 'dspace.version'), '3.1.0   \n');
+            writeChangedText(
+                join(fixtureRoot, 'docs', 'apps', 'dspace.version'),
+                readFileSync(join(fixtureRoot, 'docs', 'apps', 'dspace.version'), 'utf8'),
+                '3.1.0   \n'
+            );
 
             const result = runGuard(fixtureRoot);
             expect(result.status).not.toBe(0);
             expect(result.stderr).toContain("Missing docs/apps/dspace.version; expected '3.1.0'");
             expect(result.stderr).toContain('DSPACE release coordinates are not aligned.');
+        } finally {
+            rmSync(fixtureRoot, { recursive: true, force: true });
+        }
+    });
+
+
+    it('reports labeled failures when the package-lock top-level version is missing', () => {
+        const fixtureRoot = copyCoordinateFixture();
+        try {
+            const packageLockFile = join(fixtureRoot, 'package-lock.json');
+            const current = readFileSync(packageLockFile, 'utf8');
+            const packageLock = JSON.parse(current);
+            expect(packageLock.version).toBe('3.1.0');
+            delete packageLock.version;
+            writeChangedText(packageLockFile, current, `${JSON.stringify(packageLock, null, 2)}\n`);
+
+            const result = runGuard(fixtureRoot);
+            expect(result.status).not.toBe(0);
+            expect(result.stderr).toContain("Missing package-lock top-level version; expected '3.1.0'");
+        } finally {
+            rmSync(fixtureRoot, { recursive: true, force: true });
+        }
+    });
+
+    it('reports malformed JSON coordinate files separately from missing values', () => {
+        const fixtureRoot = copyCoordinateFixture();
+        try {
+            const packageFile = join(fixtureRoot, 'package.json');
+            writeChangedText(packageFile, readFileSync(packageFile, 'utf8'), '{not json}\n');
+
+            const result = runGuard(fixtureRoot);
+            expect(result.status).not.toBe(0);
+            expect(result.stderr).toContain('Unable to read or parse JSON coordinate file');
+            expect(result.stderr).toContain('package.json');
+        } finally {
+            rmSync(fixtureRoot, { recursive: true, force: true });
+        }
+    });
+
+    it('rejects a chart appVersion that includes a v prefix', () => {
+        const fixtureRoot = copyCoordinateFixture();
+        try {
+            replaceFixtureText(
+                join(fixtureRoot, 'charts', 'dspace', 'Chart.yaml'),
+                /^appVersion:\s*"?3\.1\.0"?$/m,
+                'appVersion: "v3.1.0"'
+            );
+
+            const result = runGuard(fixtureRoot);
+            expect(result.status).not.toBe(0);
+            expect(result.stderr).toContain("chart appVersion mismatch: found 'v3.1.0'");
+        } finally {
+            rmSync(fixtureRoot, { recursive: true, force: true });
+        }
+    });
+
+    it('rejects an unprefixed chart default image tag', () => {
+        const fixtureRoot = copyCoordinateFixture();
+        try {
+            replaceFixtureText(
+                join(fixtureRoot, 'charts', 'dspace', 'values.yaml'),
+                /^(\s*tag:)\s*v3\.1\.0$/m,
+                '$1 3.1.0'
+            );
+
+            const result = runGuard(fixtureRoot);
+            expect(result.status).not.toBe(0);
+            expect(result.stderr).toContain("chart default image.tag mismatch: found '3.1.0'");
         } finally {
             rmSync(fixtureRoot, { recursive: true, force: true });
         }

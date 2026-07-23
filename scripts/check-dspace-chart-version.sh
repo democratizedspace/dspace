@@ -22,10 +22,15 @@ json_get() {
   node -e '
 const fs = require("node:fs");
 const [file, expr] = process.argv.slice(1);
-const data = JSON.parse(fs.readFileSync(file, "utf8"));
+let data;
+try {
+  data = JSON.parse(fs.readFileSync(file, "utf8"));
+} catch (error) {
+  console.error(`Unable to read or parse JSON coordinate file ${file}: ${error.message}`);
+  process.exit(2);
+}
 const value = expr.split(".").reduce((current, key) => current?.[key], data);
-if (typeof value !== "string" || value.length === 0) process.exit(1);
-console.log(value);
+console.log(typeof value === "string" && value.length > 0 ? value : "");
 ' "$file" "$expr"
 }
 
@@ -62,10 +67,10 @@ for file in "$root_package_file" "$frontend_package_file" "$package_lock_file" "
   require_file "$file"
 done
 
-root_package_version=$(json_get "$root_package_file" version || true)
-frontend_package_version=$(json_get "$frontend_package_file" version || true)
-package_lock_version=$(json_get "$package_lock_file" version || true)
-package_lock_root_version=$(json_get "$package_lock_file" 'packages..version' || true)
+root_package_version=$(json_get "$root_package_file" version)
+frontend_package_version=$(json_get "$frontend_package_file" version)
+package_lock_version=$(json_get "$package_lock_file" version)
+package_lock_root_version=$(json_get "$package_lock_file" 'packages..version')
 chart_version=$(yaml_scalar "$chart_file" version || true)
 chart_app_version=$(yaml_scalar "$chart_file" appVersion || true)
 image_tag=$(yaml_nested_scalar "$values_file" image tag || true)
@@ -78,6 +83,15 @@ expect_present() {
   local actual="$2"
   if [[ -z "$actual" ]]; then
     echo "Missing $label; expected a non-empty value" >&2
+    failures=$((failures + 1))
+  fi
+}
+
+expect_semver() {
+  local label="$1"
+  local actual="$2"
+  if [[ -n "$actual" && ! "$actual" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo "$label must be a semantic version like 3.1.0; found '$actual'" >&2
     failures=$((failures + 1))
   fi
 }
@@ -96,6 +110,7 @@ expect_equal() {
 }
 
 expect_present "root package version" "$root_package_version"
+expect_semver "root package version" "$root_package_version"
 expect_equal "frontend package version" "$frontend_package_version" "$root_package_version"
 expect_equal "package-lock top-level version" "$package_lock_version" "$root_package_version"
 expect_equal 'package-lock packages[""].version' "$package_lock_root_version" "$root_package_version"

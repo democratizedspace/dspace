@@ -146,9 +146,9 @@ For the standard Sugarkube staging and production flow, use the
 Helm commands below remain useful for local clusters, development environments, and manual chart
 inspection.
 
-The chart is published to the GitHub Container Registry on `v3` and `main` pushes. Install it
-directly from the OCI registry using the prepared release-candidate version (currently `3.1.0`; see
-`docs/apps/dspace.version` or the registry for available versions):
+The chart is published to the GitHub Container Registry on `v3` and `main` pushes. After that
+existing publish workflow has completed successfully and the registry shows `3.1.0`, use this
+installation procedure for the prepared release-candidate version:
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
