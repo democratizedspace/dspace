@@ -14,7 +14,7 @@ setup in their existing runbooks.
 - **Immutable image tags:** `<branch>-<shortsha>`, for example `main-REPLACE_SHORTSHA` or
   `v3-REPLACE_SHORTSHA`
 - **Mutable branch convenience tags:** `<branch>-latest`, for example `main-latest` or `v3-latest`
-- **Version image tag:** `v<package.version>`, for example `v3.0.1`
+- **Version image tag:** `v<package.version>`, for example `v3.1.0`
 
 Use immutable branch-SHA tags for staging, production approvals, and rollback records whenever
 possible. Mutable branch tags are convenient for inspection but should not be the audit record for a
@@ -70,11 +70,11 @@ From the Sugarkube checkout, promote the approved version or immutable branch-SH
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-promote-prod tag=3.0.1
+just dspace-oci-promote-prod tag=3.1.0
 ```
 
-The bare `3.0.1` value is the existing Sugarkube compatibility/version promote form. The image
-workflow publishes the version image tag as `v3.0.1`; branch-SHA tags such as
+The bare `3.1.0` value is the existing Sugarkube compatibility/version promote form. The image
+workflow publishes the version image tag as `v3.1.0`; branch-SHA tags such as
 `main-REPLACE_SHORTSHA` or `v3-REPLACE_SHORTSHA` remain the preferred immutable audit path for exact
 image promotion and rollback.
 
