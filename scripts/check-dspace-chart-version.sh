@@ -62,17 +62,26 @@ for file in "$root_package_file" "$frontend_package_file" "$package_lock_file" "
   require_file "$file"
 done
 
-root_package_version=$(json_get "$root_package_file" version)
-frontend_package_version=$(json_get "$frontend_package_file" version)
-package_lock_version=$(json_get "$package_lock_file" version)
-package_lock_root_version=$(json_get "$package_lock_file" 'packages..version')
-chart_version=$(yaml_scalar "$chart_file" version)
-chart_app_version=$(yaml_scalar "$chart_file" appVersion)
-image_tag=$(yaml_nested_scalar "$values_file" image tag)
-version_line=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' "$version_file" | head -n1)
+root_package_version=$(json_get "$root_package_file" version || true)
+frontend_package_version=$(json_get "$frontend_package_file" version || true)
+package_lock_version=$(json_get "$package_lock_file" version || true)
+package_lock_root_version=$(json_get "$package_lock_file" 'packages..version' || true)
+chart_version=$(yaml_scalar "$chart_file" version || true)
+chart_app_version=$(yaml_scalar "$chart_file" appVersion || true)
+image_tag=$(yaml_nested_scalar "$values_file" image tag || true)
+version_line=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' "$version_file" | head -n1 || true)
 expected_image_tag="v${root_package_version}"
 
 failures=0
+expect_present() {
+  local label="$1"
+  local actual="$2"
+  if [[ -z "$actual" ]]; then
+    echo "Missing $label; expected a non-empty value" >&2
+    failures=$((failures + 1))
+  fi
+}
+
 expect_equal() {
   local label="$1"
   local actual="$2"
@@ -86,6 +95,7 @@ expect_equal() {
   fi
 }
 
+expect_present "root package version" "$root_package_version"
 expect_equal "frontend package version" "$frontend_package_version" "$root_package_version"
 expect_equal "package-lock top-level version" "$package_lock_version" "$root_package_version"
 expect_equal 'package-lock packages[""].version' "$package_lock_root_version" "$root_package_version"

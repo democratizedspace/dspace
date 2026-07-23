@@ -85,6 +85,42 @@ describe('DSPACE release coordinates', () => {
         }
     });
 
+
+    it('reports labeled failures when JSON coordinates are missing', () => {
+        const fixtureRoot = copyCoordinateFixture();
+        try {
+            const packageLock = JSON.parse(readFileSync(join(fixtureRoot, 'package-lock.json'), 'utf8'));
+            delete packageLock.packages[''].version;
+            writeFileSync(
+                join(fixtureRoot, 'package-lock.json'),
+                `${JSON.stringify(packageLock, null, 2)}\n`
+            );
+
+            const result = runGuard(fixtureRoot);
+            expect(result.status).not.toBe(0);
+            expect(result.stderr).toContain(
+                `Missing package-lock packages[""].version; expected '3.1.0'`
+            );
+            expect(result.stderr).toContain('DSPACE release coordinates are not aligned.');
+        } finally {
+            rmSync(fixtureRoot, { recursive: true, force: true });
+        }
+    });
+
+    it('reports labeled failures when docs/apps/dspace.version has no strict semver line', () => {
+        const fixtureRoot = copyCoordinateFixture();
+        try {
+            writeFileSync(join(fixtureRoot, 'docs', 'apps', 'dspace.version'), '3.1.0   \n');
+
+            const result = runGuard(fixtureRoot);
+            expect(result.status).not.toBe(0);
+            expect(result.stderr).toContain("Missing docs/apps/dspace.version; expected '3.1.0'");
+            expect(result.stderr).toContain('DSPACE release coordinates are not aligned.');
+        } finally {
+            rmSync(fixtureRoot, { recursive: true, force: true });
+        }
+    });
+
     it('continues to ignore historical v3.0.1 documentation outside authoritative coordinates', () => {
         const stdout = execFileSync('bash', ['scripts/check-dspace-chart-version.sh'], {
             cwd: repoRoot,
