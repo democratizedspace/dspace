@@ -1,0 +1,31 @@
+{
+    "id": "2026-07-23-dspace-production-version-drift",
+    "date": "2026-07-23",
+    "component": "DSPACE production release artifact integrity, container image publishing, Helm chart publishing, and deployment verification",
+    "impact": "Production served later 3.1-era frontend/changelog content while the footer, /healthz, and /livez still identified the deployment as prod v3.0.1. The service remained available, and no data loss, saved-game corruption, credential exposure, privacy incident, or security compromise was detected, but users and operators could be misled about which release was running.",
+    "rootCause": ".github/workflows/ci-image.yml published both immutable branch-SHA image tags and the mutable semantic v<package-version> tag from ordinary eligible branch builds. Because the package version remained 3.0.1 while later main-branch changes accumulated, later source revisions could be published under v3.0.1; production referenced that semantic tag with image.pullPolicy=Always, so replacement pods could pull different source content while health and footer surfaces still reported v3.0.1.",
+    "resolution": "The initial Helm rollback retained the mutable v3.0.1 image tag and did not restore the intended artifact. The operator corrected the live Deployment to the immutable image ghcr.io/democratizedspace/dspace:main-1a31a56, verified both replicas resolved to sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401 with zero restarts, and Sugarkube PR #2320 pinned production to main-1a31a56. Helm revision 8 still stores image.tag=v3.0.1, so Helm reconciliation remains open follow-up work but current user impact is resolved.",
+    "verification": [
+        "Public and direct Kubernetes Service root responses matched after recovery with SHA-256 b8fc71b476d5d3c7000d3a2558f2824c553a886f81775f3dcd2fce3dea13c884 and markers Latest update: April 1, 2026, prod v3.0.1, and DSPACE v3.0.1.",
+        "Public and direct-origin changelog responses matched with SHA-256 01bd0fbe848825dd8f33ab50561df1863c7c4efcece5314af24d25f42ce01dde.",
+        "Public and direct-origin docs changelog responses matched with SHA-256 8303f63583db3b48326050d2bf1643b48753a3c70265164bb1e44bcc0bb017e3.",
+        "Public and direct-origin /config.json responses matched with SHA-256 a42d7e88885d9a6529270d15584f2c9715f9bc53def928c4bae41a03747d3ee2.",
+        "Cloudflare response evidence after recovery showed cache-control: no-store and cf-cache-status: DYNAMIC; the incident is not attributed to Cloudflare caching.",
+        "The published OCI chart dspace:3.0.1 mismatch and the production helm upgrade --reuse-values nil-pointer failure are documented as recovery complications. Later standalone helm template commands using exported current user values and exported computed values succeeded, so the report does not claim every chart 3.0.1 render fails."
+    ],
+    "references": [
+        ".github/workflows/ci-image.yml",
+        ".github/workflows/ci-helm.yml",
+        "charts/dspace/Chart.yaml",
+        "charts/dspace/values.yaml",
+        "charts/dspace/templates/servicemonitor.yaml",
+        "package.json",
+        "https://github.com/democratizedspace/dspace/releases/tag/v3.0.1",
+        "https://github.com/democratizedspace/dspace/commit/1a31a569aff2dbeb238e8c2688b9e85140d2077d",
+        "https://github.com/democratizedspace/dspace/pull/4718",
+        "https://github.com/democratizedspace/dspace/pull/4719",
+        "https://github.com/futuroptimist/sugarkube/pull/2320",
+        "outages/2026-07-23-dspace-production-version-drift.md"
+    ],
+    "longForm": "outages/2026-07-23-dspace-production-version-drift.md"
+}
