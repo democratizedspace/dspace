@@ -494,15 +494,23 @@ jobs:
 
       - name: Resolve checked-out revision
         id: revision
+        # The release tag is attacker-influenceable (anyone who can publish a release
+        # controls it) and git ref names may contain shell metacharacters such as `"`,
+        # `` ` ``, `$()`, and `;`. Pass it through env and reference it as "$RELEASE_TAG"
+        # data — never interpolate ${{ github.event.release.tag_name }} directly into a
+        # run: script, since GitHub substitutes it into the script's source text before
+        # the shell parses it, which would let a crafted tag execute arbitrary commands.
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           full_sha="$(git rev-parse HEAD)"
-          tag_sha="$(git rev-parse "${{ github.event.release.tag_name }}")"
+          tag_sha="$(git rev-parse "$RELEASE_TAG")"
           if [ -z "$full_sha" ]; then
             echo "git rev-parse HEAD returned nothing; refusing to publish." >&2
             exit 1
           fi
           if [ "$full_sha" != "$tag_sha" ]; then
-            echo "Checked-out HEAD ($full_sha) does not match tag ${{ github.event.release.tag_name }} ($tag_sha); refusing to publish." >&2
+            echo "Checked-out HEAD ($full_sha) does not match tag $RELEASE_TAG ($tag_sha); refusing to publish." >&2
             exit 1
           fi
           short_sha="${full_sha:0:7}"
@@ -542,6 +550,10 @@ jobs:
 
       - name: Validate release version coordinates
         id: version
+        # See the "Resolve checked-out revision" step above: pass the attacker-influenceable
+        # release tag through env, never interpolate it directly into this run: script.
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           root_version="$(node -p "require('./package.json').version")"
           frontend_version="$(node -p "require('./frontend/package.json').version")"
@@ -552,8 +564,8 @@ jobs:
             exit 1
           fi
 
-          if [ "${{ github.event.release.tag_name }}" != "$expected_tag" ]; then
-            echo "Release tag ${{ github.event.release.tag_name }} does not match expected semantic tag $expected_tag; refusing to publish." >&2
+          if [ "$RELEASE_TAG" != "$expected_tag" ]; then
+            echo "Release tag $RELEASE_TAG does not match expected semantic tag $expected_tag; refusing to publish." >&2
             exit 1
           fi
 

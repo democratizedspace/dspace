@@ -132,6 +132,26 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
     expect(serialized).not.toContain('${{ github.sha }}');
   });
 
+  it('never interpolates the attacker-influenceable release tag directly into a shell script', () => {
+    // Git tag names can contain shell metacharacters ("`, $(), ;). GitHub substitutes
+    // ${{ }} expressions into a run: script's source text before the shell parses it, so
+    // interpolating the raw tag there would let a crafted release tag execute commands with
+    // this job's packages:write/actions:write token. The tag may only reach a `run:` step by
+    // way of an `env:` var (assigned as data, not concatenated into the script) — never as a
+    // literal ${{ github.event.release.tag_name }} expression inside `run:` text. Using it as
+    // a structured action input (checkout's `ref:`, `concurrency.group`) is fine, since those
+    // aren't shell-interpolation contexts.
+    for (const step of findSteps(job)) {
+      if (typeof step.run !== 'string') {
+        continue;
+      }
+      expect(step.run).not.toContain('${{ github.event.release.tag_name }}');
+      if (step.run.includes('RELEASE_TAG')) {
+        expect(step.env?.RELEASE_TAG).toBe('${{ github.event.release.tag_name }}');
+      }
+    }
+  });
+
   it('validates the release tag against v<root package version> before any push', () => {
     const versionStep = findSteps(job).find((step) => step.id === 'version');
     expect(versionStep.run).toMatch(/root_version/);
