@@ -233,6 +233,35 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
     expect(serialized).not.toMatch(/outcome == 'failure'/);
   });
 
+  it('completes local image verification before the sole semantic publication', () => {
+    const steps = findSteps(job);
+    const pushIndex = steps.findIndex(
+      (step) => step.uses?.startsWith('docker/build-push-action') && step.with?.push === true
+    );
+    const verificationBuildIndex = steps.findIndex(
+      (step) => step.name === 'Build image for SHA verification'
+    );
+    const shaAssertionIndex = steps.findIndex(
+      (step) => step.name === 'Assert build SHA is baked into frontend bundle'
+    );
+    const chatStampIndex = steps.findIndex(
+      (step) => step.name === 'Verify chat build stamp inside image'
+    );
+
+    expect(verificationBuildIndex).toBeGreaterThanOrEqual(0);
+    expect(shaAssertionIndex).toBeGreaterThan(verificationBuildIndex);
+    expect(chatStampIndex).toBeGreaterThan(shaAssertionIndex);
+    expect(pushIndex).toBeGreaterThan(chatStampIndex);
+
+    for (const index of [verificationBuildIndex, shaAssertionIndex, chatStampIndex]) {
+      expect(steps[index].if).toBeUndefined();
+      expect(steps[index]['continue-on-error']).toBeUndefined();
+    }
+
+    expect(steps[verificationBuildIndex].with['build-args']).toBe(steps[pushIndex].with['build-args']);
+    expect(steps[verificationBuildIndex].with.labels).toBe(steps[pushIndex].with.labels);
+  });
+
   it('lets publication failure terminate the job without conditional recovery', () => {
     const pushStep = findStepsUsing(job, 'docker/build-push-action').find(
       (step) => step.with?.push === true

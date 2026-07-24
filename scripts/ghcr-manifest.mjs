@@ -220,12 +220,27 @@ export async function describeManifest({
     }
 
     const findDigest = (architecture) =>
-        manifest.manifests.find((entry) => entry.architecture === architecture)?.digest || '';
+        manifest.manifests.find(
+            (entry) =>
+                entry.os === 'linux' &&
+                entry.architecture === architecture &&
+                typeof entry.digest === 'string' &&
+                entry.digest.trim().length > 0
+        )?.digest;
+
+    const amd64Digest = findDigest('amd64');
+    const arm64Digest = findDigest('arm64');
+    if (!amd64Digest || !arm64Digest) {
+        throw new GhcrGuardError(
+            `GHCR tag ${owner}/${repo}:${tag} does not contain non-empty digests for both required platforms linux/amd64 and linux/arm64`,
+            { code: 'missing-platform' }
+        );
+    }
 
     return {
         indexDigest: manifest.digest,
-        amd64Digest: findDigest('amd64'),
-        arm64Digest: findDigest('arm64'),
+        amd64Digest,
+        arm64Digest,
     };
 }
 

@@ -647,6 +647,45 @@ jobs:
             --repo dspace \
             --tag "${{ steps.branch.outputs.branch }}-${{ steps.revision.outputs.short_sha }}"
 
+      - name: Build image for SHA verification
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          platforms: linux/amd64
+          provenance: false
+          load: true
+          tags: dspace-verify:latest
+          build-args: |
+            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
+            GIT_SHA=${{ steps.revision.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.revision.outputs.full_sha }}
+            ENFORCE_VITE_GIT_SHA=1
+          labels: |
+            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
+            org.opencontainers.image.revision=${{ steps.revision.outputs.full_sha }}
+            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
+          cache-from: type=gha,scope=ci-image-semantic-release
+
+      - name: Assert build SHA is baked into frontend bundle
+        run: |
+          docker run --rm \
+            -e EXPECTED_SHA="${{ steps.revision.outputs.full_sha }}" \
+            -v "$PWD/scripts:/scripts:ro" \
+            dspace-verify:latest \
+            node /scripts/verify-build-sha.mjs /app/dist
+
+      - name: Verify chat build stamp inside image
+        run: |
+          docker run --rm \
+            -e VERIFY_REPO_ROOT=/app \
+            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
+            -v "$PWD/scripts:/scripts:ro" \
+            -w /app \
+            dspace-verify:latest \
+            node /scripts/verify-chat-build-stamp.mjs
+
       - name: Build and push semantic release image
         id: build_push
         uses: docker/build-push-action@v6
@@ -668,44 +707,6 @@ jobs:
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
           cache-from: type=gha,scope=ci-image-semantic-release
           cache-to: type=gha,mode=max,ignore-error=true,scope=ci-image-semantic-release
-
-      - name: Build image for SHA verification
-        if: steps.build_push.outcome == 'success'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          platforms: linux/amd64
-          provenance: false
-          load: true
-          tags: dspace-verify:latest
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-          cache-from: type=gha,scope=ci-image-semantic-release
-
-      - name: Assert build SHA is baked into frontend bundle
-        if: steps.build_push.outcome == 'success'
-        run: |
-          docker run --rm \
-            -e EXPECTED_SHA="${{ steps.revision.outputs.full_sha }}" \
-            -v "$PWD/scripts:/scripts:ro" \
-            dspace-verify:latest \
-            node /scripts/verify-build-sha.mjs /app/dist
-
-      - name: Verify chat build stamp inside image
-        if: steps.build_push.outcome == 'success'
-        run: |
-          docker run --rm \
-            -e VERIFY_REPO_ROOT=/app \
-            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
-            -v "$PWD/scripts:/scripts:ro" \
-            -w /app \
-            dspace-verify:latest \
-            node /scripts/verify-chat-build-stamp.mjs
 
       # Records index + per-platform digests as evidence. 'present' is the expected outcome
       # of this second registry call (the tag was just pushed above); scripts/ghcr-manifest.mjs

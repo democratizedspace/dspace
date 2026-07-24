@@ -220,6 +220,17 @@ describe('assertTagAbsent', () => {
 });
 
 describe('describeManifest', () => {
+  function describeWith(manifests: unknown) {
+    return describeManifest({
+      owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u',
+      password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+      fetchImpl: fetchFor({
+        tokenResponse: okToken,
+        manifestResponse: jsonResponse(200, { manifests }, { 'docker-content-digest': 'sha256:indexdigest' }),
+      }),
+    });
+  }
+
   it('returns index/amd64/arm64 digests for a published multi-arch tag', async () => {
     const body = {
       manifests: [
@@ -253,6 +264,23 @@ describe('describeManifest', () => {
     await expect(
       describeManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'missing-after-publish' });
+  });
+
+  it.each([
+    ['linux/amd64 is missing', [{ platform: { architecture: 'arm64', os: 'linux' }, digest: 'sha256:arm64digest' }]],
+    ['linux/arm64 is missing', [{ platform: { architecture: 'amd64', os: 'linux' }, digest: 'sha256:amd64digest' }]],
+    ['a non-Linux entry uses a required architecture', [
+      { platform: { architecture: 'amd64', os: 'windows' }, digest: 'sha256:wrongos' },
+      { platform: { architecture: 'arm64', os: 'linux' }, digest: 'sha256:arm64digest' },
+    ]],
+    ['the response is a single-image manifest', undefined],
+    ['the manifest list is empty', []],
+    ['a required platform has an empty digest', [
+      { platform: { architecture: 'amd64', os: 'linux' }, digest: '' },
+      { platform: { architecture: 'arm64', os: 'linux' }, digest: 'sha256:arm64digest' },
+    ]],
+  ])('fails closed when %s', async (_description, manifests) => {
+    await expect(describeWith(manifests)).rejects.toMatchObject({ code: 'missing-platform' });
   });
 });
 
