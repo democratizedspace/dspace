@@ -568,6 +568,14 @@ jobs:
             exit 1
           fi
 
+          # DSPACE release coordinates use the same strict X.Y.Z convention enforced by
+          # scripts/check-dspace-chart-version.sh. Validate before exposing package data as
+          # a step output so shell metacharacters and multiline values fail closed.
+          if [[ ! "$root_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Package version is not a supported semantic version; refusing to publish." >&2
+            exit 1
+          fi
+
           if [ "$RELEASE_TAG" != "$expected_tag" ]; then
             echo "Release tag $RELEASE_TAG does not match expected semantic tag $expected_tag; refusing to publish." >&2
             exit 1
@@ -585,16 +593,23 @@ jobs:
 
       - name: Define image tags
         id: tags
+        env:
+          SOURCE_BRANCH: ${{ steps.branch.outputs.branch }}
+          SHORT_SHA: ${{ steps.revision.outputs.short_sha }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: |
-          branch_sha_tag="ghcr.io/democratizedspace/dspace:${{ steps.branch.outputs.branch }}-${{ steps.revision.outputs.short_sha }}"
-          semantic_tag="ghcr.io/democratizedspace/dspace:v${{ steps.version.outputs.version }}"
+          branch_sha_tag="ghcr.io/democratizedspace/dspace:${SOURCE_BRANCH}-${SHORT_SHA}"
+          semantic_tag="ghcr.io/democratizedspace/dspace:v${RELEASE_VERSION}"
           echo "branch_sha_tag=${branch_sha_tag}" >> "$GITHUB_OUTPUT"
           echo "semantic_tag=${semantic_tag}" >> "$GITHUB_OUTPUT"
 
       - name: Set image build version
         id: build_version
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          SHORT_SHA: ${{ steps.revision.outputs.short_sha }}
         run: |
-          build_version="v${{ steps.version.outputs.version }}+${{ steps.revision.outputs.short_sha }}"
+          build_version="v${RELEASE_VERSION}+${SHORT_SHA}"
           echo "value=${build_version}" >> "$GITHUB_OUTPUT"
 
       - name: Set image metadata
@@ -615,11 +630,12 @@ jobs:
         env:
           GHCR_GUARD_USERNAME: ${{ github.actor }}
           GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: |
           node scripts/ghcr-manifest.mjs check-absent \
             --owner democratizedspace \
             --repo dspace \
-            --tag "v${{ steps.version.outputs.version }}"
+            --tag "v${RELEASE_VERSION}"
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -718,24 +734,29 @@ jobs:
         env:
           GHCR_GUARD_USERNAME: ${{ github.actor }}
           GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: |
           node scripts/ghcr-manifest.mjs describe \
             --owner democratizedspace \
             --repo dspace \
-            --tag "v${{ steps.version.outputs.version }}"
+            --tag "v${RELEASE_VERSION}"
 
       - name: Summarize semantic release evidence
         if: steps.build_push.outcome == 'success'
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          BRANCH_SHA_TAG: ${{ steps.tags.outputs.branch_sha_tag }}
+          SEMANTIC_TAG: ${{ steps.tags.outputs.semantic_tag }}
         run: |
           {
             echo "## DSPACE semantic release image"
             echo
             echo "| Field | Value |"
             echo "| --- | --- |"
-            echo "| Semantic version | \`v${{ steps.version.outputs.version }}\` |"
+            echo "| Semantic version | \`v${RELEASE_VERSION}\` |"
             echo "| Full Git SHA | \`${{ steps.revision.outputs.full_sha }}\` |"
-            echo "| Immutable branch-SHA tag | \`${{ steps.tags.outputs.branch_sha_tag }}\` |"
-            echo "| Semantic tag | \`${{ steps.tags.outputs.semantic_tag }}\` |"
+            echo "| Immutable branch-SHA tag | \`${BRANCH_SHA_TAG}\` |"
+            echo "| Semantic tag | \`${SEMANTIC_TAG}\` |"
             echo "| Image index digest | \`${{ steps.evidence.outputs.index_digest }}\` |"
             echo "| linux/amd64 digest | \`${{ steps.evidence.outputs.amd64_digest }}\` |"
             echo "| linux/arm64 digest | \`${{ steps.evidence.outputs.arm64_digest }}\` |"

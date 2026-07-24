@@ -187,6 +187,73 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
     expect(versionIndex).toBeLessThan(pushIndex);
   });
 
+  it('validates package versions before emitting the version output', () => {
+    const versionStep = findSteps(job).find((step) => step.id === 'version');
+    const validation = '[[ ! "$root_version" =~ ^[0-9]+\\.[0-9]+\\.[0-9]+$ ]]';
+    expect(versionStep.run).toContain(validation);
+    expect(versionStep.run.indexOf(validation)).toBeLessThan(
+      versionStep.run.indexOf(
+        'echo "version=${root_version}" >> "$GITHUB_OUTPUT"'
+      )
+    );
+
+    const supportedVersion = /^[0-9]+\.[0-9]+\.[0-9]+$/;
+    expect(supportedVersion.test('3.1.0')).toBe(true);
+    for (const maliciousVersion of [
+      '3.1.$(touch /tmp/pwned)',
+      '3.1.`id`',
+      '3.1.0\nmalicious=value',
+    ]) {
+      expect(supportedVersion.test(maliciousVersion)).toBe(false);
+    }
+  });
+
+  it('passes version-derived shell values through env instead of run expressions', () => {
+    const rawVersionExpression = '${{ steps.version.outputs.version }}';
+    for (const step of findSteps(job)) {
+      if (typeof step.run === 'string') {
+        expect(step.run).not.toContain(rawVersionExpression);
+      }
+    }
+
+    const expectedEnvReferences = [
+      ['tags', 'RELEASE_VERSION', '${RELEASE_VERSION}'],
+      ['build_version', 'RELEASE_VERSION', '${RELEASE_VERSION}'],
+      [undefined, 'RELEASE_VERSION', '"v${RELEASE_VERSION}"'],
+    ];
+    for (const [id, envName, shellReference] of expectedEnvReferences) {
+      const matchingSteps = findSteps(job).filter(
+        (step) =>
+          (id === undefined || step.id === id) &&
+          step.env?.[envName] === rawVersionExpression &&
+          step.run?.includes(shellReference)
+      );
+      expect(matchingSteps.length).toBeGreaterThan(0);
+    }
+
+    const summaryStep = findSteps(job).find((step) =>
+      step.run?.includes('GITHUB_STEP_SUMMARY')
+    );
+    expect(summaryStep.env.RELEASE_VERSION).toBe(rawVersionExpression);
+    expect(summaryStep.env.BRANCH_SHA_TAG).toBe(
+      '${{ steps.tags.outputs.branch_sha_tag }}'
+    );
+    expect(summaryStep.env.SEMANTIC_TAG).toBe(
+      '${{ steps.tags.outputs.semantic_tag }}'
+    );
+    expect(summaryStep.run).toContain('${RELEASE_VERSION}');
+    expect(summaryStep.run).toContain('${BRANCH_SHA_TAG}');
+    expect(summaryStep.run).toContain('${SEMANTIC_TAG}');
+
+    const semanticRegistrySteps = findSteps(job).filter((step) =>
+      step.run?.includes('--tag "v${RELEASE_VERSION}"')
+    );
+    expect(semanticRegistrySteps).toHaveLength(2);
+    for (const step of semanticRegistrySteps) {
+      expect(step.env.RELEASE_VERSION).toBe(rawVersionExpression);
+    }
+  });
+
   it('runs the semantic absence guard before publication, and fails closed', () => {
     const guardIndex = stepIndex(job, (step) =>
       step.run?.includes('ghcr-manifest.mjs check-absent')
@@ -300,7 +367,10 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
     const summaryStep = findSteps(job).find((step) =>
       step.run?.includes('GITHUB_STEP_SUMMARY')
     );
-    expect(summaryStep.run).toContain('steps.tags.outputs.branch_sha_tag');
+    expect(summaryStep.env.BRANCH_SHA_TAG).toBe(
+      '${{ steps.tags.outputs.branch_sha_tag }}'
+    );
+    expect(summaryStep.run).toContain('${BRANCH_SHA_TAG}');
   });
 
   it('records the required evidence in the workflow summary without leaking credentials', () => {
