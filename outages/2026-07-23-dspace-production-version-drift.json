@@ -1,0 +1,29 @@
+{
+  "id": "2026-07-23-dspace-production-version-drift",
+  "date": "2026-07-23",
+  "component": "production release artifacts and deployment image/chart coordinates",
+  "impact": "Production remained available, but democratized.space served later 3.1-era frontend/changelog content while the footer, /healthz, and /livez still identified the runtime as prod v3.0.1. No data loss, saved-game corruption, credential exposure, privacy incident, or security compromise was detected, but users and operators could be misled about which release artifact was actually deployed.",
+  "rootCause": "The primary root cause was release-artifact mutability: .github/workflows/ci-image.yml published semantic v<package-version> image tags from ordinary branch builds in addition to immutable branch-SHA tags. Because the package version remained 3.0.1 while later main-branch changes accumulated, later source revisions could be published under v3.0.1. Production used image.tag=v3.0.1 with image.pullPolicy=Always, so pod replacement could pull changed source content without any declared version change, and health/version surfaces reported the package version rather than proving the approved Git revision.",
+  "resolution": "A Helm rollback completed but retained the mutable v3.0.1 image tag and did not restore the intended source artifact. The operator then performed an emergency image-only correction on the live Deployment to ghcr.io/democratizedspace/dspace:main-1a31a56, the immutable branch-SHA tag for the canonical v3.0.1 commit. Two replacement pods started by 2026-07-23 16:13:28 PDT / 23:13:28 UTC with resolved image digest sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401, ending user impact. Sugarkube PR #2320 later made the production image pin durable, while Helm stored values intentionally remained drifted pending controlled reconciliation.",
+  "verification": [
+    "Confirmed the live Deployment and Git production image pin agreed on main-1a31a56 after recovery.",
+    "Confirmed both recovered replicas used image digest sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401 and were ready with zero restarts.",
+    "Compared public and direct-origin root, changelog, docs-changelog, and /config.json responses after recovery; matching hashes showed the recovery was not masked by Cloudflare.",
+    "Recorded that /healthz and /livez remained healthy and reported v3.0.1/prod, while their changing timestamp and uptime fields made public/origin response hashes unsuitable for static comparison."
+  ],
+  "references": [
+    ".github/workflows/ci-image.yml",
+    ".github/workflows/ci-helm.yml",
+    "charts/dspace/Chart.yaml",
+    "charts/dspace/values.yaml",
+    "charts/dspace/templates/servicemonitor.yaml",
+    "package.json",
+    "https://github.com/democratizedspace/dspace/releases/tag/v3.0.1",
+    "https://github.com/democratizedspace/dspace/commit/1a31a569aff2dbeb238e8c2688b9e85140d2077d",
+    "https://github.com/democratizedspace/dspace/pull/4718",
+    "https://github.com/democratizedspace/dspace/pull/4719",
+    "https://github.com/futuroptimist/sugarkube/pull/2320",
+    "outages/2026-07-23-dspace-production-version-drift.md"
+  ],
+  "longForm": "outages/2026-07-23-dspace-production-version-drift.md"
+}
