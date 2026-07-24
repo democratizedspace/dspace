@@ -1,0 +1,41 @@
+{
+    "id": "2026-07-23-dspace-production-version-drift",
+    "date": "2026-07-23",
+    "severity": "high",
+    "status": "Resolved",
+    "component": "production release artifact integrity for democratized.space",
+    "impact": "Production democratized.space served later 3.1-era frontend and changelog content while the footer, /healthz, and /livez still reported prod v3.0.1. The unintended 3.1-era frontend also made the non-working token.place prototype the default /chat path for fresh/default profiles; OpenAI required a manual /settings opt-in and the user's own valid API key, so it was not an automatic fallback. Exact user-impact start, affected sessions, failed chat attempts, precise token.place failure mode, and impact to already-persisted OpenAI users were not captured. Service availability remained healthy, and no evidence showed data loss, save corruption, credential exposure, privacy/security compromise, staging impact, token.place users outside DSPACE, or impact to other Sugarkube applications.",
+    "rootCause": "Release-artifact mutability was the primary control failure: ordinary eligible branch image builds could publish the semantic v<package-version> tag as well as immutable branch-SHA tags. Because the package version remained 3.0.1 while later main-branch changes accumulated, later source revisions could be published under v3.0.1. Production used v3.0.1 with image.pullPolicy=Always, so the strongest evidence-supported causal mechanism is that a later source revision was resolved under the moved v3.0.1 tag when the observed production pods were created or restarted. The exact workflow run, pre-recovery digest, and semantic tag prior/final digests were not captured. A separate published OCI chart dspace:3.0.1 mismatch was discovered during recovery and complicated Helm reconciliation, but it is not treated as the primary source of the user-visible frontend drift.",
+    "resolution": "The operator replaced the live Deployment image with ghcr.io/democratizedspace/dspace:main-1a31a56, the immutable branch-SHA image for canonical v3.0.1 commit 1a31a569aff2dbeb238e8c2688b9e85140d2077d. The second replacement container started at 2026-07-23T23:13:28Z; the successful rollout and subsequent verification established both replacement pods as ready with zero restarts on sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401, and user impact was declared over after that rollout. Sugarkube PR #2320 then made the production image pin durable as main-1a31a56. Helm revision 8 still stores image.tag=v3.0.1, so Helm reconciliation remains open follow-up work rather than current user impact.",
+    "verification": [
+        "Manual production inspection detected later 3.1-era frontend/changelog content while footer, /healthz, and /livez reported v3.0.1 prod.",
+        "Recovered pods used ghcr.io/democratizedspace/dspace:main-1a31a56 with image ID ghcr.io/democratizedspace/dspace@sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401.",
+        "Recovery completion was established by successful rollout and subsequent verification; the exact readiness transition and exact last affected request were not captured.",
+        "Post-recovery public and direct-origin root hashes matched: b8fc71b476d5d3c7000d3a2558f2824c553a886f81775f3dcd2fce3dea13c884.",
+        "Post-recovery public and direct-origin changelog hashes matched: 01bd0fbe848825dd8f33ab50561df1863c7c4efcece5314af24d25f42ce01dde.",
+        "Post-recovery public and direct-origin docs changelog hashes matched: 8303f63583db3b48326050d2bf1643b48753a3c70265164bb1e44bcc0bb017e3.",
+        "Post-recovery public and direct-origin /config.json hashes matched: a42d7e88885d9a6529270d15584f2c9715f9bc53def928c4bae41a03747d3ee2."
+    ],
+    "references": [
+        ".github/workflows/ci-image.yml",
+        ".github/workflows/ci-helm.yml",
+        "charts/dspace/Chart.yaml",
+        "charts/dspace/values.yaml",
+        "charts/dspace/templates/servicemonitor.yaml",
+        "package.json",
+        "frontend/e2e/chat-provider-routing.spec.ts",
+        "docs/design/token-place-chat-v3.1.md",
+        "https://github.com/democratizedspace/dspace/releases/tag/v3.0.1",
+        "https://github.com/democratizedspace/dspace/commit/1a31a569aff2dbeb238e8c2688b9e85140d2077d",
+        "https://github.com/democratizedspace/dspace/pull/4718",
+        "https://github.com/democratizedspace/dspace/pull/4719",
+        "https://github.com/futuroptimist/sugarkube/pull/2320",
+        "https://github.com/democratizedspace/dspace/commit/c970091e294d88170677ad752b2bdac582e1e87e",
+        "https://github.com/democratizedspace/dspace/blob/1a31a569aff2dbeb238e8c2688b9e85140d2077d/.github/workflows/ci-image.yml",
+        "https://github.com/democratizedspace/dspace/tree/1a31a569aff2dbeb238e8c2688b9e85140d2077d/charts/dspace",
+        "https://github.com/futuroptimist/sugarkube/blob/301cb8a4c5a75a75bb73dde7a198731c762b1d5c/docs/apps/dspace.prod.tag",
+        "https://github.com/futuroptimist/sugarkube/blob/61303e079e425808eb25f30d3be07e93ccdf6a37/docs/apps/dspace.prod.tag",
+        "outages/2026-07-23-dspace-production-version-drift.md"
+    ],
+    "longForm": "outages/2026-07-23-dspace-production-version-drift.md"
+}
