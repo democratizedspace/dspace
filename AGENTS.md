@@ -311,6 +311,33 @@ The root `Dockerfile` builds the production image:
 **Important**: The Docker build uses the current PR code, so any SSR safety fixes
 must be in the source before the image will work correctly.
 
+### Semantic Image Tag Publication (release-only)
+
+`ci-image.yml` has two separate GHCR publish paths, per
+[DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727) and the
+[2026-07-23 production version-drift postmortem](outages/2026-07-23-dspace-production-version-drift.md):
+
+- **Ordinary branch pushes** to `main`/`v3` (the `image` job) publish only
+  `<branch>-<short-sha>` (immutable) and `<branch>-latest` (explicitly mutable
+  convenience tag). This job must never compute or publish a `vX.Y.Z` tag — that
+  is exactly the bug that let a stale `package.json` version cause `v3.0.1` to
+  keep moving in production.
+- **A published GitHub release** (`on.release.types: [published]`, the
+  `semantic-release` job) is the single canonical event allowed to publish
+  `vX.Y.Z`. Do not also add a `push: tags: v*` trigger for this — creating a
+  release normally creates its tag too, so both firing would race and turn
+  every ordinary release into an expected "tag already exists" failure.
+
+The `semantic-release` job checks out `github.event.release.tag_name` explicitly
+and uses `git rev-parse HEAD` (not `github.sha`, which is not guaranteed to be
+the tagged commit on a `release` event) as the source revision everywhere,
+validates the tag against `v<root package.json version>` (and that the root and
+frontend versions agree), and queries GHCR for the tag before publishing —
+failing closed on any non-404 outcome, including auth, network, timeout, and
+malformed-response errors — inside a job-level `concurrency` group keyed on the
+tag so two publish attempts can't race. See `scripts/ghcr-manifest.mjs` and
+`tests/ciImageWorkflow.test.ts` / `tests/ghcrManifestGuard.test.ts`.
+
 ### Smoke Test
 
 The `ci-image.yml` workflow includes a smoke test that:
