@@ -504,7 +504,11 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           full_sha="$(git rev-parse HEAD)"
-          tag_sha="$(git rev-parse "$RELEASE_TAG")"
+          # Peel to the commit form: for annotated/signed tags, "git rev-parse <tag>" alone
+          # resolves the tag *object*'s own SHA, not the commit it points at, which would
+          # reject every legitimate release cut from such a tag even though checkout
+          # correctly left HEAD on the tagged commit.
+          tag_sha="$(git rev-parse "${RELEASE_TAG}^{commit}")"
           if [ -z "$full_sha" ]; then
             echo "git rev-parse HEAD returned nothing; refusing to publish." >&2
             exit 1

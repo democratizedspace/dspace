@@ -137,6 +137,16 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
     expect(serialized).not.toContain('${{ github.sha }}');
   });
 
+  it('peels the release tag to its commit before comparing to HEAD', () => {
+    // "git rev-parse <tag>" alone resolves an annotated/signed tag's own object SHA, not
+    // the commit it points at, which would reject every legitimate release cut from such a
+    // tag even though checkout correctly left HEAD on the tagged commit. The "^{commit}"
+    // peeling suffix is required so both lightweight and annotated/signed tags compare
+    // correctly against HEAD.
+    const revisionStep = findSteps(job).find((step) => step.id === 'revision');
+    expect(revisionStep.run).toMatch(/\$\{RELEASE_TAG\}\^\{commit\}|\$RELEASE_TAG\^\{commit\}/);
+  });
+
   it('never interpolates the attacker-influenceable release tag directly into a shell script', () => {
     // Git tag names can contain shell metacharacters ("`, $(), ;). GitHub substitutes
     // ${{ }} expressions into a run: script's source text before the shell parses it, so
