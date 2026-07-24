@@ -1,0 +1,328 @@
+# Outage: DSPACE production release-artifact drift
+
+## Incident metadata
+
+- **Date**: 2026-07-23
+- **Severity**: high
+- **Status**: Resolved
+- **Component**: production release artifact integrity for `democratized.space`
+- **Incident ID**: `2026-07-23-dspace-production-version-drift`
+
+## Summary
+
+On July 23, 2026, manual operator inspection found that production `democratized.space` was
+serving later 3.1-era frontend and changelog content while runtime identity surfaces still reported
+DSPACE v3.0.1. The footer identified the deployment as `prod v3.0.1`, `/healthz` reported
+`version: "v3.0.1"` and `env: "prod"`, and `/livez` reported `version: "v3.0.1"` and
+`env: "prod"`.
+
+The service stayed available. No data loss, saved-game corruption, credential exposure, privacy
+incident, or security compromise was detected. The incident was resolved by replacing the live
+Deployment image with the immutable v3.0.1 source-coordinate image
+`ghcr.io/democratizedspace/dspace:main-1a31a56`, whose canonical commit is
+`1a31a569aff2dbeb238e8c2688b9e85140d2077d`.
+
+The primary root cause was release-artifact mutability: ordinary eligible branch image builds could
+publish both immutable branch-SHA tags and the semantic `v<package-version>` tag. Because the
+package version remained `3.0.1` while later main-branch changes accumulated, later source revisions
+could be published under `v3.0.1`. Production used `v3.0.1` with `image.pullPolicy=Always`, so a
+recreated or restarted pod could pull different source content without a declared production image
+tag change.
+
+A separate published Helm chart mismatch was discovered during recovery. The OCI chart identified as
+`dspace:3.0.1` did not match the chart source at the canonical `v3.0.1` Git tag and complicated an
+attempted controlled Helm reconciliation. This chart artifact problem is documented here as an
+artifact-integrity violation and recovery complication, not as the primary source of the
+user-visible frontend drift.
+
+## Impact
+
+- Production served later 3.1-era frontend and changelog content while visible runtime identity
+  surfaces still reported v3.0.1.
+- Users could be misled about which DSPACE release was deployed.
+- Operators could be misled because readiness and liveness checks stayed healthy and reported the
+  expected semantic version rather than proving the expected source commit or immutable image
+  revision.
+- The service remained available throughout the confirmed incident window.
+- No data loss, saved-game corruption, credential exposure, privacy incident, or security compromise
+  was detected.
+- The exact beginning of user impact is unknown. Affected pods observed before immutable-image
+  recovery had July 7 start times, but the pre-recovery image digest and public response body were
+  not preserved, so this record does not claim impact definitively began on July 7.
+- The first confirmed user-visible impact was the July 23 manual observation.
+- The staging DSPACE 3.1.0 observability rollout occurred in a separate staging cluster and is not
+  treated as having directly changed production.
+
+## Detection
+
+Detection was manual visual inspection shortly before the first rollback at 16:02 PDT on
+2026-07-23. There was no alert or automated release-integrity check. Existing readiness and
+liveness probes continued to pass, and existing version surfaces reported the package version rather
+than the source commit, immutable image tag, or resolved image digest.
+
+The exact detection minute was not captured.
+
+## Timeline
+
+All times are shown in PDT and UTC where available.
+
+| Time (PDT) | Time (UTC) | Event |
+| --- | --- | --- |
+| 2026-05-21 10:25:23 | 2026-05-21 17:25:23 | Commit `1a31a569aff2dbeb238e8c2688b9e85140d2077d` was created and became the `v3.0.1` tag target. The derived immutable short-SHA image tag was `main-1a31a56`. |
+| 2026-05-21 10:49:01 | 2026-05-21 17:49:01 | Production Helm revision 7 deployed chart `dspace-3.0.1` with stored image tag `v3.0.1`. |
+| Shortly before 2026-07-23 16:02 | Shortly before 2026-07-23 23:02 | Operator detected production serving later 3.1-era frontend/changelog content while runtime version surfaces still said v3.0.1. The exact detection timestamp and exact impact start are unknown. |
+| 2026-07-23 16:02:32 | 2026-07-23 23:02:32 | Helm rollback to revision 7 completed and created revision 8. Helm reported success, but the release still used chart `dspace-3.0.1` and image tag `v3.0.1`; no meaningful pod-template image change occurred because the same mutable tag remained configured, and the incorrect frontend content persisted. |
+| Shortly after rollback | Shortly after rollback | A controlled Helm upgrade attempted to retain chart `3.0.1` while setting image tag `main-1a31a56` with `--reuse-values`. Rendering failed with `template: dspace/templates/servicemonitor.yaml:1:14: executing "dspace/templates/servicemonitor.yaml" at <.Values.serviceMonitor.enabled>: nil pointer evaluating interface {}.enabled`. No production change occurred from this failed Helm command. |
+| 2026-07-23 16:12:53 | 2026-07-23 23:12:53 | First replacement pod using `main-1a31a56` was created. |
+| 2026-07-23 16:13:15 | 2026-07-23 23:13:15 | First replacement container started. |
+| 2026-07-23 16:13:27 | 2026-07-23 23:13:27 | Second replacement pod was created. |
+| 2026-07-23 16:13:28 | 2026-07-23 23:13:28 | Second replacement container started. Both replicas were running the immutable recovery image, and user impact is treated as ended by this point. |
+| 2026-07-23 16:39:19 | 2026-07-23 23:39:19 | Sugarkube PR #2320 merged and changed the production image pin to `main-1a31a56`. |
+| 2026-07-23 16:41:32 | 2026-07-23 23:41:32 | Operational closeout confirmed the Git pin, live image, chart, replicas, and public health. |
+| 2026-07-23 16:54:55 | 2026-07-23 23:54:55 | Operator began private evidence collection. |
+
+## Technical root cause
+
+### Primary image-tag mutability cause
+
+The primary root cause was release-artifact mutability in the image publication and production
+selection path.
+
+Verified facts:
+
+- The canonical DSPACE v3.0.1 Git tag resolves to commit
+  `1a31a569aff2dbeb238e8c2688b9e85140d2077d`.
+- The corresponding immutable branch-SHA image tag is `main-1a31a56`.
+- The DSPACE image workflow derived branch-SHA tags as `<branch>-<short-sha>`.
+- The same workflow also derived `v<package-version>` and published it on ordinary eligible branch
+  builds.
+- Until the 3.1.0 coordinate change merged, `package.json` still described package version
+  `3.0.1`, allowing later successful branch builds to publish later source revisions under
+  `v3.0.1`.
+- Production was configured with chart `dspace-3.0.1`, stored Helm image tag `v3.0.1`, and
+  `image.pullPolicy=Always`.
+- The production Git pin was stale before recovery: `docs/apps/dspace.prod.tag` contained
+  `v3.0.0`, so the production Helm release was not fully represented by the repository's production
+  pin before the incident.
+
+Supported inference:
+
+- Because production referenced the mutable semantic image tag with `image.pullPolicy=Always`, a
+  recreated or restarted pod could pull later source content without any change to the declared
+  production tag or package version.
+- Footer, `/healthz`, and `/livez` continued to report v3.0.1 because they reflected the
+  package/build version, not proof that the running image matched the expected v3.0.1 source commit.
+- The workflow made semantic-tag movement possible, and the production behavior demonstrated that
+  `v3.0.1` was not a safe immutable deployment coordinate.
+
+Unresolved evidence:
+
+- The exact GitHub Actions run that last moved `v3.0.1`, the previous digest, and the final mutable
+  digest were not captured because the operator's GitHub CLI token lacked `read:packages`.
+- This record does not invent the missing workflow run or digest.
+
+### Published chart mismatch discovered during recovery
+
+A separate artifact-integrity issue was discovered while attempting to reconcile production through
+Helm. This was a recovery complication, not the primary source of the user-visible frontend drift.
+
+Verified facts:
+
+- The currently published OCI chart `dspace:3.0.1` had digest
+  `sha256:fa10fef00cebf6f1e7cb46c38146552eb8418646f6060493127cc5554b990175`.
+- The published chart's source content did not match the canonical chart source at Git tag
+  `v3.0.1`.
+- At Git tag `v3.0.1`, `charts/dspace/values.yaml` did not contain the `metrics` or
+  `serviceMonitor` sections, and `charts/dspace/templates/servicemonitor.yaml` did not exist.
+- In the published OCI chart `3.0.1`, `values.yaml` contained later `metrics` and
+  `serviceMonitor` defaults, and `templates/servicemonitor.yaml` contained the authenticated
+  ServiceMonitor implementation introduced later.
+- The material artifact differences included a `metrics` block, a `serviceMonitor` block, and the
+  complete `templates/servicemonitor.yaml`.
+
+Conclusion:
+
+- The published chart version `3.0.1` does not correspond to the source tree at the `v3.0.1` Git
+  tag. This is an immutable-version contract violation: an OCI chart identified as `3.0.1` was
+  published from source content later than the canonical v3.0.1 tag, or was subsequently replaced
+  with such content.
+- The exact overwrite or publish time and workflow run were not captured and are not asserted here.
+
+### Helm-render evidence nuance
+
+The real production Helm upgrade that tried to retain chart `3.0.1` while setting the image tag to
+`main-1a31a56` used `--reuse-values` and failed during rendering with this nil-pointer error:
+
+```text
+template: dspace/templates/servicemonitor.yaml:1:14: executing "dspace/templates/servicemonitor.yaml" at <.Values.serviceMonitor.enabled>: nil pointer evaluating interface {}.enabled
+```
+
+Later standalone `helm template` commands using exported current user values and exported computed
+values both succeeded. The exported user/all values did not show top-level `metrics` or
+`serviceMonitor` keys, but standalone rendering still applied the published chart's defaults.
+Therefore the exact Helm value-merging path that produced the live `--reuse-values` nil pointer was
+not fully reproduced offline.
+
+This record states only that the actual recovery upgrade failed in the `--reuse-values` path, the
+published artifact materially differs from the v3.0.1 Git tag, and the exact `--reuse-values` merge
+behavior remains a follow-up investigation. It does not claim that every render of chart 3.0.1 fails
+or that the chart is unconditionally unusable.
+
+## Contributing factors
+
+- Production used a semantic image tag as though it were immutable.
+- The image workflow republished semantic version tags from branch builds.
+- `image.pullPolicy=Always` increased the chance that a pod replacement would pull changed content
+  under the same tag.
+- Health and footer version surfaces did not expose or validate the expected Git revision.
+- No deployment gate compared the running image digest or source revision with the approved release
+  commit.
+- Helm rollback reused the same semantic tag, so Helm could report success without restoring an
+  earlier image digest.
+- The production Git pin was stale and did not match the live Helm release before the incident.
+- The chart artifact identified as 3.0.1 did not match the v3.0.1 source tag and complicated the
+  immutable-image correction.
+- There was no automated alert for frontend build/release-coordinate drift.
+- Detection depended on manual visual review.
+
+## Recovery and resolution
+
+The initial Helm rollback alone did not restore the intended source artifact because it retained the
+mutable `v3.0.1` tag. After the attempted controlled Helm upgrade failed in the live
+`--reuse-values` path, the operator performed an emergency image-only correction on the live
+Deployment:
+
+- Image: `ghcr.io/democratizedspace/dspace:main-1a31a56`
+- Resolved image ID on both recovered pods:
+  `ghcr.io/democratizedspace/dspace@sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401`
+
+The rollout created two replacement pods. Both recovered pods were ready with zero restarts. User
+impact is treated as ended by 2026-07-23 16:13:28 PDT / 23:13:28 UTC, when both replicas were
+running the immutable recovery image.
+
+Sugarkube PR #2320 then made the immutable image coordinate durable by changing the production image
+pin to `main-1a31a56`; its merge commit was
+`61303e079e425808eb25f30d3be07e93ccdf6a37`.
+
+After recovery:
+
+- Git production image pin: `main-1a31a56`
+- Live Deployment image: `ghcr.io/democratizedspace/dspace:main-1a31a56`
+- Helm chart: `dspace-3.0.1`
+- Helm stored image value: `v3.0.1`
+- Replicas: 2 available
+- `/healthz`: ready, v3.0.1, prod
+- `/livez`: alive, v3.0.1, prod
+
+## Post-recovery verification
+
+Public and direct Kubernetes Service responses were compared after recovery.
+
+| Surface | Public value | Direct-origin value | Result |
+| --- | --- | --- | --- |
+| Root marker | `Latest update: April 1, 2026` | `Latest update: April 1, 2026` | Matched |
+| Root marker | `prod v3.0.1` | `prod v3.0.1` | Matched |
+| Root marker | `DSPACE v3.0.1` | `DSPACE v3.0.1` | Matched |
+| Root SHA-256 | `b8fc71b476d5d3c7000d3a2558f2824c553a886f81775f3dcd2fce3dea13c884` | `b8fc71b476d5d3c7000d3a2558f2824c553a886f81775f3dcd2fce3dea13c884` | Matched |
+| Changelog SHA-256 | `01bd0fbe848825dd8f33ab50561df1863c7c4efcece5314af24d25f42ce01dde` | `01bd0fbe848825dd8f33ab50561df1863c7c4efcece5314af24d25f42ce01dde` | Matched |
+| Docs changelog SHA-256 | `8303f63583db3b48326050d2bf1643b48753a3c70265164bb1e44bcc0bb017e3` | `8303f63583db3b48326050d2bf1643b48753a3c70265164bb1e44bcc0bb017e3` | Matched |
+| `/config.json` SHA-256 | `a42d7e88885d9a6529270d15584f2c9715f9bc53def928c4bae41a03747d3ee2` | `a42d7e88885d9a6529270d15584f2c9715f9bc53def928c4bae41a03747d3ee2` | Matched |
+
+Cloudflare response evidence after recovery included `cache-control: no-store` and
+`cf-cache-status: DYNAMIC`. The public and origin matches verified that recovery was not masked by
+Cloudflare. This record does not attribute the incident or post-recovery state to Cloudflare
+caching.
+
+`/healthz` and `/livez` hashes differed between public and origin requests because those responses
+contain changing uptime and timestamp fields; those differing hashes were not treated as an anomaly.
+
+## What went well
+
+- The service stayed available.
+- Health and liveness endpoints helped confirm availability during recovery, even though they were
+  insufficient for source-integrity verification.
+- The canonical v3.0.1 Git commit was identifiable.
+- The workflow's branch-SHA naming convention made the correct immutable recovery tag derivable.
+- The emergency image-only rollout created fresh pods and restored correct content quickly.
+- Public and direct-origin comparisons verified the recovery was not masked by Cloudflare.
+- The production Git pin was corrected and merged in the same incident window.
+- Evidence was captured immediately after recovery.
+
+## What went poorly
+
+- The initial Helm rollback appeared successful but did not restore the intended image content.
+- Semantic version and source revision were conflated.
+- The operator could not determine the currently moved package-tag digest through the GitHub
+  packages API because the token lacked `read:packages`.
+- The attempted Helm reconciliation failed because of later chart content under version 3.0.1 and
+  the live `--reuse-values` path.
+- Helm stored values remained stale after the emergency Deployment correction.
+- No pre-recovery image digest or response-body hash was preserved.
+- The exact impact start and exact workflow run that moved the semantic tag remain unknown.
+
+## Current residual risk
+
+Incident status is resolved. The current live Deployment and Git pin agree on `main-1a31a56`, and
+this incident is not currently causing user impact.
+
+A residual operational risk remains: Helm revision 8 still stores `image.tag=v3.0.1`, and the live
+Deployment was corrected outside Helm. Helm stored state and live Deployment state are therefore
+intentionally drifted. DSPACE production Helm operations should remain frozen until a controlled
+reconciliation is performed using a newly published, never-overwritten chart version and the
+immutable image tag. This record does not recommend editing Helm revision history directly.
+
+## Corrective actions
+
+| Priority | Owner area | Status | Action | Completion condition |
+| --- | --- | --- | --- | --- |
+| P0 | Production operations | Completed | Restore production to immutable image `main-1a31a56`. | Live Deployment image is `ghcr.io/democratizedspace/dspace:main-1a31a56`. |
+| P0 | Production operations | Completed | Verify both replicas use image digest `sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401`. | Both pods report that resolved image ID and are ready with zero restarts. |
+| P0 | Sugarkube production config | Completed | Pin Sugarkube production to `main-1a31a56` through PR #2320. | PR #2320 is merged with production pin `main-1a31a56`. |
+| P0 | Production verification | Completed | Compare public and direct-origin content after recovery. | Root, changelog, docs changelog, and `/config.json` hashes match between public and origin responses. |
+| P0 | Image release workflow | Open | Change `.github/workflows/ci-image.yml` so semantic `vX.Y.Z` tags are published only from the matching Git tag or release event, never ordinary branch pushes. | Branch pushes can no longer publish semantic image tags. |
+| P0 | Image release workflow | Open | Add a guard that refuses to overwrite an already published semantic image tag. | CI fails before publishing if the semantic tag already exists with any digest. |
+| P0 | Release operations | Open | Keep branch-SHA images as the authoritative staging, production, rollback, and promotion coordinates. | Deployment and rollback procedures name immutable branch-SHA tags or digests rather than semantic tags. |
+| P0 | Helm release workflow | Open | Change `.github/workflows/ci-helm.yml` so an existing OCI chart version can never be replaced. | CI fails before publishing if the chart version already exists. |
+| P0 | Helm release workflow | Open | Publish any chart repair under a new version; do not republish `3.0.1`. | Any repaired chart has a new chart version and the `3.0.1` artifact is not replaced. |
+| P0 | Release engineering | Open | Add a release consistency gate proving Git tag, package version, chart version, chart appVersion, image OCI revision label, and approved source commit agree. | Release promotion fails unless all coordinates point to the approved commit. |
+| P0 | Production operations | Open | Reconcile production Helm state in a controlled maintenance operation so Git, Helm stored values, live Deployment, and resolved image digest all agree on the immutable image. | Helm-managed state and live state converge on the immutable image coordinate without editing Helm history directly. |
+| P0 | Sugarkube environment config | Open | Introduce environment-specific Sugarkube chart pins so staging can use DSPACE chart 3.1.0 while production remains on its approved chart version. | Staging and production chart pins are independently represented and reviewed. |
+| P1 | Application identity | Open | Expose and verify a bounded build-identity signal containing the Git revision, not only the semantic application version. | Health or a bounded identity endpoint reports the approved source revision in a safe form. |
+| P1 | Production verification | Open | Require production verification to compare the running image revision/digest against the approved release commit. | Release checks fail if live image revision or digest does not match the approved commit. |
+| P1 | Rollback procedure | Open | Update rollback procedures to verify that pods were actually replaced and that the running image ID changed to the intended digest. | Rollback runbook includes pod replacement and image ID verification. |
+| P1 | Frontend verification | Open | Add a deterministic frontend content/build marker check so release-content drift is caught even when `/healthz` and `/livez` remain healthy. | Monitoring or deploy verification compares an expected frontend build marker. |
+| P1 | Monitoring | Open | Add monitoring or alerting for unexpected production build-revision drift. | Alert fires when production build identity differs from the approved release coordinate. |
+| P1 | Incident evidence | Open | Ensure incident operators can retrieve package-version metadata or have another documented method to record semantic-tag and immutable-tag digests at deployment time. | Operators can capture semantic-tag and immutable-tag digests during incidents without relying on missing package API scopes. |
+
+## Evidence gaps and unknowns
+
+- The exact beginning of user-visible impact is unknown.
+- The pre-recovery image digest was not preserved.
+- The pre-recovery public response body and hashes were not preserved.
+- The exact GitHub Actions run that last moved `v3.0.1` was not captured.
+- The previous and final mutable `v3.0.1` image digests were not captured because the operator's
+  GitHub CLI token lacked `read:packages`.
+- The exact publish or overwrite time for the mismatched OCI chart `dspace:3.0.1` was not captured.
+- The exact Helm `--reuse-values` merge path that produced the live nil-pointer rendering failure
+  was not fully reproduced offline.
+
+## Verification commands or evidence references
+
+Repository and public references used by this record:
+
+- `.github/workflows/ci-image.yml`
+- `.github/workflows/ci-helm.yml`
+- `charts/dspace/Chart.yaml`
+- `charts/dspace/values.yaml`
+- `charts/dspace/templates/servicemonitor.yaml`
+- `package.json`
+- `outages/2026-07-23-dspace-production-version-drift.json`
+- `https://github.com/democratizedspace/dspace/releases/tag/v3.0.1`
+- `https://github.com/democratizedspace/dspace/commit/1a31a569aff2dbeb238e8c2688b9e85140d2077d`
+- `https://github.com/democratizedspace/dspace/pull/4718`
+- `https://github.com/democratizedspace/dspace/pull/4719`
+- `https://github.com/futuroptimist/sugarkube/pull/2320`
+
+Validation commands for this documentation-only change are recorded in the companion pull request and
+review output. This record intentionally excludes private evidence archive paths, credentials,
+tokens, screenshots, generated evidence bundles, and binary artifacts.

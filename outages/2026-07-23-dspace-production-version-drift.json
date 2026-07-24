@@ -1,0 +1,33 @@
+{
+    "id": "2026-07-23-dspace-production-version-drift",
+    "date": "2026-07-23",
+    "severity": "high",
+    "status": "Resolved",
+    "component": "production release artifact integrity for democratized.space",
+    "impact": "Production democratized.space served later 3.1-era frontend and changelog content while the footer, /healthz, and /livez still reported prod v3.0.1. The service remained available, and no data loss, saved-game corruption, credential exposure, privacy incident, or security compromise was detected.",
+    "rootCause": "Release-artifact mutability allowed ordinary eligible branch image builds to publish the semantic v<package-version> tag as well as immutable branch-SHA tags. Because the package version remained 3.0.1 while later main-branch changes accumulated, later source revisions could be published under v3.0.1. Production used v3.0.1 with image.pullPolicy=Always, so pod replacement could pull different source content without a declared production tag or package-version change. A separate published OCI chart dspace:3.0.1 mismatch was discovered during recovery and complicated Helm reconciliation, but it is not treated as the primary source of the user-visible frontend drift.",
+    "resolution": "The operator replaced the live Deployment image with ghcr.io/democratizedspace/dspace:main-1a31a56, the immutable branch-SHA image for canonical v3.0.1 commit 1a31a569aff2dbeb238e8c2688b9e85140d2077d. Both replacement pods resolved to sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401, were ready with zero restarts, and public-versus-origin checks matched after recovery. Sugarkube PR #2320 then made the production image pin durable as main-1a31a56. Helm revision 8 still stores image.tag=v3.0.1, so Helm reconciliation remains open follow-up work rather than current user impact.",
+    "verification": [
+        "Manual production inspection detected later 3.1-era frontend/changelog content while footer, /healthz, and /livez reported v3.0.1 prod.",
+        "Recovered pods used ghcr.io/democratizedspace/dspace:main-1a31a56 with image ID ghcr.io/democratizedspace/dspace@sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401.",
+        "Post-recovery public and direct-origin root hashes matched: b8fc71b476d5d3c7000d3a2558f2824c553a886f81775f3dcd2fce3dea13c884.",
+        "Post-recovery public and direct-origin changelog hashes matched: 01bd0fbe848825dd8f33ab50561df1863c7c4efcece5314af24d25f42ce01dde.",
+        "Post-recovery public and direct-origin docs changelog hashes matched: 8303f63583db3b48326050d2bf1643b48753a3c70265164bb1e44bcc0bb017e3.",
+        "Post-recovery public and direct-origin /config.json hashes matched: a42d7e88885d9a6529270d15584f2c9715f9bc53def928c4bae41a03747d3ee2."
+    ],
+    "references": [
+        ".github/workflows/ci-image.yml",
+        ".github/workflows/ci-helm.yml",
+        "charts/dspace/Chart.yaml",
+        "charts/dspace/values.yaml",
+        "charts/dspace/templates/servicemonitor.yaml",
+        "package.json",
+        "https://github.com/democratizedspace/dspace/releases/tag/v3.0.1",
+        "https://github.com/democratizedspace/dspace/commit/1a31a569aff2dbeb238e8c2688b9e85140d2077d",
+        "https://github.com/democratizedspace/dspace/pull/4718",
+        "https://github.com/democratizedspace/dspace/pull/4719",
+        "https://github.com/futuroptimist/sugarkube/pull/2320",
+        "outages/2026-07-23-dspace-production-version-drift.md"
+    ],
+    "longForm": "outages/2026-07-23-dspace-production-version-drift.md"
+}
