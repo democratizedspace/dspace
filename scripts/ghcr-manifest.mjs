@@ -185,7 +185,7 @@ export async function assertTagAbsent({
     fetchImpl = fetch,
     timeoutMs = DEFAULT_TIMEOUT_MS,
 }) {
-    const token = await fetchGhcrToken({ owner, repo, username, password, fetchImpl, timeoutMs });
+    const token = await fetchGhcrToken({ owner, repo, username, password, fetchImpl, timeoutMs }); // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     const manifest = await getManifest({ owner, repo, tag, token, fetchImpl, timeoutMs });
 
     if (manifest.status === 'present') {
@@ -209,7 +209,7 @@ export async function describeManifest({
     fetchImpl = fetch,
     timeoutMs = DEFAULT_TIMEOUT_MS,
 }) {
-    const token = await fetchGhcrToken({ owner, repo, username, password, fetchImpl, timeoutMs });
+    const token = await fetchGhcrToken({ owner, repo, username, password, fetchImpl, timeoutMs }); // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     const manifest = await getManifest({ owner, repo, tag, token, fetchImpl, timeoutMs });
 
     if (manifest.status !== 'present') {
@@ -280,7 +280,7 @@ export async function main(argv = process.argv.slice(2)) {
     // Credentials are read only from the environment, never from CLI args, so they can't
     // leak through process listings or workflow logs that echo the invoked command.
     const username = process.env.GHCR_GUARD_USERNAME || '';
-    const password = process.env.GHCR_GUARD_PASSWORD || '';
+    const password = process.env.GHCR_GUARD_PASSWORD || ''; // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     if (!username || !password) {
         throw new GhcrGuardError('GHCR_GUARD_USERNAME and GHCR_GUARD_PASSWORD must both be set', {
             code: 'invalid-input',

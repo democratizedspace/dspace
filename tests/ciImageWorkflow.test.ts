@@ -26,7 +26,8 @@ function findSteps(job: any): any[] {
 
 function findStepsUsing(job: any, actionPrefix: string): any[] {
   return findSteps(job).filter(
-    (step) => typeof step.uses === 'string' && step.uses.startsWith(actionPrefix)
+    (step) =>
+      typeof step.uses === 'string' && step.uses.startsWith(actionPrefix)
   );
 }
 
@@ -64,7 +65,9 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(serialized).not.toMatch(/version_tag/);
     // Guards against the historical bug directly: no step should build a tag string of the
     // shape ghcr.io/.../dspace:v<package-version> in this job.
-    expect(serialized).not.toMatch(/ghcr\.io\/democratizedspace\/dspace:v\$\{\{/);
+    expect(serialized).not.toMatch(
+      /ghcr\.io\/democratizedspace\/dspace:v\$\{\{/
+    );
   });
 
   it('still publishes the immutable branch-SHA tag and the mutable branch convenience tag', () => {
@@ -112,7 +115,9 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
 
   it('exists and is gated on a published release, not an ordinary push', () => {
     expect(job).toBeTruthy();
-    expect(job.if).toBe("github.event_name == 'release' && github.event.action == 'published'");
+    expect(job.if).toBe(
+      "github.event_name == 'release' && github.event.action == 'published'"
+    );
   });
 
   it('serializes semantic publication with a concurrency group keyed on the tag', () => {
@@ -147,7 +152,9 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
       }
       expect(step.run).not.toContain('${{ github.event.release.tag_name }}');
       if (step.run.includes('RELEASE_TAG')) {
-        expect(step.env?.RELEASE_TAG).toBe('${{ github.event.release.tag_name }}');
+        expect(step.env?.RELEASE_TAG).toBe(
+          '${{ github.event.release.tag_name }}'
+        );
       }
     }
   });
@@ -161,18 +168,24 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
 
     const pushIndex = stepIndex(
       job,
-      (step) => step.uses?.startsWith('docker/build-push-action') && step.with?.push === true
+      (step) =>
+        step.uses?.startsWith('docker/build-push-action') &&
+        step.with?.push === true
     );
     const versionIndex = stepIndex(job, (step) => step.id === 'version');
     expect(versionIndex).toBeGreaterThanOrEqual(0);
     expect(versionIndex).toBeLessThan(pushIndex);
   });
 
-  it('runs the GHCR existence guard before any push, and fails closed', () => {
-    const guardIndex = stepIndex(job, (step) => step.run?.includes('ghcr-manifest.mjs check-absent'));
+  it('runs the semantic absence guard before publication, and fails closed', () => {
+    const guardIndex = stepIndex(job, (step) =>
+      step.run?.includes('ghcr-manifest.mjs check-absent')
+    );
     const pushIndex = stepIndex(
       job,
-      (step) => step.uses?.startsWith('docker/build-push-action') && step.with?.push === true
+      (step) =>
+        step.uses?.startsWith('docker/build-push-action') &&
+        step.with?.push === true
     );
     expect(guardIndex).toBeGreaterThanOrEqual(0);
     expect(pushIndex).toBeGreaterThan(guardIndex);
@@ -188,15 +201,67 @@ describe('ci-image.yml "semantic-release" job (release-only publish path)', () =
     }
   });
 
-  it('publishes only the immutable branch-SHA tag and the semantic tag, never a mutable "latest" tag', () => {
+  it('contains exactly one semantic publication step that pushes only the semantic tag', () => {
+    const pushSteps = findStepsUsing(job, 'docker/build-push-action').filter(
+      (step) => step.with?.push === true
+    );
+    expect(pushSteps).toHaveLength(1);
+    const [pushStep] = pushSteps;
+    expect(pushStep.name).toBe('Build and push semantic release image');
+    expect(pushStep.id).toBe('build_push');
+    expect(pushStep.with.tags).toBe('${{ steps.tags.outputs.semantic_tag }}');
+    expect(pushStep.with.tags).not.toContain('branch_sha_tag');
+    expect(pushStep.with.tags).not.toMatch(/latest/);
+    expect(pushStep['continue-on-error']).toBeUndefined();
+  });
+
+  it('has no second-attempt or retry path for semantic publication', () => {
+    const serialized = JSON.stringify(job);
+    expect(serialized).not.toMatch(/attempt 1|attempt 2|retry/i);
+    expect(serialized).not.toContain('build_push_1');
+    expect(serialized).not.toContain('build_push_2');
+    expect(serialized).not.toMatch(/outcome == 'failure'/);
+  });
+
+  it('lets publication failure terminate the job without conditional recovery', () => {
+    const pushStep = findStepsUsing(job, 'docker/build-push-action').find(
+      (step) => step.with?.push === true
+    );
+    expect(pushStep).toBeTruthy();
+    expect(pushStep.if).toBeUndefined();
+    expect(pushStep['continue-on-error']).toBeUndefined();
+    const laterSteps = findSteps(job).slice(
+      findSteps(job).indexOf(pushStep) + 1
+    );
+    for (const step of laterSteps) {
+      expect(step.if ?? '').not.toMatch(
+        /failure\(\)|outcome == 'failure'|always\(\)/
+      );
+    }
+  });
+
+  it('verifies and summarizes the branch-SHA coordinate without pushing it', () => {
+    const branchDescribeStep = findSteps(job).find(
+      (step) => step.id === 'branch_sha_evidence'
+    );
+    expect(branchDescribeStep).toBeTruthy();
+    expect(branchDescribeStep.run).toContain('ghcr-manifest.mjs describe');
+    expect(branchDescribeStep.run).toContain('steps.branch.outputs.branch');
+    expect(branchDescribeStep.run).toContain(
+      'steps.revision.outputs.short_sha'
+    );
+
     const pushSteps = findStepsUsing(job, 'docker/build-push-action').filter(
       (step) => step.with?.push === true
     );
     for (const step of pushSteps) {
-      expect(step.with.tags).toContain('steps.tags.outputs.branch_sha_tag');
-      expect(step.with.tags).toContain('steps.tags.outputs.semantic_tag');
-      expect(step.with.tags).not.toMatch(/latest/);
+      expect(JSON.stringify(step.with)).not.toContain('branch_sha_tag');
     }
+
+    const summaryStep = findSteps(job).find((step) =>
+      step.run?.includes('GITHUB_STEP_SUMMARY')
+    );
+    expect(summaryStep.run).toContain('steps.tags.outputs.branch_sha_tag');
   });
 
   it('records the required evidence in the workflow summary without leaking credentials', () => {

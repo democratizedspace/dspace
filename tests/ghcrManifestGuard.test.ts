@@ -8,7 +8,7 @@ import {
   parseArgs,
 } from '../scripts/ghcr-manifest.mjs';
 
-const SECRET_PASSWORD = 'super-secret-token-value-do-not-leak';
+const SECRET_PASSWORD = 'super-secret-token-value-do-not-leak'; // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
 
 function jsonResponse(status: number, body: unknown, headers: Record<string, string> = {}) {
   const lowered = Object.fromEntries(
@@ -59,7 +59,7 @@ function hangingFetch() {
     });
 }
 
-const okToken = jsonResponse(200, { token: 'fake-bearer-token' });
+const okToken = jsonResponse(200, { token: 'fake-bearer-token' }); // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
 
 describe('fetchGhcrToken', () => {
   it('throws a network GhcrGuardError when the request fails', async () => {
@@ -68,7 +68,7 @@ describe('fetchGhcrToken', () => {
     };
 
     await expect(
-      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'network' });
   });
 
@@ -76,7 +76,7 @@ describe('fetchGhcrToken', () => {
     const fetchImpl = fetchFor({ tokenResponse: jsonResponse(401, { message: 'denied' }) });
 
     await expect(
-      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toSatisfy((error: unknown) => {
       expect(error).toBeInstanceOf(GhcrGuardError);
       expect((error as GhcrGuardError).code).toBe('auth');
@@ -89,7 +89,7 @@ describe('fetchGhcrToken', () => {
     const fetchImpl = fetchFor({ tokenResponse: jsonResponse(500, { message: 'boom' }) });
 
     await expect(
-      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'indeterminate' });
   });
 
@@ -99,7 +99,7 @@ describe('fetchGhcrToken', () => {
         owner: 'o',
         repo: 'r',
         username: 'u',
-        password: SECRET_PASSWORD,
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
         fetchImpl: hangingFetch(),
         timeoutMs: 20,
       })
@@ -110,15 +110,15 @@ describe('fetchGhcrToken', () => {
     const fetchImpl = fetchFor({ tokenResponse: malformedJsonResponse(200) });
 
     await expect(
-      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'malformed' });
   });
 
   it('fails closed when the token response has no token field', async () => {
-    const fetchImpl = fetchFor({ tokenResponse: jsonResponse(200, { not_a_token: true }) });
+    const fetchImpl = fetchFor({ tokenResponse: jsonResponse(200, { not_a_token: true }) }); // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
 
     await expect(
-      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'malformed' });
   });
 });
@@ -131,7 +131,7 @@ describe('getManifest', () => {
       owner: 'o',
       repo: 'r',
       tag: 'v1.0.0',
-      token: 't',
+      token: 't', // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
       fetchImpl: async (url: string) => fetchImpl(url),
     });
     expect(result).toEqual({ status: 'absent' });
@@ -147,7 +147,7 @@ describe('getManifest', () => {
     const fetchImpl = async () =>
       jsonResponse(200, body, { 'docker-content-digest': 'sha256:indexdigest' });
 
-    const result = await getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl });
+    const result = await getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl }); // scan-secrets: ignore (fixture token; no real secret literal)
     expect(result.status).toBe('present');
     expect(result.digest).toBe('sha256:indexdigest');
     expect(result.manifests).toEqual([
@@ -159,21 +159,21 @@ describe('getManifest', () => {
   it('fails closed on 401/403', async () => {
     const fetchImpl = async () => jsonResponse(403, {});
     await expect(
-      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl })
+      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl }) // scan-secrets: ignore (fixture token; no real secret literal)
     ).rejects.toMatchObject({ code: 'auth' });
   });
 
   it('fails closed on an indeterminate status', async () => {
     const fetchImpl = async () => jsonResponse(502, {});
     await expect(
-      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl })
+      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl }) // scan-secrets: ignore (fixture token; no real secret literal)
     ).rejects.toMatchObject({ code: 'indeterminate' });
   });
 
   it('fails closed when a 200 response is missing the digest header', async () => {
     const fetchImpl = async () => jsonResponse(200, { manifests: [] });
     await expect(
-      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl })
+      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl }) // scan-secrets: ignore (fixture token; no real secret literal)
     ).rejects.toMatchObject({ code: 'malformed' });
   });
 
@@ -181,7 +181,7 @@ describe('getManifest', () => {
     const fetchImpl = async () =>
       malformedJsonResponse(200, { 'docker-content-digest': 'sha256:indexdigest' });
     await expect(
-      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl })
+      getManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', token: 't', fetchImpl }) // scan-secrets: ignore (fixture token; no real secret literal)
     ).rejects.toMatchObject({ code: 'malformed' });
   });
 });
@@ -190,7 +190,7 @@ describe('assertTagAbsent', () => {
   it('resolves when the registry authoritatively reports the tag absent', async () => {
     const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, {}) });
     await expect(
-      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).resolves.toEqual({ status: 'absent' });
   });
 
@@ -201,7 +201,7 @@ describe('assertTagAbsent', () => {
     });
 
     await expect(
-      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toSatisfy((error: unknown) => {
       const message = (error as Error).message;
       expect((error as GhcrGuardError).code).toBe('exists');
@@ -214,7 +214,7 @@ describe('assertTagAbsent', () => {
   it('fails closed when the token request itself is denied', async () => {
     const fetchImpl = fetchFor({ tokenResponse: jsonResponse(401, {}) });
     await expect(
-      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'auth' });
   });
 });
@@ -237,7 +237,7 @@ describe('describeManifest', () => {
       repo: 'r',
       tag: 'v1.0.0',
       username: 'u',
-      password: SECRET_PASSWORD,
+      password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
       fetchImpl,
     });
 
@@ -251,7 +251,7 @@ describe('describeManifest', () => {
   it('fails when the tag unexpectedly does not exist after a publish', async () => {
     const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, {}) });
     await expect(
-      describeManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl })
+      describeManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'missing-after-publish' });
   });
 });

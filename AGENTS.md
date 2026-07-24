@@ -332,11 +332,14 @@ The `semantic-release` job checks out `github.event.release.tag_name` explicitly
 and uses `git rev-parse HEAD` (not `github.sha`, which is not guaranteed to be
 the tagged commit on a `release` event) as the source revision everywhere,
 validates the tag against `v<root package.json version>` (and that the root and
-frontend versions agree), and queries GHCR for the tag before publishing —
-failing closed on any non-404 outcome, including auth, network, timeout, and
-malformed-response errors — inside a job-level `concurrency` group keyed on the
-tag so two publish attempts can't race. See `scripts/ghcr-manifest.mjs` and
-`tests/ciImageWorkflow.test.ts` / `tests/ghcrManifestGuard.test.ts`.
+frontend versions agree), verifies the corresponding `<branch>-<short-sha>` artifact by
+reading its GHCR manifest without republishing or retagging it, and queries GHCR for the
+semantic tag before publishing — failing closed on any non-404 outcome, including auth,
+network, timeout, and malformed-response errors — inside a job-level `concurrency` group
+keyed on the tag so two publication runs can't race. The semantic publication step must
+use exactly one `push: true` attempt and must push only `vX.Y.Z`. See
+`scripts/ghcr-manifest.mjs` and `tests/ciImageWorkflow.test.ts` /
+`tests/ghcrManifestGuard.test.ts`.
 
 ### Smoke Test
 

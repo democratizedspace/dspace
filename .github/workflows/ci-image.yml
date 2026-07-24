@@ -632,9 +632,19 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push semantic release image (attempt 1)
-        id: build_push_1
-        continue-on-error: true
+      - name: Verify corresponding branch-SHA image exists
+        id: branch_sha_evidence
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
+        run: |
+          node scripts/ghcr-manifest.mjs describe \
+            --owner democratizedspace \
+            --repo dspace \
+            --tag "${{ steps.branch.outputs.branch }}-${{ steps.revision.outputs.short_sha }}"
+
+      - name: Build and push semantic release image
+        id: build_push
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -642,9 +652,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           provenance: false
-          tags: |
-            ${{ steps.tags.outputs.branch_sha_tag }}
-            ${{ steps.tags.outputs.semantic_tag }}
+          tags: ${{ steps.tags.outputs.semantic_tag }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ steps.revision.outputs.full_sha }}
@@ -656,38 +664,9 @@ jobs:
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
           cache-from: type=gha,scope=ci-image-semantic-release
           cache-to: type=gha,mode=max,ignore-error=true,scope=ci-image-semantic-release
-
-      - name: Build and push semantic release image (attempt 2)
-        id: build_push_2
-        if: steps.build_push_1.outcome == 'failure'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
-          provenance: false
-          tags: |
-            ${{ steps.tags.outputs.branch_sha_tag }}
-            ${{ steps.tags.outputs.semantic_tag }}
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-          labels: |
-            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
-            org.opencontainers.image.revision=${{ steps.revision.outputs.full_sha }}
-            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=gha,scope=ci-image-semantic-release
-          cache-to: type=gha,mode=max,ignore-error=true,scope=ci-image-semantic-release
-
-      - name: Fail if both semantic release pushes failed
-        if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome == 'failure'
-        run: exit 1
 
       - name: Build image for SHA verification
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        if: steps.build_push.outcome == 'success'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -705,7 +684,7 @@ jobs:
           cache-from: type=gha,scope=ci-image-semantic-release
 
       - name: Assert build SHA is baked into frontend bundle
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        if: steps.build_push.outcome == 'success'
         run: |
           docker run --rm \
             -e EXPECTED_SHA="${{ steps.revision.outputs.full_sha }}" \
@@ -714,7 +693,7 @@ jobs:
             node /scripts/verify-build-sha.mjs /app/dist
 
       - name: Verify chat build stamp inside image
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        if: steps.build_push.outcome == 'success'
         run: |
           docker run --rm \
             -e VERIFY_REPO_ROOT=/app \
@@ -729,7 +708,7 @@ jobs:
       # writes index_digest/amd64_digest/arm64_digest to $GITHUB_OUTPUT without ever logging
       # the registry credentials used to fetch them.
       - name: Record semantic release evidence
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        if: steps.build_push.outcome == 'success'
         id: evidence
         env:
           GHCR_GUARD_USERNAME: ${{ github.actor }}
@@ -741,7 +720,7 @@ jobs:
             --tag "v${{ steps.version.outputs.version }}"
 
       - name: Summarize semantic release evidence
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        if: steps.build_push.outcome == 'success'
         run: |
           {
             echo "## DSPACE semantic release image"
