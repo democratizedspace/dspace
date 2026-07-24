@@ -1,0 +1,41 @@
+{
+    "id": "2026-07-23-dspace-production-version-drift",
+    "date": "2026-07-23",
+    "component": "DSPACE production release artifacts, container image tags, Helm chart publication, and deployment verification",
+    "impact": "Production served later 3.1-era frontend and changelog content while the footer, /healthz, and /livez still identified the deployment as prod v3.0.1. The service remained available and no data loss, saved-game corruption, credential exposure, privacy incident, or security compromise was detected, but users and operators could be misled about which release source was deployed.",
+    "rootCause": "The primary release-integrity failure was mutable semantic image tagging: .github/workflows/ci-image.yml published both immutable branch-SHA tags and the semantic v<package-version> tag from ordinary eligible branch builds while the package version remained 3.0.1, allowing later source revisions to be published under v3.0.1. Production used v3.0.1 with image.pullPolicy=Always, so a restarted or recreated pod could pull different source content while runtime version surfaces still reported the package version. A separate published-chart mismatch was discovered during recovery: the OCI chart identified as dspace:3.0.1 contained later metrics and ServiceMonitor content that did not match the canonical v3.0.1 Git tag, complicating Helm reconciliation but not serving as the primary cause of the frontend drift.",
+    "resolution": "The incident was resolved by an emergency image-only correction of the live Deployment to ghcr.io/democratizedspace/dspace:main-1a31a56, the immutable branch-SHA image for the canonical v3.0.1 commit 1a31a569aff2dbeb238e8c2688b9e85140d2077d. Two replacement pods started by 2026-07-23 16:13:28 PDT / 23:13:28 UTC, both resolved to sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401, were ready with zero restarts, and restored the expected content. Sugarkube PR #2320 then made the immutable production image pin durable. Helm revision 8 still stores image.tag=v3.0.1, so Helm and live state remain intentionally drifted pending a controlled reconciliation using a newly published, never-overwritten chart version and the immutable image tag.",
+    "verification": [
+        "Manual post-recovery public and direct-origin root markers matched: Latest update: April 1, 2026; prod v3.0.1; DSPACE v3.0.1.",
+        "Public and direct-origin root SHA-256 matched: b8fc71b476d5d3c7000d3a2558f2824c553a886f81775f3dcd2fce3dea13c884.",
+        "Public and direct-origin changelog SHA-256 matched: 01bd0fbe848825dd8f33ab50561df1863c7c4efcece5314af24d25f42ce01dde.",
+        "Public and direct-origin docs-changelog SHA-256 matched: 8303f63583db3b48326050d2bf1643b48753a3c70265164bb1e44bcc0bb017e3.",
+        "Public and direct-origin /config.json SHA-256 matched: a42d7e88885d9a6529270d15584f2c9715f9bc53def928c4bae41a03747d3ee2.",
+        "Cloudflare response evidence after recovery showed cache-control: no-store and cf-cache-status: DYNAMIC; health endpoint hash differences were attributed to changing uptime and timestamp fields.",
+        "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts",
+        "npm run audit:ci",
+        "npm run lint",
+        "npm run type-check",
+        "npm run build",
+        "npm run test:ci",
+        "node scripts/link-check.mjs",
+        "git diff --check",
+        "git diff --stat",
+        "git diff main...HEAD | python3 scripts/scan-secrets.py"
+    ],
+    "references": [
+        ".github/workflows/ci-image.yml",
+        ".github/workflows/ci-helm.yml",
+        "charts/dspace/Chart.yaml",
+        "charts/dspace/values.yaml",
+        "charts/dspace/templates/servicemonitor.yaml",
+        "package.json",
+        "https://github.com/democratizedspace/dspace/releases/tag/v3.0.1",
+        "https://github.com/democratizedspace/dspace/commit/1a31a569aff2dbeb238e8c2688b9e85140d2077d",
+        "https://github.com/democratizedspace/dspace/pull/4718",
+        "https://github.com/democratizedspace/dspace/pull/4719",
+        "https://github.com/futuroptimist/sugarkube/pull/2320",
+        "outages/2026-07-23-dspace-production-version-drift.md"
+    ],
+    "longForm": "outages/2026-07-23-dspace-production-version-drift.md"
+}
