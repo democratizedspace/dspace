@@ -14,7 +14,9 @@ On July 23, 2026, manual operator inspection found that production `democratized
 serving later 3.1-era frontend and changelog content while runtime identity surfaces still reported
 DSPACE v3.0.1. The footer identified the deployment as `prod v3.0.1`, `/healthz` reported
 `version: "v3.0.1"` and `env: "prod"`, and `/livez` reported `version: "v3.0.1"` and
-`env: "prod"`.
+`env: "prod"`. The incident was not limited to misleading release labels or changelog content:
+the unintended 3.1-era frontend also made the non-working token.place prototype the default `/chat`
+provider, creating a directly broken user-facing feature.
 
 The service stayed available. No data loss, saved-game corruption, credential exposure, privacy
 incident, or security compromise was detected. The incident was resolved by replacing the live
@@ -42,6 +44,16 @@ user-visible frontend drift.
 - Production served later 3.1-era frontend and changelog content while visible runtime identity
   surfaces still reported v3.0.1.
 - Users could be misled about which DSPACE release was deployed.
+- Fresh/default production users opening `/chat` were routed to token.place by default; this
+  provider-selection behavior is repository-verifiable from the token.place chat design and
+  chat-provider routing E2E coverage.
+- Based on operator evidence from the affected production state, the token.place-enabled chat
+  prototype did not function during the incident, leaving the default chat workflow visibly broken.
+- The OpenAI chat path remained available only through a manual workaround in `/settings`, where a
+  user had to explicitly select OpenAI and provide or retain their own valid OpenAI API key.
+- That workaround required knowledge that was not obvious from the broken default experience and therefore did not eliminate user impact.
+- Existing users already persisted on OpenAI with a valid key may have avoided this specific chat failure.
+- The number of affected chat sessions, attempted messages, exact client errors, and precise token.place failure mode were not captured.
 - Operators could be misled because readiness and liveness checks stayed healthy and reported the
   expected semantic version rather than proving the expected source commit or immutable image
   revision.
@@ -62,10 +74,11 @@ user-visible frontend drift.
   they are not proof that incorrect content was served from startup, are not a confirmed incident
   duration, and do not rule out an earlier or later activation within that interval.
 - The first confirmed user-visible impact was the July 23 manual observation.
-- Blast radius was limited to the production `democratized.space` frontend and changelog
-  release-content integrity. Service availability remained healthy, and no evidence showed data
-  loss, save corruption, credential exposure, privacy/security compromise, staging impact,
-  token.place impact, or impact to the other Sugarkube applications.
+- Blast radius was limited to production `democratized.space` release-content integrity and the
+  default `/chat` provider selection and chat user journey. Service availability remained healthy,
+  and no evidence showed data loss, save corruption, credential exposure, privacy/security
+  compromise, staging impact, token.place users outside DSPACE, or impact to the other Sugarkube
+  applications.
 - Severity is high because production release integrity and operator trust were violated, with a
   potentially multi-day exposure window, despite no confirmed availability, data-loss, or security
   impact.
@@ -290,6 +303,9 @@ contain changing uptime and timestamp fields; those differing hashes were not tr
   3.0.1 and the live `--reuse-values` path; the precise Helm merge behavior remains unresolved.
 - Helm stored values remained stale after the emergency Deployment correction.
 - No pre-recovery image digest or response-body hash was preserved.
+- Availability and version checks did not exercise the default fresh-profile `/chat` path, allowing
+  a visibly broken production chat experience to coexist with green `/healthz` and `/livez`
+  results.
 - The exact impact start and exact workflow run that moved the semantic tag remain unknown.
 
 ## Current residual risk
@@ -321,6 +337,7 @@ immutable image tag. This record does not recommend editing Helm revision histor
 | P0 | Sugarkube environment config | Open | Introduce environment-specific Sugarkube chart pins so staging can use DSPACE chart 3.1.0 while production remains on its approved chart version. | Staging and production chart pins are independently represented and reviewed. |
 | P1 | Application identity | Open | Expose and verify a bounded build-identity signal containing the Git revision, not only the semantic application version. | Health or a bounded identity endpoint reports the approved source revision in a safe form. |
 | P1 | Production verification | Open | Require production verification to compare the running image revision/digest against the approved release commit. | Release checks fail if live image revision or digest does not match the approved commit. |
+| P1 | Production verification | Open | Add a fresh-profile synthetic or promotion smoke test for `/chat` that verifies the default provider matches the approved release, the default chat panel is usable for that release's intended provider, and the OpenAI opt-in path remains discoverable and correctly gated by a user-supplied key. | Promotion checks fail when the served frontend silently changes the default provider or when the approved default `/chat` journey is visibly non-functional. |
 | P1 | Recovery verification | Open | Capture rollout completion time, old/new pod identities, and old/new resolved image IDs during rollback or emergency redeploy. | Rollback or redeploy evidence records completion time plus old/new pods and image IDs. |
 | P1 | Frontend verification | Open | Add a deterministic frontend content/build marker check so release-content drift is caught even when `/healthz` and `/livez` remain healthy. | Monitoring or deploy verification compares an expected frontend build marker. |
 | P1 | Monitoring | Open | Add monitoring or alerting for unexpected production build-revision drift. | Alert fires when production build identity differs from the approved release coordinate. |
@@ -336,6 +353,10 @@ immutable image tag. This record does not recommend editing Helm revision histor
   GitHub CLI token lacked `read:packages`.
 - The exact publish or overwrite time for the mismatched OCI chart `dspace:3.0.1` was not captured.
 - The exact readiness transition and exact last affected request were not captured.
+- The exact count of affected users, sessions, or failed chat attempts was not captured.
+- No browser console/network trace or exact user-visible token.place error was preserved from the
+  affected production state.
+- There is no proof that users with an already persisted OpenAI provider and valid key were affected by the chat failure.
 - The exact Helm `--reuse-values` merge path that produced the live nil-pointer rendering failure
   was not fully reproduced offline.
 
@@ -349,6 +370,8 @@ Repository and public references used by this record:
 - `charts/dspace/values.yaml`
 - `charts/dspace/templates/servicemonitor.yaml`
 - `package.json`
+- `docs/design/token-place-chat-v3.1.md`
+- `frontend/e2e/chat-provider-routing.spec.ts`
 - `outages/2026-07-23-dspace-production-version-drift.json`
 - `https://github.com/democratizedspace/dspace/releases/tag/v3.0.1`
 - `https://github.com/democratizedspace/dspace/commit/1a31a569aff2dbeb238e8c2688b9e85140d2077d`
