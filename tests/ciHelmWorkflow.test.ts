@@ -24,7 +24,7 @@ describe('chart publication workflow integrity', () => {
   });
 
   it('serializes same-tag runs without cancellation', () => {
-    expect(workflow.concurrency.group).toContain('github.sha');
+    expect(workflow.concurrency.group).toBe('helm-chart-${{ github.ref }}');
     expect(workflow.concurrency['cancel-in-progress']).toBe(false);
   });
 
@@ -86,7 +86,7 @@ describe('chart publication workflow integrity', () => {
     for (const field of [
       'Chart version',
       'Application version',
-      'Chart release tag',
+      'Triggering chart release tag',
       'Full source SHA',
       'Source repository',
       'OCI reference',
@@ -95,6 +95,9 @@ describe('chart publication workflow integrity', () => {
     ]) {
       expect(summary).toContain(field);
     }
+    expect(summary).toContain(
+      'SOURCE_SHA is the authoritative immutable provenance'
+    );
   });
 
   it('keeps credentials in environment variables and stdin', () => {

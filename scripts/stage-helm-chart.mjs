@@ -65,19 +65,20 @@ export function verifyChart({ chartYaml, version, appVersion, revision }) {
     Array.isArray(chart.annotations)
   )
     throw new Error('Chart.yaml annotations must be a YAML map');
-  const expected = {
-    version,
-    appVersion,
+  const expectedAnnotations = {
     'org.opencontainers.image.source': SOURCE_REPOSITORY,
     'org.opencontainers.image.revision': revision,
     'org.opencontainers.image.version': appVersion,
   };
-  for (const [key, value] of Object.entries(expected)) {
-    const actual = key in chart ? String(chart[key]) : chart.annotations[key];
-    if (actual !== value)
+  if (String(chart.version) !== version)
+    throw new Error('Packaged Chart.yaml version mismatch');
+  if (String(chart.appVersion) !== appVersion)
+    throw new Error('Packaged Chart.yaml appVersion mismatch');
+  for (const [key, value] of Object.entries(expectedAnnotations)) {
+    if (chart.annotations[key] !== value)
       throw new Error(`Packaged Chart.yaml ${key} mismatch`);
   }
-  return expected;
+  return { version, appVersion, ...expectedAnnotations };
 }
 
 export function main(argv = process.argv.slice(2)) {

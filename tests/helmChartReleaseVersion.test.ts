@@ -11,7 +11,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { parse } from 'yaml';
+import { parse, stringify } from 'yaml';
 import {
   SOURCE_REPOSITORY,
   stageChart,
@@ -424,5 +424,33 @@ describe('staged Helm chart provenance', () => {
       ).toThrow(/mismatch/);
       expect(readFileSync(join(source, 'Chart.yaml'), 'utf8')).toBe(before);
     })
+  );
+
+  it.each([
+    ['missing', 'org.opencontainers.image.revision', undefined],
+    ['wrong', 'org.opencontainers.image.revision', 'f'.repeat(40)],
+  ])(
+    'rejects a %s provenance annotation despite a matching top-level lookalike',
+    (_case, annotation, annotationValue) =>
+      chartFixture((source, staged) => {
+        stageChart({ sourceDir: source, destinationDir: staged, revision });
+        const chartYaml = join(staged, 'Chart.yaml');
+        const chart = parse(readFileSync(chartYaml, 'utf8'));
+        chart[annotation] = revision;
+        if (annotationValue === undefined) {
+          delete chart.annotations[annotation];
+        } else {
+          chart.annotations[annotation] = annotationValue;
+        }
+        writeFileSync(chartYaml, stringify(chart));
+        expect(() =>
+          verifyChart({
+            chartYaml,
+            version: '4.5.6',
+            appVersion: '3.1.0',
+            revision,
+          })
+        ).toThrow(/revision mismatch/);
+      })
   );
 });

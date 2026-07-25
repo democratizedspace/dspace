@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: helm-chart-${{ github.sha }}
+  group: helm-chart-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -135,11 +135,12 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$ARCHIVE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ && "$OCI_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]] || exit 1
+          # The tag labels the triggering event; SOURCE_SHA is the authoritative immutable provenance.
           cat >> "$GITHUB_STEP_SUMMARY" <<EOF
           ## Helm chart publication evidence
           - Chart version: $CHART_VERSION
           - Application version: $APP_VERSION
-          - Chart release tag: $CHART_TAG
+          - Triggering chart release tag: $CHART_TAG
           - Full source SHA: $SOURCE_SHA
           - Source repository: https://github.com/democratizedspace/dspace
           - OCI reference: oci://ghcr.io/democratizedspace/charts/dspace:$CHART_VERSION
