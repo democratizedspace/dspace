@@ -48,8 +48,24 @@ jobs:
       - name: Package chart
         id: package
         run: |
-          helm package charts/dspace
-          echo "chart_file=$(ls dspace-*.tgz)" >> "$GITHUB_OUTPUT"
+          chart_version=$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)
+          app_version=$(awk '$1 == "appVersion:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)
+          chart_dist="$RUNNER_TEMP/dspace-chart-dist"
+          rm -rf "$chart_dist"
+          mkdir -p "$chart_dist"
+          expected_chart_file="$chart_dist/dspace-${chart_version}.tgz"
+          helm package charts/dspace --destination "$chart_dist"
+          mapfile -t chart_files < <(find "$chart_dist" -maxdepth 1 -type f -name 'dspace-*.tgz' -print)
+          if [[ ${#chart_files[@]} -ne 1 || "${chart_files[0]}" != "$expected_chart_file" ]]; then
+            printf 'Expected exactly %s; found: %s\n' "$expected_chart_file" "${chart_files[*]:-none}" >&2
+            exit 1
+          fi
+          packaged_version=$(helm show chart "$expected_chart_file" | awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }')
+          packaged_app_version=$(helm show chart "$expected_chart_file" | awk '$1 == "appVersion:" { gsub(/"/, "", $2); print $2; exit }')
+          [[ "$packaged_version" == "$chart_version" ]] || { echo "Packaged chart version '$packaged_version' != '$chart_version'" >&2; exit 1; }
+          [[ "$packaged_app_version" == "$app_version" ]] || { echo "Packaged appVersion '$packaged_app_version' != '$app_version'" >&2; exit 1; }
+          echo "chart_file=$expected_chart_file" >> "$GITHUB_OUTPUT"
+          echo "chart_version=$chart_version" >> "$GITHUB_OUTPUT"
 
       - name: Authenticate to GHCR
         run: helm registry login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
@@ -60,5 +76,4 @@ jobs:
       - name: Export chart reference
         id: chart-ref
         run: |
-          chart_version=$(grep '^version:' charts/dspace/Chart.yaml | awk '{print $2}')
-          echo "chart_ref=oci://ghcr.io/democratizedspace/charts/dspace:${chart_version}" >> "$GITHUB_OUTPUT"
+          echo "chart_ref=oci://ghcr.io/democratizedspace/charts/dspace:${{ steps.package.outputs.chart_version }}" >> "$GITHUB_OUTPUT"

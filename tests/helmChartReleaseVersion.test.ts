@@ -1,220 +1,301 @@
 import { describe, expect, it } from 'vitest';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = join(__dirname, '..');
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const coordinatePaths = [
+  'package.json',
+  'frontend/package.json',
+  'package-lock.json',
+  'charts/dspace/Chart.yaml',
+  'charts/dspace/values.yaml',
+  'docs/apps/dspace.version',
+];
 
-const chartPath = join(repoRoot, 'charts', 'dspace', 'Chart.yaml');
-const valuesPath = join(repoRoot, 'charts', 'dspace', 'values.yaml');
-const versionPath = join(repoRoot, 'docs', 'apps', 'dspace.version');
-const packageLockPath = join(repoRoot, 'package-lock.json');
-const packageJson = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
-const frontendPackageJson = JSON.parse(readFileSync(join(repoRoot, 'frontend', 'package.json'), 'utf8'));
-const packageLockJson = JSON.parse(readFileSync(packageLockPath, 'utf8'));
-
-const copyCoordinateFixture = () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'dspace-version-'));
-    for (const path of ['package.json', 'package-lock.json', 'frontend/package.json']) {
-        mkdirSync(dirname(join(fixtureRoot, path)), { recursive: true });
-        cpSync(join(repoRoot, path), join(fixtureRoot, path), { recursive: true });
-    }
-    for (const path of ['charts/dspace/Chart.yaml', 'charts/dspace/values.yaml', 'docs/apps/dspace.version']) {
-        mkdirSync(dirname(join(fixtureRoot, path)), { recursive: true });
-        cpSync(join(repoRoot, path), join(fixtureRoot, path), { recursive: true });
-    }
-    return fixtureRoot;
+const fixture = () => {
+  const root = mkdtempSync(join(tmpdir(), 'dspace-version-'));
+  for (const path of coordinatePaths) {
+    mkdirSync(dirname(join(root, path)), { recursive: true });
+    cpSync(join(repoRoot, path), join(root, path));
+  }
+  return root;
 };
 
-const runGuard = (fixtureRoot: string) =>
-    spawnSync('bash', [join(repoRoot, 'scripts', 'check-dspace-chart-version.sh')], {
-        cwd: repoRoot,
-        env: { ...process.env, DSPACE_VERSION_ROOT: fixtureRoot },
-        encoding: 'utf8',
-    });
+const runGuard = (root: string) =>
+  spawnSync('bash', [join(repoRoot, 'scripts/check-dspace-chart-version.sh')], {
+    env: { ...process.env, DSPACE_VERSION_ROOT: root },
+    encoding: 'utf8',
+  });
 
-const writeChangedText = (path: string, current: string, next: string) => {
-    expect(next).not.toBe(current);
-    writeFileSync(path, next);
+const read = (root: string, path: string) =>
+  readFileSync(join(root, path), 'utf8');
+const replace = (
+  root: string,
+  path: string,
+  search: string | RegExp,
+  value: string
+) => {
+  const file = join(root, path);
+  const current = read(root, path);
+  const next = current.replace(search, value);
+  expect(next).not.toBe(current);
+  writeFileSync(file, next);
+};
+const currentVersions = (root: string) => ({
+  application: JSON.parse(read(root, 'package.json')).version as string,
+  chart: read(root, 'charts/dspace/Chart.yaml').match(
+    /^version:\s*"?([^"\s]+)"?$/m
+  )?.[1] as string,
+});
+const withFixture = (check: (root: string) => void) => {
+  const root = fixture();
+  try {
+    check(root);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 };
 
-const replaceFixtureText = (path: string, search: string | RegExp, replacement: string) => {
-    const current = readFileSync(path, 'utf8');
-    const next = current.replace(search, replacement);
-    writeChangedText(path, current, next);
-};
+describe('independent DSPACE application and chart coordinates', () => {
+  it('passes current repository coordinates and reports both groups', () =>
+    withFixture((root) => {
+      const { application, chart } = currentVersions(root);
+      const result = runGuard(root);
+      expect(result.status, result.stderr).toBe(0);
+      expect(result.stdout).toContain(
+        `application version ${application} (v${application})`
+      );
+      expect(result.stdout).toContain(`chart version ${chart}`);
+    }));
 
-describe('DSPACE release coordinates', () => {
-    const chartContent = readFileSync(chartPath, 'utf8');
-    const valuesContent = readFileSync(valuesPath, 'utf8');
-    const versionContent = readFileSync(versionPath, 'utf8');
+  it('permits chart 3.0.2 with application 3.0.1', () =>
+    withFixture((root) => {
+      const { application, chart } = currentVersions(root);
+      for (const path of [
+        'package.json',
+        'frontend/package.json',
+        'package-lock.json',
+      ]) {
+        replace(
+          root,
+          path,
+          new RegExp(`"version": "${application.replaceAll('.', '\\.')}"`, 'g'),
+          '"version": "3.0.1"'
+        );
+      }
+      replace(
+        root,
+        'charts/dspace/Chart.yaml',
+        `version: ${chart}`,
+        'version: 3.0.2'
+      );
+      replace(
+        root,
+        'charts/dspace/Chart.yaml',
+        `appVersion: "${application}"`,
+        'appVersion: "3.0.1"'
+      );
+      replace(
+        root,
+        'charts/dspace/values.yaml',
+        `tag: v${application}`,
+        'tag: v3.0.1'
+      );
+      writeFileSync(join(root, 'docs/apps/dspace.version'), '3.0.2\n');
+      const result = runGuard(root);
+      expect(result.status, result.stderr).toBe(0);
+      expect(result.stdout).toContain('application version 3.0.1');
+      expect(result.stdout).toContain('chart version 3.0.2');
+    }));
 
-    const chartVersionMatch = chartContent.match(/^version:\s*"?([^"\n]+)"?/m);
-    const appVersionMatch = chartContent.match(/^appVersion:\s*"?([^"\n]+)"?/m);
-    const imageTagMatch = valuesContent.match(/^\s*tag:\s*([^\n]+)/m);
+  it.each([
+    ['Application', 'root package version', 'package.json', null],
+    ['Chart', 'chart version', 'charts/dspace/Chart.yaml', /^version:.*\n/m],
+  ])('labels a missing %s field', (group, field, path, line) =>
+    withFixture((root) => {
+      if (line) replace(root, path, line, '');
+      else rmSync(join(root, path));
+      const result = runGuard(root);
+      expect(result.status).not.toBe(0);
+      expect(result.stderr).toContain(`${group} coordinate missing: ${field}`);
+    })
+  );
 
-    it('sets every authoritative coordinate to the 3.1.0 release candidate metadata', () => {
-        expect(packageJson.version).toBe('3.1.0');
-        expect(frontendPackageJson.version).toBe('3.1.0');
-        expect(packageLockJson.version).toBe('3.1.0');
-        expect(packageLockJson.packages[''].version).toBe('3.1.0');
-        expect(chartVersionMatch?.[1]).toBe('3.1.0');
-        expect(appVersionMatch?.[1]).toBe('3.1.0');
-        expect(imageTagMatch?.[1].trim()).toBe('v3.1.0');
-        expect(versionContent).toMatch(/^3\.1\.0$/m);
-    });
+  it.each([
+    [
+      'Application',
+      'root package version',
+      'package.json',
+      /"version": "[^"]+"/,
+      '"version": "01.2.3"',
+    ],
+    [
+      'Application',
+      'chart appVersion',
+      'charts/dspace/Chart.yaml',
+      /^appVersion:.*$/m,
+      'appVersion: "v1.2.3"',
+    ],
+    [
+      'Chart',
+      'chart version',
+      'charts/dspace/Chart.yaml',
+      /^version:.*$/m,
+      'version: 1.02.3',
+    ],
+  ])('labels malformed %s field %s', (group, field, path, search, value) =>
+    withFixture((root) => {
+      replace(root, path, search, value);
+      const result = runGuard(root);
+      expect(result.status).not.toBe(0);
+      expect(result.stderr).toContain(
+        `${group} coordinate malformed: ${field}`
+      );
+    })
+  );
 
-    it('keeps appVersion unprefixed while image.tag uses the human-readable v-prefixed tag', () => {
-        expect(appVersionMatch?.[1]).toBe(packageJson.version);
-        expect(appVersionMatch?.[1].startsWith('v')).toBe(false);
-        expect(imageTagMatch?.[1].trim()).toBe(`v${packageJson.version}`);
-    });
+  it.each([
+    [
+      'root package version',
+      'package.json',
+      'version',
+      'frontend package version',
+    ],
+    [
+      'frontend package version',
+      'frontend/package.json',
+      'version',
+      'frontend package version',
+    ],
+    [
+      'package-lock top-level version',
+      'package-lock.json',
+      'version',
+      'package-lock top-level version',
+    ],
+    [
+      'package-lock packages[""].version',
+      'package-lock.json',
+      'packages',
+      'package-lock packages[""].version',
+    ],
+    [
+      'chart appVersion',
+      'charts/dspace/Chart.yaml',
+      'appVersion',
+      'chart appVersion',
+    ],
+    [
+      'chart default image.tag',
+      'charts/dspace/values.yaml',
+      'image.tag',
+      'chart default image.tag',
+    ],
+  ])(
+    'labels valid application drift in %s',
+    (_coordinate, path, field, diagnostic) =>
+      withFixture((root) => {
+        const { application } = currentVersions(root);
+        const driftVersion = application === '9.8.7' ? '9.8.6' : '9.8.7';
 
-    it('passes the release-coordinate guard for the repository fixture', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            const result = runGuard(fixtureRoot);
-            expect(result.status, result.stderr).toBe(0);
-            expect(result.stdout).toContain('DSPACE release coordinates are aligned at 3.1.0');
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
+        if (path.endsWith('.json')) {
+          const document = JSON.parse(read(root, path));
+          if (field === 'packages')
+            document.packages[''].version = driftVersion;
+          else document.version = driftVersion;
+          writeFileSync(
+            join(root, path),
+            `${JSON.stringify(document, null, 2)}\n`
+          );
+        } else if (field === 'appVersion') {
+          replace(
+            root,
+            path,
+            /^appVersion:.*$/m,
+            `appVersion: "${driftVersion}"`
+          );
+        } else {
+          replace(root, path, /^(\s*tag:)\s*.*$/m, `$1 v${driftVersion}`);
         }
-    });
 
-    it('rejects representative coordinate mismatches without scanning historical docs', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            writeChangedText(
-                join(fixtureRoot, 'docs', 'apps', 'dspace.version'),
-                readFileSync(join(fixtureRoot, 'docs', 'apps', 'dspace.version'), 'utf8'),
-                '3.0.1\n'
-            );
-            const result = runGuard(fixtureRoot);
-            expect(result.status).not.toBe(0);
-            expect(result.stderr).toContain("docs/apps/dspace.version mismatch: found '3.0.1'");
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
-        }
-    });
+        const result = runGuard(root);
+        expect(result.status).not.toBe(0);
+        expect(result.stderr).toContain(
+          `Application coordinate drift: ${diagnostic}`
+        );
+      })
+  );
 
+  it('labels chart drift with its field', () =>
+    withFixture((root) => {
+      const { chart } = currentVersions(root);
+      writeFileSync(
+        join(root, 'docs/apps/dspace.version'),
+        chart === '8.8.8' ? '8.8.7\n' : '8.8.8\n'
+      );
+      const result = runGuard(root);
+      expect(result.status).not.toBe(0);
+      expect(result.stderr).toContain(
+        'Chart coordinate drift: docs/apps/dspace.version'
+      );
+    }));
 
-    it('reports labeled failures when JSON coordinates are missing', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            const packageLockFile = join(fixtureRoot, 'package-lock.json');
-            const current = readFileSync(packageLockFile, 'utf8');
-            const packageLock = JSON.parse(current);
-            expect(packageLock.version).toBe('3.1.0');
-            expect(packageLock.packages[''].version).toBe('3.1.0');
-            delete packageLock.packages[''].version;
-            writeChangedText(packageLockFile, current, `${JSON.stringify(packageLock, null, 2)}\n`);
+  it.each([
+    ['', 'found 0'],
+    ['# comment only\n', 'found 0'],
+    ['1.2.3\n2.3.4\n', 'found 2'],
+    [' 1.2.3\n', "found ' 1.2.3'"],
+    ['v1.2.3\n', "found 'v1.2.3'"],
+    ['1.2.3 trailing\n', "found '1.2.3 trailing'"],
+  ])(
+    'rejects malformed docs/apps/dspace.version content %#',
+    (content, detail) =>
+      withFixture((root) => {
+        writeFileSync(join(root, 'docs/apps/dspace.version'), content);
+        const result = runGuard(root);
+        expect(result.status).not.toBe(0);
+        expect(result.stderr).toContain(
+          'Chart coordinate malformed: docs/apps/dspace.version'
+        );
+        expect(result.stderr).toContain(detail);
+      })
+  );
 
-            const result = runGuard(fixtureRoot);
-            expect(result.status).not.toBe(0);
-            expect(result.stderr).toContain(
-                `Missing package-lock packages[""].version; expected '3.1.0'`
-            );
-            expect(result.stderr).toContain('DSPACE release coordinates are not aligned.');
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
-        }
-    });
+  it('uses a deterministic clean package destination and chart-derived coordinates', () => {
+    const workflow = readFileSync(
+      join(repoRoot, '.github/workflows/ci-helm.yml'),
+      'utf8'
+    );
+    expect(workflow).toContain('chart_dist="$RUNNER_TEMP/dspace-chart-dist"');
+    expect(workflow).toContain('rm -rf "$chart_dist"');
+    expect(workflow).toContain('mkdir -p "$chart_dist"');
+    expect(workflow).not.toContain('mktemp -d');
+    expect(workflow).toContain(
+      'expected_chart_file="$chart_dist/dspace-${chart_version}.tgz"'
+    );
+    expect(workflow).toContain('find "$chart_dist" -maxdepth 1');
+    expect(workflow).toContain('packaged_version=$(helm show chart');
+    expect(workflow).toContain('packaged_app_version=$(helm show chart');
+    expect(workflow).toContain('${{ steps.package.outputs.chart_version }}');
+  });
 
-    it('reports labeled failures when docs/apps/dspace.version has no strict semver line', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            writeChangedText(
-                join(fixtureRoot, 'docs', 'apps', 'dspace.version'),
-                readFileSync(join(fixtureRoot, 'docs', 'apps', 'dspace.version'), 'utf8'),
-                '3.1.0   \n'
-            );
-
-            const result = runGuard(fixtureRoot);
-            expect(result.status).not.toBe(0);
-            expect(result.stderr).toContain("Missing docs/apps/dspace.version; expected '3.1.0'");
-            expect(result.stderr).toContain('DSPACE release coordinates are not aligned.');
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
-        }
-    });
-
-
-    it('reports labeled failures when the package-lock top-level version is missing', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            const packageLockFile = join(fixtureRoot, 'package-lock.json');
-            const current = readFileSync(packageLockFile, 'utf8');
-            const packageLock = JSON.parse(current);
-            expect(packageLock.version).toBe('3.1.0');
-            delete packageLock.version;
-            writeChangedText(packageLockFile, current, `${JSON.stringify(packageLock, null, 2)}\n`);
-
-            const result = runGuard(fixtureRoot);
-            expect(result.status).not.toBe(0);
-            expect(result.stderr).toContain("Missing package-lock top-level version; expected '3.1.0'");
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
-        }
-    });
-
-    it('reports malformed JSON coordinate files separately from missing values', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            const packageFile = join(fixtureRoot, 'package.json');
-            writeChangedText(packageFile, readFileSync(packageFile, 'utf8'), '{not json}\n');
-
-            const result = runGuard(fixtureRoot);
-            expect(result.status).not.toBe(0);
-            expect(result.stderr).toContain('Unable to read or parse JSON coordinate file');
-            expect(result.stderr).toContain('package.json');
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
-        }
-    });
-
-    it('rejects a chart appVersion that includes a v prefix', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            replaceFixtureText(
-                join(fixtureRoot, 'charts', 'dspace', 'Chart.yaml'),
-                /^appVersion:\s*"?3\.1\.0"?$/m,
-                'appVersion: "v3.1.0"'
-            );
-
-            const result = runGuard(fixtureRoot);
-            expect(result.status).not.toBe(0);
-            expect(result.stderr).toContain("chart appVersion mismatch: found 'v3.1.0'");
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
-        }
-    });
-
-    it('rejects an unprefixed chart default image tag', () => {
-        const fixtureRoot = copyCoordinateFixture();
-        try {
-            replaceFixtureText(
-                join(fixtureRoot, 'charts', 'dspace', 'values.yaml'),
-                /^(\s*tag:)\s*v3\.1\.0$/m,
-                '$1 3.1.0'
-            );
-
-            const result = runGuard(fixtureRoot);
-            expect(result.status).not.toBe(0);
-            expect(result.stderr).toContain("chart default image.tag mismatch: found '3.1.0'");
-        } finally {
-            rmSync(fixtureRoot, { recursive: true, force: true });
-        }
-    });
-
-    it('continues to ignore historical v3.0.1 documentation outside authoritative coordinates', () => {
-        const stdout = execFileSync('bash', ['scripts/check-dspace-chart-version.sh'], {
-            cwd: repoRoot,
-            encoding: 'utf8',
-        });
-        expect(stdout).toContain('DSPACE release coordinates are aligned at 3.1.0');
-        expect(readFileSync(join(repoRoot, 'docs', 'qa', 'v3.0.1.md'), 'utf8')).toContain('v3.0.1');
-    });
+  it('does not scan historical release records as authoritative coordinates', () =>
+    withFixture((root) => {
+      mkdirSync(join(root, 'docs/qa'), { recursive: true });
+      writeFileSync(
+        join(root, 'docs/qa/v3.0.1.md'),
+        'historical version v999.999.999\n'
+      );
+      expect(runGuard(root).status).toBe(0);
+    }));
 });

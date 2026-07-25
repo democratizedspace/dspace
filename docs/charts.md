@@ -12,7 +12,9 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `replicaCount`: Pod replica count. Defaults to `2` for redundancy.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
-- `image.tag`: Image tag to deploy. Defaults to `v3.1.0`, matching the prepared current package version.
+- `image.tag`: Image tag to deploy. Defaults to the human-readable semantic application tag
+  `v3.1.0`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
+  recording or proving the exact deployed image.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
 - `service.port`: Container and service port. Defaults to `8080`.
@@ -146,9 +148,11 @@ For the standard Sugarkube staging and production flow, use the
 Helm commands below remain useful for local clusters, development environments, and manual chart
 inspection.
 
-The chart is published to the GitHub Container Registry on `v3` and `main` pushes. After that
-existing publish workflow has completed successfully and the registry shows `3.1.0`, use this
-installation procedure for the prepared release-candidate version:
+The chart is published to the GitHub Container Registry on `v3` and `main` pushes. Its OCI version
+comes from `Chart.yaml:version` and may differ from the application version in `appVersion` and the
+package files. `docs/apps/dspace.version` pins the chart coordinate. The semantic image tag follows
+the application coordinate, but a branch-SHA tag or digest is required as immutable deployment
+evidence. After the publish workflow has completed successfully, use this installation procedure:
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
