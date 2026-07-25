@@ -20,6 +20,7 @@ setup in their existing runbooks.
   advance independently of the application version
 - **Semantic image tag:** `v<application version>`, for example `v3.1.0`; published only for a
   release and human-readable, but not proof of the deployed image
+- **Chart release tag:** exactly `chart-v<chart version>`, pointing to the reviewed immutable commit
 
 Use immutable branch-SHA tags or image digests for staging, production approvals, and rollback
 records. Mutable branch tags and release-only semantic tags are convenient for humans but must not
@@ -29,14 +30,23 @@ be the audit record for a production deploy.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
-2. `.github/workflows/ci-helm.yml` packages `charts/dspace` and publishes it to the GHCR OCI chart
-   registry for `main` and `v3` pushes, and can also be run manually for those branches.
+2. `.github/workflows/ci-helm.yml` publishes only when an exact `chart-v<chart version>` tag is
+   pushed. Ordinary `main`/`v3` pushes and manual branch dispatches never publish charts. Before
+   creating the tag, verify it will point to the reviewed immutable commit and that its
+   `Chart.yaml:version` matches the tag exactly.
 3. `charts/dspace/Chart.yaml` and `docs/apps/dspace.version` must stay in sync so Sugarkube helper
    recipes install the intended chart version. Separately, package metadata and
    `Chart.yaml:appVersion` stay aligned on the application version; neither group must equal the
    other.
 4. Local Docker builds are for local development and smoke testing only. They are not the normal
    Sugarkube staging or production release path.
+
+Chart publication is immutable and fail-closed: the workflow checks the GHCR coordinate before
+packaging and again immediately before its single push, and refuses any outcome except an
+authoritative absence. Existing coordinates cannot be replaced. Chart `3.0.1` is permanently
+tombstoned even if it later appears absent; this does not prohibit a newer chart whose `appVersion`
+is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
+package SHA-256, and OCI manifest digest.
 
 ## Deploy staging
 
