@@ -121,7 +121,6 @@ curl -fsS https://prod.democratized.space/healthz
 
 If rehearsal succeeds and you proceed to production, switch back to `docs/examples/dspace.values.prod.yaml` for the real prod deployment.
 
-
 ## Troubleshooting and cross-environment guardrails
 
 - Use positional Sugarkube env args in operator commands (`just up prod`, `just save-logs prod`)
@@ -166,3 +165,14 @@ If rehearsal succeeds and you proceed to production, switch back to `docs/exampl
   - [Sugarkube troubleshooting](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md)
   - [Canonical outage markdown](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md)
   - [Canonical outage JSON](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)
+
+## DSPACE v3.0.1 recovery chart retention
+
+While DSPACE v3.0.1 is an approved production rollback candidate, retain the
+`release/chart-3.0.x` branch. Its chart `3.0.2` manages application v3.0.1 through the immutable
+`main-1a31a56` image. Publish only after the recovery PR merges, by placing `chart-v3.0.2` on the
+exact approved recovery-branch commit. Chart `3.0.1` is permanently tombstoned.
+
+The publication run is not complete evidence until operators capture and independently verify the
+full source SHA, OCI reference, packaged archive digest, and OCI digest. Keep issue #4731 open until
+that exactly-once publication evidence is recorded.

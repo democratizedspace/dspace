@@ -1,0 +1,35 @@
+{{- $metrics := .Values.metrics | default dict -}}
+{{- $metricsAuth := $metrics.auth | default dict -}}
+{{- $serviceMonitor := .Values.serviceMonitor | default dict -}}
+{{- if ($serviceMonitor.enabled | default false) }}
+{{- if not ($metrics.enabled | default false) }}
+{{- fail "serviceMonitor.enabled requires metrics.enabled=true so the application metrics endpoint is intentionally configured" }}
+{{- end }}
+{{- if not ($metricsAuth.existingSecret | default "") }}
+{{- fail "serviceMonitor.enabled requires metrics.auth.existingSecret so Prometheus can authenticate to /metrics" }}
+{{- end }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+    {{- with $serviceMonitor.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "dspace.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: http
+      path: {{ $metrics.path | default "/metrics" | quote }}
+      interval: {{ $serviceMonitor.interval | default "30s" | quote }}
+      scrapeTimeout: {{ $serviceMonitor.scrapeTimeout | default "10s" | quote }}
+      bearerTokenSecret: # scan-secrets: ignore (Kubernetes Secret reference field, not secret material)
+        name: {{ $metricsAuth.existingSecret | quote }}
+        key: {{ $metricsAuth.secretKey | default "token" | quote }}
+{{- end }}
