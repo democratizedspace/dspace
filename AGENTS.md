@@ -432,3 +432,13 @@ Run `npm test` to verify configuration stays in sync.
 - [Codex Prompt Upgrader](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/upgrader.md)
 - [AGENTS.md Spec](https://gist.github.com/dpaluy/cc42d59243b0999c1b3f9cf60dfd3be6)
 - [Agents.md Guide](https://agentsmd.net/)
+
+## Full-release consistency invariant
+
+A full release uses one approved commit for the `vX.Y.Z` and `chart-v<chartVersion>` tags,
+the immutable branch-SHA image, both required image platform revision labels, and Helm provenance.
+Publish the branch-SHA image first, the immutable chart second, and the GitHub release/semantic
+image alias last. The semantic tag must be an exact digest alias and must never be rebuilt or
+overwritten. Deployments and release manifests always select the immutable branch-SHA image.
+`scripts/check-release-consistency.mjs` is the shared fail-closed policy implementation; workflow
+YAML must not duplicate or weaken it.

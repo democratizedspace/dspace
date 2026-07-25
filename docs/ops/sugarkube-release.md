@@ -154,3 +154,23 @@ just app-promote-prod app=dspace tag=main-REPLACE_SHORTSHA
 
 Until those generic recipes are available in Sugarkube, keep using the mature DSPACE-specific
 commands documented above.
+
+## Fail-closed full-release order and manifest
+
+1. Publish and verify the multi-platform immutable `<branch>-<shortsha>` image.
+2. Publish and verify `chart-v<chartVersion>` from that exact full source commit.
+3. Publish the `v<applicationVersion>` GitHub release. Its workflow confirms the semantic image
+   coordinate is absent, creates one exact registry alias of the approved immutable image index,
+   verifies digest equality, and uploads `dspace-release-manifest.json` in the deterministic
+   `dspace-release-manifest` workflow artifact.
+
+The JSON records `applicationVersion`, the complete `sourceRevision`, immutable `imageTag` and
+`imageDigest`, required platform digests, `chartVersion`, and `chartDigest`. It intentionally has no
+deployment environment, approver, runtime, or promotion fields. The semantic tag is human-readable
+release evidence only: equality with the immutable index digest is enforced, but deployments and
+downstream manifests continue to use the immutable branch-SHA coordinate.
+
+Publishing out of order fails before semantic mutation. Supply the missing immutable prerequisite
+and rerun, provided the semantic coordinate was not created. Authentication, timeout, malformed
+registry data, existing coordinates, provenance mismatches, and digest mismatches all fail closed;
+neither semantic image tags nor chart coordinates are moved or overwritten.

@@ -173,3 +173,13 @@ When installing from the OCI registry, you will not have access to
 `charts/dspace/values.dev.yaml` unless you clone the repository. To customize values, either
 provide your own file with `-f <your-values.yaml>` or use `--set` flags as shown above.
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
+
+## Full-release relationship
+
+For a full application release, publication is deliberately ordered: first publish and verify the
+immutable `<branch>-<shortsha>` image, then publish and verify this chart from the same full commit,
+and only then publish the GitHub release. The release workflow verifies the chart's OCI digest,
+chart version, `appVersion`, and `org.opencontainers.image.revision` before it creates any semantic
+image coordinate. A missing or mismatched artifact stops safely; publish the missing immutable
+prerequisite and rerun while the semantic tag remains absent. Existing chart versions are never
+overwritten.

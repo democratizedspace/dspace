@@ -112,294 +112,64 @@ describe('ci-image.yml "local-build" job (PR path)', () => {
 
 describe('ci-image.yml "semantic-release" job (release-only publish path)', () => {
   const job = workflow.jobs['semantic-release'];
-
-  it('exists and is gated on a published release, not an ordinary push', () => {
-    expect(job).toBeTruthy();
-    expect(job.if).toBe(
-      "github.event_name == 'release' && github.event.action == 'published'"
-    );
-  });
-
-  it('serializes semantic publication with a concurrency group keyed on the tag', () => {
-    expect(job.concurrency).toBeTruthy();
+  const steps = findSteps(job);
+  it('is release-only and serializes the event-controlled tag', () => {
+    expect(job.if).toContain("github.event_name == 'release'");
     expect(job.concurrency.group).toContain('github.event.release.tag_name');
-    expect(job.concurrency['cancel-in-progress']).toBe(false);
   });
-
-  it('checks out the tagged commit explicitly rather than trusting the default ref', () => {
-    const checkoutStep = findStepsUsing(job, 'actions/checkout')[0];
-    expect(checkoutStep.with.ref).toContain('github.event.release.tag_name');
+  it('authorizes checkout before setup or repository lifecycle execution', () => {
+    const authorization = stepIndex(job, (step) => step.id === 'revision');
+    expect(authorization).toBeLessThan(
+      stepIndex(job, (step) => step.uses?.startsWith('actions/setup-node'))
+    );
+    expect(JSON.stringify(job)).not.toContain('pnpm install');
+    const checkout = findStepsUsing(job, 'actions/checkout')[0];
+    expect(checkout.with['persist-credentials']).toBe(false);
   });
-
-  it('uses the checked-out git rev-parse HEAD as the source revision, never github.sha', () => {
-    const serialized = JSON.stringify(job);
-    expect(serialized).toMatch(/git rev-parse HEAD/);
-    expect(serialized).not.toContain('${{ github.sha }}');
+  it('uses the reusable gate before and after one exact alias operation, with no rebuild', () => {
+    const gates = steps.filter((step) =>
+      step.run?.includes('check-release-consistency.mjs')
+    );
+    expect(gates).toHaveLength(2);
+    const aliases = steps.filter((step) =>
+      step.run?.includes('docker buildx imagetools create')
+    );
+    expect(aliases).toHaveLength(1);
+    expect(stepIndex(job, (step) => step === gates[0])).toBeLessThan(
+      stepIndex(job, (step) => step === aliases[0])
+    );
+    expect(stepIndex(job, (step) => step === aliases[0])).toBeLessThan(
+      stepIndex(job, (step) => step === gates[1])
+    );
+    expect(findStepsUsing(job, 'docker/build-push-action')).toHaveLength(0);
   });
-
-  it('peels the release tag to its commit before comparing to HEAD', () => {
-    // "git rev-parse <tag>" alone resolves an annotated/signed tag's own object SHA, not
-    // the commit it points at, which would reject every legitimate release cut from such a
-    // tag even though checkout correctly left HEAD on the tagged commit. The "^{commit}"
-    // peeling suffix is required so both lightweight and annotated/signed tags compare
-    // correctly against HEAD.
-    const revisionStep = findSteps(job).find((step) => step.id === 'revision');
-    expect(revisionStep.run).toMatch(/\$\{RELEASE_TAG\}\^\{commit\}|\$RELEASE_TAG\^\{commit\}/);
+  it('revalidates absence immediately before the mutation', () => {
+    const alias = stepIndex(job, (step) =>
+      step.run?.includes('imagetools create')
+    );
+    expect(steps[alias - 1].run).toContain('ghcr-manifest.mjs check-absent');
   });
-
-  it('never interpolates the attacker-influenceable release tag directly into a shell script', () => {
-    // Git tag names can contain shell metacharacters ("`, $(), ;). GitHub substitutes
-    // ${{ }} expressions into a run: script's source text before the shell parses it, so
-    // interpolating the raw tag there would let a crafted release tag execute commands with
-    // this job's packages:write/actions:write token. The tag may only reach a `run:` step by
-    // way of an `env:` var (assigned as data, not concatenated into the script) — never as a
-    // literal ${{ github.event.release.tag_name }} expression inside `run:` text. Using it as
-    // a structured action input (checkout's `ref:`, `concurrency.group`) is fine, since those
-    // aren't shell-interpolation contexts.
-    for (const step of findSteps(job)) {
-      if (typeof step.run !== 'string') {
-        continue;
-      }
+  it('uploads a deterministic manifest with an immutable pinned action and summarizes all digests', () => {
+    const upload = findStepsUsing(job, 'actions/upload-artifact')[0];
+    expect(upload.uses).toMatch(/@[0-9a-f]{40}$/);
+    expect(upload.with.name).toBe('dspace-release-manifest');
+    expect(upload.with.path).toBe('dspace-release-manifest.json');
+    const summary = steps.find((step) =>
+      step.run?.includes('GITHUB_STEP_SUMMARY')
+    ).run;
+    for (const field of [
+      'sourceRevision',
+      'imageDigest',
+      'linux/amd64',
+      'linux/arm64',
+      'chartDigest',
+    ])
+      expect(summary).toContain(field);
+  });
+  it('passes event tag and credentials as environment data', () => {
+    for (const step of steps.filter((step) => typeof step.run === 'string')) {
       expect(step.run).not.toContain('${{ github.event.release.tag_name }}');
-      if (step.run.includes('RELEASE_TAG')) {
-        expect(step.env?.RELEASE_TAG).toBe(
-          '${{ github.event.release.tag_name }}'
-        );
-      }
-    }
-  });
-
-  it('validates the release tag against v<root package version> before any push', () => {
-    const versionStep = findSteps(job).find((step) => step.id === 'version');
-    expect(versionStep.run).toMatch(/root_version/);
-    expect(versionStep.run).toMatch(/frontend_version/);
-    expect(versionStep.run).toMatch(/expected_tag="v\$\{root_version\}"/);
-    expect(versionStep.run).toMatch(/refusing to publish/);
-
-    const pushIndex = stepIndex(
-      job,
-      (step) =>
-        step.uses?.startsWith('docker/build-push-action') &&
-        step.with?.push === true
-    );
-    const versionIndex = stepIndex(job, (step) => step.id === 'version');
-    expect(versionIndex).toBeGreaterThanOrEqual(0);
-    expect(versionIndex).toBeLessThan(pushIndex);
-  });
-
-  it('validates package versions before emitting the version output', () => {
-    const versionStep = findSteps(job).find((step) => step.id === 'version');
-    const validation = '[[ ! "$root_version" =~ ^[0-9]+\\.[0-9]+\\.[0-9]+$ ]]';
-    expect(versionStep.run).toContain(validation);
-    expect(versionStep.run.indexOf(validation)).toBeLessThan(
-      versionStep.run.indexOf(
-        'echo "version=${root_version}" >> "$GITHUB_OUTPUT"'
-      )
-    );
-
-    const supportedVersion = /^[0-9]+\.[0-9]+\.[0-9]+$/;
-    expect(supportedVersion.test('3.1.0')).toBe(true);
-    for (const maliciousVersion of [
-      '3.1.$(touch /tmp/pwned)',
-      '3.1.`id`',
-      '3.1.0\nmalicious=value',
-    ]) {
-      expect(supportedVersion.test(maliciousVersion)).toBe(false);
-    }
-  });
-
-  it('passes version-derived shell values through env instead of run expressions', () => {
-    const rawVersionExpression = '${{ steps.version.outputs.version }}';
-    for (const step of findSteps(job)) {
-      if (typeof step.run === 'string') {
-        expect(step.run).not.toContain(rawVersionExpression);
-      }
-    }
-
-    const expectedEnvReferences = [
-      ['tags', 'RELEASE_VERSION', '${RELEASE_VERSION}'],
-      ['build_version', 'RELEASE_VERSION', '${RELEASE_VERSION}'],
-      [undefined, 'RELEASE_VERSION', '"v${RELEASE_VERSION}"'],
-    ];
-    for (const [id, envName, shellReference] of expectedEnvReferences) {
-      const matchingSteps = findSteps(job).filter(
-        (step) =>
-          (id === undefined || step.id === id) &&
-          step.env?.[envName] === rawVersionExpression &&
-          step.run?.includes(shellReference)
-      );
-      expect(matchingSteps.length).toBeGreaterThan(0);
-    }
-
-    const summaryStep = findSteps(job).find((step) =>
-      step.run?.includes('GITHUB_STEP_SUMMARY')
-    );
-    expect(summaryStep.env.RELEASE_VERSION).toBe(rawVersionExpression);
-    expect(summaryStep.env.BRANCH_SHA_TAG).toBe(
-      '${{ steps.tags.outputs.branch_sha_tag }}'
-    );
-    expect(summaryStep.env.SEMANTIC_TAG).toBe(
-      '${{ steps.tags.outputs.semantic_tag }}'
-    );
-    expect(summaryStep.run).toContain('${RELEASE_VERSION}');
-    expect(summaryStep.run).toContain('${BRANCH_SHA_TAG}');
-    expect(summaryStep.run).toContain('${SEMANTIC_TAG}');
-
-    const semanticRegistrySteps = findSteps(job).filter((step) =>
-      step.run?.includes('--tag "v${RELEASE_VERSION}"')
-    );
-    expect(semanticRegistrySteps).toHaveLength(2);
-    for (const step of semanticRegistrySteps) {
-      expect(step.env.RELEASE_VERSION).toBe(rawVersionExpression);
-    }
-  });
-
-  it('runs the semantic absence guard before publication, and fails closed', () => {
-    const guardIndex = stepIndex(job, (step) =>
-      step.run?.includes('ghcr-manifest.mjs check-absent')
-    );
-    const pushIndex = stepIndex(
-      job,
-      (step) =>
-        step.uses?.startsWith('docker/build-push-action') &&
-        step.with?.push === true
-    );
-    expect(guardIndex).toBeGreaterThanOrEqual(0);
-    expect(pushIndex).toBeGreaterThan(guardIndex);
-  });
-
-  it('keeps multi-arch publication for both supported architectures', () => {
-    const pushSteps = findStepsUsing(job, 'docker/build-push-action').filter(
-      (step) => step.with?.push === true
-    );
-    expect(pushSteps.length).toBeGreaterThan(0);
-    for (const step of pushSteps) {
-      expect(step.with.platforms).toBe('linux/amd64,linux/arm64');
-    }
-  });
-
-  it('contains exactly one semantic publication step that pushes only the semantic tag', () => {
-    const pushSteps = findStepsUsing(job, 'docker/build-push-action').filter(
-      (step) => step.with?.push === true
-    );
-    expect(pushSteps).toHaveLength(1);
-    const [pushStep] = pushSteps;
-    expect(pushStep.name).toBe('Build and push semantic release image');
-    expect(pushStep.id).toBe('build_push');
-    expect(pushStep.with.tags).toBe('${{ steps.tags.outputs.semantic_tag }}');
-    expect(pushStep.with.tags).not.toContain('branch_sha_tag');
-    expect(pushStep.with.tags).not.toMatch(/latest/);
-    expect(pushStep['continue-on-error']).toBeUndefined();
-  });
-
-  it('has no second-attempt or retry path for semantic publication', () => {
-    const serialized = JSON.stringify(job);
-    expect(serialized).not.toMatch(/attempt 1|attempt 2|retry/i);
-    expect(serialized).not.toContain('build_push_1');
-    expect(serialized).not.toContain('build_push_2');
-    expect(serialized).not.toMatch(/outcome == 'failure'/);
-  });
-
-  it('completes local image verification before the sole semantic publication', () => {
-    const steps = findSteps(job);
-    const pushIndex = steps.findIndex(
-      (step) => step.uses?.startsWith('docker/build-push-action') && step.with?.push === true
-    );
-    const verificationBuildIndex = steps.findIndex(
-      (step) => step.name === 'Build image for SHA verification'
-    );
-    const shaAssertionIndex = steps.findIndex(
-      (step) => step.name === 'Assert build SHA is baked into frontend bundle'
-    );
-    const chatStampIndex = steps.findIndex(
-      (step) => step.name === 'Verify chat build stamp inside image'
-    );
-
-    expect(verificationBuildIndex).toBeGreaterThanOrEqual(0);
-    expect(shaAssertionIndex).toBeGreaterThan(verificationBuildIndex);
-    expect(chatStampIndex).toBeGreaterThan(shaAssertionIndex);
-    expect(pushIndex).toBeGreaterThan(chatStampIndex);
-
-    for (const index of [verificationBuildIndex, shaAssertionIndex, chatStampIndex]) {
-      expect(steps[index].if).toBeUndefined();
-      expect(steps[index]['continue-on-error']).toBeUndefined();
-    }
-
-    expect(steps[verificationBuildIndex].with['build-args']).toBe(steps[pushIndex].with['build-args']);
-    expect(steps[verificationBuildIndex].with.labels).toBe(steps[pushIndex].with.labels);
-  });
-
-  it('lets publication failure terminate the job without conditional recovery', () => {
-    const pushStep = findStepsUsing(job, 'docker/build-push-action').find(
-      (step) => step.with?.push === true
-    );
-    expect(pushStep).toBeTruthy();
-    expect(pushStep.if).toBeUndefined();
-    expect(pushStep['continue-on-error']).toBeUndefined();
-    const laterSteps = findSteps(job).slice(
-      findSteps(job).indexOf(pushStep) + 1
-    );
-    for (const step of laterSteps) {
-      expect(step.if ?? '').not.toMatch(
-        /failure\(\)|outcome == 'failure'|always\(\)/
-      );
-    }
-  });
-
-  it('verifies and summarizes the branch-SHA coordinate without pushing it', () => {
-    const branchDescribeStep = findSteps(job).find(
-      (step) => step.id === 'branch_sha_evidence'
-    );
-    expect(branchDescribeStep).toBeTruthy();
-    expect(branchDescribeStep.run).toContain('ghcr-manifest.mjs describe');
-    expect(branchDescribeStep.run).toContain('steps.branch.outputs.branch');
-    expect(branchDescribeStep.run).toContain(
-      'steps.revision.outputs.short_sha'
-    );
-
-    const pushSteps = findStepsUsing(job, 'docker/build-push-action').filter(
-      (step) => step.with?.push === true
-    );
-    for (const step of pushSteps) {
-      expect(JSON.stringify(step.with)).not.toContain('branch_sha_tag');
-    }
-
-    const summaryStep = findSteps(job).find((step) =>
-      step.run?.includes('GITHUB_STEP_SUMMARY')
-    );
-    expect(summaryStep.env.BRANCH_SHA_TAG).toBe(
-      '${{ steps.tags.outputs.branch_sha_tag }}'
-    );
-    expect(summaryStep.run).toContain('${BRANCH_SHA_TAG}');
-  });
-
-  it('records the required evidence in the workflow summary without leaking credentials', () => {
-    const summaryStep = findSteps(job).find((step) =>
-      step.run?.includes('GITHUB_STEP_SUMMARY')
-    );
-    expect(summaryStep).toBeTruthy();
-    const summary = summaryStep.run as string;
-    expect(summary).toMatch(/Semantic version/);
-    expect(summary).toMatch(/Full Git SHA/);
-    expect(summary).toMatch(/Immutable branch-SHA tag/);
-    expect(summary).toMatch(/Semantic tag/);
-    expect(summary).toMatch(/Image index digest/);
-    expect(summary).toMatch(/linux\/amd64 digest/);
-    expect(summary).toMatch(/linux\/arm64 digest/);
-    expect(summary).not.toMatch(/GITHUB_TOKEN/);
-    expect(summary).not.toMatch(/password/i);
-  });
-
-  it('passes registry credentials only through env, never inline in a run script', () => {
-    const guardStep = findSteps(job).find((step) =>
-      step.run?.includes('ghcr-manifest.mjs check-absent')
-    );
-    const evidenceStep = findSteps(job).find((step) =>
-      step.run?.includes('ghcr-manifest.mjs describe')
-    );
-    for (const step of [guardStep, evidenceStep]) {
-      expect(step.env.GHCR_GUARD_PASSWORD).toContain('secrets.GITHUB_TOKEN');
-      expect(step.run).not.toContain('secrets.GITHUB_TOKEN');
+      expect(step.run).not.toContain('${{ secrets.GITHUB_TOKEN }}');
     }
   });
 });

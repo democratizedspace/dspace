@@ -22,19 +22,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.0.0
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --reporter=append-only
+          persist-credentials: false
 
       - name: Validate tag, versions, and source revision
         id: release
@@ -57,6 +45,25 @@ jobs:
           echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
           echo "chart_tag=$CHART_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+
+      - name: Apply reusable release-coordinate policy
+        env:
+          CHART_TAG: ${{ steps.release.outputs.chart_tag }}
+          SOURCE_REVISION: ${{ steps.release.outputs.source_sha }}
+        run: node scripts/check-release-consistency.mjs chart-candidate
 
       - name: Refuse an existing chart coordinate (pre-package)
         env:
@@ -123,6 +130,14 @@ jobs:
           digest=$(printf '%s\n' "$output" | sed -n 's/^Digest: \(sha256:[0-9a-f]\{64\}\)$/\1/p')
           [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "helm push did not report one valid OCI digest" >&2; exit 1; }
           echo "oci_digest=$digest" >> "$GITHUB_OUTPUT"
+
+      - name: Verify published chart coordinates and provenance
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore
+          SOURCE_REVISION: ${{ steps.release.outputs.source_sha }}
+          EXPECTED_CHART_DIGEST: ${{ steps.push.outputs.oci_digest }}
+        run: node scripts/check-release-consistency.mjs chart-published
 
       - name: Write publication evidence
         env:
