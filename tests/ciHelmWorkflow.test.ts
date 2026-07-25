@@ -78,6 +78,9 @@ describe('chart publication workflow integrity', () => {
     const push = step('Push chart exactly once').run;
     expect(push).not.toMatch(/retry|continue-on-error|\|\| true/);
     expect(push).toContain('^sha256:[0-9a-f]{64}$');
+    expect(step('Verify published chart coordinates').env.EXPECTED_CHART_DIGEST).toBe(
+      '${{ steps.push.outputs.oci_digest }}'
+    );
     const summary = step('Write publication evidence').run;
     for (const field of [
       'Chart version',

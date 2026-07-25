@@ -351,8 +351,9 @@ frontend versions agree), verifies the corresponding `<branch>-<short-sha>` arti
 reading its GHCR manifest without republishing or retagging it, and queries GHCR for the
 semantic tag before publishing — failing closed on any non-404 outcome, including auth,
 network, timeout, and malformed-response errors — inside a job-level `concurrency` group
-keyed on the tag so two publication runs can't race. The semantic publication step must
-use exactly one `push: true` attempt and must push only `vX.Y.Z`. See
+keyed on the tag so two publication runs can't race. Semantic publication performs exactly one
+bounded `docker buildx imagetools create` alias from the approved immutable `tag@digest`, performs
+no application rebuild, and immediately verifies exact index-digest equality. See
 `scripts/ghcr-manifest.mjs` and `tests/ciImageWorkflow.test.ts` /
 `tests/ghcrManifestGuard.test.ts`.
 

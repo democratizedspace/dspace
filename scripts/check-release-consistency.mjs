@@ -177,6 +177,10 @@ export function releaseManifest(input) {
   return manifest;
 }
 
+export function assertExpectedDigest(actual, expected, message) {
+  if (expected && actual !== expected) fail(message);
+}
+
 function env(name) {
   return (
     process.env[name] || fail(`Missing required environment variable ${name}`)
@@ -214,8 +218,18 @@ export async function run(mode) {
       chartDigest: `sha256:${'2'.repeat(64)}`,
       semanticTag: 'v3.1.0',
     });
-    if (JSON.stringify(value) !== JSON.stringify(releaseManifest({ ...value })))
+    const expected =
+      '{"schemaVersion":1,"app":"dspace","applicationVersion":"3.1.0",' +
+      '"sourceRevision":"0123456789abcdef0123456789abcdef01234567",' +
+      '"imageTag":"main-0123456","imageDigest":"sha256:' +
+      '1111111111111111111111111111111111111111111111111111111111111111",' +
+      '"chartVersion":"4.2.0","chartDigest":"sha256:' +
+      '2222222222222222222222222222222222222222222222222222222222222222",' +
+      '"semanticTag":"v3.1.0"}';
+    if (JSON.stringify(value) !== expected)
       fail('fixture manifest is not deterministic');
+    if (JSON.stringify(releaseManifest(JSON.parse(expected))) !== expected)
+      fail('fixture manifest emit/validate round trip is not deterministic');
     console.log('Release consistency fixtures passed (network-free).');
     return;
   }
@@ -254,11 +268,11 @@ export async function run(mode) {
       tag: env('IMAGE_TAG'),
       revision: env('SOURCE_SHA'),
     });
-    if (
-      process.env.EXPECTED_IMAGE_DIGEST &&
-      evidence.indexDigest !== process.env.EXPECTED_IMAGE_DIGEST
-    )
-      fail('semantic and immutable image index digests differ');
+    assertExpectedDigest(
+      evidence.indexDigest,
+      process.env.EXPECTED_IMAGE_DIGEST,
+      'semantic and immutable image index digests differ'
+    );
     output(evidence);
     return;
   }
@@ -271,11 +285,11 @@ export async function run(mode) {
       appVersion: env('APPLICATION_VERSION'),
       revision: env('SOURCE_SHA'),
     });
-    if (
-      process.env.EXPECTED_CHART_DIGEST &&
-      evidence.digest !== process.env.EXPECTED_CHART_DIGEST
-    )
-      fail('published chart digest does not equal the push result');
+    assertExpectedDigest(
+      evidence.digest,
+      process.env.EXPECTED_CHART_DIGEST,
+      'published chart digest does not equal the push result'
+    );
     output({ chartDigest: evidence.digest });
     return;
   }

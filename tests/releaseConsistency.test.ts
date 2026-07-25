@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  assertExpectedDigest,
   readLocalCoordinates,
   releaseManifest,
   validateImageTag,
@@ -92,13 +93,26 @@ describe('release coordinate consistency', () => {
       chartDigest: digest('2'),
       semanticTag: 'v3.1.0',
     };
-    expect(JSON.stringify(releaseManifest(input))).toBe(
-      JSON.stringify(releaseManifest(input))
-    );
-    expect(releaseManifest(input)).toMatchObject({
+    expect(releaseManifest(input)).toEqual({
+      schemaVersion: 1,
+      app: 'dspace',
+      applicationVersion: '3.1.0',
+      sourceRevision: sha,
       imageTag: 'main-0123456',
+      imageDigest: digest('1'),
       chartVersion: '4.2.0',
+      chartDigest: digest('2'),
+      semanticTag: 'v3.1.0',
     });
+    expect(releaseManifest(JSON.parse(JSON.stringify(input)))).toEqual(releaseManifest(input));
+  });
+
+  it.each([
+    'semantic and immutable image index digests differ',
+    'published chart digest does not equal the push result',
+  ])('rejects digest evidence mismatches: %s', (message) => {
+    expect(() => assertExpectedDigest(digest('1'), digest('2'), message)).toThrow(message);
+    expect(() => assertExpectedDigest(digest('1'), digest('1'), message)).not.toThrow();
   });
 
   it.each(['v3.1.0', 'main-latest', 'feature-0123456', 'main-short'])(
@@ -151,6 +165,14 @@ describe('release coordinate consistency', () => {
       writeFileSync(join(root, 'new'), 'new');
       git('add', 'new');
       git('commit', '-qm', 'later');
+      const later = git('rev-parse', 'HEAD');
+      git('tag', '-f', 'chart-v4.2.0', later);
+      git('checkout', '-q', approved);
+      expect(() => validateReleaseSource({
+        root, releaseTag: 'v3.1.0', chartTag: 'chart-v4.2.0',
+        sourceRevision: approved, branch: 'main',
+      })).toThrow('chart release tag does not peel');
+      git('checkout', '-q', later);
       expect(() =>
         validateReleaseSource({
           root,

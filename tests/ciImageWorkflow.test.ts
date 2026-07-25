@@ -71,7 +71,14 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
   });
 
   it('still publishes the immutable branch-SHA tag and the mutable branch convenience tag', () => {
+    const checkout = findStepsUsing(job, 'actions/checkout')[0];
+    expect(checkout.with['persist-credentials']).toBe(false);
     const tagsStep = findSteps(job).find((step) => step.id === 'tags');
+    expect(tagsStep.env.SOURCE_BRANCH).toBe(
+      '${{ github.event.inputs.branch || github.ref_name }}'
+    );
+    expect(tagsStep.run).toContain('branch="$SOURCE_BRANCH"');
+    expect(tagsStep.run).not.toContain('${{ github.event.inputs.branch');
     expect(tagsStep.run).toContain('git rev-parse HEAD');
     expect(tagsStep.run).toContain('git rev-parse --short=7 HEAD');
     expect(tagsStep.run).toMatch(/sha_tag=/);

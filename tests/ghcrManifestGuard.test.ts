@@ -304,8 +304,12 @@ describe('release artifact provenance inspection', () => {
   function imageFetch(
     options: {
       missingArm?: boolean;
+      duplicateArchitecture?: 'amd64' | 'arm64';
       mismatchedAmdDigest?: boolean;
+      wrongAmdRevision?: boolean;
       wrongArmRevision?: boolean;
+      malformedChild?: 'amd64' | 'arm64';
+      malformedBlob?: 'amd64' | 'arm64';
       absent?: boolean;
     } = {}
   ) {
@@ -329,12 +333,18 @@ describe('release artifact provenance inspection', () => {
                     },
                   ]
                 : []),
+              ...(options.duplicateArchitecture ? [{
+                platform: { os: 'linux', architecture: options.duplicateArchitecture },
+                digest: validDigest('8'),
+              }] : []),
             ],
           },
           { 'docker-content-digest': indexDigest }
         );
       }
-      if (url.endsWith(`/manifests/${encodeURIComponent(amd64Digest)}`))
+      if (url.endsWith(`/manifests/${encodeURIComponent(amd64Digest)}`)) {
+        if (options.malformedChild === 'amd64')
+          return malformedJsonResponse(200, { 'docker-content-digest': amd64Digest });
         return jsonResponse(
           200,
           { config: { digest: amd64Config } },
@@ -344,17 +354,25 @@ describe('release artifact provenance inspection', () => {
               : amd64Digest,
           }
         );
-      if (url.endsWith(`/manifests/${encodeURIComponent(arm64Digest)}`))
+      }
+      if (url.endsWith(`/manifests/${encodeURIComponent(arm64Digest)}`)) {
+        if (options.malformedChild === 'arm64')
+          return malformedJsonResponse(200, { 'docker-content-digest': arm64Digest });
         return jsonResponse(
           200,
           { config: { digest: arm64Config } },
           { 'docker-content-digest': arm64Digest }
         );
-      if (url.endsWith(`/blobs/${amd64Config}`))
+      }
+      if (url.endsWith(`/blobs/${amd64Config}`)) {
+        if (options.malformedBlob === 'amd64') return malformedJsonResponse(200);
         return jsonResponse(200, {
-          config: { Labels: { 'org.opencontainers.image.revision': revision } },
+          config: { Labels: { 'org.opencontainers.image.revision':
+            options.wrongAmdRevision ? 'f'.repeat(40) : revision } },
         });
-      if (url.endsWith(`/blobs/${arm64Config}`))
+      }
+      if (url.endsWith(`/blobs/${arm64Config}`)) {
+        if (options.malformedBlob === 'arm64') return malformedJsonResponse(200);
         return jsonResponse(200, {
           config: {
             Labels: {
@@ -364,6 +382,7 @@ describe('release artifact provenance inspection', () => {
             },
           },
         });
+      }
       throw new Error(`Unexpected fixture URL ${url}`);
     };
   }
@@ -423,6 +442,33 @@ describe('release artifact provenance inspection', () => {
         fetchImpl: imageFetch({ mismatchedAmdDigest: true }),
       })
     ).rejects.toMatchObject({ code: 'digest-mismatch' });
+  });
+
+  it.each(['amd64', 'arm64'] as const)('rejects duplicate linux/%s descriptors', async (architecture) => {
+    await expect(inspectImage({
+      owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+      password: SECRET_PASSWORD, revision, // scan-secrets: ignore
+      fetchImpl: imageFetch({ duplicateArchitecture: architecture }),
+    })).rejects.toMatchObject({ code: 'missing-platform' });
+  });
+
+  it.each(['amd64', 'arm64'] as const)('rejects a wrong revision on linux/%s', async (architecture) => {
+    await expect(inspectImage({
+      owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+      password: SECRET_PASSWORD, revision, // scan-secrets: ignore
+      fetchImpl: imageFetch(architecture === 'amd64'
+        ? { wrongAmdRevision: true } : { wrongArmRevision: true }),
+    })).rejects.toMatchObject({ code: 'revision-mismatch' });
+  });
+
+  it.each([
+    ['child manifest', { malformedChild: 'amd64' as const }],
+    ['config blob', { malformedBlob: 'arm64' as const }],
+  ])('fails closed on a malformed %s response', async (_label, options) => {
+    await expect(inspectImage({
+      owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+      password: SECRET_PASSWORD, revision, fetchImpl: imageFetch(options), // scan-secrets: ignore
+    })).rejects.toMatchObject({ code: 'malformed' });
   });
 
   it('requires chart version, appVersion, revision, and immutable digest', async () => {

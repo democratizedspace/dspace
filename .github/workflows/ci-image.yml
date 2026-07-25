@@ -279,6 +279,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.branch) || github.ref }}
+          persist-credentials: false
 
       - name: Ensure build SHA is present
         run: |
@@ -322,8 +323,10 @@ jobs:
 
       - name: Define image tags
         id: tags
+        env:
+          SOURCE_BRANCH: ${{ github.event.inputs.branch || github.ref_name }}
         run: |
-          branch="${{ github.event.inputs.branch || github.ref_name }}"
+          branch="$SOURCE_BRANCH"
           full_sha="$(git rev-parse HEAD)"
           short_sha="$(git rev-parse --short=7 HEAD)"
           tag_prefix="${branch//\//-}"
