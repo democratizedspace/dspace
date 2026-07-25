@@ -41,7 +41,14 @@ spec:
               value: {{ .Values.environment | default "production" | quote }}
             - name: METRICS_ENABLED
               value: {{ ternary "true" "false" ($metrics.enabled | default false) | quote }}
-          {{- if and ($metrics.enabled | default false) ($metricsAuth.existingSecret | default "") }}
+          {{- if not ($metrics.enabled | default false) }}
+            # v3.0.1 has no metrics-disable switch. An unpredictable pod-local token
+            # makes /metrics inaccessible when this chart setting is disabled.
+            - name: METRICS_TOKEN
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+          {{- else if ($metricsAuth.existingSecret | default "") }}
             - name: METRICS_TOKEN
               valueFrom:
                 secretKeyRef:

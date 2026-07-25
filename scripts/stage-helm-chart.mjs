@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { cpSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { parse, stringify } from 'yaml';
 
 export const SOURCE_REPOSITORY = 'https://github.com/democratizedspace/dspace';
@@ -105,7 +106,10 @@ export function main(argv = process.argv.slice(2)) {
   process.stdout.write(`${JSON.stringify(result)}\n`);
 }
 
-if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
   try {
     main();
   } catch (error) {

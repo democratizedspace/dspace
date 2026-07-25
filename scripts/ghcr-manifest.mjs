@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { appendFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 
 const REGISTRY_HOST = 'https://ghcr.io';
 const DEFAULT_TIMEOUT_MS = 15000;
@@ -386,7 +387,7 @@ export async function main(argv = process.argv.slice(2)) {
 }
 
 const isDirectRun =
-  process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isDirectRun) {
   main().catch((error) => {
     const message =

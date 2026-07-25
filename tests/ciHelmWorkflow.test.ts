@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { join } from 'node:path';
@@ -17,6 +16,18 @@ const step = (name: string) =>
   steps.find((candidate) => candidate.name === name);
 
 describe('chart publication workflow integrity', () => {
+  it.each([
+    ['stage-helm-chart.mjs', 'Usage: stage-helm-chart.mjs'],
+    ['ghcr-manifest.mjs', 'Usage: ghcr-manifest.mjs'],
+  ])('runs %s when invoked through a relative CLI path', (script, usage) => {
+    const result = spawnSync('node', [`scripts/${script}`], {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+    });
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(usage);
+  });
+
   it('publishes only for chart-v* tag pushes, never branches or manual dispatch', () => {
     expect(workflow.on).toEqual({ push: { tags: ['chart-v*'] } });
     expect(text).not.toContain('workflow_dispatch');
@@ -42,6 +53,14 @@ describe('chart publication workflow integrity', () => {
     expect(release.run).toContain('git rev-parse "${CHART_TAG}^{commit}"');
     expect(release.run).toContain('"$source_sha" == "$EVENT_SHA"');
     expect(release.run).toContain('"$source_sha" == "$tag_sha"');
+    expect(release.run).toContain('refs/heads/release/chart-3.0.x');
+    expect(release.run).toContain('"$source_sha" == "$approved_sha"');
+  });
+
+  it('pins every package-authorized action to an immutable commit', () => {
+    for (const actionStep of steps.filter((candidate) => candidate.uses)) {
+      expect(actionStep.uses).toMatch(/^[^@]+@[0-9a-f]{40}$/);
+    }
   });
 
   it('enforces strict matching versions and tombstones chart 3.0.1 before registry access', () => {
@@ -64,8 +83,14 @@ describe('chart publication workflow integrity', () => {
     const finalGuard = step('Refuse an existing chart coordinate (pre-push)');
     const push = step('Push chart exactly once');
     expect(revalidation.env.EVENT_SHA).toBe('${{ github.sha }}');
-    expect(revalidation.run).toContain('git rev-parse "${CHART_TAG}^{commit}"');
+    expect(revalidation.run).toContain(
+      'git fetch --force --no-tags origin "refs/tags/${CHART_TAG}:${remote_tag_ref}"'
+    );
+    expect(revalidation.run).toContain(
+      'git rev-parse "${remote_tag_ref}^{commit}"'
+    );
     expect(revalidation.run).toContain('"$tag_sha" == "$EVENT_SHA"');
+    expect(revalidation.run).toContain('"$approved_sha" == "$EVENT_SHA"');
     expect(steps.indexOf(revalidation)).toBe(steps.indexOf(finalGuard) - 1);
     expect(steps.indexOf(finalGuard)).toBe(steps.indexOf(push) - 1);
   });

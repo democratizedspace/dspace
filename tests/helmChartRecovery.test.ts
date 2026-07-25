@@ -55,7 +55,10 @@ describe('v3.0.1-compatible recovery chart', () => {
       'tests/fixtures/helm/dspace-v3.0.1-null-metrics-values.yaml',
     ]);
     expect(manifest).not.toContain('kind: ServiceMonitor');
-    expect(manifest).not.toContain('METRICS_TOKEN');
+    expect(deploymentEnv(manifest)).toContainEqual({
+      name: 'METRICS_TOKEN',
+      valueFrom: { fieldRef: { fieldPath: 'metadata.uid' } },
+    });
     expect(deploymentEnv(manifest)).toContainEqual({
       name: 'METRICS_ENABLED',
       value: 'false',

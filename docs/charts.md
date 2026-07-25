@@ -13,7 +13,7 @@ settings.
 - `replicaCount`: Pod replica count. Defaults to `2` for redundancy.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
-- `image.tag`: Image tag to deploy. Defaults to `v3.0.1`, matching the current package version.
+- `image.tag`: Image tag to deploy. Defaults to immutable recovery image `main-1a31a56`.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
 - `service.port`: Container and service port. Defaults to `8080`.
@@ -26,7 +26,7 @@ settings.
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
   `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-RuntimeDefault`.
+  RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for

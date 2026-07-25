@@ -18,18 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout chart release tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
         with:
           version: 9.0.0
 
@@ -51,8 +51,11 @@ jobs:
           [[ "$chart_version" != "3.0.1" ]] || { echo "Chart version 3.0.1 is permanently tombstoned" >&2; exit 1; }
           source_sha=$(git rev-parse HEAD)
           tag_sha=$(git rev-parse "${CHART_TAG}^{commit}")
+          git fetch --force --no-tags origin refs/heads/release/chart-3.0.x:refs/remotes/origin/release/chart-3.0.x
+          approved_sha=$(git rev-parse refs/remotes/origin/release/chart-3.0.x)
           [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$EVENT_SHA" ]] || { echo "Checked-out HEAD does not match the triggering push event" >&2; exit 1; }
           [[ "$source_sha" == "$tag_sha" ]] || { echo "Chart tag moved after the triggering push event; refusing to publish" >&2; exit 1; }
+          [[ "$source_sha" == "$approved_sha" ]] || { echo "Chart tag is not on the approved release/chart-3.0.x revision; refusing to publish" >&2; exit 1; }
           echo "chart_version=$chart_version" >> "$GITHUB_OUTPUT"
           echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
@@ -66,7 +69,7 @@ jobs:
         run: node scripts/ghcr-manifest.mjs check-absent --owner democratizedspace --repo charts/dspace --tag "$CHART_VERSION"
 
       - name: Setup Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
         with:
           version: v3.12.3
 
@@ -113,9 +116,15 @@ jobs:
         run: |
           set -euo pipefail
           current_sha=$(git rev-parse HEAD)
-          tag_sha=$(git rev-parse "${CHART_TAG}^{commit}")
+          remote_tag_ref="refs/tags/revalidation/${CHART_TAG}"
+          git update-ref -d "$remote_tag_ref" || true
+          git fetch --force --no-tags origin "refs/tags/${CHART_TAG}:${remote_tag_ref}"
+          git fetch --force --no-tags origin refs/heads/release/chart-3.0.x:refs/remotes/origin/release/chart-3.0.x
+          tag_sha=$(git rev-parse "${remote_tag_ref}^{commit}")
+          approved_sha=$(git rev-parse refs/remotes/origin/release/chart-3.0.x)
           [[ "$current_sha" == "$EVENT_SHA" && "$current_sha" == "$SOURCE_SHA" ]] || { echo "Checked-out source changed after initial validation" >&2; exit 1; }
           [[ "$tag_sha" == "$EVENT_SHA" ]] || { echo "Chart tag moved after initial validation; refusing to publish" >&2; exit 1; }
+          [[ "$approved_sha" == "$EVENT_SHA" ]] || { echo "Approved recovery branch moved after initial validation; refusing to publish" >&2; exit 1; }
 
       - name: Refuse an existing chart coordinate (pre-push)
         env:
