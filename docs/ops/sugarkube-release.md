@@ -20,6 +20,8 @@ setup in their existing runbooks.
   advance independently of the application version
 - **Semantic image tag:** `v<application version>`, for example `v3.1.0`; published only for a
   release and human-readable, but not proof of the deployed image
+- **Chart release tag:** exactly `chart-v<chart version>`, for example `chart-v3.1.0`; it must point
+  to the reviewed immutable commit whose `Chart.yaml:version` matches
 
 Use immutable branch-SHA tags or image digests for staging, production approvals, and rollback
 records. Mutable branch tags and release-only semantic tags are convenient for humans but must not
@@ -29,14 +31,23 @@ be the audit record for a production deploy.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
-2. `.github/workflows/ci-helm.yml` packages `charts/dspace` and publishes it to the GHCR OCI chart
-   registry for `main` and `v3` pushes, and can also be run manually for those branches.
+2. `.github/workflows/ci-helm.yml` packages `charts/dspace` only for a pushed tag exactly matching
+   `chart-v<Chart.yaml version>`. Ordinary `main` and `v3` pushes and manual dispatches never
+   publish charts. The workflow refuses to replace an existing coordinate, checks for existence
+   both before packaging and immediately before its single push, and permanently rejects chart
+   version `3.0.1` even if that coordinate later appears absent. A later chart may retain
+   `appVersion: 3.0.1`.
 3. `charts/dspace/Chart.yaml` and `docs/apps/dspace.version` must stay in sync so Sugarkube helper
    recipes install the intended chart version. Separately, package metadata and
    `Chart.yaml:appVersion` stay aligned on the application version; neither group must equal the
    other.
 4. Local Docker builds are for local development and smoke testing only. They are not the normal
    Sugarkube staging or production release path.
+
+Before chart publication, review the exact commit, ensure its chart coordinate is ready, and create
+the matching `chart-v<chart-version>` tag at that commit. Do not reuse or move a chart release tag.
+After a successful run, retain the workflow summary: it provides the chart tag, full source SHA,
+source repository, OCI reference, package SHA-256, and OCI manifest digest as audit evidence.
 
 ## Deploy staging
 

@@ -349,6 +349,15 @@ use exactly one `push: true` attempt and must push only `vX.Y.Z`. See
 `scripts/ghcr-manifest.mjs` and `tests/ciImageWorkflow.test.ts` /
 `tests/ghcrManifestGuard.test.ts`.
 
+Helm chart publication is independent and is allowed only from a pushed tag exactly matching
+`chart-v<charts/dspace/Chart.yaml version>`. Ordinary `main` and `v3` pushes and manual dispatches
+never publish charts. The tag must identify the reviewed immutable commit; the workflow resolves
+both the checked-out `HEAD` and the tag's peeled commit, refuses any existing chart coordinate,
+and permanently tombstones chart version `3.0.1`. It checks GHCR before packaging and again
+immediately before its single push. A successful run records the full source SHA, staged OCI
+provenance, package SHA-256, and OCI manifest digest in the workflow summary. Never recreate a
+published chart coordinate or use an application release event to publish a chart.
+
 ### Smoke Test
 
 The `ci-image.yml` workflow includes a smoke test that:

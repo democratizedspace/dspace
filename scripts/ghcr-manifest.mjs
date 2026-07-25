@@ -190,7 +190,7 @@ export async function assertTagAbsent({
 
     if (manifest.status === 'present') {
         throw new GhcrGuardError(
-            `Semantic tag ${owner}/${repo}:${tag} already exists in GHCR with digest ${manifest.digest}; refusing to overwrite it`,
+            `Artifact coordinate ${owner}/${repo}:${tag} already exists in GHCR with digest ${manifest.digest}; refusing to overwrite it`,
             { code: 'exists' }
         );
     }
@@ -244,14 +244,29 @@ export async function describeManifest({
     };
 }
 
+// Artifact-neutral evidence lookup for single-manifest artifacts such as Helm charts.
+export async function describeArtifact(options) {
+    const token = await fetchGhcrToken(options); // scan-secrets: ignore (env credential plumbing)
+    const manifest = await getManifest({ ...options, token });
+    if (manifest.status !== 'present') {
+        throw new GhcrGuardError('Expected GHCR artifact to exist, but it was absent', {
+            code: 'missing-after-publish',
+        });
+    }
+    if (!/^sha256:[0-9a-f]{64}$/.test(manifest.digest)) {
+        throw new GhcrGuardError('GHCR artifact digest was malformed', { code: 'malformed' });
+    }
+    return { digest: manifest.digest };
+}
+
 const FLAG_KEYS = new Set(['owner', 'repo', 'tag']);
 
 export function parseArgs(argv) {
     const [subcommand, ...rest] = argv;
 
-    if (subcommand !== 'check-absent' && subcommand !== 'describe') {
+    if (!['check-absent', 'describe', 'describe-artifact'].includes(subcommand)) {
         throw new GhcrGuardError(
-            'Usage: ghcr-manifest.mjs <check-absent|describe> --owner <owner> --repo <repo> --tag <tag>',
+            'Usage: ghcr-manifest.mjs <check-absent|describe|describe-artifact> --owner <owner> --repo <repo> --tag <tag>',
             { code: 'invalid-input' }
         );
     }
@@ -307,6 +322,13 @@ export async function main(argv = process.argv.slice(2)) {
         console.log(
             `GHCR tag ${owner}/${repo}:${tag} is not present (registry returned 404); safe to publish.`
         );
+        return;
+    }
+
+    if (subcommand === 'describe-artifact') {
+        const artifact = await describeArtifact({ owner, repo, tag, username, password });
+        writeGithubOutput([['digest', artifact.digest]]);
+        console.log(`Recorded GHCR digest for ${owner}/${repo}:${tag}.`);
         return;
     }
 
