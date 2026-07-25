@@ -7,6 +7,21 @@ Helm publishing workflow. Do not use `deploy/charts/dspace/` as release evidence
 automation is intentionally migrated. The chart uses the application container port `8080` by
 default, matching the `Dockerfile` `EXPOSE` and health check settings.
 
+## Publishing releases
+
+Charts publish only when an operator pushes an exact `chart-v<chart-version>` tag. The tag must
+point to the reviewed immutable commit whose `charts/dspace/Chart.yaml` version matches the tag;
+ordinary `main` and `v3` pushes never publish charts. Before creating the tag, confirm that the
+coordinate is new: the workflow fails closed unless GHCR authoritatively reports it absent both
+before packaging and immediately before its one push. Existing coordinates cannot be replaced.
+Chart version `3.0.1` is permanently tombstoned and cannot be published again, even if it appears
+absent; a later chart may still use `appVersion: 3.0.1`.
+
+The workflow packages a temporary staged copy and adds OCI source, full source-revision, and
+application-version annotations without modifying the tracked chart. A successful workflow summary
+records the chart tag and versions, immutable source SHA, OCI reference, packaged archive SHA-256,
+and OCI manifest digest as publication evidence.
+
 ## Key values
 
 - `replicaCount`: Pod replica count. Defaults to `2` for redundancy.

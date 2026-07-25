@@ -281,12 +281,11 @@ describe('independent DSPACE application and chart coordinates', () => {
     expect(workflow).toContain('mkdir -p "$chart_dist"');
     expect(workflow).not.toContain('mktemp -d');
     expect(workflow).toContain(
-      'expected_chart_file="$chart_dist/dspace-${chart_version}.tgz"'
+      'expected="$chart_dist/dspace-${CHART_VERSION}.tgz"'
     );
     expect(workflow).toContain('find "$chart_dist" -maxdepth 1');
-    expect(workflow).toContain('packaged_version=$(helm show chart');
-    expect(workflow).toContain('packaged_app_version=$(helm show chart');
-    expect(workflow).toContain('${{ steps.package.outputs.chart_version }}');
+    expect(workflow).toContain('helm-chart-release.mjs verify-package');
+    expect(workflow).toContain('${{ steps.release.outputs.chartVersion }}');
   });
 
   it('does not scan historical release records as authoritative coordinates', () =>

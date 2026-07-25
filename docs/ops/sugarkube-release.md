@@ -18,6 +18,7 @@ setup in their existing runbooks.
   `Chart.yaml:appVersion`
 - **Chart version:** the matching `Chart.yaml:version` and `docs/apps/dspace.version`; this may
   advance independently of the application version
+- **Chart release tag:** exact `chart-v<chart version>`, pointing to the reviewed immutable commit
 - **Semantic image tag:** `v<application version>`, for example `v3.1.0`; published only for a
   release and human-readable, but not proof of the deployed image
 
@@ -29,8 +30,13 @@ be the audit record for a production deploy.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
-2. `.github/workflows/ci-helm.yml` packages `charts/dspace` and publishes it to the GHCR OCI chart
-   registry for `main` and `v3` pushes, and can also be run manually for those branches.
+2. `.github/workflows/ci-helm.yml` packages and publishes `charts/dspace` only when an operator
+   pushes an exact `chart-v<Chart.yaml version>` tag at the reviewed immutable commit. Ordinary
+   `main`/`v3` pushes and mutable-branch manual dispatches never publish charts. The workflow checks
+   twice that the coordinate is absent and never replaces an existing coordinate. Chart `3.0.1` is
+   permanently tombstoned even if it later appears absent (later charts may retain
+   `appVersion: 3.0.1`). Its successful summary records the full source SHA plus package and OCI
+   digests as auditable publication evidence.
 3. `charts/dspace/Chart.yaml` and `docs/apps/dspace.version` must stay in sync so Sugarkube helper
    recipes install the intended chart version. Separately, package metadata and
    `Chart.yaml:appVersion` stay aligned on the application version; neither group must equal the

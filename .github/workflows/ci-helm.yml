@@ -2,78 +2,128 @@ name: Publish Helm chart
 
 on:
   push:
-    branches:
-      - v3
-      - main
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: Branch to package and publish the chart from
-        required: false
-        default: v3
-        type: choice
-        options:
-          - v3
-          - main
+    tags:
+      - 'chart-v*'
 
 permissions:
   packages: write
   contents: read
 
+concurrency:
+  group: helm-chart-${{ github.ref_name }}
+  cancel-in-progress: false
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    outputs:
-      chart_ref: ${{ steps.chart-ref.outputs.chart_ref }}
+    env:
+      CHART_TAG: ${{ github.ref_name }}
+      CHART_SOURCE_DIR: charts/dspace
+      CHART_REPOSITORY: dspace
+      OCI_REPOSITORY: oci://ghcr.io/democratizedspace/charts
+      OCI_REFERENCE_BASE: ghcr.io/democratizedspace/charts/dspace
     steps:
-      - name: Checkout
+      - name: Checkout triggering tag
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || '' }}
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Validate immutable source and stage provenance metadata
+        id: release
+        run: |
+          set -euo pipefail
+          source_revision=$(git rev-parse HEAD)
+          tag_revision=$(git rev-parse "${CHART_TAG}^{commit}")
+          [[ "$source_revision" == "$tag_revision" ]] || { echo 'Checked-out HEAD does not match the chart tag commit' >&2; exit 1; }
+          export SOURCE_REVISION="$source_revision"
+          export CHART_STAGED_DIR="$RUNNER_TEMP/dspace-chart"
+          rm -rf "$CHART_STAGED_DIR"
+          node scripts/helm-chart-release.mjs stage
+          git diff --exit-code -- charts/dspace/Chart.yaml
+          echo "staged_dir=$CHART_STAGED_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Refuse an existing chart coordinate before packaging
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
+        run: node scripts/ghcr-manifest.mjs check-absent --owner democratizedspace --repo charts/dspace --tag "${{ steps.release.outputs.chartVersion }}"
 
       - name: Setup Helm
         uses: azure/setup-helm@v4
         with:
           version: v3.12.3
 
-      - name: Build chart dependencies
-        run: helm dependency build charts/dspace
-
-      - name: Verify chart version sync
-        run: bash scripts/check-dspace-chart-version.sh
-
-      - name: Lint chart
-        run: helm lint charts/dspace
-
-      - name: Package chart
-        id: package
+      - name: Verify chart coordinates and lint staged chart
         run: |
-          chart_version=$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)
-          app_version=$(awk '$1 == "appVersion:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)
+          bash scripts/check-dspace-chart-version.sh
+          helm dependency build "${{ steps.release.outputs.staged_dir }}"
+          helm lint "${{ steps.release.outputs.staged_dir }}"
+
+      - name: Package and verify staged chart
+        id: package
+        env:
+          CHART_VERSION: ${{ steps.release.outputs.chartVersion }}
+          APP_VERSION: ${{ steps.release.outputs.appVersion }}
+          SOURCE_REVISION: ${{ steps.release.outputs.revision }}
+        run: |
+          set -euo pipefail
           chart_dist="$RUNNER_TEMP/dspace-chart-dist"
           rm -rf "$chart_dist"
           mkdir -p "$chart_dist"
-          expected_chart_file="$chart_dist/dspace-${chart_version}.tgz"
-          helm package charts/dspace --destination "$chart_dist"
-          mapfile -t chart_files < <(find "$chart_dist" -maxdepth 1 -type f -name 'dspace-*.tgz' -print)
-          if [[ ${#chart_files[@]} -ne 1 || "${chart_files[0]}" != "$expected_chart_file" ]]; then
-            printf 'Expected exactly %s; found: %s\n' "$expected_chart_file" "${chart_files[*]:-none}" >&2
-            exit 1
-          fi
-          packaged_version=$(helm show chart "$expected_chart_file" | awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }')
-          packaged_app_version=$(helm show chart "$expected_chart_file" | awk '$1 == "appVersion:" { gsub(/"/, "", $2); print $2; exit }')
-          [[ "$packaged_version" == "$chart_version" ]] || { echo "Packaged chart version '$packaged_version' != '$chart_version'" >&2; exit 1; }
-          [[ "$packaged_app_version" == "$app_version" ]] || { echo "Packaged appVersion '$packaged_app_version' != '$app_version'" >&2; exit 1; }
-          echo "chart_file=$expected_chart_file" >> "$GITHUB_OUTPUT"
-          echo "chart_version=$chart_version" >> "$GITHUB_OUTPUT"
+          helm package "${{ steps.release.outputs.staged_dir }}" --destination "$chart_dist"
+          expected="$chart_dist/dspace-${CHART_VERSION}.tgz"
+          mapfile -t packages < <(find "$chart_dist" -maxdepth 1 -type f -name 'dspace-*.tgz' -print)
+          [[ ${#packages[@]} -eq 1 && "${packages[0]}" == "$expected" ]] || { echo 'Expected exactly one correctly named chart package' >&2; exit 1; }
+          CHART_ARCHIVE="$expected" node scripts/helm-chart-release.mjs verify-package
+          git diff --exit-code -- charts/dspace/Chart.yaml
+          archive_digest="sha256:$(sha256sum "$expected" | cut -d' ' -f1)"
+          DIGEST_VALUE="$archive_digest" DIGEST_LABEL='packaged archive digest' node scripts/helm-chart-release.mjs validate-digest
+          echo "chart_file=$expected" >> "$GITHUB_OUTPUT"
+          echo "archive_digest=$archive_digest" >> "$GITHUB_OUTPUT"
 
       - name: Authenticate to GHCR
-        run: helm registry login ghcr.io -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}"
+        run: helm registry login ghcr.io -u "$GHCR_USERNAME" --password-stdin <<<"$GHCR_PASSWORD"
+        env:
+          GHCR_USERNAME: ${{ github.actor }}
+          GHCR_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
 
-      - name: Push chart to GHCR
-        run: helm push ${{ steps.package.outputs.chart_file }} oci://ghcr.io/democratizedspace/charts
+      - name: Refuse an existing chart coordinate immediately before push
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
+        run: node scripts/ghcr-manifest.mjs check-absent --owner democratizedspace --repo charts/dspace --tag "${{ steps.release.outputs.chartVersion }}"
 
-      - name: Export chart reference
-        id: chart-ref
+      - name: Push chart once and capture digest
+        id: push
+        env:
+          CHART_FILE: ${{ steps.package.outputs.chart_file }}
         run: |
-          echo "chart_ref=oci://ghcr.io/democratizedspace/charts/dspace:${{ steps.package.outputs.chart_version }}" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          push_output=$(helm push "$CHART_FILE" "$OCI_REPOSITORY" 2>&1)
+          printf '%s\n' "$push_output"
+          oci_digest=$(printf '%s\n' "$push_output" | sed -nE 's/^Digest: (sha256:[0-9a-f]{64})$/\1/p')
+          [[ $(printf '%s\n' "$oci_digest" | sed '/^$/d' | wc -l) -eq 1 ]] || { echo 'helm push did not report exactly one valid OCI digest' >&2; exit 1; }
+          DIGEST_VALUE="$oci_digest" DIGEST_LABEL='OCI manifest digest' node scripts/helm-chart-release.mjs validate-digest
+          echo "oci_digest=$oci_digest" >> "$GITHUB_OUTPUT"
+
+      - name: Record publication evidence
+        env:
+          CHART_VERSION: ${{ steps.release.outputs.chartVersion }}
+          APP_VERSION: ${{ steps.release.outputs.appVersion }}
+          SOURCE_REVISION: ${{ steps.release.outputs.revision }}
+          ARCHIVE_DIGEST: ${{ steps.package.outputs.archive_digest }}
+          OCI_DIGEST: ${{ steps.push.outputs.oci_digest }}
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## Helm chart publication evidence
+
+          - Chart version: \`$CHART_VERSION\`
+          - appVersion: \`$APP_VERSION\`
+          - Chart release tag: \`$CHART_TAG\`
+          - Full source SHA: \`$SOURCE_REVISION\`
+          - Source repository: \`https://github.com/democratizedspace/dspace\`
+          - OCI reference: \`$OCI_REFERENCE_BASE:$CHART_VERSION\`
+          - Packaged archive SHA-256: \`$ARCHIVE_DIGEST\`
+          - OCI manifest digest: \`$OCI_DIGEST\`
+          EOF

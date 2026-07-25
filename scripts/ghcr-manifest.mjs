@@ -190,7 +190,7 @@ export async function assertTagAbsent({
 
     if (manifest.status === 'present') {
         throw new GhcrGuardError(
-            `Semantic tag ${owner}/${repo}:${tag} already exists in GHCR with digest ${manifest.digest}; refusing to overwrite it`,
+            `Artifact ${owner}/${repo}:${tag} already exists in GHCR with digest ${manifest.digest}; refusing to overwrite it`,
             { code: 'exists' }
         );
     }
@@ -214,7 +214,7 @@ export async function describeManifest({
 
     if (manifest.status !== 'present') {
         throw new GhcrGuardError(
-            `Expected GHCR tag ${owner}/${repo}:${tag} to exist after publish, but the registry reported it as absent`,
+            `Expected GHCR artifact ${owner}/${repo}:${tag} to exist after publish, but the registry reported it as absent`,
             { code: 'missing-after-publish' }
         );
     }
@@ -232,7 +232,7 @@ export async function describeManifest({
     const arm64Digest = findDigest('arm64');
     if (!amd64Digest || !arm64Digest) {
         throw new GhcrGuardError(
-            `GHCR tag ${owner}/${repo}:${tag} does not contain non-empty digests for both required platforms linux/amd64 and linux/arm64`,
+            `GHCR image ${owner}/${repo}:${tag} does not contain non-empty digests for both required platforms linux/amd64 and linux/arm64`,
             { code: 'missing-platform' }
         );
     }
@@ -305,7 +305,7 @@ export async function main(argv = process.argv.slice(2)) {
     if (subcommand === 'check-absent') {
         await assertTagAbsent({ owner, repo, tag, username, password });
         console.log(
-            `GHCR tag ${owner}/${repo}:${tag} is not present (registry returned 404); safe to publish.`
+            `GHCR artifact ${owner}/${repo}:${tag} is not present (registry returned 404); safe to publish.`
         );
         return;
     }
