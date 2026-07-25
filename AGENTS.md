@@ -313,6 +313,13 @@ must be in the source before the image will work correctly.
 
 ### Semantic Image Tag Publication (release-only)
 
+DSPACE has two independent release coordinate groups. The application version is shared by the
+root and frontend packages, root `package-lock.json` metadata, `Chart.yaml` `appVersion`, and the
+default semantic image tag. The Helm chart version is shared only by `Chart.yaml` `version`,
+`docs/apps/dspace.version`, and the packaged chart filename/reference. Both are bare SemVer, but
+they need not be equal. Immutable branch-SHA tags or digests prove deployment identity; a
+release-only `vX.Y.Z` image tag is a human-readable application coordinate, not immutable proof.
+
 `ci-image.yml` has two separate GHCR publish paths, per
 [DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727) and the
 [2026-07-23 production version-drift postmortem](outages/2026-07-23-dspace-production-version-drift.md):

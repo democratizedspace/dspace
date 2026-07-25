@@ -97,31 +97,35 @@ expect_semver() {
 }
 
 expect_equal() {
-  local label="$1"
-  local actual="$2"
-  local expected="$3"
+  local group="$1"
+  local label="$2"
+  local actual="$3"
+  local expected="$4"
   if [[ -z "$actual" ]]; then
-    echo "Missing $label; expected '$expected'" >&2
+    echo "$group coordinate drift: missing $label; expected '$expected'" >&2
     failures=$((failures + 1))
   elif [[ "$actual" != "$expected" ]]; then
-    echo "$label mismatch: found '$actual', expected '$expected'" >&2
+    echo "$group coordinate drift: $label found '$actual', expected '$expected'" >&2
     failures=$((failures + 1))
   fi
 }
 
-expect_present "root package version" "$root_package_version"
-expect_semver "root package version" "$root_package_version"
-expect_equal "frontend package version" "$frontend_package_version" "$root_package_version"
-expect_equal "package-lock top-level version" "$package_lock_version" "$root_package_version"
-expect_equal 'package-lock packages[""].version' "$package_lock_root_version" "$root_package_version"
-expect_equal "chart version" "$chart_version" "$root_package_version"
-expect_equal "chart appVersion" "$chart_app_version" "$root_package_version"
-expect_equal "chart default image.tag" "$image_tag" "$expected_image_tag"
-expect_equal "docs/apps/dspace.version" "$version_line" "$root_package_version"
+expect_present "application root package version" "$root_package_version"
+expect_semver "application root package version" "$root_package_version"
+expect_semver "application chart appVersion" "$chart_app_version"
+expect_equal "Application" "frontend package version" "$frontend_package_version" "$root_package_version"
+expect_equal "Application" "package-lock top-level version" "$package_lock_version" "$root_package_version"
+expect_equal "Application" 'package-lock packages[""].version' "$package_lock_root_version" "$root_package_version"
+expect_equal "Application" "chart appVersion" "$chart_app_version" "$root_package_version"
+expect_equal "Application" "chart default image.tag" "$image_tag" "$expected_image_tag"
+
+expect_present "chart version" "$chart_version"
+expect_semver "chart version" "$chart_version"
+expect_equal "Chart" "docs/apps/dspace.version" "$version_line" "$chart_version"
 
 if (( failures > 0 )); then
-  echo "DSPACE release coordinates are not aligned." >&2
+  echo "DSPACE release coordinate validation failed." >&2
   exit 1
 fi
 
-echo "DSPACE release coordinates are aligned at ${root_package_version} (${expected_image_tag})."
+echo "DSPACE release coordinates are valid: application version ${root_package_version} (${expected_image_tag}); chart version ${chart_version}."

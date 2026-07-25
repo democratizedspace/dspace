@@ -16,6 +16,14 @@ setup in their existing runbooks.
 - **Mutable branch convenience tags:** `<branch>-latest`, for example `main-latest` or `v3-latest`
 - **Version image tag:** `v<package.version>`, for example `v3.1.0`
 
+The application and chart have independent bare-SemVer coordinates. The application coordinate is
+the package version, chart `appVersion`, and semantic image version. The chart coordinate is
+`Chart.yaml` `version`, `docs/apps/dspace.version`, and the OCI chart version/package filename. A
+chart-only change increments only the chart coordinate. Neither coordinate proves which image bytes
+are deployed: use a branch-SHA tag or image digest for that immutable evidence. The release-only
+semantic image tag is human-readable application release metadata and is deliberately not the
+deployment audit coordinate.
+
 Use immutable branch-SHA tags for staging, production approvals, and rollback records whenever
 possible. Mutable branch tags are convenient for inspection but should not be the audit record for a
 production deploy.
@@ -26,8 +34,9 @@ production deploy.
    `v3` pushes, and can also be run manually for those branches.
 2. `.github/workflows/ci-helm.yml` packages `charts/dspace` and publishes it to the GHCR OCI chart
    registry for `main` and `v3` pushes, and can also be run manually for those branches.
-3. `charts/dspace/Chart.yaml` and `docs/apps/dspace.version` must stay in sync so Sugarkube helper
-   recipes install the intended chart version.
+3. `charts/dspace/Chart.yaml` `version` and `docs/apps/dspace.version` must stay in sync so
+   Sugarkube helper recipes install the intended chart version. `Chart.yaml` `appVersion` instead
+   stays in the independent application coordinate group.
 4. Local Docker builds are for local development and smoke testing only. They are not the normal
    Sugarkube staging or production release path.
 
