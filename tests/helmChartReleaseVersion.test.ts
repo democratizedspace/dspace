@@ -24,9 +24,9 @@ const fixture = () => {
     return root;
 };
 
-const runGuard = (root: string) =>
+const runGuard = (root: string, baseRef?: string) =>
     spawnSync('bash', [join(repoRoot, 'scripts/check-dspace-chart-version.sh')], {
-        env: { ...process.env, DSPACE_VERSION_ROOT: root },
+        env: { ...process.env, DSPACE_VERSION_ROOT: root, DSPACE_VERSION_BASE_REF: baseRef },
         encoding: 'utf8',
     });
 
@@ -51,9 +51,60 @@ describe('independent DSPACE application and chart coordinates', () => {
     it('passes current repository coordinates and reports both groups', () =>
         withFixture((root) => {
             const result = runGuard(root);
+            const packageVersion = JSON.parse(
+                readFileSync(join(root, 'package.json'), 'utf8')
+            ).version;
+            const chartVersion = readFileSync(join(root, 'charts/dspace/Chart.yaml'), 'utf8').match(
+                /^version:\s*"?([^"\s]+)"?$/m
+            )?.[1];
             expect(result.status, result.stderr).toBe(0);
-            expect(result.stdout).toContain('application version 3.1.0 (v3.1.0)');
-            expect(result.stdout).toContain('chart version 3.1.0');
+            expect(result.stdout).toContain(
+                `application version ${packageVersion} (v${packageVersion})`
+            );
+            expect(result.stdout).toContain(`chart version ${chartVersion}`);
+        }));
+
+    it('rejects an application bump that reuses the previous chart coordinate', () => {
+        const root = fixture();
+        try {
+            spawnSync('git', ['init', '-q'], { cwd: root });
+            spawnSync('git', ['add', '.'], { cwd: root });
+            spawnSync(
+                'git',
+                [
+                    '-c',
+                    'user.name=test',
+                    '-c',
+                    'user.email=test@example.com',
+                    'commit',
+                    '-qm',
+                    'base',
+                ],
+                { cwd: root }
+            );
+            for (const path of ['package.json', 'frontend/package.json', 'package-lock.json']) {
+                replace(root, path, /"version": "3\.1\.0"/g, '"version": "3.1.1"');
+            }
+            replace(
+                root,
+                'charts/dspace/Chart.yaml',
+                'appVersion: "3.1.0"',
+                'appVersion: "3.1.1"'
+            );
+            replace(root, 'charts/dspace/values.yaml', 'tag: v3.1.0', 'tag: v3.1.1');
+            const result = runGuard(root, 'HEAD');
+            expect(result.status).not.toBe(0);
+            expect(result.stderr).toContain('Chart coordinate reuse: application version changed');
+        } finally {
+            rmSync(root, { recursive: true, force: true });
+        }
+    });
+
+    it('reads only the first active chart version documentation line', () =>
+        withFixture((root) => {
+            const current = readFileSync(join(root, 'docs/apps/dspace.version'), 'utf8').trim();
+            writeFileSync(join(root, 'docs/apps/dspace.version'), `${current}\n9.9.9\n`);
+            expect(runGuard(root).status).toBe(0);
         }));
 
     it('permits chart 3.0.2 with application 3.0.1', () =>

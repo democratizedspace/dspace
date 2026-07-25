@@ -74,7 +74,7 @@ package_lock_root_version=$(json_get "$package_lock_file" 'packages..version')
 chart_version=$(yaml_scalar "$chart_file" version || true)
 chart_app_version=$(yaml_scalar "$chart_file" appVersion || true)
 image_tag=$(yaml_nested_scalar "$values_file" image tag || true)
-documented_chart_version=$(awk '!/^[[:space:]]*#/ && NF { print }' "$version_file" | tr -d '\r\n')
+documented_chart_version=$(awk '!/^[[:space:]]*#/ && NF { sub(/\r$/, ""); print; exit }' "$version_file")
 expected_image_tag="v${root_package_version}"
 
 failures=0
@@ -110,6 +110,16 @@ expect_equal() {
   fi
 }
 
+semver_is_greater() {
+  node -e '
+const [current, previous] = process.argv.slice(1).map((version) => version.split(".").map(Number));
+for (let index = 0; index < 3; index += 1) {
+  if (current[index] !== previous[index]) process.exit(current[index] > previous[index] ? 0 : 1);
+}
+process.exit(1);
+' "$1" "$2"
+}
+
 expect_present "root package version" "$root_package_version"
 expect_semver "root package version" "$root_package_version"
 for coordinate in \
@@ -128,6 +138,32 @@ expect_present "chart version" "$chart_version"
 expect_semver "chart version" "$chart_version"
 expect_semver "docs/apps/dspace.version" "$documented_chart_version"
 expect_equal "Chart" "docs/apps/dspace.version" "$documented_chart_version" "$chart_version"
+
+# Publishing changed application metadata inside an existing chart coordinate would mutate an
+# already-addressed OCI artifact. CI supplies the previous revision so independent application and
+# chart versions remain allowed, while an application bump also requires a new chart version.
+if [[ -n "${DSPACE_VERSION_BASE_REF:-}" ]]; then
+  previous_root_package=$(git -C "$repo_root" show "${DSPACE_VERSION_BASE_REF}:package.json" 2>/dev/null) || {
+    echo "Unable to read application coordinates from base revision '$DSPACE_VERSION_BASE_REF'" >&2
+    exit 1
+  }
+  previous_chart=$(git -C "$repo_root" show "${DSPACE_VERSION_BASE_REF}:charts/dspace/Chart.yaml" 2>/dev/null) || {
+    echo "Unable to read chart coordinates from base revision '$DSPACE_VERSION_BASE_REF'" >&2
+    exit 1
+  }
+  previous_app_version=$(node -e 'const fs = require("node:fs"); console.log(JSON.parse(fs.readFileSync(0, "utf8")).version || "")' <<<"$previous_root_package")
+  previous_chart_version=$(awk '$1 == "version:" { value = $2; gsub(/^"|"$/, "", value); print value; exit }' <<<"$previous_chart")
+
+  if [[ "$root_package_version" != "$previous_app_version" ]]; then
+    if [[ "$chart_version" == "$previous_chart_version" ]]; then
+      echo "Chart coordinate reuse: application version changed from '$previous_app_version' to '$root_package_version', but chart version remains '$chart_version'" >&2
+      failures=$((failures + 1))
+    elif ! semver_is_greater "$chart_version" "$previous_chart_version"; then
+      echo "Chart version must advance when application metadata changes; found '$chart_version' after '$previous_chart_version'" >&2
+      failures=$((failures + 1))
+    fi
+  fi
+fi
 
 if (( failures > 0 )); then
   echo "DSPACE release coordinate groups are not aligned." >&2
