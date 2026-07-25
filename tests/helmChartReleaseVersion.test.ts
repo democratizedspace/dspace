@@ -11,6 +11,12 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { parse } from 'yaml';
+import {
+  SOURCE_REPOSITORY,
+  stageChart,
+  verifyChart,
+} from '../scripts/stage-helm-chart.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const coordinatePaths = [
@@ -282,7 +288,7 @@ describe('independent DSPACE application and chart coordinates', () => {
     expect(workflow).not.toContain('mktemp -d');
     expect(workflow).toContain('expected="$dist/dspace-${CHART_VERSION}.tgz"');
     expect(workflow).toContain('find "$dist" -maxdepth 1');
-    expect(workflow).toContain('metadata=$(helm show chart');
+    expect(workflow).toContain('stage-helm-chart.mjs verify');
     expect(workflow).toContain('${{ steps.release.outputs.chart_version }}');
   });
 
@@ -295,4 +301,128 @@ describe('independent DSPACE application and chart coordinates', () => {
       );
       expect(runGuard(root).status).toBe(0);
     }));
+});
+
+describe('staged Helm chart provenance', () => {
+  const revision = '0123456789abcdef0123456789abcdef01234567';
+  const chartFixture = (run: (source: string, staged: string) => void) => {
+    const root = mkdtempSync(join(tmpdir(), 'stage-chart-'));
+    const source = join(root, 'source');
+    const staged = join(root, 'staged');
+    mkdirSync(source);
+    writeFileSync(
+      join(source, 'Chart.yaml'),
+      'apiVersion: v2\nname: dspace\nversion: 4.5.6\nappVersion: "3.1.0"\ndescription: retained\nannotations:\n  example.org/existing: retained\n'
+    );
+    try {
+      run(source, staged);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  };
+
+  it('preserves metadata, adds provenance, verifies it, and leaves source unchanged', () =>
+    chartFixture((source, staged) => {
+      const before = readFileSync(join(source, 'Chart.yaml'), 'utf8');
+      stageChart({ sourceDir: source, destinationDir: staged, revision });
+      const stagedYaml = join(staged, 'Chart.yaml');
+      const chart = parse(readFileSync(stagedYaml, 'utf8'));
+      expect(chart.description).toBe('retained');
+      expect(chart.annotations['example.org/existing']).toBe('retained');
+      expect(
+        verifyChart({
+          chartYaml: stagedYaml,
+          version: '4.5.6',
+          appVersion: '3.1.0',
+          revision,
+        })
+      ).toMatchObject({
+        'org.opencontainers.image.source': SOURCE_REPOSITORY,
+      });
+      expect(readFileSync(join(source, 'Chart.yaml'), 'utf8')).toBe(before);
+    }));
+
+  it.each(['01.2.3', '1.2', 'v1.2.3', '1.2.3-rc.1', '1.2.3+build'])(
+    'rejects non-strict chart SemVer %s',
+    (version) =>
+      chartFixture((source, staged) => {
+        replace(source, 'Chart.yaml', 'version: 4.5.6', `version: ${version}`);
+        expect(() =>
+          stageChart({ sourceDir: source, destinationDir: staged, revision })
+        ).toThrow(/chart version/);
+      })
+  );
+
+  it.each(['01.2.3', '1.2', 'v1.2.3', '1.2.3-rc.1', '1.2.3+build'])(
+    'rejects non-strict appVersion %s',
+    (appVersion) =>
+      chartFixture((source, staged) => {
+        replace(
+          source,
+          'Chart.yaml',
+          'appVersion: "3.1.0"',
+          `appVersion: "${appVersion}"`
+        );
+        expect(() =>
+          stageChart({ sourceDir: source, destinationDir: staged, revision })
+        ).toThrow(/appVersion/);
+      })
+  );
+
+  it.each(['abc', `${revision.slice(0, -1)}Z`, revision.slice(1)])(
+    'rejects malformed revision %s',
+    (value) =>
+      chartFixture((source, staged) => {
+        expect(() =>
+          stageChart({
+            sourceDir: source,
+            destinationDir: staged,
+            revision: value,
+          })
+        ).toThrow(/full source revision/);
+      })
+  );
+
+  it.each(['text', '[]', 'null'])(
+    'rejects non-mapping annotations: %s',
+    (annotations) =>
+      chartFixture((source, staged) => {
+        replace(
+          source,
+          'Chart.yaml',
+          /annotations:[\s\S]*$/,
+          `annotations: ${annotations}\n`
+        );
+        expect(() =>
+          stageChart({ sourceDir: source, destinationDir: staged, revision })
+        ).toThrow(/annotations must be a YAML map/);
+      })
+  );
+
+  it.each([
+    ['version', 'version: 4.5.6', 'version: 4.5.7'],
+    ['appVersion', 'appVersion: 3.1.0', 'appVersion: 3.1.1'],
+    ['source', SOURCE_REPOSITORY, 'https://example.invalid/repo'],
+    ['revision', revision, 'f'.repeat(40)],
+    [
+      'application version',
+      'org.opencontainers.image.version: 3.1.0',
+      'org.opencontainers.image.version: 3.1.1',
+    ],
+  ])('rejects tampered packaged %s metadata', (_field, search, value) =>
+    chartFixture((source, staged) => {
+      const before = readFileSync(join(source, 'Chart.yaml'), 'utf8');
+      stageChart({ sourceDir: source, destinationDir: staged, revision });
+      replace(staged, 'Chart.yaml', search, value);
+      expect(() =>
+        verifyChart({
+          chartYaml: join(staged, 'Chart.yaml'),
+          version: '4.5.6',
+          appVersion: '3.1.0',
+          revision,
+        })
+      ).toThrow(/mismatch/);
+      expect(readFileSync(join(source, 'Chart.yaml'), 'utf8')).toBe(before);
+    })
+  );
 });

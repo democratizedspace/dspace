@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { parse } from 'yaml';
 
@@ -21,7 +24,7 @@ describe('chart publication workflow integrity', () => {
   });
 
   it('serializes same-tag runs without cancellation', () => {
-    expect(workflow.concurrency.group).toContain('github.ref_name');
+    expect(workflow.concurrency.group).toContain('github.sha');
     expect(workflow.concurrency['cancel-in-progress']).toBe(false);
   });
 
@@ -33,12 +36,12 @@ describe('chart publication workflow integrity', () => {
     expect(checkout.with['fetch-depth']).toBe(0);
     const release = step('Validate tag, versions, and source revision');
     expect(release.env.CHART_TAG).toBe('${{ github.ref_name }}');
+    expect(text.match(/github\.ref_name/g)).toHaveLength(1);
     expect(release.env.EVENT_SHA).toBe('${{ github.sha }}');
     expect(release.run).toContain('git rev-parse HEAD');
-    expect(release.run).toContain('git rev-parse "${EVENT_SHA}^{commit}"');
     expect(release.run).toContain('git rev-parse "${CHART_TAG}^{commit}"');
-    expect(release.run).toContain('"$source_sha" == "$event_sha"');
-    expect(release.run).toContain('"$tag_sha" == "$event_sha"');
+    expect(release.run).toContain('"$source_sha" == "$EVENT_SHA"');
+    expect(release.run).toContain('"$source_sha" == "$tag_sha"');
   });
 
   it('enforces strict matching versions and tombstones chart 3.0.1 before registry access', () => {
@@ -49,7 +52,7 @@ describe('chart publication workflow integrity', () => {
       step('Refuse an existing chart coordinate (pre-package)')
     );
     expect(steps[releaseIndex].run).toContain(
-      '^[[0-9]+\\.[0-9]+\\.[0-9]+$'.replace('[', '')
+      '^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$'
     );
     expect(steps[releaseIndex].run).toContain('chart-v${chart_version}');
     expect(steps[releaseIndex].run).toContain('chart_version" != "3.0.1');
@@ -97,5 +100,87 @@ describe('chart publication workflow integrity', () => {
   it('keeps credentials in environment variables and stdin', () => {
     expect(text).not.toContain('-p "${{ secrets.GITHUB_TOKEN }}"');
     expect(step('Authenticate to GHCR').run).toContain('--password-stdin');
+    expect(step('Authenticate to GHCR').env).toEqual({
+      GHCR_GUARD_USERNAME: '${{ github.actor }}',
+      GHCR_GUARD_PASSWORD: '${{ secrets.GITHUB_TOKEN }}', // scan-secrets: ignore -- workflow expression, not a credential
+    });
   });
+
+  it('installs Node and YAML dependencies before staging', () => {
+    expect(step('Setup Node.js').with['node-version']).toBe(20);
+    expect(step('Setup pnpm').with.version).toBe('9.0.0');
+    expect(step('Install dependencies').run).toBe(
+      'pnpm install --frozen-lockfile --reporter=append-only'
+    );
+    expect(steps.indexOf(step('Install dependencies'))).toBeLessThan(
+      steps.indexOf(step('Validate and stage chart provenance'))
+    );
+  });
+
+  it('verifies the safely extracted packaged Chart.yaml with the YAML helper', () => {
+    const packaging = step('Validate and stage chart provenance').run;
+    expect(packaging).toContain('tar -xOf "$expected" dspace/Chart.yaml');
+    expect(packaging).toContain('stage-helm-chart.mjs verify');
+    expect(packaging).not.toContain('value()');
+  });
+});
+
+describe('immutable chart tag peeling', () => {
+  const withRepository = (
+    run: (root: string, first: string, second: string) => void
+  ) => {
+    const root = mkdtempSync(join(tmpdir(), 'helm-tag-'));
+    const git = (...args: string[]) =>
+      execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+    try {
+      git('init', '-q');
+      git('config', 'user.name', 'Test');
+      git('config', 'user.email', 'test@example.invalid');
+      execFileSync(
+        'sh',
+        ['-c', 'echo one > file && git add file && git commit -qm one'],
+        { cwd: root }
+      );
+      const first = git('rev-parse', 'HEAD');
+      execFileSync('sh', ['-c', 'echo two > file && git commit -qam two'], {
+        cwd: root,
+      });
+      run(root, first, git('rev-parse', 'HEAD'));
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  };
+  const validate = (root: string, eventSha: string, tag: string) =>
+    spawnSync(
+      'bash',
+      [
+        '-c',
+        'source_sha=$(git rev-parse HEAD); tag_sha=$(git rev-parse "${CHART_TAG}^{commit}"); [[ "$source_sha" == "$EVENT_SHA" && "$source_sha" == "$tag_sha" ]]',
+      ],
+      {
+        cwd: root,
+        env: { ...process.env, EVENT_SHA: eventSha, CHART_TAG: tag },
+      }
+    );
+
+  it.each([['lightweight'], ['annotated']])(
+    'peels a %s tag to the event commit',
+    (kind) =>
+      withRepository((root, first) => {
+        const args =
+          kind === 'annotated'
+            ? ['tag', '-a', 'chart-v1.2.3', '-m', 'release', first]
+            : ['tag', 'chart-v1.2.3', first];
+        execFileSync('git', args, { cwd: root });
+        execFileSync('git', ['checkout', '-q', first], { cwd: root });
+        expect(validate(root, first, 'chart-v1.2.3').status).toBe(0);
+      })
+  );
+
+  it('rejects a tag moved away from the checked-out event commit', () =>
+    withRepository((root, first, second) => {
+      execFileSync('git', ['tag', 'chart-v1.2.3', second], { cwd: root });
+      execFileSync('git', ['checkout', '-q', first], { cwd: root });
+      expect(validate(root, first, 'chart-v1.2.3').status).not.toBe(0);
+    }));
 });
