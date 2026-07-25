@@ -1,0 +1,18 @@
+# Deterministic representation of the stored pre-observability v3.0.1 production values.
+replicaCount: 2
+image:
+  repository: ghcr.io/democratizedspace/dspace
+  tag: v3.0.1
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 8080
+environment: production
+ingress:
+  enabled: true
+  className: traefik
+  host: democratized.space
+  annotations: {}
+  tls:
+    enabled: true
+    secretName: dspace-tls

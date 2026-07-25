@@ -1,3 +1,8 @@
+{{- $metrics := .Values.metrics | default dict -}}
+{{- $metricsAuth := $metrics.auth | default dict -}}
+{{- if and ($metrics.enabled | default false) (not ($metricsAuth.existingSecret | default "")) }}
+{{- fail "metrics.enabled=true requires metrics.auth.existingSecret so /metrics is authenticated whenever it is served" }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,6 +39,15 @@ spec:
               value: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
             - name: DSPACE_ENV
               value: {{ .Values.environment | default "production" | quote }}
+            - name: METRICS_ENABLED
+              value: {{ ternary "true" "false" ($metrics.enabled | default false) | quote }}
+          {{- if and ($metrics.enabled | default false) ($metricsAuth.existingSecret | default "") }}
+            - name: METRICS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $metricsAuth.existingSecret | quote }}
+                  key: {{ $metricsAuth.secretKey | default "token" | quote }}
+          {{- end }}
           {{- if .Values.env }}
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}

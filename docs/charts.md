@@ -26,7 +26,7 @@ settings.
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
   `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-  RuntimeDefault`.
+RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
@@ -81,3 +81,23 @@ When installing from the OCI registry, you will not have access to
 `charts/dspace/values.dev.yaml` unless you clone the repository. To customize values, either
 provide your own file with `-f <your-values.yaml>` or use `--set` flags as shown above.
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
+
+## v3.0.1 chart-only recovery release
+
+Chart `3.0.2` is a chart-only recovery release for the canonical DSPACE application v3.0.1. It
+defaults to the immutable `main-1a31a56` image built from
+`1a31a569aff2dbeb238e8c2688b9e85140d2077d`; it must never fall back to the mutable `v3.0.1`
+image tag. The chart keeps metrics and ServiceMonitor resources disabled by default and safely
+renders the pre-observability production values contract when `metrics`, `metrics.auth`, or
+`serviceMonitor` is absent or null.
+
+Retain the long-lived `release/chart-3.0.x` branch while v3.0.1 remains an approved rollback
+candidate. After the recovery PR merges into that branch, publication is permitted only by creating
+`chart-v3.0.2` at the exact approved recovery-branch commit. Ordinary branch pushes and manual
+branch dispatches cannot publish this chart. Chart `3.0.1` is permanently tombstoned and must not be
+modified or republished.
+
+Issue #4731 remains open after the implementation PR. Before it can be closed, independently verify
+the single successful publication run and capture its full source SHA, OCI reference, packaged
+archive SHA-256 digest, and OCI manifest digest. Creating or pushing the release tag and changing
+GHCR or deployment state are separate, post-merge operator actions.

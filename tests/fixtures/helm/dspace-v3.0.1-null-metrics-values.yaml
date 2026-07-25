@@ -1,0 +1,3 @@
+# Helm upgrades may retain explicitly null maps from historical stored values.
+metrics: null
+serviceMonitor: null
