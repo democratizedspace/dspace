@@ -74,7 +74,7 @@ package_lock_root_version=$(json_get "$package_lock_file" 'packages..version')
 chart_version=$(yaml_scalar "$chart_file" version || true)
 chart_app_version=$(yaml_scalar "$chart_file" appVersion || true)
 image_tag=$(yaml_nested_scalar "$values_file" image tag || true)
-version_line=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' "$version_file" | head -n1 || true)
+documented_chart_version=$(awk '!/^[[:space:]]*#/ && NF { print }' "$version_file" | tr -d '\r\n')
 expected_image_tag="v${root_package_version}"
 
 failures=0
@@ -97,31 +97,41 @@ expect_semver() {
 }
 
 expect_equal() {
-  local label="$1"
-  local actual="$2"
-  local expected="$3"
+  local group="$1"
+  local label="$2"
+  local actual="$3"
+  local expected="$4"
   if [[ -z "$actual" ]]; then
-    echo "Missing $label; expected '$expected'" >&2
+    echo "$group coordinate drift: missing $label; expected '$expected'" >&2
     failures=$((failures + 1))
   elif [[ "$actual" != "$expected" ]]; then
-    echo "$label mismatch: found '$actual', expected '$expected'" >&2
+    echo "$group coordinate drift: $label found '$actual', expected '$expected'" >&2
     failures=$((failures + 1))
   fi
 }
 
 expect_present "root package version" "$root_package_version"
 expect_semver "root package version" "$root_package_version"
-expect_equal "frontend package version" "$frontend_package_version" "$root_package_version"
-expect_equal "package-lock top-level version" "$package_lock_version" "$root_package_version"
-expect_equal 'package-lock packages[""].version' "$package_lock_root_version" "$root_package_version"
-expect_equal "chart version" "$chart_version" "$root_package_version"
-expect_equal "chart appVersion" "$chart_app_version" "$root_package_version"
-expect_equal "chart default image.tag" "$image_tag" "$expected_image_tag"
-expect_equal "docs/apps/dspace.version" "$version_line" "$root_package_version"
+for coordinate in \
+  "frontend package version:$frontend_package_version" \
+  "package-lock top-level version:$package_lock_version" \
+  'package-lock packages[""].version:'"$package_lock_root_version" \
+  "chart appVersion:$chart_app_version"; do
+  label=${coordinate%%:*}
+  actual=${coordinate#*:}
+  expect_semver "$label" "$actual"
+  expect_equal "Application" "$label" "$actual" "$root_package_version"
+done
+expect_equal "Application" "chart default image.tag" "$image_tag" "$expected_image_tag"
+
+expect_present "chart version" "$chart_version"
+expect_semver "chart version" "$chart_version"
+expect_semver "docs/apps/dspace.version" "$documented_chart_version"
+expect_equal "Chart" "docs/apps/dspace.version" "$documented_chart_version" "$chart_version"
 
 if (( failures > 0 )); then
-  echo "DSPACE release coordinates are not aligned." >&2
+  echo "DSPACE release coordinate groups are not aligned." >&2
   exit 1
 fi
 
-echo "DSPACE release coordinates are aligned at ${root_package_version} (${expected_image_tag})."
+echo "DSPACE release coordinates are aligned: application version ${root_package_version} (${expected_image_tag}); chart version ${chart_version}."

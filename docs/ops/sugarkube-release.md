@@ -14,11 +14,16 @@ setup in their existing runbooks.
 - **Immutable image tags:** `<branch>-<shortsha>`, for example `main-REPLACE_SHORTSHA` or
   `v3-REPLACE_SHORTSHA`
 - **Mutable branch convenience tags:** `<branch>-latest`, for example `main-latest` or `v3-latest`
-- **Version image tag:** `v<package.version>`, for example `v3.1.0`
+- **Application version:** the matching versions in the root/frontend package metadata and
+  `Chart.yaml:appVersion`
+- **Chart version:** the matching `Chart.yaml:version` and `docs/apps/dspace.version`; this may
+  advance independently of the application version
+- **Semantic image tag:** `v<application version>`, for example `v3.1.0`; published only for a
+  release and human-readable, but not proof of the deployed image
 
-Use immutable branch-SHA tags for staging, production approvals, and rollback records whenever
-possible. Mutable branch tags are convenient for inspection but should not be the audit record for a
-production deploy.
+Use immutable branch-SHA tags or image digests for staging, production approvals, and rollback
+records. Mutable branch tags and release-only semantic tags are convenient for humans but must not
+be the audit record for a production deploy.
 
 ## Artifact publishing summary
 
@@ -27,7 +32,9 @@ production deploy.
 2. `.github/workflows/ci-helm.yml` packages `charts/dspace` and publishes it to the GHCR OCI chart
    registry for `main` and `v3` pushes, and can also be run manually for those branches.
 3. `charts/dspace/Chart.yaml` and `docs/apps/dspace.version` must stay in sync so Sugarkube helper
-   recipes install the intended chart version.
+   recipes install the intended chart version. Separately, package metadata and
+   `Chart.yaml:appVersion` stay aligned on the application version; neither group must equal the
+   other.
 4. Local Docker builds are for local development and smoke testing only. They are not the normal
    Sugarkube staging or production release path.
 
@@ -74,9 +81,10 @@ just dspace-oci-promote-prod tag=3.1.0
 ```
 
 The bare `3.1.0` value is the existing Sugarkube compatibility/version promote form. The image
-workflow publishes the version image tag as `v3.1.0`; branch-SHA tags such as
-`main-REPLACE_SHORTSHA` or `v3-REPLACE_SHORTSHA` remain the preferred immutable audit path for exact
-image promotion and rollback.
+workflow publishes the release-only semantic application tag as `v3.1.0`; it is human-readable but
+not immutable deployment proof. Branch-SHA tags such as `main-REPLACE_SHORTSHA` or
+`v3-REPLACE_SHORTSHA` (or a digest) are the required audit path for exact image promotion and
+rollback.
 
 or:
 
