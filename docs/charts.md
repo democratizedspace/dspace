@@ -12,7 +12,8 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `replicaCount`: Pod replica count. Defaults to `2` for redundancy.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
-- `image.tag`: Image tag to deploy. Defaults to `v3.1.0`, matching the prepared current package version.
+- `image.tag`: Image tag to deploy. Defaults to `v3.1.0`, matching the application version rather
+  than the independently versioned chart.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
 - `service.port`: Container and service port. Defaults to `8080`.
@@ -162,3 +163,9 @@ When installing from the OCI registry, you will not have access to
 `charts/dspace/values.dev.yaml` unless you clone the repository. To customize values, either
 provide your own file with `-f <your-values.yaml>` or use `--set` flags as shown above.
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
+
+`Chart.yaml:version` determines the OCI chart version and `dspace-<chart-version>.tgz` filename;
+`Chart.yaml:appVersion` identifies the application release packaged by the chart. Both are bare
+SemVer, but they may differ. `docs/apps/dspace.version` follows only the chart version. For audited
+deployments, override the human-readable semantic image default with an immutable branch-SHA tag or
+digest; a semantic image tag alone is not deployment proof.

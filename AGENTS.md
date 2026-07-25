@@ -317,6 +317,12 @@ must be in the source before the image will work correctly.
 [DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727) and the
 [2026-07-23 production version-drift postmortem](outages/2026-07-23-dspace-production-version-drift.md):
 
+Application and Helm chart versions are independent coordinate groups. Root/frontend/lockfile
+package versions, `Chart.yaml:appVersion`, and the semantic image default stay internally aligned;
+`Chart.yaml:version`, `docs/apps/dspace.version`, and the packaged chart filename stay internally
+aligned. A chart-only increment must not change the application group. Immutable branch-SHA tags or
+digests, not semantic image tags, provide deployment identity.
+
 - **Ordinary branch pushes** to `main`/`v3` (the `image` job) publish only
   `<branch>-<short-sha>` (immutable) and `<branch>-latest` (explicitly mutable
   convenience tag). This job must never compute or publish a `vX.Y.Z` tag — that

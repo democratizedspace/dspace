@@ -74,7 +74,7 @@ package_lock_root_version=$(json_get "$package_lock_file" 'packages..version')
 chart_version=$(yaml_scalar "$chart_file" version || true)
 chart_app_version=$(yaml_scalar "$chart_file" appVersion || true)
 image_tag=$(yaml_nested_scalar "$values_file" image tag || true)
-version_line=$(grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' "$version_file" | head -n1 || true)
+version_line=$(awk 'NF && $1 !~ /^#/ { print $1; exit }' "$version_file")
 expected_image_tag="v${root_package_version}"
 
 failures=0
@@ -88,40 +88,48 @@ expect_present() {
 }
 
 expect_semver() {
-  local label="$1"
-  local actual="$2"
+  local group="$1"
+  local label="$2"
+  local actual="$3"
   if [[ -n "$actual" && ! "$actual" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo "$label must be a semantic version like 3.1.0; found '$actual'" >&2
+    echo "$group coordinate '$label' must be a bare semantic version like 3.1.0; found '$actual'" >&2
     failures=$((failures + 1))
   fi
 }
 
 expect_equal() {
-  local label="$1"
-  local actual="$2"
-  local expected="$3"
+  local group="$1"
+  local label="$2"
+  local actual="$3"
+  local expected="$4"
   if [[ -z "$actual" ]]; then
-    echo "Missing $label; expected '$expected'" >&2
+    echo "Missing $group coordinate '$label'; expected '$expected'" >&2
     failures=$((failures + 1))
   elif [[ "$actual" != "$expected" ]]; then
-    echo "$label mismatch: found '$actual', expected '$expected'" >&2
+    echo "$group coordinate '$label' drift: found '$actual', expected '$expected'" >&2
     failures=$((failures + 1))
   fi
 }
 
-expect_present "root package version" "$root_package_version"
-expect_semver "root package version" "$root_package_version"
-expect_equal "frontend package version" "$frontend_package_version" "$root_package_version"
-expect_equal "package-lock top-level version" "$package_lock_version" "$root_package_version"
-expect_equal 'package-lock packages[""].version' "$package_lock_root_version" "$root_package_version"
-expect_equal "chart version" "$chart_version" "$root_package_version"
-expect_equal "chart appVersion" "$chart_app_version" "$root_package_version"
-expect_equal "chart default image.tag" "$image_tag" "$expected_image_tag"
-expect_equal "docs/apps/dspace.version" "$version_line" "$root_package_version"
+expect_present "application coordinate 'root package version'" "$root_package_version"
+expect_semver "application" "root package version" "$root_package_version"
+expect_semver "application" "frontend package version" "$frontend_package_version"
+expect_semver "application" "package-lock top-level version" "$package_lock_version"
+expect_semver "application" 'package-lock packages[""].version' "$package_lock_root_version"
+expect_semver "application" "chart appVersion" "$chart_app_version"
+expect_equal "application" "frontend package version" "$frontend_package_version" "$root_package_version"
+expect_equal "application" "package-lock top-level version" "$package_lock_version" "$root_package_version"
+expect_equal "application" 'package-lock packages[""].version' "$package_lock_root_version" "$root_package_version"
+expect_equal "application" "chart appVersion" "$chart_app_version" "$root_package_version"
+expect_equal "application" "chart default image.tag" "$image_tag" "$expected_image_tag"
+
+expect_semver "chart" "Chart.yaml version" "$chart_version"
+expect_semver "chart" "docs/apps/dspace.version" "$version_line"
+expect_equal "chart" "docs/apps/dspace.version" "$version_line" "$chart_version"
 
 if (( failures > 0 )); then
-  echo "DSPACE release coordinates are not aligned." >&2
+  echo "DSPACE application and chart coordinate groups are not internally aligned." >&2
   exit 1
 fi
 
-echo "DSPACE release coordinates are aligned at ${root_package_version} (${expected_image_tag})."
+echo "DSPACE coordinate groups are aligned: application version ${root_package_version} (${expected_image_tag}); chart version ${chart_version}."
