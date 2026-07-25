@@ -20,6 +20,7 @@ setup in their existing runbooks.
   advance independently of the application version
 - **Semantic image tag:** `v<application version>`, for example `v3.1.0`; published only for a
   release and human-readable, but not proof of the deployed image
+- **Chart release tag:** exactly `chart-v<chart version>` on the reviewed immutable source commit
 
 Use immutable branch-SHA tags or image digests for staging, production approvals, and rollback
 records. Mutable branch tags and release-only semantic tags are convenient for humans but must not
@@ -29,14 +30,22 @@ be the audit record for a production deploy.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
-2. `.github/workflows/ci-helm.yml` packages `charts/dspace` and publishes it to the GHCR OCI chart
-   registry for `main` and `v3` pushes, and can also be run manually for those branches.
+2. `.github/workflows/ci-helm.yml` publishes only when an operator pushes the exact
+   `chart-v<Chart.yaml:version>` tag. Point the tag at the reviewed immutable commit whose chart
+   version matches; ordinary `main`/`v3` pushes and manual branch dispatches never publish charts.
+   The workflow refuses to replace an existing coordinate, checks absence twice, and permanently
+   rejects chart `3.0.1` even if it appears absent from GHCR. A later chart may still use
+   `appVersion: 3.0.1`.
 3. `charts/dspace/Chart.yaml` and `docs/apps/dspace.version` must stay in sync so Sugarkube helper
    recipes install the intended chart version. Separately, package metadata and
    `Chart.yaml:appVersion` stay aligned on the application version; neither group must equal the
    other.
 4. Local Docker builds are for local development and smoke testing only. They are not the normal
    Sugarkube staging or production release path.
+
+After chart publication, retain the workflow summary with the exact chart tag, full source SHA,
+packaged archive SHA-256, and OCI manifest digest. These values are the auditable chart publication
+evidence; the chart coordinate cannot be republished or replaced.
 
 ## Deploy staging
 

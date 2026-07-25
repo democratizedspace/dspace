@@ -277,16 +277,16 @@ describe('independent DSPACE application and chart coordinates', () => {
       'utf8'
     );
     expect(workflow).toContain('chart_dist="$RUNNER_TEMP/dspace-chart-dist"');
-    expect(workflow).toContain('rm -rf "$chart_dist"');
+    expect(workflow).toContain('rm -rf "$chart_stage" "$chart_dist"');
     expect(workflow).toContain('mkdir -p "$chart_dist"');
     expect(workflow).not.toContain('mktemp -d');
     expect(workflow).toContain(
-      'expected_chart_file="$chart_dist/dspace-${chart_version}.tgz"'
+      'expected="$chart_dist/dspace-${{ steps.release.outputs.chart_version }}.tgz"'
     );
     expect(workflow).toContain('find "$chart_dist" -maxdepth 1');
-    expect(workflow).toContain('packaged_version=$(helm show chart');
-    expect(workflow).toContain('packaged_app_version=$(helm show chart');
-    expect(workflow).toContain('${{ steps.package.outputs.chart_version }}');
+    expect(workflow).toContain('stage-helm-chart.mjs verify');
+    expect(workflow).toContain('tar -xOf "$expected" dspace/Chart.yaml');
+    expect(workflow).toContain('${{ steps.release.outputs.chart_version }}');
   });
 
   it('does not scan historical release records as authoritative coordinates', () =>

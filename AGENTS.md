@@ -349,6 +349,16 @@ use exactly one `push: true` attempt and must push only `vX.Y.Z`. See
 `scripts/ghcr-manifest.mjs` and `tests/ciImageWorkflow.test.ts` /
 `tests/ghcrManifestGuard.test.ts`.
 
+Helm charts have a separate, tag-only release path in `ci-helm.yml`. Ordinary `main` and `v3`
+pushes never publish charts. An operator must create the exact `chart-v<Chart.yaml:version>` tag on
+the reviewed immutable commit; the workflow verifies the tag resolves to its checked-out `HEAD`.
+It checks the chart coordinate is absent before packaging and again immediately before its single
+push, failing closed on every result except an authoritative GHCR 404. Existing chart coordinates
+cannot be replaced, and chart version `3.0.1` is permanently tombstoned even if GHCR reports it
+absent (`appVersion: 3.0.1` remains valid for a later chart). The staged package records the full
+source SHA in OCI annotations without modifying the tracked chart, and a successful workflow
+summary records the source SHA, archive SHA-256, and OCI manifest digest as release evidence.
+
 ### Smoke Test
 
 The `ci-image.yml` workflow includes a smoke test that:

@@ -244,14 +244,29 @@ export async function describeManifest({
     };
 }
 
+// Artifact-neutral lookup for single-manifest OCI artifacts such as Helm charts.
+export async function describeArtifact(options) {
+    const token = await fetchGhcrToken(options); // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+    const manifest = await getManifest({ ...options, token });
+    if (manifest.status !== 'present') {
+        throw new GhcrGuardError('Expected OCI artifact to exist after publish', {
+            code: 'missing-after-publish',
+        });
+    }
+    if (!/^sha256:[0-9a-f]{64}$/.test(manifest.digest)) {
+        throw new GhcrGuardError('OCI artifact manifest digest is malformed', { code: 'malformed' });
+    }
+    return { digest: manifest.digest };
+}
+
 const FLAG_KEYS = new Set(['owner', 'repo', 'tag']);
 
 export function parseArgs(argv) {
     const [subcommand, ...rest] = argv;
 
-    if (subcommand !== 'check-absent' && subcommand !== 'describe') {
+    if (!['check-absent', 'describe', 'describe-artifact'].includes(subcommand)) {
         throw new GhcrGuardError(
-            'Usage: ghcr-manifest.mjs <check-absent|describe> --owner <owner> --repo <repo> --tag <tag>',
+            'Usage: ghcr-manifest.mjs <check-absent|describe|describe-artifact> --owner <owner> --repo <repo> --tag <tag>',
             { code: 'invalid-input' }
         );
     }
@@ -307,6 +322,13 @@ export async function main(argv = process.argv.slice(2)) {
         console.log(
             `GHCR tag ${owner}/${repo}:${tag} is not present (registry returned 404); safe to publish.`
         );
+        return;
+    }
+
+    if (subcommand === 'describe-artifact') {
+        const artifact = await describeArtifact({ owner, repo, tag, username, password });
+        writeGithubOutput([['digest', artifact.digest]]);
+        console.log(`Recorded OCI artifact digest for ${owner}/${repo}:${tag}.`);
         return;
     }
 

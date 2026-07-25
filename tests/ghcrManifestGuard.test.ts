@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   GhcrGuardError,
   assertTagAbsent,
+  describeArtifact,
   describeManifest,
   fetchGhcrToken,
   getManifest,
@@ -282,6 +283,27 @@ describe('describeManifest', () => {
   ])('fails closed when %s', async (_description, manifests) => {
     await expect(describeWith(manifests)).rejects.toMatchObject({ code: 'missing-platform' });
   });
+});
+
+describe('describeArtifact', () => {
+  it('supports an artifact-neutral single manifest without weakening image describe', async () => {
+    const digest = `sha256:${'a'.repeat(64)}`;
+    await expect(describeArtifact({
+      owner: 'o', repo: 'charts/dspace', tag: '3.1.0', username: 'u',
+      password: SECRET_PASSWORD, // scan-secrets: ignore (fixture credential)
+      fetchImpl: fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(200, {}, { 'docker-content-digest': digest }) }),
+    })).resolves.toEqual({ digest });
+  });
+
+  it.each(['sha256:short', `sha256:${'A'.repeat(64)}`, 'not-a-digest'])(
+    'rejects malformed artifact digest %s', async (digest) => {
+      await expect(describeArtifact({
+        owner: 'o', repo: 'charts/dspace', tag: '3.1.0', username: 'u',
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture credential)
+        fetchImpl: fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(200, {}, { 'docker-content-digest': digest }) }),
+      })).rejects.toMatchObject({ code: 'malformed' });
+    }
+  );
 });
 
 describe('parseArgs', () => {
