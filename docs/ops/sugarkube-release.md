@@ -154,3 +154,26 @@ just app-promote-prod app=dspace tag=main-REPLACE_SHORTSHA
 
 Until those generic recipes are available in Sugarkube, keep using the mature DSPACE-specific
 commands documented above.
+
+## Fail-closed full-release gate and manifest
+
+A complete release has one mandatory order: (1) publish and verify the multi-platform immutable
+`<branch>-<shortsha>` image, including both platform config revision labels; (2) publish and verify
+`oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>` from that same full source SHA; and
+(3) publish the GitHub `v<applicationVersion>` release. The release workflow refuses to continue if
+either immutable prerequisite is missing or inconsistent. It then rechecks that the semantic tag is
+absent, performs one exact index alias operation, and proves that the semantic and immutable tags
+resolve to the same image-index digest. No image is rebuilt in this path.
+
+On success, the workflow uploads the deterministic artifact `dspace-release-manifest`, containing
+`dspace-release-manifest.json`. Schema version 1 records `applicationVersion`, the complete
+`sourceRevision`, immutable tag-only `imageTag`, `imageDigest`, both platform digests,
+`chartVersion`, and `chartDigest`, plus stable application and semantic-evidence fields. It contains
+no environment, approver, promotion, runtime, token, or credential data. Deployments and downstream
+manifests continue to use `imageTag` (or its digest); `semanticTag` is human-readable evidence only.
+
+Publishing the GitHub release before the immutable image and chart exist fails without creating the
+semantic coordinate. After the missing prerequisite is supplied, rerunning is safe. Once a semantic
+tag exists, the workflow never overwrites or moves it, including after a partial or conflicting run;
+investigate and choose a new approved release coordinate instead. Chart-only releases remain
+possible under the chart-tag policy, but do not constitute a complete application release manifest.

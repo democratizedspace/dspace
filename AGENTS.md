@@ -432,3 +432,15 @@ Run `npm test` to verify configuration stays in sync.
 - [Codex Prompt Upgrader](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/upgrader.md)
 - [AGENTS.md Spec](https://gist.github.com/dpaluy/cc42d59243b0999c1b3f9cf60dfd3be6)
 - [Agents.md Guide](https://agentsmd.net/)
+
+## Full release coordinate integrity
+
+A full DSPACE release is fail-closed and ordered: first publish and verify the immutable
+`<branch>-<shortsha>` multi-platform image, then publish and verify the immutable Helm chart from
+the same full commit, and only then publish the GitHub release. The release event creates `vX.Y.Z`
+as an exact digest alias (never a rebuild) and emits `dspace-release-manifest.json`. Deployments and
+downstream manifests must continue to select the immutable branch-SHA tag or digest. The semantic
+tag is human-readable release evidence only. Existing semantic image tags and chart versions are
+never overwritten; failed out-of-order releases may be retried only while the semantic coordinate
+remains absent. Use `scripts/check-release-consistency.mjs` for workflow policy rather than
+reimplementing release-coordinate parsing in YAML.

@@ -173,3 +173,19 @@ When installing from the OCI registry, you will not have access to
 `charts/dspace/values.dev.yaml` unless you clone the repository. To customize values, either
 provide your own file with `-f <your-values.yaml>` or use `--set` flags as shown above.
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
+
+## Full-release relationship and evidence
+
+Chart publication may occur independently, but a full application release requires the chart OCI
+artifact and the immutable branch-SHA image to originate at the same approved 40-character commit.
+Publish/verify the image first, publish/verify the chart second, and publish the GitHub release last.
+The final release gate checks chart version, `appVersion`, OCI digest, and revision provenance before
+creating the semantic image alias. Existing chart coordinates and semantic image tags remain
+immutable and cannot be retried by overwriting them.
+
+A successful GitHub release run uploads `dspace-release-manifest/dspace-release-manifest.json`. Its
+schema-version-1 coordinates include the application and independently versioned chart versions,
+full source revision, immutable branch-SHA `imageTag`, image index and platform digests, and chart
+OCI digest. The `vX.Y.Z` image is enforced as an exact digest alias of that immutable image and is
+human-readable evidence only; Helm values, deployments, and downstream promotion records should
+select the manifest's immutable `imageTag` or digest.

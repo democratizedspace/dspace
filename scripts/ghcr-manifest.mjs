@@ -172,7 +172,45 @@ export async function getManifest({
               }))
         : [];
 
-    return { status: 'present', digest, manifests };
+    return { status: 'present', digest, manifests, body };
+}
+
+export async function getBlob({ owner, repo, digest, token, fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_MS }) {
+    requireField(owner, 'owner'); requireField(repo, 'repo'); requireField(token, 'token');
+    if (!/^sha256:[0-9a-f]{64}$/.test(digest || '')) throw new GhcrGuardError('Invalid OCI blob digest', { code: 'malformed' });
+    const response = await fetchWithTimeout(fetchImpl, `${REGISTRY_HOST}/v2/${owner}/${repo}/blobs/${digest}`, { headers: { Authorization: `Bearer ${token}` } }, timeoutMs, 'requesting a GHCR blob');
+    if (response.status === 401 || response.status === 403) throw new GhcrGuardError(`GHCR blob request was denied with status ${response.status}`, { code: 'auth' });
+    if (!response.ok) throw new GhcrGuardError(`GHCR blob request returned an indeterminate status ${response.status}`, { code: 'indeterminate' });
+    try { return await response.json(); } catch { throw new GhcrGuardError('GHCR blob response body was not valid JSON', { code: 'malformed' }); }
+}
+
+export async function inspectImage({ owner, repo, tag, username, password, fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_MS }) {
+    const token = await fetchGhcrToken({ owner, repo, username, password, fetchImpl, timeoutMs }); // scan-secrets: ignore (environment credential plumbing; no literal secret)
+    const index = await getManifest({ owner, repo, tag, token, fetchImpl, timeoutMs });
+    if (index.status !== 'present') throw new GhcrGuardError(`Expected GHCR image ${owner}/${repo}:${tag} to exist`, { code: 'missing' });
+    if (!/^sha256:[0-9a-f]{64}$/.test(index.digest)) throw new GhcrGuardError('Invalid image index digest', { code: 'malformed' });
+    const platforms = {};
+    for (const architecture of ['amd64', 'arm64']) {
+        const entries = index.manifests.filter((entry) => entry.os === 'linux' && entry.architecture === architecture);
+        if (entries.length !== 1) throw new GhcrGuardError(`Image requires exactly one linux/${architecture} manifest`, { code: 'missing-platform' });
+        const manifest = await getManifest({ owner, repo, tag: entries[0].digest, token, fetchImpl, timeoutMs });
+        const configDigest = manifest.body?.config?.digest;
+        const config = await getBlob({ owner, repo, digest: configDigest, token, fetchImpl, timeoutMs });
+        const revision = config?.config?.Labels?.['org.opencontainers.image.revision'];
+        if (typeof revision !== 'string') throw new GhcrGuardError(`linux/${architecture} config is missing the source revision label`, { code: 'malformed' });
+        platforms[architecture] = { digest: entries[0].digest, configDigest, revision };
+    }
+    return { indexDigest: index.digest, platforms };
+}
+
+export async function inspectChart({ owner, repo, tag, username, password, fetchImpl = fetch, timeoutMs = DEFAULT_TIMEOUT_MS }) {
+    const token = await fetchGhcrToken({ owner, repo, username, password, fetchImpl, timeoutMs }); // scan-secrets: ignore (environment credential plumbing; no literal secret)
+    const manifest = await getManifest({ owner, repo, tag, token, fetchImpl, timeoutMs });
+    if (manifest.status !== 'present') throw new GhcrGuardError(`Expected GHCR chart ${owner}/${repo}:${tag} to exist`, { code: 'missing' });
+    if (!/^sha256:[0-9a-f]{64}$/.test(manifest.digest)) throw new GhcrGuardError('Invalid chart OCI digest', { code: 'malformed' });
+    const config = await getBlob({ owner, repo, digest: manifest.body?.config?.digest, token, fetchImpl, timeoutMs });
+    const annotations = { ...(config?.annotations || {}), ...(manifest.body?.annotations || {}) };
+    return { digest: manifest.digest, config: { ...config, ...annotations, annotations, chartVersion: config?.version } };
 }
 
 // Fails closed: resolves only when the registry authoritatively reports the tag as absent.

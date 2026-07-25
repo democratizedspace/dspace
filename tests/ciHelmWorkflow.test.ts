@@ -39,9 +39,9 @@ describe('chart publication workflow integrity', () => {
     expect(text.match(/github\.ref_name/g)).toHaveLength(1);
     expect(release.env.EVENT_SHA).toBe('${{ github.sha }}');
     expect(release.run).toContain('git rev-parse HEAD');
-    expect(release.run).toContain('git rev-parse "${CHART_TAG}^{commit}"');
-    expect(release.run).toContain('"$source_sha" == "$EVENT_SHA"');
-    expect(release.run).toContain('"$source_sha" == "$tag_sha"');
+    expect(release.run).toContain('check-release-consistency.mjs chart-local');
+    expect(release.run).toContain('[ "$source_sha" = "$EVENT_SHA" ]');
+    expect(release.run).toContain('--tag "$CHART_TAG"');
   });
 
   it('enforces strict matching versions and tombstones chart 3.0.1 before registry access', () => {
@@ -52,10 +52,10 @@ describe('chart publication workflow integrity', () => {
       step('Refuse an existing chart coordinate (pre-package)')
     );
     expect(steps[releaseIndex].run).toContain(
-      '^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$'
+      'check-release-consistency.mjs chart-local'
     );
-    expect(steps[releaseIndex].run).toContain('chart-v${chart_version}');
-    expect(steps[releaseIndex].run).toContain('chart_version" != "3.0.1');
+    expect(steps[releaseIndex].run).toContain('chart_version');
+    expect(steps[releaseIndex].run).toContain('chart_version" != 3.0.1');
     expect(releaseIndex).toBeLessThan(guardIndex);
   });
 
