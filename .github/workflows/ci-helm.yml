@@ -22,6 +22,26 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate tag, versions, and source revision
+        id: release
+        env:
+          CHART_TAG: ${{ github.ref_name }}
+          EVENT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          source_sha=$(git rev-parse HEAD)
+          tag_sha=$(git rev-parse "${CHART_TAG}^{commit}")
+          [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$EVENT_SHA" ]] || { echo "Checked-out HEAD does not match the triggering push event" >&2; exit 1; }
+          [[ "$source_sha" == "$tag_sha" ]] || { echo "Chart tag moved after the triggering push event; refusing to publish" >&2; exit 1; }
+          node scripts/check-release-consistency.mjs --verify-chart-local
+          chart_version="$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)"
+          app_version="$(awk '$1 == "appVersion:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)"
+          echo "chart_version=$chart_version" >> "$GITHUB_OUTPUT"
+          echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
+          echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
+          echo "chart_tag=$CHART_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -35,28 +55,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
-
-      - name: Validate tag, versions, and source revision
-        id: release
-        env:
-          CHART_TAG: ${{ github.ref_name }}
-          EVENT_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          chart_version=$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)
-          app_version=$(awk '$1 == "appVersion:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)
-          [[ "$chart_version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || { echo "Chart version must be strict X.Y.Z SemVer" >&2; exit 1; }
-          [[ "$app_version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || { echo "appVersion must be strict X.Y.Z SemVer" >&2; exit 1; }
-          [[ "$CHART_TAG" == "chart-v${chart_version}" ]] || { echo "Tag must equal chart-v${chart_version}; refusing to publish" >&2; exit 1; }
-          [[ "$chart_version" != "3.0.1" ]] || { echo "Chart version 3.0.1 is permanently tombstoned" >&2; exit 1; }
-          source_sha=$(git rev-parse HEAD)
-          tag_sha=$(git rev-parse "${CHART_TAG}^{commit}")
-          [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$EVENT_SHA" ]] || { echo "Checked-out HEAD does not match the triggering push event" >&2; exit 1; }
-          [[ "$source_sha" == "$tag_sha" ]] || { echo "Chart tag moved after the triggering push event; refusing to publish" >&2; exit 1; }
-          echo "chart_version=$chart_version" >> "$GITHUB_OUTPUT"
-          echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
-          echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
-          echo "chart_tag=$CHART_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Refuse an existing chart coordinate (pre-package)
         env:
@@ -123,6 +121,17 @@ jobs:
           digest=$(printf '%s\n' "$output" | sed -n 's/^Digest: \(sha256:[0-9a-f]\{64\}\)$/\1/p')
           [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "helm push did not report one valid OCI digest" >&2; exit 1; }
           echo "oci_digest=$digest" >> "$GITHUB_OUTPUT"
+
+      - name: Verify published chart coordinates
+        id: published_chart
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
+          CHART_VERSION: ${{ steps.release.outputs.chart_version }}
+          APPLICATION_VERSION: ${{ steps.release.outputs.app_version }}
+          SOURCE_SHA: ${{ steps.release.outputs.source_sha }}
+          EXPECTED_CHART_DIGEST: ${{ steps.push.outputs.oci_digest }}
+        run: node scripts/check-release-consistency.mjs --verify-chart
 
       - name: Write publication evidence
         env:

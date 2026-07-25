@@ -356,6 +356,15 @@ use exactly one `push: true` attempt and must push only `vX.Y.Z`. See
 `scripts/ghcr-manifest.mjs` and `tests/ciImageWorkflow.test.ts` /
 `tests/ghcrManifestGuard.test.ts`.
 
+Full releases are fail-closed and ordered: first publish and verify the immutable
+`<branch>-<short-sha>` multi-platform image, then publish and verify the immutable chart from the
+same full source SHA, and only then publish the GitHub release. The release event verifies both
+prerequisites, creates `vX.Y.Z` as an exact digest alias (never a rebuild), and uploads
+`dspace-release-manifest.json`. Deployments and downstream promotion records must continue to use
+the immutable branch-SHA image tag or digest. The semantic tag is human-readable evidence whose
+digest equality is enforced, not a deployment coordinate. Run
+`node scripts/check-release-consistency.mjs --verify-local-fixtures` when changing these gates.
+
 ### Smoke Test
 
 The `ci-image.yml` workflow includes a smoke test that:

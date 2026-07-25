@@ -161,6 +161,16 @@ version comes from `Chart.yaml:version` and may differ from the application vers
 and the package files. `docs/apps/dspace.version` pins the chart coordinate. After the publish
 workflow has completed successfully, use this installation procedure:
 
+For a full application release, publish this immutable chart after the immutable branch-SHA image
+and before publishing the GitHub release. All three artifacts must identify one approved full
+source SHA. The final release gate reads the published chart OCI manifest/config, verifies chart
+version, `appVersion`, source-revision annotation, and immutable digest, then includes that digest
+with the immutable image coordinate in
+`dspace-release-manifest/dspace-release-manifest.json`. A missing or mismatched chart safely blocks
+the later semantic image alias; the release workflow can be rerun after the chart prerequisite is
+supplied, provided no semantic coordinate exists. Semantic image tags remain human-readable
+evidence only even though exact digest equality with the immutable image index is enforced.
+
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --version 3.1.0 \

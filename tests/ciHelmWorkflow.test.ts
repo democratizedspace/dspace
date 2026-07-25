@@ -44,7 +44,7 @@ describe('chart publication workflow integrity', () => {
     expect(release.run).toContain('"$source_sha" == "$tag_sha"');
   });
 
-  it('enforces strict matching versions and tombstones chart 3.0.1 before registry access', () => {
+  it('routes strict matching versions and the chart tombstone through the reusable gate before registry access', () => {
     const releaseIndex = steps.indexOf(
       step('Validate tag, versions, and source revision')
     );
@@ -52,10 +52,8 @@ describe('chart publication workflow integrity', () => {
       step('Refuse an existing chart coordinate (pre-package)')
     );
     expect(steps[releaseIndex].run).toContain(
-      '^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$'
+      'check-release-consistency.mjs --verify-chart-local'
     );
-    expect(steps[releaseIndex].run).toContain('chart-v${chart_version}');
-    expect(steps[releaseIndex].run).toContain('chart_version" != "3.0.1');
     expect(releaseIndex).toBeLessThan(guardIndex);
   });
 
