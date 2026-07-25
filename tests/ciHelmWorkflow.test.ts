@@ -108,7 +108,10 @@ describe('chart publication workflow integrity', () => {
   });
 
   it('installs Node and YAML dependencies before staging', () => {
-    expect(step('Setup Node.js').with['node-version']).toBe(20);
+    expect(step('Setup Node.js').with['node-version-file']).toBe('.nvmrc');
+    expect(steps.indexOf(step('Setup Node.js'))).toBeLessThan(
+      steps.indexOf(step('Validate tag, versions, and source revision'))
+    );
     expect(step('Setup pnpm').with.version).toBe('9.0.0');
     expect(step('Install dependencies').run).toBe(
       'pnpm install --frozen-lockfile --reporter=append-only'

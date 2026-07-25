@@ -324,12 +324,14 @@ jobs:
         id: tags
         run: |
           branch="${{ github.event.inputs.branch || github.ref_name }}"
-          short_sha="$(git rev-parse --short HEAD)"
+          full_sha="$(git rev-parse HEAD)"
+          short_sha="$(git rev-parse --short=7 HEAD)"
           tag_prefix="${branch//\//-}"
           sha_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-${short_sha}"
           latest_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-latest"
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
+          echo "full_sha=${full_sha}" >> "$GITHUB_OUTPUT"
           echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Set image build version
@@ -342,7 +344,7 @@ jobs:
         id: metadata
         env:
           REPO_URL: ${{ github.server_url }}/${{ github.repository }}
-          GIT_SHA: ${{ github.sha }}
+          GIT_SHA: ${{ steps.tags.outputs.full_sha }}
         run: |
           created="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
           echo "created=${created}" >> "$GITHUB_OUTPUT"
@@ -379,8 +381,8 @@ jobs:
             ${{ steps.tags.outputs.latest_tag }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ github.sha }}
-            VITE_GIT_SHA=${{ github.sha }}
+            GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
@@ -404,8 +406,8 @@ jobs:
             ${{ steps.tags.outputs.latest_tag }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ github.sha }}
-            VITE_GIT_SHA=${{ github.sha }}
+            GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
@@ -427,16 +429,18 @@ jobs:
           tags: dspace-verify:latest
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ github.sha }}
-            VITE_GIT_SHA=${{ github.sha }}
+            GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
           cache-from: type=gha
 
       - name: Assert build SHA is baked into frontend bundle
         if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        env:
+          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
         run: |
           docker run --rm \
-            -e EXPECTED_SHA="${GITHUB_SHA}" \
+            -e EXPECTED_SHA \
             -v "$PWD/scripts:/scripts:ro" \
             dspace-verify:latest \
             node /scripts/verify-build-sha.mjs /app/dist
@@ -508,6 +512,11 @@ jobs:
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
           echo "source_branch=$source_branch" >> "$GITHUB_OUTPUT"
           echo "chart_tag=$chart_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
 
       - name: Validate all local release coordinates
         id: coordinates

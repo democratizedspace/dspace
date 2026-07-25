@@ -24,6 +24,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
       - name: Validate tag, versions, and source revision
         id: release
         env:
@@ -42,11 +47,6 @@ jobs:
           echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
           echo "chart_tag=$CHART_TAG" >> "$GITHUB_OUTPUT"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

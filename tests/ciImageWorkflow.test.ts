@@ -72,6 +72,8 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
 
   it('still publishes the immutable branch-SHA tag and the mutable branch convenience tag', () => {
     const tagsStep = findSteps(job).find((step) => step.id === 'tags');
+    expect(tagsStep.run).toContain('git rev-parse HEAD');
+    expect(tagsStep.run).toContain('git rev-parse --short=7 HEAD');
     expect(tagsStep.run).toMatch(/sha_tag=/);
     expect(tagsStep.run).toMatch(/latest_tag=/);
 
@@ -81,7 +83,22 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     for (const step of realPushSteps) {
       expect(step.with.tags).toContain('steps.tags.outputs.sha_tag');
       expect(step.with.tags).toContain('steps.tags.outputs.latest_tag');
+      expect(step.with['build-args']).toContain(
+        'GIT_SHA=${{ steps.tags.outputs.full_sha }}'
+      );
+      expect(step.with.labels).toContain(
+        'org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}'
+      );
     }
+  });
+
+  it('uses the checked-out commit rather than the dispatch event SHA', () => {
+    const serialized = JSON.stringify(job);
+    expect(serialized).not.toContain('GIT_SHA=${{ github.sha }}');
+    expect(serialized).not.toContain('VITE_GIT_SHA=${{ github.sha }}');
+    expect(
+      findSteps(job).find((step) => step.id === 'metadata').env.GIT_SHA
+    ).toBe('${{ steps.tags.outputs.full_sha }}');
   });
 
   it('keeps multi-arch publication for both supported architectures', () => {
@@ -140,6 +157,14 @@ describe('ci-image.yml "semantic-release" job (release-only alias path)', () => 
       steps.indexOf(named('Validate all local release coordinates'))
     );
     expect(JSON.stringify(job)).not.toContain('pnpm install');
+  });
+
+  it('pins Node before invoking the release consistency gate', () => {
+    const setup = findStepsUsing(job, 'actions/setup-node')[0];
+    expect(setup.with['node-version-file']).toBe('.nvmrc');
+    expect(steps.indexOf(setup)).toBeLessThan(
+      steps.indexOf(named('Validate all local release coordinates'))
+    );
   });
 
   it('uses the reusable gate for local, image, chart, and manifest validation', () => {
