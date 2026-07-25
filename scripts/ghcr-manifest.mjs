@@ -190,7 +190,7 @@ export async function assertTagAbsent({
 
     if (manifest.status === 'present') {
         throw new GhcrGuardError(
-            `Semantic tag ${owner}/${repo}:${tag} already exists in GHCR with digest ${manifest.digest}; refusing to overwrite it`,
+            `Artifact ${owner}/${repo}:${tag} already exists in GHCR with digest ${manifest.digest}; refusing to overwrite it`,
             { code: 'exists' }
         );
     }
@@ -305,7 +305,7 @@ export async function main(argv = process.argv.slice(2)) {
     if (subcommand === 'check-absent') {
         await assertTagAbsent({ owner, repo, tag, username, password });
         console.log(
-            `GHCR tag ${owner}/${repo}:${tag} is not present (registry returned 404); safe to publish.`
+            `GHCR artifact ${owner}/${repo}:${tag} is not present (registry returned 404); safe to publish.`
         );
         return;
     }

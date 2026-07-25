@@ -148,11 +148,18 @@ For the standard Sugarkube staging and production flow, use the
 Helm commands below remain useful for local clusters, development environments, and manual chart
 inspection.
 
-The chart is published to the GitHub Container Registry on `v3` and `main` pushes. Its OCI version
-comes from `Chart.yaml:version` and may differ from the application version in `appVersion` and the
-package files. `docs/apps/dspace.version` pins the chart coordinate. The semantic image tag follows
-the application coordinate, but a branch-SHA tag or digest is required as immutable deployment
-evidence. After the publish workflow has completed successfully, use this installation procedure:
+The chart is published only by pushing the exact tag `chart-v<chart-version>` (for example,
+`chart-v3.1.0`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
+matches it exactly; ordinary `main` and `v3` pushes never publish charts. Publication checks GHCR
+twice and fails closed unless the coordinate is authoritatively absent, so an existing chart
+coordinate cannot be replaced. Chart version `3.0.1` is permanently tombstoned and cannot be
+republished even if it appears absent (a later chart may still use application `appVersion: 3.0.1`).
+
+The workflow stages provenance annotations without changing the tracked chart and records the full
+source SHA, packaged archive digest, and OCI manifest digest in its successful run summary. The OCI
+version comes from `Chart.yaml:version` and may differ from the application version in `appVersion`
+and the package files. `docs/apps/dspace.version` pins the chart coordinate. After the publish
+workflow has completed successfully, use this installation procedure:
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \

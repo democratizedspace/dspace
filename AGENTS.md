@@ -321,6 +321,13 @@ the two versions to match. Branch-SHA tags or digests are immutable deployment e
 release-only `vX.Y.Z` semantic image tag is a human-readable application coordinate, not proof of
 the deployed image.
 
+Helm charts publish only from a pushed tag exactly matching `chart-v<Chart.yaml version>`. The tag
+must point to the reviewed immutable commit; ordinary `main`/`v3` pushes and manual branch
+dispatches never publish charts. Publication fails closed if the OCI coordinate is anything other
+than authoritatively absent, and existing coordinates cannot be overwritten. Chart version `3.0.1`
+is permanently tombstoned (independently of `appVersion`). Successful chart workflow summaries
+record the full source SHA plus package and OCI digests as release evidence.
+
 `ci-image.yml` has two separate GHCR publish paths, per
 [DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727) and the
 [2026-07-23 production version-drift postmortem](outages/2026-07-23-dspace-production-version-drift.md):
