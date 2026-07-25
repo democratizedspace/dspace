@@ -164,23 +164,87 @@ describe('independent DSPACE application and chart coordinates', () => {
     })
   );
 
-  it('labels application and chart drift with their fields', () =>
+  it.each([
+    [
+      'root package version',
+      'package.json',
+      'version',
+      'frontend package version',
+    ],
+    [
+      'frontend package version',
+      'frontend/package.json',
+      'version',
+      'frontend package version',
+    ],
+    [
+      'package-lock top-level version',
+      'package-lock.json',
+      'version',
+      'package-lock top-level version',
+    ],
+    [
+      'package-lock packages[""].version',
+      'package-lock.json',
+      'packages',
+      'package-lock packages[""].version',
+    ],
+    [
+      'chart appVersion',
+      'charts/dspace/Chart.yaml',
+      'appVersion',
+      'chart appVersion',
+    ],
+    [
+      'chart default image.tag',
+      'charts/dspace/values.yaml',
+      'image.tag',
+      'chart default image.tag',
+    ],
+  ])(
+    'labels valid application drift in %s',
+    (_coordinate, path, field, diagnostic) =>
+      withFixture((root) => {
+        const { application } = currentVersions(root);
+        const driftVersion = application === '9.8.7' ? '9.8.6' : '9.8.7';
+
+        if (path.endsWith('.json')) {
+          const document = JSON.parse(read(root, path));
+          if (field === 'packages')
+            document.packages[''].version = driftVersion;
+          else document.version = driftVersion;
+          writeFileSync(
+            join(root, path),
+            `${JSON.stringify(document, null, 2)}\n`
+          );
+        } else if (field === 'appVersion') {
+          replace(
+            root,
+            path,
+            /^appVersion:.*$/m,
+            `appVersion: "${driftVersion}"`
+          );
+        } else {
+          replace(root, path, /^(\s*tag:)\s*.*$/m, `$1 v${driftVersion}`);
+        }
+
+        const result = runGuard(root);
+        expect(result.status).not.toBe(0);
+        expect(result.stderr).toContain(
+          `Application coordinate drift: ${diagnostic}`
+        );
+      })
+  );
+
+  it('labels chart drift with its field', () =>
     withFixture((root) => {
       const { chart } = currentVersions(root);
-      replace(
-        root,
-        'frontend/package.json',
-        /"version": "[^"]+"/,
-        '"version": "9.9.9"'
-      );
       writeFileSync(
         join(root, 'docs/apps/dspace.version'),
         chart === '8.8.8' ? '8.8.7\n' : '8.8.8\n'
       );
       const result = runGuard(root);
-      expect(result.stderr).toContain(
-        'Application coordinate drift: frontend package version'
-      );
+      expect(result.status).not.toBe(0);
       expect(result.stderr).toContain(
         'Chart coordinate drift: docs/apps/dspace.version'
       );
