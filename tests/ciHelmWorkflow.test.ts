@@ -45,6 +45,7 @@ describe('chart publication workflow integrity', () => {
     );
     expect(checkout.with.ref).toBe('${{ github.sha }}');
     expect(checkout.with['fetch-depth']).toBe(0);
+    expect(checkout.with['persist-credentials']).toBe(false);
     const release = step('Validate tag, versions, and source revision');
     expect(release.env.CHART_TAG).toBe('${{ github.ref_name }}');
     expect(text.match(/github\.ref_name/g)).toHaveLength(1);
@@ -55,6 +56,27 @@ describe('chart publication workflow integrity', () => {
     expect(release.run).toContain('"$source_sha" == "$tag_sha"');
     expect(release.run).toContain('refs/heads/release/chart-3.0.x');
     expect(release.run).toContain('"$source_sha" == "$approved_sha"');
+  });
+
+  it('authorizes the source before setup or repository-controlled execution', () => {
+    const checkoutIndex = steps.indexOf(step('Checkout chart release tag'));
+    const releaseIndex = steps.indexOf(
+      step('Validate tag, versions, and source revision')
+    );
+    const nodeIndex = steps.indexOf(step('Setup Node.js'));
+    const pnpmIndex = steps.indexOf(step('Setup pnpm'));
+    const installIndex = steps.indexOf(step('Install dependencies'));
+
+    expect(releaseIndex).toBe(checkoutIndex + 1);
+    expect(releaseIndex).toBeLessThan(nodeIndex);
+    expect(releaseIndex).toBeLessThan(pnpmIndex);
+    expect(releaseIndex).toBeLessThan(installIndex);
+
+    const release = steps[releaseIndex].run;
+    expect(release).toContain('refs/heads/release/chart-3.0.x');
+    expect(release).toContain('"$source_sha" == "$EVENT_SHA"');
+    expect(release).toContain('"$source_sha" == "$tag_sha"');
+    expect(release).toContain('"$source_sha" == "$approved_sha"');
   });
 
   it('pins every package-authorized action to an immutable commit', () => {
@@ -153,6 +175,9 @@ describe('chart publication workflow integrity', () => {
     );
     expect(steps.indexOf(step('Install dependencies'))).toBeLessThan(
       steps.indexOf(step('Validate and stage chart provenance'))
+    );
+    expect(steps.indexOf(step('Install dependencies'))).toBeLessThan(
+      steps.indexOf(step('Refuse an existing chart coordinate (pre-package)'))
     );
   });
 
