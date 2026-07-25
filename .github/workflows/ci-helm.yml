@@ -20,13 +20,14 @@ jobs:
       - name: Checkout chart release tag
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
 
       - name: Validate tag, versions, and source revision
         id: release
         env:
           CHART_TAG: ${{ github.ref_name }}
+          EVENT_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
           chart_version=$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)
@@ -36,8 +37,10 @@ jobs:
           [[ "$CHART_TAG" == "chart-v${chart_version}" ]] || { echo "Tag must equal chart-v${chart_version}; refusing to publish" >&2; exit 1; }
           [[ "$chart_version" != "3.0.1" ]] || { echo "Chart version 3.0.1 is permanently tombstoned" >&2; exit 1; }
           source_sha=$(git rev-parse HEAD)
+          event_sha=$(git rev-parse "${EVENT_SHA}^{commit}")
           tag_sha=$(git rev-parse "${CHART_TAG}^{commit}")
-          [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$tag_sha" ]] || { echo "Checked-out HEAD does not match the peeled chart tag" >&2; exit 1; }
+          [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$event_sha" ]] || { echo "Checked-out HEAD does not match the triggering push event" >&2; exit 1; }
+          [[ "$tag_sha" == "$event_sha" ]] || { echo "Chart tag moved after the triggering push event; refusing to publish" >&2; exit 1; }
           echo "chart_version=$chart_version" >> "$GITHUB_OUTPUT"
           echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"

@@ -25,17 +25,20 @@ describe('chart publication workflow integrity', () => {
     expect(workflow.concurrency['cancel-in-progress']).toBe(false);
   });
 
-  it('checks out full tag history and verifies peeled annotated or lightweight tags', () => {
+  it('binds checkout to the event SHA and rejects a subsequently moved tag', () => {
     const checkout = steps.find((candidate) =>
       candidate.uses?.startsWith('actions/checkout')
     );
-    expect(checkout.with.ref).toBe('${{ github.ref_name }}');
+    expect(checkout.with.ref).toBe('${{ github.sha }}');
     expect(checkout.with['fetch-depth']).toBe(0);
     const release = step('Validate tag, versions, and source revision');
     expect(release.env.CHART_TAG).toBe('${{ github.ref_name }}');
+    expect(release.env.EVENT_SHA).toBe('${{ github.sha }}');
     expect(release.run).toContain('git rev-parse HEAD');
+    expect(release.run).toContain('git rev-parse "${EVENT_SHA}^{commit}"');
     expect(release.run).toContain('git rev-parse "${CHART_TAG}^{commit}"');
-    expect(release.run).not.toContain('${{ github.sha }}');
+    expect(release.run).toContain('"$source_sha" == "$event_sha"');
+    expect(release.run).toContain('"$tag_sha" == "$event_sha"');
   });
 
   it('enforces strict matching versions and tombstones chart 3.0.1 before registry access', () => {
