@@ -34,14 +34,24 @@ describe('chart publication workflow integrity', () => {
     );
     expect(checkout.with.ref).toBe('${{ github.sha }}');
     expect(checkout.with['fetch-depth']).toBe(0);
+    expect(checkout.with['persist-credentials']).toBe(false);
     const release = step('Validate tag, versions, and source revision');
     expect(release.env.CHART_TAG).toBe('${{ github.ref_name }}');
     expect(text.match(/github\.ref_name/g)).toHaveLength(1);
     expect(release.env.EVENT_SHA).toBe('${{ github.sha }}');
     expect(release.run).toContain('git rev-parse HEAD');
-    expect(release.run).toContain('git rev-parse "${CHART_TAG}^{commit}"');
+    expect(release.run).toContain(
+      'check-release-consistency.mjs --mode chart-pre'
+    );
     expect(release.run).toContain('"$source_sha" == "$EVENT_SHA"');
-    expect(release.run).toContain('"$source_sha" == "$tag_sha"');
+    expect(steps.indexOf(release)).toBeLessThan(
+      steps.findIndex((candidate) =>
+        candidate.uses?.startsWith('actions/setup-node')
+      )
+    );
+    expect(steps.indexOf(release)).toBeLessThan(
+      steps.findIndex((candidate) => candidate.run?.includes('pnpm install'))
+    );
   });
 
   it('enforces strict matching versions and tombstones chart 3.0.1 before registry access', () => {
@@ -51,11 +61,9 @@ describe('chart publication workflow integrity', () => {
     const guardIndex = steps.indexOf(
       step('Refuse an existing chart coordinate (pre-package)')
     );
-    expect(steps[releaseIndex].run).toContain(
-      '^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$'
-    );
-    expect(steps[releaseIndex].run).toContain('chart-v${chart_version}');
-    expect(steps[releaseIndex].run).toContain('chart_version" != "3.0.1');
+    expect(steps[releaseIndex].run).toContain('--mode chart-pre');
+    expect(steps[releaseIndex].run).toContain('CHART_TAG');
+    expect(steps[releaseIndex].run).toContain('3.0.1');
     expect(releaseIndex).toBeLessThan(guardIndex);
   });
 
@@ -97,6 +105,15 @@ describe('chart publication workflow integrity', () => {
     }
     expect(summary).toContain(
       'SOURCE_SHA is the authoritative immutable provenance'
+    );
+  });
+
+  it('verifies the published chart through the reusable consistency gate', () => {
+    const published = step('Verify published chart coordinates and provenance');
+    expect(published.run).toContain('check-release-consistency.mjs');
+    expect(published.run).toContain('--mode chart-post');
+    expect(steps.indexOf(published)).toBeGreaterThan(
+      steps.indexOf(step('Push chart exactly once'))
     );
   });
 

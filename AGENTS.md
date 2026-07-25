@@ -432,3 +432,13 @@ Run `npm test` to verify configuration stays in sync.
 - [Codex Prompt Upgrader](https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/upgrader.md)
 - [AGENTS.md Spec](https://gist.github.com/dpaluy/cc42d59243b0999c1b3f9cf60dfd3be6)
 - [Agents.md Guide](https://agentsmd.net/)
+
+### Full release consistency gate
+
+The final release consistency gate is `scripts/check-release-consistency.mjs`. A full release must
+use one approved commit for the peeled application and chart tags, both required image platform
+revision labels, and chart provenance. Publish in this fail-closed order: immutable branch-SHA
+image, immutable chart, then the GitHub release/semantic image alias/combined manifest. The
+semantic tag must be absent before its single alias operation and must resolve to the immutable
+image index digest afterward. Deployments and downstream manifests always retain the immutable
+`<branch>-<shortsha>` image tag (or digest), never the semantic evidence alias.

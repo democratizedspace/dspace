@@ -28,6 +28,29 @@ be the audit record for a production deploy.
 
 ## Artifact publishing summary
 
+The full-release order is mandatory and fail closed:
+
+1. Publish and verify the multi-platform immutable `<branch>-<shortsha>` image, including the full
+   source revision label on both `linux/amd64` and `linux/arm64` configs.
+2. Push `chart-v<chart version>` from that same approved commit. The chart workflow verifies the
+   published OCI config's chart version, application version, and full source revision.
+3. Publish the `v<application version>` GitHub release. The release workflow requires both
+   immutable prerequisites, proves the release and chart tags peel to the approved commit, creates
+   the semantic image tag as one exact alias of the immutable image index, verifies digest equality,
+   and uploads `dspace-release-manifest/dspace-release-manifest.json`.
+
+If step 3 is attempted early, it stops before creating the semantic coordinate and may be rerun
+after the missing immutable prerequisite is published. A pre-existing semantic image tag or chart
+version is never accepted, moved, or overwritten. Once a semantic coordinate has been created, a
+failed run requires investigation rather than an overwrite retry.
+
+The deterministic manifest has `schemaVersion`, `app`, `applicationVersion`, full
+`sourceRevision`, immutable tag-only `imageTag`, image-index `imageDigest`, independent
+`chartVersion`, chart `chartDigest`, both platform digests, and the human-readable semantic tag.
+It intentionally contains no environment, approver, runtime, or promotion fields. The semantic
+tag is human-readable release evidence whose exact digest equality is enforced; deployment and
+downstream release records continue to use the immutable image tag or digest.
+
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
 2. `.github/workflows/ci-helm.yml` publishes only when an exact `chart-v<chart version>` tag is

@@ -158,7 +158,20 @@ republished even if it appears absent (a later chart may still use application `
 The workflow stages provenance annotations without changing the tracked chart and records the full
 source SHA, packaged archive digest, and OCI manifest digest in its successful run summary. The OCI
 version comes from `Chart.yaml:version` and may differ from the application version in `appVersion`
-and the package files. `docs/apps/dspace.version` pins the chart coordinate. After the publish
+and the package files. `docs/apps/dspace.version` pins the chart coordinate.
+
+For a full application release, publish the immutable branch-SHA image first, this immutable chart
+second from the same approved commit, and the GitHub release last. The final workflow verifies the
+published chart OCI config and image platform provenance before creating the semantic image alias.
+It then uploads `dspace-release-manifest/dspace-release-manifest.json`, which records the application
+version, full source revision, immutable image tag and digest, independently versioned chart and
+digest, and platform digests. An out-of-order release fails before semantic publication and is
+rerunnable after the missing immutable prerequisite exists. Existing chart or semantic coordinates
+remain immutable and cannot be used as retry targets. Although the semantic image alias is required
+to have exactly the immutable image-index digest, it is human-readable evidence only; deployments
+and downstream manifests continue to select the branch-SHA tag or digest.
+
+After the publish
 workflow has completed successfully, use this installation procedure:
 
 ```bash
