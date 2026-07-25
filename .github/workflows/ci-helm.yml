@@ -24,12 +24,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
-      - name: Validate tag, versions, and source revision
+      - name: Authorize chart release source
         id: release
         env:
           CHART_TAG: ${{ github.ref_name }}
@@ -40,13 +35,22 @@ jobs:
           tag_sha=$(git rev-parse "${CHART_TAG}^{commit}")
           [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$EVENT_SHA" ]] || { echo "Checked-out HEAD does not match the triggering push event" >&2; exit 1; }
           [[ "$source_sha" == "$tag_sha" ]] || { echo "Chart tag moved after the triggering push event; refusing to publish" >&2; exit 1; }
-          node scripts/check-release-consistency.mjs --verify-chart-local
           chart_version="$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)"
           app_version="$(awk '$1 == "appVersion:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)"
           echo "chart_version=$chart_version" >> "$GITHUB_OUTPUT"
           echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
           echo "chart_tag=$CHART_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Validate chart release coordinates
+        env:
+          CHART_TAG: ${{ steps.release.outputs.chart_tag }}
+        run: node scripts/check-release-consistency.mjs --verify-chart-local
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

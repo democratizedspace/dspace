@@ -68,12 +68,16 @@ const okToken = jsonResponse(200, { token: 'fake-bearer-token' }); // scan-secre
 describe('fetchGhcrToken', () => {
   it('throws a network GhcrGuardError when the request fails', async () => {
     const fetchImpl = async () => {
-      throw new Error('getaddrinfo ENOTFOUND ghcr.io');
+      throw new Error(`request failed with password ${SECRET_PASSWORD}`);
     };
 
     await expect(
       fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
-    ).rejects.toMatchObject({ code: 'network' });
+    ).rejects.toSatisfy((error: unknown) => {
+      expect(error).toMatchObject({ code: 'network' });
+      expect((error as Error).message).not.toContain(SECRET_PASSWORD);
+      return true;
+    });
   });
 
   it('classifies a 401 as an auth failure and never leaks the password', async () => {
@@ -300,6 +304,7 @@ describe('release artifact provenance inspection', () => {
   function imageFetch(
     options: {
       missingArm?: boolean;
+      mismatchedAmdDigest?: boolean;
       wrongArmRevision?: boolean;
       absent?: boolean;
     } = {}
@@ -333,7 +338,11 @@ describe('release artifact provenance inspection', () => {
         return jsonResponse(
           200,
           { config: { digest: amd64Config } },
-          { 'docker-content-digest': amd64Digest }
+          {
+            'docker-content-digest': options.mismatchedAmdDigest
+              ? validDigest('9')
+              : amd64Digest,
+          }
         );
       if (url.endsWith(`/manifests/${encodeURIComponent(arm64Digest)}`))
         return jsonResponse(
@@ -406,6 +415,16 @@ describe('release artifact provenance inspection', () => {
     ).rejects.toMatchObject({ code: 'revision-mismatch' }); // scan-secrets: ignore
   });
 
+  it('rejects a platform manifest whose authoritative digest differs from its descriptor', async () => {
+    await expect(
+      inspectImage({
+        owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+        password: SECRET_PASSWORD, revision, // scan-secrets: ignore
+        fetchImpl: imageFetch({ mismatchedAmdDigest: true }),
+      })
+    ).rejects.toMatchObject({ code: 'digest-mismatch' });
+  });
+
   it('requires chart version, appVersion, revision, and immutable digest', async () => {
     const configDigest = validDigest('6');
     const fetchImpl = async (url: string) => {
@@ -449,6 +468,43 @@ describe('release artifact provenance inspection', () => {
         fetchImpl,
       })
     ).rejects.toMatchObject({ code: 'version-mismatch' }); // scan-secrets: ignore
+  });
+
+  it.each([
+    ['missing chart', 'missing', 'missing'],
+    ['wrong appVersion', 'appVersion', 'version-mismatch'],
+    ['wrong revision', 'revision', 'revision-mismatch'],
+    ['malformed artifact digest', 'digest', 'malformed'],
+    ['malformed config response', 'config', 'malformed'],
+  ])('fails closed for a %s', async (_description, fault, code) => {
+    const configDigest = validDigest('6');
+    const fetchImpl = async (url: string) => {
+      if (url.includes('/token')) return token;
+      if (url.includes('/manifests/4.2.0')) {
+        if (fault === 'missing') return jsonResponse(404, {});
+        return jsonResponse(
+          200,
+          {
+            config: { digest: fault === 'config' ? 'invalid' : configDigest },
+            annotations: {
+              'org.opencontainers.image.revision': fault === 'revision' ? 'f'.repeat(40) : revision,
+            },
+          },
+          { 'docker-content-digest': fault === 'digest' ? 'invalid' : validDigest('7') }
+        );
+      }
+      if (url.endsWith(`/blobs/${configDigest}`))
+        return jsonResponse(200, {
+          version: '4.2.0',
+          appVersion: fault === 'appVersion' ? '3.1.1' : '3.1.0',
+        });
+      throw new Error(`Unexpected fixture URL ${url}`);
+    };
+    await expect(inspectChart({
+      owner: 'o', repo: 'charts/dspace', tag: '4.2.0', username: 'u',
+      password: SECRET_PASSWORD, version: '4.2.0', appVersion: '3.1.0', // scan-secrets: ignore
+      revision, fetchImpl,
+    })).rejects.toMatchObject({ code });
   });
 });
 

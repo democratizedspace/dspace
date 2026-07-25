@@ -38,10 +38,11 @@ async function fetchWithTimeout(fetchImpl, url, init, timeoutMs, describeAction)
                 code: 'timeout',
             });
         }
-        throw new GhcrGuardError(
-            `Network error while ${describeAction}: ${error?.message || error}`,
-            { code: 'network' }
-        );
+        // Fetch errors can contain credential-bearing request details. Classify
+        // the failure without propagating the underlying error message.
+        throw new GhcrGuardError(`Network error while ${describeAction}`, {
+            code: 'network',
+        });
     } finally {
         clearTimeout(timer);
     }
@@ -277,6 +278,11 @@ export async function inspectImage({
       fetchImpl,
       timeoutMs,
     });
+    if (manifest.status !== 'present' || manifest.digest !== candidates[0].digest)
+      throw new GhcrGuardError(
+        `linux/${architecture} manifest digest does not match its index descriptor`,
+        { code: 'digest-mismatch' }
+      );
     const configDigest =
       manifest.status === 'present' && manifest.body?.config?.digest;
     if (!DIGEST.test(configDigest || ''))

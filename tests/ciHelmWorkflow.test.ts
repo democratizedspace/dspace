@@ -34,7 +34,7 @@ describe('chart publication workflow integrity', () => {
     );
     expect(checkout.with.ref).toBe('${{ github.sha }}');
     expect(checkout.with['fetch-depth']).toBe(0);
-    const release = step('Validate tag, versions, and source revision');
+    const release = step('Authorize chart release source');
     expect(release.env.CHART_TAG).toBe('${{ github.ref_name }}');
     expect(text.match(/github\.ref_name/g)).toHaveLength(1);
     expect(release.env.EVENT_SHA).toBe('${{ github.sha }}');
@@ -45,9 +45,7 @@ describe('chart publication workflow integrity', () => {
   });
 
   it('routes strict matching versions and the chart tombstone through the reusable gate before registry access', () => {
-    const releaseIndex = steps.indexOf(
-      step('Validate tag, versions, and source revision')
-    );
+    const releaseIndex = steps.indexOf(step('Validate chart release coordinates'));
     const guardIndex = steps.indexOf(
       step('Refuse an existing chart coordinate (pre-package)')
     );
@@ -109,8 +107,14 @@ describe('chart publication workflow integrity', () => {
 
   it('installs Node and YAML dependencies before staging', () => {
     expect(step('Setup Node.js').with['node-version-file']).toBe('.nvmrc');
+    expect(steps.indexOf(step('Authorize chart release source'))).toBeLessThan(
+      steps.indexOf(step('Setup Node.js'))
+    );
     expect(steps.indexOf(step('Setup Node.js'))).toBeLessThan(
-      steps.indexOf(step('Validate tag, versions, and source revision'))
+      steps.indexOf(step('Validate chart release coordinates'))
+    );
+    expect(steps.indexOf(step('Validate chart release coordinates'))).toBeLessThan(
+      steps.indexOf(step('Setup pnpm'))
     );
     expect(step('Setup pnpm').with.version).toBe('9.0.0');
     expect(step('Install dependencies').run).toBe(

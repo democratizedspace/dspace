@@ -48,11 +48,17 @@ describe('release coordinate consistency', () => {
     ));
 
   it.each([
+    ['package.json', { version: 'not-semver' }, 'root package version'],
     ['frontend/package.json', { version: '3.1.1' }, 'frontend package version'],
     [
       'package-lock.json',
       { version: '3.1.1', packages: { '': { version: '3.1.0' } } },
       'lockfile version',
+    ],
+    [
+      'package-lock.json',
+      { version: '3.1.0', packages: { '': { version: '3.1.1' } } },
+      'lockfile root version',
     ],
   ])('rejects metadata mismatch in %s', (path, body, message) =>
     coordinateTree((root) => {
@@ -61,13 +67,19 @@ describe('release coordinate consistency', () => {
     })
   );
 
-  it('rejects chart appVersion and documented chart drift', () =>
+  it('rejects chart appVersion drift', () =>
     coordinateTree((root) => {
       writeFileSync(
         join(root, 'charts/dspace/Chart.yaml'),
         'version: 4.2.0\nappVersion: "3.1.1"\n'
       );
       expect(() => readLocalCoordinates(root)).toThrow('chart appVersion');
+    }));
+
+  it('rejects documented chart-version drift', () =>
+    coordinateTree((root) => {
+      writeFileSync(join(root, 'docs/apps/dspace.version'), '4.2.1\n');
+      expect(() => readLocalCoordinates(root)).toThrow('documented chart version');
     }));
 
   it('emits stable canonical manifest JSON data', () => {
@@ -148,5 +160,26 @@ describe('release coordinate consistency', () => {
           branch: 'main',
         })
       ).toThrow('release tag');
+    }));
+
+  it.each([
+    ['release tag', 'v3.1.1', 'chart-v4.2.0'],
+    ['chart release tag', 'v3.1.0', 'chart-v4.2.1'],
+  ])('rejects a %s/version mismatch', (message, releaseTag, chartTag) =>
+    coordinateTree((root) => {
+      const git = (...args: string[]) =>
+        execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+      git('init', '-q');
+      git('config', 'user.name', 'Test');
+      git('config', 'user.email', 'test@example.invalid');
+      git('add', '.');
+      git('commit', '-qm', 'release');
+      const approved = git('rev-parse', 'HEAD');
+      git('tag', releaseTag);
+      git('tag', chartTag);
+      git('update-ref', 'refs/remotes/origin/main', approved);
+      expect(() => validateReleaseSource({
+        root, releaseTag, chartTag, sourceRevision: approved, branch: 'main',
+      })).toThrow(message);
     }));
 });
