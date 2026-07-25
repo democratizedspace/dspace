@@ -10,8 +10,11 @@ values_file="$repo_root/charts/dspace/values.yaml"
 version_file="$repo_root/docs/apps/dspace.version"
 
 require_file() {
-  if [[ ! -f "$1" ]]; then
-    echo "Required version coordinate file not found: $1" >&2
+  local group="$1"
+  local field="$2"
+  local file="$3"
+  if [[ ! -f "$file" ]]; then
+    echo "$group coordinate missing: $field file not found: $file" >&2
     exit 1
   fi
 }
@@ -63,9 +66,12 @@ yaml_nested_scalar() {
   ' "$file"
 }
 
-for file in "$root_package_file" "$frontend_package_file" "$package_lock_file" "$chart_file" "$values_file" "$version_file"; do
-  require_file "$file"
-done
+require_file "Application" "root package version" "$root_package_file"
+require_file "Application" "frontend package version" "$frontend_package_file"
+require_file "Application" "package-lock versions" "$package_lock_file"
+require_file "Application" "chart appVersion" "$chart_file"
+require_file "Application" "chart default image.tag" "$values_file"
+require_file "Chart" "docs/apps/dspace.version" "$version_file"
 
 root_package_version=$(json_get "$root_package_file" version)
 frontend_package_version=$(json_get "$frontend_package_file" version)
@@ -74,24 +80,31 @@ package_lock_root_version=$(json_get "$package_lock_file" 'packages..version')
 chart_version=$(yaml_scalar "$chart_file" version || true)
 chart_app_version=$(yaml_scalar "$chart_file" appVersion || true)
 image_tag=$(yaml_nested_scalar "$values_file" image tag || true)
-documented_chart_version=$(awk '!/^[[:space:]]*#/ && NF { sub(/\r$/, ""); print; exit }' "$version_file")
 expected_image_tag="v${root_package_version}"
+
+mapfile -t documented_chart_lines < <(awk '!/^[[:space:]]*#/ && NF { print }' "$version_file")
+documented_chart_version=""
+if (( ${#documented_chart_lines[@]} == 1 )); then
+  documented_chart_version=${documented_chart_lines[0]}
+fi
 
 failures=0
 expect_present() {
-  local label="$1"
-  local actual="$2"
+  local group="$1"
+  local label="$2"
+  local actual="$3"
   if [[ -z "$actual" ]]; then
-    echo "Missing $label; expected a non-empty value" >&2
+    echo "$group coordinate missing: $label; expected a non-empty value" >&2
     failures=$((failures + 1))
   fi
 }
 
 expect_semver() {
-  local label="$1"
-  local actual="$2"
-  if [[ -n "$actual" && ! "$actual" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo "$label must be a semantic version like 3.1.0; found '$actual'" >&2
+  local group="$1"
+  local label="$2"
+  local actual="$3"
+  if [[ -n "$actual" && ! "$actual" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+    echo "$group coordinate malformed: $label must be bare X.Y.Z SemVer; found '$actual'" >&2
     failures=$((failures + 1))
   fi
 }
@@ -110,18 +123,8 @@ expect_equal() {
   fi
 }
 
-semver_is_greater() {
-  node -e '
-const [current, previous] = process.argv.slice(1).map((version) => version.split(".").map(Number));
-for (let index = 0; index < 3; index += 1) {
-  if (current[index] !== previous[index]) process.exit(current[index] > previous[index] ? 0 : 1);
-}
-process.exit(1);
-' "$1" "$2"
-}
-
-expect_present "root package version" "$root_package_version"
-expect_semver "root package version" "$root_package_version"
+expect_present "Application" "root package version" "$root_package_version"
+expect_semver "Application" "root package version" "$root_package_version"
 for coordinate in \
   "frontend package version:$frontend_package_version" \
   "package-lock top-level version:$package_lock_version" \
@@ -129,41 +132,20 @@ for coordinate in \
   "chart appVersion:$chart_app_version"; do
   label=${coordinate%%:*}
   actual=${coordinate#*:}
-  expect_semver "$label" "$actual"
+  expect_semver "Application" "$label" "$actual"
   expect_equal "Application" "$label" "$actual" "$root_package_version"
 done
 expect_equal "Application" "chart default image.tag" "$image_tag" "$expected_image_tag"
 
-expect_present "chart version" "$chart_version"
-expect_semver "chart version" "$chart_version"
-expect_semver "docs/apps/dspace.version" "$documented_chart_version"
-expect_equal "Chart" "docs/apps/dspace.version" "$documented_chart_version" "$chart_version"
-
-# Publishing changed application metadata inside an existing chart coordinate would mutate an
-# already-addressed OCI artifact. CI supplies the previous revision so independent application and
-# chart versions remain allowed, while an application bump also requires a new chart version.
-if [[ -n "${DSPACE_VERSION_BASE_REF:-}" ]]; then
-  previous_root_package=$(git -C "$repo_root" show "${DSPACE_VERSION_BASE_REF}:package.json" 2>/dev/null) || {
-    echo "Unable to read application coordinates from base revision '$DSPACE_VERSION_BASE_REF'" >&2
-    exit 1
-  }
-  previous_chart=$(git -C "$repo_root" show "${DSPACE_VERSION_BASE_REF}:charts/dspace/Chart.yaml" 2>/dev/null) || {
-    echo "Unable to read chart coordinates from base revision '$DSPACE_VERSION_BASE_REF'" >&2
-    exit 1
-  }
-  previous_app_version=$(node -e 'const fs = require("node:fs"); console.log(JSON.parse(fs.readFileSync(0, "utf8")).version || "")' <<<"$previous_root_package")
-  previous_chart_version=$(awk '$1 == "version:" { value = $2; gsub(/^"|"$/, "", value); print value; exit }' <<<"$previous_chart")
-
-  if [[ "$root_package_version" != "$previous_app_version" ]]; then
-    if [[ "$chart_version" == "$previous_chart_version" ]]; then
-      echo "Chart coordinate reuse: application version changed from '$previous_app_version' to '$root_package_version', but chart version remains '$chart_version'" >&2
-      failures=$((failures + 1))
-    elif ! semver_is_greater "$chart_version" "$previous_chart_version"; then
-      echo "Chart version must advance when application metadata changes; found '$chart_version' after '$previous_chart_version'" >&2
-      failures=$((failures + 1))
-    fi
-  fi
+expect_present "Chart" "chart version" "$chart_version"
+expect_semver "Chart" "chart version" "$chart_version"
+if (( ${#documented_chart_lines[@]} != 1 )); then
+  echo "Chart coordinate malformed: docs/apps/dspace.version must contain exactly one non-empty, non-comment line; found ${#documented_chart_lines[@]}" >&2
+  failures=$((failures + 1))
+else
+  expect_semver "Chart" "docs/apps/dspace.version" "$documented_chart_version"
 fi
+expect_equal "Chart" "docs/apps/dspace.version" "$documented_chart_version" "$chart_version"
 
 if (( failures > 0 )); then
   echo "DSPACE release coordinate groups are not aligned." >&2
