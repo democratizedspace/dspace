@@ -34,7 +34,7 @@ describe('chart publication workflow integrity', () => {
     );
     expect(checkout.with.ref).toBe('${{ github.sha }}');
     expect(checkout.with['fetch-depth']).toBe(0);
-    const release = step('Validate tag, versions, and source revision');
+    const release = step('Authorize chart release source');
     expect(release.env.CHART_TAG).toBe('${{ github.ref_name }}');
     expect(text.match(/github\.ref_name/g)).toHaveLength(1);
     expect(release.env.EVENT_SHA).toBe('${{ github.sha }}');
@@ -44,18 +44,14 @@ describe('chart publication workflow integrity', () => {
     expect(release.run).toContain('"$source_sha" == "$tag_sha"');
   });
 
-  it('enforces strict matching versions and tombstones chart 3.0.1 before registry access', () => {
-    const releaseIndex = steps.indexOf(
-      step('Validate tag, versions, and source revision')
-    );
+  it('routes strict matching versions and the chart tombstone through the reusable gate before registry access', () => {
+    const releaseIndex = steps.indexOf(step('Validate chart release coordinates'));
     const guardIndex = steps.indexOf(
       step('Refuse an existing chart coordinate (pre-package)')
     );
     expect(steps[releaseIndex].run).toContain(
-      '^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$'
+      'check-release-consistency.mjs --verify-chart-local'
     );
-    expect(steps[releaseIndex].run).toContain('chart-v${chart_version}');
-    expect(steps[releaseIndex].run).toContain('chart_version" != "3.0.1');
     expect(releaseIndex).toBeLessThan(guardIndex);
   });
 
@@ -82,6 +78,9 @@ describe('chart publication workflow integrity', () => {
     const push = step('Push chart exactly once').run;
     expect(push).not.toMatch(/retry|continue-on-error|\|\| true/);
     expect(push).toContain('^sha256:[0-9a-f]{64}$');
+    expect(step('Verify published chart coordinates').env.EXPECTED_CHART_DIGEST).toBe(
+      '${{ steps.push.outputs.oci_digest }}'
+    );
     const summary = step('Write publication evidence').run;
     for (const field of [
       'Chart version',
@@ -110,7 +109,16 @@ describe('chart publication workflow integrity', () => {
   });
 
   it('installs Node and YAML dependencies before staging', () => {
-    expect(step('Setup Node.js').with['node-version']).toBe(20);
+    expect(step('Setup Node.js').with['node-version-file']).toBe('.nvmrc');
+    expect(steps.indexOf(step('Authorize chart release source'))).toBeLessThan(
+      steps.indexOf(step('Setup Node.js'))
+    );
+    expect(steps.indexOf(step('Setup Node.js'))).toBeLessThan(
+      steps.indexOf(step('Validate chart release coordinates'))
+    );
+    expect(steps.indexOf(step('Validate chart release coordinates'))).toBeLessThan(
+      steps.indexOf(step('Setup pnpm'))
+    );
     expect(step('Setup pnpm').with.version).toBe('9.0.0');
     expect(step('Install dependencies').run).toBe(
       'pnpm install --frozen-lockfile --reporter=append-only'

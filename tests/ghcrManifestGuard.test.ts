@@ -5,8 +5,12 @@ import {
   describeManifest,
   fetchGhcrToken,
   getManifest,
+  inspectChart,
+  inspectImage,
   parseArgs,
 } from '../scripts/ghcr-manifest.mjs';
+
+const validDigest = (character: string) => `sha256:${character.repeat(64)}`;
 
 const SECRET_PASSWORD = 'super-secret-token-value-do-not-leak'; // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
 
@@ -64,12 +68,16 @@ const okToken = jsonResponse(200, { token: 'fake-bearer-token' }); // scan-secre
 describe('fetchGhcrToken', () => {
   it('throws a network GhcrGuardError when the request fails', async () => {
     const fetchImpl = async () => {
-      throw new Error('getaddrinfo ENOTFOUND ghcr.io');
+      throw new Error(`request failed with password ${SECRET_PASSWORD}`);
     };
 
     await expect(
       fetchGhcrToken({ owner: 'o', repo: 'r', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
-    ).rejects.toMatchObject({ code: 'network' });
+    ).rejects.toSatisfy((error: unknown) => {
+      expect(error).toMatchObject({ code: 'network' });
+      expect((error as Error).message).not.toContain(SECRET_PASSWORD);
+      return true;
+    });
   });
 
   it('classifies a 401 as an auth failure and never leaks the password', async () => {
@@ -281,6 +289,268 @@ describe('describeManifest', () => {
     ]],
   ])('fails closed when %s', async (_description, manifests) => {
     await expect(describeWith(manifests)).rejects.toMatchObject({ code: 'missing-platform' });
+  });
+});
+
+describe('release artifact provenance inspection', () => {
+  const revision = '0123456789abcdef0123456789abcdef01234567';
+  const indexDigest = validDigest('1');
+  const amd64Digest = validDigest('2');
+  const arm64Digest = validDigest('3');
+  const amd64Config = validDigest('4');
+  const arm64Config = validDigest('5');
+  const token = jsonResponse(200, { token: 'fixture-token' }); // scan-secrets: ignore
+
+  function imageFetch(
+    options: {
+      missingArm?: boolean;
+      duplicateArchitecture?: 'amd64' | 'arm64';
+      mismatchedAmdDigest?: boolean;
+      wrongAmdRevision?: boolean;
+      wrongArmRevision?: boolean;
+      malformedChild?: 'amd64' | 'arm64';
+      malformedBlob?: 'amd64' | 'arm64';
+      absent?: boolean;
+    } = {}
+  ) {
+    return async (url: string) => {
+      if (url.includes('/token')) return token;
+      if (url.endsWith('/manifests/main-0123456')) {
+        if (options.absent) return jsonResponse(404, {});
+        return jsonResponse(
+          200,
+          {
+            manifests: [
+              {
+                platform: { os: 'linux', architecture: 'amd64' },
+                digest: amd64Digest,
+              },
+              ...(!options.missingArm
+                ? [
+                    {
+                      platform: { os: 'linux', architecture: 'arm64' },
+                      digest: arm64Digest,
+                    },
+                  ]
+                : []),
+              ...(options.duplicateArchitecture ? [{
+                platform: { os: 'linux', architecture: options.duplicateArchitecture },
+                digest: validDigest('8'),
+              }] : []),
+            ],
+          },
+          { 'docker-content-digest': indexDigest }
+        );
+      }
+      if (url.endsWith(`/manifests/${encodeURIComponent(amd64Digest)}`)) {
+        if (options.malformedChild === 'amd64')
+          return malformedJsonResponse(200, { 'docker-content-digest': amd64Digest });
+        return jsonResponse(
+          200,
+          { config: { digest: amd64Config } },
+          {
+            'docker-content-digest': options.mismatchedAmdDigest
+              ? validDigest('9')
+              : amd64Digest,
+          }
+        );
+      }
+      if (url.endsWith(`/manifests/${encodeURIComponent(arm64Digest)}`)) {
+        if (options.malformedChild === 'arm64')
+          return malformedJsonResponse(200, { 'docker-content-digest': arm64Digest });
+        return jsonResponse(
+          200,
+          { config: { digest: arm64Config } },
+          { 'docker-content-digest': arm64Digest }
+        );
+      }
+      if (url.endsWith(`/blobs/${amd64Config}`)) {
+        if (options.malformedBlob === 'amd64') return malformedJsonResponse(200);
+        return jsonResponse(200, {
+          config: { Labels: { 'org.opencontainers.image.revision':
+            options.wrongAmdRevision ? 'f'.repeat(40) : revision } },
+        });
+      }
+      if (url.endsWith(`/blobs/${arm64Config}`)) {
+        if (options.malformedBlob === 'arm64') return malformedJsonResponse(200);
+        return jsonResponse(200, {
+          config: {
+            Labels: {
+              'org.opencontainers.image.revision': options.wrongArmRevision
+                ? 'f'.repeat(40)
+                : revision,
+            },
+          },
+        });
+      }
+      throw new Error(`Unexpected fixture URL ${url}`);
+    };
+  }
+
+  it('requires the immutable image and both correctly labelled platforms', async () => {
+    await expect(
+      inspectImage({
+        owner: 'o',
+        repo: 'r',
+        tag: 'main-0123456',
+        username: 'u',
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+        revision,
+        fetchImpl: imageFetch(),
+      })
+    ).resolves.toEqual({ indexDigest, amd64Digest, arm64Digest }); // scan-secrets: ignore
+    await expect(
+      inspectImage({
+        owner: 'o',
+        repo: 'r',
+        tag: 'main-0123456',
+        username: 'u',
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+        revision,
+        fetchImpl: imageFetch({ absent: true }),
+      })
+    ).rejects.toMatchObject({ code: 'missing' }); // scan-secrets: ignore
+    await expect(
+      inspectImage({
+        owner: 'o',
+        repo: 'r',
+        tag: 'main-0123456',
+        username: 'u',
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+        revision,
+        fetchImpl: imageFetch({ missingArm: true }),
+      })
+    ).rejects.toMatchObject({ code: 'missing-platform' }); // scan-secrets: ignore
+    await expect(
+      inspectImage({
+        owner: 'o',
+        repo: 'r',
+        tag: 'main-0123456',
+        username: 'u',
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+        revision,
+        fetchImpl: imageFetch({ wrongArmRevision: true }),
+      })
+    ).rejects.toMatchObject({ code: 'revision-mismatch' }); // scan-secrets: ignore
+  });
+
+  it('rejects a platform manifest whose authoritative digest differs from its descriptor', async () => {
+    await expect(
+      inspectImage({
+        owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+        password: SECRET_PASSWORD, revision, // scan-secrets: ignore
+        fetchImpl: imageFetch({ mismatchedAmdDigest: true }),
+      })
+    ).rejects.toMatchObject({ code: 'digest-mismatch' });
+  });
+
+  it.each(['amd64', 'arm64'] as const)('rejects duplicate linux/%s descriptors', async (architecture) => {
+    await expect(inspectImage({
+      owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+      password: SECRET_PASSWORD, revision, // scan-secrets: ignore
+      fetchImpl: imageFetch({ duplicateArchitecture: architecture }),
+    })).rejects.toMatchObject({ code: 'missing-platform' });
+  });
+
+  it.each(['amd64', 'arm64'] as const)('rejects a wrong revision on linux/%s', async (architecture) => {
+    await expect(inspectImage({
+      owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+      password: SECRET_PASSWORD, revision, // scan-secrets: ignore
+      fetchImpl: imageFetch(architecture === 'amd64'
+        ? { wrongAmdRevision: true } : { wrongArmRevision: true }),
+    })).rejects.toMatchObject({ code: 'revision-mismatch' });
+  });
+
+  it.each([
+    ['child manifest', { malformedChild: 'amd64' as const }],
+    ['config blob', { malformedBlob: 'arm64' as const }],
+  ])('fails closed on a malformed %s response', async (_label, options) => {
+    await expect(inspectImage({
+      owner: 'o', repo: 'r', tag: 'main-0123456', username: 'u',
+      password: SECRET_PASSWORD, revision, fetchImpl: imageFetch(options), // scan-secrets: ignore
+    })).rejects.toMatchObject({ code: 'malformed' });
+  });
+
+  it('requires chart version, appVersion, revision, and immutable digest', async () => {
+    const configDigest = validDigest('6');
+    const fetchImpl = async (url: string) => {
+      if (url.includes('/token')) return token;
+      if (url.includes('/manifests/4.2.0'))
+        return jsonResponse(
+          200,
+          {
+            config: { digest: configDigest },
+            annotations: { 'org.opencontainers.image.revision': revision },
+          },
+          { 'docker-content-digest': validDigest('7') }
+        );
+      if (url.endsWith(`/blobs/${configDigest}`))
+        return jsonResponse(200, { version: '4.2.0', appVersion: '3.1.0' });
+      throw new Error(`Unexpected fixture URL ${url}`);
+    };
+    await expect(
+      inspectChart({
+        owner: 'o',
+        repo: 'charts/dspace',
+        tag: '4.2.0',
+        username: 'u',
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+        version: '4.2.0',
+        appVersion: '3.1.0',
+        revision,
+        fetchImpl,
+      })
+    ).resolves.toEqual({ digest: validDigest('7') }); // scan-secrets: ignore
+    await expect(
+      inspectChart({
+        owner: 'o',
+        repo: 'charts/dspace',
+        tag: '4.2.0',
+        username: 'u',
+        password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+        version: '4.2.1',
+        appVersion: '3.1.0',
+        revision,
+        fetchImpl,
+      })
+    ).rejects.toMatchObject({ code: 'version-mismatch' }); // scan-secrets: ignore
+  });
+
+  it.each([
+    ['missing chart', 'missing', 'missing'],
+    ['wrong appVersion', 'appVersion', 'version-mismatch'],
+    ['wrong revision', 'revision', 'revision-mismatch'],
+    ['malformed artifact digest', 'digest', 'malformed'],
+    ['malformed config response', 'config', 'malformed'],
+  ])('fails closed for a %s', async (_description, fault, code) => {
+    const configDigest = validDigest('6');
+    const fetchImpl = async (url: string) => {
+      if (url.includes('/token')) return token;
+      if (url.includes('/manifests/4.2.0')) {
+        if (fault === 'missing') return jsonResponse(404, {});
+        return jsonResponse(
+          200,
+          {
+            config: { digest: fault === 'config' ? 'invalid' : configDigest },
+            annotations: {
+              'org.opencontainers.image.revision': fault === 'revision' ? 'f'.repeat(40) : revision,
+            },
+          },
+          { 'docker-content-digest': fault === 'digest' ? 'invalid' : validDigest('7') }
+        );
+      }
+      if (url.endsWith(`/blobs/${configDigest}`))
+        return jsonResponse(200, {
+          version: '4.2.0',
+          appVersion: fault === 'appVersion' ? '3.1.1' : '3.1.0',
+        });
+      throw new Error(`Unexpected fixture URL ${url}`);
+    };
+    await expect(inspectChart({
+      owner: 'o', repo: 'charts/dspace', tag: '4.2.0', username: 'u',
+      password: SECRET_PASSWORD, version: '4.2.0', appVersion: '3.1.0', // scan-secrets: ignore
+      revision, fetchImpl,
+    })).rejects.toMatchObject({ code });
   });
 });
 

@@ -28,6 +28,22 @@ be the audit record for a production deploy.
 
 ## Artifact publishing summary
 
+The mandatory full-release order is fail-closed:
+
+1. Publish and verify the multi-platform immutable `<branch>-<shortsha>` image. Both required
+   platform configs (`linux/amd64` and `linux/arm64`) must identify the approved full source SHA.
+2. Push `chart-v<chart version>` from that same commit. The chart workflow preserves its two
+   authoritative-absence checks and one push, then verifies the published OCI chart version,
+   `appVersion`, source revision, and digest.
+3. Publish the `v<application version>` GitHub release. Its workflow requires both immutable
+   artifacts, creates the semantic image tag as one exact alias of the immutable image index,
+   verifies digest equality, and emits the combined release manifest.
+
+Publishing the GitHub release before either prerequisite exists fails without creating the semantic
+coordinate. After supplying the missing immutable artifact, rerun the failed release workflow. If a
+semantic tag already exists, the workflow always refuses to overwrite or move it; investigate and
+cut a new approved release coordinate rather than retrying a mutation.
+
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
 2. `.github/workflows/ci-helm.yml` publishes only when an exact `chart-v<chart version>` tag is
@@ -47,6 +63,16 @@ authoritative absence. Existing coordinates cannot be replaced. Chart `3.0.1` is
 tombstoned even if it later appears absent; this does not prohibit a newer chart whose `appVersion`
 is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
 package SHA-256, and OCI manifest digest.
+
+Successful full releases upload the deterministic artifact
+`dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
+`applicationVersion`, the complete `sourceRevision`, immutable tag-only `imageTag`, image-index
+`imageDigest`, independently versioned `chartVersion`, immutable `chartDigest`, and the semantic
+evidence tag. It intentionally contains no environment, approver, runtime, promotion, or
+credentials. The workflow summary includes the immutable image and chart references plus the image
+index and both platform digests. The semantic `vX.Y.Z` alias is verified to resolve to the exact
+same index digest, but the manifest and deployments continue to select the immutable branch-SHA
+tag.
 
 ## Deploy staging
 

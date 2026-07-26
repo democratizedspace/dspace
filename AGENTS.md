@@ -351,10 +351,20 @@ frontend versions agree), verifies the corresponding `<branch>-<short-sha>` arti
 reading its GHCR manifest without republishing or retagging it, and queries GHCR for the
 semantic tag before publishing — failing closed on any non-404 outcome, including auth,
 network, timeout, and malformed-response errors — inside a job-level `concurrency` group
-keyed on the tag so two publication runs can't race. The semantic publication step must
-use exactly one `push: true` attempt and must push only `vX.Y.Z`. See
+keyed on the tag so two publication runs can't race. Semantic publication performs exactly one
+bounded `docker buildx imagetools create` alias from the approved immutable `tag@digest`, performs
+no application rebuild, and immediately verifies exact index-digest equality. See
 `scripts/ghcr-manifest.mjs` and `tests/ciImageWorkflow.test.ts` /
 `tests/ghcrManifestGuard.test.ts`.
+
+Full releases are fail-closed and ordered: first publish and verify the immutable
+`<branch>-<short-sha>` multi-platform image, then publish and verify the immutable chart from the
+same full source SHA, and only then publish the GitHub release. The release event verifies both
+prerequisites, creates `vX.Y.Z` as an exact digest alias (never a rebuild), and uploads
+`dspace-release-manifest.json`. Deployments and downstream promotion records must continue to use
+the immutable branch-SHA image tag or digest. The semantic tag is human-readable evidence whose
+digest equality is enforced, not a deployment coordinate. Run
+`node scripts/check-release-consistency.mjs --verify-local-fixtures` when changing these gates.
 
 ### Smoke Test
 

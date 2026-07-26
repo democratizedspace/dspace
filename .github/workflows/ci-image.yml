@@ -279,6 +279,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.branch) || github.ref }}
+          persist-credentials: false
 
       - name: Ensure build SHA is present
         run: |
@@ -322,14 +323,18 @@ jobs:
 
       - name: Define image tags
         id: tags
+        env:
+          SOURCE_BRANCH: ${{ github.event.inputs.branch || github.ref_name }}
         run: |
-          branch="${{ github.event.inputs.branch || github.ref_name }}"
-          short_sha="$(git rev-parse --short HEAD)"
+          branch="$SOURCE_BRANCH"
+          full_sha="$(git rev-parse HEAD)"
+          short_sha="$(git rev-parse --short=7 HEAD)"
           tag_prefix="${branch//\//-}"
           sha_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-${short_sha}"
           latest_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-latest"
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
+          echo "full_sha=${full_sha}" >> "$GITHUB_OUTPUT"
           echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Set image build version
@@ -342,7 +347,7 @@ jobs:
         id: metadata
         env:
           REPO_URL: ${{ github.server_url }}/${{ github.repository }}
-          GIT_SHA: ${{ github.sha }}
+          GIT_SHA: ${{ steps.tags.outputs.full_sha }}
         run: |
           created="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
           echo "created=${created}" >> "$GITHUB_OUTPUT"
@@ -379,8 +384,8 @@ jobs:
             ${{ steps.tags.outputs.latest_tag }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ github.sha }}
-            VITE_GIT_SHA=${{ github.sha }}
+            GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
@@ -404,8 +409,8 @@ jobs:
             ${{ steps.tags.outputs.latest_tag }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ github.sha }}
-            VITE_GIT_SHA=${{ github.sha }}
+            GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
@@ -427,16 +432,18 @@ jobs:
           tags: dspace-verify:latest
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ github.sha }}
-            VITE_GIT_SHA=${{ github.sha }}
+            GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
           cache-from: type=gha
 
       - name: Assert build SHA is baked into frontend bundle
         if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        env:
+          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
         run: |
           docker run --rm \
-            -e EXPECTED_SHA="${GITHUB_SHA}" \
+            -e EXPECTED_SHA \
             -v "$PWD/scripts:/scripts:ro" \
             dspace-verify:latest \
             node /scripts/verify-build-sha.mjs /app/dist
@@ -474,290 +481,162 @@ jobs:
         run: exit 1
 
   semantic-release:
-    name: Publish semantic release image tag
+    name: Publish semantic release image alias and manifest
     runs-on: ubuntu-latest
-    # Single canonical semantic-publication event for DSPACE #4727: a published GitHub
-    # release. Deliberately not also triggered by a `push: tags: v*` event — creating a
-    # release normally creates its tag too, so triggering on both would race and turn
-    # every ordinary release into an expected "tag already exists" failure. See
-    # outages/2026-07-23-dspace-production-version-drift.md and AGENTS.md.
     if: github.event_name == 'release' && github.event.action == 'published'
     concurrency:
       group: dspace-semantic-image-${{ github.event.release.tag_name }}
       cancel-in-progress: false
     steps:
-      - name: Checkout tagged commit
+      - name: Checkout tagged commit without persisted credentials
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.release.tag_name }}
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Resolve checked-out revision
-        id: revision
-        # The release tag is attacker-influenceable (anyone who can publish a release
-        # controls it) and git ref names may contain shell metacharacters such as `"`,
-        # `` ` ``, `$()`, and `;`. Pass it through env and reference it as "$RELEASE_TAG"
-        # data — never interpolate ${{ github.event.release.tag_name }} directly into a
-        # run: script, since GitHub substitutes it into the script's source text before
-        # the shell parses it, which would let a crafted tag execute arbitrary commands.
+      # Authorize event-controlled source data before setup, dependency installation, or
+      # any repository-controlled lifecycle command. Tag names are passed only through env.
+      - name: Authorize release source
+        id: source
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          full_sha="$(git rev-parse HEAD)"
-          # Peel to the commit form: for annotated/signed tags, "git rev-parse <tag>" alone
-          # resolves the tag *object*'s own SHA, not the commit it points at, which would
-          # reject every legitimate release cut from such a tag even though checkout
-          # correctly left HEAD on the tagged commit.
+          set -euo pipefail
+          source_sha="$(git rev-parse HEAD)"
           tag_sha="$(git rev-parse "${RELEASE_TAG}^{commit}")"
-          if [ -z "$full_sha" ]; then
-            echo "git rev-parse HEAD returned nothing; refusing to publish." >&2
-            exit 1
-          fi
-          if [ "$full_sha" != "$tag_sha" ]; then
-            echo "Checked-out HEAD ($full_sha) does not match tag $RELEASE_TAG ($tag_sha); refusing to publish." >&2
-            exit 1
-          fi
-          short_sha="${full_sha:0:7}"
-          echo "full_sha=${full_sha}" >> "$GITHUB_OUTPUT"
-          echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
-
-      - name: Resolve eligible source branch
-        id: branch
-        run: |
-          # Do not trust github.sha for this event (it can reflect the default branch, not
-          # the tagged commit). Everything downstream keys off steps.revision.outputs.full_sha
-          # (git rev-parse HEAD after checkout), not github.sha.
-          git fetch origin main v3 --quiet
-          full_sha="${{ steps.revision.outputs.full_sha }}"
-          matched="$(git branch -r --contains "$full_sha" | sed 's/^[* ]*//' | grep -E '^origin/(main|v3)$' | head -n1 | sed 's#^origin/##')"
-          if [ -z "$matched" ]; then
-            echo "Tagged commit $full_sha is not reachable from origin/main or origin/v3; refusing to publish." >&2
-            exit 1
-          fi
-          echo "branch=${matched}" >> "$GITHUB_OUTPUT"
+          [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$tag_sha" ]] || { echo "Release tag/source mismatch" >&2; exit 1; }
+          git fetch https://github.com/democratizedspace/dspace.git main:refs/remotes/origin/main v3:refs/remotes/origin/v3 --quiet
+          source_branch="$(git branch -r --contains "$source_sha" | sed 's/^[* ]*//' | grep -E '^(origin/)?(main|v3)$' | head -n1 | sed 's#^origin/##')"
+          [[ "$source_branch" == main || "$source_branch" == v3 ]] || { echo "Unsupported release source" >&2; exit 1; }
+          chart_version="$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)"
+          chart_tag="chart-v${chart_version}"
+          git rev-parse "${chart_tag}^{commit}" >/dev/null
+          echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
+          echo "source_branch=$source_branch" >> "$GITHUB_OUTPUT"
+          echo "chart_tag=$chart_tag" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.0.0
-          run_install: false
-
-      - name: Verify pnpm is on PATH
-        run: |
-          command -v pnpm
-          pnpm --version
-
-      - name: Validate release version coordinates
-        id: version
-        # See the "Resolve checked-out revision" step above: pass the attacker-influenceable
-        # release tag through env, never interpolate it directly into this run: script.
+      - name: Validate all local release coordinates
+        id: coordinates
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: |
-          root_version="$(node -p "require('./package.json').version")"
-          frontend_version="$(node -p "require('./frontend/package.json').version")"
-          expected_tag="v${root_version}"
+          CHART_TAG: ${{ steps.source.outputs.chart_tag }}
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          SOURCE_BRANCH: ${{ steps.source.outputs.source_branch }}
+        run: node scripts/check-release-consistency.mjs --verify-local
 
-          if [ "$root_version" != "$frontend_version" ]; then
-            echo "Root package version ($root_version) does not match frontend package version ($frontend_version); refusing to publish." >&2
-            exit 1
-          fi
-
-          # DSPACE release coordinates use the same strict X.Y.Z convention enforced by
-          # scripts/check-dspace-chart-version.sh. Validate before exposing package data as
-          # a step output so shell metacharacters and multiline values fail closed.
-          if [[ ! "$root_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Package version is not a supported semantic version; refusing to publish." >&2
-            exit 1
-          fi
-
-          if [ "$RELEASE_TAG" != "$expected_tag" ]; then
-            echo "Release tag $RELEASE_TAG does not match expected semantic tag $expected_tag; refusing to publish." >&2
-            exit 1
-          fi
-
-          echo "version=${root_version}" >> "$GITHUB_OUTPUT"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --reporter=append-only
-
-      - name: Build and verify chat build stamp
-        run: |
-          pnpm run build
-          pnpm run verify:chat-build-stamp
-
-      - name: Define image tags
-        id: tags
-        env:
-          SOURCE_BRANCH: ${{ steps.branch.outputs.branch }}
-          SHORT_SHA: ${{ steps.revision.outputs.short_sha }}
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          branch_sha_tag="ghcr.io/democratizedspace/dspace:${SOURCE_BRANCH}-${SHORT_SHA}"
-          semantic_tag="ghcr.io/democratizedspace/dspace:v${RELEASE_VERSION}"
-          echo "branch_sha_tag=${branch_sha_tag}" >> "$GITHUB_OUTPUT"
-          echo "semantic_tag=${semantic_tag}" >> "$GITHUB_OUTPUT"
-
-      - name: Set image build version
-        id: build_version
-        env:
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-          SHORT_SHA: ${{ steps.revision.outputs.short_sha }}
-        run: |
-          build_version="v${RELEASE_VERSION}+${SHORT_SHA}"
-          echo "value=${build_version}" >> "$GITHUB_OUTPUT"
-
-      - name: Set image metadata
-        id: metadata
-        env:
-          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
-        run: |
-          created="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-          echo "created=${created}" >> "$GITHUB_OUTPUT"
-          echo "source=${REPO_URL}" >> "$GITHUB_OUTPUT"
-
-      # Fail-closed guard: only an authoritative "not found" result from GHCR permits
-      # publication. Auth, network, timeout, malformed-response, and any other status are
-      # treated as hard failures by scripts/ghcr-manifest.mjs. Running inside this job's
-      # tag-scoped concurrency group means the check happens only after this run has
-      # exclusive access to that group, so it cannot race a second publish attempt.
-      - name: Refuse to overwrite an existing semantic tag
+      - name: Refuse an existing semantic tag (preflight)
         env:
           GHCR_GUARD_USERNAME: ${{ github.actor }}
-          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          node scripts/ghcr-manifest.mjs check-absent \
-            --owner democratizedspace \
-            --repo dspace \
-            --tag "v${RELEASE_VERSION}"
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
+          SEMANTIC_TAG: v${{ steps.coordinates.outputs.applicationVersion }}
+        run: node scripts/check-release-consistency.mjs --pre-semantic
+
+      - name: Verify immutable image provenance
+        id: immutable_image
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
+          IMAGE_TAG: ${{ steps.coordinates.outputs.imageTag }}
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+        run: node scripts/check-release-consistency.mjs --verify-image
+
+      - name: Verify published chart provenance
+        id: chart
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
+          CHART_VERSION: ${{ steps.coordinates.outputs.chartVersion }}
+          APPLICATION_VERSION: ${{ steps.coordinates.outputs.applicationVersion }}
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+        run: node scripts/check-release-consistency.mjs --verify-chart
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
-        with:
-          platforms: arm64
+          password: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Verify corresponding branch-SHA image exists
-        id: branch_sha_evidence
+      # Revalidate immediately before the sole mutation. Never rebuild an application in
+      # this path: create an exact registry alias of the approved immutable index.
+      - name: Refuse an existing semantic tag (final)
         env:
           GHCR_GUARD_USERNAME: ${{ github.actor }}
-          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
+          SEMANTIC_TAG: v${{ steps.coordinates.outputs.applicationVersion }}
+        run: node scripts/check-release-consistency.mjs --pre-semantic
+
+      - name: Publish semantic alias exactly once
+        env:
+          IMAGE_TAG: ${{ steps.coordinates.outputs.imageTag }}
+          IMAGE_DIGEST: ${{ steps.immutable_image.outputs.indexDigest }}
+          SEMANTIC_TAG: v${{ steps.coordinates.outputs.applicationVersion }}
         run: |
-          node scripts/ghcr-manifest.mjs describe \
-            --owner democratizedspace \
-            --repo dspace \
-            --tag "${{ steps.branch.outputs.branch }}-${{ steps.revision.outputs.short_sha }}"
+          set -euo pipefail
+          docker buildx imagetools create \
+            --tag "ghcr.io/democratizedspace/dspace:${SEMANTIC_TAG}" \
+            "ghcr.io/democratizedspace/dspace:${IMAGE_TAG}@${IMAGE_DIGEST}"
 
-      - name: Build image for SHA verification
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          platforms: linux/amd64
-          provenance: false
-          load: true
-          tags: dspace-verify:latest
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-          labels: |
-            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
-            org.opencontainers.image.revision=${{ steps.revision.outputs.full_sha }}
-            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=gha,scope=ci-image-semantic-release
-
-      - name: Assert build SHA is baked into frontend bundle
-        run: |
-          docker run --rm \
-            -e EXPECTED_SHA="${{ steps.revision.outputs.full_sha }}" \
-            -v "$PWD/scripts:/scripts:ro" \
-            dspace-verify:latest \
-            node /scripts/verify-build-sha.mjs /app/dist
-
-      - name: Verify chat build stamp inside image
-        run: |
-          docker run --rm \
-            -e VERIFY_REPO_ROOT=/app \
-            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
-            -v "$PWD/scripts:/scripts:ro" \
-            -w /app \
-            dspace-verify:latest \
-            node /scripts/verify-chat-build-stamp.mjs
-
-      - name: Build and push semantic release image
-        id: build_push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
-          provenance: false
-          tags: ${{ steps.tags.outputs.semantic_tag }}
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.revision.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-          labels: |
-            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
-            org.opencontainers.image.revision=${{ steps.revision.outputs.full_sha }}
-            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=gha,scope=ci-image-semantic-release
-          cache-to: type=gha,mode=max,ignore-error=true,scope=ci-image-semantic-release
-
-      # Records index + per-platform digests as evidence. 'present' is the expected outcome
-      # of this second registry call (the tag was just pushed above); scripts/ghcr-manifest.mjs
-      # writes index_digest/amd64_digest/arm64_digest to $GITHUB_OUTPUT without ever logging
-      # the registry credentials used to fetch them.
-      - name: Record semantic release evidence
-        if: steps.build_push.outcome == 'success'
-        id: evidence
+      - name: Verify semantic alias digest equality
+        id: semantic_image
         env:
           GHCR_GUARD_USERNAME: ${{ github.actor }}
-          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (GitHub Actions secret reference, not a literal credential)
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          node scripts/ghcr-manifest.mjs describe \
-            --owner democratizedspace \
-            --repo dspace \
-            --tag "v${RELEASE_VERSION}"
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
+          IMAGE_TAG: v${{ steps.coordinates.outputs.applicationVersion }}
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          EXPECTED_IMAGE_DIGEST: ${{ steps.immutable_image.outputs.indexDigest }}
+        run: node scripts/check-release-consistency.mjs --verify-image
 
-      - name: Summarize semantic release evidence
-        if: steps.build_push.outcome == 'success'
+      - name: Emit and validate release manifest
         env:
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-          BRANCH_SHA_TAG: ${{ steps.tags.outputs.branch_sha_tag }}
-          SEMANTIC_TAG: ${{ steps.tags.outputs.semantic_tag }}
+          APPLICATION_VERSION: ${{ steps.coordinates.outputs.applicationVersion }}
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          IMAGE_TAG: ${{ steps.coordinates.outputs.imageTag }}
+          IMAGE_DIGEST: ${{ steps.immutable_image.outputs.indexDigest }}
+          CHART_VERSION: ${{ steps.coordinates.outputs.chartVersion }}
+          CHART_DIGEST: ${{ steps.chart.outputs.chartDigest }}
+          SEMANTIC_TAG: v${{ steps.coordinates.outputs.applicationVersion }}
+          RELEASE_MANIFEST_PATH: dspace-release-manifest.json
         run: |
-          {
-            echo "## DSPACE semantic release image"
-            echo
-            echo "| Field | Value |"
-            echo "| --- | --- |"
-            echo "| Semantic version | \`v${RELEASE_VERSION}\` |"
-            echo "| Full Git SHA | \`${{ steps.revision.outputs.full_sha }}\` |"
-            echo "| Immutable branch-SHA tag | \`${BRANCH_SHA_TAG}\` |"
-            echo "| Semantic tag | \`${SEMANTIC_TAG}\` |"
-            echo "| Image index digest | \`${{ steps.evidence.outputs.index_digest }}\` |"
-            echo "| linux/amd64 digest | \`${{ steps.evidence.outputs.amd64_digest }}\` |"
-            echo "| linux/arm64 digest | \`${{ steps.evidence.outputs.arm64_digest }}\` |"
-          } >> "$GITHUB_STEP_SUMMARY"
+          node scripts/check-release-consistency.mjs --emit-manifest
+          node scripts/check-release-consistency.mjs --validate-manifest
+
+      - name: Upload release manifest
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dspace-release-manifest
+          path: dspace-release-manifest.json
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Write complete release evidence
+        env:
+          APPLICATION_VERSION: ${{ steps.coordinates.outputs.applicationVersion }}
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          IMAGE_TAG: ${{ steps.coordinates.outputs.imageTag }}
+          IMAGE_DIGEST: ${{ steps.immutable_image.outputs.indexDigest }}
+          AMD64_DIGEST: ${{ steps.immutable_image.outputs.amd64Digest }}
+          ARM64_DIGEST: ${{ steps.immutable_image.outputs.arm64Digest }}
+          CHART_VERSION: ${{ steps.coordinates.outputs.chartVersion }}
+          CHART_DIGEST: ${{ steps.chart.outputs.chartDigest }}
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## Full release consistency evidence
+          - Application version: $APPLICATION_VERSION
+          - Full source SHA: $SOURCE_SHA
+          - Immutable image: ghcr.io/democratizedspace/dspace:$IMAGE_TAG@$IMAGE_DIGEST
+          - linux/amd64 manifest: $AMD64_DIGEST
+          - linux/arm64 manifest: $ARM64_DIGEST
+          - Semantic evidence alias: ghcr.io/democratizedspace/dspace:v$APPLICATION_VERSION@$IMAGE_DIGEST
+          - Immutable chart: oci://ghcr.io/democratizedspace/charts/dspace:$CHART_VERSION@$CHART_DIGEST
+          - Release manifest artifact: dspace-release-manifest/dspace-release-manifest.json
+          EOF
