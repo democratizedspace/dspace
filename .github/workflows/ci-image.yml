@@ -68,6 +68,8 @@ jobs:
           pkg_version="$(node -p "require('./package.json').version")"
           short_sha="$(git rev-parse --short HEAD)"
           echo "value=v${pkg_version}+${short_sha}" >> "$GITHUB_OUTPUT"
+          echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/democratizedspace/dspace:ci-${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies (creates host node_modules)
         run: pnpm install --frozen-lockfile --reporter=append-only
@@ -89,11 +91,16 @@ jobs:
           push: false
           platforms: linux/amd64
           provenance: false
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ steps.build_version.outputs.created }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
             ENFORCE_VITE_GIT_SHA=1
+            DSPACE_BUILD_CREATED=${{ steps.build_version.outputs.created }}
+            DSPACE_IMAGE=${{ steps.build_version.outputs.image }}
 
       - name: Build image with local node_modules present
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
@@ -108,11 +115,16 @@ jobs:
           cache-to: type=gha,mode=max,ignore-error=true,scope=ci-image-local
           load: true
           tags: dspace-test:latest
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ steps.build_version.outputs.created }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
             ENFORCE_VITE_GIT_SHA=1
+            DSPACE_BUILD_CREATED=${{ steps.build_version.outputs.created }}
+            DSPACE_IMAGE=${{ steps.build_version.outputs.image }}
 
       - name: Build image for smoke test (no cache for forks)
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork
@@ -125,11 +137,16 @@ jobs:
           provenance: false
           load: true
           tags: dspace-test:latest
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ steps.build_version.outputs.created }}
           build-args: |
             DSPACE_VERSION=${{ steps.build_version.outputs.value }}
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
             ENFORCE_VITE_GIT_SHA=1
+            DSPACE_BUILD_CREATED=${{ steps.build_version.outputs.created }}
+            DSPACE_IMAGE=${{ steps.build_version.outputs.image }}
 
       - name: Inspect frontend bundle location in built image
         run: |
@@ -259,6 +276,13 @@ jobs:
           fi
           echo "/docs/dCarbon responded with expected content"
 
+          runtime_sha="$(curl -fsS "$BASE_URL/build-info.json" | node -pe 'JSON.parse(fs.readFileSync(0)).revision')"
+          html_sha="$(curl -fsS "$BASE_URL/" | grep -o 'name="dspace-build-revision" content="[0-9a-f]\{40\}"' | grep -o '[0-9a-f]\{40\}')"
+          oci_sha="$(docker image inspect dspace-test:latest --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')"
+          test "$runtime_sha" = "$GITHUB_SHA"
+          test "$html_sha" = "$GITHUB_SHA"
+          test "$oci_sha" = "$GITHUB_SHA"
+
           # Cleanup
           docker stop dspace-smoke-test
           docker rm dspace-smoke-test
@@ -387,6 +411,8 @@ jobs:
             GIT_SHA=${{ steps.tags.outputs.full_sha }}
             VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
+            DSPACE_BUILD_CREATED=${{ steps.metadata.outputs.created }}
+            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
@@ -412,6 +438,8 @@ jobs:
             GIT_SHA=${{ steps.tags.outputs.full_sha }}
             VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
+            DSPACE_BUILD_CREATED=${{ steps.metadata.outputs.created }}
+            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
           labels: |
             org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
@@ -435,6 +463,8 @@ jobs:
             GIT_SHA=${{ steps.tags.outputs.full_sha }}
             VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
             ENFORCE_VITE_GIT_SHA=1
+            DSPACE_BUILD_CREATED=${{ steps.metadata.outputs.created }}
+            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
           cache-from: type=gha
 
       - name: Assert build SHA is baked into frontend bundle

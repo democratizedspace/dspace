@@ -11,7 +11,7 @@ const REPO_BUILD_META_PATH = path.join(
     'build_meta.json'
 );
 const FRONTEND_BUILD_META_PATH = path.join(process.cwd(), 'src', 'generated', 'build_meta.json');
-const ENV_SOURCES = ['GITHUB_SHA', 'VITE_GIT_SHA', 'GIT_SHA', 'DSPACE_GIT_SHA'];
+const FULL_SHA = /^[0-9a-f]{40}$/i;
 
 const normalizeSha = (value) => String(value || '').trim();
 
@@ -34,36 +34,41 @@ const readBuildMetaFile = async (filePath) => {
         const raw = await fs.readFile(filePath, 'utf8');
         const parsed = JSON.parse(raw);
         const gitSha = normalizeSha(parsed?.gitSha);
-        if (isPlaceholderSha(gitSha)) {
+        if (isPlaceholderSha(gitSha) || !FULL_SHA.test(gitSha)) {
             return null;
         }
-        const generatedAt = normalizeSha(parsed?.generatedAt) || new Date().toISOString();
+        const generatedAt = normalizeSha(parsed?.generatedAt);
         const source = normalizeSha(parsed?.source) || 'build-meta';
+        const version = normalizeSha(parsed?.version);
+        const shortRevision = gitSha.slice(0, 7);
+        if (!version || !generatedAt || Number.isNaN(Date.parse(generatedAt))) return null;
+        if (parsed.shortRevision && parsed.shortRevision !== shortRevision) return null;
+        const image = normalizeSha(parsed?.image);
+        if (image) {
+            const escaped = shortRevision.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            if (
+                !new RegExp(
+                    `^[a-z0-9.-]+(?:/[a-z0-9._-]+)+:[a-z0-9._-]+-${escaped}$`,
+                    'i'
+                ).test(image)
+            ) {
+                return null;
+            }
+        }
 
         return {
             gitSha,
+            version,
+            revision: gitSha,
+            shortRevision,
             generatedAt,
+            ...(image ? { image } : {}),
             source,
             resolvedFrom: filePath,
         };
     } catch (error) {
         return null;
     }
-};
-
-const resolveBuildMetaFromEnv = () => {
-    for (const key of ENV_SOURCES) {
-        const gitSha = normalizeSha(process.env[key]);
-        if (!isPlaceholderSha(gitSha)) {
-            return {
-                gitSha,
-                generatedAt: new Date().toISOString(),
-                source: `env:${key}`,
-                resolvedFrom: 'env',
-            };
-        }
-    }
-    return null;
 };
 
 export const resolveRuntimeBuildMeta = async () => {
@@ -78,10 +83,6 @@ export const resolveRuntimeBuildMeta = async () => {
     const frontendMeta = await readBuildMetaFile(FRONTEND_BUILD_META_PATH);
     if (frontendMeta) {
         return frontendMeta;
-    }
-    const envMeta = resolveBuildMetaFromEnv();
-    if (envMeta) {
-        return envMeta;
     }
     return {
         gitSha: 'missing',
@@ -104,13 +105,13 @@ const buildHeaders = () => ({
     'Cache-Control': 'no-store',
 });
 
-export async function buildRuntimeBuildMetaResponse() {
+export async function buildRuntimeBuildMetaResponse(route = '/build-meta.json') {
     try {
         const meta = await resolveRuntimeBuildMeta();
         if (isPlaceholderSha(meta.gitSha)) {
             const message = 'Runtime build metadata is missing or invalid';
             logServerError({
-                route: '/build-meta.json',
+                route,
                 method: 'GET',
                 error: message,
                 context: { meta },
@@ -130,7 +131,7 @@ export async function buildRuntimeBuildMetaResponse() {
         const errorToLog =
             error instanceof Error ? new Error(`${message}: ${error.message}`) : new Error(message);
         logServerError({
-            route: '/build-meta.json',
+            route,
             method: 'GET',
             error: errorToLog,
             context: { error },

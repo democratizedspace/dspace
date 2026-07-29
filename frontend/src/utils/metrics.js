@@ -1,5 +1,5 @@
 import { isBrowser } from './ssr.js';
-import { getAppGitSha } from './buildInfo.js';
+import buildMeta from '../generated/build_meta.json';
 
 const isBrowserRuntime = isBrowser && (typeof process === 'undefined' || !process.versions?.node);
 const defaultLoader = () => import(/* @vite-ignore */ 'prom-client');
@@ -131,13 +131,8 @@ const getOrCreateMetric = (constructors, registerInstance, type, config) => {
 };
 
 const loadBuildInfo = () => ({
-    version: process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown',
-    revision:
-        process.env.DSPACE_REVISION ||
-        process.env.GITHUB_SHA ||
-        process.env.SOURCE_VERSION ||
-        getAppGitSha() ||
-        'unknown',
+    version: buildMeta.version,
+    revision: buildMeta.gitSha,
 });
 
 async function initMetrics(loader = defaultLoader) {
@@ -209,7 +204,7 @@ async function initMetrics(loader = defaultLoader) {
         const build = loadBuildInfo();
         if (typeof metricHandles.buildInfo.remove === 'function') {
             try {
-                metricHandles.buildInfo.remove();
+                metricHandles.buildInfo.reset();
             } catch {
                 // Duplicate-import safety: older prom-client versions may not support remove().
             }

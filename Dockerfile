@@ -10,6 +10,9 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV PYTHON="/usr/bin/python3"
 ENV DSPACE_VERSION="${DSPACE_VERSION}"
+ENV DSPACE_REVISION="${GIT_SHA}"
+ENV DSPACE_BUILD_CREATED="${DSPACE_BUILD_CREATED}"
+ENV DSPACE_IMAGE="${DSPACE_IMAGE}"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
@@ -52,6 +55,8 @@ ARG DSPACE_VERSION
 ARG GIT_SHA=unknown
 ARG VITE_GIT_SHA=${GIT_SHA}
 ARG ENFORCE_VITE_GIT_SHA=0
+ARG DSPACE_BUILD_CREATED
+ARG DSPACE_IMAGE
 # GIT_SHA should be provided via build args; git is not available in the image to compute it.
 RUN if [ "$ENFORCE_VITE_GIT_SHA" = "1" ]; then \
         if [ -z "$VITE_GIT_SHA" ] || [ "$VITE_GIT_SHA" = "unknown" ] || [ "$VITE_GIT_SHA" = "dev-local" ]; then \
@@ -60,6 +65,8 @@ RUN if [ "$ENFORCE_VITE_GIT_SHA" = "1" ]; then \
         fi; \
     fi
 ENV VITE_GIT_SHA="${VITE_GIT_SHA}"
+ENV DSPACE_BUILD_CREATED="${DSPACE_BUILD_CREATED}"
+ENV DSPACE_IMAGE="${DSPACE_IMAGE}"
 # Copy source separately to avoid overlaying host node_modules (pnpm symlinks make this fail when
 # node_modules exists on the host). Build artifacts are excluded via .dockerignore for compatibility
 # with builders that do not support COPY --exclude flags.
@@ -85,7 +92,13 @@ RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --filter ./frontend
 
 FROM base AS runtime
 ARG DSPACE_VERSION=dev
+ARG GIT_SHA=unknown
+ARG DSPACE_BUILD_CREATED
+ARG DSPACE_IMAGE
 ENV DSPACE_VERSION="${DSPACE_VERSION}"
+ENV DSPACE_REVISION="${GIT_SHA}"
+ENV DSPACE_BUILD_CREATED="${DSPACE_BUILD_CREATED}"
+ENV DSPACE_IMAGE="${DSPACE_IMAGE}"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         dumb-init \

@@ -2,6 +2,7 @@
 import { SEO } from 'astro-seo';
 import { OFFLINE_TOAST_PUBLIC_PATH } from '../utils/offlineToastPath';
 import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
+import buildMeta from '../generated/build_meta.json';
 
 export interface Props {
 	title: string;
@@ -48,6 +49,7 @@ const cheatsAvailable = getCheatsAvailabilityFlag();
                 <meta name="viewport" content="width=device-width" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
                 <meta name="generator" content={Astro.generator} />
+                <meta name="dspace-build-revision" content={buildMeta.gitSha} />
                 <script is:inline>
                         (function bootstrapTheme() {
                                 const STORAGE_KEY = 'dspace-theme';

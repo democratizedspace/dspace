@@ -11,6 +11,41 @@ const readViteGitSha = () => {
 };
 
 const normalizeSha = (value) => String(value || '').trim();
+const FULL_SHA = /^[0-9a-f]{40}$/i;
+
+export const normalizeBuildIdentity = (value) => {
+    if (!value || typeof value !== 'object') throw new Error('Build identity is missing.');
+    const revision = normalizeSha(value.revision || value.gitSha);
+    if (isPlaceholderSha(revision) || !FULL_SHA.test(revision)) {
+        throw new Error('Build revision must be a full 40-character hexadecimal SHA.');
+    }
+    const version = String(value.version || '').trim();
+    if (!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(version)) {
+        throw new Error('Build version is invalid.');
+    }
+    const generatedAt = String(value.generatedAt || '').trim();
+    if (!generatedAt || Number.isNaN(Date.parse(generatedAt))) {
+        throw new Error('Build timestamp is invalid.');
+    }
+    const shortRevision = revision.slice(0, 7);
+    if (value.shortRevision && value.shortRevision !== shortRevision) {
+        throw new Error('Short revision does not match full revision.');
+    }
+    const identity = { version, revision, shortRevision, generatedAt };
+    if (value.image) {
+        const image = String(value.image).trim();
+        const escaped = shortRevision.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        if (
+            !new RegExp(`^[a-z0-9.-]+(?:/[a-z0-9._-]+)+:[a-z0-9._-]+-${escaped}$`, 'i').test(image)
+        ) {
+            throw new Error('Image coordinate is not an immutable matching branch-SHA tag.');
+        }
+        identity.image = image;
+    }
+    return identity;
+};
+
+export const getCanonicalBuildIdentity = () => normalizeBuildIdentity(buildMeta);
 
 const readBuildMetaSha = () => normalizeSha(buildMeta?.gitSha);
 
