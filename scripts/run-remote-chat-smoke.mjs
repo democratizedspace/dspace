@@ -132,7 +132,9 @@ export function parseAndValidateArgs(argv, env = process.env) {
 }
 
 export function buildSmokeEnv(options, baseEnv = process.env) {
-  const hostname = new URL(options.baseURL).hostname;
+  // Node exposes bracketed IPv6 URL hostnames as "[::1]"; normalize them before
+  // deciding whether Playwright should manage the local preview server.
+  const hostname = new URL(options.baseURL).hostname.replace(/^\[|\]$/g, '');
   const local = ['127.0.0.1', 'localhost', '0.0.0.0', '::1'].includes(hostname);
   return {
     ...baseEnv,

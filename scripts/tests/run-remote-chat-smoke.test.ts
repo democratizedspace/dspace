@@ -23,6 +23,20 @@ describe('remote chat smoke input validation', () => {
     );
   });
 
+  it.each([
+    'http://127.0.0.1:4173',
+    'http://localhost:4173',
+    'http://[::1]:4173',
+  ])('enables the managed web server for loopback URL %s', (baseURL) => {
+    const options = parseAndValidateArgs([], {
+      ...completeEnv,
+      DSPACE_SMOKE_BASE_URL: baseURL,
+    });
+    expect(buildSmokeEnv(options, {}).REMOTE_CHAT_SMOKE_USE_WEBSERVER).toBe(
+      '1'
+    );
+  });
+
   it('gives flags deterministic precedence over environment values', () => {
     const options = parseAndValidateArgs(
       ['--expected-version=3.2.0'],

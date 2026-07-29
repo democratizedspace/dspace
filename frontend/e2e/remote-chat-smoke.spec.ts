@@ -70,11 +70,15 @@ async function encryptedResponse(body: Record<string, string>) {
 }
 
 async function blockUnexpectedProviders(page: Page, allowedOrigin?: string) {
+    const providerOrigins = ['https://api.openai.com', allowedOrigin].filter(Boolean) as string[];
+    for (const origin of providerOrigins) {
+        await page.route(`${origin}/**`, async (route) => {
+            await route.abort('blockedbyclient');
+            throw new Error('secret-safety: blocked unexpected live chat-provider traffic');
+        });
+    }
     await page.route(/https?:\/\/[^/]+\/(?:api\/v1\/relay|v1\/responses).*/, async (route) => {
-        if (allowedOrigin && new URL(route.request().url()).origin === allowedOrigin) {
-            await route.fallback();
-            return;
-        }
+        await route.abort('blockedbyclient');
         throw new Error('secret-safety: blocked unexpected live chat-provider traffic');
     });
 }
@@ -82,6 +86,9 @@ async function blockUnexpectedProviders(page: Page, allowedOrigin?: string) {
 async function installSuccessfulRelay(page: Page) {
     const key = await relayPublicKey();
     const calls: Array<{ url: string; headers: Record<string, string>; body: string }> = [];
+    // Register the deny rule first: Playwright evaluates newer routes first, so only the
+    // explicit mocks below can supersede it. Every other path on the provider origin is blocked.
+    await blockUnexpectedProviders(page, expectedOrigin);
     await page.route(`${expectedOrigin}/api/v1/relay/servers/next**`, async (route) => {
         calls.push({ url: route.request().url(), headers: route.request().headers(), body: '' });
         const requestUrl = new URL(route.request().url());
@@ -125,7 +132,6 @@ async function installSuccessfulRelay(page: Page) {
             body: JSON.stringify(await encryptedResponse(body)),
         });
     });
-    await blockUnexpectedProviders(page, expectedOrigin);
     return calls;
 }
 
@@ -179,10 +185,7 @@ test.describe('release-aware remote chat smoke', () => {
 
     test('routing/configuration and submission: approved default journey', async ({ page }) => {
         const calls = expectedProvider === 'token-place' ? await installSuccessfulRelay(page) : [];
-        await blockUnexpectedProviders(
-            page,
-            expectedProvider === 'token-place' ? expectedOrigin : undefined
-        );
+        if (expectedProvider === 'openai') await blockUnexpectedProviders(page);
         const panel = await openExpectedPanel(page);
         if (expectedProvider === 'openai') {
             await panel.getByRole('textbox').fill('Key gate smoke');
@@ -221,6 +224,7 @@ test.describe('release-aware remote chat smoke', () => {
             expectedProvider !== 'token-place',
             'Only applies to token.place-default releases'
         );
+        await blockUnexpectedProviders(page, expectedOrigin);
         await page.route(`${expectedOrigin}/api/v1/relay/servers/next**`, (route) =>
             route.fulfill({
                 status: 503,
@@ -228,7 +232,6 @@ test.describe('release-aware remote chat smoke', () => {
                 body: '{"error":"unavailable"}',
             })
         );
-        await blockUnexpectedProviders(page, expectedOrigin);
         const panel = await openExpectedPanel(page);
         await panel.getByRole('textbox').fill('Controlled unavailable smoke');
         await panel.getByRole('button', { name: 'Send' }).click();
