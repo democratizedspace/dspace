@@ -9,10 +9,19 @@ const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
-const requestedOrigin = new URL(process.env.BASE_URL!).origin;
+const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
+const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
+
+test.use({
+    serviceWorkers: 'block',
+    storageState: { cookies: [], origins: [] },
+    trace: 'off',
+    video: 'off',
+    screenshot: 'off',
+});
 
 const bytesToBase64 = (value: ArrayBuffer | Uint8Array) =>
     Buffer.from(value instanceof Uint8Array ? value : new Uint8Array(value)).toString('base64');
@@ -210,7 +219,7 @@ async function installSuccessfulRelay(page: Page) {
     return evidence;
 }
 
-async function openExpectedPanel(page: Page) {
+async function openExpectedPanel(page: Page, provider = expectedProvider) {
     const navigation = await page.goto('/chat');
     expect(
         new URL(navigation?.url() || page.url()).origin,
@@ -222,7 +231,7 @@ async function openExpectedPanel(page: Page) {
     await expect(panels, 'hydration: exactly one chat panel must be active').toHaveCount(1);
     await expect(panels, 'routing/configuration: default provider drift').toHaveAttribute(
         'data-provider',
-        expectedProvider
+        provider
     );
     await expect(panels, 'hydration: chat panel did not hydrate').toHaveAttribute(
         'data-hydrated',
@@ -243,14 +252,7 @@ async function selectOpenAI(page: Page, key?: string) {
 }
 
 test.describe('release-aware remote chat smoke', () => {
-    test.skip(process.env.REMOTE_CHAT_SMOKE !== '1', 'Requires explicit release expectations.');
-    test.use({
-        serviceWorkers: 'block',
-        storageState: { cookies: [], origins: [] },
-        trace: 'off',
-        video: 'off',
-        screenshot: 'off',
-    });
+    test.skip(!remoteChatSmokeEnabled, 'Requires explicit release expectations.');
     test.beforeEach(async ({ context, page }) => {
         await context.clearCookies();
         await clearUserData(page);
@@ -285,7 +287,6 @@ test.describe('release-aware remote chat smoke', () => {
             let openAICalls = 0;
             let credentialPresent = false;
             await installProviderDenyRules(page);
-            await selectOpenAI(page);
             let panel = await openExpectedPanel(page);
             await panel.getByRole('textbox').fill('Key gate smoke');
             await panel.getByRole('button', { name: 'Send' }).click();
@@ -332,6 +333,24 @@ test.describe('release-aware remote chat smoke', () => {
             });
             return;
         }
+        const configResponse = await page.request.get('/config.json');
+        expect(
+            new URL(configResponse.url()).origin,
+            'routing/configuration: /config.json origin drift'
+        ).toBe(requestedOrigin);
+        expect(
+            configResponse.status(),
+            'routing/configuration: /config.json did not return 200'
+        ).toBe(200);
+        const config = await configResponse.json();
+        expect(
+            new URL(config.tokenPlace.url).origin,
+            'routing/configuration: token.place configured origin drift'
+        ).toBe(expectedOrigin);
+        expect(
+            config.tokenPlace.model,
+            'routing/configuration: token.place configured model drift'
+        ).toBe(expectedModel);
         const evidence = await installSuccessfulRelay(page);
         const panel = await openExpectedPanel(page);
         await panel.getByRole('textbox').fill('Deterministic remote chat smoke');
@@ -399,7 +418,7 @@ test.describe('release-aware remote chat smoke', () => {
                 providerCalls += 1;
         });
         await selectOpenAI(page);
-        const panel = await openExpectedPanel(page);
+        const panel = await openExpectedPanel(page, 'openai');
         await panel.getByRole('textbox').fill('OpenAI missing-key smoke');
         await panel.getByRole('button', { name: 'Send' }).click();
         await expect(panel.locator('.chat-error')).toHaveAttribute(
