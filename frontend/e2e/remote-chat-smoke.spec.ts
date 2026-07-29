@@ -5,7 +5,9 @@ import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
 
-const { JSEncrypt } = createRequire(import.meta.url)('jsencrypt') as typeof import('jsencrypt');
+const JSEncrypt = createRequire(import.meta.url)(
+    'jsencrypt'
+) as typeof import('jsencrypt').JSEncrypt;
 
 const expectedVersion = process.env.DSPACE_EXPECTED_VERSION!;
 const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
