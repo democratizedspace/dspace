@@ -137,6 +137,27 @@ tag.
    curl -fsS https://staging.democratized.space/livez | jq .
    ```
 
+7. From a DSPACE checkout, verify the approved release identity and default Chat journey (replace
+   every placeholder with independently approved release data):
+
+   ```bash
+   DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
+   DSPACE_EXPECTED_VERSION=REPLACE_APPLICATION_VERSION \
+   DSPACE_EXPECTED_REVISION=REPLACE_FULL_40_CHARACTER_SOURCE_SHA \
+   DSPACE_EXPECTED_PROVIDER=token-place \
+   DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+   DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+   npm run qa:remote-chat-smoke
+   ```
+
+   This dedicated check is non-destructive. It uses a new isolated browser context, clears client
+   state, blocks service workers and live chat-provider traffic, and fulfills provider calls with
+   test-owned mocks. It neither needs nor sends a real OpenAI key. It returns nonzero for release
+   identity, HTML marker, hydration, provider routing/configuration, origin/model, submission,
+   provider-availability classification, or secret-safety drift. CLI flags with the corresponding
+   lowercase names (for example, `--expected-version`) override environment values. This is the
+   DSPACE harness only; wiring it into a Sugarkube promotion gate remains separate work.
+
 ## Promote production
 
 Promote only after staging has been validated and the image/chart pair is approved.
@@ -167,6 +188,19 @@ Validate production after promotion:
 curl -fsS https://democratized.space/config.json | jq .
 curl -fsS https://democratized.space/healthz | jq .
 curl -fsS https://democratized.space/livez | jq .
+```
+
+Run the same non-destructive release-aware Chat check against production before declaring the
+promotion healthy:
+
+```bash
+DSPACE_SMOKE_BASE_URL=https://democratized.space \
+DSPACE_EXPECTED_VERSION=REPLACE_APPLICATION_VERSION \
+DSPACE_EXPECTED_REVISION=REPLACE_FULL_40_CHARACTER_SOURCE_SHA \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
 ```
 
 Record the approved immutable tag, chart version, and workflow run links in the release notes or QA
