@@ -5,6 +5,8 @@ import path from 'node:path';
 const FULL_SHA = /^[0-9a-f]{40}$/;
 const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
 const TIMESTAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
+const IMMUTABLE_IMAGE =
+  /^(?:[a-z0-9.-]+(?::[0-9]+)?\/)?[a-z0-9._/-]+:([a-z0-9._-]+)-([0-9a-f]{7})$/i;
 const fail = (message) => {
   throw new Error(message);
 };
@@ -54,10 +56,19 @@ const verify = () => {
   if (!canonicalTimestamp(timestamp))
     fail('Canonical build metadata has an invalid buildTimestamp.');
   if (meta?.image) {
-    const image = String(meta.image);
+    const image = String(meta.image).trim();
+    const hasControlCharacter = [...image].some((character) => {
+      const code = character.codePointAt(0);
+      return code < 32 || code === 127;
+    });
+    const match = image.match(IMMUTABLE_IMAGE);
     if (
-      !image.endsWith(`-${expected.slice(0, 7)}`) ||
-      /(?:^|[-_.])latest(?:$|[-_.])/i.test(image)
+      !image ||
+      image.length > 256 ||
+      hasControlCharacter ||
+      !match ||
+      match[2].toLowerCase() !== expected.slice(0, 7) ||
+      /(?:^|[-_.])latest(?:$|[-_.])/i.test(match[1])
     )
       fail(
         'Canonical build metadata has a mismatched immutable image coordinate.'

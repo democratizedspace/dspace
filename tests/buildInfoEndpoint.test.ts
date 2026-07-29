@@ -60,4 +60,49 @@ describe('runtime build identity endpoints', () => {
     });
     expect(body.resolvedFrom).toBeUndefined();
   });
+
+  it('preserves legacy-only build-meta success while canonical build-info fails closed', async () => {
+    filePayload = {
+      gitSha: SHA,
+      generatedAt: '2026-07-29T12:00:00Z',
+      source: 'legacy-ci',
+    };
+    const buildMeta = await import('../frontend/src/pages/build-meta.json.ts');
+    const legacyResponse = await buildMeta.GET();
+    expect(legacyResponse.status).toBe(200);
+    expect(await legacyResponse.json()).toEqual(filePayload);
+
+    const buildInfo = await import('../frontend/src/pages/build-info.json.ts');
+    const canonicalResponse = await buildInfo.GET();
+    expect(canonicalResponse.status).toBe(503);
+    expect(await canonicalResponse.json()).toEqual({
+      error: 'build_identity_unavailable',
+    });
+  });
+
+  it.each(['missing', 'dev-local'])(
+    'keeps placeholder %s metadata private and unavailable',
+    async (gitSha) => {
+      filePayload.gitSha = gitSha;
+      filePayload.revision = gitSha;
+      const buildMeta =
+        await import('../frontend/src/pages/build-meta.json.ts');
+      const legacyResponse = await buildMeta.GET();
+      const legacyBody = await legacyResponse.json();
+      expect(legacyResponse.status).toBe(503);
+      expect(legacyBody).toMatchObject({
+        gitSha: 'missing',
+        source: 'missing',
+      });
+      expect(legacyBody.resolvedFrom).toBeUndefined();
+
+      const buildInfo =
+        await import('../frontend/src/pages/build-info.json.ts');
+      const canonicalResponse = await buildInfo.GET();
+      expect(canonicalResponse.status).toBe(503);
+      expect(await canonicalResponse.json()).toEqual({
+        error: 'build_identity_unavailable',
+      });
+    }
+  );
 });

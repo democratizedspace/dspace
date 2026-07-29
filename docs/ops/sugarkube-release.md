@@ -26,6 +26,38 @@ Use immutable branch-SHA tags or image digests for staging, production approvals
 records. Mutable branch tags and release-only semantic tags are convenient for humans but must not
 be the audit record for a production deploy.
 
+## Runtime source verification contract
+
+Before approving an already deployed runtime, set its expected full revision, public URL, and
+published immutable image coordinate. The revision must be exactly 40 hexadecimal characters, and
+the image tag must end in the matching seven-character short revision.
+
+```bash
+export EXPECTED_SHA=REPLACE_WITH_40_HEX_REVISION
+export BASE_URL=https://staging.democratized.space
+export EXPECTED_IMAGE=ghcr.io/democratizedspace/dspace:main-${EXPECTED_SHA:0:7}
+
+[[ "$EXPECTED_SHA" =~ ^[0-9a-fA-F]{40}$ ]] || { echo "invalid EXPECTED_SHA" >&2; exit 1; }
+BUILD_INFO="$(curl -fsS "$BASE_URL/build-info.json")"
+test "$(jq -r '.revision' <<<"$BUILD_INFO")" = "${EXPECTED_SHA,,}"
+test "$(jq -r '.image' <<<"$BUILD_INFO")" = "$EXPECTED_IMAGE"
+
+HTML_REVISION="$(curl -fsS "$BASE_URL/" |
+  sed -n 's/.*<meta name="dspace-build-revision" content="\([0-9a-fA-F]\{40\}\)".*/\1/p' |
+  head -n 1)"
+test "${HTML_REVISION,,}" = "${EXPECTED_SHA,,}"
+
+docker pull "$EXPECTED_IMAGE"
+OCI_REVISION="$(docker image inspect "$EXPECTED_IMAGE" \
+  --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')"
+test "${OCI_REVISION,,}" = "${EXPECTED_SHA,,}"
+```
+
+These checks compare the approved full SHA with `/build-info.json`, its published immutable image
+coordinate, the `dspace-build-revision` HTML marker, and the pulled image's
+`org.opencontainers.image.revision` label. They are a source-verification contract only; they do
+not implement a remote `/chat` smoke test or a promotion gate.
+
 ## Artifact publishing summary
 
 The mandatory full-release order is fail-closed:

@@ -59,7 +59,12 @@ const runVerifier = (
 
 describe('verify-build-sha metadata and artifact validation', () => {
   it('accepts complete canonical metadata embedded in executable artifacts', () => {
-    expect(runVerifier(validMeta).status).toBe(0);
+    expect(
+      runVerifier({
+        ...validMeta,
+        image: `ghcr.io/democratizedspace/dspace:main-${SHA.slice(0, 7)}`,
+      }).status
+    ).toBe(0);
   });
 
   it.each([
@@ -74,6 +79,32 @@ describe('verify-build-sha metadata and artifact validation', () => {
     ],
     [
       { ...validMeta, image: 'ghcr.io/example/dspace:main-fffffff' },
+      'mismatched immutable',
+    ],
+    [
+      { ...validMeta, image: `:not-a-coordinate-${SHA.slice(0, 7)}` },
+      'mismatched immutable',
+    ],
+    [
+      { ...validMeta, image: 'ghcr.io/example/dspace:latest' },
+      'mismatched immutable',
+    ],
+    [
+      { ...validMeta, image: 'ghcr.io/example/dspace:v3.1.0' },
+      'mismatched immutable',
+    ],
+    [
+      {
+        ...validMeta,
+        image: `ghcr.io/example/${'a'.repeat(250)}:main-${SHA.slice(0, 7)}`,
+      },
+      'mismatched immutable',
+    ],
+    [
+      {
+        ...validMeta,
+        image: `ghcr.io/example/dspace:\nmain-${SHA.slice(0, 7)}`,
+      },
       'mismatched immutable',
     ],
   ])('rejects invalid metadata with a controlled error', (meta, message) => {
