@@ -12,6 +12,7 @@ describe('health probes', () => {
         expect(body.status).toBe('ready');
         expect(typeof body.timestamp).toBe('string');
         expect(Array.isArray(body.features)).toBe(true);
+        expect(body).toHaveProperty('buildIdentity');
     });
 
     it('marks readiness route as dynamic', () => {
@@ -24,6 +25,7 @@ describe('health probes', () => {
         const body = await res.json();
         expect(body.status).toBe('alive');
         expect(typeof body.uptimeSeconds).toBe('number');
+        expect(body).toHaveProperty('buildIdentity');
     });
 
     it('marks liveness route as dynamic', () => {

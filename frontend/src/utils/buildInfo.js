@@ -11,6 +11,7 @@ const readViteGitSha = () => {
 };
 
 const normalizeSha = (value) => String(value || '').trim();
+const isFullSha = (value) => /^[0-9a-f]{40}$/i.test(normalizeSha(value));
 
 const readBuildMetaSha = () => normalizeSha(buildMeta?.gitSha);
 
@@ -56,6 +57,10 @@ const isBuildMetaUsable = () => {
 const resolveGitSha = () => {
     const normalized = normalizeSha(readViteGitSha());
     if (!isPlaceholderSha(normalized)) {
+        const metadataSha = readBuildMetaSha();
+        if (isFullSha(normalized) && isFullSha(metadataSha) && normalized !== metadataSha) {
+            return 'missing';
+        }
         return normalized;
     }
     if (isBuildMetaUsable()) {
@@ -77,6 +82,10 @@ export const getAppGitSha = () => resolveGitSha();
 export const getAppGitShaWithFallback = (fallbackSha) => {
     const appSha = normalizeSha(readViteGitSha());
     if (!isPlaceholderSha(appSha)) {
+        const metadataSha = readBuildMetaSha();
+        if (isFullSha(appSha) && isFullSha(metadataSha) && appSha !== metadataSha) {
+            return { sha: 'missing', source: 'mismatch' };
+        }
         return { sha: appSha, source: 'vite' };
     }
     if (isBuildMetaUsable()) {

@@ -1,5 +1,6 @@
 import { isBrowser } from './ssr.js';
-import { getAppGitSha } from './buildInfo.js';
+import buildMeta from '../generated/build_meta.json';
+import { normalizeBuildIdentity } from './buildIdentity.js';
 
 const isBrowserRuntime = isBrowser && (typeof process === 'undefined' || !process.versions?.node);
 const defaultLoader = () => import(/* @vite-ignore */ 'prom-client');
@@ -130,15 +131,14 @@ const getOrCreateMetric = (constructors, registerInstance, type, config) => {
     return new Ctor({ ...config, registers: [registerInstance] });
 };
 
-const loadBuildInfo = () => ({
-    version: process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown',
-    revision:
-        process.env.DSPACE_REVISION ||
-        process.env.GITHUB_SHA ||
-        process.env.SOURCE_VERSION ||
-        getAppGitSha() ||
-        'unknown',
-});
+const loadBuildInfo = () => {
+    try {
+        const identity = normalizeBuildIdentity(buildMeta);
+        return { version: identity.version, revision: identity.revision };
+    } catch {
+        return { version: 'unknown', revision: 'unknown' };
+    }
+};
 
 async function initMetrics(loader = defaultLoader) {
     if (isBrowserRuntime) {
@@ -207,13 +207,7 @@ async function initMetrics(loader = defaultLoader) {
             }),
         };
         const build = loadBuildInfo();
-        if (typeof metricHandles.buildInfo.remove === 'function') {
-            try {
-                metricHandles.buildInfo.remove();
-            } catch {
-                // Duplicate-import safety: older prom-client versions may not support remove().
-            }
-        }
+        metricHandles.buildInfo.reset();
         metricHandles.buildInfo.set(build, 1);
         metricHandles.instrumentationUp.set(1);
         metricsAvailable = true;

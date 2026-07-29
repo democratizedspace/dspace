@@ -140,6 +140,30 @@ curl -fsS https://democratized.space/livez | jq .
 Record the approved immutable tag, chart version, and workflow run links in the release notes or QA
 checklist for the release.
 
+## Runtime source verification contract
+
+Given the approved full 40-character revision and immutable branch-SHA image, Sugarkube automation
+may use this bounded, read-only contract (substitute the deployment URL and image coordinate):
+
+```bash
+EXPECTED_SHA=REPLACE_WITH_40_CHARACTER_SHA
+BASE_URL=https://staging.democratized.space
+IMAGE=ghcr.io/democratizedspace/dspace:main-REPLACE_SHORTSHA
+
+test "$(curl -fsS "$BASE_URL/build-info.json" | jq -r .revision)" = "$EXPECTED_SHA"
+curl -fsS "$BASE_URL/" |
+  grep -F "name=\"dspace-build-revision\" content=\"$EXPECTED_SHA\""
+test "$(docker image inspect "$IMAGE" \
+  --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$EXPECTED_SHA"
+```
+
+`/build-info.json` is uncached and returns the application version, full and seven-character
+revisions, artifact-fixed build timestamp, and (for published images) the immutable image
+coordinate. An unavailable or invalid identity returns HTTP 503. `/build-meta.json` remains the
+compatibility surface. Build identity is additive on `/healthz` and `/livez`; probe availability
+must not be interpreted as source-identity proof. This contract deliberately does not perform the
+remote chat smoke or implement a promotion gate.
+
 ## Rollback
 
 Rollback by redeploying the prior known-good immutable image tag from Sugarkube. Do not rebuild a
