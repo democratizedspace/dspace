@@ -4,6 +4,11 @@ const hasQuestsPerfBaseUrl = () => Boolean(process.env.QUESTS_PERF_BASE_URL?.tri
 
 export const REMOTE_PLAYWRIGHT_MODE_CONFIGS = Object.freeze([
     {
+        name: 'remoteChatSmoke',
+        isEnabled: () => isEnabled(process.env.REMOTE_CHAT_SMOKE),
+        useWebServerEnv: 'REMOTE_CHAT_SMOKE_USE_WEBSERVER',
+    },
+    {
         name: 'remoteSmoke',
         isEnabled: ({ includeQuestsPerfBaseUrlSignal = false } = {}) =>
             isEnabled(process.env.REMOTE_SMOKE) ||

@@ -1,5 +1,41 @@
 # DSPACE Sugarkube release runbook
 
+## Release-aware `/chat` smoke gate
+
+After deploying an approved immutable revision, run the dedicated DSPACE harness from a DSPACE
+checkout. It serves no mutations: it uses a new isolated browser context, clears browser state,
+mocks token.place/OpenAI transport inside Playwright, and never needs a real provider credential.
+It exits nonzero when release identity, provider routing/configuration, hydration, submission,
+provider error classification, or secret-safety drifts. Expectations must come from the approved
+release record, never from the deployment under test.
+
+```bash
+# Staging
+DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=<approved-full-40-character-staging-revision> \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+
+# Production (use the independently approved production manifest values)
+DSPACE_SMOKE_BASE_URL=https://democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=<approved-full-40-character-production-revision> \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
+
+CLI equivalents are `--base-url`, `--expected-version`, `--expected-revision`,
+`--expected-provider`, `--expected-token-place-origin`, and `--expected-token-place-model`; an
+explicit flag overrides its environment variable. For an approved OpenAI-default release, set
+`DSPACE_EXPECTED_PROVIDER=openai` and omit both token.place expectations. This harness supplies
+only the DSPACE-side evidence needed by a future promotion gate; it does not implement Sugarkube
+issue #2328.
+
 DSPACE is the mature Sugarkube baseline. Its staging and production path already works, so this
 runbook documents the known-good flow instead of replacing it. Use this page as the steady-state
 release source of truth for Sugarkube operators; keep lower-level Kubernetes, chart, and Cloudflare
