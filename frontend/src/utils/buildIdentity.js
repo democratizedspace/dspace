@@ -31,6 +31,12 @@ export function normalizeBuildIdentity(meta) {
     if (isPlaceholderRevision(revision) || !FULL_GIT_SHA.test(revision)) {
         throw new Error('revision must be exactly 40 hexadecimal characters');
     }
+    if (meta?.revision != null && meta?.gitSha != null) {
+        const gitSha = boundedString(meta.gitSha, 'gitSha', 40).toLowerCase();
+        if (!FULL_GIT_SHA.test(gitSha) || gitSha !== revision) {
+            throw new Error('gitSha does not agree with revision');
+        }
+    }
     const shortRevision = revision.slice(0, 7);
     if (meta?.shortRevision && String(meta.shortRevision).toLowerCase() !== shortRevision) {
         throw new Error('shortRevision does not agree with revision');

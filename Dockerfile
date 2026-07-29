@@ -56,8 +56,10 @@ ARG BUILD_TIMESTAMP
 ARG DSPACE_IMAGE
 # GIT_SHA should be provided via build args; git is not available in the image to compute it.
 RUN if [ "$ENFORCE_VITE_GIT_SHA" = "1" ]; then \
-        if ! printf '%s' "$VITE_GIT_SHA" | grep -Eq '^[0-9a-fA-F]{40}$'; then \
-            echo "Missing VITE_GIT_SHA build arg; refusing to build frontend assets." >&2; \
+        if ! printf '%s' "$GIT_SHA" | grep -Eq '^[0-9a-fA-F]{40}$' || \
+           ! printf '%s' "$VITE_GIT_SHA" | grep -Eq '^[0-9a-fA-F]{40}$' || \
+           [ "$(printf '%s' "$GIT_SHA" | tr 'A-F' 'a-f')" != "$(printf '%s' "$VITE_GIT_SHA" | tr 'A-F' 'a-f')" ]; then \
+            echo "GIT_SHA and VITE_GIT_SHA must be equal full 40-character hexadecimal SHAs." >&2; \
             exit 1; \
         fi; \
     fi

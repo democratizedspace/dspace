@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { normalizeBuildIdentity } from '../frontend/src/utils/buildIdentity.js';
+import { assertBuildMetaComplete } from '../scripts/write-build-meta.mjs';
 
 const SHA = '0123456789abcdef0123456789abcdef01234567';
 const valid = {
@@ -48,6 +49,25 @@ describe('canonical public build identity', () => {
         buildTimestamp: '2026-02-31T00:00:00Z',
       })
     ).toThrow('buildTimestamp must be an ISO UTC timestamp');
+  });
+
+  it('rejects disagreement between supplied full revisions', () => {
+    expect(() =>
+      normalizeBuildIdentity({ ...valid, gitSha: 'f'.repeat(40) })
+    ).toThrow('gitSha does not agree with revision');
+  });
+
+  it('isolates explicit dev-local metadata from canonical and production identities', () => {
+    const local = {
+      gitSha: 'dev-local',
+      source: 'local',
+      generatedAt: '2026-07-29T12:00:00Z',
+    };
+    expect(() => assertBuildMetaComplete(local)).not.toThrow();
+    expect(() => normalizeBuildIdentity(local)).toThrow();
+    expect(() => assertBuildMetaComplete(local, { production: true })).toThrow(
+      'gitSha is not set'
+    );
   });
 
   it('accepts only an agreeing immutable branch-SHA image coordinate', () => {

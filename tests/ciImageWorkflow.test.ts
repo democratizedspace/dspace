@@ -94,6 +94,9 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
         'GIT_SHA=${{ steps.tags.outputs.full_sha }}'
       );
       expect(step.with['build-args']).toContain(
+        'VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}'
+      );
+      expect(step.with['build-args']).toContain(
         'BUILD_TIMESTAMP=${{ steps.metadata.outputs.created }}'
       );
       expect(step.with['build-args']).toContain(
@@ -113,6 +116,8 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(step.run).toContain('org.opencontainers.image.revision');
     expect(step.run).toContain('/build-info.json');
     expect(step.run).toContain('dspace-build-revision');
+    expect(step.env.EXPECTED_SHA).toBe('${{ steps.tags.outputs.full_sha }}');
+    expect(step.run).toContain('test "$label_revision" = "$EXPECTED_SHA"');
   });
 
   it('uses the checked-out commit rather than the dispatch event SHA', () => {

@@ -1440,10 +1440,10 @@ describe('DSPACE application metrics', () => {
         const metrics = await importMetrics();
         const text = await metrics.register.metrics();
         const buildInfo = getMetricLines(text, 'dspace_build_info');
-        expect(buildInfo.length).toBeGreaterThanOrEqual(1);
-        expect(
-            buildInfo.every((line) => line.includes('version=') && line.includes('revision='))
-        ).toBe(true);
+        expect(buildInfo).toHaveLength(1);
+        expect(buildInfo[0]).toMatch(
+            /^dspace_build_info\{version="[^"]+",revision="[0-9a-f]{40}"\} 1$/
+        );
         expect(buildInfo.join('\n')).not.toMatch(/user|session|request|prompt|model|token/i);
         expect(text).toContain('dspace_instrumentation_up 1');
     });

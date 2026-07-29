@@ -25,7 +25,7 @@ const resolveBuildMetaPath = (root) => {
 };
 const repoRoot = resolveRepoRoot();
 const buildMetaPath = resolveBuildMetaPath(repoRoot);
-const allowedSources = new Set(['ci', 'env', 'git']);
+const allowedSources = new Set(['ci', 'env', 'git', 'local']);
 
 const normalizeSha = (value) => String(value || '').trim();
 
@@ -47,6 +47,9 @@ export const assertBuildMetaComplete = (
   if (!payload || typeof payload !== 'object') {
     throw new Error('build_meta.json payload is missing or invalid.');
   }
+  const localMode =
+    payload.gitSha === 'dev-local' && payload.source === 'local';
+  if (localMode && !production) return;
   if (isPlaceholderSha(payload.gitSha)) {
     throw new Error(
       `build_meta.json gitSha is not set: ${payload.gitSha || 'empty'}`
@@ -101,7 +104,7 @@ export const resolveBuildMeta = () => {
 
 export const writeBuildMeta = async ({
   gitSha,
-  source = 'build-meta',
+  source = 'local',
   generatedAt = process.env.BUILD_TIMESTAMP || new Date().toISOString(),
   image = process.env.DSPACE_IMAGE || undefined,
   production = process.env.DSPACE_PRODUCTION_BUILD === '1',
