@@ -139,6 +139,18 @@ describe('buildInfo', () => {
         expect(getPromptVersionSha()).toBe('abc123d');
     });
 
+    it('fails closed when full VITE and generated metadata SHAs disagree', async () => {
+        process.env.VITE_GIT_SHA = '0123456789abcdef0123456789abcdef01234567';
+        process.env.NODE_ENV = 'production';
+        const buildMeta = {
+            gitSha: 'fedcba9876543210fedcba9876543210fedcba98',
+            generatedAt: '2026-07-29T12:00:00Z',
+            source: 'ci',
+        };
+        const { getAppGitSha } = await loadBuildInfo(buildMeta);
+        expect(getAppGitSha()).toBe('missing');
+    });
+
     it('derives the prompt SHA from an existing prompt label', async () => {
         const { getPromptVersionSha } = await loadBuildInfo();
         expect(getPromptVersionSha('v3:feedface')).toBe('feedfac');

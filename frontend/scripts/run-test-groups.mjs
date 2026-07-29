@@ -39,6 +39,12 @@ const TEST_GROUPS = [
         parallel: false,
         workers: 1,
     },
+    {
+        name: 'Build Identity',
+        files: ['build-identity.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
     ...(includeRemoteSmoke
         ? [
               {
