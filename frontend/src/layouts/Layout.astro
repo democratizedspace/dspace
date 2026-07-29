@@ -2,6 +2,7 @@
 import { SEO } from 'astro-seo';
 import { OFFLINE_TOAST_PUBLIC_PATH } from '../utils/offlineToastPath';
 import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
+import { getCanonicalBuildIdentity } from '../utils/buildInfo.js';
 
 export interface Props {
 	title: string;
@@ -12,6 +13,7 @@ const { title } = Astro.props as Props;
 const sitewideTitle = `DSPACE (democratized.space)`;
 const offlineWorkerRegistrationUrl = '/scripts/offlineWorkerRegistration.js';
 const cheatsAvailable = getCheatsAvailabilityFlag();
+const buildIdentity = getCanonicalBuildIdentity();
 ---
 
 <!DOCTYPE html>
@@ -21,6 +23,7 @@ const cheatsAvailable = getCheatsAvailabilityFlag();
         data-cheats-available={cheatsAvailable ? 'true' : 'false'}
 >
         <head>
+                <meta name="dspace-build-revision" content={buildIdentity.revision} />
                 <SEO
                         title={sitewideTitle}
                         description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."

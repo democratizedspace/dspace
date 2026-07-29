@@ -89,10 +89,10 @@ export const onRequest = async (context: MiddlewareContext, next: () => Promise<
             break;
         case '/healthz':
         case '/health':
-            fallbackResponse = buildHealthResponse();
+            fallbackResponse = await buildHealthResponse();
             break;
         case '/livez':
-            fallbackResponse = buildLivezResponse();
+            fallbackResponse = await buildLivezResponse();
             break;
         default:
             fallbackResponse = response;

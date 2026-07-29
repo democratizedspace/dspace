@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { logServerError } from './serverLogger';
+import { normalizeBuildIdentity } from './buildIdentity.js';
 
 const RUNTIME_BUILD_META_PATH = '/app/build_meta.json';
 const REPO_BUILD_META_PATH = path.join(
@@ -11,7 +12,6 @@ const REPO_BUILD_META_PATH = path.join(
     'build_meta.json'
 );
 const FRONTEND_BUILD_META_PATH = path.join(process.cwd(), 'src', 'generated', 'build_meta.json');
-const ENV_SOURCES = ['GITHUB_SHA', 'VITE_GIT_SHA', 'GIT_SHA', 'DSPACE_GIT_SHA'];
 
 const normalizeSha = (value) => String(value || '').trim();
 
@@ -37,10 +37,15 @@ const readBuildMetaFile = async (filePath) => {
         if (isPlaceholderSha(gitSha)) {
             return null;
         }
-        const generatedAt = normalizeSha(parsed?.generatedAt) || new Date().toISOString();
+        const generatedAt = normalizeSha(parsed?.generatedAt);
         const source = normalizeSha(parsed?.source) || 'build-meta';
 
         return {
+            applicationVersion: normalizeSha(parsed?.applicationVersion),
+            revision: normalizeSha(parsed?.revision),
+            shortRevision: normalizeSha(parsed?.shortRevision),
+            builtAt: normalizeSha(parsed?.builtAt),
+            ...(normalizeSha(parsed?.image) ? { image: normalizeSha(parsed.image) } : {}),
             gitSha,
             generatedAt,
             source,
@@ -49,21 +54,6 @@ const readBuildMetaFile = async (filePath) => {
     } catch (error) {
         return null;
     }
-};
-
-const resolveBuildMetaFromEnv = () => {
-    for (const key of ENV_SOURCES) {
-        const gitSha = normalizeSha(process.env[key]);
-        if (!isPlaceholderSha(gitSha)) {
-            return {
-                gitSha,
-                generatedAt: new Date().toISOString(),
-                source: `env:${key}`,
-                resolvedFrom: 'env',
-            };
-        }
-    }
-    return null;
 };
 
 export const resolveRuntimeBuildMeta = async () => {
@@ -79,10 +69,6 @@ export const resolveRuntimeBuildMeta = async () => {
     if (frontendMeta) {
         return frontendMeta;
     }
-    const envMeta = resolveBuildMetaFromEnv();
-    if (envMeta) {
-        return envMeta;
-    }
     return {
         gitSha: 'missing',
         generatedAt: '',
@@ -90,6 +76,9 @@ export const resolveRuntimeBuildMeta = async () => {
         resolvedFrom: 'missing',
     };
 };
+
+export const resolveRuntimeBuildIdentity = async () =>
+    normalizeBuildIdentity(await resolveRuntimeBuildMeta());
 
 const toPublicMeta = (meta) => {
     if (!meta || typeof meta !== 'object') {
@@ -104,24 +93,35 @@ const buildHeaders = () => ({
     'Cache-Control': 'no-store',
 });
 
-export async function buildRuntimeBuildMetaResponse() {
+export async function buildRuntimeBuildMetaResponse({
+    compatibility = true,
+    resolver = resolveRuntimeBuildMeta,
+    route = compatibility ? '/build-meta.json' : '/build-info.json',
+} = {}) {
     try {
-        const meta = await resolveRuntimeBuildMeta();
-        if (isPlaceholderSha(meta.gitSha)) {
+        const meta = await resolver();
+        let identity;
+        try {
+            identity = normalizeBuildIdentity(meta);
+        } catch {
             const message = 'Runtime build metadata is missing or invalid';
             logServerError({
-                route: '/build-meta.json',
+                route,
                 method: 'GET',
                 error: message,
                 context: { meta },
             });
-            return new Response(JSON.stringify(toPublicMeta(meta)), {
+            const body = compatibility
+                ? toPublicMeta(meta)
+                : { error: 'build_identity_unavailable' };
+            return new Response(JSON.stringify(body), {
                 status: 503,
                 headers: buildHeaders(),
             });
         }
 
-        return new Response(JSON.stringify(toPublicMeta(meta)), {
+        const body = compatibility ? { ...toPublicMeta(meta), ...identity } : identity;
+        return new Response(JSON.stringify(body), {
             status: 200,
             headers: buildHeaders(),
         });
@@ -130,13 +130,16 @@ export async function buildRuntimeBuildMetaResponse() {
         const errorToLog =
             error instanceof Error ? new Error(`${message}: ${error.message}`) : new Error(message);
         logServerError({
-            route: '/build-meta.json',
+            route,
             method: 'GET',
             error: errorToLog,
             context: { error },
         });
 
-        return new Response(JSON.stringify({ gitSha: 'missing', source: 'missing' }), {
+        const body = compatibility
+            ? { gitSha: 'missing', source: 'missing' }
+            : { error: 'build_identity_unavailable' };
+        return new Response(JSON.stringify(body), {
             status: 503,
             headers: buildHeaders(),
         });

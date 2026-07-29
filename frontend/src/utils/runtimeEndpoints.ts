@@ -3,6 +3,8 @@ import { parseFeatureFlags, readBooleanOverride } from '@dspace/feature-flags';
 import { resolveTokenPlaceBaseUrl, getTokenPlaceChatModel } from './tokenPlace.js';
 import { logServerError } from './serverLogger';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import buildMeta from '../generated/build_meta.json';
+import { normalizeBuildIdentity } from './buildIdentity.js';
 
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     const envOverride = readBooleanOverride(process.env.DSPACE_OFFLINE_WORKER_ENABLED);
@@ -188,6 +190,12 @@ function buildHealthBody(status: 'ready' | 'alive') {
     const version = process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown';
     const environment = process.env.DSPACE_ENV || 'unknown';
 
+    let buildIdentity = null;
+    try {
+        buildIdentity = normalizeBuildIdentity(buildMeta);
+    } catch {
+        // Probe availability is intentionally independent of build-identity validity.
+    }
     return {
         status,
         uptimeSeconds: process.uptime(),
@@ -196,6 +204,7 @@ function buildHealthBody(status: 'ready' | 'alive') {
         version,
         env: environment,
         features: flags.tokens,
+        buildIdentity,
     };
 }
 

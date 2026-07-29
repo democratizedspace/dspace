@@ -1,5 +1,5 @@
 import { isBrowser } from './ssr.js';
-import { getAppGitSha } from './buildInfo.js';
+import { getCanonicalBuildIdentity } from './buildInfo.js';
 
 const isBrowserRuntime = isBrowser && (typeof process === 'undefined' || !process.versions?.node);
 const defaultLoader = () => import(/* @vite-ignore */ 'prom-client');
@@ -105,6 +105,8 @@ export const normalizeRoute = (urlOrPath) => {
             '/healthz',
             '/livez',
             '/config.json',
+            '/build-info.json',
+            '/build-meta.json',
             '/cache-version.js',
             '/service-worker.js',
         ].includes(pathname)
@@ -130,15 +132,10 @@ const getOrCreateMetric = (constructors, registerInstance, type, config) => {
     return new Ctor({ ...config, registers: [registerInstance] });
 };
 
-const loadBuildInfo = () => ({
-    version: process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown',
-    revision:
-        process.env.DSPACE_REVISION ||
-        process.env.GITHUB_SHA ||
-        process.env.SOURCE_VERSION ||
-        getAppGitSha() ||
-        'unknown',
-});
+const loadBuildInfo = () => {
+    const identity = getCanonicalBuildIdentity();
+    return { version: identity.applicationVersion, revision: identity.revision };
+};
 
 async function initMetrics(loader = defaultLoader) {
     if (isBrowserRuntime) {
@@ -207,13 +204,9 @@ async function initMetrics(loader = defaultLoader) {
             }),
         };
         const build = loadBuildInfo();
-        if (typeof metricHandles.buildInfo.remove === 'function') {
-            try {
-                metricHandles.buildInfo.remove();
-            } catch {
-                // Duplicate-import safety: older prom-client versions may not support remove().
-            }
-        }
+        // A reused global registry may contain a previous hot-reload series. Reset guarantees
+        // exactly one bounded series for the artifact currently serving requests.
+        if (typeof metricHandles.buildInfo.reset === 'function') metricHandles.buildInfo.reset();
         metricHandles.buildInfo.set(build, 1);
         metricHandles.instrumentationUp.set(1);
         metricsAvailable = true;

@@ -96,6 +96,12 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
       expect(step.with.labels).toContain(
         'org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}'
       );
+      expect(step.with['build-args']).toContain(
+        'BUILD_CREATED_AT=${{ steps.metadata.outputs.created }}'
+      );
+      expect(step.with['build-args']).toContain(
+        'DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}'
+      );
     }
   });
 
@@ -131,6 +137,16 @@ describe('ci-image.yml "local-build" job (PR path)', () => {
 
   it('does not run redundantly for release events', () => {
     expect(job.if).toBe("github.event_name != 'release'");
+  });
+
+  it('compares runtime and HTML revisions to the OCI revision label', () => {
+    const serialized = JSON.stringify(job);
+    expect(serialized).toContain('/build-info.json');
+    expect(serialized).toContain('dspace-build-revision');
+    expect(serialized).toContain('org.opencontainers.image.revision');
+    expect(serialized).toContain('RUNTIME_REVISION');
+    expect(serialized).toContain('HTML_REVISION');
+    expect(serialized).toContain('OCI_REVISION');
   });
 });
 

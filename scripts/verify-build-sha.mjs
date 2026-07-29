@@ -1,86 +1,88 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { assertBuildMetaComplete, readBuildMeta } from './write-build-meta.mjs';
 
-const args = process.argv.slice(2);
-const expectedSha = String(process.env.EXPECTED_SHA || process.env.GIT_SHA || '').trim();
-
-if (!expectedSha) {
-    console.error('Expected SHA is required. Set EXPECTED_SHA or GIT_SHA.');
-    process.exit(1);
+const expectedSha = String(process.env.EXPECTED_SHA || '')
+  .trim()
+  .toLowerCase();
+if (!/^[0-9a-f]{40}$/.test(expectedSha)) {
+  console.error(
+    'EXPECTED_SHA must be the exact expected 40-character hexadecimal revision.'
+  );
+  process.exit(1);
 }
-
-const shortSha = expectedSha.length > 7 ? expectedSha.slice(0, 7) : expectedSha;
-const targets = [expectedSha, shortSha, `v3:${shortSha}`].filter(Boolean);
-const forbidden = ['v3:missing', 'v3:dev-local', 'v3:unknown', 'v3:missing-sha'];
-const allowedExtensions = new Set(['.js', '.mjs', '.cjs', '.css', '.html']);
-
-const candidateDirs =
-    args.length > 0 ? args : ['/app/dist', '/workspace/frontend/dist', 'frontend/dist', 'dist'];
-const existingDirs = candidateDirs.filter((dir) => fs.existsSync(dir));
-
-if (existingDirs.length === 0) {
-    console.error(`No dist directories found. Checked: ${candidateDirs.join(', ')}`);
-    process.exit(1);
+const roots = (
+  process.argv.slice(2).length ? process.argv.slice(2) : ['frontend/dist']
+).filter((p) => fs.existsSync(p));
+if (!roots.length) {
+  console.error('No build output directory found.');
+  process.exit(1);
 }
-
-const stack = [...existingDirs];
-let foundTarget = false;
-const forbiddenHits = new Set();
-
-while (stack.length) {
+const extensions = new Set([
+  '.js',
+  '.mjs',
+  '.cjs',
+  '.css',
+  '.html',
+  '.json',
+  '.map',
+]);
+const files = [];
+for (const root of roots) {
+  const stack = [root];
+  while (stack.length) {
     const current = stack.pop();
-    if (!current) {
-        continue;
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const entryPath = path.join(current, entry.name);
+      if (entry.isDirectory()) stack.push(entryPath);
+      else if (entry.isFile() && extensions.has(path.extname(entryPath)))
+        files.push(entryPath);
     }
-    let entries = [];
-    try {
-        entries = fs.readdirSync(current, { withFileTypes: true });
-    } catch (error) {
-        continue;
-    }
-    for (const entry of entries) {
-        const fullPath = path.join(current, entry.name);
-        if (entry.isDirectory()) {
-            stack.push(fullPath);
-            continue;
-        }
-        if (!entry.isFile()) {
-            continue;
-        }
-        if (!allowedExtensions.has(path.extname(fullPath))) {
-            continue;
-        }
-        try {
-            const content = fs.readFileSync(fullPath, 'utf8');
-            if (!foundTarget && targets.some((target) => content.includes(target))) {
-                foundTarget = true;
-            }
-            for (const forbiddenValue of forbidden) {
-                if (content.includes(forbiddenValue)) {
-                    forbiddenHits.add(forbiddenValue);
-                }
-            }
-        } catch (error) {
-            continue;
-        }
-    }
+  }
 }
-
-if (!foundTarget) {
-    console.error(
-        `Expected build SHA not found in frontend bundle. Looked for: ${targets.join(', ')}`
-    );
+let meta;
+try {
+  meta = await readBuildMeta();
+  assertBuildMetaComplete(meta);
+} catch (error) {
+  console.error(`Canonical build metadata is invalid: ${error.message}`);
+  process.exit(1);
+}
+if (
+  String(meta.revision || meta.gitSha).toLowerCase() !== expectedSha ||
+  meta.shortRevision !== expectedSha.slice(0, 7)
+) {
+  console.error('Canonical build metadata does not agree with EXPECTED_SHA.');
+  process.exit(1);
+}
+let serverHit = false;
+let clientHit = false;
+const placeholders = ['unknown', 'missing-sha', 'dev-local'];
+for (const file of files) {
+  const content = fs.readFileSync(file, 'utf8');
+  if (
+    placeholders.some((marker) =>
+      content.includes(`\"revision\":\"${marker}\"`)
+    )
+  ) {
+    console.error(`Placeholder identity found in ${file}.`);
     process.exit(1);
+  }
+  if (!content.includes(expectedSha)) continue;
+  if (
+    file.includes(`${path.sep}_astro${path.sep}`) ||
+    file.includes(`${path.sep}client${path.sep}`)
+  )
+    clientHit = true;
+  else serverHit = true;
 }
-
-if (forbiddenHits.size > 0) {
-    console.error(
-        `Forbidden build SHA markers found in frontend bundle: ${Array.from(forbiddenHits).join(
-            ', '
-        )}`
-    );
-    process.exit(1);
+if (!serverHit || !clientHit) {
+  console.error(
+    `Expected full SHA must occur in server/SSR and client/static output (server=${serverHit}, client=${clientHit}).`
+  );
+  process.exit(1);
 }
-
-console.log(`Build SHA verified in frontend bundle. Matched: ${targets.join(', ')}`);
+console.log(
+  `Verified canonical full build revision in server and client outputs: ${expectedSha}`
+);

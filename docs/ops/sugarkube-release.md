@@ -137,6 +137,27 @@ curl -fsS https://democratized.space/healthz | jq .
 curl -fsS https://democratized.space/livez | jq .
 ```
 
+### Verify one approved build identity
+
+Use the immutable, full source revision from the reviewed release record. The runtime identity,
+shared-layout SSR marker, immutable image tag, and OCI revision must all agree before promotion:
+
+```bash
+EXPECTED_SHA='<40-character-approved-git-sha>'
+BASE_URL='https://staging.democratized.space'
+IMAGE="ghcr.io/democratizedspace/dspace:main-${EXPECTED_SHA:0:7}"
+
+test "$(curl -fsS "$BASE_URL/build-info.json" | jq -r .revision)" = "$EXPECTED_SHA"
+test "$(curl -fsS "$BASE_URL/" | sed -n 's/.*name="dspace-build-revision" content="\([0-9a-f]\{40\}\)".*/\1/p' | head -n1)" = "$EXPECTED_SHA"
+test "${IMAGE##*-}" = "${EXPECTED_SHA:0:7}"
+test "$(docker buildx imagetools inspect "$IMAGE" --format '{{json .Image}}' | jq -r '.config.Labels["org.opencontainers.image.revision"]')" = "$EXPECTED_SHA"
+```
+
+`GET /build-info.json` is uncached and returns the semantic application version, full and short
+revision, artifact-fixed build timestamp, and (for image builds) the immutable branch-SHA image
+coordinate. A `503` means identity cannot be proved; it does not redefine `/healthz` readiness or
+`/livez` liveness. Do not substitute a semantic or `*-latest` tag for the immutable image above.
+
 Record the approved immutable tag, chart version, and workflow run links in the release notes or QA
 checklist for the release.
 

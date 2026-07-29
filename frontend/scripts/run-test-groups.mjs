@@ -73,6 +73,7 @@ const TEST_GROUPS = [
         name: 'Structure Tests',
         files: [
             'page-structure.spec.ts',
+            'build-identity.spec.ts',
             'nav-route-smoke.spec.ts',
             'error-pages.spec.ts',
             'svelte-component-hydration.spec.ts',
