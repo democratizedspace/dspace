@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { logServerError } from './serverLogger';
+import { normalizeBuildIdentity } from './buildIdentity.js';
 
 const RUNTIME_BUILD_META_PATH = '/app/build_meta.json';
 const REPO_BUILD_META_PATH = path.join(
@@ -37,12 +38,17 @@ const readBuildMetaFile = async (filePath) => {
         if (isPlaceholderSha(gitSha)) {
             return null;
         }
-        const generatedAt = normalizeSha(parsed?.generatedAt) || new Date().toISOString();
+        const generatedAt = normalizeSha(parsed?.generatedAt);
         const source = normalizeSha(parsed?.source) || 'build-meta';
 
         return {
+            version: normalizeSha(parsed?.version),
             gitSha,
+            revision: normalizeSha(parsed?.revision) || gitSha,
+            shortRevision: normalizeSha(parsed?.shortRevision),
             generatedAt,
+            builtAt: normalizeSha(parsed?.builtAt) || generatedAt,
+            ...(normalizeSha(parsed?.image) ? { image: normalizeSha(parsed.image) } : {}),
             source,
             resolvedFrom: filePath,
         };
@@ -91,6 +97,9 @@ export const resolveRuntimeBuildMeta = async () => {
     };
 };
 
+export const resolveRuntimeBuildIdentity = async () =>
+    normalizeBuildIdentity(await resolveRuntimeBuildMeta());
+
 const toPublicMeta = (meta) => {
     if (!meta || typeof meta !== 'object') {
         return meta;
@@ -104,24 +113,34 @@ const buildHeaders = () => ({
     'Cache-Control': 'no-store',
 });
 
-export async function buildRuntimeBuildMetaResponse() {
+export async function buildRuntimeBuildMetaResponse(
+    route = '/build-meta.json',
+    resolver = resolveRuntimeBuildMeta
+) {
     try {
-        const meta = await resolveRuntimeBuildMeta();
-        if (isPlaceholderSha(meta.gitSha)) {
+        const meta = await resolver();
+        let identity;
+        try {
+            identity = normalizeBuildIdentity(meta);
+        } catch {
             const message = 'Runtime build metadata is missing or invalid';
             logServerError({
-                route: '/build-meta.json',
+                route,
                 method: 'GET',
                 error: message,
                 context: { meta },
             });
-            return new Response(JSON.stringify(toPublicMeta(meta)), {
+            const failureBody =
+                route === '/build-meta.json'
+                    ? { gitSha: 'missing', source: 'missing' }
+                    : { error: 'build_identity_unavailable' };
+            return new Response(JSON.stringify(failureBody), {
                 status: 503,
                 headers: buildHeaders(),
             });
         }
 
-        return new Response(JSON.stringify(toPublicMeta(meta)), {
+        return new Response(JSON.stringify({ ...toPublicMeta(meta), ...identity }), {
             status: 200,
             headers: buildHeaders(),
         });
@@ -130,7 +149,7 @@ export async function buildRuntimeBuildMetaResponse() {
         const errorToLog =
             error instanceof Error ? new Error(`${message}: ${error.message}`) : new Error(message);
         logServerError({
-            route: '/build-meta.json',
+            route,
             method: 'GET',
             error: errorToLog,
             context: { error },
@@ -142,3 +161,6 @@ export async function buildRuntimeBuildMetaResponse() {
         });
     }
 }
+
+export const buildRuntimeBuildInfoResponse = () =>
+    buildRuntimeBuildMetaResponse('/build-info.json');

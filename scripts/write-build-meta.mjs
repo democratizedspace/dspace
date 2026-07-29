@@ -2,6 +2,8 @@ import { execSync } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import packageJson from '../package.json' with { type: 'json' };
+import { normalizeBuildIdentity } from '../frontend/src/utils/buildIdentity.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,7 +22,7 @@ const resolveBuildMetaPath = (root) => {
 };
 const repoRoot = resolveRepoRoot();
 const buildMetaPath = resolveBuildMetaPath(repoRoot);
-const allowedSources = new Set(['ci', 'env', 'git']);
+const allowedSources = new Set(['ci', 'env', 'git', 'local']);
 
 const normalizeSha = (value) => String(value || '').trim();
 
@@ -39,12 +41,16 @@ export const assertBuildMetaComplete = (payload) => {
     if (!payload || typeof payload !== 'object') {
         throw new Error('build_meta.json payload is missing or invalid.');
     }
-    if (isPlaceholderSha(payload.gitSha)) {
+    if (
+        isPlaceholderSha(payload.gitSha) &&
+        !(payload.source === 'local' && payload.gitSha === 'dev-local')
+    ) {
         throw new Error(`build_meta.json gitSha is not set: ${payload.gitSha || 'empty'}`);
     }
     if (!normalizeSha(payload.generatedAt)) {
         throw new Error('build_meta.json generatedAt is missing.');
     }
+    normalizeBuildIdentity(payload, { allowLocal: payload.source === 'local' });
     const source = String(payload.source || '').trim().toLowerCase();
     if (!source || source === 'static' || !allowedSources.has(source)) {
         throw new Error(`build_meta.json source is invalid: ${payload.source || 'empty'}`);
@@ -76,16 +82,30 @@ export const resolveBuildMeta = () => {
         }
         return { gitSha, source: 'git' };
     } catch (error) {
+        if (process.env.DSPACE_LOCAL_BUILD === '1') {
+            return { gitSha: 'dev-local', source: 'local' };
+        }
         throw new Error(
             'Unable to resolve git SHA from environment or git. Provide GITHUB_SHA, VITE_GIT_SHA, GIT_SHA, or DSPACE_GIT_SHA.'
         );
     }
 };
 
-export const writeBuildMeta = async ({ gitSha, source = 'build-meta' }) => {
+export const writeBuildMeta = async ({
+    gitSha,
+    source = 'build-meta',
+    generatedAt = process.env.BUILD_CREATED || new Date().toISOString(),
+    image = process.env.IMAGE_COORDINATE || '',
+    version = process.env.DSPACE_APP_VERSION || packageJson.version,
+}) => {
     const payload = {
+        version,
         gitSha: normalizeSha(gitSha),
-        generatedAt: new Date().toISOString(),
+        revision: normalizeSha(gitSha).toLowerCase(),
+        shortRevision: normalizeSha(gitSha).slice(0, 7).toLowerCase(),
+        generatedAt,
+        builtAt: generatedAt,
+        ...(image ? { image } : {}),
         source,
     };
     assertBuildMetaComplete(payload);

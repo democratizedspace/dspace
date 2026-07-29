@@ -52,14 +52,20 @@ ARG DSPACE_VERSION
 ARG GIT_SHA=unknown
 ARG VITE_GIT_SHA=${GIT_SHA}
 ARG ENFORCE_VITE_GIT_SHA=0
+ARG BUILD_CREATED
+ARG IMAGE_COORDINATE
+ARG DSPACE_APP_VERSION
 # GIT_SHA should be provided via build args; git is not available in the image to compute it.
 RUN if [ "$ENFORCE_VITE_GIT_SHA" = "1" ]; then \
-        if [ -z "$VITE_GIT_SHA" ] || [ "$VITE_GIT_SHA" = "unknown" ] || [ "$VITE_GIT_SHA" = "dev-local" ]; then \
+        if ! printf '%s' "$VITE_GIT_SHA" | grep -Eq '^[0-9a-fA-F]{40}$'; then \
             echo "Missing VITE_GIT_SHA build arg; refusing to build frontend assets." >&2; \
             exit 1; \
         fi; \
     fi
 ENV VITE_GIT_SHA="${VITE_GIT_SHA}"
+ENV BUILD_CREATED="${BUILD_CREATED}"
+ENV IMAGE_COORDINATE="${IMAGE_COORDINATE}"
+ENV DSPACE_APP_VERSION="${DSPACE_APP_VERSION}"
 # Copy source separately to avoid overlaying host node_modules (pnpm symlinks make this fail when
 # node_modules exists on the host). Build artifacts are excluded via .dockerignore for compatibility
 # with builders that do not support COPY --exclude flags.

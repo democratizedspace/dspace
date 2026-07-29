@@ -5,6 +5,27 @@ runbook documents the known-good flow instead of replacing it. Use this page as 
 release source of truth for Sugarkube operators; keep lower-level Kubernetes, chart, and Cloudflare
 setup in their existing runbooks.
 
+## Runtime source-identity verification contract
+
+Given the approved 40-character commit in `EXPECTED_SHA` and the running image in `IMAGE`, compare
+the same bounded identity across the runtime JSON, shared-layout SSR HTML, and OCI metadata:
+
+```bash
+BASE_URL=https://staging.democratized.space
+EXPECTED_SHA=REPLACE_WITH_40_CHARACTER_SHA
+IMAGE=ghcr.io/democratizedspace/dspace:main-${EXPECTED_SHA%${EXPECTED_SHA#???????}}
+
+test "$(curl -fsS "$BASE_URL/build-info.json" | jq -r .revision)" = "$EXPECTED_SHA"
+test "$(curl -fsS "$BASE_URL/" | sed -n 's/.*<meta name="dspace-build-revision" content="\([0-9a-f]*\)".*/\1/p' | head -1)" = "$EXPECTED_SHA"
+test "$(docker image inspect "$IMAGE" --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$EXPECTED_SHA"
+```
+
+`/build-info.json` is uncached and also reports the application version, seven-character short
+revision, artifact-fixed build timestamp, and immutable branch-SHA image coordinate. A non-200
+response is a failed identity check, not a failed readiness/liveness check. Promotion automation
+must use the full revision and an immutable `<branch>-<seven-character-SHA>` image tag; semantic or
+`latest` tags are not acceptable source evidence.
+
 ## Release contract
 
 - **Application image:** `ghcr.io/democratizedspace/dspace`

@@ -3,6 +3,7 @@ import { parseFeatureFlags, readBooleanOverride } from '@dspace/feature-flags';
 import { resolveTokenPlaceBaseUrl, getTokenPlaceChatModel } from './tokenPlace.js';
 import { logServerError } from './serverLogger';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { getBuildIdentity } from './buildInfo.js';
 
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     const envOverride = readBooleanOverride(process.env.DSPACE_OFFLINE_WORKER_ENABLED);
@@ -188,6 +189,12 @@ function buildHealthBody(status: 'ready' | 'alive') {
     const version = process.env.DSPACE_VERSION || process.env.npm_package_version || 'unknown';
     const environment = process.env.DSPACE_ENV || 'unknown';
 
+    let build;
+    try {
+        build = getBuildIdentity();
+    } catch {
+        build = undefined;
+    }
     return {
         status,
         uptimeSeconds: process.uptime(),
@@ -196,6 +203,7 @@ function buildHealthBody(status: 'ready' | 'alive') {
         version,
         env: environment,
         features: flags.tokens,
+        ...(build ? { build } : {}),
     };
 }
 

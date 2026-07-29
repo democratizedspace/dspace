@@ -1,4 +1,5 @@
 import buildMeta from '../generated/build_meta.json';
+import { normalizeBuildIdentity } from './buildIdentity.js';
 
 const readViteGitSha = () => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GIT_SHA) {
@@ -73,6 +74,8 @@ const shortenSha = (value) => {
 };
 
 export const getAppGitSha = () => resolveGitSha();
+
+export const getBuildIdentity = () => normalizeBuildIdentity(buildMeta, { allowLocal: true });
 
 export const getAppGitShaWithFallback = (fallbackSha) => {
     const appSha = normalizeSha(readViteGitSha());
