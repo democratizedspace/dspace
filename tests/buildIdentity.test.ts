@@ -16,6 +16,13 @@ describe('canonical public build identity', () => {
     ).toEqual(valid);
   });
 
+  it('accepts semantic versions with both prerelease and build metadata', () => {
+    expect(
+      normalizeBuildIdentity({ ...valid, version: '3.2.0-rc.1+build.7' })
+        .version
+    ).toBe('3.2.0-rc.1+build.7');
+  });
+
   it.each([
     '',
     'unknown',
@@ -35,6 +42,12 @@ describe('canonical public build identity', () => {
     expect(() =>
       normalizeBuildIdentity({ ...valid, buildTimestamp: '' })
     ).toThrow();
+    expect(() =>
+      normalizeBuildIdentity({
+        ...valid,
+        buildTimestamp: '2026-02-31T00:00:00Z',
+      })
+    ).toThrow('buildTimestamp must be an ISO UTC timestamp');
   });
 
   it('accepts only an agreeing immutable branch-SHA image coordinate', () => {

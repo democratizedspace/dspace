@@ -148,6 +148,10 @@ This section is the citeable route catalog and anchors the canonical routes unde
 - /dchat - dChat interface (AI assistant)
 - /debug - Debug tools
 
+### Runtime metadata and probes
+
+- /build-info.json - Canonical, uncached runtime build identity for artifact verification
+
 ## Dynamic routes
 
 ### Documentation

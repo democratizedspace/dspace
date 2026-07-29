@@ -13,13 +13,16 @@ const metaPath =
   process.env.VERIFY_BUILD_META_PATH ||
   path.resolve('frontend/src/generated/build_meta.json');
 const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-if (!/^[0-9a-f]{40}$/i.test(String(meta.gitSha || ''))) {
+const gitSha = String(meta?.gitSha ?? '')
+  .trim()
+  .toLowerCase();
+const revision = String(meta?.revision ?? '')
+  .trim()
+  .toLowerCase();
+if (!/^[0-9a-f]{40}$/.test(gitSha) || !/^[0-9a-f]{40}$/.test(revision)) {
   throw new Error('Canonical build metadata has an invalid full revision.');
 }
-if (
-  meta.gitSha.toLowerCase() !== expected ||
-  meta.revision.toLowerCase() !== expected
-) {
+if (gitSha !== expected || revision !== expected) {
   throw new Error('Canonical build metadata does not match EXPECTED_SHA.');
 }
 

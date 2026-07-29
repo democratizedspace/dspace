@@ -24,7 +24,7 @@ export const isPlaceholderRevision = (value) =>
 
 export function normalizeBuildIdentity(meta) {
     const version = boundedString(meta?.version, 'version', 64);
-    if (!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(version)) {
+    if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(version)) {
         throw new Error('version is not semantic');
     }
     const revision = boundedString(meta?.revision ?? meta?.gitSha, 'revision', 40).toLowerCase();
@@ -40,9 +40,14 @@ export function normalizeBuildIdentity(meta) {
         'buildTimestamp',
         40
     );
+    const parsedTimestamp = Date.parse(buildTimestamp);
+    const canonicalTimestamp = Number.isNaN(parsedTimestamp)
+        ? ''
+        : new Date(parsedTimestamp).toISOString();
     if (
         !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(buildTimestamp) ||
-        Number.isNaN(Date.parse(buildTimestamp))
+        (buildTimestamp !== canonicalTimestamp &&
+            buildTimestamp.replace(/Z$/, '.000Z') !== canonicalTimestamp)
     ) {
         throw new Error('buildTimestamp must be an ISO UTC timestamp');
     }
