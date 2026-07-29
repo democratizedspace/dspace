@@ -137,6 +137,40 @@ tag.
    curl -fsS https://staging.democratized.space/livez | jq .
    ```
 
+### Release-aware Chat smoke
+
+From the DSPACE checkout used for release verification, run the dedicated Chat harness with values
+from the approved release record (never values discovered from the target):
+
+```bash
+DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_FULL_40_CHARACTER_SHA \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
+
+Repeat against production after promotion:
+
+```bash
+DSPACE_SMOKE_BASE_URL=https://democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_FULL_40_CHARACTER_SHA \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
+
+This is a non-destructive verification command, not a Sugarkube promotion gate. It uses a fresh,
+isolated browser context; clears client-side state; blocks live token.place and OpenAI traffic; and
+fulfills provider transport inside Playwright. It checks the approved version and full revision,
+HTML build marker, default provider, token.place origin and encrypted-request model, successful
+submission, classified provider unavailability, and OpenAI's discoverable key gate. Any identity,
+routing, hydration, submission, provider-classification, or secret-safety drift returns nonzero.
+
 ## Promote production
 
 Promote only after staging has been validated and the image/chart pair is approved.

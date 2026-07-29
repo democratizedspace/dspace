@@ -90,6 +90,17 @@ jobs:
           npm run build
           npm test
           node scripts/link-check.mjs
+      - name: Run deterministic release-aware Chat smoke
+        env:
+          DSPACE_SMOKE_BASE_URL: http://127.0.0.1:4173
+          DSPACE_EXPECTED_PROVIDER: token-place
+          DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: https://token.place
+          DSPACE_EXPECTED_TOKEN_PLACE_MODEL: llama-3.1-8b-instruct
+        run: |
+          export DSPACE_EXPECTED_VERSION="$(node -p "require('./package.json').version")"
+          export DSPACE_EXPECTED_REVISION="$GITHUB_SHA"
+          GITHUB_SHA="$GITHUB_SHA" npm run build
+          npm run qa:remote-chat-smoke
 
   frontend-indexeddb-regression-e2e:
     runs-on: ubuntu-latest
