@@ -19,6 +19,7 @@ describe('runtime build identity endpoints', () => {
       revision: SHA,
       shortRevision: SHA.slice(0, 7),
       buildTimestamp: '2026-07-29T12:00:00Z',
+      image: `ghcr.io/democratizedspace/dspace:main-${SHA.slice(0, 7)}`,
       gitSha: SHA,
       generatedAt: '2026-07-29T12:00:00Z',
       source: 'ci',
@@ -35,8 +36,22 @@ describe('runtime build identity endpoints', () => {
       revision: SHA,
       shortRevision: SHA.slice(0, 7),
       buildTimestamp: '2026-07-29T12:00:00Z',
+      image: `ghcr.io/democratizedspace/dspace:main-${SHA.slice(0, 7)}`,
     });
   });
+
+  it.each([false, 0])(
+    'fails closed with a bounded error for supplied falsey image %j',
+    async (image) => {
+      filePayload.image = image;
+      const { GET } = await import('../frontend/src/pages/build-info.json.ts');
+      const response = await GET();
+      expect(response.status).toBe(503);
+      expect(await response.json()).toEqual({
+        error: 'build_identity_unavailable',
+      });
+    }
+  );
 
   it('fails closed with a bounded error for invalid production identity', async () => {
     filePayload.revision = filePayload.gitSha = 'missing';

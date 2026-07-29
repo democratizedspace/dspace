@@ -44,7 +44,7 @@ const readBuildMetaFile = async (filePath) => {
             revision: parsed?.revision,
             shortRevision: parsed?.shortRevision,
             buildTimestamp: parsed?.buildTimestamp,
-            ...(parsed?.image ? { image: parsed.image } : {}),
+            ...(parsed?.image !== undefined ? { image: parsed.image } : {}),
             gitSha,
             generatedAt,
             source,
