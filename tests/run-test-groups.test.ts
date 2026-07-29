@@ -131,6 +131,7 @@ describe('run-test-groups', () => {
       'remote-release-smoke.spec.ts',
       'remote-legacy-migration.spec.ts',
       'remote-completionist-award-iii.spec.ts',
+      'remote-chat-smoke.spec.ts',
     ]);
     const missingFiles = specFiles.filter(
       (file) => !groupedFiles.has(file) && !optionalRemoteSpecs.has(file)

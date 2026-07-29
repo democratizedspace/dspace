@@ -1,4 +1,4 @@
-import { constants, publicEncrypt, webcrypto } from 'node:crypto';
+import { constants, privateDecrypt, publicEncrypt, webcrypto } from 'node:crypto';
 
 import { expect, test, type Page } from '@playwright/test';
 
@@ -9,14 +9,24 @@ const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
+const requestedOrigin = new URL(process.env.BASE_URL!).origin;
+const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
 const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 const bytesToBase64 = (value: ArrayBuffer | Uint8Array) =>
     Buffer.from(value instanceof Uint8Array ? value : new Uint8Array(value)).toString('base64');
 const base64ToPem = (value: string) =>
     `-----BEGIN PUBLIC KEY-----\n${value.match(/.{1,64}/g)?.join('\n') || ''}\n-----END PUBLIC KEY-----`;
 
-async function relayPublicKey() {
+type RelayEvidence = {
+    paths: string[];
+    originsMatch: boolean;
+    credentialsPresent: boolean;
+    dispatchModelMatches: boolean;
+};
+
+async function relayKeypair() {
     const pair = await webcrypto.subtle.generateKey(
         {
             name: 'RSA-OAEP',
@@ -28,8 +38,32 @@ async function relayPublicKey() {
         ['encrypt', 'decrypt']
     );
     const spki = await webcrypto.subtle.exportKey('spki', pair.publicKey);
-    const pem = base64ToPem(bytesToBase64(spki));
-    return bytesToBase64(encoder.encode(pem));
+    const pkcs8 = await webcrypto.subtle.exportKey('pkcs8', pair.privateKey);
+    return {
+        publicKey: bytesToBase64(encoder.encode(base64ToPem(bytesToBase64(spki)))),
+        privateKey: `-----BEGIN PRIVATE KEY-----\n${bytesToBase64(pkcs8)
+            .match(/.{1,64}/g)
+            ?.join('\n')}\n-----END PRIVATE KEY-----`,
+    };
+}
+
+async function decryptDispatch(body: Record<string, string>, privateKey: string) {
+    const rawKey = privateDecrypt(
+        { key: privateKey, padding: constants.RSA_PKCS1_PADDING },
+        Buffer.from(body.cipherkey, 'base64')
+    );
+    // JSEncrypt wraps the base64 representation of the AES key.
+    const aesBytes = Buffer.from(decoder.decode(rawKey), 'base64');
+    const aesKey = await webcrypto.subtle.importKey('raw', aesBytes, { name: 'AES-CBC' }, false, [
+        'decrypt',
+    ]);
+    const plaintext = await webcrypto.subtle.decrypt(
+        { name: 'AES-CBC', iv: Buffer.from(body.iv, 'base64') },
+        aesKey,
+        Buffer.from(body.ciphertext, 'base64')
+    );
+    const envelope = JSON.parse(decoder.decode(plaintext));
+    return envelope?.api_v1_request?.model === expectedModel;
 }
 
 async function encryptedResponse(body: Record<string, string>) {
@@ -69,75 +103,121 @@ async function encryptedResponse(body: Record<string, string>) {
     };
 }
 
-async function blockUnexpectedProviders(page: Page, allowedOrigin?: string) {
-    const providerOrigins = ['https://api.openai.com', allowedOrigin].filter(Boolean) as string[];
-    for (const origin of providerOrigins) {
-        await page.route(`${origin}/**`, async (route) => {
-            await route.abort('blockedbyclient');
-            throw new Error('secret-safety: blocked unexpected live chat-provider traffic');
-        });
-    }
-    await page.route(/https?:\/\/[^/]+\/(?:api\/v1\/relay|v1\/responses).*/, async (route) => {
+async function installProviderDenyRules(page: Page) {
+    const abortDrift = async (route: Parameters<Parameters<Page['route']>[1]>[0]) => {
         await route.abort('blockedbyclient');
-        throw new Error('secret-safety: blocked unexpected live chat-provider traffic');
-    });
+        throw new Error('routing/configuration: blocked unmatched provider transport');
+    };
+    // These are registered before exact mocks because Playwright gives the newest route priority.
+    await page.route('https://api.openai.com/**', abortDrift);
+    if (expectedOrigin) await page.route(`${expectedOrigin}/**`, abortDrift);
+    await page.route(/https?:\/\/[^/]+\/api\/v1\/(?:relay|chat\/completions).*/, abortDrift);
+    await page.route(`${requestedOrigin}/api/chat`, abortDrift);
 }
 
 async function installSuccessfulRelay(page: Page) {
-    const key = await relayPublicKey();
-    const calls: Array<{ url: string; headers: Record<string, string>; body: string }> = [];
-    // Register the deny rule first: Playwright evaluates newer routes first, so only the
-    // explicit mocks below can supersede it. Every other path on the provider origin is blocked.
-    await blockUnexpectedProviders(page, expectedOrigin);
-    await page.route(`${expectedOrigin}/api/v1/relay/servers/next**`, async (route) => {
-        calls.push({ url: route.request().url(), headers: route.request().headers(), body: '' });
-        const requestUrl = new URL(route.request().url());
-        expect(requestUrl.origin, 'routing/configuration: token.place origin drift').toBe(
-            expectedOrigin
+    const key = await relayKeypair();
+    const evidence: RelayEvidence = {
+        paths: [],
+        originsMatch: true,
+        credentialsPresent: false,
+        dispatchModelMatches: false,
+    };
+    await installProviderDenyRules(page);
+
+    const handle = async (
+        route: Parameters<Parameters<Page['route']>[1]>[0],
+        operation: string,
+        payload: Record<string, string>
+    ) => {
+        const request = route.request();
+        evidence.paths.push(operation);
+        evidence.originsMatch &&=
+            new URL(request.url()).origin ===
+            (request.url().includes('/api/chat') ? requestedOrigin : expectedOrigin);
+        const headerNames = Object.keys(request.headers()).map((name) => name.toLowerCase());
+        evidence.credentialsPresent ||= headerNames.some(
+            (name) => name === 'authorization' || name.includes('api-key')
         );
-        expect(
-            requestUrl.searchParams.get('model'),
-            'routing/configuration: token.place model drift'
-        ).toBe(expectedModel);
-        const tier = requestUrl.searchParams.get('context_tier');
-        await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-                server_public_key: key,
-                context_tier: tier,
-                selected_profile_id: `smoke-${tier}`,
-                selected_model_support: [expectedModel],
-            }),
+        if (operation === 'select') {
+            const model = payload.model || new URL(request.url()).searchParams.get('model');
+            if (model !== expectedModel)
+                throw new Error('routing/configuration: token.place model drift');
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    server_public_key: key.publicKey,
+                    context_tier:
+                        payload.contextTier ||
+                        new URL(request.url()).searchParams.get('context_tier'),
+                    selected_profile_id: 'dspace-smoke',
+                    selected_model_support: [expectedModel],
+                }),
+            });
+        } else if (operation === 'dispatch') {
+            evidence.dispatchModelMatches = await decryptDispatch(payload, key.privateKey);
+            await route.fulfill({
+                status: 200,
+                headers: {
+                    'content-type': 'application/json',
+                    'x-dspace-correlation-token': 'bounded-smoke-correlation',
+                },
+                body: '{"accepted":true}',
+            });
+        } else if (operation === 'retrieve') {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(await encryptedResponse(payload)),
+            });
+        } else if (operation === 'complete') {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: '{"ok":true}',
+            });
+        } else {
+            await route.abort('blockedbyclient');
+            throw new Error('routing/configuration: unexpected token.place proxy operation');
+        }
+    };
+
+    await page.route(`${expectedOrigin}/api/v1/relay/servers/next**`, (route) => {
+        const url = new URL(route.request().url());
+        return handle(route, 'select', {
+            model: url.searchParams.get('model') || '',
+            contextTier: url.searchParams.get('context_tier') || '',
         });
     });
-    await page.route(`${expectedOrigin}/api/v1/relay/requests`, async (route) => {
-        calls.push({
-            url: route.request().url(),
-            headers: route.request().headers(),
-            body: route.request().postData() || '',
-        });
-        await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: '{"accepted":true}',
-        });
-    });
-    await page.route(`${expectedOrigin}/api/v1/relay/responses/retrieve`, async (route) => {
+    await page.route(`${expectedOrigin}/api/v1/relay/requests`, (route) =>
+        handle(route, 'dispatch', JSON.parse(route.request().postData() || '{}'))
+    );
+    await page.route(`${expectedOrigin}/api/v1/relay/responses/retrieve`, (route) =>
+        handle(route, 'retrieve', JSON.parse(route.request().postData() || '{}'))
+    );
+    await page.route(`${requestedOrigin}/api/chat`, async (route) => {
         const body = JSON.parse(route.request().postData() || '{}');
-        calls.push({ url: route.request().url(), headers: route.request().headers(), body: '' });
-        await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify(await encryptedResponse(body)),
-        });
+        if (
+            body.provider !== 'tokenplace' ||
+            !['select', 'dispatch', 'retrieve', 'complete'].includes(body.operation)
+        ) {
+            await route.abort('blockedbyclient');
+            throw new Error('routing/configuration: unexpected chat proxy request');
+        }
+        await handle(route, body.operation, body.payload || {});
     });
-    return calls;
+    return evidence;
 }
 
 async function openExpectedPanel(page: Page) {
-    await page.goto('/chat');
+    const navigation = await page.goto('/chat');
+    expect(
+        new URL(navigation?.url() || page.url()).origin,
+        'routing/configuration: /chat origin drift'
+    ).toBe(requestedOrigin);
     await waitForHydration(page);
+    if (fault === 'hydration') throw new Error('hydration: injected bounded CI fault');
     const panels = page.locator('[data-testid="chat-panel"]');
     await expect(panels, 'hydration: exactly one chat panel must be active').toHaveCount(1);
     await expect(panels, 'routing/configuration: default provider drift').toHaveAttribute(
@@ -148,20 +228,29 @@ async function openExpectedPanel(page: Page) {
         'data-hydrated',
         'true'
     );
-    await expect(panels.getByRole('textbox'), 'hydration: textbox is unusable').toBeEnabled();
-    await expect(
-        panels.getByRole('button', { name: 'Send' }),
-        'hydration: Send is unusable'
-    ).toBeEnabled();
     return panels;
 }
 
+async function selectOpenAI(page: Page, key?: string) {
+    await page.goto('/settings');
+    await waitForHydration(page);
+    const option = page.locator('input[name="chat-provider"][value="openai"]');
+    if (!(await option.isChecked())) await option.check();
+    if (key) {
+        await page.getByLabel('OpenAI API key', { exact: true }).fill(key);
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+    }
+}
+
 test.describe('release-aware remote chat smoke', () => {
-    test.skip(
-        process.env.REMOTE_CHAT_SMOKE !== '1',
-        'Run through npm run qa:remote-chat-smoke with explicit release expectations.'
-    );
-    test.use({ serviceWorkers: 'block', storageState: { cookies: [], origins: [] } });
+    test.skip(process.env.REMOTE_CHAT_SMOKE !== '1', 'Requires explicit release expectations.');
+    test.use({
+        serviceWorkers: 'block',
+        storageState: { cookies: [], origins: [] },
+        trace: 'off',
+        video: 'off',
+        screenshot: 'off',
+    });
     test.beforeEach(async ({ context, page }) => {
         await context.clearCookies();
         await clearUserData(page);
@@ -169,6 +258,10 @@ test.describe('release-aware remote chat smoke', () => {
 
     test('identity: approved build identity matches JSON and HTML', async ({ page, request }) => {
         const response = await request.get('/build-info.json');
+        expect(
+            new URL(response.url()).origin,
+            'routing/configuration: /build-info.json origin drift'
+        ).toBe(requestedOrigin);
         expect(response.status(), 'identity: /build-info.json did not return 200').toBe(200);
         const identity = await response.json();
         expect(identity.version, 'identity: application-version drift').toBe(expectedVersion);
@@ -176,7 +269,11 @@ test.describe('release-aware remote chat smoke', () => {
         expect(identity.shortRevision, 'identity: invalid derived short revision').toBe(
             expectedRevision.slice(0, 7)
         );
-        await page.goto('/chat');
+        const navigation = await page.goto('/chat');
+        expect(
+            new URL(navigation?.url() || page.url()).origin,
+            'routing/configuration: /chat origin drift'
+        ).toBe(requestedOrigin);
         await expect(
             page.locator('meta[name="dspace-build-revision"]'),
             'identity: HTML build marker drift'
@@ -184,47 +281,86 @@ test.describe('release-aware remote chat smoke', () => {
     });
 
     test('routing/configuration and submission: approved default journey', async ({ page }) => {
-        const calls = expectedProvider === 'token-place' ? await installSuccessfulRelay(page) : [];
-        if (expectedProvider === 'openai') await blockUnexpectedProviders(page);
-        const panel = await openExpectedPanel(page);
         if (expectedProvider === 'openai') {
+            let openAICalls = 0;
+            let credentialPresent = false;
+            await installProviderDenyRules(page);
+            await selectOpenAI(page);
+            let panel = await openExpectedPanel(page);
             await panel.getByRole('textbox').fill('Key gate smoke');
             await panel.getByRole('button', { name: 'Send' }).click();
             await expect(
                 panel.locator('.chat-error'),
                 'routing/configuration: OpenAI key gate'
             ).toHaveAttribute('data-error-type', 'missing-key');
+            expect(openAICalls, 'secret-safety: missing-key flow made a provider request').toBe(0);
+            const fakeKey = 'sk-dspace-ci-sentinel-not-a-real-credential'; // scan-secrets: ignore
+            await selectOpenAI(page, fakeKey);
+            await page.route('https://api.openai.com/v1/responses', async (route) => {
+                openAICalls += 1;
+                credentialPresent =
+                    route.request().headers().authorization?.startsWith('Bearer ') === true;
+                await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify({
+                        id: 'resp_smoke',
+                        object: 'response',
+                        status: 'completed',
+                        output: [
+                            {
+                                type: 'message',
+                                role: 'assistant',
+                                content: [
+                                    { type: 'output_text', text: 'DSPACE OpenAI smoke reply.' },
+                                ],
+                            },
+                        ],
+                    }),
+                });
+            });
+            panel = await openExpectedPanel(page);
+            await panel.getByRole('textbox').fill('Mocked OpenAI smoke');
+            await panel.getByRole('button', { name: 'Send' }).click();
+            await expect(
+                panel.getByText('DSPACE OpenAI smoke reply.'),
+                'submission: no mocked OpenAI reply'
+            ).toBeVisible();
+            expect({ openAICalls, credentialPresent }).toEqual({
+                openAICalls: 1,
+                credentialPresent: true,
+            });
             return;
         }
+        const evidence = await installSuccessfulRelay(page);
+        const panel = await openExpectedPanel(page);
         await panel.getByRole('textbox').fill('Deterministic remote chat smoke');
         await panel.getByRole('button', { name: 'Send' }).click();
+        if (fault === 'submission') throw new Error('submission: injected bounded CI fault');
         await expect(
             panel.getByText('DSPACE smoke reply.'),
             'submission: no mocked relay reply'
         ).toBeVisible();
+        expect(evidence.originsMatch, 'routing/configuration: token.place origin drift').toBe(true);
+        expect(evidence.credentialsPresent, 'secret-safety: provider credential was sent').toBe(
+            false
+        );
         expect(
-            calls.map(({ url }) => new URL(url).origin).every((origin) => origin === expectedOrigin)
+            evidence.dispatchModelMatches,
+            'routing/configuration: encrypted dispatch model drift'
         ).toBe(true);
-        expect(calls).toHaveLength(3);
-        for (const call of calls) {
-            expect(
-                JSON.stringify(call.headers),
-                'secret-safety: authorization header was sent'
-            ).not.toMatch(/authorization|api.?key|bearer|sk-/i);
-            expect(call.body, 'secret-safety: OpenAI credential material was sent').not.toMatch(
-                /api.?key|bearer|sk-/i
-            );
-        }
+        expect(evidence.paths.filter((path) => path !== 'complete')).toEqual([
+            'select',
+            'dispatch',
+            'retrieve',
+        ]);
     });
 
     test('provider availability: controlled token.place failure is classified and bounded', async ({
         page,
     }) => {
-        test.skip(
-            expectedProvider !== 'token-place',
-            'Only applies to token.place-default releases'
-        );
-        await blockUnexpectedProviders(page, expectedOrigin);
+        test.skip(expectedProvider !== 'token-place', 'Only applies to token.place releases');
+        await installProviderDenyRules(page);
         await page.route(`${expectedOrigin}/api/v1/relay/servers/next**`, (route) =>
             route.fulfill({
                 status: 503,
@@ -232,6 +368,16 @@ test.describe('release-aware remote chat smoke', () => {
                 body: '{"error":"unavailable"}',
             })
         );
+        await page.route(`${requestedOrigin}/api/chat`, async (route) => {
+            const body = JSON.parse(route.request().postData() || '{}');
+            if (body.provider === 'tokenplace' && body.operation === 'select')
+                await route.fulfill({
+                    status: 503,
+                    contentType: 'application/json',
+                    body: '{"error":"unavailable"}',
+                });
+            else await route.abort('blockedbyclient');
+        });
         const panel = await openExpectedPanel(page);
         await panel.getByRole('textbox').fill('Controlled unavailable smoke');
         await panel.getByRole('button', { name: 'Send' }).click();
@@ -247,17 +393,13 @@ test.describe('release-aware remote chat smoke', () => {
 
     test('routing/configuration: OpenAI remains discoverable and key-gated', async ({ page }) => {
         let providerCalls = 0;
-        await page.route(/https:\/\/(?:api\.openai\.com|token\.place)\/.*/, async (route) => {
-            providerCalls += 1;
-            await route.abort('blockedbyclient');
+        await installProviderDenyRules(page);
+        page.on('request', (request) => {
+            if (['https://api.openai.com', expectedOrigin].includes(new URL(request.url()).origin))
+                providerCalls += 1;
         });
-        await page.goto('/settings');
-        await waitForHydration(page);
-        const option = page.locator('input[name="chat-provider"][value="openai"]');
-        await expect(option, 'routing/configuration: OpenAI option is absent').toBeVisible();
-        if (!(await option.isChecked())) await option.check();
-        await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
-        const panel = await openExpectedPanelForOpenAI(page);
+        await selectOpenAI(page);
+        const panel = await openExpectedPanel(page);
         await panel.getByRole('textbox').fill('OpenAI missing-key smoke');
         await panel.getByRole('button', { name: 'Send' }).click();
         await expect(panel.locator('.chat-error')).toHaveAttribute(
@@ -267,12 +409,3 @@ test.describe('release-aware remote chat smoke', () => {
         expect(providerCalls, 'secret-safety: missing-key flow made a provider request').toBe(0);
     });
 });
-
-async function openExpectedPanelForOpenAI(page: Page) {
-    await page.goto('/chat');
-    await waitForHydration(page);
-    const panel = page.locator('[data-testid="chat-panel"]');
-    await expect(panel).toHaveCount(1);
-    await expect(panel).toHaveAttribute('data-provider', 'openai');
-    return panel;
-}

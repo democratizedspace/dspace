@@ -27,13 +27,13 @@ export function parseAndValidateArgs(argv, env = process.env) {
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (!argument.startsWith('--'))
-      throw new Error(`validation: unexpected argument "${argument}"`);
+      throw new Error('validation: unexpected positional argument');
     const equals = argument.indexOf('=');
     const name = argument.slice(2, equals === -1 ? undefined : equals);
     const definition = Object.values(definitions).find(
       ([flag]) => flag === name
     );
-    if (!definition) throw new Error(`validation: unknown flag "--${name}"`);
+    if (!definition) throw new Error('validation: unknown flag');
     const value = equals === -1 ? argv[++index] : argument.slice(equals + 1);
     if (!value || value.startsWith('--'))
       throw new Error(`validation: --${name} requires a value`);
@@ -65,13 +65,33 @@ export function parseAndValidateArgs(argv, env = process.env) {
   if (
     !['http:', 'https:'].includes(base.protocol) ||
     base.username ||
-    base.password
+    base.password ||
+    base.pathname !== '/' ||
+    base.search ||
+    base.hash
   ) {
     throw new Error(
       'validation: base URL must be an absolute credential-free http(s) URL'
     );
   }
-  result.baseURL = base.href.replace(/\/$/, '');
+  result.baseURL = base.origin;
+  const fault = env.DSPACE_REMOTE_CHAT_SMOKE_FAULT?.trim();
+  const normalizedHostname = base.hostname.replace(/^\[|\]$/g, '');
+  const localTarget =
+    ['127.0.0.1', 'localhost', '0.0.0.0', '::1'].includes(normalizedHostname) ||
+    normalizedHostname.endsWith('.local');
+  if (fault) {
+    if (
+      !['hydration', 'submission'].includes(fault) ||
+      env.CI !== 'true' ||
+      !localTarget
+    ) {
+      throw new Error(
+        'validation: smoke fault is restricted to bounded local CI cases'
+      );
+    }
+    result.fault = fault;
+  }
   if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(result.expectedVersion)) {
     throw new Error(
       'validation: expected version must be an exact semantic version'
@@ -135,7 +155,9 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
   // Node exposes bracketed IPv6 URL hostnames as "[::1]"; normalize them before
   // deciding whether Playwright should manage the local preview server.
   const hostname = new URL(options.baseURL).hostname.replace(/^\[|\]$/g, '');
-  const local = ['127.0.0.1', 'localhost', '0.0.0.0', '::1'].includes(hostname);
+  const local =
+    ['127.0.0.1', 'localhost', '0.0.0.0', '::1'].includes(hostname) ||
+    hostname.endsWith('.local');
   return {
     ...baseEnv,
     BASE_URL: options.baseURL,
@@ -147,6 +169,7 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
     DSPACE_EXPECTED_PROVIDER: options.expectedProvider,
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',
+    DSPACE_REMOTE_CHAT_SMOKE_FAULT: options.fault || '',
   };
 }
 
