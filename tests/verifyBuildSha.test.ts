@@ -73,6 +73,8 @@ describe('verify-build-sha metadata and artifact validation', () => {
     [{ ...validMeta, revision: SHA.slice(0, 7) }, 'invalid full revision'],
     [{ ...validMeta, shortRevision: 'fffffff' }, 'invalid shortRevision'],
     [{ ...validMeta, version: 'release' }, 'invalid version'],
+    [{ ...validMeta, image: false }, 'mismatched immutable'],
+    [{ ...validMeta, image: 0 }, 'mismatched immutable'],
     [
       { ...validMeta, buildTimestamp: '2026-02-31T00:00:00Z' },
       'invalid buildTimestamp',

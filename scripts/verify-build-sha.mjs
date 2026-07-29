@@ -55,8 +55,8 @@ const verify = () => {
   const timestamp = meta?.buildTimestamp ?? meta?.generatedAt;
   if (!canonicalTimestamp(timestamp))
     fail('Canonical build metadata has an invalid buildTimestamp.');
-  if (meta?.image) {
-    const image = String(meta.image).trim();
+  const image = String(meta?.image ?? '').trim();
+  if (image) {
     const hasControlCharacter = [...image].some((character) => {
       const code = character.codePointAt(0);
       return code < 32 || code === 127;
