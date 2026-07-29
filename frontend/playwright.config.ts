@@ -28,6 +28,8 @@ declare const process: {
         PLAYWRIGHT_SKIP_INSTALL_DEPS?: string;
         REMOTE_SMOKE?: string;
         REMOTE_SMOKE_USE_WEBSERVER?: string;
+        REMOTE_CHAT_SMOKE?: string;
+        REMOTE_CHAT_SMOKE_USE_WEBSERVER?: string;
         REMOTE_MIGRATION?: string;
         REMOTE_MIGRATION_USE_WEBSERVER?: string;
         REMOTE_COMPLETIONIST_AWARD_III?: string;

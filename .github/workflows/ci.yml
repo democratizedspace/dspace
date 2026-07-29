@@ -113,3 +113,15 @@ jobs:
       - name: Run IndexedDB regression Playwright spec
         working-directory: frontend
         run: npx playwright test e2e/indexeddb-availability.spec.ts --project=chromium --reporter=dot
+      - name: Run release-aware local chat smoke harness
+        env:
+          DSPACE_SMOKE_BASE_URL: http://127.0.0.1:4173
+          DSPACE_EXPECTED_REVISION: ${{ github.sha }}
+          DSPACE_EXPECTED_PROVIDER: token-place
+          DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: https://token.place
+          DSPACE_EXPECTED_TOKEN_PLACE_MODEL: llama-3.1-8b-instruct
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          npm run build
+          DSPACE_EXPECTED_VERSION="$(node -p "require('./package.json').version")" \
+            npm run qa:remote-chat-smoke
