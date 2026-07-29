@@ -1,8 +1,11 @@
-import { constants, privateDecrypt, publicEncrypt, webcrypto } from 'node:crypto';
+import { constants, publicEncrypt, webcrypto } from 'node:crypto';
+import { createRequire } from 'node:module';
 
 import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
+
+const { JSEncrypt } = createRequire(import.meta.url)('jsencrypt') as typeof import('jsencrypt');
 
 const expectedVersion = process.env.DSPACE_EXPECTED_VERSION!;
 const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
@@ -57,22 +60,31 @@ async function relayKeypair() {
 }
 
 async function decryptDispatch(body: Record<string, string>, privateKey: string) {
-    const rawKey = privateDecrypt(
-        { key: privateKey, padding: constants.RSA_PKCS1_PADDING },
-        Buffer.from(body.cipherkey, 'base64')
-    );
-    // JSEncrypt wraps the base64 representation of the AES key.
-    const aesBytes = Buffer.from(decoder.decode(rawKey), 'base64');
-    const aesKey = await webcrypto.subtle.importKey('raw', aesBytes, { name: 'AES-CBC' }, false, [
-        'decrypt',
-    ]);
-    const plaintext = await webcrypto.subtle.decrypt(
-        { name: 'AES-CBC', iv: Buffer.from(body.iv, 'base64') },
-        aesKey,
-        Buffer.from(body.ciphertext, 'base64')
-    );
-    const envelope = JSON.parse(decoder.decode(plaintext));
-    return envelope?.api_v1_request?.model === expectedModel;
+    try {
+        const rsa = new JSEncrypt();
+        rsa.setPrivateKey(privateKey);
+        // JSEncrypt wraps the base64 representation of the AES key.
+        const decryptedKey = rsa.decrypt(body.cipherkey);
+        if (!decryptedKey) throw new Error('empty decrypted key');
+        const aesBytes = Buffer.from(decryptedKey, 'base64');
+        if (aesBytes.length === 0) throw new Error('empty AES key');
+        const aesKey = await webcrypto.subtle.importKey(
+            'raw',
+            aesBytes,
+            { name: 'AES-CBC' },
+            false,
+            ['decrypt']
+        );
+        const plaintext = await webcrypto.subtle.decrypt(
+            { name: 'AES-CBC', iv: Buffer.from(body.iv, 'base64') },
+            aesKey,
+            Buffer.from(body.ciphertext, 'base64')
+        );
+        const envelope = JSON.parse(decoder.decode(plaintext));
+        return envelope?.api_v1_request?.model === expectedModel;
+    } catch {
+        throw new Error('routing/configuration: encrypted dispatch could not be verified');
+    }
 }
 
 async function encryptedResponse(body: Record<string, string>) {
