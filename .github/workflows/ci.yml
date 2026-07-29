@@ -113,3 +113,46 @@ jobs:
       - name: Run IndexedDB regression Playwright spec
         working-directory: frontend
         run: npx playwright test e2e/indexeddb-availability.spec.ts --project=chromium --reporter=dot
+      - name: Run release-aware local chat smoke harness
+        env:
+          DSPACE_SMOKE_BASE_URL: http://127.0.0.1:4173
+          DSPACE_EXPECTED_REVISION: ${{ github.sha }}
+          DSPACE_EXPECTED_PROVIDER: token-place
+          DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: https://token.place
+          DSPACE_EXPECTED_TOKEN_PLACE_MODEL: llama-3.1-8b-instruct
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          npm run build
+          DSPACE_EXPECTED_VERSION="$(node -p "require('./package.json').version")" \
+            npm run qa:remote-chat-smoke
+          expected_version="$(node -p "require('./package.json').version")"
+          run_negative() {
+            stage="$1"
+            shift
+            output_file="$(mktemp)"
+            if env DSPACE_EXPECTED_VERSION="$expected_version" "$@" \
+              npm run qa:remote-chat-smoke >"$output_file" 2>&1; then
+              echo "negative smoke unexpectedly passed: $stage"
+              rm -f "$output_file"
+              exit 1
+            fi
+            if grep -Fq 'sk-dspace-ci-sentinel' "$output_file"; then
+              echo "negative smoke emitted forbidden sentinel: $stage"
+              rm -f "$output_file"
+              exit 1
+            fi
+            if ! grep -Fqi "$stage" "$output_file"; then
+              echo "negative smoke missed sanitized stage: $stage"
+              rm -f "$output_file"
+              exit 1
+            fi
+            rm -f "$output_file"
+            echo "negative smoke failed closed at stage=$stage"
+          }
+          run_negative identity env DSPACE_EXPECTED_VERSION=0.0.0
+          run_negative identity env DSPACE_EXPECTED_REVISION=0000000000000000000000000000000000000000
+          run_negative routing/configuration env DSPACE_EXPECTED_PROVIDER=openai DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN= DSPACE_EXPECTED_TOKEN_PLACE_MODEL=
+          run_negative routing/configuration env DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://invalid.example.test
+          run_negative routing/configuration env DSPACE_EXPECTED_TOKEN_PLACE_MODEL=wrong-model
+          run_negative hydration env DSPACE_REMOTE_CHAT_SMOKE_FAULT=hydration
+          run_negative submission env DSPACE_REMOTE_CHAT_SMOKE_FAULT=submission

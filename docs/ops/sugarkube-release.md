@@ -169,6 +169,41 @@ curl -fsS https://democratized.space/healthz | jq .
 curl -fsS https://democratized.space/livez | jq .
 ```
 
+### Release-aware `/chat` smoke
+
+From a DSPACE checkout with dependencies and the Playwright Chromium browser installed, verify the
+remotely served frontend against release expectations taken from the approved artifact (never from
+the runtime under test). Replace the revision with the approved full 40-character source SHA:
+
+```bash
+# Staging
+DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+
+# Production (run only after the staging result and promotion are approved)
+DSPACE_SMOKE_BASE_URL=https://democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
+
+The command is non-destructive: it uses a new isolated browser context, clears browser-held state,
+blocks service workers and unexpected provider traffic, and fulfills token.place transport inside
+Playwright. It sends no live chat request or user secret and does not mutate server or shared
+production state. It returns nonzero on build identity, hydration, provider routing/origin/model,
+submission, classified availability, or secret-safety drift. OpenAI-default verification omits the
+two token.place expectations; the harness still proves that OpenAI is discoverable and missing-key
+gated without requiring a real key. This is the DSPACE-side harness only, not Sugarkube's promotion
+gate.
+
 Record the approved immutable tag, chart version, and workflow run links in the release notes or QA
 checklist for the release.
 
