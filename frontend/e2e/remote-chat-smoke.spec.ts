@@ -11,6 +11,9 @@ const JSEncrypt = createRequire(import.meta.url)(
 
 const expectedVersion = process.env.DSPACE_EXPECTED_VERSION!;
 const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
+const identityContract = process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT as
+    | 'build-info-v1'
+    | 'legacy-build-meta-v1';
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
@@ -273,6 +276,33 @@ test.describe('release-aware remote chat smoke', () => {
     });
 
     test('identity: approved build identity matches JSON and HTML', async ({ page, request }) => {
+        if (identityContract === 'legacy-build-meta-v1') {
+            const response = await request.get('/build-meta.json');
+            expect(
+                new URL(response.url()).origin,
+                'routing/configuration: /build-meta.json origin drift'
+            ).toBe(requestedOrigin);
+            expect(response.status(), 'identity: /build-meta.json did not return 200').toBe(200);
+            const identity: unknown = await response.json();
+            expect(
+                typeof identity === 'object' && identity !== null && !Array.isArray(identity),
+                'identity: /build-meta.json did not return an object'
+            ).toBe(true);
+            const legacyIdentity = identity as Record<string, unknown>;
+            expect(legacyIdentity.gitSha, 'identity: source-revision drift').toBe(expectedRevision);
+            expect(
+                typeof legacyIdentity.generatedAt === 'string' &&
+                    legacyIdentity.generatedAt.trim().length > 0 &&
+                    Number.isFinite(Date.parse(legacyIdentity.generatedAt)),
+                'identity: generatedAt is not a non-empty valid timestamp'
+            ).toBe(true);
+            expect(
+                typeof legacyIdentity.source === 'string' &&
+                    legacyIdentity.source.trim().length > 0,
+                'identity: source is not a non-empty string'
+            ).toBe(true);
+            return;
+        }
         const response = await request.get('/build-info.json');
         expect(
             new URL(response.url()).origin,

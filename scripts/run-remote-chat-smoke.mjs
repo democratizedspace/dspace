@@ -11,6 +11,7 @@ const definitions = {
   baseURL: ['base-url', 'DSPACE_SMOKE_BASE_URL'],
   expectedVersion: ['expected-version', 'DSPACE_EXPECTED_VERSION'],
   expectedRevision: ['expected-revision', 'DSPACE_EXPECTED_REVISION'],
+  identityContract: ['identity-contract', 'DSPACE_EXPECTED_IDENTITY_CONTRACT'],
   expectedProvider: ['expected-provider', 'DSPACE_EXPECTED_PROVIDER'],
   expectedTokenPlaceOrigin: [
     'expected-token-place-origin',
@@ -48,6 +49,17 @@ export function parseAndValidateArgs(argv, env = process.env) {
     // Explicit flags deterministically take precedence over the environment.
     result[key] = flags.get(flag) ?? env[environment]?.trim();
   }
+  if (
+    (flags.has('identity-contract') ||
+      Object.prototype.hasOwnProperty.call(
+        env,
+        'DSPACE_EXPECTED_IDENTITY_CONTRACT'
+      )) &&
+    !result.identityContract
+  ) {
+    throw new Error('validation: identity contract requires a value');
+  }
+  result.identityContract ||= 'build-info-v1';
   const missing = Object.entries(definitions)
     .filter(([key]) => !result[key] && !key.startsWith('expectedTokenPlace'))
     .map(([, [, environment]]) => environment);
@@ -100,6 +112,20 @@ export function parseAndValidateArgs(argv, env = process.env) {
   if (!/^[0-9a-f]{40}$/.test(result.expectedRevision)) {
     throw new Error(
       'validation: expected revision must be a lowercase full 40-character Git SHA'
+    );
+  }
+  if (
+    !['build-info-v1', 'legacy-build-meta-v1'].includes(result.identityContract)
+  ) {
+    throw new Error('validation: unknown identity contract');
+  }
+  if (
+    result.identityContract === 'legacy-build-meta-v1' &&
+    (result.expectedVersion !== '3.0.1' ||
+      result.expectedRevision !== '1a31a569aff2dbeb238e8c2688b9e85140d2077d')
+  ) {
+    throw new Error(
+      'validation: legacy identity contract is restricted to approved recovery coordinates'
     );
   }
   if (!['token-place', 'openai'].includes(result.expectedProvider)) {
@@ -166,6 +192,7 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
     PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
     DSPACE_EXPECTED_VERSION: options.expectedVersion,
     DSPACE_EXPECTED_REVISION: options.expectedRevision,
+    DSPACE_EXPECTED_IDENTITY_CONTRACT: options.identityContract,
     DSPACE_EXPECTED_PROVIDER: options.expectedProvider,
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',

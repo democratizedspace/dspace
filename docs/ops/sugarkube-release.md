@@ -204,6 +204,30 @@ two token.place expectations; the harness still proves that OpenAI is discoverab
 gated without requiring a real key. This is the DSPACE-side harness only, not Sugarkube's promotion
 gate.
 
+By default, the harness uses the strict `build-info-v1` identity contract: it requires
+same-origin `/build-info.json` identity fields and the matching HTML build-revision marker. The
+contract can also be selected explicitly with
+`DSPACE_EXPECTED_IDENTITY_CONTRACT=build-info-v1` (or `--identity-contract=build-info-v1`).
+
+The immutable 3.0.1 recovery artifact predates those identity surfaces. Verify that artifact only
+with its explicit legacy contract and exact approved coordinates:
+
+```bash
+DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
+DSPACE_EXPECTED_VERSION=3.0.1 \
+DSPACE_EXPECTED_REVISION=1a31a569aff2dbeb238e8c2688b9e85140d2077d \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=legacy-build-meta-v1 \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
+
+This mode verifies the recovery artifact through same-origin `/build-meta.json` and is accepted
+only for version `3.0.1` at revision `1a31a569aff2dbeb238e8c2688b9e85140d2077d`. It exists solely
+to verify that immutable artifact; it must not become an automatic or general fallback when modern
+identity verification fails.
+
 Record the approved immutable tag, chart version, and workflow run links in the release notes or QA
 checklist for the release.
 
