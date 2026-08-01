@@ -11,6 +11,9 @@ const JSEncrypt = createRequire(import.meta.url)(
 
 const expectedVersion = process.env.DSPACE_EXPECTED_VERSION!;
 const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
+const identityContract = process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT as
+    | 'build-info-v1'
+    | 'legacy-build-meta-v1';
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
@@ -273,6 +276,40 @@ test.describe('release-aware remote chat smoke', () => {
     });
 
     test('identity: approved build identity matches JSON and HTML', async ({ page, request }) => {
+        if (identityContract === 'legacy-build-meta-v1') {
+            const response = await request.get('/build-meta.json');
+            expect(
+                new URL(response.url()).origin,
+                'routing/configuration: /build-meta.json origin drift'
+            ).toBe(requestedOrigin);
+            expect(response.status(), 'identity: /build-meta.json did not return 200').toBe(200);
+            const identity = await response.json();
+            expect(typeof identity, 'identity: legacy build metadata must be an object').toBe(
+                'object'
+            );
+            expect(identity, 'identity: legacy build metadata must not be null').not.toBeNull();
+            expect(
+                Array.isArray(identity),
+                'identity: legacy build metadata must not be an array'
+            ).toBe(false);
+            expect(identity.gitSha, 'identity: source-revision drift').toBe(expectedRevision);
+            expect(
+                identity.generatedAt,
+                'identity: generatedAt must be a non-empty timestamp'
+            ).toEqual(expect.any(String));
+            expect(identity.generatedAt.trim(), 'identity: generatedAt must be non-empty').not.toBe(
+                ''
+            );
+            expect(
+                Number.isNaN(Date.parse(identity.generatedAt)),
+                'identity: generatedAt must be a valid timestamp'
+            ).toBe(false);
+            expect(identity.source, 'identity: source must be a non-empty string').toEqual(
+                expect.any(String)
+            );
+            expect(identity.source.trim(), 'identity: source must be non-empty').not.toBe('');
+            return;
+        }
         const response = await request.get('/build-info.json');
         expect(
             new URL(response.url()).origin,

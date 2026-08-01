@@ -6,11 +6,17 @@ import { fileURLToPath } from 'node:url';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const frontendDir = join(scriptDir, '..', 'frontend');
+const defaultIdentityContract = 'build-info-v1';
+const legacyRecoveryIdentity = {
+  version: '3.0.1',
+  revision: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
+};
 
 const definitions = {
   baseURL: ['base-url', 'DSPACE_SMOKE_BASE_URL'],
   expectedVersion: ['expected-version', 'DSPACE_EXPECTED_VERSION'],
   expectedRevision: ['expected-revision', 'DSPACE_EXPECTED_REVISION'],
+  identityContract: ['identity-contract', 'DSPACE_EXPECTED_IDENTITY_CONTRACT'],
   expectedProvider: ['expected-provider', 'DSPACE_EXPECTED_PROVIDER'],
   expectedTokenPlaceOrigin: [
     'expected-token-place-origin',
@@ -40,13 +46,24 @@ export function parseAndValidateArgs(argv, env = process.env) {
     if (flags.has(name) && flags.get(name) !== value) {
       throw new Error(`validation: contradictory values for --${name}`);
     }
-    flags.set(name, value.trim());
+    const trimmedValue = value.trim();
+    if (!trimmedValue)
+      throw new Error(`validation: --${name} requires a value`);
+    flags.set(name, trimmedValue);
   }
 
   const result = {};
   for (const [key, [flag, environment]] of Object.entries(definitions)) {
     // Explicit flags deterministically take precedence over the environment.
-    result[key] = flags.get(flag) ?? env[environment]?.trim();
+    const environmentValue = env[environment];
+    if (flags.has(flag)) result[key] = flags.get(flag);
+    else if (environmentValue !== undefined) {
+      result[key] = environmentValue.trim();
+      if (key === 'identityContract' && !result[key])
+        throw new Error(`validation: ${environment} requires a value`);
+    } else if (key === 'identityContract') {
+      result[key] = defaultIdentityContract;
+    }
   }
   const missing = Object.entries(definitions)
     .filter(([key]) => !result[key] && !key.startsWith('expectedTokenPlace'))
@@ -100,6 +117,20 @@ export function parseAndValidateArgs(argv, env = process.env) {
   if (!/^[0-9a-f]{40}$/.test(result.expectedRevision)) {
     throw new Error(
       'validation: expected revision must be a lowercase full 40-character Git SHA'
+    );
+  }
+  if (
+    !['build-info-v1', 'legacy-build-meta-v1'].includes(result.identityContract)
+  ) {
+    throw new Error('validation: unknown identity contract');
+  }
+  if (
+    result.identityContract === 'legacy-build-meta-v1' &&
+    (result.expectedVersion !== legacyRecoveryIdentity.version ||
+      result.expectedRevision !== legacyRecoveryIdentity.revision)
+  ) {
+    throw new Error(
+      'validation: legacy identity contract is restricted to the approved recovery build'
     );
   }
   if (!['token-place', 'openai'].includes(result.expectedProvider)) {
@@ -166,6 +197,7 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
     PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
     DSPACE_EXPECTED_VERSION: options.expectedVersion,
     DSPACE_EXPECTED_REVISION: options.expectedRevision,
+    DSPACE_EXPECTED_IDENTITY_CONTRACT: options.identityContract,
     DSPACE_EXPECTED_PROVIDER: options.expectedProvider,
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',
@@ -188,6 +220,9 @@ export function main(argv = process.argv.slice(2)) {
   );
   console.log(
     `[qa:remote-chat-smoke] expectedRevision=${options.expectedRevision}`
+  );
+  console.log(
+    `[qa:remote-chat-smoke] identityContract=${options.identityContract}`
   );
   console.log(
     `[qa:remote-chat-smoke] expectedProvider=${options.expectedProvider}`
