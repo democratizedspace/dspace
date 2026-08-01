@@ -195,6 +195,29 @@ DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
 npm run qa:remote-chat-smoke
 ```
 
+By default, the harness uses the strict `build-info-v1` identity contract: it verifies
+same-origin `/build-info.json` version, full and derived short revisions, and the exact HTML build
+revision marker. The contract may also be selected explicitly with
+`DSPACE_EXPECTED_IDENTITY_CONTRACT=build-info-v1` (or `--identity-contract=build-info-v1`).
+
+The immutable 3.0.1 recovery artifact predates those identity surfaces. It may be verified only
+with the explicitly selected legacy contract and its exact approved coordinates:
+
+```bash
+DSPACE_SMOKE_BASE_URL=https://democratized.space \
+DSPACE_EXPECTED_VERSION=3.0.1 \
+DSPACE_EXPECTED_REVISION=1a31a569aff2dbeb238e8c2688b9e85140d2077d \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=legacy-build-meta-v1 \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
+
+This mode checks same-origin `/build-meta.json` and exists solely to verify that immutable recovery
+artifact. The runner rejects it for every other version/revision pair; it must not become an
+automatic or general fallback when modern identity verification fails.
+
 The command is non-destructive: it uses a new isolated browser context, clears browser-held state,
 blocks service workers and unexpected provider traffic, and fulfills token.place transport inside
 Playwright. It sends no live chat request or user secret and does not mutate server or shared
