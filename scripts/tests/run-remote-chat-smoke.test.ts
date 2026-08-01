@@ -5,6 +5,7 @@ import {
 } from '../run-remote-chat-smoke.mjs';
 
 const revision = '0123456789abcdef0123456789abcdef01234567';
+const recoveryRevision = '1a31a569aff2dbeb238e8c2688b9e85140d2077d';
 const completeEnv = {
   DSPACE_SMOKE_BASE_URL: 'https://staging.example.test',
   DSPACE_EXPECTED_VERSION: '3.1.0',
@@ -18,8 +19,79 @@ describe('remote chat smoke input validation', () => {
   it('accepts the documented environment and configures remote mode', () => {
     const options = parseAndValidateArgs([], completeEnv);
     expect(options.expectedProvider).toBe('token-place');
+    expect(options.identityContract).toBe('build-info-v1');
     expect(buildSmokeEnv(options, {}).REMOTE_CHAT_SMOKE_USE_WEBSERVER).toBe(
       '0'
+    );
+  });
+
+  it('accepts the explicit modern identity contract', () => {
+    expect(
+      parseAndValidateArgs([], {
+        ...completeEnv,
+        DSPACE_EXPECTED_IDENTITY_CONTRACT: 'build-info-v1',
+      }).identityContract
+    ).toBe('build-info-v1');
+  });
+
+  it('accepts the legacy identity contract only for the recovery coordinates', () => {
+    const options = parseAndValidateArgs([], {
+      ...completeEnv,
+      DSPACE_EXPECTED_VERSION: '3.0.1',
+      DSPACE_EXPECTED_REVISION: recoveryRevision,
+      DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+    });
+    expect(options.identityContract).toBe('legacy-build-meta-v1');
+    expect(buildSmokeEnv(options, {}).DSPACE_EXPECTED_IDENTITY_CONTRACT).toBe(
+      'legacy-build-meta-v1'
+    );
+  });
+
+  it.each([
+    ['3.0.2', recoveryRevision],
+    ['3.0.1', revision],
+  ])(
+    'rejects legacy identity for version %s and revision %s',
+    (version, sha) => {
+      expect(() =>
+        parseAndValidateArgs([], {
+          ...completeEnv,
+          DSPACE_EXPECTED_VERSION: version,
+          DSPACE_EXPECTED_REVISION: sha,
+          DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+        })
+      ).toThrow('legacy identity contract is restricted');
+    }
+  );
+
+  it('rejects unknown, empty, and contradictory identity contracts', () => {
+    expect(() =>
+      parseAndValidateArgs([], {
+        ...completeEnv,
+        DSPACE_EXPECTED_IDENTITY_CONTRACT: 'unknown-contract',
+      })
+    ).toThrow('identity contract is unsupported');
+    expect(() =>
+      parseAndValidateArgs([], {
+        ...completeEnv,
+        DSPACE_EXPECTED_IDENTITY_CONTRACT: '',
+      })
+    ).toThrow('missing required input');
+    expect(() =>
+      parseAndValidateArgs(
+        [
+          '--identity-contract=build-info-v1',
+          '--identity-contract=legacy-build-meta-v1',
+        ],
+        completeEnv
+      )
+    ).toThrow('contradictory values');
+  });
+
+  it('propagates the default modern identity contract', () => {
+    const options = parseAndValidateArgs([], completeEnv);
+    expect(buildSmokeEnv(options, {}).DSPACE_EXPECTED_IDENTITY_CONTRACT).toBe(
+      'build-info-v1'
     );
   });
 
@@ -99,7 +171,11 @@ describe('remote chat smoke input validation', () => {
 
   it('keeps malformed-input diagnostics bounded and free of supplied values', () => {
     const sentinel = 'operator-private-query-sentinel';
-    for (const argv of [[sentinel], [`--unknown=${sentinel}`]]) {
+    for (const argv of [
+      [sentinel],
+      [`--unknown=${sentinel}`],
+      [`--identity-contract=${sentinel}`],
+    ]) {
       let message = '';
       try {
         parseAndValidateArgs(argv, completeEnv);
