@@ -11,9 +11,20 @@ const JSEncrypt = createRequire(import.meta.url)(
 
 const expectedVersion = process.env.DSPACE_EXPECTED_VERSION!;
 const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
-const identityContract = process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT as
-    | 'build-info-v1'
-    | 'legacy-build-meta-v1';
+type IdentityContract = 'build-info-v1' | 'legacy-build-meta-v1';
+
+function normalizeIdentityContract(value: string | undefined): IdentityContract {
+    if (value === undefined) return 'build-info-v1';
+
+    const normalized = value.trim();
+    if (normalized === 'build-info-v1' || normalized === 'legacy-build-meta-v1') {
+        return normalized;
+    }
+
+    throw new Error('DSPACE_EXPECTED_IDENTITY_CONTRACT must select a supported identity contract');
+}
+
+const identityContract = normalizeIdentityContract(process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT);
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
