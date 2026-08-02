@@ -6,11 +6,17 @@ import { fileURLToPath } from 'node:url';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const frontendDir = join(scriptDir, '..', 'frontend');
+const defaultIdentityContract = 'build-info-v1';
+const legacyIdentityCoordinates = {
+  version: '3.0.1',
+  revision: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
+};
 
 const definitions = {
   baseURL: ['base-url', 'DSPACE_SMOKE_BASE_URL'],
   expectedVersion: ['expected-version', 'DSPACE_EXPECTED_VERSION'],
   expectedRevision: ['expected-revision', 'DSPACE_EXPECTED_REVISION'],
+  identityContract: ['identity-contract', 'DSPACE_EXPECTED_IDENTITY_CONTRACT'],
   expectedProvider: ['expected-provider', 'DSPACE_EXPECTED_PROVIDER'],
   expectedTokenPlaceOrigin: [
     'expected-token-place-origin',
@@ -47,6 +53,12 @@ export function parseAndValidateArgs(argv, env = process.env) {
   for (const [key, [flag, environment]] of Object.entries(definitions)) {
     // Explicit flags deterministically take precedence over the environment.
     result[key] = flags.get(flag) ?? env[environment]?.trim();
+  }
+  if (
+    !flags.has(definitions.identityContract[0]) &&
+    !Object.hasOwn(env, definitions.identityContract[1])
+  ) {
+    result.identityContract = defaultIdentityContract;
   }
   const missing = Object.entries(definitions)
     .filter(([key]) => !result[key] && !key.startsWith('expectedTokenPlace'))
@@ -101,6 +113,18 @@ export function parseAndValidateArgs(argv, env = process.env) {
     throw new Error(
       'validation: expected revision must be a lowercase full 40-character Git SHA'
     );
+  }
+  if (
+    !['build-info-v1', 'legacy-build-meta-v1'].includes(result.identityContract)
+  ) {
+    throw new Error('validation: identity contract is unsupported');
+  }
+  if (
+    result.identityContract === 'legacy-build-meta-v1' &&
+    (result.expectedVersion !== legacyIdentityCoordinates.version ||
+      result.expectedRevision !== legacyIdentityCoordinates.revision)
+  ) {
+    throw new Error('validation: legacy identity contract is restricted');
   }
   if (!['token-place', 'openai'].includes(result.expectedProvider)) {
     throw new Error(
@@ -166,6 +190,7 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
     PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
     DSPACE_EXPECTED_VERSION: options.expectedVersion,
     DSPACE_EXPECTED_REVISION: options.expectedRevision,
+    DSPACE_EXPECTED_IDENTITY_CONTRACT: options.identityContract,
     DSPACE_EXPECTED_PROVIDER: options.expectedProvider,
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',
