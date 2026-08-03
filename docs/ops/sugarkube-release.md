@@ -221,10 +221,15 @@ The command is non-destructive: it uses a new isolated browser context, clears b
 blocks service workers and unexpected provider traffic, and fulfills token.place transport inside
 Playwright. It sends no live chat request or user secret and does not mutate server or shared
 production state. It returns nonzero on build identity, hydration, provider routing/origin/model,
-submission, classified availability, or secret-safety drift. OpenAI-default verification omits the
-two token.place expectations; the harness still proves that OpenAI is discoverable and missing-key
-gated without requiring a real key. This is the DSPACE-side harness only, not Sugarkube's promotion
-gate.
+submission, classified availability, or secret-safety drift. Under the modern contract,
+OpenAI-default verification omits the two token.place expectations but still proves that OpenAI is
+discoverable in settings and missing-key gated. The exact legacy 3.0.1 contract instead proves that
+OpenAI is the hydrated default, token.place remains visibly disabled pending opt-in, and the inline
+key editor can submit through a mocked successful OpenAI response using only the harness's fake
+sentinel credential. Neither mode needs a real credential: both deny unmatched provider traffic and
+never contact a live provider. The legacy assertions describe the harness compatibility contract,
+not modern settings or missing-key behavior in the immutable application. This is the DSPACE-side
+harness only, not Sugarkube's promotion gate.
 
 Record the approved immutable tag, chart version, and workflow run links in the release notes or QA
 checklist for the release.

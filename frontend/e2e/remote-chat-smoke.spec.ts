@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
+import { selectChatUiContract, type IdentityContract } from './remote-chat-smoke-contract';
 
 const JSEncrypt = createRequire(import.meta.url)(
     'jsencrypt'
@@ -11,8 +12,6 @@ const JSEncrypt = createRequire(import.meta.url)(
 
 const expectedVersion = process.env.DSPACE_EXPECTED_VERSION!;
 const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
-type IdentityContract = 'build-info-v1' | 'legacy-build-meta-v1';
-
 function normalizeIdentityContract(value: string | undefined): IdentityContract {
     if (value === undefined) return 'build-info-v1';
 
@@ -25,6 +24,7 @@ function normalizeIdentityContract(value: string | undefined): IdentityContract 
 }
 
 const identityContract = normalizeIdentityContract(process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT);
+const chatUiContract = selectChatUiContract(identityContract);
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
@@ -341,21 +341,33 @@ test.describe('release-aware remote chat smoke', () => {
         if (expectedProvider === 'openai') {
             let openAICalls = 0;
             let credentialPresent = false;
+            const fakeKey = 'sk-dspace-ci-sentinel-not-a-real-credential'; // scan-secrets: ignore
             await installProviderDenyRules(page);
             let panel = await openExpectedPanel(page);
-            await panel.getByRole('textbox').fill('Key gate smoke');
-            await panel.getByRole('button', { name: 'Send' }).click();
-            await expect(
-                panel.locator('.chat-error'),
-                'routing/configuration: OpenAI key gate'
-            ).toHaveAttribute('data-error-type', 'missing-key');
-            expect(openAICalls, 'secret-safety: missing-key flow made a provider request').toBe(0);
-            const fakeKey = 'sk-dspace-ci-sentinel-not-a-real-credential'; // scan-secrets: ignore
-            await selectOpenAI(page, fakeKey);
+            if (chatUiContract === 'modern-settings-v1') {
+                await panel.getByRole('textbox').fill('Key gate smoke');
+                await panel.getByRole('button', { name: 'Send' }).click();
+                await expect(
+                    panel.locator('.chat-error'),
+                    'routing/configuration: OpenAI key gate'
+                ).toHaveAttribute('data-error-type', 'missing-key');
+                expect(openAICalls, 'secret-safety: missing-key flow made a provider request').toBe(
+                    0
+                );
+                await selectOpenAI(page, fakeKey);
+            } else {
+                await expect(
+                    page.getByTestId('token-place-disabled-banner'),
+                    'routing/configuration: token.place opt-in state is not visible'
+                ).toBeVisible();
+                await expect(
+                    page.locator('[data-testid="chat-panel"][data-provider="token-place"]'),
+                    'routing/configuration: token.place became active'
+                ).toHaveCount(0);
+            }
             await page.route('https://api.openai.com/v1/responses', async (route) => {
                 openAICalls += 1;
-                credentialPresent =
-                    route.request().headers().authorization?.startsWith('Bearer ') === true;
+                credentialPresent = route.request().headers().authorization === `Bearer ${fakeKey}`;
                 await route.fulfill({
                     status: 200,
                     contentType: 'application/json',
@@ -375,6 +387,13 @@ test.describe('release-aware remote chat smoke', () => {
                     }),
                 });
             });
+            if (chatUiContract === 'legacy-inline-openai-v1') {
+                await page.locator('.api-container input[type="text"]').fill(fakeKey);
+                await page
+                    .locator('.api-container')
+                    .getByRole('button', { name: 'Submit', exact: true })
+                    .click();
+            }
             panel = await openExpectedPanel(page);
             await panel.getByRole('textbox').fill('Mocked OpenAI smoke');
             await panel.getByRole('button', { name: 'Send' }).click();
@@ -466,6 +485,10 @@ test.describe('release-aware remote chat smoke', () => {
     });
 
     test('routing/configuration: OpenAI remains discoverable and key-gated', async ({ page }) => {
+        test.skip(
+            chatUiContract === 'legacy-inline-openai-v1',
+            'Legacy recovery uses inline fake-key verification in the approved journey'
+        );
         let providerCalls = 0;
         await installProviderDenyRules(page);
         page.on('request', (request) => {
