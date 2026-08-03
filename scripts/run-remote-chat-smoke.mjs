@@ -185,6 +185,7 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
     hostname.endsWith('.local');
   return {
     ...baseEnv,
+    PW_WORKERS: '1',
     BASE_URL: options.baseURL,
     REMOTE_CHAT_SMOKE: '1',
     REMOTE_CHAT_SMOKE_USE_WEBSERVER: local ? '1' : '0',
