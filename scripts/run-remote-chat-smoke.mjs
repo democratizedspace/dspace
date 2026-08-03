@@ -122,7 +122,8 @@ export function parseAndValidateArgs(argv, env = process.env) {
   if (
     result.identityContract === 'legacy-build-meta-v1' &&
     (result.expectedVersion !== legacyIdentityCoordinates.version ||
-      result.expectedRevision !== legacyIdentityCoordinates.revision)
+      result.expectedRevision !== legacyIdentityCoordinates.revision ||
+      result.expectedProvider !== 'openai')
   ) {
     throw new Error('validation: legacy identity contract is restricted');
   }

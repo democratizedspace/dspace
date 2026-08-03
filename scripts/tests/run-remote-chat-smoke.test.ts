@@ -35,11 +35,17 @@ describe('remote chat smoke input validation', () => {
   });
 
   it('accepts the legacy identity contract only for the recovery coordinates', () => {
-    const options = parseAndValidateArgs([], {
+    const legacyEnv = {
       ...completeEnv,
       DSPACE_EXPECTED_VERSION: '3.0.1',
       DSPACE_EXPECTED_REVISION: recoveryRevision,
       DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+      DSPACE_EXPECTED_PROVIDER: 'openai',
+    };
+    delete legacyEnv.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
+    delete legacyEnv.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
+    const options = parseAndValidateArgs([], {
+      ...legacyEnv,
     });
     expect(options.identityContract).toBe('legacy-build-meta-v1');
     expect(buildSmokeEnv(options, {}).DSPACE_EXPECTED_IDENTITY_CONTRACT).toBe(
@@ -63,6 +69,17 @@ describe('remote chat smoke input validation', () => {
       ).toThrow('legacy identity contract is restricted');
     }
   );
+
+  it('rejects token.place for the legacy OpenAI-only UI contract', () => {
+    expect(() =>
+      parseAndValidateArgs([], {
+        ...completeEnv,
+        DSPACE_EXPECTED_VERSION: '3.0.1',
+        DSPACE_EXPECTED_REVISION: recoveryRevision,
+        DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+      })
+    ).toThrow('legacy identity contract is restricted');
+  });
 
   it('rejects unknown, empty, and contradictory identity contracts', () => {
     expect(() =>
