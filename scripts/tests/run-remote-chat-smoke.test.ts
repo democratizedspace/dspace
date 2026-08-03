@@ -16,6 +16,28 @@ const completeEnv = {
 };
 
 describe('remote chat smoke input validation', () => {
+  it('always configures serial Playwright execution while preserving the environment', () => {
+    const options = parseAndValidateArgs([], completeEnv);
+
+    expect(
+      buildSmokeEnv(options, { CUSTOM_SMOKE_VALUE: 'preserved' })
+    ).toMatchObject({
+      CUSTOM_SMOKE_VALUE: 'preserved',
+      PW_WORKERS: '1',
+    });
+  });
+
+  it.each(['2', '8'])(
+    'overrides ambient PW_WORKERS=%s with serial execution',
+    (workers) => {
+      const options = parseAndValidateArgs([], completeEnv);
+
+      expect(buildSmokeEnv(options, { PW_WORKERS: workers }).PW_WORKERS).toBe(
+        '1'
+      );
+    }
+  );
+
   it('accepts the documented environment and configures remote mode', () => {
     const options = parseAndValidateArgs([], completeEnv);
     expect(options.expectedProvider).toBe('token-place');
