@@ -3,6 +3,7 @@ import {
   buildSmokeEnv,
   parseAndValidateArgs,
 } from '../run-remote-chat-smoke.mjs';
+import { chatUiContractForIdentity } from '../../frontend/e2e/remote-chat-smoke-contract';
 
 const revision = '0123456789abcdef0123456789abcdef01234567';
 const recoveryRevision = '1a31a569aff2dbeb238e8c2688b9e85140d2077d';
@@ -16,6 +17,15 @@ const completeEnv = {
 };
 
 describe('remote chat smoke input validation', () => {
+  it('selects the chat UI contract from the validated identity contract', () => {
+    expect(chatUiContractForIdentity('build-info-v1')).toBe(
+      'modern-settings-v1'
+    );
+    expect(chatUiContractForIdentity('legacy-build-meta-v1')).toBe(
+      'legacy-inline-key-v1'
+    );
+  });
+
   it('accepts the documented environment and configures remote mode', () => {
     const options = parseAndValidateArgs([], completeEnv);
     expect(options.expectedProvider).toBe('token-place');
