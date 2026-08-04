@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { Page } from '../frontend/e2e/test-helpers';
 import { navigateWithRetry } from '../frontend/e2e/test-helpers';
@@ -38,6 +38,10 @@ describe('navigateWithRetry', () => {
 
   afterEach(() => {
     consoleWarnSpy.mockClear();
+  });
+
+  afterAll(() => {
+    consoleWarnSpy.mockRestore();
   });
 
   it('retries a Playwright navigation timeout before succeeding', async () => {
