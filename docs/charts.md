@@ -149,7 +149,10 @@ Helm commands below remain useful for local clusters, development environments, 
 inspection.
 
 The chart is published only by pushing the exact tag `chart-v<chart-version>` (for example,
-`chart-v3.1.0`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
+`chart-v3.1.1`). Chart `3.1.1` is a chart-only, provenance-bearing release for DSPACE application
+`3.1.0`. The legacy chart `3.1.0` must not be overwritten or used where modern immutable source
+provenance is required. A human operator will create `chart-v3.1.1` only after this change merges.
+The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
 matches it exactly; ordinary `main` and `v3` pushes never publish charts. Publication checks GHCR
 twice and fails closed unless the coordinate is authoritatively absent, so an existing chart
 coordinate cannot be replaced. Chart version `3.0.1` is permanently tombstoned and cannot be
@@ -173,7 +176,7 @@ evidence only even though exact digest equality with the immutable image index i
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
-  --version 3.1.0 \
+  --version 3.1.1 \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
   --set image.tag=v3.1.0

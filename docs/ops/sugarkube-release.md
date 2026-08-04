@@ -26,6 +26,12 @@ Use immutable branch-SHA tags or image digests for staging, production approvals
 records. Mutable branch tags and release-only semantic tags are convenient for humans but must not
 be the audit record for a production deploy.
 
+Chart `3.1.1` is the chart-only provenance-bearing coordinate for DSPACE application `3.1.0`.
+Legacy chart `3.1.0` lacks the modern immutable source-revision provenance and must neither be
+overwritten nor used where that provenance is required. After the chart `3.1.1` preparation PR
+merges, a human operator must tag its exact merge commit as `chart-v3.1.1`; this preparation does
+not create or publish the tag.
+
 ## Runtime source verification contract
 
 Before approving an already deployed runtime, set its expected full revision, public URL, and
