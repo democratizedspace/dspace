@@ -18,11 +18,14 @@ const ORIGINAL_VERSION = process.env.DSPACE_VERSION;
 const ORIGINAL_TOKEN_PLACE_URL = process.env.DSPACE_TOKEN_PLACE_URL;
 const ORIGINAL_TOKEN_PLACE_MODEL = process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
 const ORIGINAL_CHAT_PROXY_CREDENTIAL = process.env['DSPACE_CHAT_PROXY_TOKEN']; // scan-secrets: ignore
-const ORIGINAL_RATE_LIMIT_URL = process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
+const ORIGINAL_RATE_LIMIT_URL =
+  process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
 const ORIGINAL_RATE_LIMIT_CREDENTIAL =
   process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN']; // scan-secrets: ignore
-const ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS = process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
-const ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE = process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
+const ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS =
+  process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
+const ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE =
+  process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN']; // scan-secrets: ignore
 
 describe('runtime endpoints', () => {
   beforeEach(() => {
@@ -85,25 +88,29 @@ describe('runtime endpoints', () => {
     if (ORIGINAL_RATE_LIMIT_URL === undefined) {
       delete process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL;
     } else {
-      process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = ORIGINAL_RATE_LIMIT_URL;
+      process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL =
+        ORIGINAL_RATE_LIMIT_URL;
     }
 
     if (ORIGINAL_RATE_LIMIT_CREDENTIAL === undefined) {
       delete process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'];
     } else {
-      process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = ORIGINAL_RATE_LIMIT_CREDENTIAL;
+      process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] =
+        ORIGINAL_RATE_LIMIT_CREDENTIAL;
     }
 
     if (ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS === undefined) {
       delete process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS;
     } else {
-      process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS;
+      process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS =
+        ORIGINAL_CHAT_PROXY_PUBLIC_ACCESS;
     }
 
     if (ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE === undefined) {
       delete process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'];
     } else {
-      process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE;
+      process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
+        ORIGINAL_CHAT_PROXY_AUTHORIZATION_VALUE;
     }
   });
 
@@ -113,11 +120,10 @@ describe('runtime endpoints', () => {
     const body = await response.json();
     expect(body.tokenPlace).toStrictEqual({
       url: 'https://token.place',
-      model: 'llama-3.1-8b-instruct',
+      model: 'qwen3-8b-instruct',
       relayProxyAvailable: false,
     });
   });
-
 
   it('only advertises chat relay proxy when the complete shared boundary is configured', async () => {
     process.env['DSPACE_CHAT_PROXY_TOKEN'] = 'test-chat-proxy-token'; // scan-secrets: ignore
@@ -126,8 +132,10 @@ describe('runtime endpoints', () => {
     let body = await response.json();
     expect(body.tokenPlace.relayProxyAvailable).toBe(false);
 
-    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
-    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = 'test-rate-limit-token'; // scan-secrets: ignore
+    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL =
+      'https://redis.example.test';
+    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] =
+      'test-rate-limit-token'; // scan-secrets: ignore
 
     response = await getRuntimeConfig();
     body = await response.json();
@@ -138,26 +146,33 @@ describe('runtime endpoints', () => {
     body = await response.json();
     expect(body.tokenPlace.relayProxyAvailable).toBe(false);
 
-    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = 'authorized-test-user'; // scan-secrets: ignore
+    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
+      'authorized-test-user'; // scan-secrets: ignore
     response = await getRuntimeConfig();
     body = await response.json();
     expect(body.tokenPlace.relayProxyAvailable).toBe(true);
   });
 
-
   it('parses chat proxy sessions with the fixed identity and nonce format', () => {
     process.env['DSPACE_CHAT_PROXY_TOKEN'] = 'test-chat-proxy-token'; // scan-secrets: ignore
-    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
-    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = 'test-rate-limit-token'; // scan-secrets: ignore
+    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL =
+      'https://redis.example.test';
+    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] =
+      'test-rate-limit-token'; // scan-secrets: ignore
     process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
-    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = 'authorized-test-user'; // scan-secrets: ignore
+    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
+      'authorized-test-user'; // scan-secrets: ignore
 
     const identity = 'abc_defghiJKLMN01234_X';
     expect(identity).toHaveLength(22);
 
     const cookie = createChatProxySessionCookie(identity, 1_700_000_000_000);
-    expect(cookie).toMatch(/^[A-Za-z0-9_-]{22}_[A-Za-z0-9_-]{22}\.[0-9]+\.[A-Za-z0-9_-]+$/);
-    expect(verifyChatProxySessionCookie(cookie, 1_700_000_001_000)).toBe(identity);
+    expect(cookie).toMatch(
+      /^[A-Za-z0-9_-]{22}_[A-Za-z0-9_-]{22}\.[0-9]+\.[A-Za-z0-9_-]+$/
+    );
+    expect(verifyChatProxySessionCookie(cookie, 1_700_000_001_000)).toBe(
+      identity
+    );
   });
 
   it('scopes chat proxy session cookies so both SSR chat and API requests can read them', () => {
@@ -168,24 +183,36 @@ describe('runtime endpoints', () => {
       path: '/',
       maxAge: 60 * 60,
     });
-    expect(chatProxySessionCookieOptions('http:')).toMatchObject({ secure: false, path: '/' });
+    expect(chatProxySessionCookieOptions('http:')).toMatchObject({
+      secure: false,
+      path: '/',
+    });
   });
 
   it('rejects legacy anonymous chat proxy session IDs', () => {
     process.env['DSPACE_CHAT_PROXY_TOKEN'] = 'test-chat-proxy-token'; // scan-secrets: ignore
-    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL = 'https://redis.example.test';
-    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] = 'test-rate-limit-token'; // scan-secrets: ignore
+    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL =
+      'https://redis.example.test';
+    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] =
+      'test-rate-limit-token'; // scan-secrets: ignore
     process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
-    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] = 'authorized-test-user'; // scan-secrets: ignore
+    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
+      'authorized-test-user'; // scan-secrets: ignore
 
     const legacyId = 'abcdefghijklmnopqrstuv';
     const expiresAt = Math.floor(1_700_000_000_000 / 1000) + 60 * 60;
-    const signature = createHmac('sha256', process.env['DSPACE_CHAT_PROXY_TOKEN'] || '')
+    const signature = createHmac(
+      'sha256',
+      process.env['DSPACE_CHAT_PROXY_TOKEN'] || ''
+    )
       .update(`${legacyId}.${expiresAt}`)
       .digest('base64url');
 
     expect(
-      verifyChatProxySessionCookie(`${legacyId}.${expiresAt}.${signature}`, 1_700_000_001_000)
+      verifyChatProxySessionCookie(
+        `${legacyId}.${expiresAt}.${signature}`,
+        1_700_000_001_000
+      )
     ).toBeNull();
   });
 

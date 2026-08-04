@@ -28,6 +28,8 @@ const chatUiContract = chatUiContractFor(identityContract);
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
+const expectedResolvedModel =
+    process.env.DSPACE_EXPECTED_TOKEN_PLACE_RESOLVED_MODEL || expectedModel;
 const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
 const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
@@ -189,7 +191,9 @@ async function installSuccessfulRelay(page: Page) {
                         payload.contextTier ||
                         new URL(request.url()).searchParams.get('context_tier'),
                     selected_profile_id: 'dspace-smoke',
-                    selected_model_support: [expectedModel],
+                    requested_model: expectedModel,
+                    resolved_model: expectedResolvedModel,
+                    selected_model_support: [expectedResolvedModel],
                 }),
             });
         } else if (operation === 'dispatch') {
