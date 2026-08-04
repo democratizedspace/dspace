@@ -205,8 +205,11 @@ When omitted, `DSPACE_EXPECTED_IDENTITY_CONTRACT` defaults to the modern `build-
 contract. That contract requires same-origin `/build-info.json` identity (including the exact
 version, full revision, and derived short revision) and the exact HTML build-revision marker.
 
-The immutable 3.0.1 recovery artifact predates those surfaces. It may be checked only with this
-explicit legacy invocation:
+Two immutable artifacts predate those surfaces and expose the strict legacy
+`/build-meta.json` identity contract. They may be checked only with these exact compatibility
+profiles.
+
+The 3.0.1 recovery profile pairs legacy build identity with the legacy inline OpenAI chat UI:
 
 ```bash
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
@@ -217,10 +220,26 @@ DSPACE_EXPECTED_PROVIDER=openai \
 npm run qa:remote-chat-smoke
 ```
 
+The exact 3.1.0 staging profile pairs legacy build identity with the modern token.place settings
+chat UI:
+
+```bash
+DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=018687f5a7f4de45508c6e36eb28afb3e44da24d \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=legacy-build-meta-v1 \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
+
 `legacy-build-meta-v1` verifies the same-origin `/build-meta.json` response and is fail-closed to
-exactly application version `3.0.1` and source revision
-`1a31a569aff2dbeb238e8c2688b9e85140d2077d`. This mode exists solely to verify that immutable
-recovery artifact. It must not become a general fallback: the harness never selects it
+exactly the allowlisted version, source revision, and provider tuple. Build identity and chat UI
+are independent contracts: legacy identity selects the inline OpenAI UI only for the exact
+3.0.1/OpenAI profile, while the exact 3.1.0/token.place profile and all modern identity profiles
+use the modern settings UI. These modes exist solely to verify those immutable compatibility
+profiles. They must not become a general fallback: the harness never selects legacy identity
 automatically after a missing or malformed modern identity response.
 
 The command is non-destructive: it uses a new isolated browser context, clears browser-held state,
@@ -228,8 +247,8 @@ blocks service workers and unexpected provider traffic, and fulfills token.place
 Playwright. It sends no live chat request or user secret and does not mutate server or shared
 production state. It returns nonzero on build identity, hydration, provider routing/origin/model,
 submission, classified availability, or secret-safety drift. Modern OpenAI verification proves
-that OpenAI is discoverable through settings and missing-key gated. The exact legacy 3.0.1 contract
-instead proves that OpenAI is the default, configures only a hard-coded fake sentinel through the
+that OpenAI is discoverable through settings and missing-key gated. The exact legacy
+3.0.1/OpenAI contract instead proves that OpenAI is the default, configures only a hard-coded fake sentinel through the
 inline `/chat` key form, and requires one mocked successful OpenAI response; it does not imply that
 the immutable application has modern settings or missing-key behavior. Both modes deny unmatched
 or live provider traffic and require no real credential. This is the DSPACE-side harness only, not
