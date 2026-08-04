@@ -27,7 +27,8 @@ const CONNECTION_REFUSED_PATTERNS = [
 const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
-const DEFAULT_MAX_DURATION_MS = 10_000;
+const DEFAULT_NAVIGATION_TIMEOUT_MS = 15_000;
+const DEFAULT_MAX_DURATION_MS = 35_000;
 const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
 type CryptoLike = { randomUUID?: () => string };
 type IndexedDbRequest<T = unknown> = {
@@ -89,6 +90,34 @@ async function wait(page: Page, ms: number): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+type NavigateWithRetryOptions = {
+    attempts?: number;
+    delayMs?: number;
+    maxLogAttempts?: number;
+    maxDurationMs?: number;
+    perAttemptTimeoutMs?: number;
+    now?: () => number;
+    sleep?: (ms: number) => Promise<void>;
+};
+
+function isRetryableNavigationError(error: unknown): { retryable: boolean; reason: string } {
+    const message = error instanceof Error ? (error.message ?? String(error)) : String(error ?? '');
+
+    if (CONNECTION_REFUSED_PATTERNS.some((pattern) => message.includes(pattern))) {
+        return { retryable: true, reason: 'connection refusal' };
+    }
+
+    if (error instanceof Error && error.name === 'TimeoutError') {
+        return { retryable: true, reason: 'navigation timeout' };
+    }
+
+    if (/^page\.goto: (?:Timeout|Navigation timeout of) \d+ms exceeded\.?$/m.test(message)) {
+        return { retryable: true, reason: 'navigation timeout' };
+    }
+
+    return { retryable: false, reason: 'non-retryable error' };
+}
+
 export async function navigateWithRetry(
     page: Page,
     url: string,
@@ -97,35 +126,52 @@ export async function navigateWithRetry(
         delayMs = DEFAULT_RETRY_DELAY_MS,
         maxLogAttempts = DEFAULT_MAX_LOG_ATTEMPTS,
         maxDurationMs = DEFAULT_MAX_DURATION_MS,
-    }: { attempts?: number; delayMs?: number; maxLogAttempts?: number; maxDurationMs?: number } = {}
+        perAttemptTimeoutMs = DEFAULT_NAVIGATION_TIMEOUT_MS,
+        now = () => Date.now(),
+        sleep,
+    }: NavigateWithRetryOptions = {}
 ): Promise<void> {
     let lastError: unknown;
-    const startedAt = Date.now();
+    const startedAt = now();
     let suppressedLogCount = 0;
 
     for (let attempt = 1; attempt <= attempts; attempt++) {
+        const elapsedBeforeAttemptMs = now() - startedAt;
+        const remainingBeforeAttemptMs = Number.isFinite(maxDurationMs)
+            ? maxDurationMs - elapsedBeforeAttemptMs
+            : Number.POSITIVE_INFINITY;
+
+        if (remainingBeforeAttemptMs <= 0) {
+            const timeoutError = new Error(
+                `Timed out before navigating to ${url} after ${elapsedBeforeAttemptMs}ms (limit ${maxDurationMs}ms)`
+            );
+            if (lastError instanceof Error) {
+                timeoutError.cause = lastError;
+            }
+            throw timeoutError;
+        }
+
+        const timeout = Math.max(1, Math.min(perAttemptTimeoutMs, remainingBeforeAttemptMs));
+
         try {
-            await page.goto(url, { waitUntil: 'domcontentloaded' });
+            await page.goto(url, { waitUntil: 'domcontentloaded', timeout });
             return;
         } catch (error) {
             lastError = error;
 
-            const message =
-                error instanceof Error ? (error.message ?? String(error)) : String(error ?? '');
-            const isRetryable = CONNECTION_REFUSED_PATTERNS.some((pattern) =>
-                message.includes(pattern)
-            );
+            const { retryable, reason: retryReason } = isRetryableNavigationError(error);
+            const elapsedMs = now() - startedAt;
+            const remainingAfterAttemptMs = Number.isFinite(maxDurationMs)
+                ? maxDurationMs - elapsedMs
+                : Number.POSITIVE_INFINITY;
+            const exhaustedDuration = remainingAfterAttemptMs <= 0;
 
-            const elapsedMs = Date.now() - startedAt;
-
-            const exceededDuration = Number.isFinite(maxDurationMs) && elapsedMs > maxDurationMs;
-
-            if (!isRetryable || attempt === attempts || exceededDuration) {
+            if (!retryable || attempt === attempts || exhaustedDuration) {
                 const wrappedError =
                     error instanceof Error
                         ? error
                         : new Error(`Failed to navigate to ${url}: ${String(error)}`);
-                const reason = exceededDuration
+                const reason = exhaustedDuration
                     ? `after ${elapsedMs}ms (limit ${maxDurationMs}ms)`
                     : `after ${attempt} attempt${attempt === 1 ? '' : 's'}`;
 
@@ -134,9 +180,18 @@ export async function navigateWithRetry(
             }
 
             const backoffDelay = delayMs * attempt;
+            if (remainingAfterAttemptMs <= backoffDelay) {
+                const wrappedError =
+                    error instanceof Error
+                        ? error
+                        : new Error(`Failed to navigate to ${url}: ${String(error)}`);
+                wrappedError.message = `${wrappedError.message} while navigating to ${url} after ${elapsedMs}ms (limit ${maxDurationMs}ms; insufficient budget for ${backoffDelay}ms retry backoff)`;
+                throw wrappedError;
+            }
+
             if (attempt <= maxLogAttempts) {
                 console.warn(
-                    `Retrying navigation to ${url} after connection refusal (attempt ${attempt} of ${attempts})`
+                    `Retrying navigation to ${url} after ${retryReason} (attempt ${attempt} of ${attempts})`
                 );
             } else {
                 suppressedLogCount += 1;
@@ -147,7 +202,11 @@ export async function navigateWithRetry(
                     );
                 }
             }
-            await wait(page, backoffDelay);
+            if (sleep) {
+                await sleep(backoffDelay);
+            } else {
+                await wait(page, backoffDelay);
+            }
         }
     }
 

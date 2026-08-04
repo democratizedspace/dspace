@@ -5,8 +5,9 @@ vi.mock('/src/utils/gameState/common.js', () => ({}), { virtual: true });
 import type { Page } from '../frontend/e2e/test-helpers';
 import { navigateWithRetry } from '../frontend/e2e/test-helpers';
 
-describe('navigateWithRetry', () => {
+describe('navigateWithRetry preview-server retry compatibility', () => {
   const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
   it('retries navigation when the preview server is not ready', async () => {
     const goto = vi
       .fn(async () => undefined as Awaited<ReturnType<Page['goto']>>)
@@ -35,7 +36,7 @@ describe('navigateWithRetry', () => {
 
   it('rethrows non retryable navigation errors', async () => {
     const navigationError = new Error(
-      'page.goto: Navigation timeout of 30000ms exceeded'
+      'page.goto: net::ERR_CERT_AUTHORITY_INVALID'
     );
     const page = {
       goto: vi.fn(async () => {
