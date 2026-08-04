@@ -187,7 +187,7 @@ DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
 DSPACE_EXPECTED_VERSION=3.1.0 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
 DSPACE_EXPECTED_PROVIDER=token-place \
-DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
 npm run qa:remote-chat-smoke
 
@@ -205,8 +205,15 @@ When omitted, `DSPACE_EXPECTED_IDENTITY_CONTRACT` defaults to the modern `build-
 contract. That contract requires same-origin `/build-info.json` identity (including the exact
 version, full revision, and derived short revision) and the exact HTML build-revision marker.
 
-The immutable 3.0.1 recovery artifact predates those surfaces. It may be checked only with this
-explicit legacy invocation:
+Some immutable artifacts predate those surfaces but are still supported by exact compatibility
+profiles. `legacy-build-meta-v1` verifies the same-origin `/build-meta.json` response. Build
+identity and chat UI are independent contracts: the 3.0.1/OpenAI compatibility profile uses the
+legacy inline OpenAI chat UI, while the 3.1.0/token.place compatibility profile uses the modern
+settings-based token.place chat UI. These profiles are exact allowlist entries, not a general
+legacy fallback; the harness never selects legacy identity automatically after a missing or
+malformed modern identity response.
+
+The immutable 3.0.1 recovery artifact may be checked only with this explicit legacy invocation:
 
 ```bash
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
@@ -217,11 +224,19 @@ DSPACE_EXPECTED_PROVIDER=openai \
 npm run qa:remote-chat-smoke
 ```
 
-`legacy-build-meta-v1` verifies the same-origin `/build-meta.json` response and is fail-closed to
-exactly application version `3.0.1` and source revision
-`1a31a569aff2dbeb238e8c2688b9e85140d2077d`. This mode exists solely to verify that immutable
-recovery artifact. It must not become a general fallback: the harness never selects it
-automatically after a missing or malformed modern identity response.
+The immutable 3.1.0 staging artifact at Helm revision 27 may be checked only with this explicit
+legacy-identity token.place invocation:
+
+```bash
+DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION=018687f5a7f4de45508c6e36eb28afb3e44da24d \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=legacy-build-meta-v1 \
+DSPACE_EXPECTED_PROVIDER=token-place \
+DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
+DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+npm run qa:remote-chat-smoke
+```
 
 The command is non-destructive: it uses a new isolated browser context, clears browser-held state,
 blocks service workers and unexpected provider traffic, and fulfills token.place transport inside
