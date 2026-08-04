@@ -94,7 +94,7 @@ DSPACE `/chat` must not send the default prompt as plaintext directly to
     "request_id": "dspace-generated-request-id",
     "client_public_key": "browser-client-public-key",
     "api_v1_request": {
-        "model": "llama-3.1-8b-instruct",
+        "model": "qwen3-8b-instruct",
         "messages": [
             { "role": "system", "content": "..." },
             { "role": "user", "content": "..." }
