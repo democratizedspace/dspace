@@ -82,7 +82,7 @@ API v1 remains non-streaming inside the encrypted envelope. Responses may appear
 completion is ready rather than as a streaming token-by-token transcript.
 
 The default token.place origin is `https://token.place`, and the default token.place API v1
-Chat model is `llama-3.1-8b-instruct`. Deployment operators should override the origin and
+Chat model is `qwen3-8b-instruct`. Deployment operators should override the origin and
 model at runtime with public, non-secret environment variables when a token.place deployment
 requires a different API v1 model:
 

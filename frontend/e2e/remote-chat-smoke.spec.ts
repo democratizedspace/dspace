@@ -189,7 +189,9 @@ async function installSuccessfulRelay(page: Page) {
                         payload.contextTier ||
                         new URL(request.url()).searchParams.get('context_tier'),
                     selected_profile_id: 'dspace-smoke',
-                    selected_model_support: [expectedModel],
+                    requested_model: expectedModel,
+                    resolved_model: 'qwen3-8b-instruct',
+                    selected_model_support: ['qwen3-8b-instruct'],
                 }),
             });
         } else if (operation === 'dispatch') {
