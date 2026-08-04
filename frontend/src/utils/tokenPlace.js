@@ -24,7 +24,8 @@ const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
 const RELAY_PROTOCOL = 'tokenplace_api_v1_relay_e2ee';
 const RELAY_VERSION = 1;
-const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
+const DEFAULT_CHAT_MODEL = 'qwen3-8b-instruct';
+const LEGACY_LLAMA_CHAT_MODEL = 'llama-3.1-8b-instruct';
 export const TOKEN_PLACE_FAST_TIER_TIMEOUT_MS = 30_000;
 export const TOKEN_PLACE_FULL_TIER_TIMEOUT_MS = 120_000;
 const DEFAULT_RELAY_TIMEOUT_MS = TOKEN_PLACE_FAST_TIER_TIMEOUT_MS;
@@ -609,6 +610,22 @@ const getRelaySelectedContextWindowTokens = (data) => {
     return Number.isFinite(numeric) && numeric > 0 ? numeric : undefined;
 };
 
+const getRelayRequestedModel = (data) =>
+    data?.requested_model ??
+    data?.requestedModel ??
+    data?.profile?.requested_model ??
+    data?.profile?.requestedModel ??
+    data?.selected_profile?.requested_model ??
+    data?.selectedProfile?.requestedModel;
+
+const getRelayResolvedModel = (data) =>
+    data?.resolved_model ??
+    data?.resolvedModel ??
+    data?.profile?.resolved_model ??
+    data?.profile?.resolvedModel ??
+    data?.selected_profile?.resolved_model ??
+    data?.selectedProfile?.resolvedModel;
+
 const getRelaySelectedModelSupport = (data) =>
     data?.selected_model_support ??
     data?.selectedModelSupport ??
@@ -627,8 +644,12 @@ const getRelaySelectedModelSupport = (data) =>
     data?.selectedProfile?.modelSupport ??
     data?.selectedProfile?.models;
 
+const isAcceptedRelayModelResolution = (requestedModel, resolvedModel) =>
+    resolvedModel === requestedModel ||
+    (requestedModel === LEGACY_LLAMA_CHAT_MODEL && resolvedModel === DEFAULT_CHAT_MODEL);
+
 const relayModelSupportIncludes = (modelSupport, requestedModel) => {
-    if (!modelSupport || !requestedModel) return true;
+    if (!modelSupport || !requestedModel) return false;
     if (Array.isArray(modelSupport)) return modelSupport.includes(requestedModel);
     if (typeof modelSupport === 'string') return modelSupport === requestedModel;
     if (typeof modelSupport === 'object') {
@@ -690,8 +711,21 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
                 'token.place relay selected incompatible context window metadata.'
             );
         }
+        const requestedModel = getRelayRequestedModel(data);
+        if (requestedModel && requestedModel !== options.model) {
+            throw createMalformedTokenPlaceResponseError(
+                'token.place relay selected contradictory requested model metadata.'
+            );
+        }
+        const resolvedModel = getRelayResolvedModel(data);
+        if (resolvedModel && !isAcceptedRelayModelResolution(options.model, resolvedModel)) {
+            throw createMalformedTokenPlaceResponseError(
+                'token.place relay selected unexpected resolved model metadata.'
+            );
+        }
+        const effectiveModel = resolvedModel || options.model;
         const selectedModelSupport = getRelaySelectedModelSupport(data);
-        if (!relayModelSupportIncludes(selectedModelSupport, options.model)) {
+        if (!relayModelSupportIncludes(selectedModelSupport, effectiveModel)) {
             throw createMalformedTokenPlaceResponseError(
                 'token.place relay selected incompatible model metadata.'
             );

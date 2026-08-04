@@ -113,7 +113,7 @@ describe('runtime endpoints', () => {
     const body = await response.json();
     expect(body.tokenPlace).toStrictEqual({
       url: 'https://token.place',
-      model: 'llama-3.1-8b-instruct',
+      model: 'qwen3-8b-instruct',
       relayProxyAvailable: false,
     });
   });
