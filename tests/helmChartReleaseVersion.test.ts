@@ -97,7 +97,7 @@ describe('independent DSPACE application and chart coordinates', () => {
       ],
       {
         cwd: repoRoot,
-        env: { ...process.env, CHART_TAG: 'chart-v3.1.1' },
+        env: { ...process.env, CHART_TAG: 'chart-v3.1.1', GITHUB_OUTPUT: '' },
         encoding: 'utf8',
       }
     );
