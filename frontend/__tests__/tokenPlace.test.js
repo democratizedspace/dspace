@@ -1524,7 +1524,7 @@ ${ragExcerpt.repeat(4000)}`,
 
     test('accepts production Llama to Qwen relay resolution with one encrypted dispatch', async () => {
         global.fetch = makeRelayFetch({
-            selectedTier: '64k-full',
+            omitSelectedTier: true,
             selectedWindowTokens: 65_536,
             selectedModelSupport: ['qwen3-8b-instruct'],
             requestedModel: 'llama-3.1-8b-instruct',
@@ -1555,6 +1555,7 @@ ${ragExcerpt.repeat(4000)}`,
         expect(new URL(selectionCall.url).searchParams.get('model')).toBe('llama-3.1-8b-instruct');
         expect(new URL(selectionCall.url).searchParams.get('context_tier')).toBe('8k-fast');
         const selectionBody = await fetch.mock.results[0].value.then((response) => response.json());
+        expect(selectionBody).not.toHaveProperty('context_tier');
         expect(selectionBody).toMatchObject({
             requested_model: 'llama-3.1-8b-instruct',
             resolved_model: 'qwen3-8b-instruct',

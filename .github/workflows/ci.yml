@@ -123,9 +123,13 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
         run: |
           npm run build
-          DSPACE_EXPECTED_VERSION="$(node -p "require('./package.json').version")" \
-            npm run qa:remote-chat-smoke
           expected_version="$(node -p "require('./package.json').version")"
+          DSPACE_EXPECTED_VERSION="$expected_version" \
+            npm run qa:remote-chat-smoke
+          DSPACE_TOKEN_PLACE_CHAT_MODEL=llama-3.1-8b-instruct \
+            DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
+            DSPACE_EXPECTED_VERSION="$expected_version" \
+            npm run qa:remote-chat-smoke
           run_negative() {
             stage="$1"
             shift

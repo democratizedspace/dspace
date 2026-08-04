@@ -33,8 +33,7 @@ const chatUiContract = chatUiContractFor(identityContract, expectedProvider);
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
 const expectedResolvedModel =
-    process.env.DSPACE_EXPECTED_TOKEN_PLACE_RESOLVED_MODEL ||
-    (expectedModel === 'llama-3.1-8b-instruct' ? 'qwen3-8b-instruct' : expectedModel);
+    expectedModel === 'llama-3.1-8b-instruct' ? 'qwen3-8b-instruct' : expectedModel;
 const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
 const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
