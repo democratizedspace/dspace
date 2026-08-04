@@ -7,10 +7,20 @@ import { fileURLToPath } from 'node:url';
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const frontendDir = join(scriptDir, '..', 'frontend');
 const defaultIdentityContract = 'build-info-v1';
-const legacyIdentityCoordinates = {
-  version: '3.0.1',
-  revision: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
-};
+const legacyIdentityProfiles = [
+  {
+    version: '3.0.1',
+    revision: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
+    provider: 'openai',
+    identityContract: 'legacy-build-meta-v1',
+  },
+  {
+    version: '3.1.0',
+    revision: '018687f5a7f4de45508c6e36eb28afb3e44da24d',
+    provider: 'token-place',
+    identityContract: 'legacy-build-meta-v1',
+  },
+];
 
 const definitions = {
   baseURL: ['base-url', 'DSPACE_SMOKE_BASE_URL'],
@@ -119,18 +129,23 @@ export function parseAndValidateArgs(argv, env = process.env) {
   ) {
     throw new Error('validation: identity contract is unsupported');
   }
-  if (
-    result.identityContract === 'legacy-build-meta-v1' &&
-    (result.expectedVersion !== legacyIdentityCoordinates.version ||
-      result.expectedRevision !== legacyIdentityCoordinates.revision ||
-      result.expectedProvider !== 'openai')
-  ) {
-    throw new Error('validation: legacy identity contract is restricted');
-  }
   if (!['token-place', 'openai'].includes(result.expectedProvider)) {
     throw new Error(
       'validation: expected provider must be token-place or openai'
     );
+  }
+
+  if (
+    result.identityContract === 'legacy-build-meta-v1' &&
+    !legacyIdentityProfiles.some(
+      (profile) =>
+        profile.identityContract === result.identityContract &&
+        profile.version === result.expectedVersion &&
+        profile.revision === result.expectedRevision &&
+        profile.provider === result.expectedProvider
+    )
+  ) {
+    throw new Error('validation: legacy identity contract is restricted');
   }
 
   if (result.expectedProvider === 'token-place') {
