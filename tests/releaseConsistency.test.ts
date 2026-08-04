@@ -29,9 +29,9 @@ function coordinateTree(run: (root: string) => void) {
   });
   writeFileSync(
     join(root, 'charts/dspace/Chart.yaml'),
-    'version: 4.2.0\nappVersion: "3.1.0"\n'
+    'version: 3.1.1\nappVersion: "3.1.0"\n'
   );
-  writeFileSync(join(root, 'docs/apps/dspace.version'), '4.2.0\n');
+  writeFileSync(join(root, 'docs/apps/dspace.version'), '3.1.1\n');
   try {
     run(root);
   } finally {
@@ -44,7 +44,7 @@ describe('release coordinate consistency', () => {
     coordinateTree((root) =>
       expect(readLocalCoordinates(root)).toEqual({
         applicationVersion: '3.1.0',
-        chartVersion: '4.2.0',
+        chartVersion: '3.1.1',
       })
     ));
 
@@ -72,14 +72,14 @@ describe('release coordinate consistency', () => {
     coordinateTree((root) => {
       writeFileSync(
         join(root, 'charts/dspace/Chart.yaml'),
-        'version: 4.2.0\nappVersion: "3.1.1"\n'
+        'version: 3.1.1\nappVersion: "3.1.1"\n'
       );
       expect(() => readLocalCoordinates(root)).toThrow('chart appVersion');
     }));
 
   it('rejects documented chart-version drift', () =>
     coordinateTree((root) => {
-      writeFileSync(join(root, 'docs/apps/dspace.version'), '4.2.1\n');
+      writeFileSync(join(root, 'docs/apps/dspace.version'), '3.1.2\n');
       expect(() => readLocalCoordinates(root)).toThrow('documented chart version');
     }));
 
@@ -151,13 +151,13 @@ describe('release coordinate consistency', () => {
       git('commit', '-qm', 'release');
       const approved = git('rev-parse', 'HEAD');
       git('tag', '-a', 'v3.1.0', '-m', 'application release');
-      git('tag', '-a', 'chart-v4.2.0', '-m', 'chart release');
+      git('tag', '-a', 'chart-v3.1.1', '-m', 'chart release');
       git('update-ref', 'refs/remotes/origin/main', approved);
       expect(
         validateReleaseSource({
           root,
           releaseTag: 'v3.1.0',
-          chartTag: 'chart-v4.2.0',
+          chartTag: 'chart-v3.1.1',
           sourceRevision: approved,
           branch: 'main',
         }).sourceRevision
@@ -166,10 +166,10 @@ describe('release coordinate consistency', () => {
       git('add', 'new');
       git('commit', '-qm', 'later');
       const later = git('rev-parse', 'HEAD');
-      git('tag', '-f', 'chart-v4.2.0', later);
+      git('tag', '-f', 'chart-v3.1.1', later);
       git('checkout', '-q', approved);
       expect(() => validateReleaseSource({
-        root, releaseTag: 'v3.1.0', chartTag: 'chart-v4.2.0',
+        root, releaseTag: 'v3.1.0', chartTag: 'chart-v3.1.1',
         sourceRevision: approved, branch: 'main',
       })).toThrow('chart release tag does not peel');
       git('checkout', '-q', later);
@@ -177,7 +177,7 @@ describe('release coordinate consistency', () => {
         validateReleaseSource({
           root,
           releaseTag: 'v3.1.0',
-          chartTag: 'chart-v4.2.0',
+          chartTag: 'chart-v3.1.1',
           sourceRevision: git('rev-parse', 'HEAD'),
           branch: 'main',
         })
@@ -185,8 +185,8 @@ describe('release coordinate consistency', () => {
     }));
 
   it.each([
-    ['release tag', 'v3.1.1', 'chart-v4.2.0'],
-    ['chart release tag', 'v3.1.0', 'chart-v4.2.1'],
+    ['release tag', 'v3.1.1', 'chart-v3.1.1'],
+    ['chart release tag', 'v3.1.0', 'chart-v3.1.2'],
   ])('rejects a %s/version mismatch', (message, releaseTag, chartTag) =>
     coordinateTree((root) => {
       const git = (...args: string[]) =>
