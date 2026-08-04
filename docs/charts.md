@@ -148,8 +148,13 @@ For the standard Sugarkube staging and production flow, use the
 Helm commands below remain useful for local clusters, development environments, and manual chart
 inspection.
 
+Chart `3.1.1` is a chart-only, provenance-bearing release for DSPACE application `3.1.0`. The
+legacy `3.1.0` chart must not be overwritten or selected where modern immutable source provenance
+is required. After this change merges, a human operator will tag the exact merge commit as
+`chart-v3.1.1`; this preparation does not create or publish that tag.
+
 The chart is published only by pushing the exact tag `chart-v<chart-version>` (for example,
-`chart-v3.1.0`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
+`chart-v3.1.1`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
 matches it exactly; ordinary `main` and `v3` pushes never publish charts. Publication checks GHCR
 twice and fails closed unless the coordinate is authoritatively absent, so an existing chart
 coordinate cannot be replaced. Chart version `3.0.1` is permanently tombstoned and cannot be
@@ -173,7 +178,7 @@ evidence only even though exact digest equality with the immutable image index i
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
-  --version 3.1.0 \
+  --version 3.1.1 \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
   --set image.tag=v3.1.0

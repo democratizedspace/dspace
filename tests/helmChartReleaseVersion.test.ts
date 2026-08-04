@@ -76,6 +76,10 @@ describe('independent DSPACE application and chart coordinates', () => {
   it('passes current repository coordinates and reports both groups', () =>
     withFixture((root) => {
       const { application, chart } = currentVersions(root);
+      expect({ application, chart }).toEqual({
+        application: '3.1.0',
+        chart: '3.1.1',
+      });
       const result = runGuard(root);
       expect(result.status, result.stderr).toBe(0);
       expect(result.stdout).toContain(
@@ -83,6 +87,21 @@ describe('independent DSPACE application and chart coordinates', () => {
       );
       expect(result.stdout).toContain(`chart version ${chart}`);
     }));
+
+  it('accepts chart-v3.1.1 for the chart-only application 3.1.0 release', () => {
+    const result = spawnSync(
+      process.execPath,
+      ['scripts/check-release-consistency.mjs', '--verify-chart-local'],
+      {
+        cwd: repoRoot,
+        env: { ...process.env, CHART_TAG: 'chart-v3.1.1' },
+        encoding: 'utf8',
+      }
+    );
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('applicationVersion=3.1.0');
+    expect(result.stdout).toContain('chartVersion=3.1.1');
+  });
 
   it('permits chart 3.0.2 with application 3.0.1', () =>
     withFixture((root) => {
@@ -312,7 +331,7 @@ describe('staged Helm chart provenance', () => {
     mkdirSync(source);
     writeFileSync(
       join(source, 'Chart.yaml'),
-      'apiVersion: v2\nname: dspace\nversion: 4.5.6\nappVersion: "3.1.0"\ndescription: retained\nannotations:\n  example.org/existing: retained\n'
+      'apiVersion: v2\nname: dspace\nversion: 3.1.1\nappVersion: "3.1.0"\ndescription: retained\nannotations:\n  example.org/existing: retained\n'
     );
     try {
       run(source, staged);
@@ -327,17 +346,21 @@ describe('staged Helm chart provenance', () => {
       stageChart({ sourceDir: source, destinationDir: staged, revision });
       const stagedYaml = join(staged, 'Chart.yaml');
       const chart = parse(readFileSync(stagedYaml, 'utf8'));
+      expect(chart.version).toBe('3.1.1');
+      expect(chart.appVersion).toBe('3.1.0');
       expect(chart.description).toBe('retained');
       expect(chart.annotations['example.org/existing']).toBe('retained');
       expect(
         verifyChart({
           chartYaml: stagedYaml,
-          version: '4.5.6',
+          version: '3.1.1',
           appVersion: '3.1.0',
           revision,
         })
       ).toMatchObject({
         'org.opencontainers.image.source': SOURCE_REPOSITORY,
+        'org.opencontainers.image.revision': revision,
+        'org.opencontainers.image.version': '3.1.0',
       });
       expect(readFileSync(join(source, 'Chart.yaml'), 'utf8')).toBe(before);
     }));
@@ -346,7 +369,7 @@ describe('staged Helm chart provenance', () => {
     'rejects non-strict chart SemVer %s',
     (version) =>
       chartFixture((source, staged) => {
-        replace(source, 'Chart.yaml', 'version: 4.5.6', `version: ${version}`);
+        replace(source, 'Chart.yaml', 'version: 3.1.1', `version: ${version}`);
         expect(() =>
           stageChart({ sourceDir: source, destinationDir: staged, revision })
         ).toThrow(/chart version/);
@@ -400,7 +423,7 @@ describe('staged Helm chart provenance', () => {
   );
 
   it.each([
-    ['version', 'version: 4.5.6', 'version: 4.5.7'],
+    ['version', 'version: 3.1.1', 'version: 3.1.2'],
     ['appVersion', 'appVersion: 3.1.0', 'appVersion: 3.1.1'],
     ['source', SOURCE_REPOSITORY, 'https://example.invalid/repo'],
     ['revision', revision, 'f'.repeat(40)],
@@ -417,7 +440,7 @@ describe('staged Helm chart provenance', () => {
       expect(() =>
         verifyChart({
           chartYaml: join(staged, 'Chart.yaml'),
-          version: '4.5.6',
+          version: '3.1.1',
           appVersion: '3.1.0',
           revision,
         })
@@ -446,7 +469,7 @@ describe('staged Helm chart provenance', () => {
         expect(() =>
           verifyChart({
             chartYaml,
-            version: '4.5.6',
+            version: '3.1.1',
             appVersion: '3.1.0',
             revision,
           })
