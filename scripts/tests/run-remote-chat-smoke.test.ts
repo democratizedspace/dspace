@@ -6,6 +6,7 @@ import {
 
 const revision = '0123456789abcdef0123456789abcdef01234567';
 const recoveryRevision = '1a31a569aff2dbeb238e8c2688b9e85140d2077d';
+const tokenPlaceLegacyRevision = '018687f5a7f4de45508c6e36eb28afb3e44da24d';
 const completeEnv = {
   DSPACE_SMOKE_BASE_URL: 'https://staging.example.test',
   DSPACE_EXPECTED_VERSION: '3.1.0',
@@ -51,7 +52,7 @@ describe('remote chat smoke input validation', () => {
     ).toBe('build-info-v1');
   });
 
-  it('accepts the legacy identity contract only for the recovery coordinates', () => {
+  it('accepts the exact 3.0.1 OpenAI legacy identity profile', () => {
     const legacyEnv = {
       ...completeEnv,
       DSPACE_EXPECTED_VERSION: '3.0.1',
@@ -70,24 +71,56 @@ describe('remote chat smoke input validation', () => {
     );
   });
 
+  it('accepts the exact 3.1.0 token.place legacy identity profile and propagates smoke settings', () => {
+    const options = parseAndValidateArgs([], {
+      ...completeEnv,
+      DSPACE_EXPECTED_VERSION: '3.1.0',
+      DSPACE_EXPECTED_REVISION: tokenPlaceLegacyRevision,
+      DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+      DSPACE_EXPECTED_PROVIDER: 'token-place',
+      DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: 'https://token.place',
+      DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'llama-3.1-8b-instruct',
+    });
+    expect(options.identityContract).toBe('legacy-build-meta-v1');
+    expect(options.expectedProvider).toBe('token-place');
+    expect(options.expectedTokenPlaceOrigin).toBe('https://token.place');
+    expect(options.expectedTokenPlaceModel).toBe('llama-3.1-8b-instruct');
+    expect(buildSmokeEnv(options, {})).toMatchObject({
+      PW_WORKERS: '1',
+      DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+      DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: 'https://token.place',
+      DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'llama-3.1-8b-instruct',
+    });
+  });
+
   it.each([
-    ['3.0.2', recoveryRevision],
-    ['3.0.1', revision],
+    ['3.0.2', recoveryRevision, 'openai'],
+    ['3.0.1', revision, 'openai'],
+    ['3.0.1', recoveryRevision, 'token-place'],
+    ['3.1.1', tokenPlaceLegacyRevision, 'token-place'],
+    ['3.1.0', revision, 'token-place'],
+    ['3.1.0', tokenPlaceLegacyRevision, 'openai'],
   ])(
-    'rejects legacy identity for version %s and revision %s',
-    (version, sha) => {
-      expect(() =>
-        parseAndValidateArgs([], {
-          ...completeEnv,
-          DSPACE_EXPECTED_VERSION: version,
-          DSPACE_EXPECTED_REVISION: sha,
-          DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
-        })
-      ).toThrow('legacy identity contract is restricted');
+    'rejects legacy identity for version %s, revision %s, and provider %s',
+    (version, sha, provider) => {
+      const env = {
+        ...completeEnv,
+        DSPACE_EXPECTED_VERSION: version,
+        DSPACE_EXPECTED_REVISION: sha,
+        DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+        DSPACE_EXPECTED_PROVIDER: provider,
+      };
+      if (provider === 'openai') {
+        delete env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
+        delete env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
+      }
+      expect(() => parseAndValidateArgs([], env)).toThrow(
+        'legacy identity contract is restricted'
+      );
     }
   );
 
-  it('rejects token.place for the legacy OpenAI-only UI contract', () => {
+  it('rejects 3.0.1 with token.place legacy identity', () => {
     expect(() =>
       parseAndValidateArgs([], {
         ...completeEnv,
@@ -205,14 +238,24 @@ describe('remote chat smoke input validation', () => {
 
   it('keeps malformed-input diagnostics bounded and free of supplied values', () => {
     const sentinel = 'operator-private-query-sentinel';
-    for (const argv of [
-      [sentinel],
-      [`--unknown=${sentinel}`],
-      [`--identity-contract=${sentinel}`],
-    ]) {
+    const cases = [
+      { argv: [sentinel], env: completeEnv },
+      { argv: [`--unknown=${sentinel}`], env: completeEnv },
+      { argv: [`--identity-contract=${sentinel}`], env: completeEnv },
+      {
+        argv: [],
+        env: {
+          ...completeEnv,
+          DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+          DSPACE_EXPECTED_PROVIDER: 'token-place',
+          DSPACE_EXPECTED_TOKEN_PLACE_MODEL: sentinel,
+        },
+      },
+    ];
+    for (const { argv, env } of cases) {
       let message = '';
       try {
-        parseAndValidateArgs(argv, completeEnv);
+        parseAndValidateArgs(argv, env);
       } catch (error) {
         message = String(error.message);
       }
