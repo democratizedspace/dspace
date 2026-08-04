@@ -73,6 +73,39 @@ const withFixture = (check: (root: string) => void) => {
 };
 
 describe('independent DSPACE application and chart coordinates', () => {
+  it('pins chart 3.1.1 to application 3.1.0 without changing the image coordinate', () => {
+    const chart = parse(
+      readFileSync(join(repoRoot, 'charts/dspace/Chart.yaml'), 'utf8')
+    );
+    const values = parse(
+      readFileSync(join(repoRoot, 'charts/dspace/values.yaml'), 'utf8')
+    );
+    expect(chart.version).toBe('3.1.1');
+    expect(chart.appVersion).toBe('3.1.0');
+    expect(values.image.tag).toBe('v3.1.0');
+    expect(
+      readFileSync(join(repoRoot, 'docs/apps/dspace.version'), 'utf8')
+    ).toMatch(/^3\.1\.1$/m);
+  });
+
+  it('accepts the chart-v3.1.1 release tag for the local chart coordinates', () => {
+    const result = spawnSync(
+      process.execPath,
+      [
+        join(repoRoot, 'scripts/check-release-consistency.mjs'),
+        '--verify-chart-local',
+      ],
+      {
+        cwd: repoRoot,
+        env: { ...process.env, CHART_TAG: 'chart-v3.1.1' },
+        encoding: 'utf8',
+      }
+    );
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('applicationVersion=3.1.0');
+    expect(result.stdout).toContain('chartVersion=3.1.1');
+  });
+
   it('passes current repository coordinates and reports both groups', () =>
     withFixture((root) => {
       const { application, chart } = currentVersions(root);
@@ -312,7 +345,7 @@ describe('staged Helm chart provenance', () => {
     mkdirSync(source);
     writeFileSync(
       join(source, 'Chart.yaml'),
-      'apiVersion: v2\nname: dspace\nversion: 4.5.6\nappVersion: "3.1.0"\ndescription: retained\nannotations:\n  example.org/existing: retained\n'
+      'apiVersion: v2\nname: dspace\nversion: 3.1.1\nappVersion: "3.1.0"\ndescription: retained\nannotations:\n  example.org/existing: retained\n'
     );
     try {
       run(source, staged);
@@ -328,11 +361,22 @@ describe('staged Helm chart provenance', () => {
       const stagedYaml = join(staged, 'Chart.yaml');
       const chart = parse(readFileSync(stagedYaml, 'utf8'));
       expect(chart.description).toBe('retained');
+      expect(chart.version).toBe('3.1.1');
+      expect(chart.appVersion).toBe('3.1.0');
       expect(chart.annotations['example.org/existing']).toBe('retained');
+      expect(chart.annotations['org.opencontainers.image.source']).toBe(
+        SOURCE_REPOSITORY
+      );
+      expect(chart.annotations['org.opencontainers.image.revision']).toBe(
+        revision
+      );
+      expect(chart.annotations['org.opencontainers.image.version']).toBe(
+        '3.1.0'
+      );
       expect(
         verifyChart({
           chartYaml: stagedYaml,
-          version: '4.5.6',
+          version: '3.1.1',
           appVersion: '3.1.0',
           revision,
         })
@@ -346,7 +390,7 @@ describe('staged Helm chart provenance', () => {
     'rejects non-strict chart SemVer %s',
     (version) =>
       chartFixture((source, staged) => {
-        replace(source, 'Chart.yaml', 'version: 4.5.6', `version: ${version}`);
+        replace(source, 'Chart.yaml', 'version: 3.1.1', `version: ${version}`);
         expect(() =>
           stageChart({ sourceDir: source, destinationDir: staged, revision })
         ).toThrow(/chart version/);
@@ -400,7 +444,7 @@ describe('staged Helm chart provenance', () => {
   );
 
   it.each([
-    ['version', 'version: 4.5.6', 'version: 4.5.7'],
+    ['version', 'version: 3.1.1', 'version: 3.1.2'],
     ['appVersion', 'appVersion: 3.1.0', 'appVersion: 3.1.1'],
     ['source', SOURCE_REPOSITORY, 'https://example.invalid/repo'],
     ['revision', revision, 'f'.repeat(40)],
@@ -417,7 +461,7 @@ describe('staged Helm chart provenance', () => {
       expect(() =>
         verifyChart({
           chartYaml: join(staged, 'Chart.yaml'),
-          version: '4.5.6',
+          version: '3.1.1',
           appVersion: '3.1.0',
           revision,
         })
@@ -446,7 +490,7 @@ describe('staged Helm chart provenance', () => {
         expect(() =>
           verifyChart({
             chartYaml,
-            version: '4.5.6',
+            version: '3.1.1',
             appVersion: '3.1.0',
             revision,
           })

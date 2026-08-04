@@ -96,6 +96,12 @@ tombstoned even if it later appears absent; this does not prohibit a newer chart
 is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
 package SHA-256, and OCI manifest digest.
 
+Chart `3.1.1` is a chart-only, provenance-bearing release for DSPACE application `3.1.0`. The
+legacy `3.1.0` chart lacks the modern immutable source-revision provenance, so it must not be
+overwritten or selected where that provenance is required. After the chart `3.1.1` preparation PR
+merges, a human operator will create `chart-v3.1.1` at the exact reviewed merge commit; preparing
+the coordinate does not create the tag or publish the chart.
+
 Successful full releases upload the deterministic artifact
 `dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
 `applicationVersion`, the complete `sourceRevision`, immutable tag-only `imageTag`, image-index
