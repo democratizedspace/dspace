@@ -65,7 +65,7 @@ const tokenPlacePayload = (content = 'token.place assistant reply') => ({
     id: 'chatcmpl-e2e-token-place',
     object: 'chat.completion',
     created: 1780000000,
-    model: 'llama-3.1-8b-instruct',
+    model: 'qwen3-8b-instruct',
     choices: [{ message: { role: 'assistant', content } }],
     usage: { prompt_tokens: 8, completion_tokens: 5, total_tokens: 13 },
     metadata: { client: 'dspace', provider: 'token.place' },
@@ -90,6 +90,7 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
                 server_public_key: serverKey.publicKeyBase64,
                 context_tier: requestedTier,
                 selected_profile_id: `e2e-${requestedTier}`,
+                selected_model_support: ['qwen3-8b-instruct'],
             }),
         });
     });
