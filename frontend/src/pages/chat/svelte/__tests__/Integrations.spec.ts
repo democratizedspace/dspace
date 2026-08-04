@@ -107,7 +107,7 @@ describe('Integrations chat entrypoint', () => {
 
     it('passes the default runtime token.place URL into ChatPanel requests', async () => {
         render(Integrations, {
-            tokenPlace: { url: 'https://token.place', model: 'llama-3.1-8b-instruct' },
+            tokenPlace: { url: 'https://token.place', model: 'qwen3-8b-instruct' },
         });
 
         await waitFor(() => {
@@ -124,7 +124,7 @@ describe('Integrations chat entrypoint', () => {
         await waitFor(() => expect(mockTokenPlaceChatV2).toHaveBeenCalledTimes(1));
         expect(mockTokenPlaceChatV2.mock.calls[0][1]).toMatchObject({
             runtimeUrl: 'https://token.place',
-            runtimeModel: 'llama-3.1-8b-instruct',
+            runtimeModel: 'qwen3-8b-instruct',
         });
     });
 

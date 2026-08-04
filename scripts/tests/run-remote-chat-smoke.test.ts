@@ -13,7 +13,7 @@ const completeEnv = {
   DSPACE_EXPECTED_REVISION: revision,
   DSPACE_EXPECTED_PROVIDER: 'token-place',
   DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: 'https://token.place',
-  DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'llama-3.1-8b-instruct',
+  DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'qwen3-8b-instruct',
 };
 
 describe('remote chat smoke input validation', () => {

@@ -106,6 +106,11 @@ DSPACE `/chat` must not send the default prompt as plaintext directly to
 }
 ```
 
+> Historical launch-state note: the example above preserves the legacy `llama-3.1-8b-instruct`
+> request identifier used during the API v1 rollout. Current operators should use canonical
+> `qwen3-8b-instruct` unless they are intentionally testing the explicit legacy Llama → Qwen
+> resolution path.
+
 5. Encrypt that envelope with the selected compute node public key.
 6. Dispatch only ciphertext plus safe routing metadata to `POST /api/v1/relay/requests`. The relay
    request payload must not include plaintext `model`, `messages`, `PlayerState`, docs grounding,
