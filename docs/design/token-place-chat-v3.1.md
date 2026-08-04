@@ -94,7 +94,7 @@ DSPACE `/chat` must not send the default prompt as plaintext directly to
     "request_id": "dspace-generated-request-id",
     "client_public_key": "browser-client-public-key",
     "api_v1_request": {
-        "model": "qwen3-8b-instruct",
+        "model": "llama-3.1-8b-instruct",
         "messages": [
             { "role": "system", "content": "..." },
             { "role": "user", "content": "..." }
@@ -105,6 +105,11 @@ DSPACE `/chat` must not send the default prompt as plaintext directly to
     }
 }
 ```
+
+> Historical launch-state note: the example above preserves the legacy `llama-3.1-8b-instruct`
+> request identifier used during the API v1 rollout. Current operators should use canonical
+> `qwen3-8b-instruct` unless they are intentionally testing the explicit legacy Llama → Qwen
+> resolution path.
 
 5. Encrypt that envelope with the selected compute node public key.
 6. Dispatch only ciphertext plus safe routing metadata to `POST /api/v1/relay/requests`. The relay

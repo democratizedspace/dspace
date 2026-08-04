@@ -64,6 +64,7 @@ const makeRelayFetch = ({
     replyForRetrieve = null,
     dispatchCorrelationValue = null,
     dispatchJson = () => Promise.resolve({ accepted }),
+    extraSelectionData = {},
 } = {}) => {
     let retrieveCount = 0;
     let selectionCount = 0;
@@ -104,6 +105,7 @@ const makeRelayFetch = ({
                             : {}),
                         ...(resolvedModel !== undefined ? { resolved_model: resolvedModel } : {}),
                         selected_profile_id: 'test-8k',
+                        ...extraSelectionData,
                     }),
             };
         }
@@ -1527,6 +1529,12 @@ ${ragExcerpt.repeat(4000)}`,
             selectedModelSupport: ['qwen3-8b-instruct'],
             requestedModel: 'llama-3.1-8b-instruct',
             resolvedModel: 'qwen3-8b-instruct',
+            extraSelectionData: {
+                requested_context_tier: '8k-fast',
+                selected_context_tier: '64k-full',
+                spillover: true,
+                spillover_reason: 'no_smaller_eligible_node_available',
+            },
         });
 
         await expect(
@@ -1534,13 +1542,53 @@ ${ragExcerpt.repeat(4000)}`,
                 model: 'llama-3.1-8b-instruct',
             })
         ).resolves.toMatchObject({
-            metadata: { tokenPlaceContext: { spillover: true, relaySelectedTier: '64k-full' } },
+            metadata: {
+                tokenPlaceContext: {
+                    requestedTier: '8k-fast',
+                    relaySelectedTier: '64k-full',
+                    spillover: true,
+                },
+            },
+        });
+
+        const selectionCall = getFetchCallByPath('/api/v1/relay/servers/next');
+        expect(new URL(selectionCall.url).searchParams.get('model')).toBe('llama-3.1-8b-instruct');
+        expect(new URL(selectionCall.url).searchParams.get('context_tier')).toBe('8k-fast');
+        const selectionBody = await fetch.mock.results[0].value.then((response) => response.json());
+        expect(selectionBody).toMatchObject({
+            requested_model: 'llama-3.1-8b-instruct',
+            resolved_model: 'qwen3-8b-instruct',
+            selected_model_support: ['qwen3-8b-instruct'],
+            requested_context_tier: '8k-fast',
+            selected_context_tier: '64k-full',
+            selected_context_window_tokens: 65_536,
+            spillover: true,
+            spillover_reason: 'no_smaller_eligible_node_available',
         });
         expect(
             global.fetch.mock.calls.filter(([url]) =>
                 urlPathEndsWith(url, '/api/v1/relay/requests')
             )
         ).toHaveLength(1);
+        const encryptedRequest = await decryptFirstRelayRequest();
+        expect(encryptedRequest.api_v1_request.model).toBe('llama-3.1-8b-instruct');
+    });
+
+    test.each([
+        ['requested_model', { requestedModel: null }],
+        ['requested_model', { requestedModel: 123 }],
+        ['resolved_model', { resolvedModel: null }],
+        ['resolved_model', { resolvedModel: 123 }],
+    ])('rejects present malformed %s metadata before dispatch %#', async (_field, relayOptions) => {
+        global.fetch = makeRelayFetch({
+            ...relayOptions,
+            selectedModelSupport: ['qwen3-8b-instruct'],
+        });
+
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello malformed model metadata' }])
+        ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
     });
 
     test('rejects contradictory relay model resolution metadata before dispatch', async () => {

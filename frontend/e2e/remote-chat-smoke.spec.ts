@@ -78,7 +78,11 @@ async function relayKeypair() {
     };
 }
 
-async function decryptDispatch(body: Record<string, string>, privateKey: string) {
+async function decryptDispatch(
+    body: Record<string, string>,
+    privateKey: string,
+    requestedModel = expectedModel
+) {
     try {
         const rsa = new JSEncrypt();
         rsa.setPrivateKey(privateKey);
@@ -100,7 +104,7 @@ async function decryptDispatch(body: Record<string, string>, privateKey: string)
             Buffer.from(body.ciphertext, 'base64')
         );
         const envelope = JSON.parse(decoder.decode(plaintext));
-        return envelope?.api_v1_request?.model === expectedModel;
+        return envelope?.api_v1_request?.model === requestedModel;
     } catch {
         throw new Error('routing/configuration: encrypted dispatch could not be verified');
     }
@@ -155,7 +159,12 @@ async function installProviderDenyRules(page: Page) {
     await page.route(`${requestedOrigin}/api/chat`, abortDrift);
 }
 
-async function installSuccessfulRelay(page: Page) {
+async function installSuccessfulRelay(
+    page: Page,
+    options: { requestedModel?: string; resolvedModel?: string } = {}
+) {
+    const requestedModel = options.requestedModel || expectedModel;
+    const resolvedModel = options.resolvedModel || expectedResolvedModel;
     const key = await relayKeypair();
     const evidence: RelayEvidence = {
         paths: [],
@@ -181,7 +190,7 @@ async function installSuccessfulRelay(page: Page) {
         );
         if (operation === 'select') {
             const model = payload.model || new URL(request.url()).searchParams.get('model');
-            if (model !== expectedModel)
+            if (model !== requestedModel)
                 throw new Error('routing/configuration: token.place model drift');
             await route.fulfill({
                 status: 200,
@@ -192,13 +201,17 @@ async function installSuccessfulRelay(page: Page) {
                         payload.contextTier ||
                         new URL(request.url()).searchParams.get('context_tier'),
                     selected_profile_id: 'dspace-smoke',
-                    requested_model: expectedModel,
-                    resolved_model: expectedResolvedModel,
-                    selected_model_support: [expectedResolvedModel],
+                    requested_model: requestedModel,
+                    resolved_model: resolvedModel,
+                    selected_model_support: [resolvedModel],
                 }),
             });
         } else if (operation === 'dispatch') {
-            evidence.dispatchModelMatches = await decryptDispatch(payload, key.privateKey);
+            evidence.dispatchModelMatches = await decryptDispatch(
+                payload,
+                key.privateKey,
+                requestedModel
+            );
             await route.fulfill({
                 status: 200,
                 headers: {

@@ -375,6 +375,7 @@ test.describe('Chat provider routing', () => {
                     server_public_key: serverKey.publicKeyBase64,
                     context_tier: requestedTier,
                     selected_profile_id: `e2e-${requestedTier}`,
+                    selected_model_support: ['qwen3-8b-instruct'],
                 }),
             });
         });

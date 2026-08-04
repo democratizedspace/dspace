@@ -610,20 +610,33 @@ const getRelaySelectedContextWindowTokens = (data) => {
     return Number.isFinite(numeric) && numeric > 0 ? numeric : undefined;
 };
 
+const getFirstPresentValue = (candidates) => {
+    for (const [container, key] of candidates) {
+        if (container && Object.prototype.hasOwnProperty.call(container, key)) {
+            return container[key];
+        }
+    }
+    return undefined;
+};
+
 const getRelayRequestedModel = (data) =>
-    data?.requested_model ??
-    data?.requestedModel ??
-    data?.request?.model ??
-    data?.metadata?.requested_model ??
-    data?.metadata?.requestedModel;
+    getFirstPresentValue([
+        [data, 'requested_model'],
+        [data, 'requestedModel'],
+        [data?.request, 'model'],
+        [data?.metadata, 'requested_model'],
+        [data?.metadata, 'requestedModel'],
+    ]);
 
 const getRelayResolvedModel = (data) =>
-    data?.resolved_model ??
-    data?.resolvedModel ??
-    data?.effective_model ??
-    data?.effectiveModel ??
-    data?.metadata?.resolved_model ??
-    data?.metadata?.resolvedModel;
+    getFirstPresentValue([
+        [data, 'resolved_model'],
+        [data, 'resolvedModel'],
+        [data, 'effective_model'],
+        [data, 'effectiveModel'],
+        [data?.metadata, 'resolved_model'],
+        [data?.metadata, 'resolvedModel'],
+    ]);
 
 const isLegacyLlamaToQwenResolution = (requestedModel, resolvedModel) =>
     requestedModel === LEGACY_LLAMA_CHAT_MODEL && resolvedModel === DEFAULT_CHAT_MODEL;
