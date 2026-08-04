@@ -4,7 +4,11 @@ import { createRequire } from 'node:module';
 import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
-import { chatUiContractFor, type IdentityContract } from './remote-chat-smoke-contract';
+import {
+    chatUiContractFor,
+    type ChatProvider,
+    type IdentityContract,
+} from './remote-chat-smoke-contract';
 
 const JSEncrypt = createRequire(import.meta.url)(
     'jsencrypt'
@@ -24,8 +28,8 @@ function normalizeIdentityContract(value: string | undefined): IdentityContract 
 }
 
 const identityContract = normalizeIdentityContract(process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT);
-const chatUiContract = chatUiContractFor(identityContract);
-const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as 'token-place' | 'openai';
+const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as ChatProvider;
+const chatUiContract = chatUiContractFor(identityContract, expectedProvider);
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
 const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';

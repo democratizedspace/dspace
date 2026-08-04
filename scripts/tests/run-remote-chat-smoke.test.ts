@@ -6,6 +6,7 @@ import {
 
 const revision = '0123456789abcdef0123456789abcdef01234567';
 const recoveryRevision = '1a31a569aff2dbeb238e8c2688b9e85140d2077d';
+const tokenPlaceLegacyRevision = '018687f5a7f4de45508c6e36eb28afb3e44da24d';
 const completeEnv = {
   DSPACE_SMOKE_BASE_URL: 'https://staging.example.test',
   DSPACE_EXPECTED_VERSION: '3.1.0',
@@ -51,7 +52,7 @@ describe('remote chat smoke input validation', () => {
     ).toBe('build-info-v1');
   });
 
-  it('accepts the legacy identity contract only for the recovery coordinates', () => {
+  it('accepts the exact 3.0.1 OpenAI legacy recovery profile', () => {
     const legacyEnv = {
       ...completeEnv,
       DSPACE_EXPECTED_VERSION: '3.0.1',
@@ -68,6 +69,29 @@ describe('remote chat smoke input validation', () => {
     expect(buildSmokeEnv(options, {}).DSPACE_EXPECTED_IDENTITY_CONTRACT).toBe(
       'legacy-build-meta-v1'
     );
+  });
+
+  it('accepts the exact 3.1.0 token.place legacy compatibility profile', () => {
+    const options = parseAndValidateArgs([], {
+      ...completeEnv,
+      DSPACE_EXPECTED_REVISION: tokenPlaceLegacyRevision,
+      DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+    });
+    const smokeEnv = buildSmokeEnv(options, {});
+    expect(options).toMatchObject({
+      expectedVersion: '3.1.0',
+      expectedRevision: tokenPlaceLegacyRevision,
+      expectedProvider: 'token-place',
+      identityContract: 'legacy-build-meta-v1',
+      expectedTokenPlaceOrigin: 'https://token.place',
+      expectedTokenPlaceModel: 'llama-3.1-8b-instruct',
+    });
+    expect(smokeEnv).toMatchObject({
+      DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+      DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: 'https://token.place',
+      DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'llama-3.1-8b-instruct',
+      PW_WORKERS: '1',
+    });
   });
 
   it.each([
@@ -87,7 +111,7 @@ describe('remote chat smoke input validation', () => {
     }
   );
 
-  it('rejects token.place for the legacy OpenAI-only UI contract', () => {
+  it('rejects 3.0.1 with token.place for the legacy identity contract', () => {
     expect(() =>
       parseAndValidateArgs([], {
         ...completeEnv,
@@ -97,6 +121,97 @@ describe('remote chat smoke input validation', () => {
       })
     ).toThrow('legacy identity contract is restricted');
   });
+
+  it('rejects 3.1.0 with OpenAI for the legacy identity contract', () => {
+    const env = {
+      ...completeEnv,
+      DSPACE_EXPECTED_REVISION: tokenPlaceLegacyRevision,
+      DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+      DSPACE_EXPECTED_PROVIDER: 'openai',
+    };
+    delete env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
+    delete env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
+    expect(() => parseAndValidateArgs([], env)).toThrow(
+      'legacy identity contract is restricted'
+    );
+  });
+
+  it.each([
+    [
+      '3.0.1 version drift',
+      {
+        DSPACE_EXPECTED_VERSION: '3.0.2',
+        DSPACE_EXPECTED_REVISION: recoveryRevision,
+        DSPACE_EXPECTED_PROVIDER: 'openai',
+      },
+    ],
+    [
+      '3.0.1 revision drift',
+      {
+        DSPACE_EXPECTED_VERSION: '3.0.1',
+        DSPACE_EXPECTED_REVISION: revision,
+        DSPACE_EXPECTED_PROVIDER: 'openai',
+      },
+    ],
+    [
+      '3.0.1 provider drift',
+      {
+        DSPACE_EXPECTED_VERSION: '3.0.1',
+        DSPACE_EXPECTED_REVISION: recoveryRevision,
+        DSPACE_EXPECTED_PROVIDER: 'token-place',
+      },
+    ],
+    [
+      '3.1.0 version drift',
+      {
+        DSPACE_EXPECTED_VERSION: '3.1.1',
+        DSPACE_EXPECTED_REVISION: tokenPlaceLegacyRevision,
+        DSPACE_EXPECTED_PROVIDER: 'token-place',
+      },
+    ],
+    [
+      '3.1.0 revision drift',
+      {
+        DSPACE_EXPECTED_VERSION: '3.1.0',
+        DSPACE_EXPECTED_REVISION: revision,
+        DSPACE_EXPECTED_PROVIDER: 'token-place',
+      },
+    ],
+    [
+      '3.1.0 provider drift',
+      {
+        DSPACE_EXPECTED_VERSION: '3.1.0',
+        DSPACE_EXPECTED_REVISION: tokenPlaceLegacyRevision,
+        DSPACE_EXPECTED_PROVIDER: 'openai',
+      },
+    ],
+  ])(
+    'rejects legacy profile %s without echoing supplied values',
+    (_name, drift) => {
+      const env = {
+        ...completeEnv,
+        ...drift,
+        DSPACE_EXPECTED_IDENTITY_CONTRACT: 'legacy-build-meta-v1',
+      };
+      if (env.DSPACE_EXPECTED_PROVIDER === 'openai') {
+        delete env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
+        delete env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
+      }
+      let message = '';
+      try {
+        parseAndValidateArgs([], env);
+      } catch (error) {
+        message = String(error.message);
+      }
+      expect(message).toBe(
+        'validation: legacy identity contract is restricted'
+      );
+      expect(message.length).toBeLessThan(100);
+      expect(message).not.toContain(env.DSPACE_EXPECTED_VERSION);
+      expect(message).not.toContain(env.DSPACE_EXPECTED_REVISION);
+      expect(message).not.toContain(env.DSPACE_EXPECTED_PROVIDER);
+    }
+  );
 
   it('rejects unknown, empty, and contradictory identity contracts', () => {
     expect(() =>
