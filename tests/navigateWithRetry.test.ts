@@ -79,6 +79,61 @@ describe('navigateWithRetry', () => {
     expect(page.goto).toHaveBeenCalledTimes(2);
   });
 
+  it('retries the stable Playwright goto timeout message with a call log before succeeding', async () => {
+    const page = createMockPage([
+      new Error(
+        'page.goto: Timeout 15000ms exceeded.\nCall log:\n  - navigating to "/"'
+      ),
+      'success',
+    ]);
+
+    await expect(
+      navigateWithRetry(page, '/', {
+        attempts: 2,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+      })
+    ).resolves.toBeUndefined();
+
+    expect(page.goto).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not retry a near-match Playwright goto timeout message with unrelated trailing text', async () => {
+    const page = createMockPage([
+      new Error('page.goto: Timeout 15000ms exceeded. unrelated trailing text'),
+      'success',
+    ]);
+
+    await expect(
+      navigateWithRetry(page, '/', {
+        attempts: 2,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+      })
+    ).rejects.toThrow('after 1 attempt');
+
+    expect(page.goto).toHaveBeenCalledTimes(1);
+    expect(page.waitForTimeout).not.toHaveBeenCalled();
+  });
+
+  it('does not retry the legacy navigation timeout message', async () => {
+    const page = createMockPage([
+      new Error('page.goto: Navigation timeout of 30000ms exceeded'),
+      'success',
+    ]);
+
+    await expect(
+      navigateWithRetry(page, '/', {
+        attempts: 2,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+      })
+    ).rejects.toThrow('after 1 attempt');
+
+    expect(page.goto).toHaveBeenCalledTimes(1);
+    expect(page.waitForTimeout).not.toHaveBeenCalled();
+  });
+
   it('retries connection refusal before succeeding', async () => {
     const page = createMockPage([
       new Error('net::ERR_CONNECTION_REFUSED'),
@@ -126,6 +181,9 @@ describe('navigateWithRetry', () => {
       nowMs += 7_000;
       throw createTimeoutError();
     });
+    page.waitForTimeout.mockImplementationOnce(async (ms: number) => {
+      nowMs += ms;
+    });
 
     await expect(
       navigateWithRetry(page, '/', {
@@ -137,15 +195,38 @@ describe('navigateWithRetry', () => {
       })
     ).resolves.toBeUndefined();
 
+    expect(page.waitForTimeout).toHaveBeenCalledWith(100);
     expect(page.goto).toHaveBeenNthCalledWith(1, '/', {
       waitUntil: 'domcontentloaded',
       timeout: 10_000,
     });
     expect(page.goto).toHaveBeenNthCalledWith(2, '/', {
       waitUntil: 'domcontentloaded',
-      timeout: 3_000,
+      timeout: 2_900,
     });
   });
+
+  it.each([
+    0,
+    -1,
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+    Number.NEGATIVE_INFINITY,
+  ])(
+    'rejects invalid attemptTimeoutMs value %s before attempting navigation',
+    async (attemptTimeoutMs) => {
+      const page = createMockPage(['success']);
+
+      await expect(
+        navigateWithRetry(page, '/', {
+          attemptTimeoutMs,
+        })
+      ).rejects.toThrow('attemptTimeoutMs must be a finite positive number');
+
+      expect(page.goto).not.toHaveBeenCalled();
+      expect(page.waitForTimeout).not.toHaveBeenCalled();
+    }
+  );
 
   it('does not sleep or begin another attempt when the retry backoff would exhaust the budget', async () => {
     let nowMs = 0;

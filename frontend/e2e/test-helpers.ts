@@ -24,7 +24,7 @@ const CONNECTION_REFUSED_PATTERNS = [
     'Connection refused',
 ];
 
-const PLAYWRIGHT_GOTO_TIMEOUT_PATTERN = /^page\.goto: Timeout \d+ms exceeded\b/;
+const PLAYWRIGHT_GOTO_TIMEOUT_PATTERN = /^page\.goto: Timeout \d+ms exceeded\.(?:\r?\n|$)/;
 
 const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
@@ -140,6 +140,12 @@ export async function navigateWithRetry(
         now = () => Date.now(),
     }: NavigateWithRetryOptions = {}
 ): Promise<void> {
+    if (!Number.isFinite(attemptTimeoutMs) || attemptTimeoutMs <= 0) {
+        throw new Error(
+            `attemptTimeoutMs must be a finite positive number, received ${attemptTimeoutMs}`
+        );
+    }
+
     let lastError: unknown;
     const startedAt = now();
     let suppressedLogCount = 0;
