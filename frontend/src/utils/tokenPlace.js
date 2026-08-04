@@ -24,7 +24,9 @@ const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
 const RELAY_PROTOCOL = 'tokenplace_api_v1_relay_e2ee';
 const RELAY_VERSION = 1;
-const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
+const DEFAULT_CHAT_MODEL = 'qwen3-8b-instruct';
+const LEGACY_CHAT_MODEL = 'llama-3.1-8b-instruct';
+const TOKEN_PLACE_MODEL_ALIASES = new Map([[LEGACY_CHAT_MODEL, DEFAULT_CHAT_MODEL]]);
 export const TOKEN_PLACE_FAST_TIER_TIMEOUT_MS = 30_000;
 export const TOKEN_PLACE_FULL_TIER_TIMEOUT_MS = 120_000;
 const DEFAULT_RELAY_TIMEOUT_MS = TOKEN_PLACE_FAST_TIER_TIMEOUT_MS;
@@ -609,6 +611,22 @@ const getRelaySelectedContextWindowTokens = (data) => {
     return Number.isFinite(numeric) && numeric > 0 ? numeric : undefined;
 };
 
+const getRelayRequestedModel = (data) =>
+    data?.requested_model ??
+    data?.requestedModel ??
+    data?.profile?.requested_model ??
+    data?.profile?.requestedModel ??
+    data?.selected_profile?.requested_model ??
+    data?.selectedProfile?.requestedModel;
+
+const getRelayResolvedModel = (data) =>
+    data?.resolved_model ??
+    data?.resolvedModel ??
+    data?.profile?.resolved_model ??
+    data?.profile?.resolvedModel ??
+    data?.selected_profile?.resolved_model ??
+    data?.selectedProfile?.resolvedModel;
+
 const getRelaySelectedModelSupport = (data) =>
     data?.selected_model_support ??
     data?.selectedModelSupport ??
@@ -627,19 +645,39 @@ const getRelaySelectedModelSupport = (data) =>
     data?.selectedProfile?.modelSupport ??
     data?.selectedProfile?.models;
 
-const relayModelSupportIncludes = (modelSupport, requestedModel) => {
-    if (!modelSupport || !requestedModel) return true;
-    if (Array.isArray(modelSupport)) return modelSupport.includes(requestedModel);
-    if (typeof modelSupport === 'string') return modelSupport === requestedModel;
+const normalizeRelayModelId = (model) =>
+    typeof model === 'string' && model.trim() ? model.trim() : undefined;
+
+const isAllowedResolvedModel = (requestedModel, resolvedModel) =>
+    resolvedModel === requestedModel ||
+    TOKEN_PLACE_MODEL_ALIASES.get(requestedModel) === resolvedModel;
+
+const getEffectiveRelayModel = (data, requestedModel) => {
+    const rawRequestedModel = getRelayRequestedModel(data);
+    const rawResolvedModel = getRelayResolvedModel(data);
+    const echoedRequestedModel = normalizeRelayModelId(rawRequestedModel);
+    const resolvedModel = normalizeRelayModelId(rawResolvedModel);
+    if (rawRequestedModel !== undefined && echoedRequestedModel !== requestedModel) {
+        return undefined;
+    }
+    if (rawResolvedModel !== undefined && !resolvedModel) return undefined;
+    if (!resolvedModel) return requestedModel;
+    return isAllowedResolvedModel(requestedModel, resolvedModel) ? resolvedModel : undefined;
+};
+
+const relayModelSupportIncludes = (modelSupport, effectiveModel) => {
+    if (!modelSupport || !effectiveModel) return true;
+    if (Array.isArray(modelSupport)) return modelSupport.includes(effectiveModel);
+    if (typeof modelSupport === 'string') return modelSupport === effectiveModel;
     if (typeof modelSupport === 'object') {
-        if (Array.isArray(modelSupport.models)) return modelSupport.models.includes(requestedModel);
+        if (Array.isArray(modelSupport.models)) return modelSupport.models.includes(effectiveModel);
         if (Array.isArray(modelSupport.supported_models)) {
-            return modelSupport.supported_models.includes(requestedModel);
+            return modelSupport.supported_models.includes(effectiveModel);
         }
         if (Array.isArray(modelSupport.supportedModels)) {
-            return modelSupport.supportedModels.includes(requestedModel);
+            return modelSupport.supportedModels.includes(effectiveModel);
         }
-        if (typeof modelSupport[requestedModel] === 'boolean') return modelSupport[requestedModel];
+        if (typeof modelSupport[effectiveModel] === 'boolean') return modelSupport[effectiveModel];
     }
     return false;
 };
@@ -690,8 +728,14 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
                 'token.place relay selected incompatible context window metadata.'
             );
         }
+        const effectiveModel = getEffectiveRelayModel(data, options.model);
+        if (!effectiveModel) {
+            throw createMalformedTokenPlaceResponseError(
+                'token.place relay selected incompatible model metadata.'
+            );
+        }
         const selectedModelSupport = getRelaySelectedModelSupport(data);
-        if (!relayModelSupportIncludes(selectedModelSupport, options.model)) {
+        if (!relayModelSupportIncludes(selectedModelSupport, effectiveModel)) {
             throw createMalformedTokenPlaceResponseError(
                 'token.place relay selected incompatible model metadata.'
             );
