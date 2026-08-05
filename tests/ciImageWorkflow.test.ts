@@ -108,6 +108,63 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     }
   });
 
+  it('verifies the chat build stamp through a repository-preserving mount', () => {
+    const step = findSteps(job).find(
+      (candidate) => candidate.name === 'Verify chat build stamp inside image'
+    );
+    expect(step.run).toContain('-e VERIFY_REPO_ROOT=/app');
+    expect(step.run).toContain(
+      '-e VERIFY_BUILD_META_PATH=/app/build_meta.json'
+    );
+    expect(step.run).toContain('-v "$PWD:/verification-repo:ro"');
+    expect(step.run).toContain(
+      'node /verification-repo/scripts/verify-chat-build-stamp.mjs'
+    );
+    expect(step.run).not.toContain('node /scripts/verify-chat-build-stamp.mjs');
+    expect(step.run).not.toContain('-v "$PWD/scripts:/scripts:ro"');
+  });
+
+  it('keeps the broken /scripts chat verifier invocation out of the branch image job', () => {
+    expect(JSON.stringify(job)).not.toContain(
+      'node /scripts/verify-chat-build-stamp.mjs'
+    );
+  });
+
+  it('runs local image construction and identity gates before the first registry mutation', () => {
+    const buildVerify = stepIndex(
+      job,
+      (step) => step.name === 'Build image for SHA verification'
+    );
+    const fullSha = stepIndex(
+      job,
+      (step) => step.name === 'Assert build SHA is baked into frontend bundle'
+    );
+    const chatStamp = stepIndex(
+      job,
+      (step) => step.name === 'Verify chat build stamp inside image'
+    );
+    const runtimeIdentity = stepIndex(
+      job,
+      (step) => step.name === 'Compare runtime identity with OCI revision'
+    );
+    const login = stepIndex(job, (step) => step.name === 'Log in to GHCR');
+    const firstPush = stepIndex(
+      job,
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+
+    expect(buildVerify).toBeGreaterThan(-1);
+    expect(buildVerify).toBeLessThan(fullSha);
+    expect(fullSha).toBeLessThan(chatStamp);
+    expect(chatStamp).toBeLessThan(runtimeIdentity);
+    expect(runtimeIdentity).toBeLessThan(login);
+    expect(login).toBeLessThan(firstPush);
+
+    const verifyStep = findSteps(job)[buildVerify];
+    expect(verifyStep.with.push).toBe(false);
+    expect(verifyStep.with.tags).toBe('dspace-verify:latest');
+  });
+
   it('compares runtime JSON and HTML identity with the OCI revision', () => {
     const step = findSteps(job).find(
       (candidate) =>
@@ -118,6 +175,40 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(step.run).toContain('dspace-build-revision');
     expect(step.env.EXPECTED_SHA).toBe('${{ steps.tags.outputs.full_sha }}');
     expect(step.run).toContain('test "$label_revision" = "$EXPECTED_SHA"');
+  });
+
+  it('guards the immutable branch-SHA tag immediately before each push attempt', () => {
+    const steps = findSteps(job);
+    const guard1 = steps.find(
+      (step) =>
+        step.name === 'Refuse existing branch-SHA tag before push attempt 1'
+    );
+    const push1 = steps.find(
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+    const guard2 = steps.find(
+      (step) =>
+        step.name === 'Refuse existing branch-SHA tag before push attempt 2'
+    );
+    const push2 = steps.find(
+      (step) => step.name === 'Build and push image (attempt 2)'
+    );
+
+    expect(steps.indexOf(guard1)).toBe(steps.indexOf(push1) - 1);
+    expect(steps.indexOf(guard2)).toBe(steps.indexOf(push2) - 1);
+    for (const guard of [guard1, guard2]) {
+      expect(guard.run).toContain('scripts/ghcr-manifest.mjs check-absent');
+      expect(guard.run).toContain('--owner democratizedspace');
+      expect(guard.run).toContain('--repo dspace');
+      expect(guard.run).toContain('--tag "${SHA_TAG_ONLY##*:}"');
+      expect(guard.env.GHCR_GUARD_USERNAME).toBe('${{ github.actor }}');
+      expect(guard.env.GHCR_GUARD_PASSWORD).toContain('secrets.GITHUB_TOKEN');
+      expect(guard.env.SHA_TAG_ONLY).toBe('${{ steps.tags.outputs.sha_tag }}');
+    }
+    expect(guard2.if).toBe("steps.build_push_1.outcome == 'failure'");
+    expect(push2.if).toBe(
+      "steps.build_push_1.outcome == 'failure' && steps.retry_guard.outcome == 'success'"
+    );
   });
 
   it('uses the checked-out commit rather than the dispatch event SHA', () => {

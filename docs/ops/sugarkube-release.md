@@ -76,6 +76,13 @@ coordinate. After supplying the missing immutable artifact, rerun the failed rel
 semantic tag already exists, the workflow always refuses to overwrite or move it; investigate and
 cut a new approved release coordinate rather than retrying a mutation.
 
+If an ordinary branch-image workflow publishes its immutable branch-SHA coordinate but fails a later
+workflow step, preserve that coordinate as failed-run evidence. Do not rerun the failed workflow,
+overwrite the tag, move the tag, or select that coordinate for staging, production, chart tagging,
+or semantic release publication. Fix the workflow through a new reviewed commit; only after that
+new commit's complete image workflow succeeds may its new `<branch>-<shortsha>` coordinate become
+the release candidate.
+
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
 2. `.github/workflows/ci-helm.yml` publishes only when an exact `chart-v<chart version>` tag is
