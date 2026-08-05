@@ -26,6 +26,13 @@ Use immutable branch-SHA tags or image digests for staging, production approvals
 records. Mutable branch tags and release-only semantic tags are convenient for humans but must not
 be the audit record for a production deploy.
 
+If an ordinary branch-image workflow publishes its immutable SHA coordinate but fails in a later
+validation or evidence step, treat that coordinate as failed-run evidence only. Do not rerun the
+failed workflow, overwrite the SHA tag, move it, delete it, or select it for release promotion.
+Instead, fix the workflow or source problem through a new reviewed commit; only that new commit's
+`<branch>-<shortsha>` image may become the release candidate after its complete image workflow
+succeeds.
+
 ## Runtime source verification contract
 
 Before approving an already deployed runtime, set its expected full revision, public URL, and
