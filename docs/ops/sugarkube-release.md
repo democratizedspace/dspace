@@ -79,9 +79,31 @@ The mandatory full-release order is fail-closed:
    verifies digest equality, and emits the combined release manifest.
 
 Publishing the GitHub release before either prerequisite exists fails without creating the semantic
-coordinate. After supplying the missing immutable artifact, rerun the failed release workflow. If a
-semantic tag already exists, the workflow always refuses to overwrite or move it; investigate and
-cut a new approved release coordinate rather than retrying a mutation.
+coordinate. After supplying a missing immutable artifact, use the guarded recovery dispatch below
+from the current fixed workflow definition. If a semantic tag already exists, the workflow always
+refuses to overwrite or move it; investigate and cut a new approved release coordinate rather than
+retrying a mutation.
+
+### Recover a failed semantic release publication
+
+Use this recovery only when the immutable application tag and a non-draft, published GitHub release
+already exist, but their semantic workflow failed before publishing the GHCR semantic alias. First
+prove that the semantic GHCR tag is authoritatively absent. Then start a **fresh dispatch from the
+fixed `main` workflow definition**; do not rerun the historical failed workflow, which would reuse
+its broken definition:
+
+```bash
+gh workflow run ci-image.yml \
+  --repo democratizedspace/dspace \
+  --ref main \
+  -f release_tag=v3.1.1
+```
+
+The recovery checks out and verifies the existing immutable tag; it does not move or recreate that
+tag or the GitHub release. It reuses the normal semantic-release provenance checks, two semantic-tag
+absence guards, single digest alias operation, and deterministic release-manifest path. After a
+successful recovery, an identical repeat dispatch is expected to fail at the semantic-tag guard
+before mutation, preserving the fail-closed evidence required by Refs #4727 and #4730.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.

@@ -49,6 +49,14 @@ describe('ci-image.yml triggers', () => {
     // and turn every ordinary release into an expected duplicate-publication failure.
     expect(workflow.on.push.tags).toBeUndefined();
   });
+
+  it('offers an optional stable-tag semantic recovery input', () => {
+    expect(workflow.on.workflow_dispatch.inputs.release_tag).toMatchObject({
+      required: false,
+      default: '',
+      type: 'string',
+    });
+  });
 });
 
 describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
@@ -57,7 +65,12 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
   it('never runs for release events', () => {
     expect(job.if).toContain("github.event_name == 'push'");
     expect(job.if).toContain("github.event_name == 'workflow_dispatch'");
-    expect(job.if).not.toMatch(/release/);
+    expect(job.if).not.toContain("github.event_name == 'release'");
+  });
+
+  it('keeps empty manual dispatches on the branch-image path and excludes recovery dispatches', () => {
+    expect(job.if).toContain("github.event_name == 'workflow_dispatch'");
+    expect(job.if).toContain("inputs.release_tag == ''");
   });
 
   it('serializes ordinary publication by target branch without workflow SHA', () => {
@@ -259,7 +272,8 @@ describe('ci-image.yml "local-build" job (PR path)', () => {
   });
 
   it('does not run redundantly for release events', () => {
-    expect(job.if).toBe("github.event_name != 'release'");
+    expect(job.if).toContain("github.event_name != 'release'");
+    expect(job.if).toContain("inputs.release_tag != ''");
   });
 });
 
@@ -268,24 +282,40 @@ describe('ci-image.yml "semantic-release" job (release-only alias path)', () => 
   const steps = findSteps(job);
   const named = (name: string) => steps.find((step) => step.name === name);
 
-  it('is release-only and serialized by semantic tag', () => {
-    expect(job.if).toBe(
+  it('supports published releases and non-empty recovery dispatches, serialized by semantic tag', () => {
+    expect(job.if).toContain(
       "github.event_name == 'release' && github.event.action == 'published'"
     );
+    expect(job.if).toContain(
+      "github.event_name == 'workflow_dispatch' && inputs.release_tag != ''"
+    );
     expect(job.concurrency.group).toContain('github.event.release.tag_name');
+    expect(job.concurrency.group).toContain('inputs.release_tag');
     expect(job.concurrency['cancel-in-progress']).toBe(false);
+  });
+
+  it('validates recovery tags and requires an existing published release before checkout', () => {
+    const validation = named('Validate semantic release request');
+    const checkout = findStepsUsing(job, 'actions/checkout')[0];
+    expect(validation.run).toContain(
+      '^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$'
+    );
+    expect(validation.run).toContain('releases/tags/${RELEASE_TAG}');
+    expect(validation.run).toContain(
+      '.draft == false and .published_at != null'
+    );
+    expect(steps.indexOf(validation)).toBeLessThan(steps.indexOf(checkout));
   });
 
   it('authorizes the checked-out source before lifecycle execution', () => {
     const checkout = findStepsUsing(job, 'actions/checkout')[0];
-    expect(checkout.with.ref).toContain('github.event.release.tag_name');
+    expect(checkout.with.ref).toBe('${{ env.RELEASE_TAG }}');
     expect(checkout.with['persist-credentials']).toBe(false);
     const authorization = named('Authorize release source');
-    expect(authorization.env.RELEASE_TAG).toContain('release.tag_name');
     expect(authorization.run).toContain(
       'git rev-parse "${RELEASE_TAG}^{commit}"'
     );
-    expect(authorization.run).toContain('refs/remotes/origin/main');
+    expect(authorization.run).toContain('refs/remotes/origin/$branch');
     expect(authorization.run).not.toContain(
       '${{ github.event.release.tag_name }}'
     );
@@ -293,6 +323,31 @@ describe('ci-image.yml "semantic-release" job (release-only alias path)', () => 
       steps.indexOf(named('Validate all local release coordinates'))
     );
     expect(JSON.stringify(job)).not.toContain('pnpm install');
+  });
+
+  it('distinguishes absent allowed branches from indeterminate discovery failures', () => {
+    const authorization = named('Authorize release source');
+    expect(authorization.run).toContain(
+      'git ls-remote --exit-code --heads "$remote" "refs/heads/$branch"'
+    );
+    expect(authorization.run).toContain(
+      '2) echo "Allowed release branch $branch is authoritatively absent"'
+    );
+    expect(authorization.run).toContain(
+      '*) echo "Unable to determine whether allowed release branch $branch exists" >&2; exit "$status"'
+    );
+    expect(authorization.run).not.toContain('|| true');
+  });
+
+  it('fetches only existing allowed branches and requires exactly one source branch', () => {
+    const run = named('Authorize release source').run;
+    expect(run).toContain('for branch in main v3');
+    expect(run).toContain('((${#existing_branches[@]} > 0))');
+    expect(run).toContain('for branch in "${existing_branches[@]}"');
+    expect(run).toContain('((${#containing_branches[@]} == 1))');
+    expect(run).not.toContain(
+      'main:refs/remotes/origin/main v3:refs/remotes/origin/v3'
+    );
   });
 
   it('pins Node before invoking the release consistency gate', () => {
