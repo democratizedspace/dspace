@@ -83,6 +83,38 @@ coordinate. After supplying the missing immutable artifact, rerun the failed rel
 semantic tag already exists, the workflow always refuses to overwrite or move it; investigate and
 cut a new approved release coordinate rather than retrying a mutation.
 
+### Recover a failed semantic publication
+
+Use recovery only for an existing, non-draft published GitHub release whose semantic workflow
+failed before creating its semantic GHCR alias. First prove that the semantic tag is absent using
+the repository's authenticated GHCR manifest check (supply a package-readable token); an
+indeterminate registry response is not absence:
+
+```bash
+GHCR_GUARD_USERNAME=YOUR_GITHUB_USER \
+GHCR_GUARD_PASSWORD="$(gh auth token)" \
+node scripts/ghcr-manifest.mjs check-absent \
+  --owner democratizedspace --repo dspace --tag v3.1.1
+```
+
+Then start a fresh dispatch from the fixed `main` workflow definition—do not rerun the historical
+failed run, because a rerun uses its broken workflow definition:
+
+```bash
+gh workflow run ci-image.yml \
+  --repo democratizedspace/dspace \
+  --ref main \
+  -f release_tag=v3.1.1
+```
+
+Recovery checks out the existing immutable application tag and verifies its published GitHub
+release, allowed source branch, immutable image, and chart provenance. It does not move or recreate
+the application tag or GitHub release. It performs the same two semantic-tag absence guards, exact
+digest alias, verification, and deterministic manifest generation as an ordinary release event.
+After recovery succeeds, an identical dispatch is expected to fail at the semantic-tag guard
+before mutation; never delete or overwrite that tag. This recovery evidence supports #4727 and
+#4730.
+
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
 2. `.github/workflows/ci-helm.yml` publishes only when an exact `chart-v<chart version>` tag is
