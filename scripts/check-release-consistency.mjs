@@ -210,22 +210,22 @@ export async function run(mode) {
   if (mode === '--verify-local-fixtures') {
     const revision = '0123456789abcdef0123456789abcdef01234567';
     const value = releaseManifest({
-      applicationVersion: '3.1.0',
+      applicationVersion: '3.1.1',
       sourceRevision: revision,
       imageTag: 'main-0123456',
       imageDigest: `sha256:${'1'.repeat(64)}`,
       chartVersion: '4.2.0',
       chartDigest: `sha256:${'2'.repeat(64)}`,
-      semanticTag: 'v3.1.0',
+      semanticTag: 'v3.1.1',
     });
     const expected =
-      '{"schemaVersion":1,"app":"dspace","applicationVersion":"3.1.0",' +
+      '{"schemaVersion":1,"app":"dspace","applicationVersion":"3.1.1",' +
       '"sourceRevision":"0123456789abcdef0123456789abcdef01234567",' +
       '"imageTag":"main-0123456","imageDigest":"sha256:' +
       '1111111111111111111111111111111111111111111111111111111111111111",' +
       '"chartVersion":"4.2.0","chartDigest":"sha256:' +
       '2222222222222222222222222222222222222222222222222222222222222222",' +
-      '"semanticTag":"v3.1.0"}';
+      '"semanticTag":"v3.1.1"}';
     if (JSON.stringify(value) !== expected)
       fail('fixture manifest is not deterministic');
     if (JSON.stringify(releaseManifest(JSON.parse(expected))) !== expected)
