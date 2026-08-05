@@ -108,6 +108,105 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     }
   });
 
+  it('runs all local image validation gates before the first registry mutation', () => {
+    const buildVerify = stepIndex(
+      job,
+      (step) => step.name === 'Build image for SHA verification'
+    );
+    const assertSha = stepIndex(
+      job,
+      (step) => step.name === 'Assert build SHA is baked into frontend bundle'
+    );
+    const chatStamp = stepIndex(
+      job,
+      (step) => step.name === 'Verify chat build stamp inside image'
+    );
+    const identity = stepIndex(
+      job,
+      (step) => step.name === 'Compare runtime identity with OCI revision'
+    );
+    const login = stepIndex(job, (step) => step.name === 'Log in to GHCR');
+    const guard1 = stepIndex(
+      job,
+      (step) =>
+        step.name === 'Guard immutable image tag absence before push attempt 1'
+    );
+    const push1 = stepIndex(
+      job,
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+
+    expect(buildVerify).toBeGreaterThan(-1);
+    expect(assertSha).toBeGreaterThan(buildVerify);
+    expect(chatStamp).toBeGreaterThan(assertSha);
+    expect(identity).toBeGreaterThan(chatStamp);
+    expect(login).toBeGreaterThan(identity);
+    expect(guard1).toBe(login + 1);
+    expect(push1).toBe(guard1 + 1);
+
+    const buildStep = findSteps(job)[buildVerify];
+    expect(buildStep.with.push).toBe(false);
+    expect(buildStep.with.load).toBe(true);
+    expect(buildStep.with.tags).toBe('dspace-verify:latest');
+    expect(findSteps(job)[assertSha].run).toContain(
+      'verify-build-sha.mjs /app/dist'
+    );
+    expect(findSteps(job)[chatStamp].run).toContain(
+      'node /verification-repo/scripts/verify-chat-build-stamp.mjs'
+    );
+    expect(findSteps(job)[identity].run).toContain('/build-info.json');
+  });
+
+  it('invokes chat stamp verification from a repository-preserving mount, not /scripts', () => {
+    const step = findSteps(job).find(
+      (candidate) => candidate.name === 'Verify chat build stamp inside image'
+    );
+    expect(step.run).toContain('-v "$PWD:/verification-repo:ro"');
+    expect(step.run).toContain('VERIFY_REPO_ROOT=/app');
+    expect(step.run).toContain('VERIFY_BUILD_META_PATH=/app/build_meta.json');
+    expect(step.run).toContain(
+      'node /verification-repo/scripts/verify-chat-build-stamp.mjs'
+    );
+    expect(step.run).not.toContain('-v "$PWD/scripts:/scripts:ro"');
+    expect(step.run).not.toContain('node /scripts/verify-chat-build-stamp.mjs');
+  });
+
+  it('guards immutable branch-SHA absence immediately before each push attempt', () => {
+    const steps = findSteps(job);
+    const guard1 = steps.find(
+      (step) =>
+        step.name === 'Guard immutable image tag absence before push attempt 1'
+    );
+    const guard2 = steps.find(
+      (step) =>
+        step.name === 'Guard immutable image tag absence before push attempt 2'
+    );
+    const push1 = steps.find(
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+    const push2 = steps.find(
+      (step) => step.name === 'Build and push image (attempt 2)'
+    );
+
+    expect(steps.indexOf(guard1)).toBe(steps.indexOf(push1) - 1);
+    expect(steps.indexOf(guard2)).toBe(steps.indexOf(push2) - 1);
+    for (const guard of [guard1, guard2]) {
+      expect(guard.env.GHCR_GUARD_USERNAME).toBe('${{ github.actor }}');
+      expect(guard.env.GHCR_GUARD_PASSWORD).toBe('${{ secrets.GITHUB_TOKEN }}');
+      expect(guard.env.IMAGE_TAG).toBe('${{ steps.tags.outputs.sha_tag }}');
+      expect(guard.run).toContain('ghcr-manifest.mjs check-absent');
+      expect(guard.run).toContain('--owner democratizedspace');
+      expect(guard.run).toContain('--repo dspace');
+      expect(guard.run).toContain('--tag "${IMAGE_TAG##*:}"');
+      expect(guard.run).not.toContain('${{ secrets.GITHUB_TOKEN }}');
+    }
+    expect(guard2.if).toBe("steps.build_push_1.outcome == 'failure'");
+    expect(guard2['continue-on-error']).toBe(true);
+    expect(push2.if).toBe(
+      "steps.build_push_1.outcome == 'failure' && steps.guard_sha_absent_2.outcome == 'success'"
+    );
+  });
+
   it('compares runtime JSON and HTML identity with the OCI revision', () => {
     const step = findSteps(job).find(
       (candidate) =>
