@@ -73,22 +73,22 @@ const withFixture = (check: (root: string) => void) => {
 };
 
 describe('independent DSPACE application and chart coordinates', () => {
-  it('pins chart 3.1.1 to application 3.1.0 without changing the image coordinate', () => {
+  it('pins chart 3.1.2 to application 3.1.1 without changing the image coordinate', () => {
     const chart = parse(
       readFileSync(join(repoRoot, 'charts/dspace/Chart.yaml'), 'utf8')
     );
     const values = parse(
       readFileSync(join(repoRoot, 'charts/dspace/values.yaml'), 'utf8')
     );
-    expect(chart.version).toBe('3.1.1');
-    expect(chart.appVersion).toBe('3.1.0');
-    expect(values.image.tag).toBe('v3.1.0');
+    expect(chart.version).toBe('3.1.2');
+    expect(chart.appVersion).toBe('3.1.1');
+    expect(values.image.tag).toBe('v3.1.1');
     expect(
       readFileSync(join(repoRoot, 'docs/apps/dspace.version'), 'utf8')
-    ).toMatch(/^3\.1\.1$/m);
+    ).toMatch(/^3\.1\.2$/m);
   });
 
-  it('accepts the chart-v3.1.1 release tag for the local chart coordinates', () => {
+  it('accepts the chart-v3.1.2 release tag for the local chart coordinates', () => {
     const result = spawnSync(
       process.execPath,
       [
@@ -97,13 +97,13 @@ describe('independent DSPACE application and chart coordinates', () => {
       ],
       {
         cwd: repoRoot,
-        env: { ...process.env, CHART_TAG: 'chart-v3.1.1', GITHUB_OUTPUT: '' },
+        env: { ...process.env, CHART_TAG: 'chart-v3.1.2', GITHUB_OUTPUT: '' },
         encoding: 'utf8',
       }
     );
     expect(result.status, result.stderr).toBe(0);
-    expect(result.stdout).toContain('applicationVersion=3.1.0');
-    expect(result.stdout).toContain('chartVersion=3.1.1');
+    expect(result.stdout).toContain('applicationVersion=3.1.1');
+    expect(result.stdout).toContain('chartVersion=3.1.2');
   });
 
   it('passes current repository coordinates and reports both groups', () =>
@@ -345,7 +345,7 @@ describe('staged Helm chart provenance', () => {
     mkdirSync(source);
     writeFileSync(
       join(source, 'Chart.yaml'),
-      'apiVersion: v2\nname: dspace\nversion: 3.1.1\nappVersion: "3.1.0"\ndescription: retained\nannotations:\n  example.org/existing: retained\n'
+      'apiVersion: v2\nname: dspace\nversion: 3.1.2\nappVersion: "3.1.1"\ndescription: retained\nannotations:\n  example.org/existing: retained\n'
     );
     try {
       run(source, staged);
@@ -361,8 +361,8 @@ describe('staged Helm chart provenance', () => {
       const stagedYaml = join(staged, 'Chart.yaml');
       const chart = parse(readFileSync(stagedYaml, 'utf8'));
       expect(chart.description).toBe('retained');
-      expect(chart.version).toBe('3.1.1');
-      expect(chart.appVersion).toBe('3.1.0');
+      expect(chart.version).toBe('3.1.2');
+      expect(chart.appVersion).toBe('3.1.1');
       expect(chart.annotations['example.org/existing']).toBe('retained');
       expect(chart.annotations['org.opencontainers.image.source']).toBe(
         SOURCE_REPOSITORY
@@ -371,13 +371,13 @@ describe('staged Helm chart provenance', () => {
         revision
       );
       expect(chart.annotations['org.opencontainers.image.version']).toBe(
-        '3.1.0'
+        '3.1.1'
       );
       expect(
         verifyChart({
           chartYaml: stagedYaml,
-          version: '3.1.1',
-          appVersion: '3.1.0',
+          version: '3.1.2',
+          appVersion: '3.1.1',
           revision,
         })
       ).toMatchObject({
@@ -390,7 +390,7 @@ describe('staged Helm chart provenance', () => {
     'rejects non-strict chart SemVer %s',
     (version) =>
       chartFixture((source, staged) => {
-        replace(source, 'Chart.yaml', 'version: 3.1.1', `version: ${version}`);
+        replace(source, 'Chart.yaml', 'version: 3.1.2', `version: ${version}`);
         expect(() =>
           stageChart({ sourceDir: source, destinationDir: staged, revision })
         ).toThrow(/chart version/);
@@ -404,7 +404,7 @@ describe('staged Helm chart provenance', () => {
         replace(
           source,
           'Chart.yaml',
-          'appVersion: "3.1.0"',
+          'appVersion: "3.1.1"',
           `appVersion: "${appVersion}"`
         );
         expect(() =>
@@ -444,14 +444,14 @@ describe('staged Helm chart provenance', () => {
   );
 
   it.each([
-    ['version', 'version: 3.1.1', 'version: 3.1.2'],
-    ['appVersion', 'appVersion: 3.1.0', 'appVersion: 3.1.1'],
+    ['version', 'version: 3.1.2', 'version: 3.1.3'],
+    ['appVersion', 'appVersion: 3.1.1', 'appVersion: 3.1.2'],
     ['source', SOURCE_REPOSITORY, 'https://example.invalid/repo'],
     ['revision', revision, 'f'.repeat(40)],
     [
       'application version',
-      'org.opencontainers.image.version: 3.1.0',
       'org.opencontainers.image.version: 3.1.1',
+      'org.opencontainers.image.version: 3.1.2',
     ],
   ])('rejects tampered packaged %s metadata', (_field, search, value) =>
     chartFixture((source, staged) => {
@@ -461,8 +461,8 @@ describe('staged Helm chart provenance', () => {
       expect(() =>
         verifyChart({
           chartYaml: join(staged, 'Chart.yaml'),
-          version: '3.1.1',
-          appVersion: '3.1.0',
+          version: '3.1.2',
+          appVersion: '3.1.1',
           revision,
         })
       ).toThrow(/mismatch/);
@@ -490,8 +490,8 @@ describe('staged Helm chart provenance', () => {
         expect(() =>
           verifyChart({
             chartYaml,
-            version: '3.1.1',
-            appVersion: '3.1.0',
+            version: '3.1.2',
+            appVersion: '3.1.1',
             revision,
           })
         ).toThrow(/revision mismatch/);

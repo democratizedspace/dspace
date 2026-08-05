@@ -18,7 +18,7 @@ setup in their existing runbooks.
   `Chart.yaml:appVersion`
 - **Chart version:** the matching `Chart.yaml:version` and `docs/apps/dspace.version`; this may
   advance independently of the application version
-- **Semantic image tag:** `v<application version>`, for example `v3.1.0`; published only for a
+- **Semantic image tag:** `v<application version>`, for example `v3.1.1`; published only for a
   release and human-readable, but not proof of the deployed image
 - **Chart release tag:** exactly `chart-v<chart version>`, pointing to the reviewed immutable commit
 
@@ -96,11 +96,13 @@ tombstoned even if it later appears absent; this does not prohibit a newer chart
 is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
 package SHA-256, and OCI manifest digest.
 
-Chart `3.1.1` is a chart-only, provenance-bearing release for DSPACE application `3.1.0`. The
+Chart `3.1.2` is the provenance-bearing chart for DSPACE application `3.1.1`. The
 legacy `3.1.0` chart lacks the modern immutable source-revision provenance, so it must not be
-overwritten or selected where that provenance is required. After the chart `3.1.1` preparation PR
-merges, a human operator will create `chart-v3.1.1` at the exact reviewed merge commit; preparing
+overwritten or selected where that provenance is required. After the application `3.1.1` preparation PR
+merges, a human operator will create `chart-v3.1.2` at the exact reviewed merge commit; preparing
 the coordinate does not create the tag or publish the chart.
+
+For the application `3.1.1` / chart `3.1.2` patch release, use the focused [DSPACE 3.1.1 release handoff](./dspace-3.1.1-release-handoff.md) to collect the post-merge #4727/#4730 evidence without changing the release ordering above.
 
 Successful full releases upload the deterministic artifact
 `dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
@@ -151,11 +153,11 @@ From the Sugarkube checkout, promote the approved version or immutable branch-SH
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-promote-prod tag=3.1.0
+just dspace-oci-promote-prod tag=3.1.1
 ```
 
-The bare `3.1.0` value is the existing Sugarkube compatibility/version promote form. The image
-workflow publishes the release-only semantic application tag as `v3.1.0`; it is human-readable but
+The bare `3.1.1` value is the existing Sugarkube compatibility/version promote form. The image
+workflow publishes the release-only semantic application tag as `v3.1.1`; it is human-readable but
 not immutable deployment proof. Branch-SHA tags such as `main-REPLACE_SHORTSHA` or
 `v3-REPLACE_SHORTSHA` (or a digest) are the required audit path for exact image promotion and
 rollback.
@@ -184,7 +186,7 @@ the runtime under test). Replace the revision with the approved full 40-characte
 ```bash
 # Staging
 DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_VERSION=3.1.1 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
@@ -193,7 +195,7 @@ npm run qa:remote-chat-smoke
 
 # Production (run only after the staging result and promotion are approved)
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_VERSION=3.1.1 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
@@ -229,7 +231,7 @@ legacy-identity token.place invocation:
 
 ```bash
 DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_VERSION=3.1.1 \
 DSPACE_EXPECTED_REVISION=018687f5a7f4de45508c6e36eb28afb3e44da24d \
 DSPACE_EXPECTED_IDENTITY_CONTRACT=legacy-build-meta-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
