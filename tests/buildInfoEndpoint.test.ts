@@ -15,7 +15,7 @@ vi.mock('../frontend/src/utils/serverLogger', () => ({
 describe('runtime build identity endpoints', () => {
   beforeEach(() => {
     filePayload = {
-      version: '3.1.0',
+      version: '3.1.1',
       revision: SHA,
       shortRevision: SHA.slice(0, 7),
       buildTimestamp: '2026-07-29T12:00:00Z',
@@ -32,7 +32,7 @@ describe('runtime build identity endpoints', () => {
     expect(response.status).toBe(200);
     expect(response.headers.get('cache-control')).toBe('no-store');
     expect(await response.json()).toEqual({
-      version: '3.1.0',
+      version: '3.1.1',
       revision: SHA,
       shortRevision: SHA.slice(0, 7),
       buildTimestamp: '2026-07-29T12:00:00Z',

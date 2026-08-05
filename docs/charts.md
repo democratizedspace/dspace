@@ -13,7 +13,7 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
 - `image.tag`: Image tag to deploy. Defaults to the human-readable semantic application tag
-  `v3.1.0`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
+  `v3.1.1`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
   recording or proving the exact deployed image.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
@@ -66,9 +66,9 @@ development:
 
 ```yaml
 metrics:
-    enabled: false
+  enabled: false
 serviceMonitor:
-    enabled: false
+  enabled: false
 ```
 
 Sugarkube staging can opt in with a pre-created Secret. The chart never stores or renders the token
@@ -80,18 +80,18 @@ required for this contract and `bearerTokenSecret` remains compatible with older
 ```yaml
 environment: staging
 metrics:
-    enabled: true
-    path: /metrics
-    auth:
-        existingSecret: dspace-staging-metrics-token
-        secretKey: token
+  enabled: true
+  path: /metrics
+  auth:
+    existingSecret: dspace-staging-metrics-token
+    secretKey: token
 serviceMonitor:
-    enabled: true
-    interval: 30s
-    scrapeTimeout: 10s
-    additionalLabels:
-        release: kube-prometheus-stack
-    cluster: sugarkube
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels:
+    release: kube-prometheus-stack
+  cluster: sugarkube
 ```
 
 The normal public ingress still routes `/` to the DSPACE service and does not create a separate
@@ -136,7 +136,7 @@ Deploy the chart with a custom host and image tag:
 helm install dspace charts/dspace \
   -f charts/dspace/values.dev.yaml \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3.1.0
+  --set image.tag=v3.1.1
 ```
 
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
@@ -149,7 +149,7 @@ Helm commands below remain useful for local clusters, development environments, 
 inspection.
 
 The chart is published only by pushing the exact tag `chart-v<chart-version>` (for example,
-`chart-v3.1.1`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
+`chart-v3.1.2`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
 matches it exactly; ordinary `main` and `v3` pushes never publish charts. Publication checks GHCR
 twice and fails closed unless the coordinate is authoritatively absent, so an existing chart
 coordinate cannot be replaced. Chart version `3.0.1` is permanently tombstoned and cannot be
@@ -173,10 +173,10 @@ evidence only even though exact digest equality with the immutable image index i
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
-  --version 3.1.1 \
+  --version 3.1.2 \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3.1.0
+  --set image.tag=v3.1.1
 ```
 
 When installing from the OCI registry, you will not have access to
