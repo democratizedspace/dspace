@@ -79,9 +79,30 @@ The mandatory full-release order is fail-closed:
    verifies digest equality, and emits the combined release manifest.
 
 Publishing the GitHub release before either prerequisite exists fails without creating the semantic
-coordinate. After supplying the missing immutable artifact, rerun the failed release workflow. If a
-semantic tag already exists, the workflow always refuses to overwrite or move it; investigate and
-cut a new approved release coordinate rather than retrying a mutation.
+coordinate. After supplying a missing immutable prerequisite, use the semantic recovery procedure
+below rather than rerunning a historical workflow definition. If a semantic tag already exists,
+the workflow always refuses to overwrite or move it; investigate and cut a new approved release
+coordinate rather than retrying a mutation.
+
+### Recover a failed semantic publication
+
+This recovery is only for an existing, published (non-draft) GitHub application release whose
+semantic workflow failed before publishing its GHCR semantic alias. First prove that the semantic
+tag is authoritatively absent using the authenticated registry evidence procedure. Then dispatch
+the fixed workflow definition from `main` (do not rerun the historical failed workflow run):
+
+```bash
+gh workflow run ci-image.yml \
+  --repo democratizedspace/dspace \
+  --ref main \
+  -f release_tag=v3.1.1
+```
+
+The recovery validates the published release and immutable application tag, source-branch reachability,
+immutable image and chart provenance, and both semantic-tag absence guards before creating the one
+exact alias and deterministic release manifest. It does not move or recreate the application tag or
+GitHub release. An identical dispatch after success is expected to fail at the semantic-tag guard
+before mutation; this is intentional evidence for #4727 and #4730.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
