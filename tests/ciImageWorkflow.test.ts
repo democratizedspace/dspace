@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
+import {
+  chmodSync,
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
@@ -35,6 +43,71 @@ function stepIndex(job: any, predicate: (step: any) => boolean): number {
   return findSteps(job).findIndex(predicate);
 }
 
+function runShell(run: string, env: Record<string, string> = {}) {
+  const directory = mkdtempSync(join(tmpdir(), 'ci-image-workflow-'));
+  const bin = join(directory, 'bin');
+  mkdirSync(bin);
+  const output = join(directory, 'output');
+  const log = join(directory, 'calls.log');
+  writeFileSync(output, '');
+  writeFileSync(log, '');
+  const executable = (name: string, body: string) => {
+    const path = join(bin, name);
+    writeFileSync(path, `#!/usr/bin/env bash\n${body}`);
+    chmodSync(path, 0o755);
+  };
+  executable(
+    'gh',
+    'echo gh >> "$MOCK_LOG"\nprintf \'%s\\n\' "$MOCK_RELEASE_JSON"\n'
+  );
+  executable(
+    'git',
+    `echo "$*" >> "$MOCK_LOG"
+if [[ "$1 $2" == "rev-parse HEAD" ]]; then echo "$MOCK_SOURCE_SHA"; exit 0; fi
+if [[ "$1" == "rev-parse" && "$2" == *'^'{commit} ]]; then echo "$MOCK_SOURCE_SHA"; exit 0; fi
+if [[ "$1" == "ls-remote" ]]; then
+  [[ "${'$'}*" == *refs/heads/main* ]] && exit "${'$'}MOCK_MAIN_LS"
+  exit "${'$'}MOCK_V3_LS"
+fi
+if [[ "$1" == "fetch" ]]; then exit 0; fi
+if [[ "$1 $2" == "merge-base --is-ancestor" ]]; then
+  [[ "${'$'}*" == *origin/main* ]] && exit "${'$'}MOCK_MAIN_MERGE"
+  exit "${'$'}MOCK_V3_MERGE"
+fi
+if [[ "$1" == "rev-parse" ]]; then echo 1111111111111111111111111111111111111111; exit 0; fi
+exit 99
+`
+  );
+  mkdirSync(join(directory, 'charts', 'dspace'), { recursive: true });
+  writeFileSync(
+    join(directory, 'charts', 'dspace', 'Chart.yaml'),
+    'version: 3.0.0\n'
+  );
+  const result = spawnSync('bash', ['-c', run], {
+    cwd: directory,
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      PATH: `${bin}:${process.env.PATH}`,
+      GITHUB_OUTPUT: output,
+      GITHUB_REPOSITORY: 'democratizedspace/dspace',
+      MOCK_LOG: log,
+      MOCK_RELEASE_JSON: '{}',
+      MOCK_SOURCE_SHA: '0123456789abcdef0123456789abcdef01234567',
+      MOCK_MAIN_LS: '2',
+      MOCK_V3_LS: '2',
+      MOCK_MAIN_MERGE: '1',
+      MOCK_V3_MERGE: '1',
+      ...env,
+    },
+  });
+  return {
+    ...result,
+    calls: readFileSync(log, 'utf8'),
+    output: readFileSync(output, 'utf8'),
+  };
+}
+
 describe('ci-image.yml triggers', () => {
   it('keeps ordinary branch coverage on main and v3, with no tag-push trigger', () => {
     expect(workflow.on.push.branches).toEqual(['v3', 'main']);
@@ -43,11 +116,45 @@ describe('ci-image.yml triggers', () => {
   });
 
   it('has exactly one canonical semantic-publication event: a published release', () => {
-    expect(workflow.on.release).toBeTruthy();
-    expect(workflow.on.release.types).toContain('published');
+    expect(workflow.on.release).toEqual({ types: ['published'] });
     // No push.tags trigger alongside release: published — that combination would race
     // and turn every ordinary release into an expected duplicate-publication failure.
     expect(workflow.on.push.tags).toBeUndefined();
+  });
+
+  it('keeps an empty manual recovery tag on the ordinary branch-image path', () => {
+    expect(workflow.on.workflow_dispatch.inputs.release_tag).toMatchObject({
+      type: 'string',
+      required: false,
+      default: '',
+    });
+    expect(workflow.jobs.image.if).toBe(
+      "github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == '')"
+    );
+    expect(workflow.jobs['local-build'].if).toBe(
+      "github.event_name != 'release' && !(github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')"
+    );
+    expect(workflow.jobs['semantic-release'].if).toBe(
+      "(github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')"
+    );
+  });
+
+  it('routes empty dispatches to both branch jobs and valid recovery only to semantic release', () => {
+    const enabled = (releaseTag: string) => ({
+      localBuild: releaseTag === '',
+      image: releaseTag === '',
+      semanticRelease: releaseTag !== '',
+    });
+    expect(enabled('')).toEqual({
+      localBuild: true,
+      image: true,
+      semanticRelease: false,
+    });
+    expect(enabled('v3.1.1')).toEqual({
+      localBuild: false,
+      image: false,
+      semanticRelease: true,
+    });
   });
 });
 
@@ -57,7 +164,7 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
   it('never runs for release events', () => {
     expect(job.if).toContain("github.event_name == 'push'");
     expect(job.if).toContain("github.event_name == 'workflow_dispatch'");
-    expect(job.if).not.toMatch(/release/);
+    expect(job.if).not.toContain("github.event_name == 'release'");
   });
 
   it('serializes ordinary publication by target branch without workflow SHA', () => {
@@ -259,33 +366,80 @@ describe('ci-image.yml "local-build" job (PR path)', () => {
   });
 
   it('does not run redundantly for release events', () => {
-    expect(job.if).toBe("github.event_name != 'release'");
+    expect(job.if).toContain("github.event_name != 'release'");
+    expect(job.if).toContain(
+      "github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != ''"
+    );
   });
 });
 
-describe('ci-image.yml "semantic-release" job (release-only alias path)', () => {
+describe('ci-image.yml "semantic-release" job (normal and recovery alias path)', () => {
   const job = workflow.jobs['semantic-release'];
   const steps = findSteps(job);
   const named = (name: string) => steps.find((step) => step.name === name);
 
-  it('is release-only and serialized by semantic tag', () => {
+  it('accepts published release events or explicit recovery dispatches and serializes by tag', () => {
     expect(job.if).toBe(
-      "github.event_name == 'release' && github.event.action == 'published'"
+      "(github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')"
     );
     expect(job.concurrency.group).toContain('github.event.release.tag_name');
+    expect(job.concurrency.group).toContain('github.event.inputs.release_tag');
     expect(job.concurrency['cancel-in-progress']).toBe(false);
+  });
+
+  it('requires a stable tag belonging to an existing published, non-draft GitHub release', () => {
+    const release = named('Resolve and authorize published release');
+    const valid = JSON.stringify({
+      tag_name: 'v3.1.1',
+      draft: false,
+      published_at: '2026-08-05T00:00:00Z',
+    });
+    const passed = runShell(release.run, {
+      RELEASE_TAG: 'v3.1.1',
+      MOCK_RELEASE_JSON: valid,
+    });
+    expect(passed.status).toBe(0);
+    expect(passed.output).toBe('tag=v3.1.1\n');
+    expect(passed.calls).toBe('gh\n');
+
+    for (const tag of ['', '3.1.1', 'v3.1.1-rc.1']) {
+      const failed = runShell(release.run, {
+        RELEASE_TAG: tag,
+        MOCK_RELEASE_JSON: valid,
+      });
+      expect(failed.status).not.toBe(0);
+      expect(failed.calls).toBe('');
+    }
+    for (const releaseJson of [
+      { tag_name: 'v3.1.1', draft: true, published_at: '2026-08-05T00:00:00Z' },
+      { tag_name: 'v3.1.1', draft: false, published_at: null },
+    ]) {
+      const failed = runShell(release.run, {
+        RELEASE_TAG: 'v3.1.1',
+        MOCK_RELEASE_JSON: JSON.stringify(releaseJson),
+      });
+      expect(failed.status).not.toBe(0);
+      expect(failed.calls).toBe('gh\n');
+      expect(failed.output).toBe('');
+    }
   });
 
   it('authorizes the checked-out source before lifecycle execution', () => {
     const checkout = findStepsUsing(job, 'actions/checkout')[0];
-    expect(checkout.with.ref).toContain('github.event.release.tag_name');
+    expect(checkout.with.ref).toBe('${{ steps.release.outputs.tag }}');
     expect(checkout.with['persist-credentials']).toBe(false);
     const authorization = named('Authorize release source');
-    expect(authorization.env.RELEASE_TAG).toContain('release.tag_name');
+    expect(authorization.env.RELEASE_TAG).toBe(
+      '${{ steps.release.outputs.tag }}'
+    );
     expect(authorization.run).toContain(
       'git rev-parse "${RELEASE_TAG}^{commit}"'
     );
-    expect(authorization.run).toContain('refs/remotes/origin/main');
+    expect(authorization.run).toContain('refs/remotes/origin/$branch');
+    expect(authorization.run).toContain('git ls-remote --exit-code --heads');
+    expect(authorization.run).toContain('elif [[ $status -ne 2 ]]');
+    expect(authorization.run).toContain('${#containing_branches[@]} == 1');
+    expect(authorization.run).not.toContain('|| true');
     expect(authorization.run).not.toContain(
       '${{ github.event.release.tag_name }}'
     );
@@ -293,6 +447,50 @@ describe('ci-image.yml "semantic-release" job (release-only alias path)', () => 
       steps.indexOf(named('Validate all local release coordinates'))
     );
     expect(JSON.stringify(job)).not.toContain('pnpm install');
+  });
+
+  it.each([
+    ['main', { MOCK_MAIN_LS: '0', MOCK_V3_LS: '2', MOCK_MAIN_MERGE: '0' }],
+    ['v3', { MOCK_MAIN_LS: '2', MOCK_V3_LS: '0', MOCK_V3_MERGE: '0' }],
+  ])('authorizes the sole existing containing branch: %s', (branch, env) => {
+    const result = runShell(named('Authorize release source').run, {
+      RELEASE_TAG: 'v3.1.1',
+      ...env,
+    });
+    expect(result.status).toBe(0);
+    expect(result.output).toContain(`source_branch=${branch}\n`);
+    expect(result.calls.match(/^fetch .*$/gm)).toEqual([
+      `fetch https://github.com/democratizedspace/dspace.git ${branch}:refs/remotes/origin/${branch} --quiet`,
+    ]);
+  });
+
+  it.each([
+    ['neither branch exists', {}],
+    ['branch discovery is indeterminate', { MOCK_MAIN_LS: '3' }],
+    [
+      'containment is indeterminate even when the other branch contains the source',
+      {
+        MOCK_MAIN_LS: '0',
+        MOCK_V3_LS: '0',
+        MOCK_MAIN_MERGE: '3',
+        MOCK_V3_MERGE: '0',
+      },
+    ],
+    [
+      'both branches contain the source',
+      {
+        MOCK_MAIN_LS: '0',
+        MOCK_V3_LS: '0',
+        MOCK_MAIN_MERGE: '0',
+        MOCK_V3_MERGE: '0',
+      },
+    ],
+  ])('fails closed when %s', (_case, env) => {
+    const result = runShell(named('Authorize release source').run, {
+      RELEASE_TAG: 'v3.1.1',
+      ...env,
+    });
+    expect(result.status).not.toBe(0);
   });
 
   it('pins Node before invoking the release consistency gate', () => {
