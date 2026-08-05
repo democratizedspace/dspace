@@ -274,9 +274,10 @@ jobs:
     # exclusively by the semantic-release job below.
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     concurrency:
-      # Serialize the absence check plus push for a branch/SHA coordinate so two ordinary
-      # publication runs cannot both observe the immutable tag as absent before pushing.
-      group: dspace-image-${{ github.event.inputs.branch || github.ref_name }}-${{ github.sha }}
+      # Serialize the absence check plus push by target branch. workflow_dispatch can
+      # choose a checkout branch independently of github.sha, so branch-scoped locking
+      # keeps runs for the same published tag namespace from racing.
+      group: dspace-image-${{ github.event.inputs.branch || github.ref_name }}
       cancel-in-progress: false
     outputs:
       image-tag: ${{ steps.tags.outputs.sha_tag }}

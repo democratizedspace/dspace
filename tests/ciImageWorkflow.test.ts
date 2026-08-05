@@ -60,10 +60,11 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(job.if).not.toMatch(/release/);
   });
 
-  it('serializes ordinary publication by branch and workflow SHA', () => {
+  it('serializes ordinary publication by target branch without workflow SHA', () => {
     expect(job.concurrency.group).toBe(
-      'dspace-image-${{ github.event.inputs.branch || github.ref_name }}-${{ github.sha }}'
+      'dspace-image-${{ github.event.inputs.branch || github.ref_name }}'
     );
+    expect(job.concurrency.group).not.toContain('github.sha');
     expect(job.concurrency['cancel-in-progress']).toBe(false);
   });
 
