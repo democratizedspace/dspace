@@ -132,6 +132,29 @@ Required post-merge evidence for Refs #4727 and Refs #4730:
 4. `dspace-release-manifest.json` agrees with the full source SHA, immutable image tag and digest,
    both platform digests, chart `3.1.2` digest/provenance, and semantic tag evidence.
 
+#### Recover a failed semantic publication
+
+Use this recovery only when the immutable application tag and a non-draft, published GitHub
+release already exist, but their semantic workflow failed before publishing the semantic GHCR
+alias and release manifest. First prove that the semantic GHCR tag is authoritatively absent; do
+not dispatch recovery if the lookup is unauthorized, unavailable, or otherwise indeterminate.
+
+Start a **fresh dispatch using the fixed workflow definition from `main`** (do not rerun the
+historical failed workflow run):
+
+```bash
+gh workflow run ci-image.yml \
+  --repo democratizedspace/dspace \
+  --ref main \
+  -f release_tag=v3.1.1
+```
+
+Recovery checks out and verifies the existing immutable application tag; it does not move or
+recreate that tag or the GitHub release. It verifies the allowed source branch and existing image
+and chart provenance, then reuses the normal semantic publication and manifest path. After a
+successful recovery, an identical dispatch is expected to fail at the semantic-tag absence guard
+before mutation. This fail-closed retry behavior is required evidence for #4727 and #4730.
+
 Successful full releases upload the deterministic artifact
 `dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
 `applicationVersion`, the complete `sourceRevision`, immutable tag-only `imageTag`, image-index
