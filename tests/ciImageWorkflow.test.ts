@@ -108,6 +108,95 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     }
   });
 
+  it('invokes the chat verifier from a repository-preserving mount', () => {
+    const step = findSteps(job).find(
+      (candidate) => candidate.name === 'Verify chat build stamp inside image'
+    );
+    expect(step.run).toContain('-v "$PWD:/verification-repo:ro"');
+    expect(step.run).toContain(
+      'node /verification-repo/scripts/verify-chat-build-stamp.mjs'
+    );
+    expect(step.run).toContain('-e VERIFY_REPO_ROOT=/app');
+    expect(step.run).toContain(
+      '-e VERIFY_BUILD_META_PATH=/app/build_meta.json'
+    );
+    expect(step.run).not.toContain('node /scripts/verify-chat-build-stamp.mjs');
+  });
+
+  it('runs local image construction and identity checks before the first registry mutation', () => {
+    const steps = findSteps(job);
+    const firstPush = steps.find(
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+    const firstPushIndex = steps.indexOf(firstPush);
+
+    for (const name of [
+      'Build image for SHA verification',
+      'Assert build SHA is baked into frontend bundle',
+      'Verify chat build stamp inside image',
+      'Compare runtime identity with OCI revision',
+      'Refuse existing branch-SHA image tag before push attempt 1',
+    ]) {
+      expect(stepIndex(job, (step) => step.name === name)).toBeLessThan(
+        firstPushIndex
+      );
+    }
+
+    const localBuild = steps.find(
+      (step) => step.name === 'Build image for SHA verification'
+    );
+    expect(localBuild.with.push).toBe(false);
+    expect(localBuild.with.tags).toBe('dspace-verify:latest');
+  });
+
+  it('checks authoritative SHA-tag absence immediately before each push attempt', () => {
+    const steps = findSteps(job);
+    const firstGuard = steps.find(
+      (step) =>
+        step.name ===
+        'Refuse existing branch-SHA image tag before push attempt 1'
+    );
+    const firstPush = steps.find(
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+    const retryGuard = steps.find(
+      (step) =>
+        step.name ===
+        'Refuse existing branch-SHA image tag before push attempt 2'
+    );
+    const secondPush = steps.find(
+      (step) => step.name === 'Build and push image (attempt 2)'
+    );
+
+    expect(steps.indexOf(firstGuard)).toBe(steps.indexOf(firstPush) - 1);
+    expect(steps.indexOf(retryGuard)).toBe(steps.indexOf(secondPush) - 1);
+    for (const guard of [firstGuard, retryGuard]) {
+      expect(guard.env.GHCR_GUARD_USERNAME).toBe('${{ github.actor }}');
+      expect(guard.env.GHCR_GUARD_PASSWORD).toContain('secrets.GITHUB_TOKEN');
+      expect(guard.env.SHA_IMAGE_TAG).toBe('${{ steps.tags.outputs.sha_tag }}');
+      expect(guard.run).toContain(
+        'node scripts/ghcr-manifest.mjs check-absent'
+      );
+      expect(guard.run).toContain('tag="${SHA_IMAGE_TAG##*:}"');
+      expect(guard.run).not.toContain('${{ steps.tags.outputs.sha_tag }}');
+    }
+  });
+
+  it('requires a failed first attempt and successful retry guard before attempt 2', () => {
+    const retryGuard = findSteps(job).find(
+      (step) =>
+        step.name ===
+        'Refuse existing branch-SHA image tag before push attempt 2'
+    );
+    const secondPush = findSteps(job).find(
+      (step) => step.name === 'Build and push image (attempt 2)'
+    );
+    expect(retryGuard.if).toBe("steps.build_push_1.outcome == 'failure'");
+    expect(secondPush.if).toBe(
+      "steps.build_push_1.outcome == 'failure' && steps.retry_guard.outcome == 'success'"
+    );
+  });
+
   it('compares runtime JSON and HTML identity with the OCI revision', () => {
     const step = findSteps(job).find(
       (candidate) =>
