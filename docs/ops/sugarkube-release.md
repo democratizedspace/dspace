@@ -105,11 +105,12 @@ merge commit; preparing the coordinate does not create the tag or publish the ch
 
 ### Operator handoff for the DSPACE 3.1.1 patch release
 
-After this preparation merges to `main`, collect evidence in the normal fail-closed order. The
-expected coordinates are:
+After this preparation merges to `main`, define `SHORT_SHA` as exactly the first seven lowercase
+hexadecimal characters of the reviewed merge commit SHA, then collect evidence in the normal
+fail-closed order. The expected coordinates are:
 
-- Branch image tag: `main-<merge-shortsha>` for the reviewed merge commit, published as
-  `ghcr.io/democratizedspace/dspace:main-<merge-shortsha>`.
+- Branch image tag: `main-SHORT_SHA` for the reviewed merge commit, published as
+  `ghcr.io/democratizedspace/dspace:main-SHORT_SHA`.
 - Chart tag: `chart-v3.1.2`, pointing at the same reviewed merge commit.
 - Application release tag: `v3.1.1`, published only by the GitHub release event after the image and
   chart prerequisites exist.
@@ -117,7 +118,7 @@ expected coordinates are:
 Required post-merge evidence for Refs #4727 and Refs #4730:
 
 1. The first semantic publication for `v3.1.1` succeeds exactly once and aliases the immutable
-   `main-<merge-shortsha>` image index digest without rebuilding.
+   `main-SHORT_SHA` image index digest without rebuilding.
 2. Rerunning the semantic job for the same release fails at the GHCR existence guard before any
    publication or tag mutation.
 3. The semantic `v3.1.1` digest remains unchanged after the rejected rerun.

@@ -12,7 +12,7 @@ vi.mock('../src/generated/build_meta.json', () => ({
 
 beforeEach(() => {
     buildMeta = {
-        version: '3.1.0',
+        version: '3.1.1',
         revision: SHA,
         shortRevision: SHA.slice(0, 7),
         buildTimestamp: '2026-07-29T12:00:00Z',
