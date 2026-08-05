@@ -18,7 +18,7 @@ setup in their existing runbooks.
   `Chart.yaml:appVersion`
 - **Chart version:** the matching `Chart.yaml:version` and `docs/apps/dspace.version`; this may
   advance independently of the application version
-- **Semantic image tag:** `v<application version>`, for example `v3.1.0`; published only for a
+- **Semantic image tag:** `v<application version>`, for example `v3.1.1`; published only for a
   release and human-readable, but not proof of the deployed image
 - **Chart release tag:** exactly `chart-v<chart version>`, pointing to the reviewed immutable commit
 
@@ -96,11 +96,11 @@ tombstoned even if it later appears absent; this does not prohibit a newer chart
 is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
 package SHA-256, and OCI manifest digest.
 
-Chart `3.1.1` is a chart-only, provenance-bearing release for DSPACE application `3.1.0`. The
-legacy `3.1.0` chart lacks the modern immutable source-revision provenance, so it must not be
-overwritten or selected where that provenance is required. After the chart `3.1.1` preparation PR
-merges, a human operator will create `chart-v3.1.1` at the exact reviewed merge commit; preparing
-the coordinate does not create the tag or publish the chart.
+Chart `3.1.2` is the provenance-bearing chart coordinate for DSPACE application `3.1.1`. The
+existing `3.1.1` chart coordinate is immutable and must not be overwritten or selected for the next
+patch application release. After the application `3.1.1` / chart `3.1.2` preparation PR merges, a
+human operator will create `chart-v3.1.2` at the exact reviewed merge commit; preparing the
+coordinate does not create the tag or publish the chart.
 
 Successful full releases upload the deterministic artifact
 `dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
@@ -111,6 +111,28 @@ credentials. The workflow summary includes the immutable image and chart referen
 index and both platform digests. The semantic `vX.Y.Z` alias is verified to resolve to the exact
 same index digest, but the manifest and deployments continue to select the immutable branch-SHA
 tag.
+
+## DSPACE 3.1.1 operator handoff
+
+The repository preparation for the next patch application release uses application `3.1.1` and
+chart `3.1.2`. It intentionally does not create tags, releases, artifacts, or deployments.
+
+After this PR merges to `main`, operators should collect the remaining evidence for Refs #4727 and
+Refs #4730 in this order:
+
+1. Confirm the `ci-image.yml` branch run for the merge commit publishes and verifies the immutable
+   multi-platform image tag `main-<merge-short-sha>` (for example, `main-REPLACE_SHORTSHA`) and
+   records the full source SHA, image index digest, and platform digests.
+2. Create `chart-v3.1.2` at that same reviewed merge commit, let `ci-helm.yml` publish the
+   provenance-bearing immutable chart, and record the chart package digest and GHCR chart digest.
+3. Publish the GitHub application release tag `v3.1.1` from the same commit exactly once. The
+   semantic-release job must verify the matching branch image and chart evidence, create exactly one
+   semantic digest alias `v3.1.1`, and upload `dspace-release-manifest.json`.
+4. Rerun the semantic publication job only as a negative-control check: it must fail at the GHCR
+   semantic-tag existence guard before any publication attempt.
+5. Confirm the `v3.1.1` semantic image digest remains unchanged and the release manifest agrees with
+   the source revision, immutable image tag, image index/platform digest evidence, chart version, and
+   chart digest.
 
 ## Deploy staging
 
