@@ -38,7 +38,7 @@ describe('sync-package metadata script', () => {
     const { rootPackagePath, targetPackagePath, cleanup } = setupWorkspace(
       {
         name: 'dspace',
-        version: '3.1.0',
+        version: '3.1.1',
         description: 'Root description',
         license: 'Apache-2.0',
       },
@@ -64,7 +64,7 @@ describe('sync-package metadata script', () => {
       expect(updates).toEqual(['name', 'version', 'description', 'license']);
       expect(updated).toMatchObject({
         name: 'dspace',
-        version: '3.1.0',
+        version: '3.1.1',
         description: 'Root description',
         license: 'Apache-2.0',
       });
@@ -76,7 +76,7 @@ describe('sync-package metadata script', () => {
   it('does not rewrite the frontend manifest when metadata already matches', () => {
     const manifest = {
       name: 'dspace',
-      version: '3.1.0',
+      version: '3.1.1',
       description: 'Root description',
       license: 'Apache-2.0',
     };
