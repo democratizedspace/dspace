@@ -50,17 +50,13 @@ describe('ci-image.yml triggers', () => {
     expect(workflow.on.push.tags).toBeUndefined();
   });
 
-  it('keeps an empty manual recovery tag on the ordinary branch-image path', () => {
-    expect(workflow.on.workflow_dispatch.inputs.release_tag).toMatchObject({
-      type: 'string',
-      required: false,
-      default: '',
-    });
+  it('keeps manual dispatch limited to the ordinary branch-image path', () => {
+    expect(workflow.on.workflow_dispatch.inputs.release_tag).toBeUndefined();
     expect(workflow.jobs.image.if).toContain(
-      "github.event.inputs.release_tag == ''"
+      "github.event_name == 'workflow_dispatch'"
     );
-    expect(workflow.jobs['local-build'].if).toContain(
-      "github.event.inputs.release_tag != ''"
+    expect(workflow.jobs['semantic-release'].if).not.toContain(
+      "github.event_name == 'workflow_dispatch'"
     );
   });
 });
@@ -274,26 +270,21 @@ describe('ci-image.yml "local-build" job (PR path)', () => {
 
   it('does not run redundantly for release events', () => {
     expect(job.if).toContain("github.event_name != 'release'");
-    expect(job.if).toContain(
-      "github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != ''"
-    );
+    expect(job.if).not.toContain('release_tag');
   });
 });
 
-describe('ci-image.yml "semantic-release" job (normal and recovery alias path)', () => {
+describe('ci-image.yml "semantic-release" job', () => {
   const job = workflow.jobs['semantic-release'];
   const steps = findSteps(job);
   const named = (name: string) => steps.find((step) => step.name === name);
 
-  it('accepts published release events or explicit recovery dispatches and serializes by tag', () => {
-    expect(job.if).toContain(
+  it('accepts only published release events and serializes by tag', () => {
+    expect(job.if).toBe(
       "github.event_name == 'release' && github.event.action == 'published'"
     );
-    expect(job.if).toContain(
-      "github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != ''"
-    );
     expect(job.concurrency.group).toContain('github.event.release.tag_name');
-    expect(job.concurrency.group).toContain('github.event.inputs.release_tag');
+    expect(job.concurrency.group).not.toContain('github.event.inputs');
     expect(job.concurrency['cancel-in-progress']).toBe(false);
   });
 
@@ -303,7 +294,10 @@ describe('ci-image.yml "semantic-release" job (normal and recovery alias path)',
     expect(release.run).toContain('gh api');
     expect(release.run).toContain('.draft == false');
     expect(release.run).toContain('.published_at != null');
-    expect(release.env.RELEASE_TAG).toContain('event.inputs.release_tag');
+    expect(release.run).toContain('.target_commitish');
+    expect(release.env.RELEASE_TAG).toBe(
+      '${{ github.event.release.tag_name }}'
+    );
   });
 
   it('authorizes the checked-out source before lifecycle execution', () => {
@@ -320,7 +314,11 @@ describe('ci-image.yml "semantic-release" job (normal and recovery alias path)',
     expect(authorization.run).toContain('refs/remotes/origin/$branch');
     expect(authorization.run).toContain('git ls-remote --exit-code --heads');
     expect(authorization.run).toContain('elif [[ $status -ne 2 ]]');
-    expect(authorization.run).toContain('${#containing_branches[@]} == 1');
+    expect(authorization.run).toContain('${#containing_branches[@]} > 0');
+    expect(authorization.env.SOURCE_BRANCH_HINT).toBe(
+      '${{ steps.release.outputs.source_branch_hint }}'
+    );
+    expect(authorization.run).toContain('"$branch" == "$SOURCE_BRANCH_HINT"');
     expect(authorization.run).not.toContain('|| true');
     expect(authorization.run).not.toContain(
       '${{ github.event.release.tag_name }}'
@@ -340,7 +338,8 @@ describe('ci-image.yml "semantic-release" job (normal and recovery alias path)',
     expect(run).toContain('for branch in "${existing_branches[@]}"');
     expect(run).toContain('git merge-base --is-ancestor');
     expect(run).toContain('elif [[ $status -ne 1 ]]');
-    expect(run).toContain('${#containing_branches[@]} == 1');
+    expect(run).toContain('${#containing_branches[@]} > 0');
+    expect(run).toContain('[[ "$branch" == v3 ]] && source_branch=v3');
   });
 
   it('pins Node before invoking the release consistency gate', () => {
