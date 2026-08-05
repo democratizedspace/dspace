@@ -60,6 +60,14 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(job.if).not.toMatch(/release/);
   });
 
+  it('serializes ordinary publication by target branch without workflow SHA', () => {
+    expect(job.concurrency.group).toBe(
+      'dspace-image-${{ github.event.inputs.branch || github.ref_name }}'
+    );
+    expect(job.concurrency.group).not.toContain('github.sha');
+    expect(job.concurrency['cancel-in-progress']).toBe(false);
+  });
+
   it('never computes or publishes a semantic version tag', () => {
     const serialized = JSON.stringify(job);
     expect(serialized).not.toMatch(/version_tag/);
@@ -115,11 +123,111 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     );
     expect(step.run).toContain('org.opencontainers.image.revision');
     expect(step.run).toContain('/build-info.json');
+    expect(step.run).toContain('if [ ! -s /tmp/build-info.json ]; then');
+    expect(step.run).toContain('docker logs "$container"');
     expect(step.run).toContain('dspace-build-revision');
     expect(step.env.EXPECTED_SHA).toBe('${{ steps.tags.outputs.full_sha }}');
     expect(step.run).toContain('test "$label_revision" = "$EXPECTED_SHA"');
   });
 
+  it('invokes image verifiers from a repository-preserving mount, not a scripts-only mount', () => {
+    const serialized = JSON.stringify(job);
+    const shaStep = findSteps(job).find(
+      (step) => step.name === 'Assert build SHA is baked into frontend bundle'
+    );
+    const chatStep = findSteps(job).find(
+      (step) => step.name === 'Verify chat build stamp inside image'
+    );
+
+    expect(shaStep.run).toContain('-v "$PWD:/verification-repo:ro"');
+    expect(shaStep.run).toContain(
+      'node /verification-repo/scripts/verify-build-sha.mjs /app/dist'
+    );
+    expect(chatStep.run).toContain('-v "$PWD:/verification-repo:ro"');
+    expect(chatStep.run).toContain('-e VERIFY_REPO_ROOT=/app');
+    expect(chatStep.run).toContain(
+      '-e VERIFY_BUILD_META_PATH=/app/build_meta.json'
+    );
+    expect(chatStep.run).toContain(
+      'node /verification-repo/scripts/verify-chat-build-stamp.mjs'
+    );
+    expect(serialized).not.toContain('$PWD/scripts:/scripts:ro');
+    expect(serialized).not.toContain(
+      'node /scripts/verify-chat-build-stamp.mjs'
+    );
+  });
+
+  it('builds and locally validates the runtime image before the first registry mutation', () => {
+    const steps = findSteps(job);
+    const firstPush = stepIndex(
+      job,
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+    for (const name of [
+      'Build image for SHA verification',
+      'Assert build SHA is baked into frontend bundle',
+      'Verify chat build stamp inside image',
+      'Compare runtime identity with OCI revision',
+    ]) {
+      expect(stepIndex(job, (step) => step.name === name)).toBeGreaterThan(-1);
+      expect(stepIndex(job, (step) => step.name === name)).toBeLessThan(
+        firstPush
+      );
+    }
+
+    const verifyBuild = steps.find(
+      (step) => step.name === 'Build image for SHA verification'
+    );
+    expect(verifyBuild.with.push).toBe(false);
+    expect(verifyBuild.with.tags).toBe('dspace-verify:latest');
+    expect(verifyBuild.with['cache-from']).toBe('type=gha');
+    expect(verifyBuild.with['cache-to']).toBe(
+      'type=gha,mode=max,ignore-error=true'
+    );
+  });
+
+  it('guards the immutable SHA tag immediately before both push attempts', () => {
+    const steps = findSteps(job);
+    const guard1 = steps.find(
+      (step) =>
+        step.name === 'Ensure immutable SHA tag is absent before push attempt 1'
+    );
+    const guard2 = steps.find(
+      (step) =>
+        step.name === 'Ensure immutable SHA tag is absent before push attempt 2'
+    );
+    const push1 = steps.find(
+      (step) => step.name === 'Build and push image (attempt 1)'
+    );
+    const push2 = steps.find(
+      (step) => step.name === 'Build and push image (attempt 2)'
+    );
+
+    expect(steps.indexOf(guard1)).toBe(steps.indexOf(push1) - 1);
+    expect(steps.indexOf(guard2)).toBe(steps.indexOf(push2) - 1);
+    for (const guard of [guard1, guard2]) {
+      expect(guard.run).toContain('scripts/ghcr-manifest.mjs check-absent');
+      expect(guard.env.GHCR_GUARD_USERNAME).toBe('${{ github.actor }}');
+      expect(guard.env.GHCR_GUARD_PASSWORD).toBe('${{ secrets.GITHUB_TOKEN }}');
+      expect(guard.env.IMAGE_TAG).toBe('${{ steps.tags.outputs.sha_tag }}');
+      expect(guard.run).toContain('--tag "${IMAGE_TAG##*:}"');
+      expect(guard.run).not.toContain('${{ secrets.GITHUB_TOKEN }}');
+    }
+  });
+
+  it('requires a failed first push and successful retry guard before attempt 2', () => {
+    const guard2 = findSteps(job).find(
+      (step) =>
+        step.name === 'Ensure immutable SHA tag is absent before push attempt 2'
+    );
+    const push2 = findSteps(job).find(
+      (step) => step.name === 'Build and push image (attempt 2)'
+    );
+    expect(guard2.if).toBe("steps.build_push_1.outcome == 'failure'");
+    expect(push2.if).toBe(
+      "steps.build_push_1.outcome == 'failure' && steps.check_sha_absent_2.outcome == 'success'"
+    );
+  });
   it('uses the checked-out commit rather than the dispatch event SHA', () => {
     const serialized = JSON.stringify(job);
     expect(serialized).not.toContain('GIT_SHA=${{ github.sha }}');
