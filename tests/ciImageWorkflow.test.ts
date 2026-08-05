@@ -60,6 +60,13 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(job.if).not.toMatch(/release/);
   });
 
+  it('serializes ordinary publication by branch and workflow SHA', () => {
+    expect(job.concurrency.group).toBe(
+      'dspace-image-${{ github.event.inputs.branch || github.ref_name }}-${{ github.sha }}'
+    );
+    expect(job.concurrency['cancel-in-progress']).toBe(false);
+  });
+
   it('never computes or publishes a semantic version tag', () => {
     const serialized = JSON.stringify(job);
     expect(serialized).not.toMatch(/version_tag/);
@@ -115,6 +122,8 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     );
     expect(step.run).toContain('org.opencontainers.image.revision');
     expect(step.run).toContain('/build-info.json');
+    expect(step.run).toContain('if [ ! -s /tmp/build-info.json ]; then');
+    expect(step.run).toContain('docker logs "$container"');
     expect(step.run).toContain('dspace-build-revision');
     expect(step.env.EXPECTED_SHA).toBe('${{ steps.tags.outputs.full_sha }}');
     expect(step.run).toContain('test "$label_revision" = "$EXPECTED_SHA"');
@@ -170,6 +179,10 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     );
     expect(verifyBuild.with.push).toBe(false);
     expect(verifyBuild.with.tags).toBe('dspace-verify:latest');
+    expect(verifyBuild.with['cache-from']).toBe('type=gha');
+    expect(verifyBuild.with['cache-to']).toBe(
+      'type=gha,mode=max,ignore-error=true'
+    );
   });
 
   it('guards the immutable SHA tag immediately before both push attempts', () => {

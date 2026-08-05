@@ -273,6 +273,11 @@ jobs:
     # outages/2026-07-23-dspace-production-version-drift.md); semantic tags are published
     # exclusively by the semantic-release job below.
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    concurrency:
+      # Serialize the absence check plus push for a branch/SHA coordinate so two ordinary
+      # publication runs cannot both observe the immutable tag as absent before pushing.
+      group: dspace-image-${{ github.event.inputs.branch || github.ref_name }}-${{ github.sha }}
+      cancel-in-progress: false
     outputs:
       image-tag: ${{ steps.tags.outputs.sha_tag }}
     steps:
@@ -392,6 +397,7 @@ jobs:
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
           cache-from: type=gha
+          cache-to: type=gha,mode=max,ignore-error=true
 
       - name: Assert build SHA is baked into frontend bundle
         env:
@@ -422,7 +428,18 @@ jobs:
           test "$label_revision" = "$EXPECTED_SHA"
           container="$(docker run -d -p 18080:8080 dspace-verify:latest)"
           trap 'docker rm -f "$container"' EXIT
-          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:18080/build-info.json > /tmp/build-info.json && break; sleep 2; done
+          rm -f /tmp/build-info.json
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18080/build-info.json > /tmp/build-info.json; then
+              break
+            fi
+            sleep 2
+          done
+          if [ ! -s /tmp/build-info.json ]; then
+            echo "/build-info.json did not become reachable or returned an empty response" >&2
+            docker logs "$container" >&2 || true
+            exit 1
+          fi
           test "$(node -p "JSON.parse(require('fs').readFileSync('/tmp/build-info.json')).revision")" = "$label_revision"
           curl -fsS http://127.0.0.1:18080/ | grep -F "name=\"dspace-build-revision\" content=\"${label_revision}\""
 
