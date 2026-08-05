@@ -14,6 +14,11 @@ on:
       - published
   workflow_dispatch:
     inputs:
+      release_tag:
+        description: Existing published vX.Y.Z release to recover (leave empty for a branch image)
+        required: false
+        default: ''
+        type: string
       branch:
         description: Branch to build and publish the image from
         required: false
@@ -34,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     # Release publication gets its own build in the semantic-release job below; skip the
     # redundant PR-style validate/smoke pass for release events.
-    if: github.event_name != 'release'
+    if: github.event_name != 'release' && !(github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -272,7 +277,7 @@ jobs:
     # exact class of bug that let branch builds move vX.Y.Z (see DSPACE #4727 and
     # outages/2026-07-23-dspace-production-version-drift.md); semantic tags are published
     # exclusively by the semantic-release job below.
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == '')
     concurrency:
       # Serialize the absence check plus push by target branch. workflow_dispatch can
       # choose a checkout branch independently of github.sha, so branch-scoped locking
@@ -547,20 +552,20 @@ jobs:
   semantic-release:
     name: Publish semantic release image alias and manifest
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: (github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')
     concurrency:
-      group: dspace-semantic-image-${{ github.event.release.tag_name }}
+      group: dspace-semantic-image-${{ github.event.release.tag_name || github.event.inputs.release_tag }}
       cancel-in-progress: false
     steps:
       - name: Resolve and authorize published release
         id: release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
         run: |
           set -euo pipefail
           [[ "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || {
-            echo "Semantic publication requires a stable vX.Y.Z release tag" >&2
+            echo "Recovery requires a stable vX.Y.Z release tag" >&2
             exit 1
           }
           release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}")"
@@ -571,8 +576,6 @@ jobs:
               exit 1
             }
           echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
-          release_branch="$(jq -r '.target_commitish | select(. == "main" or . == "v3")' <<<"$release_json")"
-          echo "source_branch_hint=$release_branch" >> "$GITHUB_OUTPUT"
 
       - name: Checkout tagged commit without persisted credentials
         uses: actions/checkout@v4
@@ -587,7 +590,6 @@ jobs:
         id: source
         env:
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
-          SOURCE_BRANCH_HINT: ${{ steps.release.outputs.source_branch_hint }}
         run: |
           set -euo pipefail
           source_sha="$(git rev-parse HEAD)"
@@ -624,17 +626,8 @@ jobs:
               exit "$status"
             fi
           done
-          ((${#containing_branches[@]} > 0)) || { echo "Release source is not contained by a supported branch" >&2; exit 1; }
-          # A release commit can legitimately be reachable from both branches after a merge.
-          # Prefer the release's supported target_commitish, then v3 as a deterministic fallback.
+          ((${#containing_branches[@]} == 1)) || { echo "Release source must be contained by exactly one supported branch" >&2; exit 1; }
           source_branch="${containing_branches[0]}"
-          for branch in "${containing_branches[@]}"; do
-            if [[ -n "$SOURCE_BRANCH_HINT" && "$branch" == "$SOURCE_BRANCH_HINT" ]]; then
-              source_branch="$SOURCE_BRANCH_HINT"
-              break
-            fi
-            [[ "$branch" == v3 ]] && source_branch=v3
-          done
           chart_version="$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)"
           chart_tag="chart-v${chart_version}"
           git rev-parse "${chart_tag}^{commit}" >/dev/null

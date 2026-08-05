@@ -79,10 +79,41 @@ The mandatory full-release order is fail-closed:
    verifies digest equality, and emits the combined release manifest.
 
 Publishing the GitHub release before either prerequisite exists fails without creating the semantic
-coordinate. Do not use a manual workflow dispatch to recover semantic publication: the published
-GitHub release event is the single canonical event permitted to create a semantic alias. Investigate
-the failed run and cut a new approved release coordinate after supplying any missing immutable
-prerequisite. If a semantic tag already exists, the workflow always refuses to overwrite or move it.
+coordinate. After supplying a missing immutable prerequisite, use the semantic recovery procedure
+below rather than rerunning a historical workflow definition. If a semantic tag already exists,
+the workflow always refuses to overwrite or move it; investigate and cut a new approved release
+coordinate rather than retrying a mutation.
+
+### Recover a failed semantic publication
+
+This recovery is only for an existing, published (non-draft) GitHub application release whose
+semantic workflow failed before publishing its GHCR semantic alias. First prove that the semantic
+tag is authoritatively absent with the fail-closed preflight:
+
+```bash
+GHCR_GUARD_USERNAME="$(gh api user --jq .login)" \
+GHCR_GUARD_PASSWORD="$(gh auth token)" \
+node scripts/ghcr-manifest.mjs check-absent \
+  --owner democratizedspace \
+  --repo dspace \
+  --tag v3.1.1
+```
+
+Then dispatch the fixed workflow definition from `main` (do not rerun the historical failed
+workflow run):
+
+```bash
+gh workflow run ci-image.yml \
+  --repo democratizedspace/dspace \
+  --ref main \
+  -f release_tag=v3.1.1
+```
+
+The recovery validates the published release and immutable application tag, source-branch reachability,
+immutable image and chart provenance, and both semantic-tag absence guards before creating the one
+exact alias and deterministic release manifest. It does not move or recreate the application tag or
+GitHub release. An identical dispatch after success is expected to fail at the semantic-tag guard
+before mutation; this is intentional evidence for #4727 and #4730.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
