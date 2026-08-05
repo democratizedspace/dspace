@@ -14,6 +14,11 @@ on:
       - published
   workflow_dispatch:
     inputs:
+      release_tag:
+        description: Existing published stable release tag to recover (leave empty for a branch image)
+        required: false
+        default: ''
+        type: string
       branch:
         description: Branch to build and publish the image from
         required: false
@@ -34,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     # Release publication gets its own build in the semantic-release job below; skip the
     # redundant PR-style validate/smoke pass for release events.
-    if: github.event_name != 'release'
+    if: github.event_name != 'release' && (github.event_name != 'workflow_dispatch' || github.event.inputs.release_tag == '')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -272,7 +277,7 @@ jobs:
     # exact class of bug that let branch builds move vX.Y.Z (see DSPACE #4727 and
     # outages/2026-07-23-dspace-production-version-drift.md); semantic tags are published
     # exclusively by the semantic-release job below.
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == '')
     concurrency:
       # Serialize the absence check plus push by target branch. workflow_dispatch can
       # choose a checkout branch independently of github.sha, so branch-scoped locking
@@ -547,15 +552,15 @@ jobs:
   semantic-release:
     name: Publish semantic release image alias and manifest
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: (github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')
     concurrency:
-      group: dspace-semantic-image-${{ github.event.release.tag_name }}
+      group: dspace-semantic-image-${{ github.event.release.tag_name || github.event.inputs.release_tag }}
       cancel-in-progress: false
     steps:
       - name: Checkout tagged commit without persisted credentials
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -564,15 +569,40 @@ jobs:
       - name: Authorize release source
         id: source
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
         run: |
           set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || { echo "Release tag must be a stable vX.Y.Z tag" >&2; exit 1; }
+          release_json="$(gh api "/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}")"
+          jq -e --arg tag "$RELEASE_TAG" '.tag_name == $tag and .draft == false and .prerelease == false' <<<"$release_json" >/dev/null || { echo "Release must already exist and be published (not draft or prerelease)" >&2; exit 1; }
           source_sha="$(git rev-parse HEAD)"
           tag_sha="$(git rev-parse "${RELEASE_TAG}^{commit}")"
           [[ "$source_sha" =~ ^[0-9a-f]{40}$ && "$source_sha" == "$tag_sha" ]] || { echo "Release tag/source mismatch" >&2; exit 1; }
-          git fetch https://github.com/democratizedspace/dspace.git main:refs/remotes/origin/main v3:refs/remotes/origin/v3 --quiet
-          source_branch="$(git branch -r --contains "$source_sha" | sed 's/^[* ]*//' | grep -E '^(origin/)?(main|v3)$' | head -n1 | sed 's#^origin/##')"
-          [[ "$source_branch" == main || "$source_branch" == v3 ]] || { echo "Unsupported release source" >&2; exit 1; }
+          remote_url="https://github.com/democratizedspace/dspace.git"
+          existing_branches=()
+          for branch in main v3; do
+            set +e
+            remote_ref="$(git ls-remote --exit-code "$remote_url" "refs/heads/$branch" 2>"/tmp/ls-remote-$branch.err")"
+            status=$?
+            set -e
+            case "$status" in
+              0)
+                [[ "$remote_ref" =~ ^[0-9a-f]{40}[[:space:]]refs/heads/$branch$ ]] || { echo "Indeterminate $branch branch response" >&2; exit 1; }
+                git fetch "$remote_url" "refs/heads/$branch:refs/remotes/origin/$branch" --quiet
+                existing_branches+=("$branch")
+                ;;
+              2) echo "Allowed release branch $branch is authoritatively absent" ;;
+              *) cat "/tmp/ls-remote-$branch.err" >&2; echo "Could not determine whether allowed branch $branch exists" >&2; exit 1 ;;
+            esac
+          done
+          ((${#existing_branches[@]} > 0)) || { echo "Neither allowed release branch exists" >&2; exit 1; }
+          containing_branches=()
+          for branch in "${existing_branches[@]}"; do
+            git merge-base --is-ancestor "$source_sha" "refs/remotes/origin/$branch" && containing_branches+=("$branch")
+          done
+          ((${#containing_branches[@]} == 1)) || { echo "Release source must be contained by exactly one supported branch" >&2; exit 1; }
+          source_branch="${containing_branches[0]}"
           chart_version="$(awk '$1 == "version:" { gsub(/"/, "", $2); print $2; exit }' charts/dspace/Chart.yaml)"
           chart_tag="chart-v${chart_version}"
           git rev-parse "${chart_tag}^{commit}" >/dev/null
@@ -588,7 +618,7 @@ jobs:
       - name: Validate all local release coordinates
         id: coordinates
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
           CHART_TAG: ${{ steps.source.outputs.chart_tag }}
           SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
           SOURCE_BRANCH: ${{ steps.source.outputs.source_branch }}
