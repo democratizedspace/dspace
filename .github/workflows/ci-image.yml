@@ -355,13 +355,6 @@ jobs:
           echo "source=${REPO_URL}" >> "$GITHUB_OUTPUT"
           echo "revision=${GIT_SHA}" >> "$GITHUB_OUTPUT"
 
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
         with:
@@ -369,6 +362,81 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Build image for SHA verification
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          platforms: linux/amd64
+          provenance: false
+          load: true
+          tags: dspace-verify:latest
+          build-args: |
+            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
+            GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
+            ENFORCE_VITE_GIT_SHA=1
+            BUILD_TIMESTAMP=${{ steps.metadata.outputs.created }}
+            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
+          labels: |
+            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
+            org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
+            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
+          cache-from: type=gha
+
+      - name: Assert build SHA is baked into frontend bundle
+        env:
+          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
+        run: |
+          docker run --rm \
+            -e EXPECTED_SHA \
+            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
+            -v "$PWD/scripts:/scripts:ro" \
+            dspace-verify:latest \
+            node /scripts/verify-build-sha.mjs /app/dist
+
+      - name: Verify chat build stamp inside image
+        run: |
+          docker run --rm \
+            -e VERIFY_REPO_ROOT=/app \
+            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
+            -v "$PWD:/verification-repo:ro" \
+            -w /app \
+            dspace-verify:latest \
+            node /verification-repo/scripts/verify-chat-build-stamp.mjs
+
+      - name: Compare runtime identity with OCI revision
+        env:
+          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
+        run: |
+          label_revision="$(docker image inspect dspace-verify:latest --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')"
+          test "$label_revision" = "$EXPECTED_SHA"
+          container="$(docker run -d -p 18080:8080 dspace-verify:latest)"
+          trap 'docker rm -f "$container"' EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:18080/build-info.json > /tmp/build-info.json && break; sleep 2; done
+          test "$(node -p "JSON.parse(require('fs').readFileSync('/tmp/build-info.json')).revision")" = "$label_revision"
+          curl -fsS http://127.0.0.1:18080/ | grep -F "name=\"dspace-build-revision\" content=\"${label_revision}\""
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Guard immutable image tag absence before push attempt 1
+        id: guard_sha_absent_1
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ steps.tags.outputs.sha_tag }}
+        run: |
+          node scripts/ghcr-manifest.mjs check-absent \
+            --owner democratizedspace \
+            --repo dspace \
+            --tag "${IMAGE_TAG##*:}"
 
       - name: Build and push image (attempt 1)
         id: build_push_1
@@ -397,9 +465,23 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max,ignore-error=true
 
+      - name: Guard immutable image tag absence before push attempt 2
+        id: guard_sha_absent_2
+        if: steps.build_push_1.outcome == 'failure'
+        continue-on-error: true
+        env:
+          GHCR_GUARD_USERNAME: ${{ github.actor }}
+          GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ steps.tags.outputs.sha_tag }}
+        run: |
+          node scripts/ghcr-manifest.mjs check-absent \
+            --owner democratizedspace \
+            --repo dspace \
+            --tag "${IMAGE_TAG##*:}"
+
       - name: Build and push image (attempt 2)
         id: build_push_2
-        if: steps.build_push_1.outcome == 'failure'
+        if: steps.build_push_1.outcome == 'failure' && steps.guard_sha_absent_2.outcome == 'success'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -424,66 +506,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max,ignore-error=true
 
-      - name: Build image for SHA verification
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          platforms: linux/amd64
-          provenance: false
-          load: true
-          tags: dspace-verify:latest
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-            BUILD_TIMESTAMP=${{ steps.metadata.outputs.created }}
-            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
-          labels: |
-            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
-            org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
-            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=gha
-
-      - name: Assert build SHA is baked into frontend bundle
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
-        env:
-          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
-        run: |
-          docker run --rm \
-            -e EXPECTED_SHA \
-            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
-            -v "$PWD/scripts:/scripts:ro" \
-            dspace-verify:latest \
-            node /scripts/verify-build-sha.mjs /app/dist
-
-      - name: Verify chat build stamp inside image
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
-        run: |
-          docker run --rm \
-            -e VERIFY_REPO_ROOT=/app \
-            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
-            -v "$PWD/scripts:/scripts:ro" \
-            -w /app \
-            dspace-verify:latest \
-            node /scripts/verify-chat-build-stamp.mjs
-
-      - name: Compare runtime identity with OCI revision
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
-        env:
-          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
-        run: |
-          label_revision="$(docker image inspect dspace-verify:latest --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')"
-          test "$label_revision" = "$EXPECTED_SHA"
-          container="$(docker run -d -p 18080:8080 dspace-verify:latest)"
-          trap 'docker rm -f "$container"' EXIT
-          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:18080/build-info.json > /tmp/build-info.json && break; sleep 2; done
-          test "$(node -p "JSON.parse(require('fs').readFileSync('/tmp/build-info.json')).revision")" = "$label_revision"
-          curl -fsS http://127.0.0.1:18080/ | grep -F "name=\"dspace-build-revision\" content=\"${label_revision}\""
-
       - name: Summarize published image tags
         if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
         run: |
@@ -502,7 +524,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Fail if both image pushes failed
-        if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome == 'failure'
+        if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome != 'success'
         run: exit 1
 
   semantic-release:
