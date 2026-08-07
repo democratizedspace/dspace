@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
-import { dirname, join } from 'node:path';
+import { open, rename, unlink } from 'node:fs/promises';
+import { basename, dirname, join } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -36,6 +38,8 @@ const definitions = {
     'expected-token-place-model',
     'DSPACE_EXPECTED_TOKEN_PLACE_MODEL',
   ],
+  resultFile: ['result-file', null],
+  runnerRevision: ['runner-revision', null],
 };
 
 export function parseAndValidateArgs(argv, env = process.env) {
@@ -62,7 +66,8 @@ export function parseAndValidateArgs(argv, env = process.env) {
   const result = {};
   for (const [key, [flag, environment]] of Object.entries(definitions)) {
     // Explicit flags deterministically take precedence over the environment.
-    result[key] = flags.get(flag) ?? env[environment]?.trim();
+    result[key] =
+      flags.get(flag) ?? (environment ? env[environment]?.trim() : undefined);
   }
   if (
     !flags.has(definitions.identityContract[0]) &&
@@ -71,7 +76,10 @@ export function parseAndValidateArgs(argv, env = process.env) {
     result.identityContract = defaultIdentityContract;
   }
   const missing = Object.entries(definitions)
-    .filter(([key]) => !result[key] && !key.startsWith('expectedTokenPlace'))
+    .filter(
+      ([key, [, environment]]) =>
+        environment && !result[key] && !key.startsWith('expectedTokenPlace')
+    )
     .map(([, [, environment]]) => environment);
   if (missing.length)
     throw new Error(
@@ -122,6 +130,16 @@ export function parseAndValidateArgs(argv, env = process.env) {
   if (!/^[0-9a-f]{40}$/.test(result.expectedRevision)) {
     throw new Error(
       'validation: expected revision must be a lowercase full 40-character Git SHA'
+    );
+  }
+  if (Boolean(result.resultFile) !== Boolean(result.runnerRevision)) {
+    throw new Error(
+      'validation: --result-file and --runner-revision must be supplied together'
+    );
+  }
+  if (result.runnerRevision && !/^[0-9a-f]{40}$/.test(result.runnerRevision)) {
+    throw new Error(
+      'validation: runner revision must be a lowercase full 40-character Git SHA'
     );
   }
   if (
@@ -190,6 +208,99 @@ export function parseAndValidateArgs(argv, env = process.env) {
   return result;
 }
 
+export async function writeResultAtomically(resultFile, result) {
+  const directory = dirname(resultFile);
+  const temporary = join(
+    directory,
+    `.${basename(resultFile)}.${process.pid}.${randomUUID()}.tmp`
+  );
+  let handle;
+  try {
+    handle = await open(temporary, 'wx', 0o600);
+    await handle.writeFile(`${JSON.stringify(result)}\n`, 'utf8');
+    await handle.sync();
+    await handle.close();
+    handle = undefined;
+    await rename(temporary, resultFile);
+  } catch (error) {
+    if (handle) await handle.close().catch(() => {});
+    await unlink(temporary).catch(() => {});
+    throw error;
+  }
+}
+
+function smokeResult(options, passed, now) {
+  return {
+    schemaVersion: 1,
+    journey: '/chat',
+    passed,
+    executedAt: Math.floor(now() / 1000),
+    runnerRevision: options.runnerRevision,
+    transport: 'intercepted',
+    mutationEnabled: false,
+  };
+}
+
+export function runSmoke(
+  options,
+  {
+    spawnImpl = spawn,
+    publishResult = writeResultAtomically,
+    now = Date.now,
+    relaySignal = (signal) => process.kill(process.pid, signal),
+  } = {}
+) {
+  return new Promise((resolve) => {
+    let settled = false;
+    let child;
+    try {
+      child = spawnImpl(
+        'node',
+        [
+          './node_modules/@playwright/test/cli.js',
+          'test',
+          'e2e/remote-chat-smoke.spec.ts',
+          '--project=chromium',
+        ],
+        { cwd: frontendDir, env: buildSmokeEnv(options), stdio: 'inherit' }
+      );
+    } catch {
+      console.error('[qa:remote-chat-smoke] launch failed');
+      resolve(1);
+      return;
+    }
+    child.once('error', (error) => {
+      if (settled) return;
+      settled = true;
+      console.error(`[qa:remote-chat-smoke] launch: ${error.message}`);
+      resolve(1);
+    });
+    child.once('exit', async (code, signal) => {
+      if (settled) return;
+      settled = true;
+      if (signal) {
+        relaySignal(signal);
+        resolve(null);
+        return;
+      }
+      const exitCode = code ?? 1;
+      if (options.resultFile) {
+        try {
+          await publishResult(
+            options.resultFile,
+            smokeResult(options, exitCode === 0, now)
+          );
+        } catch {
+          console.error('[qa:remote-chat-smoke] result publication failed');
+          resolve(1);
+          return;
+        }
+      }
+      resolve(exitCode);
+    });
+  });
+}
+
 export function buildSmokeEnv(options, baseEnv = process.env) {
   // Node exposes bracketed IPv6 URL hostnames as "[::1]"; normalize them before
   // deciding whether Playwright should manage the local preview server.
@@ -214,7 +325,7 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
   };
 }
 
-export function main(argv = process.argv.slice(2)) {
+export async function main(argv = process.argv.slice(2)) {
   let options;
   try {
     options = parseAndValidateArgs(argv);
@@ -236,24 +347,8 @@ export function main(argv = process.argv.slice(2)) {
   console.log(
     '[qa:remote-chat-smoke] transport=intercepted; profile=isolated; mutation=disabled'
   );
-  const child = spawn(
-    'node',
-    [
-      './node_modules/@playwright/test/cli.js',
-      'test',
-      'e2e/remote-chat-smoke.spec.ts',
-      '--project=chromium',
-    ],
-    { cwd: frontendDir, env: buildSmokeEnv(options), stdio: 'inherit' }
-  );
-  child.on('error', (error) => {
-    console.error(`[qa:remote-chat-smoke] launch: ${error.message}`);
-    process.exitCode = 1;
-  });
-  child.on('exit', (code, signal) => {
-    if (signal) process.kill(process.pid, signal);
-    else process.exitCode = code ?? 1;
-  });
+  const exitCode = await runSmoke(options);
+  if (exitCode !== null) process.exitCode = exitCode;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] === fileURLToPath(import.meta.url)) await main();

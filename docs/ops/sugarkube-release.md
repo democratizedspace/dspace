@@ -312,6 +312,36 @@ the immutable application has modern settings or missing-key behavior. Both mode
 or live provider traffic and require no real credential. This is the DSPACE-side harness only, not
 Sugarkube's promotion gate.
 
+### Sugarkube synthetic result publication
+
+The runner can optionally publish the bounded result consumed by Sugarkube's DSPACE chat synthetic
+metrics collector. The operator must pin the DSPACE repository and runner tooling at the same full,
+immutable commit SHA supplied to `--runner-revision`; do not run a moving branch or supply a SHA for
+different tooling. A pinned staging invocation for the immutable 3.1.0 compatibility profile is:
+
+```bash
+git checkout --detach <FULL_IMMUTABLE_DSPACE_COMMIT_SHA>
+node scripts/run-remote-chat-smoke.mjs \
+  --base-url https://staging.democratized.space \
+  --expected-version 3.1.0 \
+  --expected-revision 018687f5a7f4de45508c6e36eb28afb3e44da24d \
+  --identity-contract legacy-build-meta-v1 \
+  --expected-provider token-place \
+  --expected-token-place-origin https://staging.token.place \
+  --expected-token-place-model llama-3.1-8b-instruct \
+  --runner-revision <FULL_IMMUTABLE_DSPACE_COMMIT_SHA> \
+  --result-file /run/dspace-chat/result.json
+```
+
+The two result options are paired and opt-in. After Playwright completes, the runner atomically
+replaces the result with schema version 1, journey `/chat`, the completion timestamp, the pinned
+runner revision, `transport: "intercepted"`, `mutationEnabled: false`, and `passed` derived from the
+Playwright exit status. A completed test failure publishes `passed: false` and retains Playwright's
+nonzero status. Validation, launch, signal, or other incomplete-execution failures do not replace a
+previous result (and create none if it did not exist), so the consumer can detect staleness. Result
+publication failure after a completed smoke fails closed with a nonzero runner status. Without both
+options, the runner does not publish a result and retains its existing behavior.
+
 Record the approved immutable tag, chart version, and workflow run links in the release notes or QA
 checklist for the release.
 

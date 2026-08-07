@@ -1,7 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { EventEmitter } from 'node:events';
+import { mkdtemp, readFile, stat, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { describe, expect, it, vi } from 'vitest';
 import {
   buildSmokeEnv,
   parseAndValidateArgs,
+  runSmoke,
+  writeResultAtomically,
 } from '../run-remote-chat-smoke.mjs';
 
 const revision = '0123456789abcdef0123456789abcdef01234567';
@@ -313,5 +319,163 @@ describe('remote chat smoke input validation', () => {
     delete env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
     delete env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
     expect(parseAndValidateArgs([], env).expectedProvider).toBe('openai');
+  });
+});
+
+const runnerRevision = 'abcdef0123456789abcdef0123456789abcdef01';
+
+function completedChild(
+  code: number | null,
+  signal: NodeJS.Signals | null = null
+) {
+  const child = new EventEmitter();
+  queueMicrotask(() => child.emit('exit', code, signal));
+  return child;
+}
+
+function resultOptions(resultFile: string) {
+  return parseAndValidateArgs(
+    ['--result-file', resultFile, '--runner-revision', runnerRevision],
+    completeEnv
+  );
+}
+
+describe('remote chat smoke result contract', () => {
+  it('requires paired result options and validates the runner full SHA', () => {
+    expect(() =>
+      parseAndValidateArgs(['--result-file', '/tmp/result.json'], completeEnv)
+    ).toThrow('must be supplied together');
+    expect(() =>
+      parseAndValidateArgs(
+        [
+          '--result-file',
+          '/tmp/result.json',
+          '--runner-revision',
+          revision.toUpperCase(),
+        ],
+        completeEnv
+      )
+    ).toThrow('lowercase full 40-character');
+  });
+
+  it('emits the exact successful schema after completed execution', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
+    const resultFile = join(directory, 'result.json');
+    const exitCode = await runSmoke(resultOptions(resultFile), {
+      spawnImpl: () => completedChild(0),
+      now: () => 1_785_988_800_999,
+    });
+
+    expect(exitCode).toBe(0);
+    const raw = await readFile(resultFile, 'utf8');
+    expect(raw.endsWith('\n')).toBe(true);
+    const result = JSON.parse(raw);
+    expect(result).toEqual({
+      schemaVersion: 1,
+      journey: '/chat',
+      passed: true,
+      executedAt: 1_785_988_800,
+      runnerRevision,
+      transport: 'intercepted',
+      mutationEnabled: false,
+    });
+    expect(Object.keys(result)).toEqual([
+      'schemaVersion',
+      'journey',
+      'passed',
+      'executedAt',
+      'runnerRevision',
+      'transport',
+      'mutationEnabled',
+    ]);
+    if (process.platform !== 'win32') {
+      expect((await stat(resultFile)).mode & 0o777).toBe(0o600);
+    }
+  });
+
+  it('publishes a failed completed result and retains the child status', async () => {
+    const publishResult = vi.fn().mockResolvedValue(undefined);
+    const options = resultOptions('/tmp/result.json');
+    await expect(
+      runSmoke(options, { spawnImpl: () => completedChild(7), publishResult })
+    ).resolves.toBe(7);
+    expect(publishResult).toHaveBeenCalledWith(
+      options.resultFile,
+      expect.objectContaining({ passed: false })
+    );
+  });
+
+  it('atomically replaces an existing result', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-replace-'));
+    const resultFile = join(directory, 'result.json');
+    await writeFile(resultFile, '{"old":true}\n');
+    await writeResultAtomically(resultFile, { bounded: true });
+    expect(await readFile(resultFile, 'utf8')).toBe('{"bounded":true}\n');
+  });
+
+  it.each([
+    [
+      'launch error',
+      (child: EventEmitter) => child.emit('error', new Error('private detail')),
+    ],
+    ['signal', (child: EventEmitter) => child.emit('exit', null, 'SIGTERM')],
+  ])('preserves an existing result on %s', async (_name, complete) => {
+    const child = new EventEmitter();
+    const publishResult = vi.fn();
+    const relaySignal = vi.fn();
+    const pending = runSmoke(resultOptions('/tmp/result.json'), {
+      spawnImpl: () => child,
+      publishResult,
+      relaySignal,
+    });
+    complete(child);
+    await pending;
+    expect(publishResult).not.toHaveBeenCalled();
+  });
+
+  it('does not publish when launch throws', async () => {
+    const publishResult = vi.fn();
+    await expect(
+      runSmoke(resultOptions('/tmp/result.json'), {
+        spawnImpl: () => {
+          throw new Error('spawn failure');
+        },
+        publishResult,
+      })
+    ).resolves.toBe(1);
+    expect(publishResult).not.toHaveBeenCalled();
+  });
+
+  it('fails closed when publication fails after completion', async () => {
+    await expect(
+      runSmoke(resultOptions('/tmp/result.json'), {
+        spawnImpl: () => completedChild(0),
+        publishResult: () => Promise.reject(new Error('filesystem detail')),
+      })
+    ).resolves.toBe(1);
+  });
+
+  it('preserves legacy execution and serial intercepted invariants', async () => {
+    let invocation: any[] = [];
+    const options = parseAndValidateArgs([], completeEnv);
+    await expect(
+      runSmoke(options, {
+        spawnImpl: (...args: any[]) => {
+          invocation = args;
+          return completedChild(0);
+        },
+      })
+    ).resolves.toBe(0);
+    expect(invocation[1]).toEqual([
+      './node_modules/@playwright/test/cli.js',
+      'test',
+      'e2e/remote-chat-smoke.spec.ts',
+      '--project=chromium',
+    ]);
+    expect(invocation[2].env).toMatchObject({
+      PW_WORKERS: '1',
+      REMOTE_CHAT_SMOKE: '1',
+    });
+    expect(options.resultFile).toBeUndefined();
   });
 });
