@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
+import { open, rename, unlink } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
+import { randomBytes } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -36,6 +38,8 @@ const definitions = {
     'expected-token-place-model',
     'DSPACE_EXPECTED_TOKEN_PLACE_MODEL',
   ],
+  resultFile: ['result-file'],
+  runnerRevision: ['runner-revision'],
 };
 
 export function parseAndValidateArgs(argv, env = process.env) {
@@ -71,12 +75,27 @@ export function parseAndValidateArgs(argv, env = process.env) {
     result.identityContract = defaultIdentityContract;
   }
   const missing = Object.entries(definitions)
-    .filter(([key]) => !result[key] && !key.startsWith('expectedTokenPlace'))
+    .filter(
+      ([key]) =>
+        !result[key] &&
+        !key.startsWith('expectedTokenPlace') &&
+        !['resultFile', 'runnerRevision'].includes(key)
+    )
     .map(([, [, environment]]) => environment);
   if (missing.length)
     throw new Error(
       `validation: missing required input(s): ${missing.join(', ')}`
     );
+  if (Boolean(result.resultFile) !== Boolean(result.runnerRevision)) {
+    throw new Error(
+      'validation: --result-file and --runner-revision must be supplied together'
+    );
+  }
+  if (result.runnerRevision && !/^[0-9a-f]{40}$/.test(result.runnerRevision)) {
+    throw new Error(
+      'validation: runner revision must be a lowercase full 40-character Git SHA'
+    );
+  }
 
   let base;
   try {
@@ -214,46 +233,113 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
   };
 }
 
-export function main(argv = process.argv.slice(2)) {
-  let options;
+export async function publishResult(resultFile, runnerRevision, passed) {
+  const temporaryFile = join(
+    dirname(resultFile),
+    `.dspace-chat-result-${process.pid}-${randomBytes(8).toString('hex')}.tmp`
+  );
+  const payload = `${JSON.stringify({
+    schemaVersion: 1,
+    journey: '/chat',
+    passed,
+    executedAt: Math.floor(Date.now() / 1000),
+    runnerRevision,
+    transport: 'intercepted',
+    mutationEnabled: false,
+  })}\n`;
+  let handle;
   try {
-    options = parseAndValidateArgs(argv);
+    handle = await open(temporaryFile, 'wx', 0o600);
+    await handle.writeFile(payload, 'utf8');
+    await handle.sync();
+    await handle.close();
+    handle = undefined;
+    await rename(temporaryFile, resultFile);
   } catch (error) {
-    console.error(`[qa:remote-chat-smoke] ${error.message}`);
-    process.exitCode = 2;
-    return;
+    await handle?.close().catch(() => {});
+    await unlink(temporaryFile).catch(() => {});
+    throw error;
   }
-  console.log(`[qa:remote-chat-smoke] target=${options.baseURL}`);
-  console.log(
-    `[qa:remote-chat-smoke] expectedVersion=${options.expectedVersion}`
-  );
-  console.log(
-    `[qa:remote-chat-smoke] expectedRevision=${options.expectedRevision}`
-  );
-  console.log(
-    `[qa:remote-chat-smoke] expectedProvider=${options.expectedProvider}`
-  );
-  console.log(
+}
+
+export function runSmoke(options, dependencies = {}) {
+  const spawnChild = dependencies.spawn ?? spawn;
+  const writeResult = dependencies.publishResult ?? publishResult;
+  const runtime = dependencies.process ?? process;
+  const log = dependencies.log ?? console.log;
+  const logError = dependencies.error ?? console.error;
+
+  log(`[qa:remote-chat-smoke] target=${options.baseURL}`);
+  log(`[qa:remote-chat-smoke] expectedVersion=${options.expectedVersion}`);
+  log(`[qa:remote-chat-smoke] expectedRevision=${options.expectedRevision}`);
+  log(`[qa:remote-chat-smoke] expectedProvider=${options.expectedProvider}`);
+  log(
     '[qa:remote-chat-smoke] transport=intercepted; profile=isolated; mutation=disabled'
   );
-  const child = spawn(
-    'node',
-    [
-      './node_modules/@playwright/test/cli.js',
-      'test',
-      'e2e/remote-chat-smoke.spec.ts',
-      '--project=chromium',
-    ],
-    { cwd: frontendDir, env: buildSmokeEnv(options), stdio: 'inherit' }
-  );
+  let child;
+  try {
+    child = spawnChild(
+      'node',
+      [
+        './node_modules/@playwright/test/cli.js',
+        'test',
+        'e2e/remote-chat-smoke.spec.ts',
+        '--project=chromium',
+      ],
+      { cwd: frontendDir, env: buildSmokeEnv(options), stdio: 'inherit' }
+    );
+  } catch (error) {
+    if (!options.resultFile) throw error;
+    logError('[qa:remote-chat-smoke] launch failed');
+    runtime.exitCode = 1;
+    return;
+  }
+
+  let launchFailed = false;
   child.on('error', (error) => {
-    console.error(`[qa:remote-chat-smoke] launch: ${error.message}`);
-    process.exitCode = 1;
+    launchFailed = true;
+    logError(`[qa:remote-chat-smoke] launch: ${error.message}`);
+    runtime.exitCode = 1;
   });
-  child.on('exit', (code, signal) => {
-    if (signal) process.kill(process.pid, signal);
-    else process.exitCode = code ?? 1;
+  child.on('exit', async (code, signal) => {
+    if (signal) {
+      runtime.kill(runtime.pid, signal);
+      return;
+    }
+    if (launchFailed || !Number.isInteger(code)) {
+      runtime.exitCode = 1;
+      return;
+    }
+    if (options.resultFile) {
+      try {
+        await writeResult(
+          options.resultFile,
+          options.runnerRevision,
+          code === 0
+        );
+      } catch {
+        logError('[qa:remote-chat-smoke] result publication failed');
+        runtime.exitCode = 1;
+        return;
+      }
+    }
+    runtime.exitCode = code;
   });
+  return child;
+}
+
+export function main(argv = process.argv.slice(2), dependencies = {}) {
+  let options;
+  try {
+    options = parseAndValidateArgs(argv, dependencies.env ?? process.env);
+  } catch (error) {
+    (dependencies.error ?? console.error)(
+      `[qa:remote-chat-smoke] ${error.message}`
+    );
+    (dependencies.process ?? process).exitCode = 2;
+    return;
+  }
+  return runSmoke(options, dependencies);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();

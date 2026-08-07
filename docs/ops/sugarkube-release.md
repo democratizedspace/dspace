@@ -263,6 +263,31 @@ DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
 npm run qa:remote-chat-smoke
 ```
 
+For scheduled Sugarkube observability, opt in to the versioned machine-readable result contract by
+pinning the DSPACE checkout/tooling to one immutable full commit SHA and supplying that same SHA as
+`--runner-revision`. For example, the pinned 3.1.0 staging compatibility check is:
+
+```bash
+node scripts/run-remote-chat-smoke.mjs \
+  --base-url https://staging.democratized.space \
+  --expected-version 3.1.0 \
+  --expected-revision 018687f5a7f4de45508c6e36eb28afb3e44da24d \
+  --identity-contract legacy-build-meta-v1 \
+  --expected-provider token-place \
+  --expected-token-place-origin https://staging.token.place \
+  --expected-token-place-model llama-3.1-8b-instruct \
+  --runner-revision <FULL_IMMUTABLE_DSPACE_COMMIT_SHA> \
+  --result-file /run/dspace-chat/result.json
+```
+
+The paired result options are opt-in. After Playwright completes, the runner atomically replaces
+the result with schema version 1, journey `/chat`, the completion timestamp, the pinned runner
+revision, intercepted transport, mutation disabled, and `passed` reflecting Playwright's status.
+A completed test failure publishes `passed: false` and retains the test's nonzero status. A
+validation, launch, interruption, or other incomplete-execution failure does not replace an older
+result; a publication failure after a completed run fails closed. The JSON contains no Playwright
+output, URLs, credentials, environment values, or free-form diagnostics.
+
 When omitted, `DSPACE_EXPECTED_IDENTITY_CONTRACT` defaults to the modern `build-info-v1`
 contract. That contract requires same-origin `/build-info.json` identity (including the exact
 version, full revision, and derived short revision) and the exact HTML build-revision marker.
