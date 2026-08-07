@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { mkdtemp, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, stat, utimes, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
@@ -28,9 +28,12 @@ function options(resultFile?: string) {
   );
 }
 
-function childThat(event: 'exit' | 'error', ...args: unknown[]) {
+function childThat(event: 'close' | 'error', ...args: unknown[]) {
   const child = new EventEmitter();
-  queueMicrotask(() => child.emit(event, ...args));
+  queueMicrotask(() => {
+    child.emit(event, ...args);
+    if (event === 'error') child.emit('close', null, null);
+  });
   return child;
 }
 
@@ -41,10 +44,10 @@ function completedChild(
   const child = new EventEmitter();
   queueMicrotask(async () => {
     await writeFile(
-      settings.env.DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_FILE,
-      settings.env.DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_TOKEN
+      settings.env.DSPACE_REMOTE_CHAT_SMOKE_COMPLETION_FILE,
+      'dspace-remote-chat-smoke-journey-complete-v1\n'
     );
-    child.emit('exit', exitCode, null);
+    child.emit('close', exitCode, null);
   });
   return child;
 }
@@ -123,7 +126,7 @@ describe('remote chat smoke result contract', () => {
 
   it.each([
     ['launch failure', () => childThat('error', new Error('spawn failed'))],
-    ['signal', () => childThat('exit', null, 'SIGTERM')],
+    ['signal', () => childThat('close', null, 'SIGTERM')],
   ])('preserves an existing result after %s', async (_name, spawnImpl) => {
     const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
     const resultFile = join(directory, 'result.json');
@@ -154,10 +157,57 @@ describe('remote chat smoke result contract', () => {
       const resultFile = join(directory, 'result.json');
       await writeFile(resultFile, 'existing-result\n');
       const outcome = await runSmoke(options(resultFile), {
-        spawnImpl: () => childThat('exit', childExitCode, null) as never,
+        spawnImpl: () => childThat('close', childExitCode, null) as never,
       });
       expect(outcome).toEqual({ kind: 'incomplete', exitCode: 1 });
       expect(await readFile(resultFile, 'utf8')).toBe('existing-result\n');
+    }
+  );
+
+  it('creates no result when a numeric exit has no completion evidence', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
+    const resultFile = join(directory, 'result.json');
+    const outcome = await runSmoke(options(resultFile), {
+      spawnImpl: () => childThat('close', 9, null) as never,
+    });
+    expect(outcome).toEqual({ kind: 'incomplete', exitCode: 9 });
+    await expect(readFile(resultFile)).rejects.toMatchObject({
+      code: 'ENOENT',
+    });
+  });
+
+  it.each([
+    ['malformed', async (file: string) => writeFile(file, 'not-the-marker')],
+    ['oversized', async (file: string) => writeFile(file, 'x'.repeat(1024))],
+    [
+      'stale',
+      async (file: string) => {
+        await writeFile(file, 'dspace-remote-chat-smoke-journey-complete-v1\n');
+        await utimes(file, 1, 1);
+      },
+    ],
+  ])(
+    'rejects and cleans up %s completion evidence',
+    async (_name, writeEvidence) => {
+      const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
+      const resultFile = join(directory, 'result.json');
+      let markerFile = '';
+      const outcome = await runSmoke(options(resultFile), {
+        spawnImpl: (_command, _args, settings) => {
+          markerFile = settings.env.DSPACE_REMOTE_CHAT_SMOKE_COMPLETION_FILE;
+          const child = new EventEmitter();
+          queueMicrotask(async () => {
+            await writeEvidence(markerFile);
+            child.emit('close', 0, null);
+          });
+          return child as never;
+        },
+      });
+      expect(outcome).toEqual({ kind: 'incomplete', exitCode: 1 });
+      await expect(stat(markerFile)).rejects.toMatchObject({ code: 'ENOENT' });
+      await expect(readFile(resultFile)).rejects.toMatchObject({
+        code: 'ENOENT',
+      });
     }
   );
 
@@ -192,7 +242,7 @@ describe('remote chat smoke result contract', () => {
     const outcome = await runSmoke(options(), {
       spawnImpl: (_command, args, settings) => {
         invocation = { args, settings } as typeof invocation;
-        return childThat('exit', 0, null) as never;
+        return childThat('close', 0, null) as never;
       },
     });
     expect(outcome).toEqual({ kind: 'completed', exitCode: 0 });

@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
-import { open, readFile, rename, unlink } from 'node:fs/promises';
+import {
+  mkdtemp,
+  open,
+  readFile,
+  rename,
+  rm,
+  stat,
+  unlink,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 import { randomBytes } from 'node:crypto';
@@ -10,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const frontendDir = join(scriptDir, '..', 'frontend');
 const defaultIdentityContract = 'build-info-v1';
+const completionMarker = 'dspace-remote-chat-smoke-journey-complete-v1\n';
 const legacyIdentityProfiles = [
   {
     version: '3.0.1',
@@ -240,8 +249,9 @@ export function buildSmokeEnv(
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',
     DSPACE_REMOTE_CHAT_SMOKE_FAULT: options.fault || '',
-    DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_FILE: executionEvidence?.file || '',
-    DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_TOKEN: executionEvidence?.token || '',
+    ...(executionEvidence
+      ? { DSPACE_REMOTE_CHAT_SMOKE_COMPLETION_FILE: executionEvidence.file }
+      : {}),
   };
 }
 
@@ -279,7 +289,7 @@ export async function publishResult(
   }
 }
 
-export function runSmoke(
+export async function runSmoke(
   options,
   {
     spawnImpl = spawn,
@@ -287,20 +297,22 @@ export function runSmoke(
     relaySignal = (signal) => process.kill(process.pid, signal),
   } = {}
 ) {
+  const evidenceDirectory = options.resultFile
+    ? await mkdtemp(join(tmpdir(), 'dspace-chat-smoke-'))
+    : undefined;
   return new Promise((resolve) => {
     let launchFailed = false;
-    const executionEvidence = options.resultFile
-      ? {
-          file: join(
-            tmpdir(),
-            `dspace-chat-smoke.${process.pid}.${randomBytes(8).toString('hex')}.executed`
-          ),
-          token: randomBytes(32).toString('hex'),
-        }
+    let launchError;
+    // Some filesystems expose modification times at one-second granularity.
+    const evidenceNotBefore = Date.now() - 2000;
+    const executionEvidence = evidenceDirectory
+      ? { file: join(evidenceDirectory, 'completion') }
       : undefined;
     const removeExecutionEvidence = () =>
-      executionEvidence
-        ? unlink(executionEvidence.file).catch(() => {})
+      evidenceDirectory
+        ? rm(evidenceDirectory, { recursive: true, force: true }).catch(
+            () => {}
+          )
         : Promise.resolve();
     let child;
     try {
@@ -319,17 +331,21 @@ export function runSmoke(
         }
       );
     } catch (error) {
-      void removeExecutionEvidence();
-      resolve({ kind: 'launch-failure', exitCode: 1, error });
+      void removeExecutionEvidence().then(() =>
+        resolve({ kind: 'launch-failure', exitCode: 1, error })
+      );
       return;
     }
     child.once('error', (error) => {
       launchFailed = true;
-      void removeExecutionEvidence();
-      resolve({ kind: 'launch-failure', exitCode: 1, error });
+      launchError = error;
     });
-    child.once('exit', async (code, signal) => {
-      if (launchFailed) return;
+    child.once('close', async (code, signal) => {
+      if (launchFailed) {
+        await removeExecutionEvidence();
+        resolve({ kind: 'launch-failure', exitCode: 1, error: launchError });
+        return;
+      }
       if (signal) {
         await removeExecutionEvidence();
         resolve({ kind: 'signal', signal });
@@ -340,11 +356,18 @@ export function runSmoke(
       if (options.resultFile) {
         let executed = false;
         try {
-          executed =
-            (await readFile(executionEvidence.file, 'utf8')) ===
-            executionEvidence.token;
+          const markerStat = await stat(executionEvidence.file);
+          if (
+            markerStat.isFile() &&
+            markerStat.size === Buffer.byteLength(completionMarker) &&
+            markerStat.mtimeMs >= evidenceNotBefore
+          ) {
+            executed =
+              (await readFile(executionEvidence.file, 'utf8')) ===
+              completionMarker;
+          }
         } catch {
-          // A missing or malformed marker means Playwright did not enter a smoke test body.
+          // Missing, malformed, or unreadable evidence means the journey did not complete.
         }
         await removeExecutionEvidence();
         if (!executed) {
@@ -358,7 +381,7 @@ export function runSmoke(
             exitCode === 0
           );
         } catch {
-          resolve({ kind: 'publication-failure', exitCode: 1 });
+          resolve({ kind: 'publication-failure', exitCode: exitCode || 1 });
           return;
         }
       }
@@ -394,6 +417,10 @@ export async function main(argv = process.argv.slice(2)) {
     console.error(`[qa:remote-chat-smoke] launch: ${outcome.error.message}`);
   } else if (outcome.kind === 'publication-failure') {
     console.error('[qa:remote-chat-smoke] result publication failed');
+  } else if (outcome.kind === 'incomplete') {
+    console.error(
+      '[qa:remote-chat-smoke] journey completion was not confirmed; result preserved'
+    );
   }
   if ('exitCode' in outcome) process.exitCode = outcome.exitCode;
   return outcome.exitCode;

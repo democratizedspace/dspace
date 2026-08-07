@@ -282,12 +282,15 @@ node scripts/run-remote-chat-smoke.mjs \
 ```
 
 The two result options are paired and opt-in; omitting both preserves the existing runner behavior.
-After Playwright completes, the runner atomically replaces the result with schema version 1, the
+The destination directory (for example, `/run/dspace-chat`) must already exist and be writable by
+the operator account; the runner neither creates it nor recursively creates parent directories.
+After Playwright exits and the selected `/chat` journey fixture confirms that the test body ran to
+teardown, the runner atomically replaces the result with schema version 1, the
 `/chat` journey, the completion timestamp, the pinned runner revision, intercepted transport,
 mutation disabled, and `passed` reflecting Playwright's exit status. A completed failing test still
 publishes `passed: false` and retains the test's nonzero status. Validation, launch, interruption,
-and other incomplete-execution failures do not replace a prior result. Publication failure after a
-completed run fails closed with a nonzero runner status.
+missing or invalid completion evidence, and other incomplete-execution failures do not replace a
+prior result. Publication failure after a completed run fails closed with a nonzero runner status.
 
 When omitted, `DSPACE_EXPECTED_IDENTITY_CONTRACT` defaults to the modern `build-info-v1`
 contract. That contract requires same-origin `/build-info.json` identity (including the exact
