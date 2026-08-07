@@ -9,6 +9,7 @@ import {
     type IdentityContract,
     type SmokeProvider,
 } from './remote-chat-smoke-contract';
+import { writeRemoteChatSmokeCompletion } from '../../scripts/remote-chat-smoke-completion.mjs';
 
 const JSEncrypt = createRequire(import.meta.url)(
     'jsencrypt'
@@ -37,6 +38,7 @@ const expectedResolvedModel =
 const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
 const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
+const completionMarkerFile = process.env.DSPACE_REMOTE_CHAT_SMOKE_COMPLETION_FILE;
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
@@ -300,6 +302,20 @@ async function selectOpenAI(page: Page, key?: string) {
     }
 }
 
+const journeyTest = test.extend<{ markJourneyEntered: () => void }>({
+    markJourneyEntered: async ({ page }, use) => {
+        // Depending on page ensures setup cannot begin until Chromium and the page fixture exist.
+        void page;
+        let entered = false;
+        await use(() => {
+            entered = true;
+        });
+        if (entered && completionMarkerFile) {
+            await writeRemoteChatSmokeCompletion(completionMarkerFile);
+        }
+    },
+});
+
 test.describe('release-aware remote chat smoke', () => {
     test.skip(!remoteChatSmokeEnabled, 'Requires explicit release expectations.');
     test.beforeEach(async ({ context, page }) => {
@@ -358,18 +374,82 @@ test.describe('release-aware remote chat smoke', () => {
         ).toHaveAttribute('content', expectedRevision);
     });
 
-    test('routing/configuration and submission: approved default journey', async ({ page }) => {
-        if (expectedProvider === 'openai') {
-            let openAICalls = 0;
-            let credentialPresent = false;
-            await installProviderDenyRules(page);
-            const fakeKey = 'sk-dspace-ci-sentinel-not-a-real-credential'; // scan-secrets: ignore
+    journeyTest(
+        'routing/configuration and submission: approved default journey',
+        async ({ page, markJourneyEntered }) => {
+            markJourneyEntered();
+            if (expectedProvider === 'openai') {
+                let openAICalls = 0;
+                let credentialPresent = false;
+                await installProviderDenyRules(page);
+                const fakeKey = 'sk-dspace-ci-sentinel-not-a-real-credential'; // scan-secrets: ignore
 
-            if (chatUiContract === 'legacy-inline-openai-v1') {
+                if (chatUiContract === 'legacy-inline-openai-v1') {
+                    await page.route('https://api.openai.com/v1/responses', async (route) => {
+                        openAICalls += 1;
+                        credentialPresent =
+                            route.request().headers().authorization === `Bearer ${fakeKey}`;
+                        await route.fulfill({
+                            status: 200,
+                            contentType: 'application/json',
+                            body: JSON.stringify({
+                                id: 'resp_smoke',
+                                object: 'response',
+                                status: 'completed',
+                                output: [
+                                    {
+                                        type: 'message',
+                                        role: 'assistant',
+                                        content: [
+                                            {
+                                                type: 'output_text',
+                                                text: 'DSPACE OpenAI smoke reply.',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            }),
+                        });
+                    });
+                    let panel = await openExpectedPanel(page, 'openai');
+                    await expect(page.getByTestId('token-place-disabled-banner')).toBeVisible();
+                    await expect(
+                        page.locator('[data-testid="chat-panel"][data-provider="token-place"]')
+                    ).toHaveCount(0);
+                    await page.locator('.api-container form input[type="text"]').fill(fakeKey);
+                    await page
+                        .locator('.api-container form')
+                        .getByRole('button', { name: 'Submit' })
+                        .click();
+                    panel = await openExpectedPanel(page, 'openai');
+                    await panel.getByRole('textbox').fill('Mocked OpenAI smoke');
+                    await panel.getByRole('button', { name: 'Send' }).click();
+                    await expect(
+                        panel.getByText('DSPACE OpenAI smoke reply.'),
+                        'submission: no mocked OpenAI reply'
+                    ).toBeVisible();
+                    expect({ openAICalls, credentialPresent }).toEqual({
+                        openAICalls: 1,
+                        credentialPresent: true,
+                    });
+                    return;
+                }
+
+                let panel = await openExpectedPanel(page);
+                await panel.getByRole('textbox').fill('Key gate smoke');
+                await panel.getByRole('button', { name: 'Send' }).click();
+                await expect(
+                    panel.locator('.chat-error'),
+                    'routing/configuration: OpenAI key gate'
+                ).toHaveAttribute('data-error-type', 'missing-key');
+                expect(openAICalls, 'secret-safety: missing-key flow made a provider request').toBe(
+                    0
+                );
+                await selectOpenAI(page, fakeKey);
                 await page.route('https://api.openai.com/v1/responses', async (route) => {
                     openAICalls += 1;
                     credentialPresent =
-                        route.request().headers().authorization === `Bearer ${fakeKey}`;
+                        route.request().headers().authorization?.startsWith('Bearer ') === true;
                     await route.fulfill({
                         status: 200,
                         contentType: 'application/json',
@@ -389,17 +469,7 @@ test.describe('release-aware remote chat smoke', () => {
                         }),
                     });
                 });
-                let panel = await openExpectedPanel(page, 'openai');
-                await expect(page.getByTestId('token-place-disabled-banner')).toBeVisible();
-                await expect(
-                    page.locator('[data-testid="chat-panel"][data-provider="token-place"]')
-                ).toHaveCount(0);
-                await page.locator('.api-container form input[type="text"]').fill(fakeKey);
-                await page
-                    .locator('.api-container form')
-                    .getByRole('button', { name: 'Submit' })
-                    .click();
-                panel = await openExpectedPanel(page, 'openai');
+                panel = await openExpectedPanel(page);
                 await panel.getByRole('textbox').fill('Mocked OpenAI smoke');
                 await panel.getByRole('button', { name: 'Send' }).click();
                 await expect(
@@ -412,93 +482,50 @@ test.describe('release-aware remote chat smoke', () => {
                 });
                 return;
             }
-
-            let panel = await openExpectedPanel(page);
-            await panel.getByRole('textbox').fill('Key gate smoke');
+            const configResponse = await page.request.get('/config.json');
+            expect(
+                new URL(configResponse.url()).origin,
+                'routing/configuration: /config.json origin drift'
+            ).toBe(requestedOrigin);
+            expect(
+                configResponse.status(),
+                'routing/configuration: /config.json did not return 200'
+            ).toBe(200);
+            const config = await configResponse.json();
+            expect(
+                new URL(config.tokenPlace.url).origin,
+                'routing/configuration: token.place configured origin drift'
+            ).toBe(expectedOrigin);
+            expect(
+                config.tokenPlace.model,
+                'routing/configuration: token.place configured model drift'
+            ).toBe(expectedModel);
+            const evidence = await installSuccessfulRelay(page);
+            const panel = await openExpectedPanel(page);
+            await panel.getByRole('textbox').fill('Deterministic remote chat smoke');
             await panel.getByRole('button', { name: 'Send' }).click();
+            if (fault === 'submission') throw new Error('submission: injected bounded CI fault');
             await expect(
-                panel.locator('.chat-error'),
-                'routing/configuration: OpenAI key gate'
-            ).toHaveAttribute('data-error-type', 'missing-key');
-            expect(openAICalls, 'secret-safety: missing-key flow made a provider request').toBe(0);
-            await selectOpenAI(page, fakeKey);
-            await page.route('https://api.openai.com/v1/responses', async (route) => {
-                openAICalls += 1;
-                credentialPresent =
-                    route.request().headers().authorization?.startsWith('Bearer ') === true;
-                await route.fulfill({
-                    status: 200,
-                    contentType: 'application/json',
-                    body: JSON.stringify({
-                        id: 'resp_smoke',
-                        object: 'response',
-                        status: 'completed',
-                        output: [
-                            {
-                                type: 'message',
-                                role: 'assistant',
-                                content: [
-                                    { type: 'output_text', text: 'DSPACE OpenAI smoke reply.' },
-                                ],
-                            },
-                        ],
-                    }),
-                });
-            });
-            panel = await openExpectedPanel(page);
-            await panel.getByRole('textbox').fill('Mocked OpenAI smoke');
-            await panel.getByRole('button', { name: 'Send' }).click();
-            await expect(
-                panel.getByText('DSPACE OpenAI smoke reply.'),
-                'submission: no mocked OpenAI reply'
+                panel.getByText('DSPACE smoke reply.'),
+                'submission: no mocked relay reply'
             ).toBeVisible();
-            expect({ openAICalls, credentialPresent }).toEqual({
-                openAICalls: 1,
-                credentialPresent: true,
-            });
-            return;
+            expect(evidence.originsMatch, 'routing/configuration: token.place origin drift').toBe(
+                true
+            );
+            expect(evidence.credentialsPresent, 'secret-safety: provider credential was sent').toBe(
+                false
+            );
+            expect(
+                evidence.dispatchModelMatches,
+                'routing/configuration: encrypted dispatch model drift'
+            ).toBe(true);
+            expect(evidence.paths.filter((path) => path !== 'complete')).toEqual([
+                'select',
+                'dispatch',
+                'retrieve',
+            ]);
         }
-        const configResponse = await page.request.get('/config.json');
-        expect(
-            new URL(configResponse.url()).origin,
-            'routing/configuration: /config.json origin drift'
-        ).toBe(requestedOrigin);
-        expect(
-            configResponse.status(),
-            'routing/configuration: /config.json did not return 200'
-        ).toBe(200);
-        const config = await configResponse.json();
-        expect(
-            new URL(config.tokenPlace.url).origin,
-            'routing/configuration: token.place configured origin drift'
-        ).toBe(expectedOrigin);
-        expect(
-            config.tokenPlace.model,
-            'routing/configuration: token.place configured model drift'
-        ).toBe(expectedModel);
-        const evidence = await installSuccessfulRelay(page);
-        const panel = await openExpectedPanel(page);
-        await panel.getByRole('textbox').fill('Deterministic remote chat smoke');
-        await panel.getByRole('button', { name: 'Send' }).click();
-        if (fault === 'submission') throw new Error('submission: injected bounded CI fault');
-        await expect(
-            panel.getByText('DSPACE smoke reply.'),
-            'submission: no mocked relay reply'
-        ).toBeVisible();
-        expect(evidence.originsMatch, 'routing/configuration: token.place origin drift').toBe(true);
-        expect(evidence.credentialsPresent, 'secret-safety: provider credential was sent').toBe(
-            false
-        );
-        expect(
-            evidence.dispatchModelMatches,
-            'routing/configuration: encrypted dispatch model drift'
-        ).toBe(true);
-        expect(evidence.paths.filter((path) => path !== 'complete')).toEqual([
-            'select',
-            'dispatch',
-            'retrieve',
-        ]);
-    });
+    );
 
     test('provider availability: controlled token.place failure is classified and bounded', async ({
         page,
