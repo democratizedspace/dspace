@@ -1,6 +1,5 @@
 import { constants, publicEncrypt, webcrypto } from 'node:crypto';
 import { createRequire } from 'node:module';
-import { writeFile } from 'node:fs/promises';
 
 import { expect, test, type Page } from '@playwright/test';
 
@@ -10,6 +9,7 @@ import {
     type IdentityContract,
     type SmokeProvider,
 } from './remote-chat-smoke-contract';
+import { writeRemoteChatSmokeCompletion } from '../../scripts/remote-chat-smoke-completion.mjs';
 
 const JSEncrypt = createRequire(import.meta.url)(
     'jsencrypt'
@@ -39,7 +39,6 @@ const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
 const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
 const completionMarkerFile = process.env.DSPACE_REMOTE_CHAT_SMOKE_COMPLETION_FILE;
-const completionMarker = 'dspace-remote-chat-smoke-journey-complete-v1\n';
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
@@ -312,11 +311,7 @@ const journeyTest = test.extend<{ markJourneyEntered: () => void }>({
             entered = true;
         });
         if (entered && completionMarkerFile) {
-            await writeFile(completionMarkerFile, completionMarker, {
-                encoding: 'utf8',
-                mode: 0o600,
-                flag: 'wx',
-            });
+            await writeRemoteChatSmokeCompletion(completionMarkerFile);
         }
     },
 });

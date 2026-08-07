@@ -6,6 +6,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { chatUiContractFor } from '../../frontend/e2e/remote-chat-smoke-contract';
 import {
+  remoteChatSmokeCompletionMarker,
+  writeRemoteChatSmokeCompletion,
+} from '../remote-chat-smoke-completion.mjs';
+import {
   parseAndValidateArgs,
   publishResult,
   runSmoke,
@@ -64,6 +68,21 @@ describe('remote chat smoke UI contract selection', () => {
 });
 
 describe('remote chat smoke result contract', () => {
+  it('publishes the completion marker idempotently for Playwright retries', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-completion-'));
+    const markerFile = join(directory, 'completion');
+
+    await writeRemoteChatSmokeCompletion(markerFile);
+    await writeRemoteChatSmokeCompletion(markerFile);
+
+    expect(await readFile(markerFile, 'utf8')).toBe(
+      remoteChatSmokeCompletionMarker
+    );
+    if (process.platform !== 'win32') {
+      expect((await stat(markerFile)).mode & 0o777).toBe(0o600);
+    }
+  });
+
   it('leaves an existing result untouched on validation failure', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
     const resultFile = join(directory, 'result.json');
