@@ -1,7 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { EventEmitter } from 'node:events';
+import { access, mkdtemp, readFile, stat, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   buildSmokeEnv,
+  main,
   parseAndValidateArgs,
+  writeResultFile,
 } from '../run-remote-chat-smoke.mjs';
 
 const revision = '0123456789abcdef0123456789abcdef01234567';
@@ -15,6 +21,29 @@ const completeEnv = {
   DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: 'https://token.place',
   DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'qwen3-8b-instruct',
 };
+
+const runnerArgs = [
+  '--base-url=https://staging.example.test',
+  '--expected-version=3.2.0',
+  `--expected-revision=${revision}`,
+  '--expected-provider=openai',
+];
+
+function completingSpawn(
+  code: number | null,
+  signal: NodeJS.Signals | null = null
+) {
+  return vi.fn((..._args: unknown[]) => {
+    const child = new EventEmitter();
+    queueMicrotask(() => child.emit('close', code, signal));
+    return child;
+  });
+}
+
+afterEach(() => {
+  process.exitCode = 0;
+  vi.restoreAllMocks();
+});
 
 describe('remote chat smoke input validation', () => {
   it('selects serial Playwright execution by default', () => {
@@ -221,6 +250,34 @@ describe('remote chat smoke input validation', () => {
     expect(options.expectedVersion).toBe('3.2.0');
   });
 
+  it('requires the result options as a pair and validates a lowercase full SHA', () => {
+    expect(() =>
+      parseAndValidateArgs(
+        [...runnerArgs, '--result-file=/tmp/result.json'],
+        {}
+      )
+    ).toThrow('must be supplied together');
+    expect(() =>
+      parseAndValidateArgs([...runnerArgs, `--runner-revision=${revision}`], {})
+    ).toThrow('must be supplied together');
+    for (const invalid of [
+      revision.slice(1),
+      revision.toUpperCase(),
+      `${revision}0`,
+    ]) {
+      expect(() =>
+        parseAndValidateArgs(
+          [
+            ...runnerArgs,
+            '--result-file=/tmp/result.json',
+            `--runner-revision=${invalid}`,
+          ],
+          {}
+        )
+      ).toThrow('lowercase full 40-character');
+    }
+  });
+
   it.each([
     [
       { ...completeEnv, DSPACE_EXPECTED_REVISION: revision.slice(0, 7) },
@@ -313,5 +370,182 @@ describe('remote chat smoke input validation', () => {
     delete env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
     delete env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
     expect(parseAndValidateArgs([], env).expectedProvider).toBe('openai');
+  });
+});
+
+describe('remote chat smoke result publication', () => {
+  it('publishes passed true after a successful completed smoke', async () => {
+    const publishResult = vi.fn().mockResolvedValue(undefined);
+    expect(
+      await main(
+        [
+          ...runnerArgs,
+          '--result-file=/tmp/result.json',
+          `--runner-revision=${revision}`,
+        ],
+        { spawnImpl: completingSpawn(0), publishResult }
+      )
+    ).toBe(0);
+    expect(publishResult).toHaveBeenCalledWith(
+      '/tmp/result.json',
+      revision,
+      true
+    );
+  });
+
+  it('atomically replaces a result with the exact successful schema and restrictive mode', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
+    const destination = join(directory, 'result.json');
+    await writeFile(destination, '{"stale":true}\n');
+
+    await writeResultFile(destination, revision, true);
+
+    const raw = await readFile(destination, 'utf8');
+    const result = JSON.parse(raw);
+    expect(raw.endsWith('\n')).toBe(true);
+    expect(Object.keys(result)).toEqual([
+      'schemaVersion',
+      'journey',
+      'passed',
+      'executedAt',
+      'runnerRevision',
+      'transport',
+      'mutationEnabled',
+    ]);
+    expect(result).toEqual({
+      schemaVersion: 1,
+      journey: '/chat',
+      passed: true,
+      executedAt: expect.any(Number),
+      runnerRevision: revision,
+      transport: 'intercepted',
+      mutationEnabled: false,
+    });
+    expect(Number.isInteger(result.executedAt)).toBe(true);
+    if (process.platform !== 'win32') {
+      expect((await stat(destination)).mode & 0o777).toBe(0o600);
+    }
+  });
+
+  it('publishes passed false and preserves a completed child failure status', async () => {
+    const publishResult = vi.fn().mockResolvedValue(undefined);
+    const code = await main(
+      [
+        ...runnerArgs,
+        '--result-file=/tmp/result.json',
+        `--runner-revision=${revision}`,
+      ],
+      { spawnImpl: completingSpawn(7), publishResult }
+    );
+    expect(code).toBe(7);
+    expect(process.exitCode).toBe(7);
+    expect(publishResult).toHaveBeenCalledWith(
+      '/tmp/result.json',
+      revision,
+      false
+    );
+  });
+
+  it('does not publish on validation failure, launch failure, or signal', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    for (const [args, spawnImpl] of [
+      [[...runnerArgs, '--result-file=/tmp/result.json'], completingSpawn(0)],
+      [
+        [
+          ...runnerArgs,
+          '--result-file=/tmp/result.json',
+          `--runner-revision=${revision}`,
+        ],
+        () => {
+          throw new Error('private launch detail');
+        },
+      ],
+    ] as const) {
+      const publishResult = vi.fn();
+      await main(args, { spawnImpl, publishResult });
+      expect(publishResult).not.toHaveBeenCalled();
+    }
+
+    const publishResult = vi.fn();
+    const forwardSignal = vi.fn();
+    await main(
+      [
+        ...runnerArgs,
+        '--result-file=/tmp/result.json',
+        `--runner-revision=${revision}`,
+      ],
+      {
+        spawnImpl: completingSpawn(null, 'SIGTERM'),
+        publishResult,
+        forwardSignal,
+      }
+    );
+    expect(publishResult).not.toHaveBeenCalled();
+    expect(forwardSignal).toHaveBeenCalledWith('SIGTERM');
+  });
+
+  it('preserves an existing result and creates none when execution is incomplete', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-incomplete-'));
+    const existing = join(directory, 'existing.json');
+    const absent = join(directory, 'absent.json');
+    await writeFile(existing, '{"known":"stale"}\n');
+    const launchFailure = () => {
+      throw new Error('launch failure');
+    };
+
+    for (const destination of [existing, absent]) {
+      await main(
+        [
+          ...runnerArgs,
+          `--result-file=${destination}`,
+          `--runner-revision=${revision}`,
+        ],
+        { spawnImpl: launchFailure }
+      );
+    }
+
+    expect(await readFile(existing, 'utf8')).toBe('{"known":"stale"}\n');
+    await expect(access(absent)).rejects.toMatchObject({ code: 'ENOENT' });
+  });
+
+  it('fails closed with a bounded diagnostic when result publication fails', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const code = await main(
+      [
+        ...runnerArgs,
+        '--result-file=/unwritable/result.json',
+        `--runner-revision=${revision}`,
+      ],
+      {
+        spawnImpl: completingSpawn(0),
+        publishResult: vi.fn().mockRejectedValue(new Error('secret detail')),
+      }
+    );
+    expect(code).toBe(1);
+    expect(error).toHaveBeenCalledWith(
+      '[qa:remote-chat-smoke] result publication failed'
+    );
+    expect(error.mock.calls.flat().join(' ')).not.toContain('secret detail');
+  });
+
+  it('keeps legacy invocations output-free and preserves serial intercepted guarantees', async () => {
+    const spawnImpl = completingSpawn(0);
+    expect(await main(runnerArgs, { spawnImpl })).toBe(0);
+    const [, playwrightArgs, spawnOptions] = spawnImpl.mock.calls[0] as [
+      string,
+      string[],
+      { env: Record<string, string> },
+    ];
+    expect(playwrightArgs).toEqual([
+      './node_modules/@playwright/test/cli.js',
+      'test',
+      'e2e/remote-chat-smoke.spec.ts',
+      '--project=chromium',
+    ]);
+    expect(spawnOptions.env).toMatchObject({
+      PW_WORKERS: '1',
+      REMOTE_CHAT_SMOKE: '1',
+    });
   });
 });
