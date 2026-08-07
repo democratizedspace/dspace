@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
-import { dirname, join } from 'node:path';
+import { open, rename, unlink } from 'node:fs/promises';
+import { basename, dirname, join } from 'node:path';
+import { randomBytes } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -36,7 +38,17 @@ const definitions = {
     'expected-token-place-model',
     'DSPACE_EXPECTED_TOKEN_PLACE_MODEL',
   ],
+  resultFile: ['result-file'],
+  runnerRevision: ['runner-revision'],
 };
+
+const requiredKeys = new Set([
+  'baseURL',
+  'expectedVersion',
+  'expectedRevision',
+  'identityContract',
+  'expectedProvider',
+]);
 
 export function parseAndValidateArgs(argv, env = process.env) {
   const flags = new Map();
@@ -71,12 +83,23 @@ export function parseAndValidateArgs(argv, env = process.env) {
     result.identityContract = defaultIdentityContract;
   }
   const missing = Object.entries(definitions)
-    .filter(([key]) => !result[key] && !key.startsWith('expectedTokenPlace'))
+    .filter(([key]) => requiredKeys.has(key) && !result[key])
     .map(([, [, environment]]) => environment);
   if (missing.length)
     throw new Error(
       `validation: missing required input(s): ${missing.join(', ')}`
     );
+
+  if (Boolean(result.resultFile) !== Boolean(result.runnerRevision)) {
+    throw new Error(
+      'validation: --result-file and --runner-revision must be supplied together'
+    );
+  }
+  if (result.runnerRevision && !/^[0-9a-f]{40}$/.test(result.runnerRevision)) {
+    throw new Error(
+      'validation: runner revision must be a lowercase full 40-character Git SHA'
+    );
+  }
 
   let base;
   try {
@@ -214,14 +237,103 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
   };
 }
 
-export function main(argv = process.argv.slice(2)) {
+export async function publishResult(
+  resultFile,
+  runnerRevision,
+  passed,
+  now = Date.now
+) {
+  const result = {
+    schemaVersion: 1,
+    journey: '/chat',
+    passed,
+    executedAt: Math.floor(now() / 1000),
+    runnerRevision,
+    transport: 'intercepted',
+    mutationEnabled: false,
+  };
+  const temporaryFile = join(
+    dirname(resultFile),
+    `.${basename(resultFile)}.${process.pid}.${randomBytes(8).toString('hex')}.tmp`
+  );
+  let handle;
+  try {
+    handle = await open(temporaryFile, 'wx', 0o600);
+    await handle.writeFile(`${JSON.stringify(result)}\n`, 'utf8');
+    await handle.sync();
+    await handle.close();
+    handle = undefined;
+    await rename(temporaryFile, resultFile);
+  } catch (error) {
+    if (handle) await handle.close().catch(() => {});
+    await unlink(temporaryFile).catch(() => {});
+    throw error;
+  }
+}
+
+export function runSmoke(
+  options,
+  {
+    spawnImpl = spawn,
+    publishResultImpl = publishResult,
+    relaySignal = (signal) => process.kill(process.pid, signal),
+  } = {}
+) {
+  return new Promise((resolve) => {
+    let launchFailed = false;
+    let child;
+    try {
+      child = spawnImpl(
+        'node',
+        [
+          './node_modules/@playwright/test/cli.js',
+          'test',
+          'e2e/remote-chat-smoke.spec.ts',
+          '--project=chromium',
+        ],
+        { cwd: frontendDir, env: buildSmokeEnv(options), stdio: 'inherit' }
+      );
+    } catch (error) {
+      resolve({ kind: 'launch-failure', exitCode: 1, error });
+      return;
+    }
+    child.once('error', (error) => {
+      launchFailed = true;
+      resolve({ kind: 'launch-failure', exitCode: 1, error });
+    });
+    child.once('exit', async (code, signal) => {
+      if (launchFailed) return;
+      if (signal) {
+        resolve({ kind: 'signal', signal });
+        relaySignal(signal);
+        return;
+      }
+      const exitCode = code ?? 1;
+      if (options.resultFile) {
+        try {
+          await publishResultImpl(
+            options.resultFile,
+            options.runnerRevision,
+            exitCode === 0
+          );
+        } catch {
+          resolve({ kind: 'publication-failure', exitCode: 1 });
+          return;
+        }
+      }
+      resolve({ kind: 'completed', exitCode });
+    });
+  });
+}
+
+export async function main(argv = process.argv.slice(2)) {
   let options;
   try {
     options = parseAndValidateArgs(argv);
   } catch (error) {
     console.error(`[qa:remote-chat-smoke] ${error.message}`);
     process.exitCode = 2;
-    return;
+    return 2;
   }
   console.log(`[qa:remote-chat-smoke] target=${options.baseURL}`);
   console.log(
@@ -236,24 +348,14 @@ export function main(argv = process.argv.slice(2)) {
   console.log(
     '[qa:remote-chat-smoke] transport=intercepted; profile=isolated; mutation=disabled'
   );
-  const child = spawn(
-    'node',
-    [
-      './node_modules/@playwright/test/cli.js',
-      'test',
-      'e2e/remote-chat-smoke.spec.ts',
-      '--project=chromium',
-    ],
-    { cwd: frontendDir, env: buildSmokeEnv(options), stdio: 'inherit' }
-  );
-  child.on('error', (error) => {
-    console.error(`[qa:remote-chat-smoke] launch: ${error.message}`);
-    process.exitCode = 1;
-  });
-  child.on('exit', (code, signal) => {
-    if (signal) process.kill(process.pid, signal);
-    else process.exitCode = code ?? 1;
-  });
+  const outcome = await runSmoke(options);
+  if (outcome.kind === 'launch-failure') {
+    console.error(`[qa:remote-chat-smoke] launch: ${outcome.error.message}`);
+  } else if (outcome.kind === 'publication-failure') {
+    console.error('[qa:remote-chat-smoke] result publication failed');
+  }
+  if ('exitCode' in outcome) process.exitCode = outcome.exitCode;
+  return outcome.exitCode;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] === fileURLToPath(import.meta.url)) await main();

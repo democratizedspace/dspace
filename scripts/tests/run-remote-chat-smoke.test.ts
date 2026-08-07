@@ -221,6 +221,45 @@ describe('remote chat smoke input validation', () => {
     expect(options.expectedVersion).toBe('3.2.0');
   });
 
+  it('requires result output options as a pair', () => {
+    expect(() =>
+      parseAndValidateArgs(['--result-file=/tmp/result.json'], completeEnv)
+    ).toThrow('--result-file and --runner-revision');
+    expect(() =>
+      parseAndValidateArgs(['--runner-revision', revision], completeEnv)
+    ).toThrow('--result-file and --runner-revision');
+  });
+
+  it.each([
+    revision.toUpperCase(),
+    revision.slice(1),
+    `${revision}0`,
+    'x'.repeat(40),
+  ])('rejects malformed runner revision %s', (runnerRevision) => {
+    expect(() =>
+      parseAndValidateArgs(
+        [
+          '--result-file=/tmp/result.json',
+          `--runner-revision=${runnerRevision}`,
+        ],
+        completeEnv
+      )
+    ).toThrow('lowercase full 40-character Git SHA');
+  });
+
+  it('accepts paired result output options without changing the smoke environment', () => {
+    const legacy = parseAndValidateArgs([], completeEnv);
+    const withResult = parseAndValidateArgs(
+      ['--result-file=/tmp/result.json', `--runner-revision=${revision}`],
+      completeEnv
+    );
+    expect(withResult).toMatchObject({
+      resultFile: '/tmp/result.json',
+      runnerRevision: revision,
+    });
+    expect(buildSmokeEnv(withResult, {})).toEqual(buildSmokeEnv(legacy, {}));
+  });
+
   it.each([
     [
       { ...completeEnv, DSPACE_EXPECTED_REVISION: revision.slice(0, 7) },
