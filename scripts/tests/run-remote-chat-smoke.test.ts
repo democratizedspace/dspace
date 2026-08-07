@@ -221,6 +221,15 @@ describe('remote chat smoke input validation', () => {
     expect(options.expectedVersion).toBe('3.2.0');
   });
 
+  it('does not read CLI-only options from an ambient undefined environment key', () => {
+    const options = parseAndValidateArgs([], {
+      ...completeEnv,
+      undefined: '/unexpected/result.json',
+    });
+    expect(options.resultFile).toBeUndefined();
+    expect(options.runnerRevision).toBeUndefined();
+  });
+
   it('requires result output options as a pair', () => {
     expect(() =>
       parseAndValidateArgs(['--result-file=/tmp/result.json'], completeEnv)

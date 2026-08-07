@@ -34,6 +34,21 @@ function childThat(event: 'exit' | 'error', ...args: unknown[]) {
   return child;
 }
 
+function completedChild(
+  settings: { env: Record<string, string> },
+  exitCode: number
+) {
+  const child = new EventEmitter();
+  queueMicrotask(async () => {
+    await writeFile(
+      settings.env.DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_FILE,
+      settings.env.DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_TOKEN
+    );
+    child.emit('exit', exitCode, null);
+  });
+  return child;
+}
+
 describe('remote chat smoke UI contract selection', () => {
   it.each([
     ['legacy-build-meta-v1', 'openai', 'legacy-inline-openai-v1'],
@@ -62,7 +77,8 @@ describe('remote chat smoke result contract', () => {
     await writeFile(resultFile, '{"stale":true}\n');
 
     const outcome = await runSmoke(options(resultFile), {
-      spawnImpl: () => childThat('exit', 0, null) as never,
+      spawnImpl: (_command, _args, settings) =>
+        completedChild(settings, 0) as never,
       publishResultImpl: (file, sha, passed) =>
         publishResult(file, sha, passed, () => 1785988800123),
     });
@@ -98,7 +114,8 @@ describe('remote chat smoke result contract', () => {
     const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
     const resultFile = join(directory, 'result.json');
     const outcome = await runSmoke(options(resultFile), {
-      spawnImpl: () => childThat('exit', 17, null) as never,
+      spawnImpl: (_command, _args, settings) =>
+        completedChild(settings, 17) as never,
     });
     expect(outcome).toEqual({ kind: 'completed', exitCode: 17 });
     expect(JSON.parse(await readFile(resultFile, 'utf8')).passed).toBe(false);
@@ -130,6 +147,20 @@ describe('remote chat smoke result contract', () => {
     });
   });
 
+  it.each([0, 1])(
+    'preserves an existing result when Playwright exits %i before a test body runs',
+    async (childExitCode) => {
+      const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
+      const resultFile = join(directory, 'result.json');
+      await writeFile(resultFile, 'existing-result\n');
+      const outcome = await runSmoke(options(resultFile), {
+        spawnImpl: () => childThat('exit', childExitCode, null) as never,
+      });
+      expect(outcome).toEqual({ kind: 'incomplete', exitCode: 1 });
+      expect(await readFile(resultFile, 'utf8')).toBe('existing-result\n');
+    }
+  );
+
   it('preserves an existing result when launch throws synchronously', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'dspace-chat-result-'));
     const resultFile = join(directory, 'result.json');
@@ -145,7 +176,8 @@ describe('remote chat smoke result contract', () => {
 
   it('fails closed when publication fails after completion', async () => {
     const outcome = await runSmoke(options('/unwritten/result.json'), {
-      spawnImpl: () => childThat('exit', 0, null) as never,
+      spawnImpl: (_command, _args, settings) =>
+        completedChild(settings, 0) as never,
       publishResultImpl: async () => {
         throw new Error('sensitive implementation detail');
       },

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
-import { open, rename, unlink } from 'node:fs/promises';
+import { open, readFile, rename, unlink } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -74,7 +75,8 @@ export function parseAndValidateArgs(argv, env = process.env) {
   const result = {};
   for (const [key, [flag, environment]] of Object.entries(definitions)) {
     // Explicit flags deterministically take precedence over the environment.
-    result[key] = flags.get(flag) ?? env[environment]?.trim();
+    result[key] =
+      flags.get(flag) ?? (environment ? env[environment]?.trim() : undefined);
   }
   if (
     !flags.has(definitions.identityContract[0]) &&
@@ -213,7 +215,11 @@ export function parseAndValidateArgs(argv, env = process.env) {
   return result;
 }
 
-export function buildSmokeEnv(options, baseEnv = process.env) {
+export function buildSmokeEnv(
+  options,
+  baseEnv = process.env,
+  executionEvidence
+) {
   // Node exposes bracketed IPv6 URL hostnames as "[::1]"; normalize them before
   // deciding whether Playwright should manage the local preview server.
   const hostname = new URL(options.baseURL).hostname.replace(/^\[|\]$/g, '');
@@ -234,6 +240,8 @@ export function buildSmokeEnv(options, baseEnv = process.env) {
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',
     DSPACE_REMOTE_CHAT_SMOKE_FAULT: options.fault || '',
+    DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_FILE: executionEvidence?.file || '',
+    DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_TOKEN: executionEvidence?.token || '',
   };
 }
 
@@ -281,6 +289,19 @@ export function runSmoke(
 ) {
   return new Promise((resolve) => {
     let launchFailed = false;
+    const executionEvidence = options.resultFile
+      ? {
+          file: join(
+            tmpdir(),
+            `dspace-chat-smoke.${process.pid}.${randomBytes(8).toString('hex')}.executed`
+          ),
+          token: randomBytes(32).toString('hex'),
+        }
+      : undefined;
+    const removeExecutionEvidence = () =>
+      executionEvidence
+        ? unlink(executionEvidence.file).catch(() => {})
+        : Promise.resolve();
     let child;
     try {
       child = spawnImpl(
@@ -291,25 +312,45 @@ export function runSmoke(
           'e2e/remote-chat-smoke.spec.ts',
           '--project=chromium',
         ],
-        { cwd: frontendDir, env: buildSmokeEnv(options), stdio: 'inherit' }
+        {
+          cwd: frontendDir,
+          env: buildSmokeEnv(options, process.env, executionEvidence),
+          stdio: 'inherit',
+        }
       );
     } catch (error) {
+      void removeExecutionEvidence();
       resolve({ kind: 'launch-failure', exitCode: 1, error });
       return;
     }
     child.once('error', (error) => {
       launchFailed = true;
+      void removeExecutionEvidence();
       resolve({ kind: 'launch-failure', exitCode: 1, error });
     });
     child.once('exit', async (code, signal) => {
       if (launchFailed) return;
       if (signal) {
+        await removeExecutionEvidence();
         resolve({ kind: 'signal', signal });
         relaySignal(signal);
         return;
       }
       const exitCode = code ?? 1;
       if (options.resultFile) {
+        let executed = false;
+        try {
+          executed =
+            (await readFile(executionEvidence.file, 'utf8')) ===
+            executionEvidence.token;
+        } catch {
+          // A missing or malformed marker means Playwright did not enter a smoke test body.
+        }
+        await removeExecutionEvidence();
+        if (!executed) {
+          resolve({ kind: 'incomplete', exitCode: exitCode || 1 });
+          return;
+        }
         try {
           await publishResultImpl(
             options.resultFile,

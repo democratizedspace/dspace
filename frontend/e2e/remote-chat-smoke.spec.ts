@@ -1,5 +1,6 @@
 import { constants, publicEncrypt, webcrypto } from 'node:crypto';
 import { createRequire } from 'node:module';
+import { writeFile } from 'node:fs/promises';
 
 import { expect, test, type Page } from '@playwright/test';
 
@@ -37,6 +38,8 @@ const expectedResolvedModel =
 const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
 const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
+const executionFile = process.env.DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_FILE;
+const executionToken = process.env.DSPACE_REMOTE_CHAT_SMOKE_EXECUTION_TOKEN;
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
@@ -303,6 +306,9 @@ async function selectOpenAI(page: Page, key?: string) {
 test.describe('release-aware remote chat smoke', () => {
     test.skip(!remoteChatSmokeEnabled, 'Requires explicit release expectations.');
     test.beforeEach(async ({ context, page }) => {
+        if (executionFile && executionToken) {
+            await writeFile(executionFile, executionToken, { encoding: 'utf8', mode: 0o600 });
+        }
         await context.clearCookies();
         await clearUserData(page);
     });
