@@ -58,16 +58,20 @@ describe('outages', () => {
 
   beforeEach(() => {
     const originalConsoleWarn = console.warn;
-    consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation((...args: unknown[]) => {
-      const [first] = args;
-      if (
-        typeof first === 'string' &&
-        first.startsWith('Warning: Failed to fetch current UTC time from time API;')
-      ) {
-        return;
-      }
-      originalConsoleWarn(...args);
-    });
+    consoleWarnMock = vi
+      .spyOn(console, 'warn')
+      .mockImplementation((...args: unknown[]) => {
+        const [first] = args;
+        if (
+          typeof first === 'string' &&
+          first.startsWith(
+            'Warning: Failed to fetch current UTC time from time API;'
+          )
+        ) {
+          return;
+        }
+        originalConsoleWarn(...args);
+      });
   });
 
   afterEach(() => {
@@ -174,6 +178,31 @@ describe('outages', () => {
         console.error(validate.errors);
       }
       expect(valid).toBe(true);
+    });
+  });
+
+  it('accounts for every July 23 release-drift issue with no open status', () => {
+    const postmortem = readFileSync(
+      path.join(outagesDir, '2026-07-23-dspace-production-version-drift.md'),
+      'utf8'
+    );
+    const correctiveActions = postmortem.match(
+      /## Corrective actions[\s\S]*?(?=## Evidence gaps and unknowns)/
+    )?.[0];
+
+    expect(correctiveActions).toBeTruthy();
+    expect(correctiveActions).not.toMatch(/\|\s*OPEN\s*\|/i);
+
+    const expectedIssues = [
+      ...Array.from({ length: 16 }, (_, index) => 4727 + index),
+      ...Array.from({ length: 9 }, (_, index) => 2321 + index),
+    ];
+
+    expectedIssues.forEach((issue) => {
+      const issueLinks = correctiveActions!.match(
+        new RegExp(`issues/${issue}\\)`, 'g')
+      );
+      expect(issueLinks, `issue ${issue} accounting`).toHaveLength(1);
     });
   });
 
