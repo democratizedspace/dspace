@@ -326,71 +326,112 @@ contain changing uptime and timestamp fields; those differing hashes were not tr
   results.
 - The exact impact start and exact workflow run that moved the semantic tag remain unknown.
 
-## Current residual risk
+## Final production state and residual risk
 
-Incident status is resolved. The current live Deployment and Git pin agree on `main-1a31a56`, and
-this incident is not currently causing user impact.
+The temporary Helm drift and operations freeze are closed. The finalized Sugarkube evidence record
+[`deployment-evidence/dspace/prod/main-1a31a56-20260801T093443Z.json`](https://github.com/futuroptimist/sugarkube/blob/main/deployment-evidence/dspace/prod/main-1a31a56-20260801T093443Z.json)
+records the controlled production reconciliation at Helm revision 9:
 
-A residual operational risk remains: Helm revision 8 still stores `image.tag=v3.0.1`, and the live
-Deployment was corrected outside Helm. Helm stored state and live Deployment state are therefore
-intentionally drifted. DSPACE production Helm operations should remain frozen until a controlled
-reconciliation is performed using a newly published, never-overwritten chart version and the
-immutable image tag. Recovery and residual-risk follow-up is tracked in
-[Sugarkube #2325](https://github.com/futuroptimist/sugarkube/issues/2325) for controlled Helm-state
-reconciliation, [Sugarkube #2326](https://github.com/futuroptimist/sugarkube/issues/2326) for
-immutable release manifests and deployment evidence, and
-[Sugarkube #2327](https://github.com/futuroptimist/sugarkube/issues/2327) for manifest-based
-rollback and verification. This record does not recommend editing Helm revision history directly.
+- application DSPACE `3.0.1`, source `1a31a569aff2dbeb238e8c2688b9e85140d2077d`;
+- image `main-1a31a56`, digest
+  `sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401`;
+- chart `3.0.2`, digest
+  `sha256:8b862135e52146f301a41259d6dabb053ed891d798fc1c8c95ca775b2b8e9575`,
+  from source `63063e287adb92a4158ce2c8e7d378b73f52c1c5`; and
+- expected provider OpenAI.
 
-## Corrective actions
+Image, chart, Helm values, runtime identity, frontend identity, replica agreement, public/direct
+agreement, provider, and `/chat` checks all passed. Git, Helm, the Deployment, pod image IDs,
+runtime identity, and the finalized manifest now agree, so normal guarded Helm operations may
+resume. This reconciliation created revision 9; it did not alter historical Helm revisions.
 
-| Priority | Owner area | Status | Action | Completion condition |
-| --- | --- | --- | --- | --- |
-| P0 | Production operations | Completed | Restore production to immutable image `main-1a31a56`. | Live Deployment image is `ghcr.io/democratizedspace/dspace:main-1a31a56`. |
-| P0 | Production operations | Completed | Verify both replicas use image digest `sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401`. | Both pods report that resolved image ID and are ready with zero restarts. |
-| P0 | Sugarkube production config | Completed | Pin Sugarkube production to `main-1a31a56` through PR #2320. | PR #2320 is merged with production pin `main-1a31a56`. |
-| P0 | Production verification | Completed | Compare public and direct-origin content after recovery. | Root, changelog, docs changelog, and `/config.json` hashes match between public and origin responses. |
-| P0 | Image release workflow | Open | Change `.github/workflows/ci-image.yml` so semantic `vX.Y.Z` tags are published only from the matching Git tag or release event, never ordinary branch pushes; track with [DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727). | Branch pushes can no longer publish semantic image tags. |
-| P0 | Image release workflow | Open | Add a guard that refuses to overwrite an already published semantic image tag; track with [DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727). | CI fails before publishing if the semantic tag already exists with any digest. |
-| P0 | Production deploy tooling | Open | Reject semantic `vX.Y.Z` image tags for production deployment and rollback; require an approved branch-SHA tag with digest verification or a direct digest pin; track with [Sugarkube #2321](https://github.com/futuroptimist/sugarkube/issues/2321). | Production commands fail before Helm/Kubernetes mutation when given a semantic or otherwise mutable image tag. |
-| P0 | Chart publication | Open | Verify an existing OCI chart version before push and fail closed rather than replacing it; track with [DSPACE #4728](https://github.com/democratizedspace/dspace/issues/4728). | CI fails before publishing if the chart version already exists. |
-| P0 | Helm release workflow | Open | Publish any chart repair under a new version and decouple future chart versions from application versions where their release cadence differs; track with [DSPACE #4729](https://github.com/democratizedspace/dspace/issues/4729) and [DSPACE #4731](https://github.com/democratizedspace/dspace/issues/4731). | Any repaired chart has a new chart version, the `3.0.1` artifact is not replaced, and chart-version selection is independent from application-version selection. |
-| P1 | Release evidence | Open | Record the expected full Git SHA, OCI revision label, branch-SHA tag, resolved multi-architecture image digest, and immutable release manifest at promotion time; track with [Sugarkube #2326](https://github.com/futuroptimist/sugarkube/issues/2326). | Promotion evidence makes later tag movement detectable without requiring retrospective package-API access. |
-| P0 | Production operations | Open | Reconcile production Helm state in a controlled maintenance operation so Git, Helm stored values, live Deployment, and resolved image digest all agree on the immutable image; track with [Sugarkube #2325](https://github.com/futuroptimist/sugarkube/issues/2325). | Helm-managed state and live state converge on the immutable image coordinate without editing Helm history directly. |
-| P0 | Sugarkube environment config | Open | Introduce environment-specific Sugarkube chart pins so staging can use DSPACE chart 3.1.0 while production remains on its approved chart version; track with [Sugarkube #2322](https://github.com/futuroptimist/sugarkube/issues/2322). | Staging and production chart pins are independently represented and reviewed. |
-| P0 | Sugarkube deployment tooling | Open | Render every app release before cluster mutation and remove `--reuse-values` from standard app upgrades so the exact release is reviewed before it can change production; track with [Sugarkube #2323](https://github.com/futuroptimist/sugarkube/issues/2323) and [Sugarkube #2324](https://github.com/futuroptimist/sugarkube/issues/2324). | Standard app upgrades render the exact release before mutation and do not use `--reuse-values`. |
-| P1 | Application identity | Open | Expose and verify a bounded build-identity signal containing the Git revision, not only the semantic application version; track with [DSPACE #4732](https://github.com/democratizedspace/dspace/issues/4732). | Health or a bounded identity endpoint reports the approved source revision in a safe form. |
-| P0 | Production verification | Open | Require production verification to compare the running image revision/digest against the approved release commit through an end-to-end release-coordinate consistency gate; track with [DSPACE #4730](https://github.com/democratizedspace/dspace/issues/4730). | Release checks fail if live image revision or digest does not match the approved commit. |
-| P1 | Production verification | Open | Add a deterministic remote fresh-profile synthetic or promotion smoke test for `/chat` that verifies the default provider matches the approved release, the default chat panel is usable for that release's intended provider, and the OpenAI opt-in path remains discoverable and correctly gated by a user-supplied key; track with [DSPACE #4733](https://github.com/democratizedspace/dspace/issues/4733) and [Sugarkube #2328](https://github.com/futuroptimist/sugarkube/issues/2328). | Promotion checks fail when the served frontend silently changes the default provider or when the approved default `/chat` journey is visibly non-functional. |
-| P1 | Recovery verification | Open | Capture rollout completion time, old/new pod identities, old/new resolved image IDs, and manifest-based rollback verification during rollback or emergency redeploy; track with [Sugarkube #2327](https://github.com/futuroptimist/sugarkube/issues/2327). | Rollback or redeploy evidence records completion time plus old/new pods and image IDs and verifies the rollback against the approved manifest. |
-| P1 | Frontend verification | Open | Add a deterministic frontend content/build marker check so release-content drift is caught even when `/healthz` and `/livez` remain healthy. | Monitoring or deploy verification compares an expected frontend build marker. |
-| P1 | Monitoring | Open | Add monitoring or alerting for unexpected production build-revision drift and `/chat` failures with mobile routing; track with [Sugarkube #2329](https://github.com/futuroptimist/sugarkube/issues/2329). | Alert fires when production build identity differs from the approved release coordinate or the default `/chat` journey fails. |
-| P1 | Incident evidence | Open | Ensure incident operators can retrieve package-version metadata or have another documented method to record semantic-tag and immutable-tag digests at deployment time. | Operators can capture semantic-tag and immutable-tag digests during incidents without relying on missing package API scopes. |
+## Post-incident closeout
 
-### Tracked GitHub issues
+All 16 independent corrective actions and all nine mirrored DSPACE tracking issues carrying
+`outage_2026_07_23_1` are closed; no labeled issue remains open. The final controls are:
 
-This table is the canonical issue tracker for postmortem follow-up. Each issue appears exactly
-once. `Type` records the action's primary control function. `Status` should be updated from
-`OPEN` to `CLOSED` only when the linked GitHub issue is actually closed.
+- **Prevention:** semantic images publish only from a matching release, existing image and chart
+  coordinates fail closed, chart and application versions are independent, production accepts only
+  immutable image coordinates, environment chart pins are separate, every exact release renders
+  before mutation, and standard upgrades do not use `--reuse-values`.
+- **Mitigation and recovery:** chart `3.0.2` was published once for application `3.0.1`; guarded
+  manifests now drive deployment and rollback using immutable chart/image digests and complete
+  values, with rollout and identity verification. The production record above is durable proof.
+- **Detection:** DSPACE exposes bounded runtime and frontend source identity and a deterministic,
+  release-aware `/chat` smoke result. Promotion compares manifest, OCI, Helm, pod, runtime,
+  frontend, provider, and journey coordinates. This also satisfies the formerly unlinked frontend
+  marker and incident artifact-retrieval actions: the former is part of the build-identity and
+  promotion controls, and the latter is provided by immutable manifests and deployment evidence.
 
-| Repository | Issue | Type | Status |
+### DSPACE 3.1.1 release-control proof
+
+The genuine [v3.1.1 release](https://github.com/democratizedspace/dspace/releases/tag/v3.1.1)
+validated source `22f506e07e0b5abfd0cf756e9c5827c0458fb4b2`, immutable image
+`main-22f506e`, and semantic alias `v3.1.1` at the same digest,
+`sha256:467890df969cc7938cb760f965fd8f90a8912b1dcb1f8425bc808216b7e1512b`.
+It paired chart `3.1.2` at digest
+`sha256:544a3e31ab827e6d2bf28754a19d8af17b0402b75159c2a40c1b3dfe5eb60161`.
+The [semantic recovery workflow](https://github.com/democratizedspace/dspace/actions/runs/31058866232)
+succeeded. The later [duplicate-publication exercise](https://github.com/democratizedspace/dspace/actions/runs/31059130820)
+was an expected negative test: it stopped at the preflight existence guard without publishing or
+changing the digest, rather than representing an unexpected CI failure.
+
+### Canonical corrective-action accounting
+
+Each row below is one independent action. `Completed` reflects verified implementation or
+operational evidence, not issue closure alone.
+
+| Repository issue | Type | Status | Verified completion and durable evidence |
 | --- | --- | --- | --- |
-| DSPACE | [#4727: Make semantic image tags release-only and immutable](https://github.com/democratizedspace/dspace/issues/4727) | Prevent | OPEN |
-| DSPACE | [#4728: Prevent republishing existing Helm chart versions](https://github.com/democratizedspace/dspace/issues/4728) | Prevent | OPEN |
-| DSPACE | [#4729: Decouple Helm chart version from application version](https://github.com/democratizedspace/dspace/issues/4729) | Prevent | OPEN |
-| DSPACE | [#4730: Add an end-to-end release-coordinate consistency gate](https://github.com/democratizedspace/dspace/issues/4730) | Prevent | OPEN |
-| DSPACE | [#4731: Publish a v3.0.1-compatible recovery chart under a new version](https://github.com/democratizedspace/dspace/issues/4731) | Mitigate | OPEN |
-| DSPACE | [#4732: Expose a bounded full-source build identity at runtime](https://github.com/democratizedspace/dspace/issues/4732) | Detect | OPEN |
-| DSPACE | [#4733: Add a deterministic remote smoke harness for the default `/chat` journey](https://github.com/democratizedspace/dspace/issues/4733) | Detect | OPEN |
-| Sugarkube | [#2321: Reject semantic image tags for production deployments](https://github.com/futuroptimist/sugarkube/issues/2321) | Prevent | OPEN |
-| Sugarkube | [#2322: Add environment-specific chart version pins](https://github.com/futuroptimist/sugarkube/issues/2322) | Prevent | OPEN |
-| Sugarkube | [#2323: Render every app release before cluster mutation](https://github.com/futuroptimist/sugarkube/issues/2323) | Prevent | OPEN |
-| Sugarkube | [#2324: Remove `--reuse-values` from standard app upgrades](https://github.com/futuroptimist/sugarkube/issues/2324) | Prevent | OPEN |
-| Sugarkube | [#2325: Reconcile DSPACE production Helm state with immutable coordinates](https://github.com/futuroptimist/sugarkube/issues/2325) | Mitigate | OPEN |
-| Sugarkube | [#2326: Add immutable release manifests and deployment evidence](https://github.com/futuroptimist/sugarkube/issues/2326) | Prevent | OPEN |
-| Sugarkube | [#2327: Replace Helm-revision rollback with manifest-based rollback verification](https://github.com/futuroptimist/sugarkube/issues/2327) | Mitigate | OPEN |
-| Sugarkube | [#2328: Require DSPACE build identity and `/chat` smoke checks during promotion](https://github.com/futuroptimist/sugarkube/issues/2328) | Prevent | OPEN |
-| Sugarkube | [#2329: Alert on DSPACE release drift and `/chat` failures with mobile routing](https://github.com/futuroptimist/sugarkube/issues/2329) | Detect | OPEN |
+| [DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727) | Prevent | Completed | Release-only semantic publication and non-overwrite guard landed through [PR #4802](https://github.com/democratizedspace/dspace/pull/4802) and passed both v3.1.1 workflow exercises above. |
+| [DSPACE #4728](https://github.com/democratizedspace/dspace/issues/4728) | Prevent | Completed | [PR #4747](https://github.com/democratizedspace/dspace/pull/4747) made chart publication fail closed; chart 3.0.2's first publish succeeded and its intentional retry was rejected. |
+| [DSPACE #4729](https://github.com/democratizedspace/dspace/issues/4729) | Prevent | Completed | [PR #4747](https://github.com/democratizedspace/dspace/pull/4747) separated chart version, appVersion, and release triggers; published 3.0.2/3.0.1 and 3.1.2/3.1.1 coordinates prove independent cadence. |
+| [DSPACE #4730](https://github.com/democratizedspace/dspace/issues/4730) | Prevent | Completed | [PR #4802](https://github.com/democratizedspace/dspace/pull/4802) completed the fail-closed coordinate gate; the v3.1.1 release manifest validated source, image, chart, semantic alias, and digests end to end. |
+| [DSPACE #4731](https://github.com/democratizedspace/dspace/issues/4731) | Mitigate | Completed | [PR #4751](https://github.com/democratizedspace/dspace/pull/4751) published compatible chart 3.0.2 once from `63063e2`; the production evidence verifies its OCI digest. |
+| [DSPACE #4732](https://github.com/democratizedspace/dspace/issues/4732) | Detect | Completed | [PR #4759](https://github.com/democratizedspace/dspace/pull/4759) added bounded full-source runtime and frontend identity; final staging and production evidence verifies both. |
+| [DSPACE #4733](https://github.com/democratizedspace/dspace/issues/4733) | Detect | Completed | [PR #4763](https://github.com/democratizedspace/dspace/pull/4763) added the deterministic release-aware remote `/chat` harness; later compatibility work supplied bounded machine-readable results. |
+| [Sugarkube #2321](https://github.com/futuroptimist/sugarkube/issues/2321) | Prevent | Completed | [PR #2373](https://github.com/futuroptimist/sugarkube/pull/2373) rejects semantic/movable production image tags before registry, Helm, or cluster access. |
+| [Sugarkube #2322](https://github.com/futuroptimist/sugarkube/issues/2322) | Prevent | Completed | [PR #2331](https://github.com/futuroptimist/sugarkube/pull/2331) added independently reviewable environment version files; generic inline override intentionally remains highest precedence. |
+| [Sugarkube #2323](https://github.com/futuroptimist/sugarkube/issues/2323) | Prevent | Completed | [PR #2381](https://github.com/futuroptimist/sugarkube/pull/2381) requires exact chart, namespace, values, and immutable image rendering before mutation. |
+| [Sugarkube #2324](https://github.com/futuroptimist/sugarkube/issues/2324) | Prevent | Completed | [PR #2390](https://github.com/futuroptimist/sugarkube/pull/2390) removed `--reuse-values` from standard paths and made Git-controlled values authoritative. |
+| [Sugarkube #2325](https://github.com/futuroptimist/sugarkube/issues/2325) | Mitigate | Completed | [PR #2478](https://github.com/futuroptimist/sugarkube/pull/2478) preserves the finalized production revision-9 reconciliation record linked above. |
+| [Sugarkube #2326](https://github.com/futuroptimist/sugarkube/issues/2326) | Prevent | Completed | [PR #2350](https://github.com/futuroptimist/sugarkube/pull/2350) added strict, non-overwritable manifests/evidence; the final production record also supplies the previously missing artifact-retrieval path. |
+| [Sugarkube #2327](https://github.com/futuroptimist/sugarkube/issues/2327) | Mitigate | Completed | [PR #2363](https://github.com/futuroptimist/sugarkube/pull/2363) added manifest-based guarded recovery without Helm rollback or reused values; live records proved its runtime/frontend dependencies, not a destructive rollback drill. |
+| [Sugarkube #2328](https://github.com/futuroptimist/sugarkube/issues/2328) | Prevent | Completed | [PR #2426](https://github.com/futuroptimist/sugarkube/pull/2426) gates promotion on immutable coordinates, runtime/frontend identity, provider, replica/public/direct agreement, and bounded `/chat` results. |
+| [Sugarkube #2329](https://github.com/futuroptimist/sugarkube/issues/2329) | Detect | Completed (staging scope) | [PR #2501](https://github.com/futuroptimist/sugarkube/pull/2501), [DSPACE PR #4806](https://github.com/democratizedspace/dspace/pull/4806), and [PR #2523](https://github.com/futuroptimist/sugarkube/pull/2523) preserve the staging implementation and acceptance evidence described below. |
+
+### Mirrored DSPACE issue reconciliation
+
+These nine issues were closed as `not planned` on 2026-07-24 because the work is canonical in
+Sugarkube. They are accounting mirrors, not nine additional corrective actions.
+
+| Mirrored DSPACE issue | Canonical Sugarkube action | Disposition |
+| --- | --- | --- |
+| [#4734](https://github.com/democratizedspace/dspace/issues/4734) | 2321 | Closed as duplicate tracking (`not planned`) |
+| [#4735](https://github.com/democratizedspace/dspace/issues/4735) | 2322 | Closed as duplicate tracking (`not planned`) |
+| [#4736](https://github.com/democratizedspace/dspace/issues/4736) | 2323 | Closed as duplicate tracking (`not planned`) |
+| [#4737](https://github.com/democratizedspace/dspace/issues/4737) | 2324 | Closed as duplicate tracking (`not planned`) |
+| [#4738](https://github.com/democratizedspace/dspace/issues/4738) | 2325 | Closed as duplicate tracking (`not planned`) |
+| [#4739](https://github.com/democratizedspace/dspace/issues/4739) | 2326 | Closed as duplicate tracking (`not planned`) |
+| [#4740](https://github.com/democratizedspace/dspace/issues/4740) | 2327 | Closed as duplicate tracking (`not planned`) |
+| [#4741](https://github.com/democratizedspace/dspace/issues/4741) | 2328 | Closed as duplicate tracking (`not planned`) |
+| [#4742](https://github.com/democratizedspace/dspace/issues/4742) | 2329 | Closed as duplicate tracking (`not planned`) |
+
+### Final observability scope
+
+The #2329 closeout is deliberately bounded to staging. At observability Helm revision 8, all five
+installed DSPACE release-integrity alerts—`DspaceBuildRevisionMismatch`,
+`DspaceMixedBuildRevisions`, `DspaceDeploymentImagePinMismatch`, `DspaceChatSyntheticFailed`, and
+`DspaceMetricsTargetDown`—were healthy and inactive at steady state, and the pinned `/chat`
+synthetic ran every five minutes. Owner-scoped drill
+`dspace-2329-20260808T051818Z-1053` exercised three representative alerts; Prometheus and
+Alertmanager observed them, PagerDuty delivered firing notifications that were acknowledged on the
+configured mobile receiver and delivered resolution, the exact temporary rule was deleted, and
+steady state was clean afterward.
+
+Production observability was not deployed or live-tested in that drill and remains a separate
+future rollout. Closing the action records staging acceptance and completion of this postmortem
+item; it is not production observability proof.
 
 ## Evidence gaps and unknowns
 
