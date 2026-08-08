@@ -351,7 +351,7 @@ unchanged; it was expected negative-path proof, not an unexpected CI failure.
 ### Final production reconciliation
 
 The finalized Sugarkube evidence
-[`deployment-evidence/dspace/prod/main-1a31a56-20260801T093443Z.json`](https://github.com/futuroptimist/sugarkube/blob/main/deployment-evidence/dspace/prod/main-1a31a56-20260801T093443Z.json)
+[`deployment-evidence/dspace/prod/main-1a31a56-20260801T093443Z.json`](https://github.com/futuroptimist/sugarkube/blob/e55c2cf12a0c0f84c55d3337bddd00e54e0b2460/deployment-evidence/dspace/prod/main-1a31a56-20260801T093443Z.json)
 records application DSPACE `3.0.1`, source
 `1a31a569aff2dbeb238e8c2688b9e85140d2077d`, image `main-1a31a56`, and image digest
 `sha256:23dbc573377549136c1f10b05706b3c176ffbabaf04a3194381a24752104a401`. It records
@@ -384,7 +384,7 @@ Helm freeze is lifted; this reconciliation did not edit or rewrite Helm history.
 | [Sugarkube #2326](https://github.com/futuroptimist/sugarkube/issues/2326) | Prevent | [PR #2350](https://github.com/futuroptimist/sugarkube/pull/2350) added validated, non-overwritable manifests and deployment evidence. This is also the closed canonical action satisfying incident artifact retrieval without retrospective package-API scope. | CLOSED (completed) |
 | [Sugarkube #2327](https://github.com/futuroptimist/sugarkube/issues/2327) | Mitigate | [PR #2363](https://github.com/futuroptimist/sugarkube/pull/2363) replaced default revision rollback with guarded manifest-based recovery; live staging/production evidence proved its runtime, frontend, provider, replica, and journey verifier dependencies. | CLOSED (completed) |
 | [Sugarkube #2328](https://github.com/futuroptimist/sugarkube/issues/2328) | Prevent | [PR #2426](https://github.com/futuroptimist/sugarkube/pull/2426) made runtime/frontend identity, replica, provider, and bounded `/chat` checks promotion gates. This is also the closed canonical action satisfying frontend-marker verification. | CLOSED (completed) |
-| [Sugarkube #2329](https://github.com/futuroptimist/sugarkube/issues/2329) | Detect | [PR #2501](https://github.com/futuroptimist/sugarkube/pull/2501), [DSPACE PR #4806](https://github.com/democratizedspace/dspace/pull/4806), and [PR #2523](https://github.com/futuroptimist/sugarkube/pull/2523) completed the staging observability implementation, producer, and acceptance evidence described below. Production deployment and a live production drill remain required before the action is complete. | OPEN (production rollout) |
+| [Sugarkube #2329](https://github.com/futuroptimist/sugarkube/issues/2329) | Detect | [PR #2501](https://github.com/futuroptimist/sugarkube/pull/2501), [DSPACE PR #4806](https://github.com/democratizedspace/dspace/pull/4806), and [PR #2523](https://github.com/futuroptimist/sugarkube/pull/2523) completed the staging observability implementation, producer, and acceptance evidence described below. | CLOSED (completed; staging scope) |
 <!-- tracked-outage-issues:end -->
 
 ### Mirrored DSPACE issue reconciliation
@@ -407,9 +407,8 @@ independent corrective actions. GitHub records each as `closed` with reason `not
 | [#4742](https://github.com/democratizedspace/dspace/issues/4742) | #2329 | CLOSED (not planned; duplicate mirror) |
 <!-- mirrored-outage-issues:end -->
 
-The accounting above contains all 16 labeled DSPACE issues and all nine labeled Sugarkube issues.
-The production scope of Sugarkube #2329 remains open; all other canonical actions and all duplicate
-mirrors are closed.
+The accounting above contains all 16 labeled DSPACE issues and all nine labeled Sugarkube issues;
+none remained open as of 2026-08-08.
 
 ### Final staging observability proof and boundary
 
@@ -422,10 +421,9 @@ and ran every five minutes. Owner-scoped drill
 mixed-replica, and chat alerts; PagerDuty firing, iPhone acknowledgement, resolution, exact
 temporary-rule deletion, and clean steady-state verification all succeeded.
 
-Production observability was not deployed or live-tested by that drill. Sugarkube #2329 therefore
-remains the visible open action for deploying the monitors in production and completing an
-owner-scoped live production drill; staging acceptance alone does not satisfy that completion
-condition.
+Production observability was not deployed or live-tested by that drill and remains a separate future
+rollout. Closing the action records its staging acceptance and this postmortem item, not production
+observability proof.
 
 ## Evidence gaps and unknowns
 

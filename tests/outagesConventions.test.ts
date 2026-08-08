@@ -177,7 +177,7 @@ describe('outages', () => {
     });
   });
 
-  it('accounts for every July 23 release-drift follow-up and its remaining open scope', () => {
+  it('accounts for every July 23 release-drift follow-up as closed exactly once', () => {
     const report = readFileSync(
       path.join(outagesDir, '2026-07-23-dspace-production-version-drift.md'),
       'utf8'
@@ -191,6 +191,11 @@ describe('outages', () => {
 
     expect(canonical).toBeTruthy();
     expect(mirrors).toBeTruthy();
+    if (!canonical || !mirrors) {
+      throw new Error('Expected canonical and mirrored outage issue tables');
+    }
+    expect(`${canonical}${mirrors}`).not.toMatch(/\bOPEN\b/);
+
     const expectedCanonical = [
       ...Array.from({ length: 7 }, (_, index) => 4727 + index),
       ...Array.from({ length: 9 }, (_, index) => 2321 + index),
@@ -198,14 +203,13 @@ describe('outages', () => {
     const expectedMirrors = Array.from({ length: 9 }, (_, index) => 4734 + index);
 
     expectedCanonical.forEach((issue) => {
-      expect(canonical!.match(new RegExp(`/issues/${issue}\\b`, 'g')) ?? []).toHaveLength(1);
+      expect(canonical.match(new RegExp(`/issues/${issue}\\b`, 'g')) ?? []).toHaveLength(1);
     });
     expectedMirrors.forEach((issue) => {
-      expect(mirrors!.match(new RegExp(`/issues/${issue}\\b`, 'g')) ?? []).toHaveLength(1);
+      expect(mirrors.match(new RegExp(`/issues/${issue}\\b`, 'g')) ?? []).toHaveLength(1);
     });
-    expect(canonical!.match(/\| CLOSED \(completed\) \|/g) ?? []).toHaveLength(15);
-    expect(canonical!.match(/\| OPEN \(production rollout\) \|/g) ?? []).toHaveLength(1);
-    expect(mirrors!.match(/\| CLOSED \(not planned; duplicate mirror\) \|/g) ?? []).toHaveLength(9);
+    expect(canonical.match(/\| CLOSED \(completed(?:; staging scope)?\) \|/g) ?? []).toHaveLength(16);
+    expect(mirrors.match(/\| CLOSED \(not planned; duplicate mirror\) \|/g) ?? []).toHaveLength(9);
   });
 
   it('documents the processes CI long-tail outage', () => {
