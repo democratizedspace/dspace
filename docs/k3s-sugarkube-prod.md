@@ -169,8 +169,8 @@ If rehearsal succeeds and you proceed to production, switch back to `docs/exampl
 ## DSPACE v3.0.1 recovery chart retention
 
 While DSPACE v3.0.1 is an approved production rollback candidate, retain the
-`release/chart-3.0.x` branch. Its chart `3.0.2` manages application v3.0.1 through the immutable
-`main-1a31a56` image. Publish only after the recovery PR merges, by placing `chart-v3.0.2` on the
+`release/chart-3.0.x` branch. Its chart `3.0.3` manages application v3.0.1 through the immutable
+`main-1a31a56` image. Publish only after the recovery PR merges, by placing `chart-v3.0.3` on the
 exact approved recovery-branch commit. Chart `3.0.1` is permanently tombstoned.
 
 The publication run is not complete evidence until operators capture and independently verify the
