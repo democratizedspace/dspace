@@ -1,25 +1,28 @@
 'use strict';
 
-const WORKSTORAGE_FLAG = '--no-experimental-webstorage';
-const MIN_AFFECTED_NODE_MAJOR = 22;
+const WEBSTORAGE_FLAG = '--no-experimental-webstorage';
 
-function nodeMajorVersion(nodeVersion = process.versions.node) {
-  return Number(String(nodeVersion).split('.')[0]);
+// Node's experimental native `localStorage`/`sessionStorage` global (introduced in
+// Node 22.4.0, not at the start of the Node 22 line) shadows Vitest's jsdom Storage
+// implementation: Vitest only installs its own working Storage onto the test global
+// when the key isn't already present there, so any Node build that ships the native
+// global breaks jsdom tests touching localStorage/sessionStorage.
+// `--no-experimental-webstorage` removes Node's native global so Vitest's normal jsdom
+// wiring applies, but the flag itself doesn't exist before Node 22.4.0 and passing it
+// there is a fatal "not allowed in NODE_OPTIONS" startup error. Ask the running Node
+// binary directly whether it recognizes the flag, via `process.allowedNodeEnvironmentFlags`,
+// instead of hardcoding a version cutoff, so this stays correct across every Node release.
+function supportsWebStorageFlag(
+  allowedFlags = process.allowedNodeEnvironmentFlags
+) {
+  return allowedFlags.has(WEBSTORAGE_FLAG);
 }
 
-// Node >=22 ships an experimental native `localStorage`/`sessionStorage` global that
-// evaluates to `undefined` without `--localstorage-file`. Vitest's jsdom environment
-// setup skips installing its own working Storage implementation whenever the key is
-// already present on the process global, so on those Node versions every jsdom test
-// that touches localStorage/sessionStorage breaks. `--no-experimental-webstorage`
-// removes Node's native global so Vitest's normal jsdom wiring applies. The flag does
-// not exist on Node 20 (this repo's pinned version) and passing it there is a fatal
-// "not allowed in NODE_OPTIONS" startup error, so only add it when running on Node >=22.
 function addWebStorageWorkaroundToEnv(
   env = process.env,
-  nodeVersion = process.versions.node
+  allowedFlags = process.allowedNodeEnvironmentFlags
 ) {
-  if (nodeMajorVersion(nodeVersion) < MIN_AFFECTED_NODE_MAJOR) {
+  if (!supportsWebStorageFlag(allowedFlags)) {
     return env;
   }
 
@@ -29,8 +32,8 @@ function addWebStorageWorkaroundToEnv(
     ? existingNodeOptions.split(/\s+/)
     : [];
 
-  if (!existingOptions.includes(WORKSTORAGE_FLAG)) {
-    existingOptions.push(WORKSTORAGE_FLAG);
+  if (!existingOptions.includes(WEBSTORAGE_FLAG)) {
+    existingOptions.push(WEBSTORAGE_FLAG);
   }
 
   nextEnv.NODE_OPTIONS = existingOptions.join(' ').trim();
@@ -39,7 +42,6 @@ function addWebStorageWorkaroundToEnv(
 
 module.exports = {
   addWebStorageWorkaroundToEnv,
-  nodeMajorVersion,
-  WORKSTORAGE_FLAG,
-  MIN_AFFECTED_NODE_MAJOR,
+  supportsWebStorageFlag,
+  WEBSTORAGE_FLAG,
 };
