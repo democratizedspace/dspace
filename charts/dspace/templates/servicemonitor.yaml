@@ -32,4 +32,23 @@ spec:
       bearerTokenSecret: # scan-secrets: ignore (Kubernetes Secret reference field, not secret material)
         name: {{ $metricsAuth.existingSecret | quote }}
         key: {{ $metricsAuth.secretKey | default "token" | quote }}
+      relabelings:
+        - action: replace
+          targetLabel: app
+          replacement: {{ include "dspace.name" . | quote }}
+        - action: replace
+          targetLabel: environment
+          replacement: {{ .Values.environment | default "production" | quote }}
+        - action: replace
+          targetLabel: namespace
+          replacement: {{ .Release.Namespace | quote }}
+        - action: replace
+          targetLabel: release
+          replacement: {{ .Release.Name | quote }}
+        - action: replace
+          targetLabel: cluster
+          replacement: {{ $serviceMonitor.cluster | default "sugarkube" | quote }}
+        {{- with $serviceMonitor.relabelings }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
 {{- end }}

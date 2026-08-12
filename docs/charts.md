@@ -37,6 +37,9 @@ settings.
   (liveness) and `/healthz` (readiness) respectively.
 - `probes.liveness` / `probes.readiness`: Probe timing defaults (`initialDelaySeconds`,
   `periodSeconds`, `timeoutSeconds`, `failureThreshold`).
+- `serviceMonitor.relabelings`: Optional list of extra Prometheus relabeling rules appended after
+  the chart's five built-in `app`/`environment`/`namespace`/`release`/`cluster` relabelings.
+  Defaults to `[]`. Requires `metrics.enabled=true` and `serviceMonitor.enabled=true`.
 
 For development, `charts/dspace/values.dev.yaml` enables ingress and sets a placeholder host:
 `dspace-v3.example.dev`. Override this host for your own environment.
@@ -101,3 +104,25 @@ Issue #4731 remains open after the implementation PR. Before it can be closed, i
 the single successful publication run and capture its full source SHA, OCI reference, packaged
 archive SHA-256 digest, and OCI manifest digest. Creating or pushing the release tag and changing
 GHCR or deployment state are separate, post-merge operator actions.
+
+## v3.0.1 chart 3.0.3 observability compatibility patch
+
+Chart `3.0.3` is a chart-only compatibility patch for the same canonical DSPACE application v3.0.1
+described above; it does not promote or change the application version or the default
+`main-1a31a56` image. It adds authenticated ServiceMonitor relabeling so Prometheus can attribute
+scraped `/metrics` samples to `app`, `environment`, `namespace`, `release`, and `cluster` labels.
+When `metrics.enabled=true` and `serviceMonitor.enabled=true`, the rendered `ServiceMonitor`
+always includes five built-in `action: replace` relabelings, in this order: `app` (chart name via
+`include "dspace.name" .`), `environment` (`.Values.environment`), `namespace`
+(`.Release.Namespace`), `release` (`.Release.Name`), and `cluster` (`serviceMonitor.cluster`,
+defaulting to `sugarkube`). Operators may append additional relabelings via the new
+`serviceMonitor.relabelings` values key, which defaults to `[]`; any entries provided there are
+rendered after the five built-in rules, in the order supplied.
+
+This section is additive. The "v3.0.1 chart-only recovery release" section above documents chart
+`3.0.2` and remains unchanged, immutable history; it is not superseded, rewritten, or deleted by
+this patch.
+
+As with chart `3.0.2`, merging this PR into `release/chart-3.0.x` does not publish anything.
+Publication requires a separate, reviewed maintainer action creating the `chart-v3.0.3` tag at the
+exact merged commit on this branch. This PR does not create or push that tag.

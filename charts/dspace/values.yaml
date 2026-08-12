@@ -26,6 +26,7 @@ serviceMonitor:
   scrapeTimeout: 10s
   additionalLabels:
     release: kube-prometheus-stack
+  relabelings: []
   cluster: sugarkube
 
 ingress:
