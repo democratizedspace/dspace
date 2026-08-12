@@ -84,16 +84,16 @@ describe('independent DSPACE application and chart coordinates', () => {
       expect(result.stdout).toContain(`chart version ${chart}`);
     }));
 
-  it('permits chart 3.0.2 with application 3.0.1', () =>
+  it('permits chart 3.0.3 with application 3.0.1', () =>
     withFixture((root) => {
       expect(currentVersions(root)).toEqual({
         application: '3.0.1',
-        chart: '3.0.2',
+        chart: '3.0.3',
       });
       const result = runGuard(root);
       expect(result.status, result.stderr).toBe(0);
       expect(result.stdout).toContain('application version 3.0.1');
-      expect(result.stdout).toContain('chart version 3.0.2');
+      expect(result.stdout).toContain('chart version 3.0.3');
     }));
 
   it.each([
