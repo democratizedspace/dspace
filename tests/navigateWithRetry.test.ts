@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { Page } from '../frontend/e2e/test-helpers';
@@ -445,15 +446,18 @@ describe('navigateWithRetry', () => {
 });
 
 describe('remote chat smoke navigation contract', () => {
-  const source = readFileSync(
-    resolve(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
-    'utf8'
-  );
-  const openExpectedPanel = source.match(
-    /async function openExpectedPanel[\s\S]*?\n}\n\nasync function selectOpenAI/
-  )?.[0];
-
   it('uses bounded opted-in navigation and verifies final origin before hydration', () => {
+    const source = readFileSync(
+      resolve(
+        dirname(fileURLToPath(import.meta.url)),
+        '../frontend/e2e/remote-chat-smoke.spec.ts'
+      ),
+      'utf8'
+    );
+    const openExpectedPanel = source.match(
+      /async function openExpectedPanel[\s\S]*?\n}\n\nasync function selectOpenAI/
+    )?.[0];
+
     expect(openExpectedPanel).toBeDefined();
     expect(openExpectedPanel).toContain(
       "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });"
