@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { Page } from '../frontend/e2e/test-helpers';
@@ -31,6 +33,12 @@ function createTimeoutError(
   const error = new Error(message);
   error.name = 'TimeoutError';
   return error;
+}
+
+function createAbortedNavigationError(): Error {
+  return new Error(
+    'page.goto: net::ERR_ABORTED at https://democratized.space/chat\nCall log:\n  - navigating to "https://democratized.space/chat"'
+  );
 }
 
 describe('navigateWithRetry', () => {
@@ -150,6 +158,98 @@ describe('navigateWithRetry', () => {
 
     expect(page.goto).toHaveBeenCalledTimes(2);
     expect(page.waitForTimeout).toHaveBeenCalledTimes(1);
+  });
+
+  it('retries an opted-in Playwright navigation abort before succeeding', async () => {
+    const page = createMockPage([createAbortedNavigationError(), 'success']);
+
+    await expect(
+      navigateWithRetry(page, '/chat', {
+        attempts: 2,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+        retryAbortedNavigation: true,
+      })
+    ).resolves.toBeUndefined();
+
+    expect(page.goto).toHaveBeenCalledTimes(2);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Retrying navigation to /chat after aborted navigation (attempt 1 of 2)'
+    );
+  });
+
+  it('retries multiple opted-in navigation aborts within both bounds', async () => {
+    const page = createMockPage([
+      createAbortedNavigationError(),
+      createAbortedNavigationError(),
+      'success',
+    ]);
+
+    await expect(
+      navigateWithRetry(page, '/chat', {
+        attempts: 3,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+        retryAbortedNavigation: true,
+      })
+    ).resolves.toBeUndefined();
+
+    expect(page.goto).toHaveBeenCalledTimes(3);
+    expect(page.waitForTimeout).toHaveBeenCalledTimes(2);
+  });
+
+  it('fails abort exhaustion with the original Playwright diagnostic context', async () => {
+    const originalError = createAbortedNavigationError();
+    const page = createMockPage([
+      originalError,
+      createAbortedNavigationError(),
+      'success',
+    ]);
+
+    await expect(
+      navigateWithRetry(page, '/chat', {
+        attempts: 2,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+        retryAbortedNavigation: true,
+      })
+    ).rejects.toThrow(
+      'page.goto: net::ERR_ABORTED at https://democratized.space/chat\nCall log:'
+    );
+
+    expect(page.goto).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not retry a navigation abort without explicit opt-in', async () => {
+    const page = createMockPage([createAbortedNavigationError(), 'success']);
+
+    await expect(navigateWithRetry(page, '/chat')).rejects.toThrow(
+      'after 1 attempt'
+    );
+
+    expect(page.goto).toHaveBeenCalledTimes(1);
+    expect(page.waitForTimeout).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    'page.goto: net::ERR_ABORTED while loading https://democratized.space/chat',
+    'page.goto: net::ERR_ABORTED at ftp://democratized.space/chat',
+    'page.goto: net::ERR_ABORTED at https://democratized.space/chat unrelated trailing text',
+    'routing/configuration: /chat origin drift',
+    'hydration: chat panel did not hydrate',
+    'assertion: expected exactly one chat panel',
+  ])('does not retry near-match or fail-closed error: %s', async (message) => {
+    const page = createMockPage([new Error(message), 'success']);
+
+    await expect(
+      navigateWithRetry(page, '/chat', {
+        attempts: 2,
+        retryAbortedNavigation: true,
+      })
+    ).rejects.toThrow('after 1 attempt');
+
+    expect(page.goto).toHaveBeenCalledTimes(1);
+    expect(page.waitForTimeout).not.toHaveBeenCalled();
   });
 
   it('succeeds on the first attempt without sleeping or logging', async () => {
@@ -294,5 +394,23 @@ describe('navigateWithRetry', () => {
       2,
       'Suppressing further retry logs for /; attempts 2-4 will retry silently'
     );
+  });
+});
+
+describe('remote chat smoke navigation', () => {
+  it('opts openExpectedPanel into bounded navigation and verifies the final origin', () => {
+    const source = readFileSync(
+      'frontend/e2e/remote-chat-smoke.spec.ts',
+      'utf8'
+    );
+    const openExpectedPanel = source.match(
+      /async function openExpectedPanel[\s\S]*?\n}\n\nasync function selectOpenAI/
+    )?.[0];
+
+    expect(openExpectedPanel).toContain(
+      "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true })"
+    );
+    expect(openExpectedPanel).toContain('new URL(page.url()).origin');
+    expect(openExpectedPanel).toContain('await waitForHydration(page)');
   });
 });
