@@ -1,6 +1,6 @@
+// @vitest-environment node
+
 import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { Page } from '../frontend/e2e/test-helpers';
@@ -448,26 +448,32 @@ describe('navigateWithRetry', () => {
 describe('remote chat smoke navigation contract', () => {
   it('uses bounded opted-in navigation and verifies final origin before hydration', () => {
     const source = readFileSync(
-      resolve(
-        dirname(fileURLToPath(import.meta.url)),
-        '../frontend/e2e/remote-chat-smoke.spec.ts'
-      ),
+      new URL('../frontend/e2e/remote-chat-smoke.spec.ts', import.meta.url),
       'utf8'
     );
-    const openExpectedPanel = source.match(
-      /async function openExpectedPanel[\s\S]*?\n}\n\nasync function selectOpenAI/
-    )?.[0];
+    const openExpectedPanelStart = source.indexOf(
+      'async function openExpectedPanel'
+    );
+    const selectOpenAIBoundary = source.indexOf(
+      'async function selectOpenAI',
+      openExpectedPanelStart
+    );
 
-    expect(openExpectedPanel).toBeDefined();
+    expect(openExpectedPanelStart).toBeGreaterThanOrEqual(0);
+    expect(selectOpenAIBoundary).toBeGreaterThan(openExpectedPanelStart);
+
+    const openExpectedPanel = source.slice(
+      openExpectedPanelStart,
+      selectOpenAIBoundary
+    );
+
     expect(openExpectedPanel).toContain(
       "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });"
     );
     expect(openExpectedPanel).not.toContain("page.goto('/chat')");
 
-    const originCheck = openExpectedPanel!.indexOf(
-      'new URL(page.url()).origin'
-    );
-    const hydrationCheck = openExpectedPanel!.indexOf(
+    const originCheck = openExpectedPanel.indexOf('new URL(page.url()).origin');
+    const hydrationCheck = openExpectedPanel.indexOf(
       'await waitForHydration(page)'
     );
     expect(originCheck).toBeGreaterThan(-1);
