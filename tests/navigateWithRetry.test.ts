@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { Page } from '../frontend/e2e/test-helpers';
@@ -152,6 +154,105 @@ describe('navigateWithRetry', () => {
     expect(page.waitForTimeout).toHaveBeenCalledTimes(1);
   });
 
+  it('retries an opted-in Playwright navigation abort before succeeding', async () => {
+    const page = createMockPage([
+      new Error(
+        'page.goto: net::ERR_ABORTED at https://democratized.space/chat'
+      ),
+      'success',
+    ]);
+
+    await expect(
+      navigateWithRetry(page, '/chat', {
+        attempts: 2,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+        retryAbortedNavigation: true,
+      })
+    ).resolves.toBeUndefined();
+
+    expect(page.goto).toHaveBeenCalledTimes(2);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      'Retrying navigation to /chat after aborted navigation (attempt 1 of 2)'
+    );
+  });
+
+  it('retries multiple opted-in navigation aborts within the configured bounds', async () => {
+    const aborted = () =>
+      new Error(
+        'page.goto: net::ERR_ABORTED at https://democratized.space/chat\nCall log:\n  - navigating to "/chat"'
+      );
+    const page = createMockPage([aborted(), aborted(), 'success']);
+
+    await expect(
+      navigateWithRetry(page, '/chat', {
+        attempts: 3,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+        retryAbortedNavigation: true,
+      })
+    ).resolves.toBeUndefined();
+
+    expect(page.goto).toHaveBeenCalledTimes(3);
+    expect(page.waitForTimeout).toHaveBeenCalledTimes(2);
+  });
+
+  it('preserves the original abort diagnostic when opted-in retries are exhausted', async () => {
+    const diagnostic =
+      'page.goto: net::ERR_ABORTED at https://democratized.space/chat\nCall log:\n  - navigating to "/chat"';
+    const page = createMockPage([new Error(diagnostic), new Error(diagnostic)]);
+
+    await expect(
+      navigateWithRetry(page, '/chat', {
+        attempts: 2,
+        delayMs: 1,
+        maxDurationMs: 20_000,
+        retryAbortedNavigation: true,
+      })
+    ).rejects.toThrow(
+      `${diagnostic} while navigating to /chat after 2 attempts`
+    );
+
+    expect(page.goto).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not retry a navigation abort without explicit opt-in', async () => {
+    const page = createMockPage([
+      new Error(
+        'page.goto: net::ERR_ABORTED at https://democratized.space/chat'
+      ),
+      'success',
+    ]);
+
+    await expect(navigateWithRetry(page, '/chat')).rejects.toThrow(
+      'after 1 attempt'
+    );
+    expect(page.goto).toHaveBeenCalledTimes(1);
+    expect(page.waitForTimeout).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    'page.goto: net::ERR_ABORTED',
+    'page.goto: net::ERR_ABORTED while loading https://democratized.space/chat',
+    'page.goto: net::ERR_ABORTED at file:///chat',
+    'locator.click: net::ERR_ABORTED at https://democratized.space/chat',
+  ])(
+    'does not retry unrelated or near-match abort text: %s',
+    async (message) => {
+      const page = createMockPage([new Error(message), 'success']);
+
+      await expect(
+        navigateWithRetry(page, '/chat', {
+          attempts: 2,
+          retryAbortedNavigation: true,
+        })
+      ).rejects.toThrow('after 1 attempt');
+
+      expect(page.goto).toHaveBeenCalledTimes(1);
+      expect(page.waitForTimeout).not.toHaveBeenCalled();
+    }
+  );
+
   it('succeeds on the first attempt without sleeping or logging', async () => {
     const page = createMockPage(['success']);
 
@@ -294,5 +395,28 @@ describe('navigateWithRetry', () => {
       2,
       'Suppressing further retry logs for /; attempts 2-4 will retry silently'
     );
+  });
+});
+
+describe('remote chat smoke navigation', () => {
+  it('uses opted-in bounded navigation before verifying the final origin and hydration', () => {
+    const source = readFileSync(
+      'frontend/e2e/remote-chat-smoke.spec.ts',
+      'utf8'
+    );
+    const openExpectedPanel = source.slice(
+      source.indexOf('async function openExpectedPanel'),
+      source.indexOf('async function selectOpenAI')
+    );
+
+    expect(openExpectedPanel).toContain(
+      "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });"
+    );
+    expect(
+      openExpectedPanel.indexOf('new URL(page.url()).origin')
+    ).toBeGreaterThan(openExpectedPanel.indexOf('await navigateWithRetry'));
+    expect(
+      openExpectedPanel.indexOf('await waitForHydration(page)')
+    ).toBeGreaterThan(openExpectedPanel.indexOf('new URL(page.url()).origin'));
   });
 });

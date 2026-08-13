@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 
 import { expect, test, type Page } from '@playwright/test';
 
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpers';
 import {
     chatUiContractFor,
     type IdentityContract,
@@ -271,11 +271,10 @@ async function installSuccessfulRelay(
 }
 
 async function openExpectedPanel(page: Page, provider = expectedProvider) {
-    const navigation = await page.goto('/chat');
-    expect(
-        new URL(navigation?.url() || page.url()).origin,
-        'routing/configuration: /chat origin drift'
-    ).toBe(requestedOrigin);
+    await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });
+    expect(new URL(page.url()).origin, 'routing/configuration: /chat origin drift').toBe(
+        requestedOrigin
+    );
     await waitForHydration(page);
     if (fault === 'hydration') throw new Error('hydration: injected bounded CI fault');
     const panels = page.locator('[data-testid="chat-panel"]');
