@@ -25,6 +25,7 @@ const CONNECTION_REFUSED_PATTERNS = [
 ];
 
 const PLAYWRIGHT_GOTO_TIMEOUT_PATTERN = /^page\.goto: Timeout \d+ms exceeded\.(?:\r?\n|$)/;
+const PLAYWRIGHT_GOTO_ABORTED_PATTERN = /^page\.goto: net::ERR_ABORTED at \S+(?:\r?\n|$)/;
 
 const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
@@ -98,10 +99,14 @@ type NavigateWithRetryOptions = {
     maxLogAttempts?: number;
     maxDurationMs?: number;
     attemptTimeoutMs?: number;
+    retryAbortedNavigation?: boolean;
     now?: () => number;
 };
 
-function getNavigationRetryReason(error: unknown): 'connection refusal' | 'timeout' | null {
+function getNavigationRetryReason(
+    error: unknown,
+    retryAbortedNavigation: boolean
+): 'connection refusal' | 'timeout' | 'aborted navigation' | null {
     const message = error instanceof Error ? (error.message ?? String(error)) : String(error ?? '');
 
     if (CONNECTION_REFUSED_PATTERNS.some((pattern) => message.includes(pattern))) {
@@ -114,6 +119,10 @@ function getNavigationRetryReason(error: unknown): 'connection refusal' | 'timeo
 
     if (PLAYWRIGHT_GOTO_TIMEOUT_PATTERN.test(message)) {
         return 'timeout';
+    }
+
+    if (retryAbortedNavigation && PLAYWRIGHT_GOTO_ABORTED_PATTERN.test(message)) {
+        return 'aborted navigation';
     }
 
     return null;
@@ -137,6 +146,7 @@ export async function navigateWithRetry(
         maxLogAttempts = DEFAULT_MAX_LOG_ATTEMPTS,
         maxDurationMs = DEFAULT_MAX_DURATION_MS,
         attemptTimeoutMs = DEFAULT_NAVIGATION_ATTEMPT_TIMEOUT_MS,
+        retryAbortedNavigation = false,
         now = () => Date.now(),
     }: NavigateWithRetryOptions = {}
 ): Promise<void> {
@@ -175,7 +185,7 @@ export async function navigateWithRetry(
         } catch (error) {
             lastError = error;
 
-            const retryReason = getNavigationRetryReason(error);
+            const retryReason = getNavigationRetryReason(error, retryAbortedNavigation);
             const elapsedMs = now() - startedAt;
             const remainingAfterAttemptMs = Number.isFinite(maxDurationMs)
                 ? maxDurationMs - elapsedMs
