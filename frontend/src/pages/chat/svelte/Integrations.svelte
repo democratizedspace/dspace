@@ -2,11 +2,11 @@
     import ChatPanel from './ChatPanel.svelte';
 
     export let tokenPlace = null;
-    export let openAIChatProxy = null;
+    export let defaultChatProvider = 'token-place';
 </script>
 
 <div class="container">
-    <ChatPanel {tokenPlace} {openAIChatProxy} />
+    <ChatPanel {tokenPlace} {defaultChatProvider} />
 </div>
 
 <style>

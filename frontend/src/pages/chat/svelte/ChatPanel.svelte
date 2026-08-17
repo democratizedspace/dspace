@@ -22,6 +22,7 @@
     } from '../../../stores/chat.js';
     import {
         loadGameState,
+        hasPersistedGameState,
         ready,
         state as gameStateStore,
     } from '../../../utils/gameState/common.js';
@@ -48,7 +49,7 @@
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
     export let tokenPlace = null;
-    export let openAIChatProxy = null;
+    export let defaultChatProvider = 'token-place';
 
     const message = writable('');
     const messageHistory = writable([]);
@@ -80,7 +81,7 @@
     let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
     let debugOverride = false;
-    let currentSettings = normalizeSettings();
+    let currentSettings = normalizeSettings({}, defaultChatProvider);
     let lastShowChatDebugPayload;
     let componentDestroyed = false;
     let providerUsage = null;
@@ -88,7 +89,6 @@
     $: runtimeTokenPlaceUrl = tokenPlace?.url ?? null;
     $: runtimeTokenPlaceModel = tokenPlace?.model ?? null;
     $: tokenPlaceRelayProxyAvailable = Boolean(tokenPlace?.relayProxyAvailable);
-    $: openAIProxyAvailable = Boolean(openAIChatProxy?.enabled);
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -194,9 +194,7 @@
         providerMetadata = null;
         const selectedProvider = activeProvider;
         const currentState = loadGameState();
-        const useOpenAIProxy =
-            selectedProvider === 'openai' && !currentState?.openAI?.apiKey && openAIProxyAvailable;
-        if (selectedProvider === 'openai' && !currentState?.openAI?.apiKey && !useOpenAIProxy) {
+        if (selectedProvider === 'openai' && !currentState?.openAI?.apiKey) {
             const fallback =
                 'OpenAI is selected in Settings, but no API key is saved. Add your key on /settings to use OpenAI, or switch back to token.place.';
             errorBanner = {
@@ -217,19 +215,12 @@
         }
 
         try {
-            const openAIOptions = useOpenAIProxy
-                ? {
-                      persona: currentPersona,
-                      serverChatProxy: true,
-                      serverChatProxyAvailable: true,
-                  }
-                : {
-                      persona: currentPersona,
-                      promptPayload: debugPayload,
-                  };
             const aiResponse =
                 selectedProvider === 'openai'
-                    ? await GPT5ChatV2(historyForApi, openAIOptions)
+                    ? await GPT5ChatV2(historyForApi, {
+                          persona: currentPersona,
+                          promptPayload: debugPayload,
+                      })
                     : await TokenPlaceChatV2(historyForApi, {
                           persona: currentPersona,
                           promptPayload: debugPayload,
@@ -453,7 +444,10 @@
         hydrated = true;
         await ready;
         const currentState = loadGameState();
-        const normalized = normalizeSettings(currentState?.settings);
+        const normalized = normalizeSettings(
+            hasPersistedGameState() ? currentState?.settings : {},
+            defaultChatProvider
+        );
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
@@ -523,7 +517,10 @@
         window.addEventListener('hashchange', promptDebugLinkListener);
         window.addEventListener('popstate', promptDebugLinkListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
-            const nextNormalized = normalizeSettings(value?.settings);
+            const nextNormalized = normalizeSettings(
+                hasPersistedGameState() ? value?.settings : {},
+                defaultChatProvider
+            );
             currentSettings = nextNormalized;
             if (hasPlayerStateDetails(value)) {
                 playerStateSummary = getPlayerStateSummary(value);

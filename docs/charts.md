@@ -13,11 +13,12 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
 - `image.tag`: Image tag to deploy. Defaults to the human-readable semantic application tag
-  `v3.1.1`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
+  `v3.1.2`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
   recording or proving the exact deployed image.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
 - `service.port`: Container and service port. Defaults to `8080`.
+- `chat.defaultProvider`: Chat deployment default (`token-place` or `openai`). It applies only to missing or invalid saved state; a valid user choice always wins. The chart renders it once as `DSPACE_DEFAULT_CHAT_PROVIDER` and rejects duplicates in `env`.
 - `metrics.enabled`: Enables application-side metrics configuration. Defaults to `false`.
 - `metrics.path`: Prometheus scrape path. Defaults to `/metrics`.
 - `metrics.auth.existingSecret`: Existing Secret name that contains the bearer token for
@@ -136,7 +137,7 @@ Deploy the chart with a custom host and image tag:
 helm install dspace charts/dspace \
   -f charts/dspace/values.dev.yaml \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3.1.1
+  --set image.tag=v3.1.2
 ```
 
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
@@ -149,7 +150,7 @@ Helm commands below remain useful for local clusters, development environments, 
 inspection.
 
 The chart is published only by pushing the exact tag `chart-v<chart-version>` (for example,
-`chart-v3.1.2`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
+`chart-v3.1.3`). The tag must point to the reviewed immutable commit whose `Chart.yaml:version`
 matches it exactly; ordinary `main` and `v3` pushes never publish charts. Publication checks GHCR
 twice and fails closed unless the coordinate is authoritatively absent, so an existing chart
 coordinate cannot be replaced. Chart version `3.0.1` is permanently tombstoned and cannot be
@@ -176,7 +177,7 @@ helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --version 3.1.2 \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3.1.1
+  --set image.tag=v3.1.2
 ```
 
 When installing from the OCI registry, you will not have access to

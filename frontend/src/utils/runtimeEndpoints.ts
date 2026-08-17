@@ -6,6 +6,18 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import buildMeta from '../generated/build_meta.json';
 import { normalizeBuildIdentity } from './buildIdentity.js';
 
+export type ChatProvider = 'token-place' | 'openai';
+const DEFAULT_CHAT_PROVIDER: ChatProvider = 'token-place';
+const CHAT_PROVIDERS = new Set<ChatProvider>([DEFAULT_CHAT_PROVIDER, 'openai']);
+
+export function resolveRuntimeDefaultChatProvider(
+    value = process.env.DSPACE_DEFAULT_CHAT_PROVIDER
+): ChatProvider {
+    if (value === undefined) return DEFAULT_CHAT_PROVIDER;
+    if (CHAT_PROVIDERS.has(value as ChatProvider)) return value as ChatProvider;
+    throw new Error('DSPACE_DEFAULT_CHAT_PROVIDER must be exactly "token-place" or "openai"');
+}
+
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     const envOverride = readBooleanOverride(process.env.DSPACE_OFFLINE_WORKER_ENABLED);
     if (envOverride !== undefined) {
@@ -152,6 +164,7 @@ export function buildRuntimeConfigResponse(): Response {
         const offlineWorkerEnabled = parseOfflineWorkerEnabled(flags);
         const telemetryEnabled = parseTelemetryEnabled(flags);
         const tokenPlace = resolveRuntimeTokenPlaceConfig();
+        const defaultProvider = resolveRuntimeDefaultChatProvider();
 
         const body = {
             offlineWorker: {
@@ -161,6 +174,7 @@ export function buildRuntimeConfigResponse(): Response {
                 enabled: telemetryEnabled,
             },
             tokenPlace,
+            chat: { defaultProvider },
             featureFlags: flags.tokens,
         };
 

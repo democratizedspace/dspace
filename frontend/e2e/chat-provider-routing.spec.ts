@@ -174,6 +174,28 @@ test.describe('Chat provider routing', () => {
         await clearUserData(page);
     });
 
+    test('fresh profile uses the OpenAI deployment default and remains key-gated', async ({
+        page,
+    }) => {
+        test.skip(
+            process.env.DSPACE_DEFAULT_CHAT_PROVIDER !== 'openai',
+            'requires the OpenAI deployment-default web server'
+        );
+        let providerCalls = 0;
+        await page.route(/https:\/\/(token\.place|api\.openai\.com)\/.*/, async (route) => {
+            providerCalls += 1;
+            await route.abort();
+        });
+
+        const chatPanel = await openChat(page, 'openai');
+        await sendFromPanel(chatPanel, 'Verify the deployment default key gate');
+        await expect(chatPanel.locator('.chat-error')).toHaveAttribute(
+            'data-error-type',
+            'missing-key'
+        );
+        expect(providerCalls).toBe(0);
+    });
+
     test('fresh profile defaults to token.place API v1 without auth or OpenAI key UI', async ({
         page,
     }) => {

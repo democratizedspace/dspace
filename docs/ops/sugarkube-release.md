@@ -5,6 +5,10 @@ runbook documents the known-good flow instead of replacing it. Use this page as 
 release source of truth for Sugarkube operators; keep lower-level Kubernetes, chart, and Cloudflare
 setup in their existing runbooks.
 
+## Chat provider promotion coordinate
+
+Set the reviewed Helm value `chat.defaultProvider` to exactly `token-place` or `openai`. The chart renders this once as `DSPACE_DEFAULT_CHAT_PROVIDER`, and `/config.json` reports it as `chat.defaultProvider` for release-aware smoke agreement. This deployment default affects only missing or invalid saved browser state: it never overwrites a valid provider explicitly saved by a user. Selecting OpenAI does not bypass its local API-key gate, and no provider credential belongs in chart values.
+
 ## Release contract
 
 - **Application image:** `ghcr.io/democratizedspace/dspace`

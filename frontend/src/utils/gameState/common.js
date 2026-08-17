@@ -57,6 +57,7 @@ let warnedFallback = false;
 let readyResolved = false;
 let loadedFromPersistence = false;
 export const isUsingLocalStorage = () => useLocalStorage;
+export const hasPersistedGameState = () => loadedFromPersistence;
 
 function warnFallback() {
     if (warnedFallback) return;

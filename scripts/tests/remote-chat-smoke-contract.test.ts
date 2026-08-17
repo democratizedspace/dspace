@@ -57,6 +57,18 @@ function completedChild(
 }
 
 describe('remote chat smoke UI contract selection', () => {
+  it('keeps the runtime deployment-default agreement assertion release-aware', async () => {
+    const source = await readFile(
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
+      'utf8'
+    );
+    expect(source).toContain("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'");
+    expect(source).toContain('.toBe(expectedProvider)');
+    expect(source.indexOf("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'")).toBeLessThan(
+      source.indexOf("if (expectedProvider === 'openai')")
+    );
+  });
+
   it.each([
     ['legacy-build-meta-v1', 'openai', 'legacy-inline-openai-v1'],
     ['legacy-build-meta-v1', 'token-place', 'modern-settings-v1'],
