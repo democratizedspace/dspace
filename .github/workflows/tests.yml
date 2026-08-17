@@ -188,3 +188,10 @@ jobs:
       - name: Run Playwright tests (${{ matrix.shard }})
         working-directory: frontend
         run: npx playwright test --shard=${{ matrix.shard }} --reporter=dot
+
+      - name: Run OpenAI deployment-default Playwright contracts
+        if: matrix.shard == '1/2'
+        working-directory: frontend
+        env:
+          DSPACE_DEFAULT_CHAT_PROVIDER: openai
+        run: npx playwright test e2e/chat-provider-routing.spec.ts --project=chromium --grep 'OpenAI deployment default'

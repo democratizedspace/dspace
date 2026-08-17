@@ -156,8 +156,12 @@ async function seedState(page: Page, state: Record<string, unknown>) {
     }, state);
 }
 
-async function openChat(page: Page, provider: 'token-place' | 'openai' = 'token-place') {
-    await page.goto('/chat');
+async function openChat(
+    page: Page,
+    provider: 'token-place' | 'openai' = 'token-place',
+    route = '/chat'
+) {
+    await page.goto(route);
     await waitForHydration(page);
     const chatPanel = page.locator(`[data-testid="chat-panel"][data-provider="${provider}"]`);
     await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
@@ -187,13 +191,16 @@ test.describe('Chat provider routing', () => {
             await route.abort();
         });
 
-        const chatPanel = await openChat(page, 'openai');
-        await sendFromPanel(chatPanel, 'Verify the deployment default key gate');
-        await expect(chatPanel.locator('.chat-error')).toHaveAttribute(
-            'data-error-type',
-            'missing-key'
-        );
-        expect(providerCalls).toBe(0);
+        for (const route of ['/chat', '/dchat']) {
+            await clearUserData(page);
+            const chatPanel = await openChat(page, 'openai', route);
+            await sendFromPanel(chatPanel, 'Verify the deployment default key gate');
+            await expect(chatPanel.locator('.chat-error')).toHaveAttribute(
+                'data-error-type',
+                'missing-key'
+            );
+            expect(providerCalls).toBe(0);
+        }
     });
 
     test('OpenAI deployment default handles missing persisted, invalid persisted, unrelated save, and explicit override', async ({
