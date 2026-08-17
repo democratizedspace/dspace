@@ -12,6 +12,19 @@ describe('normalizeSettings', () => {
         expect(normalizeSettings().chatProvider).toBe('token-place');
     });
 
+    it('uses the deployment default only for missing or invalid saved state', () => {
+        expect(normalizeSettings({}, 'openai').chatProvider).toBe('openai');
+        expect(normalizeSettings({ chatProvider: 'invalid' }, 'openai').chatProvider).toBe(
+            'openai'
+        );
+        expect(normalizeSettings({ chatProvider: 'token-place' }, 'openai').chatProvider).toBe(
+            'token-place'
+        );
+        expect(normalizeSettings({ chatProvider: 'openai' }, 'token-place').chatProvider).toBe(
+            'openai'
+        );
+    });
+
     it.each([
         { caseName: 'missing', settings: {}, expectedProvider: 'token-place' },
         { caseName: 'null', settings: { chatProvider: null }, expectedProvider: 'token-place' },

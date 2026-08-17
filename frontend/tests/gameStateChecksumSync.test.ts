@@ -8,6 +8,7 @@ import {
     resetGameState,
     saveGameState,
     syncGameStateFromLocalIfStale,
+    hasExplicitChatProvider,
 } from '../src/utils/gameState/common.js';
 
 const clearIndexedDbMetaStore = async () => {
@@ -49,6 +50,8 @@ describe('game state checksum sync', () => {
 
         const newer = structuredClone(loadGameState());
         newer.inventory['multi-tab-item'] = 8;
+        newer.settings.chatProvider = 'invalid';
+        newer._meta.chatProviderExplicit = true;
         newer._meta.checksum = 'forced-tab-checksum';
 
         localStorage.setItem('gameState', JSON.stringify(newer));
@@ -61,6 +64,9 @@ describe('game state checksum sync', () => {
         const changed = syncGameStateFromLocalIfStale(getGameStateChecksum());
         expect(changed).toBe(true);
         expect(loadGameState().inventory['multi-tab-item']).toBe(8);
+        expect(hasExplicitChatProvider(loadGameState())).toBe(false);
+        expect(loadGameState()._meta.chatProviderExplicit).toBe(false);
+        expect(getPersistedGameStateChecksum()).toBe(getGameStateChecksum());
     });
 
     test('reads checksum from IndexedDB lightweight snapshot before localStorage fallback', async () => {

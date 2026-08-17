@@ -3,11 +3,12 @@
     import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
     import {
         loadGameState,
+        hasExplicitChatProvider,
         ready,
         saveGameState,
         state as gameStateStore,
     } from '../../utils/gameState/common.js';
-    import { DEFAULT_CHAT_PROVIDER, normalizeSettings } from '../../utils/settingsDefaults.js';
+    import { normalizeSettings } from '../../utils/settingsDefaults.js';
 
     const PROVIDERS = {
         tokenPlace: 'token-place',
@@ -15,14 +16,18 @@
     };
 
     let hydrated = false;
-    let selectedProvider = DEFAULT_CHAT_PROVIDER;
+    export let defaultChatProvider = 'token-place';
+
+    let selectedProvider = defaultChatProvider;
     let tokenPlaceTokenLite = false;
     let statusMessage = '';
     let unsubscribe;
 
     const syncFromState = (value) => {
-        const settings = normalizeSettings(value?.settings);
-        selectedProvider = settings.chatProvider;
+        const settings = normalizeSettings(value?.settings, defaultChatProvider);
+        selectedProvider = hasExplicitChatProvider(value)
+            ? settings.chatProvider
+            : defaultChatProvider;
         tokenPlaceTokenLite = settings.tokenPlaceTokenLite;
     };
 
@@ -42,7 +47,7 @@
         await ready;
         const current = loadGameState();
         const nextSettings = {
-            ...normalizeSettings(current.settings),
+            ...normalizeSettings(current.settings, defaultChatProvider),
             chatProvider: selectedProvider,
             tokenPlaceTokenLite: enabled,
         };
@@ -60,12 +65,13 @@
         await ready;
         const current = loadGameState();
         const nextSettings = {
-            ...normalizeSettings(current.settings),
+            ...normalizeSettings(current.settings, defaultChatProvider),
             chatProvider: provider,
         };
         await saveGameState({
             ...current,
             settings: nextSettings,
+            _meta: { ...current._meta, chatProviderExplicit: true },
         });
         statusMessage =
             provider === PROVIDERS.openAI
@@ -82,8 +88,9 @@
     <div class="heading">
         <h2>Chat provider</h2>
         <p>
-            token.place is the default DSPACE Chat provider. It needs no authentication, no API key,
-            and no user-facing credential setup.
+            The deployment default is {defaultChatProvider === PROVIDERS.openAI
+                ? 'OpenAI'
+                : 'token.place'}. Your saved choice remains authoritative.
         </p>
     </div>
 
@@ -100,7 +107,11 @@
                 />
                 <span>
                     <strong>token.place</strong>
-                    <small>Default provider. No API key required.</small>
+                    <small
+                        >{defaultChatProvider === PROVIDERS.tokenPlace
+                            ? 'Deployment default. '
+                            : ''}No API key required.</small
+                    >
                 </span>
             </label>
             <label class="provider-option">
@@ -113,7 +124,10 @@
                 />
                 <span>
                     <strong>OpenAI</strong>
-                    <small>Use your own OpenAI API key stored locally in DSPACE.</small>
+                    <small
+                        >{defaultChatProvider === PROVIDERS.openAI ? 'Deployment default. ' : ''}Use
+                        your own OpenAI API key stored locally in DSPACE.</small
+                    >
                 </span>
             </label>
         </fieldset>

@@ -40,6 +40,7 @@ let gameStateSubscriber: ((state: { settings: { showChatDebugPayload: boolean } 
     null;
 
 vi.mock('../../../../utils/gameState/common.js', () => ({
+    hasExplicitChatProvider: vi.fn(() => true),
     loadGameState: vi.fn(() => ({
         settings: {
             showChatDebugPayload: true,

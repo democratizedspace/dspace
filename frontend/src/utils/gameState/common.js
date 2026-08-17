@@ -56,7 +56,21 @@ let useLocalStorage = false;
 let warnedFallback = false;
 let readyResolved = false;
 let loadedFromPersistence = false;
+const hasValidChatProvider = (state) =>
+    state?.settings?.chatProvider === 'token-place' || state?.settings?.chatProvider === 'openai';
+const canonicalizeChatProviderProvenance = (state) => {
+    if (!state || typeof state !== 'object') return state;
+    ensureMeta(state);
+    const marker = state[META_KEY].chatProviderExplicit;
+    // A markerless legacy save with a valid raw provider represents an intentional choice.
+    state[META_KEY].chatProviderExplicit =
+        hasValidChatProvider(state) && (marker === true || marker === undefined);
+    return state;
+};
 export const isUsingLocalStorage = () => useLocalStorage;
+export const hasPersistedGameState = () => loadedFromPersistence;
+export const hasExplicitChatProvider = (state) =>
+    hasValidChatProvider(state) && state?.[META_KEY]?.chatProviderExplicit === true;
 
 function warnFallback() {
     if (warnedFallback) return;
@@ -353,7 +367,7 @@ const initializeGameState = () => ({
     itemContainerCounts: {},
     settings: { ...DEFAULT_SETTINGS },
     versionNumberString: CURRENT_VERSION,
-    [META_KEY]: { lastUpdated: Date.now() },
+    [META_KEY]: { lastUpdated: Date.now(), chatProviderExplicit: false },
 });
 
 const ensureMeta = (state) => {
@@ -419,6 +433,7 @@ export const validateGameState = (state) => {
     if (!state || typeof state !== 'object') {
         return initializeGameState();
     }
+    canonicalizeChatProviderProvenance(state);
     if (!isPlainObject(state.quests)) {
         state.quests = {};
     }
@@ -519,6 +534,7 @@ export const saveGameState = async (newState) => {
     const previousSnapshot = structuredClone(gameState);
     const nextState = validateGameState(structuredClone(newState));
     nextState[META_KEY].lastUpdated = Date.now();
+    stampStateChecksum(nextState);
     gameState = nextState;
     state.set(gameState);
 

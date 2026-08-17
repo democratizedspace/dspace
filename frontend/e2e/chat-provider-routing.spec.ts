@@ -156,8 +156,12 @@ async function seedState(page: Page, state: Record<string, unknown>) {
     }, state);
 }
 
-async function openChat(page: Page, provider: 'token-place' | 'openai' = 'token-place') {
-    await page.goto('/chat');
+async function openChat(
+    page: Page,
+    provider: 'token-place' | 'openai' = 'token-place',
+    route = '/chat'
+) {
+    await page.goto(route);
     await waitForHydration(page);
     const chatPanel = page.locator(`[data-testid="chat-panel"][data-provider="${provider}"]`);
     await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
@@ -172,6 +176,78 @@ async function sendFromPanel(chatPanel: ReturnType<Page['locator']>, text: strin
 test.describe('Chat provider routing', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+    });
+
+    test('fresh profile uses the OpenAI deployment default and remains key-gated', async ({
+        page,
+    }) => {
+        test.skip(
+            process.env.DSPACE_DEFAULT_CHAT_PROVIDER !== 'openai',
+            'requires the OpenAI deployment-default web server'
+        );
+        let providerCalls = 0;
+        await page.route(/https:\/\/(token\.place|api\.openai\.com)\/.*/, async (route) => {
+            providerCalls += 1;
+            await route.abort();
+        });
+
+        for (const route of ['/chat', '/dchat']) {
+            await clearUserData(page);
+            const chatPanel = await openChat(page, 'openai', route);
+            await sendFromPanel(chatPanel, 'Verify the deployment default key gate');
+            await expect(chatPanel.locator('.chat-error')).toHaveAttribute(
+                'data-error-type',
+                'missing-key'
+            );
+            expect(providerCalls).toBe(0);
+        }
+    });
+
+    test('OpenAI deployment default handles missing persisted, invalid persisted, unrelated save, and explicit override', async ({
+        page,
+    }) => {
+        test.skip(
+            process.env.DSPACE_DEFAULT_CHAT_PROVIDER !== 'openai',
+            'requires the OpenAI deployment-default web server'
+        );
+
+        for (const settings of [{}, { chatProvider: 'invalid' }]) {
+            await clearUserData(page);
+            await seedState(page, {
+                settings,
+                _meta: { chatProviderExplicit: true, lastUpdated: Date.now() },
+            });
+            await openChat(page, 'openai');
+        }
+
+        await clearUserData(page);
+        await seedState(page, {
+            settings: { chatProvider: 'token-place' },
+            _meta: { chatProviderExplicit: false, lastUpdated: Date.now() },
+        });
+        await page.goto('/settings');
+        await waitForHydration(page);
+        await expect(page.getByText('The deployment default is OpenAI.')).toBeVisible();
+        await page.getByLabel('OpenAI API key', { exact: true }).fill('sk-unrelated-save');
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await page.reload();
+        await waitForHydration(page);
+        await expect(page.locator('input[name="chat-provider"][value="openai"]')).toBeChecked();
+        await expect
+            .poll(() =>
+                page.evaluate(() => {
+                    const saved = JSON.parse(localStorage.getItem('gameState') || '{}');
+                    return saved._meta?.chatProviderExplicit;
+                })
+            )
+            .toBe(false);
+
+        await clearUserData(page);
+        await seedState(page, {
+            settings: { chatProvider: 'token-place' },
+            _meta: { chatProviderExplicit: true, lastUpdated: Date.now() },
+        });
+        await openChat(page, 'token-place');
     });
 
     test('fresh profile defaults to token.place API v1 without auth or OpenAI key UI', async ({
