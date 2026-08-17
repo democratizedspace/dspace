@@ -21,6 +21,7 @@
         setActivePersona,
     } from '../../../stores/chat.js';
     import {
+        hasValidPersistedChatProviderSelection,
         loadGameState,
         ready,
         state as gameStateStore,
@@ -49,6 +50,7 @@
 
     export let tokenPlace = null;
     export let openAIChatProxy = null;
+    export let defaultChatProvider = 'token-place';
 
     const message = writable('');
     const messageHistory = writable([]);
@@ -80,7 +82,7 @@
     let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
     let debugOverride = false;
-    let currentSettings = normalizeSettings();
+    let currentSettings = normalizeSettings({}, defaultChatProvider);
     let lastShowChatDebugPayload;
     let componentDestroyed = false;
     let providerUsage = null;
@@ -111,6 +113,15 @@
         activeProvider === 'openai' ? 'OpenAI selected in Settings' : 'Powered by token.place';
     $: if (errorBanner?.type === 'missing-key' && activeProvider !== 'openai') {
         errorBanner = null;
+    }
+
+    function normalizeRuntimeSettings(settings) {
+        const userSelectionIsAuthoritative =
+            settings?.chatProviderUserSelected === true || hasValidPersistedChatProviderSelection();
+        return normalizeSettings(
+            settings,
+            userSelectionIsAuthoritative ? settings?.chatProvider : defaultChatProvider
+        );
     }
 
     function getWelcomeText(persona) {
@@ -453,7 +464,7 @@
         hydrated = true;
         await ready;
         const currentState = loadGameState();
-        const normalized = normalizeSettings(currentState?.settings);
+        const normalized = normalizeRuntimeSettings(currentState?.settings);
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
@@ -523,7 +534,7 @@
         window.addEventListener('hashchange', promptDebugLinkListener);
         window.addEventListener('popstate', promptDebugLinkListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
-            const nextNormalized = normalizeSettings(value?.settings);
+            const nextNormalized = normalizeRuntimeSettings(value?.settings);
             currentSettings = nextNormalized;
             if (hasPlayerStateDetails(value)) {
                 playerStateSummary = getPlayerStateSummary(value);

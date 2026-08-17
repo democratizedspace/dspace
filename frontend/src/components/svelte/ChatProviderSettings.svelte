@@ -2,6 +2,7 @@
     import { onDestroy, onMount } from 'svelte';
     import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
     import {
+        hasValidPersistedChatProviderSelection,
         loadGameState,
         ready,
         saveGameState,
@@ -14,14 +15,23 @@
         openAI: 'openai',
     };
 
+    export let defaultChatProvider = 'token-place';
+
     let hydrated = false;
     let selectedProvider = DEFAULT_CHAT_PROVIDER;
     let tokenPlaceTokenLite = false;
     let statusMessage = '';
     let unsubscribe;
+    $: deploymentDefaultLabel = defaultChatProvider === PROVIDERS.openAI ? 'OpenAI' : 'token.place';
 
     const syncFromState = (value) => {
-        const settings = normalizeSettings(value?.settings);
+        const userSelectionIsAuthoritative =
+            value?.settings?.chatProviderUserSelected === true ||
+            hasValidPersistedChatProviderSelection();
+        const settings = normalizeSettings(
+            value?.settings,
+            userSelectionIsAuthoritative ? value?.settings?.chatProvider : defaultChatProvider
+        );
         selectedProvider = settings.chatProvider;
         tokenPlaceTokenLite = settings.tokenPlaceTokenLite;
     };
@@ -62,6 +72,7 @@
         const nextSettings = {
             ...normalizeSettings(current.settings),
             chatProvider: provider,
+            chatProviderUserSelected: true,
         };
         await saveGameState({
             ...current,
@@ -82,8 +93,8 @@
     <div class="heading">
         <h2>Chat provider</h2>
         <p>
-            token.place is the default DSPACE Chat provider. It needs no authentication, no API key,
-            and no user-facing credential setup.
+            The deployment default is {deploymentDefaultLabel}. A provider you save here remains
+            authoritative for this browser.
         </p>
     </div>
 
@@ -100,7 +111,7 @@
                 />
                 <span>
                     <strong>token.place</strong>
-                    <small>Default provider. No API key required.</small>
+                    <small>No API key required. Always available as a provider choice.</small>
                 </span>
             </label>
             <label class="provider-option">

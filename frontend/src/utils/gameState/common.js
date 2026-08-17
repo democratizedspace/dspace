@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
-import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
+import { isValidChatProvider, normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
 import { restoreCustomContentBackup } from '../customContentBackup.js';
@@ -56,6 +56,7 @@ let useLocalStorage = false;
 let warnedFallback = false;
 let readyResolved = false;
 let loadedFromPersistence = false;
+let validPersistedChatProviderSelection = false;
 export const isUsingLocalStorage = () => useLocalStorage;
 
 function warnFallback() {
@@ -479,6 +480,9 @@ export const ready = isBrowser
           try {
               const stored = await read(STATE_STORE);
               if (stored) {
+                  validPersistedChatProviderSelection = isValidChatProvider(
+                      stored?.settings?.chatProvider
+                  );
                   gameState = validateGameState(stored);
                   state.set(gameState);
                   loadedFromPersistence = true;
@@ -511,6 +515,8 @@ export const getGameStateChecksum = () => gameState?.[META_KEY]?.checksum ?? '';
 
 export const isGameStateReady = () => readyResolved;
 export const hasLoadedPersistedGameState = () => loadedFromPersistence;
+export const hasValidPersistedChatProviderSelection = () =>
+    loadedFromPersistence && validPersistedChatProviderSelection;
 
 export const saveGameState = async (newState) => {
     if (!readyResolved) {

@@ -18,7 +18,7 @@ setup in their existing runbooks.
   `Chart.yaml:appVersion`
 - **Chart version:** the matching `Chart.yaml:version` and `docs/apps/dspace.version`; this may
   advance independently of the application version
-- **Semantic image tag:** `v<application version>`, for example `v3.1.1`; published only for a
+- **Semantic image tag:** `v<application version>`, for example `v3.1.2`; published only for a
   release and human-readable, but not proof of the deployed image
 - **Chart release tag:** exactly `chart-v<chart version>`, pointing to the reviewed immutable commit
 
@@ -96,7 +96,7 @@ GHCR_GUARD_PASSWORD="$(gh auth token)" \
 node scripts/ghcr-manifest.mjs check-absent \
   --owner democratizedspace \
   --repo dspace \
-  --tag v3.1.1
+  --tag v3.1.2
 ```
 
 Then dispatch the fixed workflow definition from `main` (do not rerun the historical failed
@@ -106,7 +106,7 @@ workflow run):
 gh workflow run ci-image.yml \
   --repo democratizedspace/dspace \
   --ref main \
-  -f release_tag=v3.1.1
+  -f release_tag=v3.1.2
 ```
 
 The recovery validates the published release and immutable application tag, source-branch reachability,
@@ -135,14 +135,14 @@ tombstoned even if it later appears absent; this does not prohibit a newer chart
 is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
 package SHA-256, and OCI manifest digest.
 
-Chart `3.1.2` is the next immutable chart coordinate for DSPACE application `3.1.1`. Chart
+Chart `3.1.3` is the next immutable chart coordinate for DSPACE application `3.1.2`. Chart
 `3.1.1` remains a chart-only, provenance-bearing release for DSPACE application `3.1.0`, and the
 legacy `3.1.0` chart lacks the modern immutable source-revision provenance, so neither coordinate
 may be overwritten or selected where newer release evidence is required. After the application
-`3.1.1` preparation PR merges, a human operator will create `chart-v3.1.2` at the exact reviewed
+`3.1.2` preparation PR merges, a human operator will create `chart-v3.1.3` at the exact reviewed
 merge commit; preparing the coordinate does not create the tag or publish the chart.
 
-### Operator handoff for the DSPACE 3.1.1 patch release
+### Operator handoff for the DSPACE 3.1.2 patch release
 
 After this preparation merges to `main`, define `SHORT_SHA` as exactly the first seven lowercase
 hexadecimal characters of the reviewed merge commit SHA, then collect evidence in the normal
@@ -150,19 +150,19 @@ fail-closed order. The expected coordinates are:
 
 - Branch image tag: `main-SHORT_SHA` for the reviewed merge commit, published as
   `ghcr.io/democratizedspace/dspace:main-SHORT_SHA`.
-- Chart tag: `chart-v3.1.2`, pointing at the same reviewed merge commit.
-- Application release tag: `v3.1.1`, published only by the GitHub release event after the image and
+- Chart tag: `chart-v3.1.3`, pointing at the same reviewed merge commit.
+- Application release tag: `v3.1.2`, published only by the GitHub release event after the image and
   chart prerequisites exist.
 
 Required post-merge evidence for Refs #4727 and Refs #4730:
 
-1. The first semantic publication for `v3.1.1` succeeds exactly once and aliases the immutable
+1. The first semantic publication for `v3.1.2` succeeds exactly once and aliases the immutable
    `main-SHORT_SHA` image index digest without rebuilding.
 2. Rerunning the semantic job for the same release fails at the GHCR existence guard before any
    publication or tag mutation.
-3. The semantic `v3.1.1` digest remains unchanged after the rejected rerun.
+3. The semantic `v3.1.2` digest remains unchanged after the rejected rerun.
 4. `dspace-release-manifest.json` agrees with the full source SHA, immutable image tag and digest,
-   both platform digests, chart `3.1.2` digest/provenance, and semantic tag evidence.
+   both platform digests, chart `3.1.3` digest/provenance, and semantic tag evidence.
 
 Successful full releases upload the deterministic artifact
 `dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
@@ -213,11 +213,11 @@ From the Sugarkube checkout, promote the approved version or immutable branch-SH
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-promote-prod tag=3.1.1
+just dspace-oci-promote-prod tag=3.1.2
 ```
 
-The bare `3.1.1` value is the existing Sugarkube compatibility/version promote form. The image
-workflow publishes the release-only semantic application tag as `v3.1.1`; it is human-readable but
+The bare `3.1.2` value is the existing Sugarkube compatibility/version promote form. The image
+workflow publishes the release-only semantic application tag as `v3.1.2`; it is human-readable but
 not immutable deployment proof. Branch-SHA tags such as `main-REPLACE_SHORTSHA` or
 `v3-REPLACE_SHORTSHA` (or a digest) are the required audit path for exact image promotion and
 rollback.
@@ -246,7 +246,7 @@ the runtime under test). Replace the revision with the approved full 40-characte
 ```bash
 # Staging
 DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.1 \
+DSPACE_EXPECTED_VERSION=3.1.2 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
@@ -255,7 +255,7 @@ npm run qa:remote-chat-smoke
 
 # Production (run only after the staging result and promotion are approved)
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.1 \
+DSPACE_EXPECTED_VERSION=3.1.2 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \

@@ -136,3 +136,11 @@ The container listens on port `8080` internally. The Helm chart configures:
 
 Cloudflared provides outbound access from the cluster; no extra configuration is required within the
 container beyond the defaults above.
+
+### Default Chat provider
+
+`DSPACE_DEFAULT_CHAT_PROVIDER` accepts exactly `token-place` or `openai`. It defaults to
+`token-place` when unset; malformed explicit values fail closed. `/config.json` exposes the resolved
+value as `chat.defaultProvider`. The deployment default applies only to missing or invalid saved
+provider state and never overwrites a valid user choice. OpenAI remains locally key-gated, and
+token.place remains selectable.

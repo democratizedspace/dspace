@@ -377,6 +377,16 @@ test.describe('release-aware remote chat smoke', () => {
         'routing/configuration and submission: approved default journey',
         async ({ page, markJourneyEntered }) => {
             markJourneyEntered();
+            const deploymentConfigResponse = await page.request.get('/config.json');
+            expect(
+                deploymentConfigResponse.status(),
+                'routing/configuration: /config.json did not return 200'
+            ).toBe(200);
+            const deploymentConfig = await deploymentConfigResponse.json();
+            expect(
+                deploymentConfig.chat?.defaultProvider,
+                'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'
+            ).toBe(expectedProvider);
             if (expectedProvider === 'openai') {
                 let openAICalls = 0;
                 let credentialPresent = false;

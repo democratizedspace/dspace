@@ -183,3 +183,9 @@ When installing from the OCI registry, you will not have access to
 `charts/dspace/values.dev.yaml` unless you clone the repository. To customize values, either
 provide your own file with `-f <your-values.yaml>` or use `--set` flags as shown above.
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
+
+### Chat provider deployment default
+
+`chat.defaultProvider` accepts `token-place` (the default) or `openai` and renders once as
+`DSPACE_DEFAULT_CHAT_PROVIDER`. Do not duplicate it in `env`; it contains no credential. It affects
+only missing or invalid saved provider state, never a valid user choice. OpenAI remains key-gated.

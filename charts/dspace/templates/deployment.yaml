@@ -1,3 +1,8 @@
+{{- range .Values.env }}
+{{- if eq .name "DSPACE_DEFAULT_CHAT_PROVIDER" }}
+{{- fail "env must not contain DSPACE_DEFAULT_CHAT_PROVIDER; configure chat.defaultProvider instead" }}
+{{- end }}
+{{- end }}
 {{- if and .Values.metrics.enabled (not .Values.metrics.auth.existingSecret) }}
 {{- fail "metrics.enabled=true requires metrics.auth.existingSecret so /metrics is authenticated whenever it is served" }}
 {{- end }}
@@ -37,6 +42,8 @@ spec:
               value: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
             - name: DSPACE_ENV
               value: {{ .Values.environment | default "production" | quote }}
+            - name: DSPACE_DEFAULT_CHAT_PROVIDER
+              value: {{ .Values.chat.defaultProvider | quote }}
             - name: METRICS_ENABLED
               value: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
           {{- if and .Values.metrics.enabled .Values.metrics.auth.existingSecret }}

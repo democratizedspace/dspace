@@ -38,6 +38,19 @@ describe('normalizeSettings', () => {
         }
     );
 
+    it('uses the validated deployment default only for missing or invalid provider state', () => {
+        expect(normalizeSettings({}, 'openai').chatProvider).toBe('openai');
+        expect(normalizeSettings({ chatProvider: 'invalid' }, 'openai').chatProvider).toBe(
+            'openai'
+        );
+        expect(normalizeSettings({ chatProvider: 'token-place' }, 'openai').chatProvider).toBe(
+            'token-place'
+        );
+        expect(normalizeSettings({ chatProvider: 'openai' }, 'token-place').chatProvider).toBe(
+            'openai'
+        );
+    });
+
     it('keeps existing boolean settings behavior unchanged', () => {
         expect(
             normalizeSettings({

@@ -36,6 +36,7 @@ vi.mock('../../../../utils/gameState/common.js', async () => {
     mockRefs.resetStore = () => store.set(structuredClone(mockRefs.baseState));
 
     return {
+        hasValidPersistedChatProviderSelection: vi.fn(() => false),
         loadGameState: vi.fn(() => structuredClone(mockRefs.baseState)),
         ready: Promise.resolve(),
         state: store,
@@ -77,6 +78,51 @@ describe('Integrations chat entrypoint', () => {
         expect(document.querySelector('.persona-summary')).toBeInTheDocument();
         expect(screen.queryByText(/OpenAI API Key/i)).not.toBeInTheDocument();
         expect(screen.queryByText(/OpenAI.?API.?Key.?Settings/i)).not.toBeInTheDocument();
+    });
+
+    it('uses an OpenAI deployment default for clean storage and remains key-gated', async () => {
+        mockRefs.baseState.settings = {};
+        mockRefs.resetStore();
+        render(Integrations, { defaultChatProvider: 'openai' });
+
+        const panel = await waitFor(() => {
+            const value = document.querySelector(
+                '[data-testid="chat-panel"][data-provider="openai"]'
+            );
+            expect(value).toBeInTheDocument();
+            return value;
+        });
+        await fireEvent.input(screen.getByRole('textbox'), { target: { value: 'Key gate' } });
+        await fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+        await waitFor(() =>
+            expect(panel.querySelector('[data-error-type="missing-key"]')).toBeTruthy()
+        );
+        expect(mockTokenPlaceChatV2).not.toHaveBeenCalled();
+    });
+
+    it('falls back from invalid clean state to token.place deployment default', async () => {
+        mockRefs.baseState.settings = { chatProvider: 'invalid' };
+        mockRefs.resetStore();
+        render(Integrations, { defaultChatProvider: 'token-place' });
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
+            ).toBeInTheDocument()
+        );
+    });
+
+    it('keeps an explicitly saved user selection over the deployment default', async () => {
+        mockRefs.baseState.settings = {
+            chatProvider: 'token-place',
+            chatProviderUserSelected: true,
+        };
+        mockRefs.resetStore();
+        render(Integrations, { defaultChatProvider: 'openai' });
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
+            ).toBeInTheDocument()
+        );
     });
 
     it('passes runtime token.place deployment config into ChatPanel requests', async () => {
