@@ -38,9 +38,10 @@ describe('Helm Chat provider deployment coordinate', () => {
   it('rejects invalid schema values', () => {
     const result = helm('lint', chart, '--set', 'chat.defaultProvider=invalid');
     expect(result.status).not.toBe(0);
-    expect(result.stdout + result.stderr).toContain(
-      'must be one of the following'
-    );
+    const output = result.stdout + result.stderr;
+    expect(output).toMatch(/[/.]chat[/.]defaultProvider/);
+    expect(output).toContain('token-place');
+    expect(output).toContain('openai');
   });
 
   it('rejects invalid values during template rendering', () => {
@@ -48,11 +49,12 @@ describe('Helm Chat provider deployment coordinate', () => {
       'template',
       'dspace',
       chart,
+      '--skip-schema-validation',
       '--set',
       'chat.defaultProvider=invalid'
     );
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain(
+    expect(result.stdout + result.stderr).toContain(
       'chat.defaultProvider must be exactly one of: token-place, openai'
     );
   });

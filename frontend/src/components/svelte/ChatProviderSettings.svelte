@@ -24,11 +24,10 @@
     let unsubscribe;
 
     const syncFromState = (value) => {
-        const settings = normalizeSettings(
-            hasExplicitChatProvider(value) ? value?.settings : {},
-            defaultChatProvider
-        );
-        selectedProvider = settings.chatProvider;
+        const settings = normalizeSettings(value?.settings, defaultChatProvider);
+        selectedProvider = hasExplicitChatProvider(value)
+            ? settings.chatProvider
+            : defaultChatProvider;
         tokenPlaceTokenLite = settings.tokenPlaceTokenLite;
     };
 

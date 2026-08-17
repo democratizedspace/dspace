@@ -444,10 +444,10 @@
         hydrated = true;
         await ready;
         const currentState = loadGameState();
-        const normalized = normalizeSettings(
-            hasExplicitChatProvider(currentState) ? currentState?.settings : {},
-            defaultChatProvider
-        );
+        const normalized = normalizeSettings(currentState?.settings, defaultChatProvider);
+        if (!hasExplicitChatProvider(currentState)) {
+            normalized.chatProvider = defaultChatProvider;
+        }
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
@@ -517,10 +517,10 @@
         window.addEventListener('hashchange', promptDebugLinkListener);
         window.addEventListener('popstate', promptDebugLinkListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
-            const nextNormalized = normalizeSettings(
-                hasExplicitChatProvider(value) ? value?.settings : {},
-                defaultChatProvider
-            );
+            const nextNormalized = normalizeSettings(value?.settings, defaultChatProvider);
+            if (!hasExplicitChatProvider(value)) {
+                nextNormalized.chatProvider = defaultChatProvider;
+            }
             currentSettings = nextNormalized;
             if (hasPlayerStateDetails(value)) {
                 playerStateSummary = getPlayerStateSummary(value);
