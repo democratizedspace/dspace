@@ -23,6 +23,7 @@ across `dev`, `int`, and `prod` clusters.
 | `METRICS_TOKEN`                 | Recommended                        | Bearer token that protects the `/metrics` endpoint. When set, Prometheus or other collectors must send `Authorization: Bearer <token>`.                                                                                 | _(generated)_                 | Kubernetes Secret (`dspace-secrets`, key `metricsToken` managed via SOPS) |
 | `DSPACE_TOKEN_PLACE_URL`        | No (default `https://token.place`) | Deployment-time public token.place origin passed by SSR into hydrated `/chat` clients before appending API v1 relay E2EE route paths. Normalize origin, `/api`, and `/api/v1` values to avoid duplicate API path segments. | `https://staging.token.place` | Runtime environment / ConfigMap / values.yaml                             |
 | `DSPACE_TOKEN_PLACE_CHAT_MODEL` | No (default `qwen3-8b-instruct`) | Deployment-time public token.place API v1 Chat model passed by SSR into hydrated `/chat` clients.                                                                                                                       | `qwen3-8b-instruct`       | Runtime environment / ConfigMap / values.yaml                             |
+| `DSPACE_DEFAULT_CHAT_PROVIDER`  | No (default `token-place`)        | Deployment-time Chat default. Accepted values are exactly `token-place` and `openai`; invalid explicit values fail closed. Exposed as `chat.defaultProvider` by `/config.json`.                                        | `openai`                      | Runtime environment / Helm `chat.defaultProvider`                         |
 | `VITE_TOKEN_PLACE_URL`          | No (default `https://token.place`) | Local/build compatibility fallback used only when a runtime `DSPACE_TOKEN_PLACE_URL` prop and legacy saved `state.tokenPlace.url` are absent.                                                                           | `https://staging.token.place` | Local dev / image build fallback                                          |
 | `VITE_TOKEN_PLACE_CHAT_MODEL`   | No (default `qwen3-8b-instruct`) | Local/build compatibility fallback used only when a runtime `DSPACE_TOKEN_PLACE_CHAT_MODEL` prop or explicit caller model is absent.                                                                                    | `qwen3-8b-instruct`       | Local dev / image build fallback                                          |
 | `SERVER_CERT_PATH`              | Optional                           | Path to a TLS certificate inside the container. Provide along with `SERVER_KEY_PATH` to terminate TLS in-process instead of via Traefik.                                                                                | `/app/tls/tls.crt`            | Kubernetes Secret (mounted volume)                                        |
@@ -35,6 +36,13 @@ across `dev`, `int`, and `prod` clusters.
 > the token.place origin. `VITE_TOKEN_PLACE_URL` and `VITE_TOKEN_PLACE_CHAT_MODEL` remain
 > local/build compatibility fallbacks; staging no longer needs a distinct environment-specific
 > browser bundle solely to call staging token.place.
+
+> **Chat provider default**: `DSPACE_DEFAULT_CHAT_PROVIDER` controls only clean browser storage or
+> missing/invalid saved provider state. A valid `settings.chatProvider` explicitly saved by the
+> user remains authoritative and is never overwritten by the deployment default. OpenAI remains
+> locally API-key gated even when it is the deployment default; token.place remains selectable and
+> requires no credential. The Helm chart renders this variable from `chat.defaultProvider`; do not
+> duplicate it through the generic `env` list.
 
 > **Secrets**: `METRICS_TOKEN`, TLS material, and any future API keys should live in a SOPS-managed
 > secret named `dspace-secrets` (see Helm values below). Flux/SOPS will render them into the

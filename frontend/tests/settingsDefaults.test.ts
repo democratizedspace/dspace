@@ -50,6 +50,16 @@ describe('normalizeSettings', () => {
         });
     });
 
+    it('uses the deployment default only for missing or invalid saved providers', () => {
+        expect(normalizeSettings({}, 'openai').chatProvider).toBe('openai');
+        expect(normalizeSettings({ chatProvider: 'invalid' }, 'openai').chatProvider).toBe(
+            'openai'
+        );
+        expect(normalizeSettings({ chatProvider: 'token-place' }, 'openai').chatProvider).toBe(
+            'token-place'
+        );
+    });
+
     it('does not let legacy tokenPlace.enabled affect chatProvider defaults', () => {
         const legacyState = {
             tokenPlace: { enabled: false },

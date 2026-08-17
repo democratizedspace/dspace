@@ -3,10 +3,11 @@
 
     export let tokenPlace = null;
     export let openAIChatProxy = null;
+    export let defaultChatProvider = 'token-place';
 </script>
 
 <div class="container">
-    <ChatPanel {tokenPlace} {openAIChatProxy} />
+    <ChatPanel {tokenPlace} {openAIChatProxy} {defaultChatProvider} />
 </div>
 
 <style>

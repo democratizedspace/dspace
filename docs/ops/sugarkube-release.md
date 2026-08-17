@@ -246,7 +246,7 @@ the runtime under test). Replace the revision with the approved full 40-characte
 ```bash
 # Staging
 DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.1 \
+DSPACE_EXPECTED_VERSION=3.1.2 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
@@ -257,9 +257,7 @@ npm run qa:remote-chat-smoke
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
 DSPACE_EXPECTED_VERSION=3.1.1 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
-DSPACE_EXPECTED_PROVIDER=token-place \
-DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
-DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
+DSPACE_EXPECTED_PROVIDER=openai \
 npm run qa:remote-chat-smoke
 ```
 
@@ -280,6 +278,12 @@ node scripts/run-remote-chat-smoke.mjs \
   --runner-revision <FULL_IMMUTABLE_DSPACE_COMMIT_SHA> \
   --result-file /run/dspace-chat/result.json
 ```
+
+For modern releases, the smoke also requires `/config.json` `chat.defaultProvider` to agree with
+`--expected-provider`; do not weaken or bypass that deployment-coordinate check. The deployment
+default affects only clean or missing/invalid browser provider state. A valid provider already
+saved by the user remains authoritative, while an OpenAI default still cannot issue a request
+without a locally saved API key.
 
 The two result options are paired and opt-in; omitting both preserves the existing runner behavior.
 The destination directory (for example, `/run/dspace-chat`) must already exist and be writable by

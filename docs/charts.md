@@ -13,11 +13,16 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
 - `image.tag`: Image tag to deploy. Defaults to the human-readable semantic application tag
-  `v3.1.1`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
+  `v3.1.2`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
   recording or proving the exact deployed image.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
 - `service.port`: Container and service port. Defaults to `8080`.
+- `chat.defaultProvider`: Validated deployment Chat default (`token-place` or `openai`). It
+  defaults to `token-place` and is rendered once as `DSPACE_DEFAULT_CHAT_PROVIDER`. The generic
+  `env` list may not duplicate that variable. This default applies only when saved browser state
+  has no valid provider and never replaces a valid user selection; no provider credentials belong
+  in chart values.
 - `metrics.enabled`: Enables application-side metrics configuration. Defaults to `false`.
 - `metrics.path`: Prometheus scrape path. Defaults to `/metrics`.
 - `metrics.auth.existingSecret`: Existing Secret name that contains the bearer token for

@@ -27,6 +27,7 @@ const mockRefs = vi.hoisted(() => ({
     },
     resetStore: () => undefined,
     state: null,
+    persistedProvider: 'token-place',
 }));
 
 vi.mock('../../../../utils/gameState/common.js', async () => {
@@ -39,6 +40,7 @@ vi.mock('../../../../utils/gameState/common.js', async () => {
         loadGameState: vi.fn(() => structuredClone(mockRefs.baseState)),
         ready: Promise.resolve(),
         state: store,
+        getPersistedChatProviderSelection: vi.fn(() => mockRefs.persistedProvider),
     };
 });
 
@@ -46,6 +48,7 @@ describe('Integrations chat entrypoint', () => {
     beforeEach(() => {
         mockRefs.baseState.openAI.apiKey = '';
         mockRefs.baseState.settings = { chatProvider: 'token-place' };
+        mockRefs.persistedProvider = 'token-place';
         mockRefs.resetStore();
         delete process.env.VITE_TOKEN_PLACE_URL;
         mockTokenPlaceChatV2.mockClear();
@@ -77,6 +80,28 @@ describe('Integrations chat entrypoint', () => {
         expect(document.querySelector('.persona-summary')).toBeInTheDocument();
         expect(screen.queryByText(/OpenAI API Key/i)).not.toBeInTheDocument();
         expect(screen.queryByText(/OpenAI.?API.?Key.?Settings/i)).not.toBeInTheDocument();
+    });
+
+    it('uses an OpenAI deployment default for clean storage', async () => {
+        mockRefs.persistedProvider = null;
+        render(Integrations, { defaultChatProvider: 'openai' });
+
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
+            ).toBeInTheDocument()
+        );
+    });
+
+    it('falls back to the deployment default for invalid persisted provider state', async () => {
+        mockRefs.persistedProvider = null;
+        mockRefs.baseState.settings = { chatProvider: 'invalid' };
+        mockRefs.resetStore();
+        render(Integrations, { defaultChatProvider: 'openai' });
+
+        await waitFor(() =>
+            expect(screen.getByTestId('chat-panel')).toHaveAttribute('data-provider', 'openai')
+        );
     });
 
     it('passes runtime token.place deployment config into ChatPanel requests', async () => {
@@ -131,6 +156,7 @@ describe('Integrations chat entrypoint', () => {
     it('renders OpenAI chat for users who select OpenAI and have an existing OpenAI API key', async () => {
         mockRefs.baseState.openAI.apiKey = 'sk-test';
         mockRefs.baseState.settings = { chatProvider: 'openai' };
+        mockRefs.persistedProvider = 'openai';
         mockRefs.resetStore();
 
         render(Integrations);

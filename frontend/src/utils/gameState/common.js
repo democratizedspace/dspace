@@ -56,6 +56,7 @@ let useLocalStorage = false;
 let warnedFallback = false;
 let readyResolved = false;
 let loadedFromPersistence = false;
+let persistedChatProviderSelection = null;
 export const isUsingLocalStorage = () => useLocalStorage;
 
 function warnFallback() {
@@ -479,6 +480,11 @@ export const ready = isBrowser
           try {
               const stored = await read(STATE_STORE);
               if (stored) {
+                  persistedChatProviderSelection = ['token-place', 'openai'].includes(
+                      stored?.settings?.chatProvider
+                  )
+                      ? stored.settings.chatProvider
+                      : null;
                   gameState = validateGameState(stored);
                   state.set(gameState);
                   loadedFromPersistence = true;
@@ -511,6 +517,7 @@ export const getGameStateChecksum = () => gameState?.[META_KEY]?.checksum ?? '';
 
 export const isGameStateReady = () => readyResolved;
 export const hasLoadedPersistedGameState = () => loadedFromPersistence;
+export const getPersistedChatProviderSelection = () => persistedChatProviderSelection;
 
 export const saveGameState = async (newState) => {
     if (!readyResolved) {
@@ -518,6 +525,11 @@ export const saveGameState = async (newState) => {
     }
     const previousSnapshot = structuredClone(gameState);
     const nextState = validateGameState(structuredClone(newState));
+    persistedChatProviderSelection = ['token-place', 'openai'].includes(
+        newState?.settings?.chatProvider
+    )
+        ? newState.settings.chatProvider
+        : null;
     nextState[META_KEY].lastUpdated = Date.now();
     gameState = nextState;
     state.set(gameState);
@@ -718,6 +730,7 @@ export const importGameStateString = async (gameStateString) => {
 
 export const resetGameState = async () => {
     gameState = initializeGameState();
+    persistedChatProviderSelection = null;
     validateGameState(gameState);
     state.set(gameState);
     writeChecksumMarker(gameState[META_KEY].checksum);

@@ -188,8 +188,11 @@ settings: {
 Normalization rules:
 
 - `settings.chatProvider` allowed values are exactly `token-place` and `openai`.
-- Missing, null, unknown, or invalid `settings.chatProvider` normalizes to `token-place`.
-- The default in `DEFAULT_SETTINGS` should be `chatProvider: 'token-place'`.
+- Missing, null, unknown, or invalid `settings.chatProvider` normalizes to the validated deployment
+  default (`DSPACE_DEFAULT_CHAT_PROVIDER`), which remains `token-place` when unset.
+- A valid saved `settings.chatProvider` remains authoritative and is never overwritten by the
+  deployment default. The default in `DEFAULT_SETTINGS` remains `chatProvider: 'token-place'` for
+  backward compatibility when no deployment coordinate is supplied.
 - Keep `state.openAI.apiKey` as the OpenAI key storage location for backwards compatibility.
 - Do not migrate or rename existing OpenAI keys in v3.1; simply continue reading/writing
   `openAI.apiKey` from the new settings panel.
@@ -233,7 +236,8 @@ request state, and uses `credentials: 'omit'`.
 `/chat` should show exactly one NPC chat panel:
 
 1. Load normalized settings from game state.
-2. If `settings.chatProvider` is missing or invalid, treat it as `token-place`.
+2. If `settings.chatProvider` is missing or invalid, use the validated deployment default
+   (`token-place` when unset).
 3. If provider is `token-place`, submit through the token.place API v1 client.
 4. If provider is `openai`, submit through the existing OpenAI client only when
    `state.openAI.apiKey` is present.

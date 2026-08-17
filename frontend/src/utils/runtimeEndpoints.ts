@@ -6,6 +6,16 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import buildMeta from '../generated/build_meta.json';
 import { normalizeBuildIdentity } from './buildIdentity.js';
 
+export type ChatProvider = 'token-place' | 'openai';
+
+export function resolveRuntimeDefaultChatProvider(
+    value = process.env.DSPACE_DEFAULT_CHAT_PROVIDER
+): ChatProvider {
+    if (value === undefined) return 'token-place';
+    if (value === 'token-place' || value === 'openai') return value;
+    throw new Error('Invalid DSPACE_DEFAULT_CHAT_PROVIDER: expected exactly token-place or openai');
+}
+
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
     const envOverride = readBooleanOverride(process.env.DSPACE_OFFLINE_WORKER_ENABLED);
     if (envOverride !== undefined) {
@@ -152,6 +162,7 @@ export function buildRuntimeConfigResponse(): Response {
         const offlineWorkerEnabled = parseOfflineWorkerEnabled(flags);
         const telemetryEnabled = parseTelemetryEnabled(flags);
         const tokenPlace = resolveRuntimeTokenPlaceConfig();
+        const defaultProvider = resolveRuntimeDefaultChatProvider();
 
         const body = {
             offlineWorker: {
@@ -161,6 +172,7 @@ export function buildRuntimeConfigResponse(): Response {
                 enabled: telemetryEnabled,
             },
             tokenPlace,
+            chat: { defaultProvider },
             featureFlags: flags.tokens,
         };
 
