@@ -56,8 +56,19 @@ let useLocalStorage = false;
 let warnedFallback = false;
 let readyResolved = false;
 let loadedFromPersistence = false;
+let persistedChatProviderWasExplicit = false;
+const hasValidChatProvider = (state) =>
+    state?.settings?.chatProvider === 'token-place' || state?.settings?.chatProvider === 'openai';
+const hasExplicitChatProviderMarker = (state) =>
+    typeof state?.[META_KEY]?.chatProviderExplicit === 'boolean'
+        ? state[META_KEY].chatProviderExplicit
+        : hasValidChatProvider(state);
 export const isUsingLocalStorage = () => useLocalStorage;
 export const hasPersistedGameState = () => loadedFromPersistence;
+export const hasExplicitChatProvider = () => persistedChatProviderWasExplicit;
+export const markChatProviderExplicitlySelected = () => {
+    persistedChatProviderWasExplicit = true;
+};
 
 function warnFallback() {
     if (warnedFallback) return;
@@ -480,6 +491,7 @@ export const ready = isBrowser
           try {
               const stored = await read(STATE_STORE);
               if (stored) {
+                  persistedChatProviderWasExplicit = hasExplicitChatProviderMarker(stored);
                   gameState = validateGameState(stored);
                   state.set(gameState);
                   loadedFromPersistence = true;
@@ -519,6 +531,7 @@ export const saveGameState = async (newState) => {
     }
     const previousSnapshot = structuredClone(gameState);
     const nextState = validateGameState(structuredClone(newState));
+    nextState[META_KEY].chatProviderExplicit = persistedChatProviderWasExplicit;
     nextState[META_KEY].lastUpdated = Date.now();
     gameState = nextState;
     state.set(gameState);
@@ -598,6 +611,7 @@ export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
         return false;
     }
 
+    persistedChatProviderWasExplicit = hasExplicitChatProviderMarker(persisted);
     gameState = validateGameState(persisted);
     state.set(gameState);
     lsWrite(META_STORE, buildLightweightSnapshot(gameState));
@@ -705,6 +719,7 @@ export const importGameStateString = async (gameStateString) => {
         payload = imported.payload;
     }
 
+    persistedChatProviderWasExplicit = hasExplicitChatProviderMarker(payload);
     await saveGameState(payload);
 
     if (customContent && isBrowser) {
@@ -718,8 +733,10 @@ export const importGameStateString = async (gameStateString) => {
 };
 
 export const resetGameState = async () => {
+    persistedChatProviderWasExplicit = false;
     gameState = initializeGameState();
     validateGameState(gameState);
+    gameState[META_KEY].chatProviderExplicit = false;
     state.set(gameState);
     writeChecksumMarker(gameState[META_KEY].checksum);
     await write(STATE_STORE, gameState).catch(() => undefined);
@@ -731,6 +748,7 @@ export const rollbackGameState = async () => {
     try {
         const backup = await read(BACKUP_STORE);
         if (!backup) return;
+        persistedChatProviderWasExplicit = hasExplicitChatProviderMarker(backup);
         gameState = validateGameState(backup);
         state.set(gameState);
         writeChecksumMarker(gameState[META_KEY].checksum);

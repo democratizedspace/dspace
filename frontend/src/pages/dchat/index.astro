@@ -2,12 +2,15 @@
 import Page from '../../components/Page.astro';
 import TokenBadge from './TokenBadge.svelte';
 import Integrations from '../chat/svelte/Integrations.svelte';
+import { resolveRuntimeDefaultChatProvider } from '../../utils/runtimeEndpoints';
+
+const defaultChatProvider = resolveRuntimeDefaultChatProvider();
 ---
 
 <Page title="dChat" columns="1">
     <img src="/assets/npc/dChat.jpg" alt="dChat" />
     <TokenBadge client:load />
-    <Integrations client:idle />
+    <Integrations client:idle {defaultChatProvider} />
 </Page>
 
 <style>
@@ -19,4 +22,3 @@ import Integrations from '../chat/svelte/Integrations.svelte';
         margin-bottom: -25px;
     }
 </style>
-

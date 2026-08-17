@@ -174,7 +174,7 @@ evidence only even though exact digest equality with the immutable image index i
 
 ```bash
 helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
-  --version 3.1.2 \
+  --version 3.1.3 \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
   --set image.tag=v3.1.2

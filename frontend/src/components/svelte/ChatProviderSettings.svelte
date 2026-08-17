@@ -3,7 +3,8 @@
     import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
     import {
         loadGameState,
-        hasPersistedGameState,
+        hasExplicitChatProvider,
+        markChatProviderExplicitlySelected,
         ready,
         saveGameState,
         state as gameStateStore,
@@ -26,7 +27,7 @@
 
     const syncFromState = (value) => {
         const settings = normalizeSettings(
-            hasPersistedGameState() || providerPersistedThisSession ? value?.settings : {},
+            hasExplicitChatProvider() || providerPersistedThisSession ? value?.settings : {},
             defaultChatProvider
         );
         selectedProvider = settings.chatProvider;
@@ -35,7 +36,7 @@
 
     onMount(async () => {
         await ready;
-        syncFromState(hasPersistedGameState() ? loadGameState() : {});
+        syncFromState(loadGameState());
         unsubscribe = gameStateStore.subscribe((value) => syncFromState(value));
         hydrated = true;
     });
@@ -65,6 +66,7 @@
     async function persistProvider(provider) {
         selectedProvider = provider;
         providerPersistedThisSession = true;
+        markChatProviderExplicitlySelected();
         await ready;
         const current = loadGameState();
         const nextSettings = {

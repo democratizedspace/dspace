@@ -30,7 +30,7 @@ describe('Helm Chat provider deployment coordinate', () => {
     );
     expect(result.status, result.stderr).toBe(0);
     expect(
-      result.stdout.match(/name: DSPACE_DEFAULT_CHAT_PROVIDER/g)
+      result.stdout.match(/name: DSPACE_DEFAULT_CHAT_PROVIDER/g) ?? []
     ).toHaveLength(1);
     expect(result.stdout).toContain(`value: \"${provider}\"`);
   });
@@ -40,6 +40,20 @@ describe('Helm Chat provider deployment coordinate', () => {
     expect(result.status).not.toBe(0);
     expect(result.stdout + result.stderr).toContain(
       'must be one of the following'
+    );
+  });
+
+  it('rejects invalid values during template rendering', () => {
+    const result = helm(
+      'template',
+      'dspace',
+      chart,
+      '--set',
+      'chat.defaultProvider=invalid'
+    );
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain(
+      'chat.defaultProvider must be exactly one of: token-place, openai'
     );
   });
 

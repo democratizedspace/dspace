@@ -1,6 +1,9 @@
 {{- if and .Values.metrics.enabled (not .Values.metrics.auth.existingSecret) }}
 {{- fail "metrics.enabled=true requires metrics.auth.existingSecret so /metrics is authenticated whenever it is served" }}
 {{- end }}
+{{- if not (has .Values.chat.defaultProvider (list "token-place" "openai")) }}
+{{- fail "chat.defaultProvider must be exactly one of: token-place, openai" }}
+{{- end }}
 {{- range .Values.env }}
 {{- if eq .name "DSPACE_DEFAULT_CHAT_PROVIDER" }}
 {{- fail "env must not contain DSPACE_DEFAULT_CHAT_PROVIDER; use chat.defaultProvider" }}

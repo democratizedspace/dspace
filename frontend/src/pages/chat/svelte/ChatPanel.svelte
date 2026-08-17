@@ -22,7 +22,7 @@
     } from '../../../stores/chat.js';
     import {
         loadGameState,
-        hasPersistedGameState,
+        hasExplicitChatProvider,
         ready,
         state as gameStateStore,
     } from '../../../utils/gameState/common.js';
@@ -445,7 +445,7 @@
         await ready;
         const currentState = loadGameState();
         const normalized = normalizeSettings(
-            hasPersistedGameState() ? currentState?.settings : {},
+            hasExplicitChatProvider() ? currentState?.settings : {},
             defaultChatProvider
         );
         currentSettings = normalized;
@@ -518,7 +518,7 @@
         window.addEventListener('popstate', promptDebugLinkListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(
-                hasPersistedGameState() ? value?.settings : {},
+                hasExplicitChatProvider() ? value?.settings : {},
                 defaultChatProvider
             );
             currentSettings = nextNormalized;
