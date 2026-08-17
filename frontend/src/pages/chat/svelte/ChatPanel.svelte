@@ -445,7 +445,7 @@
         await ready;
         const currentState = loadGameState();
         const normalized = normalizeSettings(
-            hasExplicitChatProvider() ? currentState?.settings : {},
+            hasExplicitChatProvider(currentState) ? currentState?.settings : {},
             defaultChatProvider
         );
         currentSettings = normalized;
@@ -518,7 +518,7 @@
         window.addEventListener('popstate', promptDebugLinkListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
             const nextNormalized = normalizeSettings(
-                hasExplicitChatProvider() ? value?.settings : {},
+                hasExplicitChatProvider(value) ? value?.settings : {},
                 defaultChatProvider
             );
             currentSettings = nextNormalized;

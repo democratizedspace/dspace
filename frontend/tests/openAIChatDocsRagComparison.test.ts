@@ -20,6 +20,7 @@ vi.mock('../src/utils/docsRag.js', async () => {
 });
 
 vi.mock('../src/utils/gameState/common.js', () => ({
+    hasExplicitChatProvider: vi.fn(() => true),
     loadGameState: vi.fn(() => ({
         openAI: {},
         settings: {

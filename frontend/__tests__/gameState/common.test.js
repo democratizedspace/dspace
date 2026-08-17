@@ -12,6 +12,7 @@ import {
     syncGameStateFromLocalIfStale,
     getPersistedGameStateLightweightSync,
     getAuthoritativeQuestProgressSnapshot,
+    hasExplicitChatProvider,
 } from '../../src/utils/gameState/common.js';
 import { listBuiltInQuestIds } from '../../src/utils/builtInQuests.js';
 import { getOfficialQuestStats } from '../../src/utils/gameState/questStats.js';
@@ -157,8 +158,63 @@ describe('gameState - common utilities', () => {
         expect(typeof validated._meta?.lastUpdated).toBe('number');
     });
 
+    test('canonicalizes chat provider provenance before normalization', () => {
+        const implicit = validateGameState({
+            settings: { chatProvider: 'openai' },
+            _meta: { chatProviderExplicit: false },
+        });
+        expect(hasExplicitChatProvider(implicit)).toBe(false);
+
+        const explicit = validateGameState({
+            settings: { chatProvider: 'openai' },
+            _meta: { chatProviderExplicit: true },
+        });
+        expect(hasExplicitChatProvider(explicit)).toBe(true);
+
+        for (const chatProvider of [undefined, 'invalid']) {
+            const invalid = validateGameState({
+                settings: { chatProvider },
+                _meta: { chatProviderExplicit: true },
+            });
+            expect(invalid.settings.chatProvider).toBe('token-place');
+            expect(hasExplicitChatProvider(invalid)).toBe(false);
+        }
+
+        const legacy = validateGameState({ settings: { chatProvider: 'token-place' } });
+        expect(hasExplicitChatProvider(legacy)).toBe(true);
+    });
+
+    test('unrelated saves preserve implicit provider provenance and a valid checksum', async () => {
+        const next = loadGameState();
+        next.inventory.unrelated = 1;
+        await saveGameState(next);
+
+        const saved = loadGameState();
+        expect(hasExplicitChatProvider(saved)).toBe(false);
+        expect(saved._meta.chatProviderExplicit).toBe(false);
+        expect(getPersistedGameStateChecksum()).toBe(getGameStateChecksum());
+    });
+
+    test('imports canonicalize valid and stale provider provenance', async () => {
+        await importGameStateString(
+            JSON.stringify({ settings: { chatProvider: 'openai' }, inventory: {}, quests: {} })
+        );
+        expect(hasExplicitChatProvider(loadGameState())).toBe(true);
+
+        await importGameStateString(
+            JSON.stringify({
+                settings: { chatProvider: 'invalid' },
+                _meta: { chatProviderExplicit: true },
+            })
+        );
+        expect(hasExplicitChatProvider(loadGameState())).toBe(false);
+        expect(getPersistedGameStateChecksum()).toBe(getGameStateChecksum());
+    });
+
     test('rollbackGameState should restore previous state', async () => {
         const state = loadGameState();
+        state.settings.chatProvider = 'openai';
+        state._meta.chatProviderExplicit = true;
         state.inventory['1'] = 1;
         await saveGameState(state);
 
@@ -169,6 +225,8 @@ describe('gameState - common utilities', () => {
         await rollbackGameState();
         const rolled = loadGameState();
         expect(rolled.inventory['1']).toBe(1);
+        expect(hasExplicitChatProvider(rolled)).toBe(true);
+        expect(getPersistedGameStateChecksum()).toBe(getGameStateChecksum());
     });
 
     test('rollbackGameState does nothing when no backup exists', async () => {

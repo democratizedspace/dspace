@@ -37,7 +37,7 @@ vi.mock('../../../../utils/gameState/common.js', async () => {
 
     return {
         loadGameState: vi.fn(() => structuredClone(mockRefs.baseState)),
-        hasExplicitChatProvider: vi.fn(() => true),
+        hasExplicitChatProvider: vi.fn((value) => Boolean(value?.settings?.chatProvider)),
         ready: Promise.resolve(),
         state: store,
     };

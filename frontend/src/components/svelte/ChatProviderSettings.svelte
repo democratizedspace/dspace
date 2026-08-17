@@ -4,7 +4,6 @@
     import {
         loadGameState,
         hasExplicitChatProvider,
-        markChatProviderExplicitlySelected,
         ready,
         saveGameState,
         state as gameStateStore,
@@ -23,11 +22,10 @@
     let tokenPlaceTokenLite = false;
     let statusMessage = '';
     let unsubscribe;
-    let providerPersistedThisSession = false;
 
     const syncFromState = (value) => {
         const settings = normalizeSettings(
-            hasExplicitChatProvider() || providerPersistedThisSession ? value?.settings : {},
+            hasExplicitChatProvider(value) ? value?.settings : {},
             defaultChatProvider
         );
         selectedProvider = settings.chatProvider;
@@ -65,8 +63,6 @@
 
     async function persistProvider(provider) {
         selectedProvider = provider;
-        providerPersistedThisSession = true;
-        markChatProviderExplicitlySelected();
         await ready;
         const current = loadGameState();
         const nextSettings = {
@@ -76,6 +72,7 @@
         await saveGameState({
             ...current,
             settings: nextSettings,
+            _meta: { ...current._meta, chatProviderExplicit: true },
         });
         statusMessage =
             provider === PROVIDERS.openAI
