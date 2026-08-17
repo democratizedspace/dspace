@@ -184,6 +184,10 @@ tag.
    after the colon into Sugarkube `tag=...` commands.
 4. Confirm the Helm chart version in `charts/dspace/Chart.yaml`, `docs/apps/dspace.version`, and/or
    the `ci-helm.yml` publish workflow run.
+   Confirm the reviewed Helm values set `chat.defaultProvider` to the promotion's expected
+   provider, and verify `/config.json` reports the same value at `chat.defaultProvider`. This is a
+   deployment default only: missing or invalid saved state uses it, while a valid saved user
+   selection remains authoritative.
 5. From the Sugarkube checkout, deploy the immutable image tag to staging:
 
    ```bash

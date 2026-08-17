@@ -88,11 +88,18 @@ requires a different API v1 model:
 
 - `DSPACE_TOKEN_PLACE_URL`
 - `DSPACE_TOKEN_PLACE_CHAT_MODEL`
+- `DSPACE_DEFAULT_CHAT_PROVIDER` (`token-place` or `openai`; default `token-place`)
 
 The `/config.json` endpoint and the server-rendered `/chat` page both read these runtime values, so
 one immutable image can move between staging and production without rebuilding. Staging should use
 `DSPACE_TOKEN_PLACE_URL=https://staging.token.place`. Production can omit the URL override or set
 `DSPACE_TOKEN_PLACE_URL=https://token.place` explicitly.
+
+Helm exposes the provider coordinate as `chat.defaultProvider` and renders it once as
+`DSPACE_DEFAULT_CHAT_PROVIDER`. The resolved value is reported at `chat.defaultProvider` in
+`/config.json` and seeds clean or invalid browser state on both `/chat` and `/settings`. It does
+not overwrite a valid provider already selected by the user. An OpenAI default still requires a
+locally saved OpenAI key before any OpenAI request; token.place remains selectable without a key.
 
 `VITE_TOKEN_PLACE_URL` and `VITE_TOKEN_PLACE_CHAT_MODEL` remain local-development and build-time
 compatibility fallbacks only. Runtime `DSPACE_TOKEN_PLACE_URL` takes precedence over legacy saved

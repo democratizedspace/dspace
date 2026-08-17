@@ -79,6 +79,50 @@ describe('Integrations chat entrypoint', () => {
         expect(screen.queryByText(/OpenAI.?API.?Key.?Settings/i)).not.toBeInTheDocument();
     });
 
+    it('uses an OpenAI deployment default for missing persisted state without making a request', async () => {
+        mockRefs.baseState.settings = {};
+        mockRefs.resetStore();
+
+        render(Integrations, { defaultChatProvider: 'openai' });
+
+        const panel = await waitFor(() => {
+            const element = document.querySelector(
+                '[data-testid="chat-panel"][data-provider="openai"]'
+            );
+            expect(element).toBeInTheDocument();
+            return element;
+        });
+        await fireEvent.input(screen.getByRole('textbox'), { target: { value: 'Key gate' } });
+        await fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+        await waitFor(() =>
+            expect(panel.querySelector('.chat-error')).toHaveAttribute(
+                'data-error-type',
+                'missing-key'
+            )
+        );
+        expect(mockTokenPlaceChatV2).not.toHaveBeenCalled();
+    });
+
+    it('keeps a valid saved token.place choice over an OpenAI deployment default', async () => {
+        render(Integrations, { defaultChatProvider: 'openai' });
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
+            ).toBeInTheDocument()
+        );
+    });
+
+    it('falls back from an invalid saved provider to the deployment default', async () => {
+        mockRefs.baseState.settings = { chatProvider: 'invalid' };
+        mockRefs.resetStore();
+        render(Integrations, { defaultChatProvider: 'openai' });
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
+            ).toBeInTheDocument()
+        );
+    });
+
     it('passes runtime token.place deployment config into ChatPanel requests', async () => {
         render(Integrations, {
             tokenPlace: { url: 'https://staging.token.place', model: 'staging-chat-model' },

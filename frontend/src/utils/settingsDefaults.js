@@ -8,14 +8,16 @@ export const DEFAULT_SETTINGS = {
     showQuestGraphVisualizer: false,
 };
 
-export const normalizeSettings = (settings = {}) => {
+export const normalizeSettings = (settings = {}, deploymentDefault = DEFAULT_CHAT_PROVIDER) => {
+    const fallbackProvider = CHAT_PROVIDER_VALUES.has(deploymentDefault)
+        ? deploymentDefault
+        : DEFAULT_CHAT_PROVIDER;
     const base =
         settings && typeof settings === 'object'
             ? { ...DEFAULT_SETTINGS, ...settings }
             : { ...DEFAULT_SETTINGS };
-    const chatProvider = CHAT_PROVIDER_VALUES.has(base.chatProvider)
-        ? base.chatProvider
-        : DEFAULT_CHAT_PROVIDER;
+    const savedProvider = settings && typeof settings === 'object' ? settings.chatProvider : null;
+    const chatProvider = CHAT_PROVIDER_VALUES.has(savedProvider) ? savedProvider : fallbackProvider;
 
     return {
         ...base,

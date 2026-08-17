@@ -57,6 +57,20 @@ function completedChild(
 }
 
 describe('remote chat smoke UI contract selection', () => {
+  it('requires the live runtime default to agree with the expected provider', async () => {
+    const source = await readFile(
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
+      'utf8'
+    );
+    expect(source).toContain('defaultConfig.chat?.defaultProvider');
+    expect(source).toContain(
+      "'routing/configuration: live default provider disagreement'"
+    );
+    expect(source).toMatch(
+      /defaultConfig\.chat\?\.defaultProvider[\s\S]*\.toBe\(expectedProvider\)/
+    );
+  });
+
   it.each([
     ['legacy-build-meta-v1', 'openai', 'legacy-inline-openai-v1'],
     ['legacy-build-meta-v1', 'token-place', 'modern-settings-v1'],

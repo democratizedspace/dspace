@@ -73,22 +73,22 @@ const withFixture = (check: (root: string) => void) => {
 };
 
 describe('independent DSPACE application and chart coordinates', () => {
-  it('pins chart 3.1.2 to application 3.1.1 with matching image coordinate', () => {
+  it('pins chart 3.1.3 to application 3.1.2 with matching image coordinate', () => {
     const chart = parse(
       readFileSync(join(repoRoot, 'charts/dspace/Chart.yaml'), 'utf8')
     );
     const values = parse(
       readFileSync(join(repoRoot, 'charts/dspace/values.yaml'), 'utf8')
     );
-    expect(chart.version).toBe('3.1.2');
-    expect(chart.appVersion).toBe('3.1.1');
-    expect(values.image.tag).toBe('v3.1.1');
+    expect(chart.version).toBe('3.1.3');
+    expect(chart.appVersion).toBe('3.1.2');
+    expect(values.image.tag).toBe('v3.1.2');
     expect(
       readFileSync(join(repoRoot, 'docs/apps/dspace.version'), 'utf8')
-    ).toMatch(/^3\.1\.2$/m);
+    ).toMatch(/^3\.1\.3$/m);
   });
 
-  it('accepts the chart-v3.1.2 release tag for the local chart coordinates', () => {
+  it('accepts the chart-v3.1.3 release tag for the local chart coordinates', () => {
     const result = spawnSync(
       process.execPath,
       [
@@ -97,13 +97,13 @@ describe('independent DSPACE application and chart coordinates', () => {
       ],
       {
         cwd: repoRoot,
-        env: { ...process.env, CHART_TAG: 'chart-v3.1.2', GITHUB_OUTPUT: '' },
+        env: { ...process.env, CHART_TAG: 'chart-v3.1.3', GITHUB_OUTPUT: '' },
         encoding: 'utf8',
       }
     );
     expect(result.status, result.stderr).toBe(0);
-    expect(result.stdout).toContain('applicationVersion=3.1.1');
-    expect(result.stdout).toContain('chartVersion=3.1.2');
+    expect(result.stdout).toContain('applicationVersion=3.1.2');
+    expect(result.stdout).toContain('chartVersion=3.1.3');
   });
 
   it('passes current repository coordinates and reports both groups', () =>

@@ -49,6 +49,7 @@
 
     export let tokenPlace = null;
     export let openAIChatProxy = null;
+    export let defaultChatProvider = 'token-place';
 
     const message = writable('');
     const messageHistory = writable([]);
@@ -80,7 +81,7 @@
     let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
     let debugOverride = false;
-    let currentSettings = normalizeSettings();
+    let currentSettings = normalizeSettings({}, defaultChatProvider);
     let lastShowChatDebugPayload;
     let componentDestroyed = false;
     let providerUsage = null;
@@ -453,7 +454,7 @@
         hydrated = true;
         await ready;
         const currentState = loadGameState();
-        const normalized = normalizeSettings(currentState?.settings);
+        const normalized = normalizeSettings(currentState?.settings, defaultChatProvider);
         currentSettings = normalized;
         lastShowChatDebugPayload = normalized.showChatDebugPayload;
         syncPromptDebugDeepLink({ allowAutoExpand: true });
@@ -523,7 +524,7 @@
         window.addEventListener('hashchange', promptDebugLinkListener);
         window.addEventListener('popstate', promptDebugLinkListener);
         settingsUnsubscribe = gameStateStore.subscribe((value) => {
-            const nextNormalized = normalizeSettings(value?.settings);
+            const nextNormalized = normalizeSettings(value?.settings, defaultChatProvider);
             currentSettings = nextNormalized;
             if (hasPlayerStateDetails(value)) {
                 playerStateSummary = getPlayerStateSummary(value);

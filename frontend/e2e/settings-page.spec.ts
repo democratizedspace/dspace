@@ -53,9 +53,7 @@ test.describe('Settings route', () => {
         const chatPanel = page.getByTestId('chat-provider-settings');
         await expect(chatPanel).toBeVisible();
         await expect(page.getByRole('heading', { level: 2, name: 'Chat provider' })).toBeVisible();
-        await expect(
-            page.getByText('token.place is the default DSPACE Chat provider')
-        ).toBeVisible();
+        await expect(page.getByText('The deployment default is token.place')).toBeVisible();
         await expect(
             chatPanel.locator('input[name="chat-provider"][value="token-place"]')
         ).toBeChecked();

@@ -8,11 +8,13 @@ import QuestGraphToggle from '../components/svelte/QuestGraphToggle.svelte';
 import ChatProviderSettings from '../components/svelte/ChatProviderSettings.svelte';
 import { getCheatsAvailabilityFlag, isStagingEnvironment } from '../utils/cheatsAvailability';
 import { getCookieItemsFromStore, getCookieKeysFromStore } from '../utils/migrationCookies.js';
+import { resolveDefaultChatProvider } from '../utils/runtimeEndpoints';
 
 const cheatsAvailable = getCheatsAvailabilityFlag();
 const stagingEnvironment = isStagingEnvironment();
 const legacyV1Items = getCookieItemsFromStore(Astro.cookies);
 const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
+const defaultChatProvider = resolveDefaultChatProvider();
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
@@ -27,7 +29,7 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
                 />
             ) : null
         }
-        <ChatProviderSettings client:idle />
+        <ChatProviderSettings client:idle {defaultChatProvider} />
         <QuestGraphToggle client:idle />
         <LegacySaveUpgrade
             legacyV1Items={legacyV1Items}
