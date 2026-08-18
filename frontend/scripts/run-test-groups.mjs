@@ -35,7 +35,7 @@ const includeRemoteCompletionistAwardIII = process.env.REMOTE_COMPLETIONIST_AWAR
 const TEST_GROUPS = [
     {
         name: 'Test Coverage',
-        files: ['test-coverage.spec.ts'],
+        files: ['test-coverage.spec.ts', 'navigate-with-retry.spec.ts'],
         parallel: false,
         workers: 1,
     },
