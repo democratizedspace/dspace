@@ -492,13 +492,17 @@ describe('remote chat smoke navigation contract', () => {
     );
     expect(identityJourney).not.toContain("page.goto('/chat')");
 
+    const identityNavigation = identityJourney.indexOf(
+      "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });"
+    );
     const identityOriginCheck = identityJourney.indexOf(
       'new URL(page.url()).origin'
     );
     const htmlAgreementCheck = identityJourney.indexOf(
       'page.locator(\'meta[name="dspace-build-revision"]\')'
     );
-    expect(identityOriginCheck).toBeGreaterThan(-1);
+    expect(identityNavigation).toBeGreaterThan(-1);
+    expect(identityOriginCheck).toBeGreaterThan(identityNavigation);
     expect(htmlAgreementCheck).toBeGreaterThan(identityOriginCheck);
   });
 });
