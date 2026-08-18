@@ -362,11 +362,10 @@ test.describe('release-aware remote chat smoke', () => {
         expect(identity.shortRevision, 'identity: invalid derived short revision').toBe(
             expectedRevision.slice(0, 7)
         );
-        const navigation = await page.goto('/chat');
-        expect(
-            new URL(navigation?.url() || page.url()).origin,
-            'routing/configuration: /chat origin drift'
-        ).toBe(requestedOrigin);
+        await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });
+        expect(new URL(page.url()).origin, 'routing/configuration: /chat origin drift').toBe(
+            requestedOrigin
+        );
         await expect(
             page.locator('meta[name="dspace-build-revision"]'),
             'identity: HTML build marker drift'
