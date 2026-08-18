@@ -446,7 +446,7 @@ describe('navigateWithRetry', () => {
 });
 
 describe('remote chat smoke navigation contract', () => {
-  it('uses bounded opted-in navigation and verifies final origin before hydration', () => {
+  it('uses bounded opted-in navigation for chat and identity before validating results', () => {
     const source = readFileSync(
       new URL('../frontend/e2e/remote-chat-smoke.spec.ts', import.meta.url),
       'utf8'
@@ -478,5 +478,27 @@ describe('remote chat smoke navigation contract', () => {
     );
     expect(originCheck).toBeGreaterThan(-1);
     expect(hydrationCheck).toBeGreaterThan(originCheck);
+
+    const identityStart = source.indexOf(
+      "test('identity: approved build identity matches JSON and HTML'"
+    );
+    const journeyBoundary = source.indexOf('journeyTest(', identityStart);
+    expect(identityStart).toBeGreaterThanOrEqual(0);
+    expect(journeyBoundary).toBeGreaterThan(identityStart);
+
+    const identityJourney = source.slice(identityStart, journeyBoundary);
+    expect(identityJourney).toContain(
+      "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });"
+    );
+    expect(identityJourney).not.toContain("page.goto('/chat')");
+
+    const identityOriginCheck = identityJourney.indexOf(
+      'new URL(page.url()).origin'
+    );
+    const htmlAgreementCheck = identityJourney.indexOf(
+      'page.locator(\'meta[name="dspace-build-revision"]\')'
+    );
+    expect(identityOriginCheck).toBeGreaterThan(-1);
+    expect(htmlAgreementCheck).toBeGreaterThan(identityOriginCheck);
   });
 });
