@@ -479,4 +479,29 @@ describe('remote chat smoke navigation contract', () => {
     expect(originCheck).toBeGreaterThan(-1);
     expect(hydrationCheck).toBeGreaterThan(originCheck);
   });
+
+  it('routes identity HTML navigation through the bounded opted-in helper', () => {
+    const source = readFileSync(
+      new URL('../frontend/e2e/remote-chat-smoke.spec.ts', import.meta.url),
+      'utf8'
+    );
+    const identityStart = source.indexOf(
+      "test('identity: approved build identity matches JSON and HTML'"
+    );
+    const defaultJourneyBoundary = source.indexOf(
+      "'routing/configuration and submission: approved default journey'",
+      identityStart
+    );
+
+    expect(identityStart).toBeGreaterThanOrEqual(0);
+    expect(defaultJourneyBoundary).toBeGreaterThan(identityStart);
+
+    const identityJourney = source.slice(identityStart, defaultJourneyBoundary);
+    expect(identityJourney).toContain(
+      "const navigation = await navigateWithRetry(page, '/chat', {"
+    );
+    expect(identityJourney).toContain('retryAbortedNavigation: true');
+    expect(identityJourney).not.toContain("page.goto('/chat')");
+    expect(identityJourney).toContain('navigation?.url() || page.url()');
+  });
 });

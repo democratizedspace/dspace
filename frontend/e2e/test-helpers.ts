@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import type { Locator, Page } from '@playwright/test';
+import type { Locator, Page, Response } from '@playwright/test';
 import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 
 export type { Page };
@@ -150,7 +150,7 @@ export async function navigateWithRetry(
         retryAbortedNavigation = false,
         now = () => Date.now(),
     }: NavigateWithRetryOptions = {}
-): Promise<void> {
+): Promise<Response | null> {
     if (!Number.isFinite(attemptTimeoutMs) || attemptTimeoutMs <= 0) {
         throw new Error(
             `attemptTimeoutMs must be a finite positive number, received ${attemptTimeoutMs}`
@@ -178,11 +178,10 @@ export async function navigateWithRetry(
         const navigationTimeoutMs = Math.min(remainingBeforeAttemptMs, attemptTimeoutMs);
 
         try {
-            await page.goto(url, {
+            return await page.goto(url, {
                 waitUntil: 'domcontentloaded',
                 timeout: navigationTimeoutMs,
             });
-            return;
         } catch (error) {
             lastError = error;
 

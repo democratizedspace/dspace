@@ -362,7 +362,9 @@ test.describe('release-aware remote chat smoke', () => {
         expect(identity.shortRevision, 'identity: invalid derived short revision').toBe(
             expectedRevision.slice(0, 7)
         );
-        const navigation = await page.goto('/chat');
+        const navigation = await navigateWithRetry(page, '/chat', {
+            retryAbortedNavigation: true,
+        });
         expect(
             new URL(navigation?.url() || page.url()).origin,
             'routing/configuration: /chat origin drift'
