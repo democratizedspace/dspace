@@ -446,7 +446,7 @@ describe('navigateWithRetry', () => {
 });
 
 describe('remote chat smoke navigation contract', () => {
-  it('uses bounded opted-in navigation and verifies final origin before hydration', () => {
+  it('uses bounded opted-in navigation for the chat and identity journeys', () => {
     const source = readFileSync(
       new URL('../frontend/e2e/remote-chat-smoke.spec.ts', import.meta.url),
       'utf8'
@@ -478,5 +478,21 @@ describe('remote chat smoke navigation contract', () => {
     );
     expect(originCheck).toBeGreaterThan(-1);
     expect(hydrationCheck).toBeGreaterThan(originCheck);
+
+    const identityStart = source.indexOf(
+      "test('identity: approved build identity matches JSON and HTML'"
+    );
+    const defaultJourneyBoundary = source.indexOf(
+      "'routing/configuration and submission: approved default journey'",
+      identityStart
+    );
+    expect(identityStart).toBeGreaterThanOrEqual(0);
+    expect(defaultJourneyBoundary).toBeGreaterThan(identityStart);
+
+    const identityJourney = source.slice(identityStart, defaultJourneyBoundary);
+    expect(identityJourney).toContain(
+      "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });"
+    );
+    expect(identityJourney).not.toContain("page.goto('/chat')");
   });
 });

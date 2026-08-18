@@ -362,11 +362,29 @@ test.describe('release-aware remote chat smoke', () => {
         expect(identity.shortRevision, 'identity: invalid derived short revision').toBe(
             expectedRevision.slice(0, 7)
         );
-        const navigation = await page.goto('/chat');
-        expect(
-            new URL(navigation?.url() || page.url()).origin,
-            'routing/configuration: /chat origin drift'
-        ).toBe(requestedOrigin);
+        let identityNavigationAttempts = 0;
+        if (fault === 'identity-navigation-once' || fault === 'identity-navigation-persistent') {
+            await page.route('**/chat', async (route) => {
+                identityNavigationAttempts += 1;
+                if (
+                    fault === 'identity-navigation-persistent' ||
+                    identityNavigationAttempts === 1
+                ) {
+                    await route.abort('aborted');
+                    return;
+                }
+                await route.continue();
+            });
+        }
+        await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });
+        if (fault === 'identity-navigation-once') {
+            expect(identityNavigationAttempts, 'identity: navigation retry was not exercised').toBe(
+                2
+            );
+        }
+        expect(new URL(page.url()).origin, 'routing/configuration: /chat origin drift').toBe(
+            requestedOrigin
+        );
         await expect(
             page.locator('meta[name="dspace-build-revision"]'),
             'identity: HTML build marker drift'
