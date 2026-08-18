@@ -50,6 +50,49 @@ test.use({
     screenshot: 'off',
 });
 
+test.describe('navigateWithRetry browser integration', () => {
+    test.skip(remoteChatSmokeEnabled, 'Local retry-path regression coverage only.');
+
+    test('recovers from one transient aborted chat navigation', async ({ page }) => {
+        let attempts = 0;
+        await page.route('**/chat', async (route) => {
+            attempts += 1;
+            if (attempts === 1) {
+                await route.abort('aborted');
+                return;
+            }
+            await route.continue();
+        });
+
+        await navigateWithRetry(page, '/chat', {
+            attempts: 2,
+            delayMs: 1,
+            retryAbortedNavigation: true,
+        });
+
+        expect(attempts).toBe(2);
+        expect(new URL(page.url()).pathname).toBe('/chat');
+    });
+
+    test('fails after the bounded attempts when chat navigation stays aborted', async ({
+        page,
+    }) => {
+        let attempts = 0;
+        await page.route('**/chat', async (route) => {
+            attempts += 1;
+            await route.abort('aborted');
+        });
+
+        await expect(
+            navigateWithRetry(page, '/chat', {
+                attempts: 2,
+                delayMs: 1,
+                retryAbortedNavigation: true,
+            })
+        ).rejects.toThrow('while navigating to /chat after 2 attempts');
+        expect(attempts).toBe(2);
+    });
+});
 const bytesToBase64 = (value: ArrayBuffer | Uint8Array) =>
     Buffer.from(value instanceof Uint8Array ? value : new Uint8Array(value)).toString('base64');
 const base64ToPem = (value: string) =>
@@ -362,11 +405,10 @@ test.describe('release-aware remote chat smoke', () => {
         expect(identity.shortRevision, 'identity: invalid derived short revision').toBe(
             expectedRevision.slice(0, 7)
         );
-        const navigation = await page.goto('/chat');
-        expect(
-            new URL(navigation?.url() || page.url()).origin,
-            'routing/configuration: /chat origin drift'
-        ).toBe(requestedOrigin);
+        await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });
+        expect(new URL(page.url()).origin, 'routing/configuration: /chat origin drift').toBe(
+            requestedOrigin
+        );
         await expect(
             page.locator('meta[name="dspace-build-revision"]'),
             'identity: HTML build marker drift'
