@@ -497,13 +497,23 @@ describe('remote chat smoke navigation contract', () => {
     expect(journeyTestBoundary).toBeGreaterThan(identityTestStart);
 
     const identityTest = source.slice(identityTestStart, journeyTestBoundary);
-    const boundedNavigation = identityTest.indexOf(
-      "await navigateWithRetry(page, '/chat', { retryAbortedNavigation: true });"
+    const boundedNavigation =
+      /await\s+navigateWithRetry\(\s*page\s*,\s*['"]\/chat['"]\s*,\s*\{\s*retryAbortedNavigation\s*:\s*true\s*\}\s*\)\s*;/.exec(
+        identityTest
+      );
+    const directNavigation = /page\s*\.\s*goto\(\s*['"]\/chat['"]\s*\)/.exec(
+      identityTest
     );
-    const originCheck = identityTest.indexOf('new URL(page.url()).origin');
+    const originCheck =
+      /new\s+URL\(\s*page\s*\.\s*url\(\s*\)\s*\)\s*\.\s*origin/.exec(
+        identityTest
+      );
 
-    expect(boundedNavigation).toBeGreaterThanOrEqual(0);
-    expect(identityTest).not.toContain("page.goto('/chat')");
-    expect(originCheck).toBeGreaterThan(boundedNavigation);
+    expect(boundedNavigation).not.toBeNull();
+    expect(directNavigation).toBeNull();
+    expect(originCheck).not.toBeNull();
+    expect(originCheck?.index ?? -1).toBeGreaterThan(
+      boundedNavigation?.index ?? -1
+    );
   });
 });
