@@ -505,4 +505,41 @@ describe('remote chat smoke navigation contract', () => {
     expect(identityOriginCheck).toBeGreaterThan(identityNavigation);
     expect(htmlAgreementCheck).toBeGreaterThan(identityOriginCheck);
   });
+
+  it('uses bounded opted-in navigation before checking the identity test final origin', () => {
+    const source = readFileSync(
+      new URL('../frontend/e2e/remote-chat-smoke.spec.ts', import.meta.url),
+      'utf8'
+    );
+    const identityTestStart = source.indexOf(
+      "test('identity: approved build identity matches JSON and HTML'"
+    );
+    const journeyTestBoundary = source.indexOf(
+      'journeyTest(',
+      identityTestStart
+    );
+
+    expect(identityTestStart).toBeGreaterThanOrEqual(0);
+    expect(journeyTestBoundary).toBeGreaterThan(identityTestStart);
+
+    const identityTest = source.slice(identityTestStart, journeyTestBoundary);
+    const boundedNavigation =
+      /await\s+navigateWithRetry\(\s*page\s*,\s*['"]\/chat['"]\s*,\s*\{\s*retryAbortedNavigation\s*:\s*true\s*\}\s*\)\s*;/.exec(
+        identityTest
+      );
+    const directNavigation = /page\s*\.\s*goto\(\s*['"]\/chat['"]\s*\)/.exec(
+      identityTest
+    );
+    const originCheck =
+      /new\s+URL\(\s*page\s*\.\s*url\(\s*\)\s*\)\s*\.\s*origin/.exec(
+        identityTest
+      );
+
+    expect(boundedNavigation).not.toBeNull();
+    expect(directNavigation).toBeNull();
+    expect(originCheck).not.toBeNull();
+    expect(originCheck?.index ?? -1).toBeGreaterThan(
+      boundedNavigation?.index ?? -1
+    );
+  });
 });
