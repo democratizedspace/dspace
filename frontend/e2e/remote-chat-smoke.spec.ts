@@ -6,6 +6,8 @@ import { expect, test, type Page } from '@playwright/test';
 import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpers';
 import {
     chatUiContractFor,
+    normalizeProviderConfigContract,
+    validateProviderConfig,
     type IdentityContract,
     type SmokeProvider,
 } from './remote-chat-smoke-contract';
@@ -17,6 +19,7 @@ const JSEncrypt = createRequire(import.meta.url)(
 
 const expectedVersion = process.env.DSPACE_EXPECTED_VERSION!;
 const expectedRevision = process.env.DSPACE_EXPECTED_REVISION!;
+const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
 function normalizeIdentityContract(value: string | undefined): IdentityContract {
     if (value === undefined) return 'build-info-v1';
 
@@ -29,13 +32,15 @@ function normalizeIdentityContract(value: string | undefined): IdentityContract 
 }
 
 const identityContract = normalizeIdentityContract(process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT);
+const providerConfigContract = remoteChatSmokeEnabled
+    ? normalizeProviderConfigContract(process.env.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT)
+    : 'chat-default-provider-v1';
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as SmokeProvider;
 const chatUiContract = chatUiContractFor(identityContract, expectedProvider);
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
 const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
 const expectedResolvedModel =
     expectedModel === 'llama-3.1-8b-instruct' ? 'qwen3-8b-instruct' : expectedModel;
-const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
 const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
 const completionMarkerFile = process.env.DSPACE_REMOTE_CHAT_SMOKE_COMPLETION_FILE;
@@ -419,16 +424,19 @@ test.describe('release-aware remote chat smoke', () => {
         'routing/configuration and submission: approved default journey',
         async ({ page, markJourneyEntered }) => {
             markJourneyEntered();
-            if (identityContract === 'build-info-v1') {
-                const providerConfigResponse = await page.request.get('/config.json');
-                expect(providerConfigResponse.status(), '/config.json did not return 200').toBe(
-                    200
-                );
-                expect(
-                    (await providerConfigResponse.json()).chat?.defaultProvider,
-                    'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'
-                ).toBe(expectedProvider);
-            }
+            const providerConfigResponse = await page.request.get('/config.json');
+            expect(
+                new URL(providerConfigResponse.url()).origin,
+                'routing/configuration: /config.json origin drift'
+            ).toBe(requestedOrigin);
+            expect(providerConfigResponse.status(), '/config.json did not return 200').toBe(200);
+            validateProviderConfig(
+                await providerConfigResponse.json(),
+                providerConfigContract,
+                expectedProvider,
+                expectedOrigin,
+                expectedModel
+            );
             if (expectedProvider === 'openai') {
                 let openAICalls = 0;
                 let credentialPresent = false;

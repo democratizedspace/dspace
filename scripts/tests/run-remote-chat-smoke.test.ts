@@ -12,6 +12,7 @@ const completeEnv = {
   DSPACE_EXPECTED_VERSION: '3.1.0',
   DSPACE_EXPECTED_REVISION: revision,
   DSPACE_EXPECTED_PROVIDER: 'token-place',
+  DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'chat-default-provider-v1',
   DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: 'https://token.place',
   DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'qwen3-8b-instruct',
 };
@@ -41,6 +42,45 @@ describe('remote chat smoke input validation', () => {
     expect(buildSmokeEnv(options, {}).REMOTE_CHAT_SMOKE_USE_WEBSERVER).toBe(
       '0'
     );
+  });
+
+  it('requires an explicit supported provider-config contract', () => {
+    const missing = { ...completeEnv };
+    delete missing.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT;
+    expect(() => parseAndValidateArgs([], missing)).toThrow(
+      'DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT'
+    );
+    expect(() =>
+      parseAndValidateArgs([], {
+        ...completeEnv,
+        DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'automatic',
+      })
+    ).toThrow('provider-config contract is unsupported');
+  });
+
+  it('accepts and propagates an explicit legacy provider-config contract', () => {
+    const options = parseAndValidateArgs(
+      ['--provider-config-contract=legacy-no-chat-default-provider-v1'],
+      completeEnv
+    );
+    expect(options.providerConfigContract).toBe(
+      'legacy-no-chat-default-provider-v1'
+    );
+    expect(
+      buildSmokeEnv(options, {}).DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
+    ).toBe('legacy-no-chat-default-provider-v1');
+  });
+
+  it('rejects contradictory provider-config contract flags', () => {
+    expect(() =>
+      parseAndValidateArgs(
+        [
+          '--provider-config-contract=chat-default-provider-v1',
+          '--provider-config-contract=legacy-no-chat-default-provider-v1',
+        ],
+        completeEnv
+      )
+    ).toThrow('contradictory values');
   });
 
   it('accepts the explicit modern identity contract', () => {

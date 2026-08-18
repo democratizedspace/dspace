@@ -4,7 +4,11 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
-import { chatUiContractFor } from '../../frontend/e2e/remote-chat-smoke-contract';
+import {
+  chatUiContractFor,
+  normalizeProviderConfigContract,
+  validateProviderConfig,
+} from '../../frontend/e2e/remote-chat-smoke-contract';
 import {
   remoteChatSmokeCompletionMarker,
   writeRemoteChatSmokeCompletion,
@@ -21,6 +25,7 @@ const completeEnv = {
   DSPACE_EXPECTED_VERSION: '3.1.1',
   DSPACE_EXPECTED_REVISION: revision,
   DSPACE_EXPECTED_PROVIDER: 'openai',
+  DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'chat-default-provider-v1',
 };
 
 function options(resultFile?: string) {
@@ -58,14 +63,18 @@ function completedChild(
 
 describe('remote chat smoke UI contract selection', () => {
   it('keeps the runtime deployment-default agreement assertion release-aware', async () => {
-    const source = await readFile(
+    const contractSource = await readFile(
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke-contract.ts'),
+      'utf8'
+    );
+    const journeySource = await readFile(
       join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
       'utf8'
     );
-    expect(source).toContain("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'");
-    expect(source).toContain('.toBe(expectedProvider)');
-    expect(source.indexOf("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'")).toBeLessThan(
-      source.indexOf("if (expectedProvider === 'openai')")
+    expect(contractSource).toContain("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'");
+    expect(contractSource).toContain('defaultProvider !== expectedProvider');
+    expect(journeySource.indexOf('validateProviderConfig(')).toBeLessThan(
+      journeySource.indexOf("if (expectedProvider === 'openai')")
     );
   });
 
@@ -76,6 +85,97 @@ describe('remote chat smoke UI contract selection', () => {
     ['build-info-v1', 'token-place', 'modern-settings-v1'],
   ] as const)('maps %s + %s to %s', (identityContract, provider, expected) => {
     expect(chatUiContractFor(identityContract, provider)).toBe(expected);
+  });
+});
+
+describe('remote chat smoke provider configuration contracts', () => {
+  const legacy311Config = {
+    tokenPlace: {
+      url: 'https://token.place/api',
+      model: 'qwen3-8b-instruct',
+    },
+  };
+
+  it('requires an explicit provider configuration contract', () => {
+    expect(() => normalizeProviderConfigContract(undefined)).toThrow(
+      'must select a supported provider-config contract'
+    );
+    expect(() => normalizeProviderConfigContract('unknown')).toThrow(
+      'must select a supported provider-config contract'
+    );
+  });
+
+  it.each([{}, { chat: {} }, { chat: { defaultProvider: 'openai' } }])(
+    'strict-current rejects missing or mismatched default provider: %j',
+    (config) => {
+      expect(() =>
+        validateProviderConfig(
+          config,
+          'chat-default-provider-v1',
+          'token-place'
+        )
+      ).toThrow('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
+    }
+  );
+
+  it('strict-current accepts the exact runtime default provider', () => {
+    expect(() =>
+      validateProviderConfig(
+        { chat: { defaultProvider: 'token-place' } },
+        'chat-default-provider-v1',
+        'token-place'
+      )
+    ).not.toThrow();
+  });
+
+  it('legacy accepts the 3.1.1 shape only with exact token.place coordinates', () => {
+    expect(() =>
+      validateProviderConfig(
+        legacy311Config,
+        'legacy-no-chat-default-provider-v1',
+        'token-place',
+        'https://token.place',
+        'qwen3-8b-instruct'
+      )
+    ).not.toThrow();
+    for (const config of [
+      {
+        tokenPlace: {
+          ...legacy311Config.tokenPlace,
+          url: 'https://other.example/api',
+        },
+      },
+      { tokenPlace: { ...legacy311Config.tokenPlace, model: 'other-model' } },
+      { ...legacy311Config, chat: { defaultProvider: 'token-place' } },
+      { tokenPlace: null },
+    ]) {
+      expect(() =>
+        validateProviderConfig(
+          config,
+          'legacy-no-chat-default-provider-v1',
+          'token-place',
+          'https://token.place',
+          'qwen3-8b-instruct'
+        )
+      ).toThrow();
+    }
+  });
+
+  it('keeps provider validation before the existing complete journey', async () => {
+    const source = await readFile(
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
+      'utf8'
+    );
+    const validation = source.indexOf('validateProviderConfig(');
+    for (const assertion of [
+      'openExpectedPanel(page)',
+      ".getByRole('button', { name: 'Send' }).click()",
+      "panel.getByText('DSPACE smoke reply.')",
+      'evidence.paths.filter',
+    ]) {
+      expect(validation).toBeGreaterThan(-1);
+      expect(source.indexOf(assertion, validation)).toBeGreaterThan(validation);
+    }
   });
 });
 

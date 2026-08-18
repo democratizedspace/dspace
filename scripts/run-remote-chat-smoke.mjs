@@ -39,6 +39,10 @@ const definitions = {
   expectedVersion: ['expected-version', 'DSPACE_EXPECTED_VERSION'],
   expectedRevision: ['expected-revision', 'DSPACE_EXPECTED_REVISION'],
   identityContract: ['identity-contract', 'DSPACE_EXPECTED_IDENTITY_CONTRACT'],
+  providerConfigContract: [
+    'provider-config-contract',
+    'DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT',
+  ],
   expectedProvider: ['expected-provider', 'DSPACE_EXPECTED_PROVIDER'],
   expectedTokenPlaceOrigin: [
     'expected-token-place-origin',
@@ -57,6 +61,7 @@ const requiredKeys = new Set([
   'expectedVersion',
   'expectedRevision',
   'identityContract',
+  'providerConfigContract',
   'expectedProvider',
 ]);
 
@@ -163,6 +168,14 @@ export function parseAndValidateArgs(argv, env = process.env) {
   ) {
     throw new Error('validation: identity contract is unsupported');
   }
+  if (
+    ![
+      'chat-default-provider-v1',
+      'legacy-no-chat-default-provider-v1',
+    ].includes(result.providerConfigContract)
+  ) {
+    throw new Error('validation: provider-config contract is unsupported');
+  }
   if (!['token-place', 'openai'].includes(result.expectedProvider)) {
     throw new Error(
       'validation: expected provider must be token-place or openai'
@@ -245,6 +258,7 @@ export function buildSmokeEnv(
     DSPACE_EXPECTED_VERSION: options.expectedVersion,
     DSPACE_EXPECTED_REVISION: options.expectedRevision,
     DSPACE_EXPECTED_IDENTITY_CONTRACT: options.identityContract,
+    DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: options.providerConfigContract,
     DSPACE_EXPECTED_PROVIDER: options.expectedProvider,
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',
@@ -408,6 +422,9 @@ export async function main(argv = process.argv.slice(2)) {
   );
   console.log(
     `[qa:remote-chat-smoke] expectedProvider=${options.expectedProvider}`
+  );
+  console.log(
+    `[qa:remote-chat-smoke] providerConfigContract=${options.providerConfigContract}`
   );
   console.log(
     '[qa:remote-chat-smoke] transport=intercepted; profile=isolated; mutation=disabled'
