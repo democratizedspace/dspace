@@ -59,14 +59,35 @@ function completedChild(
 describe('remote chat smoke UI contract selection', () => {
   it('keeps the runtime deployment-default agreement assertion release-aware', async () => {
     const source = await readFile(
-      join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke-contract.ts'),
       'utf8'
     );
     expect(source).toContain("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'");
-    expect(source).toContain('.toBe(expectedProvider)');
-    expect(source.indexOf("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'")).toBeLessThan(
-      source.indexOf("if (expectedProvider === 'openai')")
+    expect(source).toContain('defaultProvider !== expectations.provider');
+  });
+
+  it('keeps legacy config selection inside the complete provider journey', async () => {
+    const source = await readFile(
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
+      'utf8'
     );
+    const validation = source.indexOf(
+      'validateProviderConfig(providerConfigContract'
+    );
+    expect(validation).toBeGreaterThan(-1);
+    expect(source).toContain(".toHaveAttribute(\n        'data-provider'");
+    for (const assertion of [
+      'const panel = await openExpectedPanel(page);',
+      ".getByRole('button', { name: 'Send' }).click()",
+      "panel.getByText('DSPACE smoke reply.')",
+    ]) {
+      expect(source.indexOf(assertion, validation)).toBeGreaterThan(validation);
+    }
+    expect(
+      source.lastIndexOf(
+        "'select',\n                'dispatch',\n                'retrieve'"
+      )
+    ).toBeGreaterThan(validation);
   });
 
   it.each([

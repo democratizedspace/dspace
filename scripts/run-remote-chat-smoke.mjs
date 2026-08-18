@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const frontendDir = join(scriptDir, '..', 'frontend');
 const defaultIdentityContract = 'build-info-v1';
+const defaultProviderConfigContract = 'explicit-default-provider-v1';
 const completionMarker = 'dspace-remote-chat-smoke-journey-complete-v1\n';
 const legacyIdentityProfiles = [
   {
@@ -39,6 +40,10 @@ const definitions = {
   expectedVersion: ['expected-version', 'DSPACE_EXPECTED_VERSION'],
   expectedRevision: ['expected-revision', 'DSPACE_EXPECTED_REVISION'],
   identityContract: ['identity-contract', 'DSPACE_EXPECTED_IDENTITY_CONTRACT'],
+  providerConfigContract: [
+    'provider-config-contract',
+    'DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT',
+  ],
   expectedProvider: ['expected-provider', 'DSPACE_EXPECTED_PROVIDER'],
   expectedTokenPlaceOrigin: [
     'expected-token-place-origin',
@@ -57,6 +62,7 @@ const requiredKeys = new Set([
   'expectedVersion',
   'expectedRevision',
   'identityContract',
+  'providerConfigContract',
   'expectedProvider',
 ]);
 
@@ -92,6 +98,14 @@ export function parseAndValidateArgs(argv, env = process.env) {
     !Object.hasOwn(env, definitions.identityContract[1])
   ) {
     result.identityContract = defaultIdentityContract;
+  }
+  if (
+    !flags.has(definitions.providerConfigContract[0]) &&
+    !Object.hasOwn(env, definitions.providerConfigContract[1])
+  ) {
+    // Preserve the runner's existing fail-closed behavior unless an operator
+    // explicitly selects compatibility with a pre-contract release.
+    result.providerConfigContract = defaultProviderConfigContract;
   }
   const missing = Object.entries(definitions)
     .filter(([key]) => requiredKeys.has(key) && !result[key])
@@ -162,6 +176,13 @@ export function parseAndValidateArgs(argv, env = process.env) {
     !['build-info-v1', 'legacy-build-meta-v1'].includes(result.identityContract)
   ) {
     throw new Error('validation: identity contract is unsupported');
+  }
+  if (
+    !['explicit-default-provider-v1', 'legacy-no-default-provider-v1'].includes(
+      result.providerConfigContract
+    )
+  ) {
+    throw new Error('validation: provider config contract is unsupported');
   }
   if (!['token-place', 'openai'].includes(result.expectedProvider)) {
     throw new Error(
@@ -245,6 +266,7 @@ export function buildSmokeEnv(
     DSPACE_EXPECTED_VERSION: options.expectedVersion,
     DSPACE_EXPECTED_REVISION: options.expectedRevision,
     DSPACE_EXPECTED_IDENTITY_CONTRACT: options.identityContract,
+    DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: options.providerConfigContract,
     DSPACE_EXPECTED_PROVIDER: options.expectedProvider,
     DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: options.expectedTokenPlaceOrigin || '',
     DSPACE_EXPECTED_TOKEN_PLACE_MODEL: options.expectedTokenPlaceModel || '',
@@ -408,6 +430,9 @@ export async function main(argv = process.argv.slice(2)) {
   );
   console.log(
     `[qa:remote-chat-smoke] expectedProvider=${options.expectedProvider}`
+  );
+  console.log(
+    `[qa:remote-chat-smoke] providerConfigContract=${options.providerConfigContract}`
   );
   console.log(
     '[qa:remote-chat-smoke] transport=intercepted; profile=isolated; mutation=disabled'

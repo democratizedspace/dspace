@@ -38,9 +38,43 @@ describe('remote chat smoke input validation', () => {
     const options = parseAndValidateArgs([], completeEnv);
     expect(options.expectedProvider).toBe('token-place');
     expect(options.identityContract).toBe('build-info-v1');
+    expect(options.providerConfigContract).toBe('explicit-default-provider-v1');
     expect(buildSmokeEnv(options, {}).REMOTE_CHAT_SMOKE_USE_WEBSERVER).toBe(
       '0'
     );
+  });
+
+  it('accepts and propagates an explicit legacy provider config contract', () => {
+    const options = parseAndValidateArgs([], {
+      ...completeEnv,
+      DSPACE_EXPECTED_VERSION: '3.1.1',
+      DSPACE_EXPECTED_REVISION: '22f506e07e0b5abfd0cf756e9c5827c0458fb4b2',
+      DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'legacy-no-default-provider-v1',
+    });
+    expect(options.providerConfigContract).toBe(
+      'legacy-no-default-provider-v1'
+    );
+    expect(
+      buildSmokeEnv(options, {}).DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
+    ).toBe('legacy-no-default-provider-v1');
+  });
+
+  it('rejects invalid and contradictory provider config contract selectors', () => {
+    expect(() =>
+      parseAndValidateArgs([], {
+        ...completeEnv,
+        DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'automatic',
+      })
+    ).toThrow('provider config contract is unsupported');
+    expect(() =>
+      parseAndValidateArgs(
+        [
+          '--provider-config-contract=explicit-default-provider-v1',
+          '--provider-config-contract=legacy-no-default-provider-v1',
+        ],
+        completeEnv
+      )
+    ).toThrow('contradictory values');
   });
 
   it('accepts the explicit modern identity contract', () => {
@@ -325,6 +359,7 @@ describe('remote chat smoke input validation', () => {
       [sentinel],
       [`--unknown=${sentinel}`],
       [`--identity-contract=${sentinel}`],
+      [`--provider-config-contract=${sentinel}`],
     ]) {
       let message = '';
       try {

@@ -6,6 +6,8 @@ import { expect, test, type Page } from '@playwright/test';
 import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpers';
 import {
     chatUiContractFor,
+    providerConfigContractFrom,
+    validateProviderConfig,
     type IdentityContract,
     type SmokeProvider,
 } from './remote-chat-smoke-contract';
@@ -29,6 +31,9 @@ function normalizeIdentityContract(value: string | undefined): IdentityContract 
 }
 
 const identityContract = normalizeIdentityContract(process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT);
+const providerConfigContract = providerConfigContractFrom(
+    process.env.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
+);
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as SmokeProvider;
 const chatUiContract = chatUiContractFor(identityContract, expectedProvider);
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
@@ -419,16 +424,17 @@ test.describe('release-aware remote chat smoke', () => {
         'routing/configuration and submission: approved default journey',
         async ({ page, markJourneyEntered }) => {
             markJourneyEntered();
-            if (identityContract === 'build-info-v1') {
-                const providerConfigResponse = await page.request.get('/config.json');
-                expect(providerConfigResponse.status(), '/config.json did not return 200').toBe(
-                    200
-                );
-                expect(
-                    (await providerConfigResponse.json()).chat?.defaultProvider,
-                    'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'
-                ).toBe(expectedProvider);
-            }
+            const providerConfigResponse = await page.request.get('/config.json');
+            expect(
+                new URL(providerConfigResponse.url()).origin,
+                'routing/configuration: /config.json origin drift'
+            ).toBe(requestedOrigin);
+            expect(providerConfigResponse.status(), '/config.json did not return 200').toBe(200);
+            validateProviderConfig(providerConfigContract, await providerConfigResponse.json(), {
+                provider: expectedProvider,
+                tokenPlaceOrigin: expectedOrigin,
+                tokenPlaceModel: expectedModel,
+            });
             if (expectedProvider === 'openai') {
                 let openAICalls = 0;
                 let credentialPresent = false;
@@ -533,24 +539,6 @@ test.describe('release-aware remote chat smoke', () => {
                 });
                 return;
             }
-            const configResponse = await page.request.get('/config.json');
-            expect(
-                new URL(configResponse.url()).origin,
-                'routing/configuration: /config.json origin drift'
-            ).toBe(requestedOrigin);
-            expect(
-                configResponse.status(),
-                'routing/configuration: /config.json did not return 200'
-            ).toBe(200);
-            const config = await configResponse.json();
-            expect(
-                new URL(config.tokenPlace.url).origin,
-                'routing/configuration: token.place configured origin drift'
-            ).toBe(expectedOrigin);
-            expect(
-                config.tokenPlace.model,
-                'routing/configuration: token.place configured model drift'
-            ).toBe(expectedModel);
             const evidence = await installSuccessfulRelay(page);
             const panel = await openExpectedPanel(page);
             await panel.getByRole('textbox').fill('Deterministic remote chat smoke');
