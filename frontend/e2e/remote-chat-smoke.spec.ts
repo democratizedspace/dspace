@@ -7,7 +7,7 @@ import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpe
 import {
     chatUiContractFor,
     type IdentityContract,
-    normalizeProviderConfigContract,
+    providerConfigContractForRemoteSmoke,
     type SmokeProvider,
     validateProviderConfig,
 } from './remote-chat-smoke-contract';
@@ -38,6 +38,10 @@ const expectedModel = process.env.DSPACE_EXPECTED_TOKEN_PLACE_MODEL;
 const expectedResolvedModel =
     expectedModel === 'llama-3.1-8b-instruct' ? 'qwen3-8b-instruct' : expectedModel;
 const remoteChatSmokeEnabled = process.env.REMOTE_CHAT_SMOKE === '1';
+const providerConfigContract = providerConfigContractForRemoteSmoke(
+    remoteChatSmokeEnabled,
+    process.env.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
+);
 const requestedOrigin = remoteChatSmokeEnabled ? new URL(process.env.BASE_URL!).origin : undefined;
 const fault = process.env.DSPACE_REMOTE_CHAT_SMOKE_FAULT;
 const completionMarkerFile = process.env.DSPACE_REMOTE_CHAT_SMOKE_COMPLETION_FILE;
@@ -421,9 +425,6 @@ test.describe('release-aware remote chat smoke', () => {
         'routing/configuration and submission: approved default journey',
         async ({ page, markJourneyEntered }) => {
             markJourneyEntered();
-            const providerConfigContract = normalizeProviderConfigContract(
-                process.env.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
-            );
             const providerConfigResponse = await page.request.get('/config.json');
             expect(
                 new URL(providerConfigResponse.url()).origin,

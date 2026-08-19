@@ -17,6 +17,13 @@ export function normalizeProviderConfigContract(value: string | undefined): Prov
     );
 }
 
+export function providerConfigContractForRemoteSmoke(
+    enabled: boolean,
+    value: string | undefined
+): ProviderConfigContract {
+    return enabled ? normalizeProviderConfigContract(value) : 'chat-default-provider-v1';
+}
+
 function record(value: unknown, name: string): Record<string, unknown> {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) {
         throw new Error(`routing/configuration: ${name} must be an object`);

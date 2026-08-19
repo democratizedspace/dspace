@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   chatUiContractFor,
   normalizeProviderConfigContract,
+  providerConfigContractForRemoteSmoke,
   validateProviderConfig,
 } from '../../frontend/e2e/remote-chat-smoke-contract';
 import {
@@ -125,6 +126,33 @@ describe('remote chat smoke provider config contracts', () => {
       'must select a supported provider config contract'
     );
   });
+
+  it('uses a harmless current-contract placeholder when remote smoke is inactive', () => {
+    expect(providerConfigContractForRemoteSmoke(false, undefined)).toBe(
+      'chat-default-provider-v1'
+    );
+  });
+
+  it.each([undefined, 'automatic'])(
+    'rejects %s when remote smoke is active',
+    (selector) => {
+      expect(() =>
+        providerConfigContractForRemoteSmoke(true, selector)
+      ).toThrow('must select a supported provider config contract');
+    }
+  );
+
+  it.each([
+    'chat-default-provider-v1',
+    'legacy-no-default-provider-v1',
+  ] as const)(
+    'preserves the explicit %s selector in active smoke mode',
+    (selector) => {
+      expect(providerConfigContractForRemoteSmoke(true, selector)).toBe(
+        selector
+      );
+    }
+  );
 
   it('rejects unsupported contracts instead of treating them as legacy', () => {
     expect(() =>
