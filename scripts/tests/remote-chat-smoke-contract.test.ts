@@ -132,6 +132,20 @@ describe('remote chat smoke provider config contracts', () => {
     ).toThrow('unsupported provider config contract');
   });
 
+  it.each([
+    ['missing', undefined],
+    ['unknown', 'automatic'],
+  ])(
+    'rejects a %s receiver selector before legacy validation',
+    (_description, selector) => {
+      const legacyConfig = { chat: {}, tokenPlace: undefined };
+      expect(() => {
+        const contract = normalizeProviderConfigContract(selector);
+        validateProviderConfig(legacyConfig, contract, 'openai');
+      }).toThrow('must select a supported provider config contract');
+    }
+  );
+
   it('accepts the current contract only with an exact default provider', () => {
     expect(() =>
       validateProviderConfig(

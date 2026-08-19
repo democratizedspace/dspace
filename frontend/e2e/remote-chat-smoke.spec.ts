@@ -31,9 +31,6 @@ function normalizeIdentityContract(value: string | undefined): IdentityContract 
 }
 
 const identityContract = normalizeIdentityContract(process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT);
-const providerConfigContract = normalizeProviderConfigContract(
-    process.env.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
-);
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as SmokeProvider;
 const chatUiContract = chatUiContractFor(identityContract, expectedProvider);
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;
@@ -424,6 +421,9 @@ test.describe('release-aware remote chat smoke', () => {
         'routing/configuration and submission: approved default journey',
         async ({ page, markJourneyEntered }) => {
             markJourneyEntered();
+            const providerConfigContract = normalizeProviderConfigContract(
+                process.env.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
+            );
             const providerConfigResponse = await page.request.get('/config.json');
             expect(
                 new URL(providerConfigResponse.url()).origin,
