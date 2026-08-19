@@ -7,7 +7,7 @@ import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpe
 import {
     chatUiContractFor,
     type IdentityContract,
-    type ProviderConfigContract,
+    normalizeProviderConfigContract,
     type SmokeProvider,
     validateProviderConfig,
 } from './remote-chat-smoke-contract';
@@ -31,8 +31,9 @@ function normalizeIdentityContract(value: string | undefined): IdentityContract 
 }
 
 const identityContract = normalizeIdentityContract(process.env.DSPACE_EXPECTED_IDENTITY_CONTRACT);
-const providerConfigContract = process.env
-    .DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT as ProviderConfigContract;
+const providerConfigContract = normalizeProviderConfigContract(
+    process.env.DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT
+);
 const expectedProvider = process.env.DSPACE_EXPECTED_PROVIDER as SmokeProvider;
 const chatUiContract = chatUiContractFor(identityContract, expectedProvider);
 const expectedOrigin = process.env.DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN;

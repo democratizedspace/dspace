@@ -3,6 +3,20 @@ export type SmokeProvider = 'token-place' | 'openai';
 export type ChatUiContract = 'modern-settings-v1' | 'legacy-inline-openai-v1';
 export type ProviderConfigContract = 'chat-default-provider-v1' | 'legacy-no-default-provider-v1';
 
+export function normalizeProviderConfigContract(value: string | undefined): ProviderConfigContract {
+    const normalized = value?.trim();
+    if (
+        normalized === 'chat-default-provider-v1' ||
+        normalized === 'legacy-no-default-provider-v1'
+    ) {
+        return normalized;
+    }
+
+    throw new Error(
+        'DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT must select a supported provider config contract'
+    );
+}
+
 function record(value: unknown, name: string): Record<string, unknown> {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) {
         throw new Error(`routing/configuration: ${name} must be an object`);
@@ -24,8 +38,12 @@ export function validateProviderConfig(
         if (chat?.defaultProvider !== expectedProvider) {
             throw new Error('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
         }
-    } else if (chat && Object.hasOwn(chat, 'defaultProvider')) {
-        throw new Error('routing/configuration: legacy config claims chat.defaultProvider');
+    } else if (contract === 'legacy-no-default-provider-v1') {
+        if (chat && Object.hasOwn(chat, 'defaultProvider')) {
+            throw new Error('routing/configuration: legacy config claims chat.defaultProvider');
+        }
+    } else {
+        throw new Error('routing/configuration: unsupported provider config contract');
     }
 
     if (expectedProvider !== 'token-place') return;

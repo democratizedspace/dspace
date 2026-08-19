@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   chatUiContractFor,
+  normalizeProviderConfigContract,
   validateProviderConfig,
 } from '../../frontend/e2e/remote-chat-smoke-contract';
 import {
@@ -109,6 +110,27 @@ describe('remote chat smoke provider config contracts', () => {
   const tokenPlace = {
     tokenPlace: { url: 'https://token.place', model: 'qwen3-8b-instruct' },
   };
+
+  it('normalizes only explicit supported provider config contracts', () => {
+    expect(normalizeProviderConfigContract(' chat-default-provider-v1 ')).toBe(
+      'chat-default-provider-v1'
+    );
+    expect(
+      normalizeProviderConfigContract('legacy-no-default-provider-v1')
+    ).toBe('legacy-no-default-provider-v1');
+    expect(() => normalizeProviderConfigContract(undefined)).toThrow(
+      'must select a supported provider config contract'
+    );
+    expect(() => normalizeProviderConfigContract('automatic')).toThrow(
+      'must select a supported provider config contract'
+    );
+  });
+
+  it('rejects unsupported contracts instead of treating them as legacy', () => {
+    expect(() =>
+      validateProviderConfig(tokenPlace, 'automatic' as never, 'openai')
+    ).toThrow('unsupported provider config contract');
+  });
 
   it('accepts the current contract only with an exact default provider', () => {
     expect(() =>

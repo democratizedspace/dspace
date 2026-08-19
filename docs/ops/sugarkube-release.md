@@ -252,6 +252,7 @@ the runtime under test). Replace the revision with the approved full 40-characte
 DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
 DSPACE_EXPECTED_VERSION=3.1.1 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
@@ -261,6 +262,7 @@ npm run qa:remote-chat-smoke
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
 DSPACE_EXPECTED_VERSION=3.1.1 \
 DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
@@ -278,6 +280,7 @@ node scripts/run-remote-chat-smoke.mjs \
   --expected-version 3.1.0 \
   --expected-revision 018687f5a7f4de45508c6e36eb28afb3e44da24d \
   --identity-contract legacy-build-meta-v1 \
+  --provider-config-contract legacy-no-default-provider-v1 \
   --expected-provider token-place \
   --expected-token-place-origin https://staging.token.place \
   --expected-token-place-model llama-3.1-8b-instruct \
@@ -315,6 +318,7 @@ DSPACE_SMOKE_BASE_URL=https://democratized.space \
 DSPACE_EXPECTED_VERSION=3.0.1 \
 DSPACE_EXPECTED_REVISION=1a31a569aff2dbeb238e8c2688b9e85140d2077d \
 DSPACE_EXPECTED_IDENTITY_CONTRACT=legacy-build-meta-v1 \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
 DSPACE_EXPECTED_PROVIDER=openai \
 npm run qa:remote-chat-smoke
 ```
@@ -327,6 +331,7 @@ DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
 DSPACE_EXPECTED_VERSION=3.1.0 \
 DSPACE_EXPECTED_REVISION=018687f5a7f4de45508c6e36eb28afb3e44da24d \
 DSPACE_EXPECTED_IDENTITY_CONTRACT=legacy-build-meta-v1 \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=llama-3.1-8b-instruct \
