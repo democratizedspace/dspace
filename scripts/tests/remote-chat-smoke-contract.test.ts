@@ -4,7 +4,12 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
-import { chatUiContractFor } from '../../frontend/e2e/remote-chat-smoke-contract';
+import {
+  chatUiContractFor,
+  normalizeProviderConfigContract,
+  providerConfigContractForRemoteSmoke,
+  validateProviderConfig,
+} from '../../frontend/e2e/remote-chat-smoke-contract';
 import {
   remoteChatSmokeCompletionMarker,
   writeRemoteChatSmokeCompletion,
@@ -21,6 +26,7 @@ const completeEnv = {
   DSPACE_EXPECTED_VERSION: '3.1.1',
   DSPACE_EXPECTED_REVISION: revision,
   DSPACE_EXPECTED_PROVIDER: 'openai',
+  DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'chat-default-provider-v1',
 };
 
 function options(resultFile?: string) {
@@ -58,14 +64,36 @@ function completedChild(
 
 describe('remote chat smoke UI contract selection', () => {
   it('keeps the runtime deployment-default agreement assertion release-aware', async () => {
+    const journeySource = await readFile(
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
+      'utf8'
+    );
+    const contractSource = await readFile(
+      join(process.cwd(), 'frontend/e2e/remote-chat-smoke-contract.ts'),
+      'utf8'
+    );
+    expect(contractSource).toContain("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'");
+    expect(journeySource.indexOf('validateProviderConfig(')).toBeLessThan(
+      journeySource.indexOf("if (expectedProvider === 'openai')")
+    );
+  });
+
+  it('keeps legacy selection coupled to the complete provider journey', async () => {
     const source = await readFile(
       join(process.cwd(), 'frontend/e2e/remote-chat-smoke.spec.ts'),
       'utf8'
     );
-    expect(source).toContain("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'");
-    expect(source).toContain('.toBe(expectedProvider)');
-    expect(source.indexOf("'LIVE_DEFAULT_PROVIDER_DISAGREEMENT'")).toBeLessThan(
-      source.indexOf("if (expectedProvider === 'openai')")
+    const validation = source.indexOf('validateProviderConfig(');
+    for (const assertion of [
+      'const panel = await openExpectedPanel(page)',
+      "panel.getByRole('button', { name: 'Send' }).click()",
+      "panel.getByText('DSPACE smoke reply.')",
+      'evidence.dispatchModelMatches',
+    ]) {
+      expect(source.indexOf(assertion, validation)).toBeGreaterThan(validation);
+    }
+    expect(source).toContain(
+      'writeRemoteChatSmokeCompletion(completionMarkerFile)'
     );
   });
 
@@ -76,6 +104,130 @@ describe('remote chat smoke UI contract selection', () => {
     ['build-info-v1', 'token-place', 'modern-settings-v1'],
   ] as const)('maps %s + %s to %s', (identityContract, provider, expected) => {
     expect(chatUiContractFor(identityContract, provider)).toBe(expected);
+  });
+});
+
+describe('remote chat smoke provider config contracts', () => {
+  const tokenPlace = {
+    tokenPlace: { url: 'https://token.place', model: 'qwen3-8b-instruct' },
+  };
+
+  it('normalizes only explicit supported provider config contracts', () => {
+    expect(normalizeProviderConfigContract(' chat-default-provider-v1 ')).toBe(
+      'chat-default-provider-v1'
+    );
+    expect(
+      normalizeProviderConfigContract('legacy-no-default-provider-v1')
+    ).toBe('legacy-no-default-provider-v1');
+    expect(() => normalizeProviderConfigContract(undefined)).toThrow(
+      'must select a supported provider config contract'
+    );
+    expect(() => normalizeProviderConfigContract('automatic')).toThrow(
+      'must select a supported provider config contract'
+    );
+  });
+
+  it('uses a harmless current-contract placeholder when remote smoke is inactive', () => {
+    expect(providerConfigContractForRemoteSmoke(false, undefined)).toBe(
+      'chat-default-provider-v1'
+    );
+  });
+
+  it.each([undefined, 'automatic'])(
+    'rejects %s when remote smoke is active',
+    (selector) => {
+      expect(() =>
+        providerConfigContractForRemoteSmoke(true, selector)
+      ).toThrow('must select a supported provider config contract');
+    }
+  );
+
+  it.each([
+    'chat-default-provider-v1',
+    'legacy-no-default-provider-v1',
+  ] as const)(
+    'preserves the explicit %s selector in active smoke mode',
+    (selector) => {
+      expect(providerConfigContractForRemoteSmoke(true, selector)).toBe(
+        selector
+      );
+    }
+  );
+
+  it('rejects unsupported contracts instead of treating them as legacy', () => {
+    expect(() =>
+      validateProviderConfig(tokenPlace, 'automatic' as never, 'openai')
+    ).toThrow('unsupported provider config contract');
+  });
+
+  it.each([
+    ['missing', undefined],
+    ['unknown', 'automatic'],
+  ])(
+    'rejects a %s receiver selector before legacy validation',
+    (_description, selector) => {
+      const legacyConfig = { chat: {}, tokenPlace: undefined };
+      expect(() => {
+        const contract = normalizeProviderConfigContract(selector);
+        validateProviderConfig(legacyConfig, contract, 'openai');
+      }).toThrow('must select a supported provider config contract');
+    }
+  );
+
+  it('accepts the current contract only with an exact default provider', () => {
+    expect(() =>
+      validateProviderConfig(
+        { ...tokenPlace, chat: { defaultProvider: 'token-place' } },
+        'chat-default-provider-v1',
+        'token-place',
+        'https://token.place',
+        'qwen3-8b-instruct'
+      )
+    ).not.toThrow();
+    for (const config of [
+      tokenPlace,
+      { ...tokenPlace, chat: { defaultProvider: 'openai' } },
+    ]) {
+      expect(() =>
+        validateProviderConfig(
+          config,
+          'chat-default-provider-v1',
+          'token-place',
+          'https://token.place',
+          'qwen3-8b-instruct'
+        )
+      ).toThrow('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
+    }
+  });
+
+  it('accepts the finalized 3.1.1 config shape only with exact token.place coordinates', () => {
+    expect(() =>
+      validateProviderConfig(
+        tokenPlace,
+        'legacy-no-default-provider-v1',
+        'token-place',
+        'https://token.place',
+        'qwen3-8b-instruct'
+      )
+    ).not.toThrow();
+    for (const config of [
+      {
+        tokenPlace: { ...tokenPlace.tokenPlace, url: 'https://other.example' },
+      },
+      { tokenPlace: { ...tokenPlace.tokenPlace, model: 'other-model' } },
+      { tokenPlace: { url: 'not-a-url', model: 'qwen3-8b-instruct' } },
+      { ...tokenPlace, chat: { defaultProvider: 'token-place' } },
+    ]) {
+      expect(() =>
+        validateProviderConfig(
+          config,
+          'legacy-no-default-provider-v1',
+          'token-place',
+          'https://token.place',
+          'qwen3-8b-instruct'
+        )
+      ).toThrow();
+    }
   });
 });
 

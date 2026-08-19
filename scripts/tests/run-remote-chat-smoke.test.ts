@@ -12,6 +12,7 @@ const completeEnv = {
   DSPACE_EXPECTED_VERSION: '3.1.0',
   DSPACE_EXPECTED_REVISION: revision,
   DSPACE_EXPECTED_PROVIDER: 'token-place',
+  DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'chat-default-provider-v1',
   DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: 'https://token.place',
   DSPACE_EXPECTED_TOKEN_PLACE_MODEL: 'qwen3-8b-instruct',
 };
@@ -38,9 +39,50 @@ describe('remote chat smoke input validation', () => {
     const options = parseAndValidateArgs([], completeEnv);
     expect(options.expectedProvider).toBe('token-place');
     expect(options.identityContract).toBe('build-info-v1');
+    expect(options.providerConfigContract).toBe('chat-default-provider-v1');
     expect(buildSmokeEnv(options, {}).REMOTE_CHAT_SMOKE_USE_WEBSERVER).toBe(
       '0'
     );
+  });
+
+  it.each([
+    [
+      { DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: '' },
+      'missing required input',
+    ],
+    [
+      { DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'automatic' },
+      'provider config contract is unsupported',
+    ],
+  ])(
+    'rejects missing and unknown provider config contracts',
+    (change, message) => {
+      expect(() =>
+        parseAndValidateArgs([], { ...completeEnv, ...change })
+      ).toThrow(message);
+    }
+  );
+
+  it('accepts and propagates the explicit legacy provider config contract', () => {
+    const options = parseAndValidateArgs([], {
+      ...completeEnv,
+      DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'legacy-no-default-provider-v1',
+    });
+    expect(buildSmokeEnv(options, {})).toMatchObject({
+      DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: 'legacy-no-default-provider-v1',
+    });
+  });
+
+  it('rejects contradictory provider config contract flags before execution', () => {
+    expect(() =>
+      parseAndValidateArgs(
+        [
+          '--provider-config-contract=chat-default-provider-v1',
+          '--provider-config-contract=legacy-no-default-provider-v1',
+        ],
+        completeEnv
+      )
+    ).toThrow('contradictory values');
   });
 
   it('accepts the explicit modern identity contract', () => {
@@ -325,6 +367,7 @@ describe('remote chat smoke input validation', () => {
       [sentinel],
       [`--unknown=${sentinel}`],
       [`--identity-contract=${sentinel}`],
+      [`--provider-config-contract=${sentinel}`],
     ]) {
       let message = '';
       try {

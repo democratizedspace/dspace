@@ -118,6 +118,7 @@ jobs:
           DSPACE_SMOKE_BASE_URL: http://127.0.0.1:4173
           DSPACE_EXPECTED_REVISION: ${{ github.sha }}
           DSPACE_EXPECTED_PROVIDER: token-place
+          DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: chat-default-provider-v1
           DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN: https://token.place
           DSPACE_EXPECTED_TOKEN_PLACE_MODEL: qwen3-8b-instruct
           GITHUB_SHA: ${{ github.sha }}
