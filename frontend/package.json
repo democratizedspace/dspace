@@ -84,7 +84,7 @@
         "svelte-jester": "^2.3.2",
         "svelte-switch-case": "^2.0.0",
         "text-encoding": "^0.7.0",
-        "ts-jest": "^29.2.6",
+        "ts-jest": "^29.4.9",
         "typescript": "^5.9.2"
     },
     "dependencies": {
