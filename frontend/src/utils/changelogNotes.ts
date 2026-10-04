@@ -101,7 +101,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20260201': [
         {
             message:
-                'Update: token.place is now the default Chat provider in DSPACE v3.1, while OpenAI remains optional from Settings.',
+                'Update: the DSPACE v3.1 candidate defaults to token.place, while OpenAI remains optional from Settings.',
             href: '/docs/token-place',
             linkLabel: 'token.place integration doc',
         },
@@ -127,9 +127,9 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
-                'AI chat now defaults to token.place in v3.1, with OpenAI available as an opt-in provider from Settings.',
+                'The v3.1 candidate defaults to token.place, with OpenAI available from Settings; production promotion remains gated on release readiness.',
             href: '/docs/changelog/20260801',
-            linkLabel: 'August 1, 2026 changelog',
+            linkLabel: 'v3.1 release preparation notes (November 1, 2026 tentative)',
         },
         {
             message:
