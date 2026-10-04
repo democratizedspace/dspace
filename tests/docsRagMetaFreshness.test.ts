@@ -14,6 +14,14 @@ describe('docs RAG metadata freshness', () => {
         );
     });
 
+    it('indexes archived changelogs only as changelog chunks', () => {
+        const archivedChunks = docsChunks.filter((chunk) =>
+            chunk.path.startsWith('frontend/src/pages/docs/md/changelog/')
+        );
+        expect(archivedChunks.length).toBeGreaterThan(0);
+        expect(archivedChunks.every((chunk) => chunk.kind === 'changelog')).toBe(true);
+    });
+
     it('records a concrete git SHA', () => {
         expect(docsMeta.gitSha).toBeTruthy();
         expect(String(docsMeta.gitSha)).not.toBe('unknown');
