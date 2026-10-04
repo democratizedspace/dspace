@@ -10,8 +10,21 @@ coordinates to use automatically for this candidate. Before collecting new evide
 release-owner-confirmed application version, chart version/appVersion, source SHA, image digest,
 chart reference, environment, and timestamp in the [QA checklist](../qa/v3.1.md).
 
-Read current preparation metadata from root/frontend package files and `charts/dspace/Chart.yaml`;
-this document does not select final versions or establish what is deployed. Checked source items
+Before recording candidate coordinates, verify both complete coordinate groups:
+
+- Application: root `package.json`, `frontend/package.json`, root `package-lock.json` (top-level
+  version and root package metadata), `charts/dspace/Chart.yaml:appVersion`, and the default
+  semantic image tag in `charts/dspace/values.yaml:image.tag` must agree (the tag adds `v`).
+- Chart: `charts/dspace/Chart.yaml:version`, `docs/apps/dspace.version`, and the packaged chart
+  filename must agree. The chart version is independent of the application version.
+
+Use the existing release-consistency gates in `scripts/check-release-consistency.mjs`; its
+`--verify-local-fixtures` mode checks deterministic manifest fixtures without network access.
+Fixture success alone is not candidate artifact verification. Deployment and rollback evidence
+must pin an immutable branch-SHA image tag or digest and chart reference; the semantic image tag
+is a human-readable release coordinate, not the deployment coordinate.
+
+This document does not select final versions or establish what is deployed. Checked source items
 below do not replace candidate staging evidence. The [current preparation guide](../../frontend/src/pages/docs/md/v3-1-release-preparation.md)
 records the tentative November 1, 2026 target; readiness takes priority.
 
