@@ -2,6 +2,7 @@
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
 import Card from '../../components/Card.astro';
+import { appendChangelogNotes } from '../../utils/changelogNotes';
 import { fixMarkdownText } from '../../utils';
 
 const escapeHtml = (value = '') =>
@@ -38,7 +39,7 @@ const buildLatestChangelogHtml = (entries = []) => {
         ? `\n        <p>${escapeHtml(summaryText)}</p>`
         : '';
 
-    return `\n<ul aria-label="Latest changelog entry">\n    <li>\n        <a href="/changelog#${escapeHtml(latest.slug)}">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`;
+    return appendChangelogNotes(`\n<ul aria-label="Latest changelog entry">\n    <li>\n        <a href="/changelog#${escapeHtml(latest.slug)}">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`, latest.slug);
 };
 
 const { slug } = Astro.params;

@@ -5,6 +5,14 @@ export interface ChangelogNote {
 }
 
 const notesBySlug: Record<string, ChangelogNote[]> = {
+    '20260801': [
+        {
+            message:
+                'Current release status: v3.1 remains in preparation with a tentative November 1, 2026 target; readiness takes priority. The archived August entry is not evidence of production promotion. Its transport and configuration descriptions are superseded by the current preparation guide.',
+            href: '/docs/v3-1-release-preparation',
+            linkLabel: 'v3.1 release preparation',
+        },
+    ],
     '20221019': [
         {
             message:
@@ -128,7 +136,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         {
             message:
                 'The v3.1 candidate defaults to token.place, with OpenAI available from Settings; production promotion remains gated on release readiness.',
-            href: '/docs/changelog/20260801',
+            href: '/docs/v3-1-release-preparation',
             linkLabel: 'v3.1 release preparation notes (November 1, 2026 tentative)',
         },
         {
@@ -197,14 +205,11 @@ export function renderChangelogNotes(slug: string | undefined): string {
 }
 
 /**
- * Intentionally returns the compiled changelog HTML unchanged.
- *
- * `notesBySlug` is source metadata and must stay available via
- * `renderChangelogNotes`/`getChangelogNotes` for programmatic consumers,
- * but it should not be injected into user-facing HTML.
+ * Show the explicitly requested current-status advisory for the August v3.1 entry,
+ * preserving its archived HTML verbatim. Other historical notes stay metadata-only.
  */
-export function appendChangelogNotes(html: string, _slug: string | undefined): string {
-    return html;
+export function appendChangelogNotes(html: string, slug: string | undefined): string {
+    return slug === '20260801' ? renderChangelogNotes(slug) + html : html;
 }
 
 export function getChangelogNotes(slug: string | undefined): ChangelogNote[] {

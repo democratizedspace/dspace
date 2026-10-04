@@ -312,10 +312,11 @@ This sequence keeps each implementation PR reviewable:
 
 5. **Phase 5: User-facing docs and release QA**
     - Update Chat and Settings docs for token.place default and OpenAI opt-in.
-    - Maintain the explicitly requested v3.1 release preparation entry at
-      `frontend/src/pages/docs/md/changelog/20260801.md`. November 1, 2026 is tentative; readiness
-      takes priority. Retain the filename/slug to preserve existing permalinks and archive anchors
-      (this is not a general license for agents to create or update changelogs).
+    - Maintain current v3.1 release preparation at
+      `frontend/src/pages/docs/md/v3-1-release-preparation.md`. November 1, 2026 is tentative;
+      readiness takes priority. Preserve `frontend/src/pages/docs/md/changelog/20260801.md` as
+      archived narrative and keep its permalink/anchor; render a current-status note linking to
+      the preparation page (this is not a general license to rewrite historical changelogs).
     - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
 
 6. **Phase 6: Cleanup and hardening**
