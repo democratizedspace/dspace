@@ -30,6 +30,7 @@ export const TOKEN_PLACE_FAST_TIER_TIMEOUT_MS = 30_000;
 export const TOKEN_PLACE_FULL_TIER_TIMEOUT_MS = 120_000;
 const DEFAULT_RELAY_TIMEOUT_MS = TOKEN_PLACE_FAST_TIER_TIMEOUT_MS;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
+const RELAY_CANCEL_TIMEOUT_MS = 1000;
 export {
     sanitizeTokenPlaceMessages,
     TOKEN_PLACE_API_V1_MAX_MESSAGES,
@@ -787,7 +788,70 @@ export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}
         options
     );
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms, signal) =>
+    new Promise((resolve, reject) => {
+        if (signal.aborted) {
+            reject(signal.reason);
+            return;
+        }
+        const onAbort = () => {
+            clearTimeout(timer);
+            signal.removeEventListener('abort', onAbort);
+            reject(signal.reason);
+        };
+        const timer = setTimeout(() => {
+            signal.removeEventListener('abort', onAbort);
+            resolve();
+        }, ms);
+        signal.addEventListener('abort', onAbort, { once: true });
+    });
+
+const createRelayTimeoutError = () =>
+    createTokenPlaceHttpError(
+        408,
+        { message: 'Timed out waiting for token.place compute response.' },
+        'Timeout'
+    );
+
+// Race the entire operation, including body reads, against the deadline. Abort the
+// transport as well, but do not depend on a fetch implementation honoring abort.
+const withRelayDeadline = async (operation, { timeoutMs, signal, timeoutError }) => {
+    const controller = new AbortController();
+    let rejectStopped;
+    const stopped = new Promise((_, reject) => {
+        rejectStopped = reject;
+    });
+    const stop = (error) => {
+        if (controller.signal.aborted) return;
+        rejectStopped(error);
+        controller.abort(error);
+    };
+    const onAbort = () => {
+        const error = createTokenPlaceNetworkError(signal.reason);
+        error.type = 'abort';
+        stop(error);
+    };
+    let timer;
+    if (signal?.aborted) {
+        onAbort();
+    } else {
+        signal?.addEventListener('abort', onAbort, { once: true });
+        if (timeoutMs <= 0) stop(timeoutError);
+        else timer = setTimeout(() => stop(timeoutError), timeoutMs);
+    }
+    try {
+        return await Promise.race([
+            stopped,
+            Promise.resolve().then(() => {
+                controller.signal.throwIfAborted();
+                return operation(controller.signal);
+            }),
+        ]);
+    } finally {
+        clearTimeout(timer);
+        signal?.removeEventListener('abort', onAbort);
+    }
+};
 
 const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     const metricsStart = performance.now();
@@ -865,37 +929,54 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     }
 };
 
-const cancelRelayRequest = async (baseUrl, cancelToken, options = {}) => {
+const cancelRelayRequest = async (baseUrl, cancelToken) => {
     if (!cancelToken) return;
     try {
-        await fetch(`${baseUrl}/api/v1/relay/requests/cancel`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cancel_token: cancelToken }),
-            signal: options.signal,
-            credentials: 'omit',
-        });
+        await withRelayDeadline(
+            (signal) =>
+                fetch(`${baseUrl}/api/v1/relay/requests/cancel`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cancel_token: cancelToken }),
+                    signal,
+                    credentials: 'omit',
+                }),
+            { timeoutMs: RELAY_CANCEL_TIMEOUT_MS, timeoutError: createRelayTimeoutError() }
+        );
     } catch {
         // Best-effort timeout cleanup only; preserve the user-facing timeout error.
     }
 };
 
 export const pollTokenPlaceRelayResponse = async (baseUrl, body, options = {}) => {
-    const startedAt = Date.now();
     const timeoutMs = options.timeoutMs ?? DEFAULT_RELAY_TIMEOUT_MS;
     const intervalMs = options.pollIntervalMs ?? DEFAULT_RELAY_POLL_INTERVAL_MS;
-    while (Date.now() - startedAt < timeoutMs) {
-        const result = await retrieveRelayResponse(baseUrl, body, options);
-        if (result.ready) return result.data;
-        if (result.terminalSelectedServerFailure) return result;
-        await sleep(intervalMs);
+    const timeoutError = createRelayTimeoutError();
+    try {
+        return await withRelayDeadline(
+            async (signal) => {
+                while (true) {
+                    signal.throwIfAborted();
+                    const result = await retrieveRelayResponse(baseUrl, body, {
+                        ...options,
+                        signal,
+                    });
+                    signal.throwIfAborted();
+                    if (result.ready) return result.data;
+                    if (result.terminalSelectedServerFailure) return result;
+                    await sleep(intervalMs, signal);
+                }
+            },
+            { timeoutMs, signal: options.signal, timeoutError }
+        );
+    } catch (error) {
+        if (error === timeoutError) {
+            // Cleanup must not delay the timeout shown to the player. It has its own
+            // bounded signal because the polling transport has already been aborted.
+            void cancelRelayRequest(baseUrl, options.cancelToken);
+        }
+        throw error;
     }
-    await cancelRelayRequest(baseUrl, options.cancelToken, options);
-    throw createTokenPlaceHttpError(
-        408,
-        { message: 'Timed out waiting for token.place compute response.' },
-        'Timeout'
-    );
 };
 
 export const validateTokenPlaceResponseEnvelope = (envelope, expected) => {
