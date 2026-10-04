@@ -18,8 +18,12 @@ Before recording candidate coordinates, verify both complete coordinate groups:
 - Chart: `charts/dspace/Chart.yaml:version`, `docs/apps/dspace.version`, and the packaged chart
   filename must agree. The chart version is independent of the application version.
 
-Use the existing release-consistency gates in `scripts/check-release-consistency.mjs`; its
-`--verify-local-fixtures` mode checks deterministic manifest fixtures without network access.
+Run `bash scripts/check-dspace-chart-version.sh` for source-coordinate consistency, including
+the default image tag. Then use the staging, linting, packaging, exact package-filename assertion,
+and embedded metadata verification from `.github/workflows/ci-helm.yml`; the non-publishing
+commands are in the [QA automation section](../qa/v3.1.md#12-automation-evidence).
+`scripts/check-release-consistency.mjs --verify-local-fixtures` checks deterministic manifest
+fixtures without network access; it does not validate the default image tag or package filename.
 Fixture success alone is not candidate artifact verification. Deployment and rollback evidence
 must pin an immutable branch-SHA image tag or digest and chart reference; the semantic image tag
 is a human-readable release coordinate, not the deployment coordinate.
