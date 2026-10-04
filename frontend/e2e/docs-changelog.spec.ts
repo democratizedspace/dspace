@@ -139,7 +139,7 @@ test.describe('docs changelog page', () => {
 
         await expect(page.getByRole('heading', { name: 'Changelog' })).toBeVisible();
 
-        const releasesList = page.getByRole('list', { name: 'Latest releases' });
+        const releasesList = page.getByRole('list', { name: 'Latest changelog entry' });
         await expect(releasesList).toBeVisible();
 
         if (latestChangelog) {

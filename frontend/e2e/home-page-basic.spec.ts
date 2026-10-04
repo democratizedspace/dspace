@@ -11,7 +11,7 @@ test.describe('Home Page Basic Rendering', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const latestUpdate = page.getByRole('heading', { name: /latest update/i });
+        const latestUpdate = page.getByRole('heading', { name: /latest changelog entry/i });
         await expect(latestUpdate).toBeVisible();
     });
 });

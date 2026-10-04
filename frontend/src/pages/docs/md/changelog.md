@@ -9,7 +9,7 @@ and tooling changes as they land.
 
 For v3.1 Chat details, see the [v3.1 release preparation notes (November 1, 2026 tentative)](/docs/changelog/20260801) and [token.place integration guide](/docs/token-place). For historical v3 launch readiness details, see [v3 Release State](/docs/v3-release-state).
 
-## Latest releases
+## Latest changelog entry
 
 <!--LATEST_RELEASES-->
 
