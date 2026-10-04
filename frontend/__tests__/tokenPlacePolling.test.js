@@ -7,9 +7,14 @@ vi.mock('../src/utils/gameState/common.js', () => ({
 vi.mock('../src/utils/docsRag.js', () => ({
     searchDocsRag: vi.fn(async () => ({ excerptsText: '', sources: [] })),
 }));
+vi.mock('../src/utils/metrics.js', async (importOriginal) => ({
+    ...(await importOriginal()),
+    recordDependencyRequest: vi.fn(),
+}));
 
 const { pollTokenPlaceRelayResponse } = await import('../src/utils/tokenPlace.js');
 const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
+const { recordDependencyRequest } = await import('../src/utils/metrics.js');
 const pending = () => new Promise(() => {});
 const body = { client_public_key: 'fixture-client', request_id: 'fixture-request' };
 const startPolling = (options = {}) => {
@@ -33,6 +38,7 @@ describe('token.place polling deadlines', () => {
     beforeEach(() => {
         vi.useFakeTimers();
         vi.stubGlobal('fetch', vi.fn());
+        recordDependencyRequest.mockClear();
     });
     afterEach(() => {
         vi.clearAllTimers();
@@ -49,6 +55,39 @@ describe('token.place polling deadlines', () => {
         expect(fetch).toHaveBeenCalledTimes(1);
         expect(vi.getTimerCount()).toBe(0);
     });
+
+    test.each(['fetch', 'success body', 'error body', 'rejected fetch', 'rejected body'])(
+        'ignores a late %s after the deadline, including dependency observations',
+        async (stage) => {
+            let settle;
+            const delayed = new Promise((resolve, reject) => {
+                settle = stage.startsWith('rejected') ? reject : resolve;
+            });
+            const response = {
+                status: stage === 'error body' ? 503 : 200,
+                ok: stage !== 'error body',
+                json: stage.includes('body') ? () => delayed : async () => ({ ciphertext: 'late' }),
+            };
+            fetch.mockImplementation(() =>
+                stage.includes('fetch') ? delayed : Promise.resolve(response)
+            );
+            const observed = startPolling();
+            await vi.advanceTimersByTimeAsync(50);
+            expect(observed.error).toMatchObject({ status: 408 });
+            settle(
+                stage.startsWith('rejected')
+                    ? new Error('late failure')
+                    : stage === 'fetch'
+                      ? response
+                      : { ciphertext: 'late' }
+            );
+            await vi.advanceTimersByTimeAsync(0);
+            expect(observed.result).toBeUndefined();
+            expect(recordDependencyRequest).not.toHaveBeenCalled();
+            expect(fetch).toHaveBeenCalledTimes(1);
+            expect(vi.getTimerCount()).toBe(0);
+        }
+    );
 
     test.each([200, 503])('bounds a stalled HTTP %s response body', async (status) => {
         fetch.mockResolvedValue({ status, ok: status === 200, json: pending });
@@ -115,6 +154,9 @@ describe('token.place polling deadlines', () => {
         const observed = startPolling({ signal: controller.signal });
         await vi.advanceTimersByTimeAsync(0);
         expect(observed.result).toEqual(response);
+        expect(recordDependencyRequest).toHaveBeenCalledWith(
+            expect.objectContaining({ dependency: 'tokenplace', outcome: 'success' })
+        );
         expect(vi.getTimerCount()).toBe(0);
         controller.abort();
         expect(fetch.mock.calls[0][1].signal.aborted).toBe(false);

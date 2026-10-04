@@ -867,6 +867,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
                   credentials: 'omit',
               });
     } catch (error) {
+        if (options.signal?.aborted) throw options.signal.reason;
         const wrapped = createTokenPlaceNetworkError(error);
         recordDependencyRequest({
             dependency: 'tokenplace',
@@ -875,6 +876,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
         });
         throw wrapped;
     }
+    options.signal?.throwIfAborted();
     if (response.status === 202) {
         recordDependencyRequest({
             dependency: 'tokenplace',
@@ -893,6 +895,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     }
     if (!response.ok) {
         const payload = await parseErrorPayload(response);
+        options.signal?.throwIfAborted();
         const err =
             response.status >= 500
                 ? createTokenPlaceHttpError(
@@ -910,6 +913,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     }
     try {
         const data = await response.json();
+        options.signal?.throwIfAborted();
         recordDependencyRequest({
             dependency: 'tokenplace',
             outcome: 'success',
@@ -917,6 +921,7 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
         });
         return { ready: true, data };
     } catch {
+        if (options.signal?.aborted) throw options.signal.reason;
         const err = createMalformedTokenPlaceResponseError(
             'Malformed encrypted token.place response.'
         );
