@@ -3,12 +3,17 @@ title: 'v3.1 Release Preparation'
 slug: 'v3-1-release-preparation'
 tagline: 'v3.1 token.place Chat default — release preparation'
 summary: >-
-    Planned v3.1 makes token.place API v1 the default Chat provider while OpenAI remains optional. November 1, 2026 is tentative; release readiness takes priority.
+    Current v3.1 candidate readiness covers token.place API v1 as the default Chat provider while OpenAI remains optional. November 1, 2026 is tentative; readiness takes priority.
 ---
 
-DSPACE v3.1 is in release preparation, with a tentative target of **November 1, 2026**.
+The current DSPACE v3.1 candidate has a tentative readiness target of **November 1, 2026**.
 Readiness takes priority over the date. These notes describe the candidate behavior, not a
 completed release or production promotion.
+
+The [v3.1.1 GitHub release](https://github.com/democratizedspace/dspace/releases/tag/v3.1.1)
+was published on August 5, 2026. This plan preserves that record and tracks the current candidate;
+it does not establish what is deployed. Main currently prepares application `3.1.2` and chart
+`3.1.3`. The release owner must confirm final coordinates before publication.
 
 The [August 1 entry](/docs/changelog/20260801) remains archived unchanged. This page supersedes
 its release timing, transport, and configuration claims for current planning; the archived date is

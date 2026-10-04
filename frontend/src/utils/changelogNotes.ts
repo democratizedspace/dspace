@@ -8,7 +8,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20260801': [
         {
             message:
-                'Current release status: v3.1 remains in preparation with a tentative November 1, 2026 target; readiness takes priority. The archived August entry is not evidence of production promotion. Its transport and configuration descriptions are superseded by the current preparation guide.',
+                'Current candidate status: v3.1 readiness work has a tentative November 1, 2026 target; readiness takes priority. The archived August entry is not evidence of production promotion. Its transport and configuration descriptions are superseded by the current preparation guide.',
             href: '/docs/v3-1-release-preparation',
             linkLabel: 'v3.1 release preparation',
         },
