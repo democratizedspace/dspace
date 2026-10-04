@@ -137,7 +137,7 @@ test.describe('docs changelog page', () => {
         await page.goto('/docs/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        await expect(page.getByRole('heading', { name: 'Changelog' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Changelog', exact: true })).toBeVisible();
 
         const releasesList = page.getByRole('list', { name: 'Latest changelog entry' });
         await expect(releasesList).toBeVisible();
