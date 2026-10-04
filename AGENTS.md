@@ -410,7 +410,16 @@ are consistent across:
 
 Run `npm test` to verify configuration stays in sync.
 
-## Historical changelog policy
+## Changelog lifecycle and release dates
+
+- Every dated changelog requires explicit frontmatter `status: draft` or `status: published`.
+  Missing or invalid states fail validation; there is no date-based or legacy-published default.
+  Only an explicitly authorized release, verified against publication/deployment evidence, changes
+  `draft` to `published`. A past target date never publishes a draft automatically.
+- UI release history, the homepage's latest update, and changelog RAG discovery use that status.
+  Drafts are displayed separately and are excluded from published-release RAG sources. The initial
+  published-state migration was checked against production `/changelog` on October 4, 2026; it
+  changes frontmatter only and preserves published narrative bodies.
 
 - Default: do not create, update, or append changelog entries unless the human task prompt
   explicitly requests changelog work. Do not infer that a feature, fix, patch, minor release,
@@ -419,13 +428,25 @@ Run `npm test` to verify configuration stays in sync.
   major/minor/patch level, invent a release date, create a changelog file, or append changelog
   notes without explicit human direction. If this AGENTS.md guidance and a narrower human task
   prompt conflict, the explicit human task prompt controls for that task.
-- When the human task prompt explicitly names a new changelog file/date, create or use that file
-  exactly as requested.
-- When the human task prompt explicitly requests a patch changelog update without naming a new
-  file, append/update the appropriate existing changelog entry.
-- Treat published changelog markdown under `frontend/src/pages/docs/md/changelog/` as
-  immutable narrative history.
-- Only fix typos, spacing, or broken links in historical files — document those adjustments in
+- Each new major or minor SemVer release gets one changelog entry. Patch versions append to the
+  existing major/minor entry: the April 1, 2026 file covers v3.0.0 and its v3.0.1 patch addendum.
+  Do not rename that published major/minor file for a patch; add a dated patch section.
+- If an **unpublished draft** release date slips, rename the existing draft file to the new
+  `YYYYMMDD.md` date and update its title, slug, links, navigation references, and tests together.
+  Keep `status: draft`; maintain old draft URL/anchor redirects where needed without keeping an
+  obsolete duplicate entry.
+  This is the same planned release, not a new release or a historical archive. Do not copy the
+  draft into a second changelog or replace it with a separate preparation page/advisory.
+- A dated filename, release-style prose, presence on main, or a GitHub artifact release alone does
+  not establish that the player-facing changelog was published. Check the user's release context,
+  source history, and production changelog/deployment evidence before classifying it as historical.
+  The release owner confirmed that the August 1 draft was never published: rename it to
+  `20261101.md` for the same v3.1.0 release, tentatively November 1, 2026.
+- For an explicitly requested patch update, append to the appropriate existing major/minor entry;
+  do not create a separate patch changelog file. See [release workflow](docs/releases.md).
+- Preserve published narrative under `frontend/src/pages/docs/md/changelog/`. An explicitly
+  requested patch addendum may be appended without rewriting the prior release narrative.
+- Within already-published narrative, only fix typos, spacing, or broken links - document those adjustments in
   `frontend/tests/fixtures/changelogCorrections.json` and refresh the associated snapshots.
 - When explicitly requested changelog work needs to reference newer context from an older release,
   add an entry to `frontend/src/utils/changelogNotes.ts` so the UI appends a note at render time

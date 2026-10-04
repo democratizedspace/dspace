@@ -35,6 +35,87 @@ exists:
 
 ## Update checklist
 
+### Changelog lifecycle and a slipped release date
+
+Every dated entry has required frontmatter `status: draft` or `status: published`. The enum is
+validated by `frontend/src/utils/changelogState.mjs`. Missing/invalid values fail closed; there is
+no implicit legacy state and no clock/filename-based transition. Start new entries as `draft`.
+Change to `published` only with explicit human release authorization and verified publication or
+deployment evidence; a passed target date or an artifact tag alone does not authorize that edit.
+
+The homepage and latest-release list use only `published` entries. The changelog shows drafts in a
+separate "Upcoming drafts" section, and release-history RAG discovery excludes draft entries.
+For legacy migration, verify each entry rather than assigning a blanket default. On October 4,
+2026, all 13 existing entries through April 1 were verified as anchors on production `/changelog`,
+including April's v3.0.1 addendum. Their migration adds frontmatter only; their bodies are unchanged.
+
+Each new major or minor SemVer release gets one changelog entry. Patch versions add an addendum
+to that same major/minor entry. For example, `frontend/src/pages/docs/md/changelog/20260401.md`
+contains the v3.0.0 release and the May 21 v3.0.1 patch notes; the patch does not get a new file.
+Do not rename the published major/minor entry for a patch. Preserve its earlier narrative and
+append a dated patch section when authorized. The existing entry remains `published`; any patch
+planning text must be explicitly labeled as draft until that patch is authorized and verified.
+
+For an unpublished draft whose release date slips:
+
+1. Confirm its unpublished status from the release owner's context, source history, and
+   production changelog/deployment evidence. A filename, release-style wording, presence on main,
+   or GitHub artifact record alone is not proof that the player-facing entry was published.
+2. Rename the existing draft to the new `YYYYMMDD.md` filename. Update its frontmatter title/slug
+   and tentative date while preserving `status: draft`, the intended release and its current scope.
+3. Update internal links, navigation references, and tests to that single canonical draft. Do not
+   leave an obsolete draft presented as a historical release, duplicate the entry, or substitute
+   a separate release-preparation page or historical advisory.
+   Preserve old draft URLs/anchors as redirects when needed, without retaining a duplicate entry.
+4. Keep genuinely published entries and their patch addenda intact. Only published narrative
+   history belongs in the preservation snapshots; an unpublished draft must remain editable.
+5. Rerun history/link/rendering checks and candidate QA. The new date does not establish that
+   readiness gates passed or authorize production promotion.
+
+The release owner confirmed that the former August 1, 2026 v3.1.0 draft was never published.
+Its canonical file is now `frontend/src/pages/docs/md/changelog/20261101.md`, for the same
+**v3.1.0** release tentatively planned for **November 1, 2026**. Readiness takes priority.
+
+### Application versions and chart versions
+
+The application SemVer and Helm `appVersion` describe the same application; `appVersion` is not
+a separate end-user release version. Root/frontend packages, root lockfile metadata, chart
+`appVersion`, and the default semantic image tag must agree. Helm chart `version` is an independent
+package version and agrees with `docs/apps/dspace.version` and the packaged chart filename.
+
+Reconcile source metadata and existing immutable artifact records with the release owner's
+intended version before publishing. Do not infer a new product target from an earlier metadata
+bump, blindly downgrade coordinates, or overwrite an existing immutable tag/digest. A GitHub
+artifact release record does not by itself establish which application is deployed in production
+or whether a draft changelog was published.
+
+For the November draft, coordinate reconciliation remains a publication gate. Read-only checks on
+October 4, 2026 found:
+
+- [bd1ad0c15](https://github.com/democratizedspace/dspace/commit/bd1ad0c15aedaa886276318c7b190e3a88559519)
+  prepared application/chart 3.1.0. Public GHCR already serves `dspace:v3.1.0` at
+  `sha256:8c82cc08586637af2635f6caa331592b8dace4216cf0c54d5eb09fa0dec26430`, with image revision
+  `ac5d26c62129a1be9d4e513a37475e6bef3e3321` (application package 3.1.0). The absence of a GitHub
+  v3.1.0 release/tag does not make this occupied registry coordinate reusable.
+- [14f2fcebe](https://github.com/democratizedspace/dspace/commit/14f2fcebefc59dda47332f878ea0b90f2f837067)
+  prepared application 3.1.1/chart 3.1.2. A [GitHub v3.1.1 record](https://github.com/democratizedspace/dspace/releases/tag/v3.1.1)
+  was published August 5; public GHCR `dspace:v3.1.1` resolves to
+  `sha256:467890df969cc7938cb760f965fd8f90a8912b1dcb1f8425bc808216b7e1512b`, revision
+  `22f506e07e0b5abfd0cf756e9c5827c0458fb4b2`. These artifact records do not publish the August draft.
+- [ff8674fdd](https://github.com/democratizedspace/dspace/commit/ff8674fddfe78639c10f98f2b3fda9279af77066)
+  bumped application/appVersion to 3.1.2 and chart to 3.1.3 while adding runtime default-provider
+  configuration. Those are main's prepared metadata, not an approved replacement for the user's
+  requested v3.1.0 goal. This draft-date change does not downgrade or republish them.
+- The production homepage still shows April 1 and its v3.0.1 patch addendum. Anonymous chart
+  registry inspection returned an authorization response, so chart availability was not independently
+  established by this check.
+
+The release owner must resolve the occupied v3.1.0 application coordinate before publication.
+Keep the requested draft goal explicit while that decision is pending; do not silently relabel the
+release as 3.1.2 or overwrite existing artifacts.
+
+### Recording tags
+
 When cutting a new release or RC tag:
 
 1. Verify the tag exists (`git fetch --tags && git tag --list`).

@@ -1,35 +1,64 @@
-# DSPACE v3.1.0 Observability Release Gate
+# DSPACE v3.1 Candidate Observability Release Gate
 
-This design turns observability into an explicit DSPACE v3.1.0 release requirement. It is a
-planning and QA contract. The application runtime now implements the first privacy-safe
-Prometheus metrics slice, but dashboards, alerts, canonical Helm scrape templates, and live
-Sugarkube scrape evidence remain release-gated work.
+This is the planning and QA contract for the planned v3.1.0 release. Application metrics and
+canonical Helm scrape templates exist in source; dashboards, alerts, and live Sugarkube evidence
+remain release gates until verified for the selected candidate.
 
-Status: v3.1.0 is not treated as shipped by this document. The unshipped application `3.1.0`
-preparation has been superseded by current preparation for application `3.1.1`, chart `3.1.2`,
-and `appVersion: 3.1.1` in the active GHCR Helm publishing workflow for `charts/dspace`.
-Forward-looking roadmap or QA text must therefore be read as release planning until an immutable
-image, published chart, staging evidence, and production promotion are recorded.
+The release goal is v3.1.0; the former August changelog was an unpublished draft, now renamed for
+November 1. Reconcile source/package and existing artifact coordinates with that goal before
+publication; see the [release workflow](../releases.md#application-versions-and-chart-versions).
+Before collecting new evidence, record the confirmed application version, chart version/appVersion,
+source SHA, image digest, chart reference, environment, and timestamp in the [QA checklist](../qa/v3.1.md).
+
+Before recording candidate coordinates, verify both complete coordinate groups:
+
+- Application: root `package.json`, `frontend/package.json`, root `package-lock.json` (top-level
+  version and root package metadata), `charts/dspace/Chart.yaml:appVersion`, and the default
+  semantic image tag in `charts/dspace/values.yaml:image.tag` must agree (the tag adds `v`).
+- Chart: `charts/dspace/Chart.yaml:version`, `docs/apps/dspace.version`, and the packaged chart
+  filename must agree. The chart version is independent of the application version.
+
+Run `bash scripts/check-dspace-chart-version.sh` for source-coordinate consistency, including
+the default image tag. Then use the staging, linting, packaging, exact package-filename assertion,
+and embedded metadata verification from `.github/workflows/ci-helm.yml`; the non-publishing
+commands are in the [QA automation section](../qa/v3.1.md#12-automation-evidence).
+`scripts/check-release-consistency.mjs --verify-local-fixtures` checks deterministic manifest
+fixtures without network access; it does not validate the default image tag or package filename.
+Fixture success alone is not candidate artifact verification. Deployment and rollback evidence
+must pin an immutable branch-SHA image tag or digest and chart reference; the semantic image tag
+is a human-readable release coordinate, not the deployment coordinate.
+
+This document does not establish what is deployed. Checked source items
+below do not replace candidate staging evidence. The [v3.1.0 draft changelog](../../frontend/src/pages/docs/md/changelog/20261101.md)
+records the tentative November 1, 2026 target; readiness takes priority.
+
+## Ownership
+
+DSPACE owns application metrics, canonical `charts/dspace` scrape contracts, and privacy/cardinality
+rules. Sugarkube owns dashboard and alert provisioning, deployment integration, and deployment
+evidence. Verify existing Sugarkube assets before adding or duplicating them; record reviewed source
+references and staging evidence in the QA checklist. This ownership split does not mark the remaining
+dashboard, alert, or staging gates complete.
 
 ## Source alignment
 
 This gate is aligned with the Sugarkube observability design at
 <https://github.com/futuroptimist/sugarkube/blob/main/docs/observability-design.md>. DSPACE adopts
 the Sugarkube naming, labeling, privacy, dashboard, alert, and staging-evidence posture for the
-smallest useful v3.1.0 release slice.
+smallest useful candidate release slice.
 
 ## Repository evidence inventory
 
-| Area                          | Evidence                                                                                                                                                                                                                                      | Classification                                                         | v3.1.0 implication                                                                                                                                                          |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Runtime version               | `package.json` is prepared as `3.1.1`.                                                                                                                                                                                                        | Release-candidate metadata prepared.                                   | Do not claim v3.1.0 shipped until immutable artifacts, staging evidence, and production promotion exist.                                                                    |
-| Metrics route                 | `frontend/src/pages/metrics.ts` exposes `/metrics`, deliberately returns `404` when `METRICS_ENABLED=false`, and requires `Authorization: Bearer <METRICS_TOKEN>` when metrics are enabled with `METRICS_TOKEN` configured.                   | Implemented source behavior; live evidence pending.                    | Endpoint exists with default-disabled behavior and token-gated enabled behavior, but staging/prod scrape behavior and public exposure evidence still need capture.          |
-| Metric implementation         | `frontend/src/utils/metrics.js` initializes the shared `prom-client` registry, default process metrics, DSPACE HTTP metrics, dChat metrics, dependency metrics, build info, and instrumentation health.                                       | Implemented source behavior; live evidence pending.                    | Application source emits the canonical privacy-safe metric families. Staging/prod scrape behavior, chart wiring, dashboards, and alerts still need evidence.                |
-| Local monitoring scaffold     | `infra/monitoring/` contains local Prometheus, Grafana dashboard, and alert examples.                                                                                                                                                         | Legacy/local scaffold.                                                 | Useful as reference only; not the canonical Sugarkube release gate. Metric names and thresholds are not sufficient for v3.1.0.                                              |
-| Canonical GHCR chart          | `.github/workflows/ci-helm.yml` packages and publishes chart `3.1.2` for `appVersion: 3.1.1` from `charts/dspace` to `oci://ghcr.io/democratizedspace/charts/dspace`.                                                                          | Chart 3.1.2 for app 3.1.1 prepared.                                    | `charts/dspace` is the canonical chart path for the current GHCR/Sugarkube release path.                                                                                    |
-| Canonical chart scrape config | `charts/dspace` includes default-disabled `metrics` and `serviceMonitor` values, Secret-backed `METRICS_TOKEN` injection, `METRICS_ENABLED` runtime disablement, bounded Service target labels, and an authenticated ServiceMonitor contract. | Implemented source behavior; live staging/production evidence pending. | Canonical chart source now defines the scrape contract; v3.1.0 promotion still needs live Prometheus target health, network reachability, staging, and production evidence. |
-| Duplicate chart tree          | `deploy/charts/dspace` contains ServiceMonitor, PrometheusRule, NetworkPolicy, and metrics values, but is not packaged by the GHCR Helm workflow.                                                                                             | Partial legacy/experimental duplicate.                                 | Do not update both chart trees blindly. Either migrate the needed scrape contract into `charts/dspace` or explicitly retarget release automation before v3.1.0.             |
-| Environment values            | `deploy/env/{dev,int,prod}/values.yaml` exist for the duplicate deploy chart.                                                                                                                                                                 | Legacy/partial.                                                        | Not canonical release evidence unless the release path changes and automation points at that chart.                                                                         |
+| Area                          | Evidence                                                                                                                                                                                                                                      | Classification                                                         | Candidate implication                                                                                                                                                          |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Runtime version               | Root and frontend package metadata define the prepared application version; record the release-owner-confirmed candidate version before QA.                                                                                                   | Release-candidate metadata prepared.                                   | Do not claim this candidate is promoted until immutable artifacts, staging evidence, and production approval are recorded.                                                     |
+| Metrics route                 | `frontend/src/pages/metrics.ts` exposes `/metrics`, deliberately returns `404` when `METRICS_ENABLED=false`, and requires `Authorization: Bearer <METRICS_TOKEN>` when metrics are enabled with `METRICS_TOKEN` configured.                   | Implemented source behavior; live evidence pending.                    | Endpoint exists with default-disabled behavior and token-gated enabled behavior, but staging/prod scrape behavior and public exposure evidence still need capture.             |
+| Metric implementation         | `frontend/src/utils/metrics.js` initializes the shared `prom-client` registry, default process metrics, DSPACE HTTP metrics, dChat metrics, dependency metrics, build info, and instrumentation health.                                       | Implemented source behavior; live evidence pending.                    | Application source emits the canonical privacy-safe metric families. Staging/prod scrape behavior, chart wiring, dashboards, and alerts still need evidence.                   |
+| Local monitoring scaffold     | `infra/monitoring/` contains local Prometheus, Grafana dashboard, and alert examples.                                                                                                                                                         | Legacy/local scaffold.                                                 | Useful as reference only; not the canonical Sugarkube release gate. Metric names and thresholds are not sufficient for this candidate.                                         |
+| Canonical GHCR chart          | `.github/workflows/ci-helm.yml` packages `charts/dspace`; `Chart.yaml` defines chart version and appVersion. Record the approved immutable chart reference for this candidate.                                                                | Candidate chart metadata; publication evidence required.               | `charts/dspace` is the canonical chart path for the current GHCR/Sugarkube release path.                                                                                       |
+| Canonical chart scrape config | `charts/dspace` includes default-disabled `metrics` and `serviceMonitor` values, Secret-backed `METRICS_TOKEN` injection, `METRICS_ENABLED` runtime disablement, bounded Service target labels, and an authenticated ServiceMonitor contract. | Implemented source behavior; live staging/production evidence pending. | Canonical chart source now defines the scrape contract; candidate promotion still needs live Prometheus target health, network reachability, staging, and production evidence. |
+| Duplicate chart tree          | `deploy/charts/dspace` contains ServiceMonitor, PrometheusRule, NetworkPolicy, and metrics values, but is not packaged by the GHCR Helm workflow.                                                                                             | Partial legacy/experimental duplicate.                                 | Do not update both chart trees blindly. Either migrate the needed scrape contract into `charts/dspace` or explicitly retarget release automation before candidate promotion.   |
+| Environment values            | `deploy/env/{dev,int,prod}/values.yaml` exist for the duplicate deploy chart.                                                                                                                                                                 | Legacy/partial.                                                        | Not canonical release evidence unless the release path changes and automation points at that chart.                                                                            |
 
 ## Canonical Helm chart decision
 
@@ -41,7 +70,7 @@ charts/dspace
 
 Reason: the Helm publishing workflow builds dependencies, lints, packages, pushes, and exports the
 chart reference from `charts/dspace`. The `deploy/charts/dspace` tree is treated as a duplicate
-legacy or experimental chart until maintainers explicitly change release automation. v3.1.0 work
+legacy or experimental chart until maintainers explicitly change release automation. Candidate work
 must not rely on `deploy/charts/dspace` ServiceMonitor or PrometheusRule resources as canonical
 release evidence unless the workflow and runbooks are changed in the same release-planning stream.
 
@@ -49,13 +78,13 @@ release evidence unless the workflow and runbooks are changed in the same releas
 
 Every requirement below is classified as one of:
 
-- **v3.1.0 release blocker**: must exist before v3.1.0 production promotion.
+- **candidate release blocker**: must exist before candidate production promotion.
 - **required staging evidence**: must be captured from staging before production promotion.
-- **post-v3.1 follow-up**: intentionally deferred and not a v3.1.0 blocker.
+- **post-v3.1 follow-up**: intentionally deferred and not a candidate blocker.
 
 ## Application scrape contract
 
-### v3.1.0 release blockers
+### Candidate release blockers
 
 - [ ] Staging and production expose a Prometheus-compatible DSPACE endpoint for in-cluster
       scraping.
@@ -172,7 +201,7 @@ registry. If metrics initialization fails, `/metrics` returns `503` instead of a
 successful placeholder. Metrics write failures are isolated from game functionality and do not expose
 secrets.
 
-### v3.1.0 release blockers
+### Candidate release blockers
 
 - [x] Application source: HTTP request totals, using bounded labels: method, route group, status class, and outcome.
 - [x] Application source: HTTP request latency histograms in seconds, using bounded route groups instead of raw URLs.
@@ -226,7 +255,7 @@ sum by (outcome) (rate(dspace_dependency_requests_total{dependency="tokenplace"}
 
 ## Privacy and cardinality constraints
 
-### v3.1.0 release blockers
+### Candidate release blockers
 
 - [ ] Metrics, labels, dashboards, alerts, and routine operational logs never record prompts,
       responses, OpenAI keys, token.place credentials, save data, inventory, player identity, IP
@@ -252,7 +281,7 @@ sum by (outcome) (rate(dspace_dependency_requests_total{dependency="tokenplace"}
 
 ## DSPACE dashboard requirement
 
-### v3.1.0 release blockers
+### Candidate release blockers
 
 A DSPACE dashboard must exist for staging before production promotion. It must contain rows or
 sections for:
@@ -275,7 +304,7 @@ sections for:
 Thresholds below are provisional until staging establishes a baseline. They are release-gating
 candidate alerts, not claims about historical production behavior.
 
-### v3.1.0 release blockers
+### Candidate release blockers
 
 - [ ] Application unavailable: public probe or scrape-backed availability fails for 3-5 minutes,
       with staging warning severity and production critical severity after baseline review.
@@ -319,7 +348,7 @@ candidate alerts, not claims about historical production behavior.
 
 ## Rollback requirement
 
-### v3.1.0 release blockers
+### Candidate release blockers
 
 - [ ] Before production promotion, record the prior immutable image tag or digest.
 - [ ] Before production promotion, record the prior chart reference and values revision used in the
@@ -331,7 +360,7 @@ candidate alerts, not claims about historical production behavior.
 
 ## Explicit post-v3.1 follow-ups
 
-These are intentionally outside the first v3.1.0 release slice and must not become blockers unless a
+These are intentionally outside the first candidate release slice and must not become blockers unless a
 maintainer explicitly changes the scope:
 
 - [ ] Loki deployment and broad log aggregation.

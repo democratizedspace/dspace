@@ -1,8 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import docsMeta from '../frontend/src/generated/rag/docs_meta.json';
+import docsChunks from '../frontend/src/generated/rag/docs_chunks.json';
 import { getDocsRagComparison, getDocsRagMismatchWarning } from '../frontend/src/utils/docsRag.js';
 
 describe('docs RAG metadata freshness', () => {
+    it('excludes the unpublished draft from release-history discovery and chunks', () => {
+        const draftPath = 'frontend/src/pages/docs/md/changelog/20261101.md';
+        expect(docsMeta.sources.changelog).not.toContain(draftPath);
+        expect(docsMeta.sources.v3Changelog).not.toContain(draftPath);
+        expect(docsChunks.some((chunk) => chunk.path === draftPath)).toBe(false);
+        expect(docsMeta.sources.changelog).toContain(
+            'frontend/src/pages/docs/md/changelog/20260401.md'
+        );
+    });
+
     it('records a concrete git SHA', () => {
         expect(docsMeta.gitSha).toBeTruthy();
         expect(String(docsMeta.gitSha)).not.toBe('unknown');

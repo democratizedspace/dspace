@@ -7,6 +7,7 @@ import yaml from 'yaml';
 import { execSync } from 'node:child_process';
 import GithubSlugger from 'github-slugger';
 import prettier from 'prettier';
+import { getChangelogStatus } from '../frontend/src/utils/changelogState.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -403,6 +404,7 @@ const gatherDocs = async () => {
     const v3ChangelogSources = [];
     const legacyChangelogAnchors = [];
     const legacyChangelogPaths = [];
+    const indexedChangelogFiles = [];
 
     const sortedDocFiles = docFiles.sort();
     for (const filePath of sortedDocFiles) {
@@ -428,6 +430,11 @@ const gatherDocs = async () => {
     for (const filePath of changelogFiles) {
         const raw = await readFileSafe(filePath);
         const { frontmatter, body } = parseFrontmatter(raw);
+        const isDatedEntry = path.resolve(path.dirname(filePath)) === path.resolve(CHANGELOG_DIR);
+        if (isDatedEntry && getChangelogStatus(frontmatter) !== 'published') {
+            continue;
+        }
+        indexedChangelogFiles.push(filePath);
         const entrySlug = resolveChangelogSlug(frontmatter, filePath);
         const qualifiesAsV3 = isV3ChangelogSource({ filePath, frontmatter, body });
         if (qualifiesAsV3) {
@@ -472,7 +479,7 @@ const gatherDocs = async () => {
 
     return {
         chunks,
-        changelogFiles,
+        changelogFiles: indexedChangelogFiles,
         v3ChangelogSources,
         legacyChangelogAnchors: legacyChangelogAnchors.sort(),
         legacyChangelogPaths: legacyChangelogPaths.sort(),

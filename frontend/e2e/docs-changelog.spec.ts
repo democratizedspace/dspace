@@ -78,7 +78,7 @@ const getLatestChangelogMeta = () => {
     const entries = files
         .map((file) => {
             const raw = fs.readFileSync(path.join(changelogDir, file), 'utf8');
-            const match = raw.match(/^---\n([\s\S]+?)\n---/);
+            const match = raw.match(/^---\r?\n([\s\S]+?)\r?\n---/);
             if (!match) {
                 return null;
             }
@@ -88,7 +88,7 @@ const getLatestChangelogMeta = () => {
             }
             return frontmatter;
         })
-        .filter(Boolean)
+        .filter((entry) => entry?.status === 'published')
         .sort((a, b) => String(b.slug).localeCompare(String(a.slug)));
 
     return entries[0] ?? null;
@@ -137,7 +137,7 @@ test.describe('docs changelog page', () => {
         await page.goto('/docs/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        await expect(page.getByRole('heading', { name: 'Changelog' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Changelog', exact: true })).toBeVisible();
 
         const releasesList = page.getByRole('list', { name: 'Latest releases' });
         await expect(releasesList).toBeVisible();
@@ -174,6 +174,34 @@ test.describe('docs changelog page', () => {
         await expect(
             page.getByRole('link', { name: 'complete changelog archive' })
         ).toHaveAttribute('href', '/changelog');
+    });
+
+    test('separates the November draft from published release history', async ({ page }) => {
+        await page.goto('/docs/changelog');
+        const drafts = page.getByRole('list', { name: 'Draft release notes' });
+        await expect(drafts).toContainText('unpublished draft');
+        await expect(drafts.getByRole('link', { name: 'November 1, 2026' })).toHaveAttribute(
+            'href',
+            '/changelog#20261101'
+        );
+        await expect(page.getByRole('list', { name: 'Latest releases' })).not.toContainText(
+            'November 1'
+        );
+        await page.goto('/changelog');
+        const draftSection = page.getByRole('region', { name: 'Upcoming drafts' });
+        const publishedSection = page.getByRole('region', { name: 'Published releases' });
+        await expect(draftSection.locator('[id="20261101"]')).toContainText('DSPACE v3.1.0');
+        await expect(publishedSection.locator('[id="20261101"]')).toHaveCount(0);
+        await expect(publishedSection.locator('[id="20260401"]')).toContainText('v3.0.1');
+        await expect(page.locator('[id="20260801"]')).toHaveCount(0);
+    });
+
+    test('redirects old draft links to the single November draft', async ({ page }) => {
+        await page.goto('/docs/changelog/20260801');
+        await expect(page).toHaveURL(/\/changelog#20261101$/);
+        await expect(page.locator('[id="20261101"]')).toBeVisible();
+        await page.goto('/changelog#20260801');
+        await expect(page).toHaveURL(/\/changelog#20261101$/);
     });
 
     test('does not show the placeholder contribution CTA', async ({ page }) => {

@@ -1,6 +1,10 @@
 ---
+import { draftChangelogRedirects } from '../../../utils/changelogState.mjs';
 const { slug } = Astro.params;
-const anchor = slug ? String(slug).toLowerCase() : '';
+const requestedAnchor = slug ? String(slug).toLowerCase() : '';
+const anchor = Object.hasOwn(draftChangelogRedirects, requestedAnchor)
+    ? draftChangelogRedirects[requestedAnchor]
+    : requestedAnchor;
 const destination = anchor ? `/changelog#${anchor}` : '/changelog';
 
 return Astro.redirect(destination, 301);

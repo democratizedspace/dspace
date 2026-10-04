@@ -312,9 +312,11 @@ This sequence keeps each implementation PR reviewable:
 
 5. **Phase 5: User-facing docs and release QA**
     - Update Chat and Settings docs for token.place default and OpenAI opt-in.
-    - Create the `frontend/src/pages/docs/md/changelog/20260801.md` changelog entry for the v3.1
-      minor release (this is an explicit human-requested minor-release changelog entry, not a
-      general license for agents to create or update changelogs).
+    - Maintain the single unpublished v3.1.0 draft at
+      `frontend/src/pages/docs/md/changelog/20261101.md`. November 1, 2026 is tentative;
+      readiness takes priority. This renames the unpublished August draft for the same release;
+      it does not create another release or change published April/v3.0.1 history. Follow the
+      [changelog lifecycle procedure](../releases.md#changelog-lifecycle-and-a-slipped-release-date).
     - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
 
 6. **Phase 6: Cleanup and hardening**
@@ -324,6 +326,13 @@ This sequence keeps each implementation PR reviewable:
     - Record release-hardening notes and residual risks.
 
 ## Risks and mitigations
+
+For v3.1.0, the release owner selected the current API v1 protections after compatibility/privacy
+QA and staging, with the relay-supplied compute-key trust assumption documented honestly.
+Requests use AES-CBC; response decoding supports GCM and CBC compatibility. Envelope validation
+does not turn CBC into authenticated encryption. A new independent compute identity/authentication
+design is follow-up work, not a v3.1.0 release blocker. See the
+[accepted QA scope](../qa/v3.1.md#accepted-api-v1-security-scope).
 
 - **API v1 non-streaming latency:** show the existing spinner, preserve disabled-send behavior while
   a request is in flight, and avoid adding streaming as a quick fix. Consider copy that says

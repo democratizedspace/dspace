@@ -11,7 +11,7 @@ current shipped status where relevant.
 - [ ] [custom quests](/docs/custom-quest-system) (historical milestone: shipped in April 2026)
 - [ ] 10x more quests (historical milestone: shipped in April 2026)
 - [ ] Top-down isometric base building prototype (late 2026 target, shifted beyond launch)
-- [ ] DSPACE v3.1.0 release planning (not shipped): token.place default `/chat` path and
+- [ ] [DSPACE v3.1.0 release](/docs/changelog/20261101) (unpublished draft; November 1, 2026 tentative, readiness first): token.place default `/chat` path and
       observability release gates remain active until staging evidence, immutable artifacts, and
       production promotion are recorded
 
