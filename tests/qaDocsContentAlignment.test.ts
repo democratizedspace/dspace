@@ -192,3 +192,33 @@ describe('backups doc alignment', () => {
     expect(customSection).not.toMatch(/\bCopy\b/i);
   });
 });
+
+describe('proxy QA observation boundaries', () => {
+  it.each(['../docs/qa/v3.1.md', '../docs/design/observability-v3.1.md'])(
+    '%s documents completion abuse limits and the server observation boundary',
+    (docPath) => {
+      const doc = readDoc(docPath).replace(/\s+/g, ' ');
+
+      expect(doc).toContain('DSPACE_CHAT_PROXY_SUBOP_COMPLETE_LIMIT');
+      expect(doc).toContain('DSPACE_CHAT_PROXY_SESSION_LIMIT');
+      expect(doc).toContain('(300 / 60 + 1)');
+      expect(doc).toContain('120/min');
+      expect(doc).toMatch(/before correlation-token consumption \(`GETDEL`\)/);
+      expect(doc).toMatch(/budget returns `429`/);
+      expect(doc).toMatch(/unavailable budget backend returns `503`/);
+      expect(doc).not.toMatch(/not a counter|no separate counter/);
+
+      expect(doc).toMatch(/outcome comes from stored server state/);
+      expect(doc).toMatch(/not proof of browser decryption or rendering/i);
+      expect(doc).toMatch(
+        /browser failures do not change (?:the|that) stored success outcome/i
+      );
+      expect(doc).toMatch(
+        /expired completion produces no correlated dChat observation/
+      );
+      expect(doc).not.toMatch(
+        /post-dispatch failures.*bounded failure outcome/
+      );
+    }
+  );
+});
