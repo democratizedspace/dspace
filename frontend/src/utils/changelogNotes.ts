@@ -5,14 +5,6 @@ export interface ChangelogNote {
 }
 
 const notesBySlug: Record<string, ChangelogNote[]> = {
-    '20260801': [
-        {
-            message:
-                'Current candidate status: v3.1 readiness work has a tentative November 1, 2026 target; readiness takes priority. The archived August entry is not evidence of production promotion. Its transport and configuration descriptions are superseded by the current preparation guide.',
-            href: '/docs/v3-1-release-preparation',
-            linkLabel: 'v3.1 release preparation',
-        },
-    ],
     '20221019': [
         {
             message:
@@ -109,7 +101,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20260201': [
         {
             message:
-                'Update: the DSPACE v3.1 candidate defaults to token.place, while OpenAI remains optional from Settings.',
+                'The planned v3.1.0 release defaults to token.place, while OpenAI remains optional from Settings.',
             href: '/docs/token-place',
             linkLabel: 'token.place integration doc',
         },
@@ -135,9 +127,9 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
-                'The v3.1 candidate defaults to token.place, with OpenAI available from Settings; production promotion remains gated on release readiness.',
-            href: '/docs/v3-1-release-preparation',
-            linkLabel: 'v3.1 release preparation notes (November 1, 2026 tentative)',
+                'The unpublished v3.1.0 draft plans token.place as the default, with OpenAI available as an opt-in provider from Settings.',
+            href: '/docs/changelog/20261101',
+            linkLabel: 'November 1, 2026 draft changelog (tentative)',
         },
         {
             message:
@@ -205,11 +197,14 @@ export function renderChangelogNotes(slug: string | undefined): string {
 }
 
 /**
- * Show the explicitly requested current-status advisory for the August v3.1 entry,
- * preserving its archived HTML verbatim. Other historical notes stay metadata-only.
+ * Intentionally returns the compiled changelog HTML unchanged.
+ *
+ * `notesBySlug` is source metadata and must stay available via
+ * `renderChangelogNotes`/`getChangelogNotes` for programmatic consumers,
+ * but it should not be injected into user-facing HTML.
  */
-export function appendChangelogNotes(html: string, slug: string | undefined): string {
-    return slug === '20260801' ? renderChangelogNotes(slug) + html : html;
+export function appendChangelogNotes(html: string, _slug: string | undefined): string {
+    return html;
 }
 
 export function getChangelogNotes(slug: string | undefined): ChangelogNote[] {

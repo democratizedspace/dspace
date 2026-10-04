@@ -3,7 +3,9 @@ title: 'token.place Integration'
 slug: 'token-place'
 ---
 
-DSPACE v3.1 uses token.place as the default provider for in-game NPC Chat. Open [/chat](/chat),
+The planned DSPACE v3.1.0 release uses token.place as the default provider for in-game NPC Chat.
+This guide describes candidate behavior; see the [unpublished November draft](/docs/changelog/20261101)
+for release status. Open [/chat](/chat),
 choose a persona if you want one, and send a message: fresh users do not need DSPACE auth, an
 OpenAI API key, or token.place credentials.
 
@@ -46,6 +48,18 @@ chat request envelope for the compute node, dispatches ciphertext with
 `POST /api/v1/relay/requests`, polls `POST /api/v1/relay/responses/retrieve`, then decrypts and
 validates the response client-side before reading `api_v1_response.message.content` or
 `api_v1_response.choices[0].message.content`.
+
+## Current relay trust boundary
+
+The browser trusts the compute public key supplied by the configured relay over HTTPS. It does not
+independently authenticate the compute node's identity or protect against a relay substituting that
+key. Current requests use AES-CBC; response decoding supports AES-GCM and CBC compatibility.
+CBC is not authenticated encryption, and validating protocol, request ID, and client key fields
+does not add cryptographic integrity to CBC. Do not interpret "relay E2EE" as a claim that these
+independent identity or integrity protections are already implemented.
+
+The v3.1.0 acceptance scope is these current API v1 protections, verified by candidate QA and
+staging. A new independent identity/authentication design is follow-up work, not a release blocker.
 
 ## Context tiers and bounded retry
 

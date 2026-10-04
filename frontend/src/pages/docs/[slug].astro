@@ -2,8 +2,8 @@
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
 import Card from '../../components/Card.astro';
-import { appendChangelogNotes } from '../../utils/changelogNotes';
 import { fixMarkdownText } from '../../utils';
+import { partitionChangelogs } from '../../utils/changelogState.mjs';
 
 const escapeHtml = (value = '') =>
     String(value)
@@ -39,7 +39,7 @@ const buildLatestChangelogHtml = (entries = []) => {
         ? `\n        <p>${escapeHtml(summaryText)}</p>`
         : '';
 
-    return appendChangelogNotes(`\n<ul aria-label="Latest changelog entry">\n    <li>\n        <a href="/changelog#${escapeHtml(latest.slug)}">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`, latest.slug);
+    return `\n<ul aria-label="Latest releases">\n    <li>\n        <a href="/changelog#${escapeHtml(latest.slug)}">${escapeHtml(latest.title)}${taglineSuffix}</a>${summaryHtml}\n    </li>\n</ul>`;
 };
 
 const { slug } = Astro.params;
@@ -62,8 +62,15 @@ try {
 
         if (normalizedSlug === 'changelog') {
             const changelogEntries = await Astro.glob('./md/changelog/*.md');
-            const latestHtml = buildLatestChangelogHtml(changelogEntries);
+            const { published, draft } = partitionChangelogs(changelogEntries);
+            const latestHtml = buildLatestChangelogHtml(published);
             compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
+            const draftHtml = draft.length
+                ? `<ul aria-label="Draft release notes">${draft.map((entry) =>
+                    `<li><a href="/changelog#${escapeHtml(entry.frontmatter.slug)}">${escapeHtml(entry.frontmatter.title)}</a> — unpublished draft; date is tentative.</li>`
+                ).join('')}</ul>`
+                : '<p>No unpublished release drafts.</p>';
+            compiled = compiled.replace('<!--DRAFT_RELEASES-->', draftHtml);
         }
 
         html = fixMarkdownText(compiled);

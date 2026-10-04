@@ -1,14 +1,14 @@
 # DSPACE v3.1 Candidate Observability Release Gate
 
-This is the planning and QA contract for the current v3.1 candidate. Application metrics and
+This is the planning and QA contract for the planned v3.1.0 release. Application metrics and
 canonical Helm scrape templates exist in source; dashboards, alerts, and live Sugarkube evidence
 remain release gates until verified for the selected candidate.
 
-The [v3.1.1 release](https://github.com/democratizedspace/dspace/releases/tag/v3.1.1) was published
-on August 5, 2026. Its application/chart coordinates are historical release evidence, not the
-coordinates to use automatically for this candidate. Before collecting new evidence, record the
-release-owner-confirmed application version, chart version/appVersion, source SHA, image digest,
-chart reference, environment, and timestamp in the [QA checklist](../qa/v3.1.md).
+The release goal is v3.1.0; the former August changelog was an unpublished draft, now renamed for
+November 1. Reconcile source/package and existing artifact coordinates with that goal before
+publication; see the [release workflow](../releases.md#application-versions-and-chart-versions).
+Before collecting new evidence, record the confirmed application version, chart version/appVersion,
+source SHA, image digest, chart reference, environment, and timestamp in the [QA checklist](../qa/v3.1.md).
 
 Before recording candidate coordinates, verify both complete coordinate groups:
 
@@ -28,9 +28,17 @@ Fixture success alone is not candidate artifact verification. Deployment and rol
 must pin an immutable branch-SHA image tag or digest and chart reference; the semantic image tag
 is a human-readable release coordinate, not the deployment coordinate.
 
-This document does not select final versions or establish what is deployed. Checked source items
-below do not replace candidate staging evidence. The [current preparation guide](../../frontend/src/pages/docs/md/v3-1-release-preparation.md)
+This document does not establish what is deployed. Checked source items
+below do not replace candidate staging evidence. The [v3.1.0 draft changelog](../../frontend/src/pages/docs/md/changelog/20261101.md)
 records the tentative November 1, 2026 target; readiness takes priority.
+
+## Ownership
+
+DSPACE owns application metrics, canonical `charts/dspace` scrape contracts, and privacy/cardinality
+rules. Sugarkube owns dashboard and alert provisioning, deployment integration, and deployment
+evidence. Verify existing Sugarkube assets before adding or duplicating them; record reviewed source
+references and staging evidence in the QA checklist. This ownership split does not mark the remaining
+dashboard, alert, or staging gates complete.
 
 ## Source alignment
 

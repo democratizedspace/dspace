@@ -11,12 +11,13 @@ test.describe('Home Page Basic Rendering', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const latestUpdate = page.getByRole('heading', { name: /latest changelog entry/i });
+        const latestUpdate = page.getByRole('heading', {
+            name: 'Latest update: April 1, 2026',
+            exact: true,
+        });
         await expect(latestUpdate).toBeVisible();
-        const statusNote = page.getByRole('complementary', { name: 'Historical note' });
-        await expect(statusNote).toContainText('tentative November 1, 2026');
-        await expect(
-            statusNote.getByRole('link', { name: 'v3.1 release preparation' })
-        ).toHaveAttribute('href', '/docs/v3-1-release-preparation');
+        await expect(page.locator('.latest-update-html')).toContainText('v3.0.1');
+        await expect(page.locator('.latest-update-html')).not.toContainText('v3.1.0');
+        await expect(page.getByRole('complementary', { name: 'Historical note' })).toHaveCount(0);
     });
 });
