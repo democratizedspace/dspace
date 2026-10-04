@@ -6,9 +6,10 @@ import { glob } from 'glob';
 import { globDocsFiles } from '../scripts/docs-rag-files.mjs';
 
 describe('docs RAG source discovery', () => {
-  let fixture: string;
+  let fixture = '';
 
   beforeEach(async () => {
+    fixture = '';
     fixture = await fs.mkdtemp(path.join(os.tmpdir(), 'dspace rag files-'));
     await fs.mkdir(path.join(fixture, 'changelog'), { recursive: true });
     await fs.mkdir(path.join(fixture, 'nested', 'directory.md'), {
@@ -26,6 +27,7 @@ describe('docs RAG source discovery', () => {
   });
 
   afterEach(async () => {
+    if (!fixture) return;
     expect(path.dirname(fixture)).toBe(path.resolve(os.tmpdir()));
     expect(path.basename(fixture)).toMatch(/^dspace rag files-/);
     await fs.rm(fixture, { recursive: true, force: true });
