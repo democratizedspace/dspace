@@ -34,7 +34,7 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
         .filter((line) => !line.trim().startsWith('#'))
         .join('\n');
       const shellPublish =
-        /docker\s+(?:(?:image\s+)?push\b|buildx\s+imagetools\s+create\b)/.test(
+        /docker\s+(?:(?:(?:image|manifest)\s+)?push\b|buildx\s+imagetools\s+create\b)/.test(
           shell
         ) ||
         (/docker\s+(?:build\b|buildx\s+(?:build|bake)\b)/.test(shell) &&
@@ -116,6 +116,7 @@ describe('build workflow multi-arch validation', () => {
   it.each<Step>([
     { run: 'docker push ghcr.io/example/image:tag' },
     { run: 'docker image push ghcr.io/example/image:tag' },
+    { run: 'docker manifest push ghcr.io/example/image:tag' },
     {
       run: 'docker buildx imagetools create --tag ghcr.io/example/image:tag source@sha256:abc',
     },
@@ -220,5 +221,18 @@ describe('build workflow multi-arch validation', () => {
         /^(?:main|v3)-(?:[0-9a-f]{7,40}|REPLACE_(?:NEW_)?SHORTSHA)$/.test(tag)
       )
     ).toBe(true);
+  });
+
+  it('documents canonical image coordinates and keeps dev on the published mutable tag', () => {
+    const config = readFileSync(join(repoRoot, 'docs', 'config.md'), 'utf8');
+    expect(config).toContain('<branch>-<short-sha>');
+    expect(config).not.toContain('sha-<full commit>');
+    const dev = parse(
+      readFileSync(
+        join(repoRoot, 'deploy', 'env', 'dev', 'values.yaml'),
+        'utf8'
+      )
+    );
+    expect(dev.image.tag).toBe('main-latest');
   });
 });
