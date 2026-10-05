@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MiniSearch from 'minisearch';
-import { glob } from 'glob';
+import { globDocsFiles } from './docs-rag-files.mjs';
 import yaml from 'yaml';
 import { execSync } from 'node:child_process';
 import GithubSlugger from 'github-slugger';
@@ -338,7 +338,7 @@ const discoverChangelogSources = async () => {
 
     for (const candidate of CHANGELOG_CANDIDATES) {
         if (candidate.includes('*')) {
-            const matches = await glob(candidate, { nodir: true });
+            const matches = await globDocsFiles(candidate);
             matches.forEach((match) => sources.add(match));
             continue;
         }
@@ -397,7 +397,7 @@ const isLegacyChangelogSlug = (slug) => /^202[0-3]/.test(String(slug || '').trim
 const gatherDocs = async () => {
     await ensureFileExists(ROUTES_PATH, 'Routes index');
 
-    const docFiles = await glob(path.join(DOCS_DIR, '**/*.md'), { nodir: true });
+    const docFiles = await globDocsFiles(path.join(DOCS_DIR, '**/*.md'));
     const changelogFiles = await discoverChangelogSources();
 
     const chunks = [];

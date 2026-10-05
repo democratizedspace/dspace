@@ -64,6 +64,15 @@ SKIP_E2E=1 npm test
   instead of using `.npmrc` proxy settings.
 - Use `nvm use` to match the Node.js version specified in `.nvmrc` (Node 20 LTS).
 
+## Docs RAG discovery on Windows
+
+`npm run build:docs-rag` uses `scripts/docs-rag-files.mjs` for filesystem globbing.
+Patterns built with `path.join()` need `windowsPathsNoEscape: true`, otherwise Windows
+backslashes escape the glob and Markdown sources disappear. Normalize returned paths before
+native-separator checks so archived changelogs remain excluded from ordinary doc chunks.
+Keep `tests/docsRagFiles.test.ts` passing for native, forward-slash, and backslash paths; do not
+work around missing sources by skipping RAG generation or weakening its source checks.
+
 ## Code Formatting with Prettier
 
 **Important**: The repository has multiple Prettier configuration files. Always use the **frontend-specific** configuration when formatting frontend code.
