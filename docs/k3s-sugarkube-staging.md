@@ -21,7 +21,8 @@ validated before production promotion.
 
 ## Release model for staging
 
-- Prefer immutable branch build tags from CI: `main-<shortsha>`.
+- Prefer immutable branch build tags from CI: `main-<shortsha>` or `v3-<shortsha>`.
+  The examples below use `main`; substitute `v3` when that branch published the candidate.
 - RC git tags identify source candidates; `build.yml` only validates them. Select the matching
   immutable branch-SHA image or digest from a successful `ci-image.yml` run for staging.
 - Avoid mutable tags such as `main-latest` for release sign-off. Release-only `vX.Y.Z` aliases

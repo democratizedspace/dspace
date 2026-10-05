@@ -34,7 +34,9 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
         .filter((line) => !line.trim().startsWith('#'))
         .join('\n');
       const shellPublish =
-        /docker\s+(?:push\b|buildx\s+imagetools\s+create\b)/.test(shell) ||
+        /docker\s+(?:(?:image\s+)?push\b|buildx\s+imagetools\s+create\b)/.test(
+          shell
+        ) ||
         (/docker\s+(?:build\b|buildx\s+(?:build|bake)\b)/.test(shell) &&
           (/--push(?:=true)?(?=\s|$)/.test(shell) ||
             Array.from(
@@ -113,6 +115,7 @@ describe('build workflow multi-arch validation', () => {
 
   it.each<Step>([
     { run: 'docker push ghcr.io/example/image:tag' },
+    { run: 'docker image push ghcr.io/example/image:tag' },
     {
       run: 'docker buildx imagetools create --tag ghcr.io/example/image:tag source@sha256:abc',
     },
@@ -212,6 +215,10 @@ describe('build workflow multi-arch validation', () => {
       (match) => match[1]
     );
     expect(tags.length).toBeGreaterThan(0);
-    expect(tags.every((tag) => tag.startsWith('main-'))).toBe(true);
+    expect(
+      tags.every((tag) =>
+        /^(?:main|v3)-(?:[0-9a-f]{7,40}|REPLACE_(?:NEW_)?SHORTSHA)$/.test(tag)
+      )
+    ).toBe(true);
   });
 });
