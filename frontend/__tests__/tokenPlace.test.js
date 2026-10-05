@@ -1327,13 +1327,19 @@ ${ragExcerpt.repeat(4000)}`,
     });
 
     test('timeout calls cancel when possible and returns helpful error', async () => {
-        global.fetch = makeRelayFetch({ retrieveStatuses: [202] });
+        global.fetch = makeRelayFetch({
+            retrieveStatuses: [202],
+            dispatchCorrelationValue: 'timeout-correlation-fixture',
+        });
         await expect(
             tokenPlaceChat([{ role: 'user', content: 'hello' }], {
                 timeoutMs: 1,
                 pollIntervalMs: 1,
             })
-        ).rejects.toMatchObject({ status: 408 });
+        ).rejects.toMatchObject({
+            status: 408,
+            correlationToken: 'timeout-correlation-fixture',
+        });
         expect(
             fetch.mock.calls.some(([url]) => urlPathEndsWith(url, '/api/v1/relay/requests/cancel'))
         ).toBe(true);
