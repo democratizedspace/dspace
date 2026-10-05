@@ -10,13 +10,24 @@ const repoRoot = join(__dirname, '..');
 type Step = { uses?: string; run?: string; with?: Record<string, unknown> };
 type Workflow = { jobs: Record<string, { steps?: Step[] }> };
 
+function publishesExporter(value: string): boolean {
+  return value
+    .split(/\r?\n/)
+    .some(
+      (exporter) =>
+        /\btype\s*=\s*registry\b/.test(exporter) ||
+        (/\btype\s*=\s*image\b/.test(exporter) &&
+          /(?:^|,)\s*push(?:-by-digest)?\s*=\s*true\b/.test(exporter))
+    );
+}
+
 function imagePublishers(filename: string, workflow: Workflow): string[] {
   const publishers: string[] = [];
   for (const [jobName, job] of Object.entries(workflow.jobs)) {
     for (const step of job.steps ?? []) {
       const buildAction = step.uses?.startsWith('docker/build-push-action@');
       const registryExport = ['outputs', 'cache-to'].some((input) =>
-        /type\s*=\s*registry\b/.test(String(step.with?.[input] ?? ''))
+        publishesExporter(String(step.with?.[input] ?? ''))
       );
       const shell = (step.run ?? '')
         .split('\n')
@@ -26,8 +37,12 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
         /docker\s+(?:push\b|buildx\s+imagetools\s+create\b)/.test(shell) ||
         (/docker\s+(?:buildx\s+)?build\b/.test(shell) &&
           (/--push\b/.test(shell) ||
-            /(?:--output|--cache-to|-o)(?:=|\s+)["']?[^\r\n]*\btype\s*=\s*registry\b/.test(
-              shell
+            Array.from(
+              shell.matchAll(
+                /(?:--output|--cache-to|-o)(?:=|\s+)(?:"([^"]*)"|'([^']*)'|([^\s]+))/g
+              )
+            ).some((match) =>
+              publishesExporter(match[1] ?? match[2] ?? match[3])
             )));
       if (
         (buildAction && (step.with?.push !== false || registryExport)) ||
@@ -107,6 +122,18 @@ describe('build workflow multi-arch validation', () => {
     },
     { run: 'docker build --output type=registry .' },
     {
+      run: 'docker buildx build --output type=image,name=example/image,push=true .',
+    },
+    { run: 'docker buildx build --output="type=image,push-by-digest=true" .' },
+    {
+      uses: 'docker/build-push-action@v6',
+      with: { push: false, outputs: 'type=image,name=example/image,push=true' },
+    },
+    {
+      uses: 'docker/build-push-action@v6',
+      with: { push: false, outputs: 'type=image,push-by-digest=true' },
+    },
+    {
       uses: 'docker/build-push-action@v6',
       with: {
         push: false,
@@ -121,6 +148,23 @@ describe('build workflow multi-arch validation', () => {
     expect(
       imagePublishers('other.yml', { jobs: { validation: { steps: [step] } } })
     ).toEqual(['other.yml:validation']);
+  });
+
+  it.each<Step>([
+    {
+      run: 'docker buildx build --output type=image,name=example/image,push=false .',
+    },
+    {
+      uses: 'docker/build-push-action@v6',
+      with: {
+        push: false,
+        outputs: 'type=image,push=false,push-by-digest=false',
+      },
+    },
+  ])('allows local image exporters without publication: %j', (step) => {
+    expect(
+      imagePublishers('other.yml', { jobs: { validation: { steps: [step] } } })
+    ).toEqual([]);
   });
 
   it('requires stabilization candidates to reach a supported publication branch', () => {
