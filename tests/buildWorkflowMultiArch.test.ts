@@ -23,9 +23,12 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
         .filter((line) => !line.trim().startsWith('#'))
         .join('\n');
       const shellPublish =
-        /docker\s+(?:push\b|buildx\s+imagetools\s+create\b|buildx\s+build\b[^]*?--push\b)/.test(
-          shell
-        );
+        /docker\s+(?:push\b|buildx\s+imagetools\s+create\b)/.test(shell) ||
+        (/docker\s+(?:buildx\s+)?build\b/.test(shell) &&
+          (/--push\b/.test(shell) ||
+            /(?:--output|--cache-to|-o)(?:=|\s+)["']?[^\r\n]*\btype\s*=\s*registry\b/.test(
+              shell
+            )));
       if (
         (buildAction && (step.with?.push !== false || registryExport)) ||
         shellPublish
@@ -93,6 +96,16 @@ describe('build workflow multi-arch validation', () => {
       run: 'docker buildx imagetools create --tag ghcr.io/example/image:tag source@sha256:abc',
     },
     { run: 'docker buildx build --platform linux/amd64 --push .' },
+    { run: 'docker buildx build --output type=registry .' },
+    { run: 'docker buildx build --output="type=registry" .' },
+    { run: 'docker buildx build -o type=registry .' },
+    {
+      run: 'docker buildx build --cache-to type=registry,ref=ghcr.io/example/cache .',
+    },
+    {
+      run: 'docker buildx build --cache-to=type=registry,ref=ghcr.io/example/cache .',
+    },
+    { run: 'docker build --output type=registry .' },
     {
       uses: 'docker/build-push-action@v6',
       with: {
