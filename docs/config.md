@@ -57,6 +57,10 @@ feature toggles without opening each values file.
 
 Flux consumption details:
 
+- The dev overlay uses `image.pullPolicy: Always` so newly started pods resolve the current
+  `main-latest` image. Moving that registry tag does not restart existing pods; adopting a new
+  build still requires a dev rollout. Staging and production sign-off use immutable coordinates.
+
 - `deploy/env/dev/kustomization.yaml` renders `dspace-dev-values` and `helmrelease.yaml` mounts it
   via `valuesFrom`, so Flux keeps development hosts and feature flags in sync.
 - `deploy/env/int/kustomization.yaml` emits `dspace-int-values`; the integration release tracks a

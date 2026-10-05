@@ -4,6 +4,7 @@ environment: dev
 image:
   # Dev can follow a mutable tag for rapid iteration; pin a digest locally when needed.
   tag: main-latest
+  pullPolicy: Always
   digest: ""
 ingress:
   className: traefik

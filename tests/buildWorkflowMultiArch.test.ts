@@ -10,11 +10,12 @@ const repoRoot = join(__dirname, '..');
 type Step = { uses?: string; run?: string; with?: Record<string, unknown> };
 type Workflow = { jobs: Record<string, { steps?: Step[] }> };
 
-function publishesExporter(value: string): boolean {
+function publishesExporter(value: string, cache = false): boolean {
   return value
     .split(/\r?\n/)
     .some(
       (exporter) =>
+        (cache && /^[^\s,=]+$/.test(exporter.trim())) ||
         /\btype\s*=\s*registry\b/.test(exporter) ||
         (/\btype\s*=\s*image\b/.test(exporter) &&
           /(?:^|,)\s*push(?:-by-digest)?\s*=\s*true\b/.test(exporter))
@@ -27,7 +28,10 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
     for (const step of job.steps ?? []) {
       const buildAction = step.uses?.startsWith('docker/build-push-action@');
       const registryExport = ['outputs', 'cache-to'].some((input) =>
-        publishesExporter(String(step.with?.[input] ?? ''))
+        publishesExporter(
+          String(step.with?.[input] ?? ''),
+          input === 'cache-to'
+        )
       );
       const shell = (step.run ?? '')
         .split('\n')
@@ -46,11 +50,14 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
             ).some((match) => {
               const value = match[2] ?? match[3] ?? match[4];
               // Bake --set exports use target.output/cache-to, including append overrides.
-              return (
-                (match[1] !== '--set' ||
-                  /^.+\.(?:output|cache-to)\+?=/.test(value)) &&
-                publishesExporter(value)
-              );
+              if (match[1] === '--set') {
+                const override = value.match(/^.+\.(output|cache-to)\+?=(.*)$/);
+                return (
+                  !!override &&
+                  publishesExporter(override[2], override[1] === 'cache-to')
+                );
+              }
+              return publishesExporter(value, match[1] === '--cache-to');
             })));
       if (
         (buildAction && (step.with?.push !== false || registryExport)) ||
@@ -121,6 +128,20 @@ describe('build workflow multi-arch validation', () => {
       run: 'docker buildx imagetools create --tag ghcr.io/example/image:tag source@sha256:abc',
     },
     { run: 'docker buildx build --platform linux/amd64 --push .' },
+    { run: 'docker buildx build --cache-to=user/app:cache .' },
+    { run: 'docker buildx build --cache-to user/app:cache .' },
+    { run: 'docker buildx bake --set *.cache-to=user/app:cache' },
+    {
+      uses: 'docker/build-push-action@v6',
+      with: { push: false, 'cache-to': 'user/app:cache' },
+    },
+    {
+      uses: 'docker/build-push-action@v6',
+      with: {
+        push: false,
+        'cache-to': 'type=local,dest=.cache\nuser/app:cache',
+      },
+    },
     { run: 'docker buildx bake --push' },
     { run: 'docker buildx bake --set *.output=type=registry' },
     { run: 'docker buildx bake --set="app.output=type=image,push=true"' },
@@ -174,6 +195,20 @@ describe('build workflow multi-arch validation', () => {
 
   it.each<Step>([
     { run: 'docker buildx bake --load --set *.output=type=docker' },
+    {
+      run: 'docker buildx build --cache-to=type=local,dest=.cache --output dist .',
+    },
+    {
+      run: 'docker buildx bake --set *.output=dist --set *.cache-to=type=local,dest=.cache',
+    },
+    {
+      uses: 'docker/build-push-action@v6',
+      with: {
+        push: false,
+        'cache-to': 'type=local,dest=.cache',
+        outputs: 'dist',
+      },
+    },
     { run: 'docker buildx bake --push=false' },
     { run: 'docker buildx bake --set *.args.EXAMPLE=type=registry' },
     {
@@ -234,5 +269,6 @@ describe('build workflow multi-arch validation', () => {
       )
     );
     expect(dev.image.tag).toBe('main-latest');
+    expect(dev.image.pullPolicy).toBe('Always');
   });
 });
