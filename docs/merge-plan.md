@@ -24,6 +24,8 @@ Cross-reference runbooks:
 - Merge normal feature/fix PRs into `main`.
 - `ci-image.yml` publishes immutable branch+SHA tags like `main-<shortsha>` and convenience tags
   like `main-latest`.
+- `build.yml` validates both architectures on its existing triggers, including git tag pushes;
+  it does not publish images or registry cache.
 - Use immutable tags (`main-<shortsha>`) for sign-off, promotion, and rollback.
 
 ### 2) Optional stabilization branch (only when needed)
@@ -49,10 +51,10 @@ git tag vX.Y.Z-rc.1
 git push origin vX.Y.Z-rc.1
 ```
 
-- Tag pushes trigger `build.yml`, which publishes immutable image tags derived from the git tag
-  (for example `3.1.0-rc.1`, no leading `v`) and `sha-<longsha>`.
-- Deploy those immutable artifacts to staging for sign-off.
-- Iterate (`rc.2`, `rc.3`, ...) until staging gates pass.
+- RC git tags identify candidate commits; tag pushes run validation without publishing images.
+- Select the matching immutable branch-SHA image or digest from a successful `ci-image.yml` run
+  for staging sign-off. Keep the full source SHA and approved chart coordinate with the evidence.
+- Iterate with new reviewed commits and their immutable images until staging gates pass.
 
 ### 4) Final SemVer git tag for production release
 
@@ -66,9 +68,11 @@ git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-- The tag push triggers `build.yml`, which publishes immutable release-tag artifacts (for example
-  `3.0.1`) and `sha-<longsha>`.
-- Deploy one of those immutable artifacts to prod.
+- A tag push alone does not publish a semantic image. Follow the
+  [canonical release runbook](./ops/sugarkube-release.md): verify the immutable image and chart
+  from the approved source commit before publishing the GitHub release. That published-release
+  event makes `ci-image.yml` create the guarded `vX.Y.Z` digest alias without rebuilding.
+- Promote the same approved immutable branch-SHA image or digest to prod after approval.
 - Record the exact deployed artifact tag and commit SHA in release notes and QA checklist.
 
 ## Environment promotion rules
@@ -139,7 +143,7 @@ curl -fsS https://<environment-hostname>/livez
 For each production release, record:
 
 - release git tag (`vX.Y.Z`)
-- deployed immutable image artifact tag (for example `main-<shortsha>`, `3.0.1`, or `sha-<longsha>`)
+- deployed immutable branch-SHA image tag (for example `main-<shortsha>`) and digest
 - commit SHA
 - staging validation timestamp + approver
 - production deploy timestamp + operator

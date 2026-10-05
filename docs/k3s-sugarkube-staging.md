@@ -22,9 +22,10 @@ validated before production promotion.
 ## Release model for staging
 
 - Prefer immutable branch build tags from CI: `main-<shortsha>`.
-- For tag-driven release candidates, use artifact tags published by `build.yml` from git tags
-  (for example `3.1.0-rc.2` from git tag `v3.1.0-rc.2`).
-- Avoid mutable tags (`main-latest`, `v<package-version>`) for release sign-off.
+- RC git tags identify source candidates; `build.yml` only validates them. Select the matching
+  immutable branch-SHA image or digest from a successful `ci-image.yml` run for staging.
+- Avoid mutable tags such as `main-latest` for release sign-off. Release-only `vX.Y.Z` aliases
+  are human-readable references, not deployment coordinates.
 
 See the cross-environment release procedure: [docs/merge-plan.md](./merge-plan.md).
 
