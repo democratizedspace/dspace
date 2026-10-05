@@ -91,4 +91,3 @@ jobs:
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
             ENFORCE_VITE_GIT_SHA=1
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache

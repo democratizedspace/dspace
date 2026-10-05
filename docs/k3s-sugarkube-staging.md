@@ -131,13 +131,13 @@ Prod should deploy the same approved immutable artifact (not `main-latest`).
   Fresh/rebuilt staging cluster example:
 
   ```bash
-  just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+  just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
   ```
 
   Existing staging release example:
 
   ```bash
-  just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+  just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
   ```
 - If Helm OCI pulls fail with `403 denied: denied`, rotate/re-login GHCR credentials:
 

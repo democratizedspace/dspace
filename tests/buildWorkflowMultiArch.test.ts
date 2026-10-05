@@ -35,15 +35,21 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
         .join('\n');
       const shellPublish =
         /docker\s+(?:push\b|buildx\s+imagetools\s+create\b)/.test(shell) ||
-        (/docker\s+(?:buildx\s+)?build\b/.test(shell) &&
-          (/--push\b/.test(shell) ||
+        (/docker\s+(?:build\b|buildx\s+(?:build|bake)\b)/.test(shell) &&
+          (/--push(?:=true)?(?=\s|$)/.test(shell) ||
             Array.from(
               shell.matchAll(
-                /(?:--output|--cache-to|-o)(?:=|\s+)(?:"([^"]*)"|'([^']*)'|([^\s]+))/g
+                /(--output|--cache-to|-o|--set)(?:=|\s+)(?:"([^"]*)"|'([^']*)'|([^\s]+))/g
               )
-            ).some((match) =>
-              publishesExporter(match[1] ?? match[2] ?? match[3])
-            )));
+            ).some((match) => {
+              const value = match[2] ?? match[3] ?? match[4];
+              // Bake --set exports use target.output/cache-to, including append overrides.
+              return (
+                (match[1] !== '--set' ||
+                  /^.+\.(?:output|cache-to)\+?=/.test(value)) &&
+                publishesExporter(value)
+              );
+            })));
       if (
         (buildAction && (step.with?.push !== false || registryExport)) ||
         shellPublish
@@ -111,6 +117,18 @@ describe('build workflow multi-arch validation', () => {
       run: 'docker buildx imagetools create --tag ghcr.io/example/image:tag source@sha256:abc',
     },
     { run: 'docker buildx build --platform linux/amd64 --push .' },
+    { run: 'docker buildx bake --push' },
+    { run: 'docker buildx bake --set *.output=type=registry' },
+    { run: 'docker buildx bake --set="app.output=type=image,push=true"' },
+    {
+      run: "docker buildx bake --set 'app.output=type=image,push-by-digest=true'",
+    },
+    {
+      run: 'docker buildx bake --set=*.cache-to=type=registry,ref=example/cache',
+    },
+    {
+      run: 'docker buildx bake --set "app.cache-to+=type=registry,ref=example/cache"',
+    },
     { run: 'docker buildx build --output type=registry .' },
     { run: 'docker buildx build --output="type=registry" .' },
     { run: 'docker buildx build -o type=registry .' },
@@ -151,6 +169,9 @@ describe('build workflow multi-arch validation', () => {
   });
 
   it.each<Step>([
+    { run: 'docker buildx bake --load --set *.output=type=docker' },
+    { run: 'docker buildx bake --push=false' },
+    { run: 'docker buildx bake --set *.args.EXAMPLE=type=registry' },
     {
       run: 'docker buildx build --output type=image,name=example/image,push=false .',
     },
@@ -179,5 +200,18 @@ describe('build workflow multi-arch validation', () => {
       'A release-branch-only commit has no published candidate image'
     );
     expect(doc).toContain('git tag vX.Y.Z-rc.1 <published-full-sha>');
+  });
+
+  it('uses published branch-SHA images in every staging command example', () => {
+    const staging = readFileSync(
+      join(repoRoot, 'docs', 'k3s-sugarkube-staging.md'),
+      'utf8'
+    );
+    const tags = Array.from(
+      staging.matchAll(/default_tag=([^\s`]+)/g),
+      (match) => match[1]
+    );
+    expect(tags.length).toBeGreaterThan(0);
+    expect(tags.every((tag) => tag.startsWith('main-'))).toBe(true);
   });
 });
