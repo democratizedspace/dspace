@@ -37,14 +37,19 @@ git checkout -b release/vX.Y.Z
 ```
 
 - Only cherry-pick or merge scoped fixes for that release line.
+- Before RC tagging or staging, land the reviewed changes on a supported publication branch
+  (`main`, or `v3` when using that supported path). Select the resulting full commit only after
+  its canonical `ci-image.yml` publication succeeds. A release-branch-only commit has no
+  published candidate image; creating an RC tag does not create one.
 - Keep branch lifetime short; delete it after release is finalized.
 
 ### 3) RC tags for candidate validation
 
-Mark candidate commits with release-candidate git tags before final release sign-off.
+Mark the already-published candidate commit with a release-candidate git tag before final
+release sign-off. Use its recorded full source SHA, not an unmerged stabilization-branch HEAD.
 
 ```bash
-git tag vX.Y.Z-rc.1
+git tag vX.Y.Z-rc.1 <published-full-sha>
 ```
 
 ```bash
@@ -61,7 +66,7 @@ git push origin vX.Y.Z-rc.1
 After staging approval, create the final SemVer git tag from the approved commit.
 
 ```bash
-git tag vX.Y.Z
+git tag vX.Y.Z <approved-full-sha>
 ```
 
 ```bash
