@@ -173,26 +173,46 @@ OpenAI credential is configured for sanitized OpenAI proxy traffic.
 
 **Observability scope.** Browser token.place helpers keep relay plaintext, encryption, and
 private-key material in the browser, forwarding only safe routing fields and ciphertext through the
-server relay boundary so actual token.place dependency attempts and one bounded terminal dChat
-outcome can be observed in the server registry.
+server relay boundary so actual token.place dependency attempts and at most one bounded
+server-observed dChat outcome per logical chat can be observed in the server registry. These
+observations are not proof of browser decryption or rendering; verify the browser result separately
+in staging.
 
 **Correlation token system.** When a rate-limited `dispatch` operation succeeds at the server relay
 boundary and returns parseable JSON, `/api/chat` issues an opaque correlation token stored in the shared Redis-compatible
 backend with a short TTL (300 seconds), bound to the verified session identity. The client receives
-the token via the `X-DSpace-Correlation-Token` response header. To report a terminal dChat outcome,
+the token via the `X-DSpace-Correlation-Token` response header. To finish the correlated observation,
 the client calls `complete` and includes the correlation token. The server atomically consumes the
 token (`GETDEL`), verifies session ownership, derives the duration from the server-owned dispatch
 timestamp, and records one bounded `dspace_dchat_requests_total` and
-`dspace_dchat_request_duration_seconds` observation. Missing, expired, replayed, or cross-session
+`dspace_dchat_request_duration_seconds` observation. The outcome comes from stored server state
+(`success` for a successful dispatch); client-provided `outcome` and `durationSeconds` are ignored.
+Post-dispatch browser failures do not change that stored success outcome. Duration measures the
+dispatch timestamp to accepted completion, not independently verified browser completion. A missing
+or expired completion produces no correlated dChat observation. With completion budget available,
+missing, expired, replayed, or cross-session
 tokens return `400` and do not mutate the registry. The correlation token is never used as a metric
-label and never appears in `/metrics` output. Dispatch failures recorded before a correlation token exists record a terminal dChat failure immediately without issuing a correlation token; post-dispatch failures consume the issued correlation token with a bounded failure outcome.
+label and never appears in `/metrics` output. Dispatch failures recorded before a correlation token
+exists record a terminal dChat failure immediately without issuing a correlation token. Retrieval
+attempts have their own server-observed dependency metrics; they do not rewrite the stored dispatch
+outcome.
 
 **Per-operation sub-budgets.** `select` and `retrieve` sub-operations of a logical token.place chat
 have separate per-session rate-limit counters with higher limits (defaults: 60/min for `select`,
 200/min for `retrieve`, configurable via `DSPACE_CHAT_PROXY_SUBOP_SELECT_LIMIT` and
 `DSPACE_CHAT_PROXY_SUBOP_RETRIEVE_LIMIT`). This prevents normal polling from exhausting the main
-dispatch quota while still bounding per-session abuse potential. The `complete` operation is bounded
-by the correlation token (one per dispatch), so it has no separate counter.
+dispatch quota while still bounding per-session abuse potential. `complete` also has a separate
+per-session attempt counter, configurable via `DSPACE_CHAT_PROXY_SUBOP_COMPLETE_LIMIT`, checked
+before correlation-token consumption (`GETDEL`). Without that override, its default is
+`DSPACE_CHAT_PROXY_SESSION_LIMIT` (default 20) multiplied by `(300 / 60 + 1)`, using the 300-second
+correlation TTL and 60-second rate-limit window: 120/min with the default session limit. This bounds
+syntactically valid random and replayed token attempts without consuming the main dispatch quota;
+the single-use token still prevents duplicate observations. Exhausting the completion budget returns
+`429`; an unavailable budget backend returns `503` before token consumption.
+
+These boundaries follow the [proxy implementation](../../frontend/src/pages/api/chat.ts) and
+[offline metrics regression tests](../../tests/metricsFallback.test.ts); they do not constitute
+staging evidence.
 
 Browser metric reports are not accepted; `POST /metrics` is non-writable and returns `405`, so only
 trusted server instrumentation can mutate the registry scraped by Prometheus. Browser-held OpenAI
