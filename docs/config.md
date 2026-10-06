@@ -6,10 +6,11 @@ across `dev`, `int`, and `prod` clusters.
 
 ## Container Images
 
-- The CI pipeline publishes multi-architecture images (`linux/amd64` and `linux/arm64`) to
+- The guarded `ci-image.yml` workflow publishes multi-architecture images (`linux/amd64` and `linux/arm64`) to
   [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-  and tags every push with an immutable `sha-<full commit>` identifier so clusters can pin exact
-  builds.
+  for supported `main` and `v3` branch pushes. Pin deployments to the published immutable
+  `<branch>-<short-sha>` tag (for example `main-<short-sha>`) or image digest, and record the full
+  source commit from the workflow evidence. The validation-only `build.yml` publishes no tags.
 
 ## Environment Variables
 
@@ -50,11 +51,15 @@ feature toggles without opening each values file.
 
 | Environment | Hostname                 | Image strategy                                    | Metrics                                               | Feature flags                           | Notes                                                          |
 | ----------- | ------------------------ | ------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------- |
-| dev         | `dev.dspace.example.com` | Follows tag `main` for rapid iteration            | Disabled (`serviceMonitor.enabled=false`)             | `beta-chat`                             | Single replica, metrics exporter left off to minimize noise.   |
+| dev         | `dev.dspace.example.com` | Follows tag `main-latest` for rapid iteration     | Disabled (`serviceMonitor.enabled=false`)             | `beta-chat`                             | Single replica, metrics exporter left off to minimize noise.   |
 | int         | `int.dspace.example.com` | Pins an immutable digest for release verification | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel`               | Autoscaling between two and four replicas with 60% CPU target. |
 | prod        | `dspace.example.com`     | Pins an immutable digest for production rollouts  | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel,observability` | Alerts enabled and resources raised (500m/768Mi requests).     |
 
 Flux consumption details:
+
+- The dev overlay uses `image.pullPolicy: Always` so newly started pods resolve the current
+  `main-latest` image. Moving that registry tag does not restart existing pods; adopting a new
+  build still requires a dev rollout. Staging and production sign-off use immutable coordinates.
 
 - `deploy/env/dev/kustomization.yaml` renders `dspace-dev-values` and `helmrelease.yaml` mounts it
   via `valuesFrom`, so Flux keeps development hosts and feature flags in sync.

@@ -16,7 +16,11 @@ DELIVERABLES
    - If the app needs persistence, mount a PVC (`RWX` optional) with a `StorageClass` provided by the platform (Longhorn default).
 
 2) **Multi-arch build & publish**
-   - `.github/workflows/build.yml` (Docker Buildx) to build/push to **GHCR** with semver (if any) and immutable `sha-<shortsha>` tags; add OCI labels.
+   - Keep `.github/workflows/build.yml` validation-only for both architectures. Publication belongs to
+     `.github/workflows/ci-image.yml`: supported branch pushes publish immutable `<branch>-<short-sha>`
+     tags and mutable `<branch>-latest` tags with OCI labels; only a published release creates the
+     guarded semantic image alias. Preserve immutable-coordinate guards and pin staging/production
+     to the approved branch-SHA image or digest.
 
 3) **Helm chart (`deploy/charts/dspace`)**
    - `Deployment`, `Service`, `Ingress`, resource requests/limits for Pi 5.

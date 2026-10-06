@@ -21,10 +21,12 @@ validated before production promotion.
 
 ## Release model for staging
 
-- Prefer immutable branch build tags from CI: `main-<shortsha>`.
-- For tag-driven release candidates, use artifact tags published by `build.yml` from git tags
-  (for example `3.1.0-rc.2` from git tag `v3.1.0-rc.2`).
-- Avoid mutable tags (`main-latest`, `v<package-version>`) for release sign-off.
+- Prefer immutable branch build tags from CI: `main-<shortsha>` or `v3-<shortsha>`.
+  The examples below use `main`; substitute `v3` when that branch published the candidate.
+- RC git tags identify source candidates; `build.yml` only validates them. Select the matching
+  immutable branch-SHA image or digest from a successful `ci-image.yml` run for staging.
+- Avoid mutable tags such as `main-latest` for release sign-off. Release-only `vX.Y.Z` aliases
+  are human-readable references, not deployment coordinates.
 
 See the cross-environment release procedure: [docs/merge-plan.md](./merge-plan.md).
 
@@ -130,13 +132,13 @@ Prod should deploy the same approved immutable artifact (not `main-latest`).
   Fresh/rebuilt staging cluster example:
 
   ```bash
-  just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+  just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
   ```
 
   Existing staging release example:
 
   ```bash
-  just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+  just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
   ```
 - If Helm OCI pulls fail with `403 denied: denied`, rotate/re-login GHCR credentials:
 

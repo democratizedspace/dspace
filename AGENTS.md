@@ -337,6 +337,11 @@ than authoritatively absent, and existing coordinates cannot be overwritten. Cha
 is permanently tombstoned (independently of `appVersion`). Successful chart workflow summaries
 record the full source SHA plus package and OCI digests as release evidence.
 
+`build.yml` is multi-architecture validation only on every trigger, including `main` and `v*`
+pushes. It must not push images, log in to GHCR, request package-write permission, or export
+registry cache. Keep publication in `ci-image.yml` so independent workflows cannot race for the
+same immutable branch-SHA coordinate.
+
 `ci-image.yml` has two separate GHCR publish paths, per
 [DSPACE #4727](https://github.com/democratizedspace/dspace/issues/4727) and the
 [2026-07-23 production version-drift postmortem](outages/2026-07-23-dspace-production-version-drift.md):

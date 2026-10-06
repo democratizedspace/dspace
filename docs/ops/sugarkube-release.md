@@ -121,6 +121,8 @@ before mutation; this is intentional evidence for #4727 and #4730.
 
 1. `.github/workflows/ci-image.yml` builds and publishes the multi-arch DSPACE image for `main` and
    `v3` pushes, and can also be run manually for those branches.
+   `.github/workflows/build.yml` is validation-only on every trigger; it never publishes images
+   or registry cache. A git tag push alone does not publish a semantic image alias.
 2. `.github/workflows/ci-helm.yml` publishes only when an exact `chart-v<chart version>` tag is
    pushed. Ordinary `main`/`v3` pushes and manual branch dispatches never publish charts. Before
    creating the tag, verify it will point to the reviewed immutable commit and that its

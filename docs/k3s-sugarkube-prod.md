@@ -25,9 +25,10 @@ Use it only when you explicitly want temporary rehearsal/preview validation.
 
 ## Release model for prod
 
-- Deploy from immutable tags only (`main-<shortsha>`, `sha-<longsha>`, or release-tag artifacts
-  such as `3.0.1`).
-- Do not deploy mutable tags (`main-latest`, `v<package-version>`) to prod.
+- Deploy the approved immutable branch-SHA image (for example `main-<shortsha>`) or digest
+  from the canonical `ci-image.yml` workflow.
+- Do not deploy mutable tags such as `main-latest` to prod. Release-only `vX.Y.Z` aliases
+  are human-readable references, not deployment coordinates.
 - Keep the previous known-good immutable tag available for explicit rollback.
 
 See release workflow and branch/tag policy: [docs/merge-plan.md](./merge-plan.md).
@@ -72,18 +73,12 @@ curl -fsS https://democratized.space/healthz
 curl -fsS https://democratized.space/livez
 ```
 
-## Optional: deploy release-tag artifact directly
+## Release-tag references
 
-Use the tag format published by `build.yml` (for example, git tag `v3.0.1` publishes image tag
-`3.0.1`).
-
-```bash
-cd ~/sugarkube
-```
-
-```bash
-just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod.yaml version_file=docs/apps/dspace.version default_tag=3.0.1
-```
+`build.yml` is validation-only; a git tag push does not publish a release image. The published
+GitHub release triggers `ci-image.yml` to create a guarded `vX.Y.Z` alias of the approved image.
+Keep using the immutable branch-SHA image or digest that passed staging, following the
+[canonical release runbook](./ops/sugarkube-release.md).
 
 ## Roll back production
 
