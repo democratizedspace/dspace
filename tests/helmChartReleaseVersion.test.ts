@@ -73,7 +73,14 @@ const withFixture = (check: (root: string) => void) => {
 };
 
 describe('independent DSPACE application and chart coordinates', () => {
-  it('pins chart 3.1.3 to application 3.1.2 with matching image coordinate', () => {
+  it('pins independent chart 3.1.3 to the intended application 3.1.0', () => {
+    const rootPackage = JSON.parse(read(repoRoot, 'package.json'));
+    const frontendPackage = JSON.parse(read(repoRoot, 'frontend/package.json'));
+    const lock = JSON.parse(read(repoRoot, 'package-lock.json'));
+    expect(rootPackage.version).toBe('3.1.0');
+    expect(frontendPackage.version).toBe('3.1.0');
+    expect(lock.version).toBe('3.1.0');
+    expect(lock.packages[''].version).toBe('3.1.0');
     const chart = parse(
       readFileSync(join(repoRoot, 'charts/dspace/Chart.yaml'), 'utf8')
     );
@@ -81,8 +88,8 @@ describe('independent DSPACE application and chart coordinates', () => {
       readFileSync(join(repoRoot, 'charts/dspace/values.yaml'), 'utf8')
     );
     expect(chart.version).toBe('3.1.3');
-    expect(chart.appVersion).toBe('3.1.2');
-    expect(values.image.tag).toBe('v3.1.2');
+    expect(chart.appVersion).toBe('3.1.0');
+    expect(values.image.tag).toBe('v3.1.0');
     expect(
       readFileSync(join(repoRoot, 'docs/apps/dspace.version'), 'utf8')
     ).toMatch(/^3\.1\.3$/m);
@@ -102,7 +109,7 @@ describe('independent DSPACE application and chart coordinates', () => {
       }
     );
     expect(result.status, result.stderr).toBe(0);
-    expect(result.stdout).toContain('applicationVersion=3.1.2');
+    expect(result.stdout).toContain('applicationVersion=3.1.0');
     expect(result.stdout).toContain('chartVersion=3.1.3');
   });
 

@@ -141,18 +141,21 @@ tombstoned even if it later appears absent; this does not prohibit a newer chart
 is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
 package SHA-256, and OCI manifest digest.
 
-Chart `3.1.2` is the next immutable chart coordinate for DSPACE application `3.1.1`. Chart
+Historically, chart `3.1.2` was prepared for DSPACE application `3.1.1`. Chart
 `3.1.1` remains a chart-only, provenance-bearing release for DSPACE application `3.1.0`, and the
 legacy `3.1.0` chart lacks the modern immutable source-revision provenance, so neither coordinate
-may be overwritten or selected where newer release evidence is required. After the application
-`3.1.1` preparation PR merges, a human operator will create `chart-v3.1.2` at the exact reviewed
-merge commit; preparing the coordinate does not create the tag or publish the chart.
+may be overwritten or selected where newer release evidence is required. These historical
+coordinates are not the November candidate; preparing a coordinate does not publish it.
 
 ### Operator handoff for the DSPACE 3.1.1 patch release
 
-After this preparation merges to `main`, define `SHORT_SHA` as exactly the first seven lowercase
-hexadecimal characters of the reviewed merge commit SHA, then collect evidence in the normal
-fail-closed order. The expected coordinates are:
+This section records the earlier 3.1.1 handoff and its validation requirements, not instructions
+to recreate that release. The release owner reported deleting its GitHub release and tag on
+October 6 while retaining the container image. See the current November handoff below.
+
+That handoff defined `SHORT_SHA` as exactly the first seven lowercase hexadecimal characters of
+the reviewed merge commit SHA and required evidence in the normal fail-closed order. Its
+expected coordinates were:
 
 - Branch image tag: `main-SHORT_SHA` for the reviewed merge commit, published as
   `ghcr.io/democratizedspace/dspace:main-SHORT_SHA`.
@@ -169,6 +172,22 @@ Required post-merge evidence for Refs #4727 and Refs #4730:
 3. The semantic `v3.1.1` digest remains unchanged after the rejected rerun.
 4. `dspace-release-manifest.json` agrees with the full source SHA, immutable image tag and digest,
    both platform digests, chart `3.1.2` digest/provenance, and semantic tag evidence.
+
+### November v3.1.0 candidate handoff (publication blocked)
+
+Prepared application metadata is now `3.1.0`; independent chart `3.1.3` remains provisional.
+The retained older `v3.1.0` image occupies the semantic coordinate. The source normalization does
+not turn that image into the candidate or authorize any registry mutation. Keep the existing
+absence/provenance guards: semantic publication remains blocked pending a separate release-owner
+decision. See [source and artifact reconciliation](../releases.md#application-versions-and-chart-versions).
+
+For later authorized release work, record the reviewed full source SHA, its newly published
+immutable `main-SHORT_SHA` (or supported `v3-SHORT_SHA`) image index and platform digests, and a
+verified chart from that same source. Confirm chart `3.1.3` is available before publication; if
+occupied, obtain approval for an unused chart coordinate rather than replacing it. Do not use the
+default semantic image tag or the retained `main-8b3f6d5` build as evidence for the new candidate.
+Staging deployment identity, browser QA, monitoring, soak and rollback evidence remain required
+before separately authorized production promotion. The November changelog remains `status: draft`.
 
 Successful full releases upload the deterministic artifact
 `dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
