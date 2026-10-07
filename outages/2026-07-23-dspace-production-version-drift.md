@@ -337,7 +337,7 @@ Detection now combines bounded runtime and frontend source identity, release-awa
 checks, and staging-accepted release-integrity alerts. The tables below link the issues, merged PRs,
 and durable operational proof without treating the DSPACE mirrors as extra actions.
 
-The genuine [DSPACE v3.1.1 release](https://github.com/democratizedspace/dspace/releases/tag/v3.1.1)
+The genuine [DSPACE v3.1.1 release](https://github.com/democratizedspace/dspace/commit/22f506e07e0b5abfd0cf756e9c5827c0458fb4b2)
 validated the release controls from source `22f506e07e0b5abfd0cf756e9c5827c0458fb4b2`: immutable image
 `main-22f506e` and semantic alias `v3.1.1` both resolved to
 `sha256:467890df969cc7938cb760f965fd8f90a8912b1dcb1f8425bc808216b7e1512b`, while chart
