@@ -234,24 +234,15 @@ tag.
 
 Promote only after staging has been validated and the image/chart pair is approved.
 
-From the Sugarkube checkout, promote the approved version or immutable branch-SHA tag:
+Set `CANDIDATE_IMAGE_TAG` to the approved, staging-verified immutable `main-SHORT_SHA` or
+`v3-SHORT_SHA` tag. Set `CANDIDATE_SOURCE_SHA` to its verified full 40-character source SHA.
+Use the same image/chart pair and source identity throughout promotion and smoke checks;
+do not substitute the occupied `v3.1.0` tag or a retained historical image.
+From the Sugarkube checkout:
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-promote-prod tag=3.1.1
-```
-
-The bare `3.1.1` value is the existing Sugarkube compatibility/version promote form. The image
-workflow publishes the release-only semantic application tag as `v3.1.1`; it is human-readable but
-not immutable deployment proof. Branch-SHA tags such as `main-REPLACE_SHORTSHA` or
-`v3-REPLACE_SHORTSHA` (or a digest) are the required audit path for exact image promotion and
-rollback.
-
-or:
-
-```bash
-cd ~/sugarkube
-just dspace-oci-promote-prod tag=main-REPLACE_SHORTSHA
+just dspace-oci-promote-prod tag="${CANDIDATE_IMAGE_TAG:?Set the approved immutable candidate image tag}"
 ```
 
 Validate production after promotion:
@@ -268,25 +259,30 @@ From a DSPACE checkout with dependencies and the Playwright Chromium browser ins
 remotely served frontend against release expectations taken from the approved artifact (never from
 the runtime under test). Select the provider-config contract from that approved immutable source,
 not from the live `/config.json` response, version ordering, or missing fields. Replace the revision
-with the approved full 40-character source SHA:
+with `CANDIDATE_SOURCE_SHA` from the approved image evidence. The normalized November candidate
+uses application version `3.1.0`, modern `build-info-v1` identity and
+`chat-default-provider-v1` configuration; older allowlisted compatibility examples are separated
+below and must not be used for this candidate:
 
 ```bash
 # Staging
 DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.1 \
-DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION="${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=build-info-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
-DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1 \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
 npm run qa:remote-chat-smoke
 
 # Production (run only after the staging result and promotion are approved)
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.1 \
-DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION="${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=build-info-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
-DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1 \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
 npm run qa:remote-chat-smoke
@@ -297,17 +293,17 @@ result contract by pinning the DSPACE checkout/tooling and passing that same ful
 SHA as `--runner-revision`:
 
 ```bash
-git checkout <FULL_IMMUTABLE_DSPACE_COMMIT_SHA>
+git checkout "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}"
 node scripts/run-remote-chat-smoke.mjs \
   --base-url https://staging.democratized.space \
   --expected-version 3.1.0 \
-  --expected-revision 018687f5a7f4de45508c6e36eb28afb3e44da24d \
-  --identity-contract legacy-build-meta-v1 \
+  --expected-revision "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
+  --identity-contract build-info-v1 \
   --expected-provider token-place \
-  --provider-config-contract legacy-no-default-provider-v1 \
+  --provider-config-contract chat-default-provider-v1 \
   --expected-token-place-origin https://staging.token.place \
-  --expected-token-place-model llama-3.1-8b-instruct \
-  --runner-revision <FULL_IMMUTABLE_DSPACE_COMMIT_SHA> \
+  --expected-token-place-model qwen3-8b-instruct \
+  --runner-revision "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
   --result-file /run/dspace-chat/result.json
 ```
 
@@ -325,6 +321,11 @@ prior result. Publication failure after a completed run fails closed with a nonz
 When omitted, `DSPACE_EXPECTED_IDENTITY_CONTRACT` defaults to the modern `build-info-v1`
 contract. That contract requires same-origin `/build-info.json` identity (including the exact
 version, full revision, and derived short revision) and the exact HTML build-revision marker.
+
+### Historical compatibility checks
+
+These explicit checks apply only to the named retained artifacts, not to the November candidate
+or its promotion sign-off.
 
 Some immutable artifacts predate those surfaces but are still supported by exact compatibility
 profiles. `legacy-build-meta-v1` verifies the same-origin `/build-meta.json` response. Build
