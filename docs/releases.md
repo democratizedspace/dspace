@@ -89,7 +89,19 @@ bump, blindly downgrade coordinates, or overwrite an existing immutable tag/dige
 artifact release record does not by itself establish which application is deployed in production
 or whether a draft changelog was published.
 
-For the November draft, coordinate reconciliation remains a publication gate. Read-only checks on
+The release owner approved source-only normalization to application **3.1.0** for the November
+draft. Root/frontend packages, root lockfile metadata, canonical chart `appVersion`, and its
+default semantic image tag now agree with that target. Independent chart **3.1.3** remains a
+provisional prepared coordinate, not proof that it is available or published. Before chart
+publication, verify its absence with the existing fail-closed guard; an occupied coordinate
+requires a separately approved unused chart version and synchronized chart metadata.
+
+This changes prepared source metadata only. It does not roll back code, rewrite retained images,
+create tags/releases, or establish staging or production deployment. The existing
+`20261101.md` remains `status: draft`; publication still requires explicit release authorization
+and verified evidence. Published changelog bodies and their history remain unchanged.
+
+For the November draft, artifact reconciliation remains a publication gate. Read-only checks on
 October 4, 2026 found:
 
 - [bd1ad0c15](https://github.com/democratizedspace/dspace/commit/bd1ad0c15aedaa886276318c7b190e3a88559519)
@@ -98,21 +110,38 @@ October 4, 2026 found:
   `ac5d26c62129a1be9d4e513a37475e6bef3e3321` (application package 3.1.0). The absence of a GitHub
   v3.1.0 release/tag does not make this occupied registry coordinate reusable.
 - [14f2fcebe](https://github.com/democratizedspace/dspace/commit/14f2fcebefc59dda47332f878ea0b90f2f837067)
-  prepared application 3.1.1/chart 3.1.2. A [GitHub v3.1.1 record](https://github.com/democratizedspace/dspace/releases/tag/v3.1.1)
-  was published August 5; public GHCR `dspace:v3.1.1` resolves to
+  prepared application 3.1.1/chart 3.1.2. A GitHub v3.1.1 record was published August 5;
+  the October 4 check found public GHCR `dspace:v3.1.1` at
   `sha256:467890df969cc7938cb760f965fd8f90a8912b1dcb1f8425bc808216b7e1512b`, revision
   `22f506e07e0b5abfd0cf756e9c5827c0458fb4b2`. These artifact records do not publish the August draft.
 - [ff8674fdd](https://github.com/democratizedspace/dspace/commit/ff8674fddfe78639c10f98f2b3fda9279af77066)
   bumped application/appVersion to 3.1.2 and chart to 3.1.3 while adding runtime default-provider
-  configuration. Those are main's prepared metadata, not an approved replacement for the user's
-  requested v3.1.0 goal. This draft-date change does not downgrade or republish them.
-- The production homepage still shows April 1 and its v3.0.1 patch addendum. Anonymous chart
+  configuration. Those earlier prepared metadata did not replace the user's requested v3.1.0
+  goal; the source normalization above reconciles the application fields without republishing
+  their artifacts.
+- The production homepage check showed April 1 and its v3.0.1 patch addendum. Anonymous chart
   registry inspection returned an authorization response, so chart availability was not independently
   established by this check.
 
-The release owner must resolve the occupied v3.1.0 application coordinate before publication.
-Keep the requested draft goal explicit while that decision is pending; do not silently relabel the
-release as 3.1.2 or overwrite existing artifacts.
+On October 6, the release owner reported deleting the invalid GitHub v3.1.1 release and Git tag
+himself and directed that its container image remain. These are distinct artifact types; that
+report does not establish deletion of any registry coordinate or explain other missing releases.
+Retain the existing container images, including the older v3.1.0 image.
+
+The verified October 6 branch build `main-8b3f6d5` has source
+`8b3f6d51a503cbd745326da7918ef2feb7f1d63a`, image-index digest
+`sha256:3aea64fd11b1d19a8106ccd967c9d372403a748d1b2efc6007adb4385a5559e7`, and embedded version
+`v3.1.2+8b3f6d5`. It remains valid evidence for that earlier source, not a normalized v3.1.0
+candidate or proof of deployment.
+
+The occupied v3.1.0 application coordinate blocks semantic publication under the unchanged
+immutable-artifact policy. Source normalization neither resolves that gate nor authorizes deletion,
+retagging, overwrite, or a different publication policy. A separate release-owner decision is
+required before semantic publication; do not silently relabel the intended release as 3.1.2.
+The chart default `v3.1.0` may resolve to the retained older image, so never use it as evidence of
+the November candidate. Staging must select the newly approved immutable branch-SHA image or
+digest and verified chart from the same full source SHA, record runtime identity and QA evidence,
+and pass before any separately authorized production promotion.
 
 ### Recording tags
 

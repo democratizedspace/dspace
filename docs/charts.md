@@ -13,7 +13,7 @@ default, matching the `Dockerfile` `EXPOSE` and health check settings.
 - `nameOverride` / `fullnameOverride`: Optional overrides for release naming.
 - `image.repository`: Defaults to `ghcr.io/democratizedspace/dspace`.
 - `image.tag`: Image tag to deploy. Defaults to the human-readable semantic application tag
-  `v3.1.2`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
+  `v3.1.0`; it is not an immutable deployment coordinate. Use a branch-SHA tag or digest when
   recording or proving the exact deployed image.
 - `image.pullPolicy`: Defaults to `IfNotPresent`.
 - `service.type`: Kubernetes service type. Defaults to `ClusterIP`.
@@ -131,13 +131,16 @@ npm run helm:template
 
 ## Install example
 
-Deploy the chart with a custom host and image tag:
+Deploy the chart with a custom host and an independently verified immutable candidate image.
+Set `CANDIDATE_IMAGE_TAG` to its published branch-SHA tag before adapting these examples.
+The default `v3.1.0` coordinate is occupied by an older image and does not identify the November
+candidate; see the [publication gate](./releases.md#application-versions-and-chart-versions).
 
 ```bash
 helm install dspace charts/dspace \
   -f charts/dspace/values.dev.yaml \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3.1.2
+  --set-string image.tag="${CANDIDATE_IMAGE_TAG:?Set the approved published branch-SHA image tag}"
 ```
 
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
@@ -177,7 +180,7 @@ helm install dspace oci://ghcr.io/democratizedspace/charts/dspace \
   --version 3.1.3 \
   --set ingress.enabled=true \
   --set ingress.host=dspace.example.com \
-  --set image.tag=v3.1.2
+  --set-string image.tag="${CANDIDATE_IMAGE_TAG:?Set the approved published branch-SHA image tag}"
 ```
 
 When installing from the OCI registry, you will not have access to

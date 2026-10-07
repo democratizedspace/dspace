@@ -141,18 +141,21 @@ tombstoned even if it later appears absent; this does not prohibit a newer chart
 is `3.0.1`. A successful run summary is the audit record for the release tag, full source SHA,
 package SHA-256, and OCI manifest digest.
 
-Chart `3.1.2` is the next immutable chart coordinate for DSPACE application `3.1.1`. Chart
+Historically, chart `3.1.2` was prepared for DSPACE application `3.1.1`. Chart
 `3.1.1` remains a chart-only, provenance-bearing release for DSPACE application `3.1.0`, and the
 legacy `3.1.0` chart lacks the modern immutable source-revision provenance, so neither coordinate
-may be overwritten or selected where newer release evidence is required. After the application
-`3.1.1` preparation PR merges, a human operator will create `chart-v3.1.2` at the exact reviewed
-merge commit; preparing the coordinate does not create the tag or publish the chart.
+may be overwritten or selected where newer release evidence is required. These historical
+coordinates are not the November candidate; preparing a coordinate does not publish it.
 
 ### Operator handoff for the DSPACE 3.1.1 patch release
 
-After this preparation merges to `main`, define `SHORT_SHA` as exactly the first seven lowercase
-hexadecimal characters of the reviewed merge commit SHA, then collect evidence in the normal
-fail-closed order. The expected coordinates are:
+This section records the earlier 3.1.1 handoff and its validation requirements, not instructions
+to recreate that release. The release owner reported deleting its GitHub release and tag on
+October 6 while retaining the container image. See the current November handoff below.
+
+That handoff defined `SHORT_SHA` as exactly the first seven lowercase hexadecimal characters of
+the reviewed merge commit SHA and required evidence in the normal fail-closed order. Its
+expected coordinates were:
 
 - Branch image tag: `main-SHORT_SHA` for the reviewed merge commit, published as
   `ghcr.io/democratizedspace/dspace:main-SHORT_SHA`.
@@ -169,6 +172,22 @@ Required post-merge evidence for Refs #4727 and Refs #4730:
 3. The semantic `v3.1.1` digest remains unchanged after the rejected rerun.
 4. `dspace-release-manifest.json` agrees with the full source SHA, immutable image tag and digest,
    both platform digests, chart `3.1.2` digest/provenance, and semantic tag evidence.
+
+### November v3.1.0 candidate handoff (publication blocked)
+
+Prepared application metadata is now `3.1.0`; independent chart `3.1.3` remains provisional.
+The retained older `v3.1.0` image occupies the semantic coordinate. The source normalization does
+not turn that image into the candidate or authorize any registry mutation. Keep the existing
+absence/provenance guards: semantic publication remains blocked pending a separate release-owner
+decision. See [source and artifact reconciliation](../releases.md#application-versions-and-chart-versions).
+
+For later authorized release work, record the reviewed full source SHA, its newly published
+immutable `main-SHORT_SHA` (or supported `v3-SHORT_SHA`) image index and platform digests, and a
+verified chart from that same source. Confirm chart `3.1.3` is available before publication; if
+occupied, obtain approval for an unused chart coordinate rather than replacing it. Do not use the
+default semantic image tag or the retained `main-8b3f6d5` build as evidence for the new candidate.
+Staging deployment identity, browser QA, monitoring, soak and rollback evidence remain required
+before separately authorized production promotion. The November changelog remains `status: draft`.
 
 Successful full releases upload the deterministic artifact
 `dspace-release-manifest/dspace-release-manifest.json`. Schema version 1 records
@@ -215,24 +234,15 @@ tag.
 
 Promote only after staging has been validated and the image/chart pair is approved.
 
-From the Sugarkube checkout, promote the approved version or immutable branch-SHA tag:
+Set `CANDIDATE_IMAGE_TAG` to the approved, staging-verified immutable `main-SHORT_SHA` or
+`v3-SHORT_SHA` tag. Set `CANDIDATE_SOURCE_SHA` to its verified full 40-character source SHA.
+Use the same image/chart pair and source identity throughout promotion and smoke checks;
+do not substitute the occupied `v3.1.0` tag or a retained historical image.
+From the Sugarkube checkout:
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-promote-prod tag=3.1.1
-```
-
-The bare `3.1.1` value is the existing Sugarkube compatibility/version promote form. The image
-workflow publishes the release-only semantic application tag as `v3.1.1`; it is human-readable but
-not immutable deployment proof. Branch-SHA tags such as `main-REPLACE_SHORTSHA` or
-`v3-REPLACE_SHORTSHA` (or a digest) are the required audit path for exact image promotion and
-rollback.
-
-or:
-
-```bash
-cd ~/sugarkube
-just dspace-oci-promote-prod tag=main-REPLACE_SHORTSHA
+just dspace-oci-promote-prod tag="${CANDIDATE_IMAGE_TAG:?Set the approved immutable candidate image tag}"
 ```
 
 Validate production after promotion:
@@ -249,25 +259,30 @@ From a DSPACE checkout with dependencies and the Playwright Chromium browser ins
 remotely served frontend against release expectations taken from the approved artifact (never from
 the runtime under test). Select the provider-config contract from that approved immutable source,
 not from the live `/config.json` response, version ordering, or missing fields. Replace the revision
-with the approved full 40-character source SHA:
+with `CANDIDATE_SOURCE_SHA` from the approved image evidence. The normalized November candidate
+uses application version `3.1.0`, modern `build-info-v1` identity and
+`chat-default-provider-v1` configuration; older allowlisted compatibility examples are separated
+below and must not be used for this candidate:
 
 ```bash
 # Staging
 DSPACE_SMOKE_BASE_URL=https://staging.democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.1 \
-DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION="${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=build-info-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
-DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1 \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
 npm run qa:remote-chat-smoke
 
 # Production (run only after the staging result and promotion are approved)
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
-DSPACE_EXPECTED_VERSION=3.1.1 \
-DSPACE_EXPECTED_REVISION=REPLACE_WITH_APPROVED_40_CHARACTER_SHA \
+DSPACE_EXPECTED_VERSION=3.1.0 \
+DSPACE_EXPECTED_REVISION="${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
+DSPACE_EXPECTED_IDENTITY_CONTRACT=build-info-v1 \
 DSPACE_EXPECTED_PROVIDER=token-place \
-DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1 \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
 npm run qa:remote-chat-smoke
@@ -278,17 +293,17 @@ result contract by pinning the DSPACE checkout/tooling and passing that same ful
 SHA as `--runner-revision`:
 
 ```bash
-git checkout <FULL_IMMUTABLE_DSPACE_COMMIT_SHA>
+git checkout "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}"
 node scripts/run-remote-chat-smoke.mjs \
   --base-url https://staging.democratized.space \
   --expected-version 3.1.0 \
-  --expected-revision 018687f5a7f4de45508c6e36eb28afb3e44da24d \
-  --identity-contract legacy-build-meta-v1 \
+  --expected-revision "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
+  --identity-contract build-info-v1 \
   --expected-provider token-place \
-  --provider-config-contract legacy-no-default-provider-v1 \
+  --provider-config-contract chat-default-provider-v1 \
   --expected-token-place-origin https://staging.token.place \
-  --expected-token-place-model llama-3.1-8b-instruct \
-  --runner-revision <FULL_IMMUTABLE_DSPACE_COMMIT_SHA> \
+  --expected-token-place-model qwen3-8b-instruct \
+  --runner-revision "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
   --result-file /run/dspace-chat/result.json
 ```
 
@@ -306,6 +321,11 @@ prior result. Publication failure after a completed run fails closed with a nonz
 When omitted, `DSPACE_EXPECTED_IDENTITY_CONTRACT` defaults to the modern `build-info-v1`
 contract. That contract requires same-origin `/build-info.json` identity (including the exact
 version, full revision, and derived short revision) and the exact HTML build-revision marker.
+
+### Historical compatibility checks
+
+These explicit checks apply only to the named retained artifacts, not to the November candidate
+or its promotion sign-off.
 
 Some immutable artifacts predate those surfaces but are still supported by exact compatibility
 profiles. `legacy-build-meta-v1` verifies the same-origin `/build-meta.json` response. Build
