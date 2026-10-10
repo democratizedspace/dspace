@@ -5,6 +5,12 @@ run its own tests, and send you a ready‑made PR — but only if you give it a 
 file‑scoped prompt. This document stores the baseline instructions used when
 invoking Codex on DSPACE and should evolve alongside the project.
 
+All commit-producing prompts must follow the canonical
+[agent commit identity contract](../../../CONTRIBUTING.md#agent-commit-identity-contract).
+Verify the effective author and committer before committing; stop on an unexpected
+identity, preserve third-party attribution, and never invent an email or change
+global Git configuration. Authentication does not establish commit authorship.
+
 For task-specific templates see [Quest prompts](quests.md),
 [Item prompts](items.md), [Process prompts](processes.md),
 [NPC prompts](npcs.md), [Outage prompts](outages.md),
