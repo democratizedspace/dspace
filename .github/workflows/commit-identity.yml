@@ -1,0 +1,92 @@
+name: Commit identity advisory
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: ['**']
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  advisory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      # No checkout, dependencies, actions, PR code, or PR policy are executed.
+      # Push workflow YAML itself remains branch-controlled; this is advisory.
+      - name: Inspect metadata with trusted default-branch policy
+        id: inspect
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          IDENTITY_REPOSITORY: ${{ github.repository }}
+          IDENTITY_EVENT: ${{ github.event_name }}
+        run: |
+          set +x
+          node --input-type=module <<'NODE' 2>/dev/null
+          import { readFileSync } from 'node:fs';
+          const repo = process.env.IDENTITY_REPOSITORY;
+          const validRepo = /^[A-Za-z0-9][A-Za-z0-9-]{0,38}\/[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}$(?![\s\S])/;
+          const sha = /^[a-f0-9]{40}$(?![\s\S])/;
+          const warn = () => process.stdout.write('::warning::' +
+            (validRepo.test(repo) ? repo + ' ' : '') + 'COVERAGE_BOOTSTRAP_UNAVAILABLE\n');
+          // No raw exceptions, including uncaught/rejected exception paths.
+          process.on('uncaughtException', () => { warn(); process.exit(0); });
+          process.on('unhandledRejection', () => { warn(); process.exit(0); });
+          try {
+            if (!validRepo.test(repo)) throw null;
+            const decode = (bytes) => new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+            const get = async (path) => {
+              const response = await fetch('https://api.github.com/repos/' + repo + '/' + path, {
+                headers: { Accept: 'application/vnd.github+json',
+                  Authorization: 'Bearer ' + process.env.GH_TOKEN,
+                  'X-GitHub-Api-Version': '2022-11-28' },
+                redirect: 'error', signal: AbortSignal.timeout(20000),
+              });
+              if (!response.ok) throw null;
+              const reader = response.body.getReader();
+              const chunks = [];
+              let size = 0;
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                size += value.length;
+                if (size > 1024 * 1024) { await reader.cancel(); throw null; }
+                chunks.push(value);
+              }
+              return JSON.parse(decode(Buffer.concat(chunks)));
+            };
+            const event = JSON.parse(decode(readFileSync(process.env.GITHUB_EVENT_PATH)));
+            // Resolve the server's default branch, then pin BOTH files to its full SHA.
+            // Do not use event head refs, PR files, local git config, or event policy.
+            const repository = await get('');
+            if (repository.full_name !== repo || typeof repository.default_branch !== 'string') throw null;
+            const base = await get('commits/' + encodeURIComponent(repository.default_branch));
+            if (!sha.test(base.sha) || base.sha === '0'.repeat(40)) throw null;
+            const file = async (path) => {
+              const data = await get('contents/' + path + '?ref=' + base.sha);
+              if (data.type !== 'file' || data.encoding !== 'base64' ||
+                  typeof data.content !== 'string' || !/^[A-Za-z0-9+/=\r\n]+$/.test(data.content)) throw null;
+              const compact = data.content.replace(/[\r\n]/g, '');
+              const bytes = Buffer.from(compact, 'base64');
+              if (bytes.toString('base64') !== compact) throw null;
+              return decode(bytes);
+            };
+            const source = await file('.github/scripts/commit-identity.mjs');
+            const policy = JSON.parse(await file('.github/commit-identity-policy.json'));
+            const trusted = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
+            await trusted.run({ event, eventName: process.env.IDENTITY_EVENT, repository: repo, policy,
+              get: trusted.apiClient(repo, process.env.GH_TOKEN), emit: trusted.reporter(repo) });
+          } catch { warn(); }
+          NODE
+      - name: Report interrupted inspection
+        if: ${{ always() && steps.inspect.outcome != 'success' }}
+        shell: bash
+        run: |
+          set +x
+          printf '%s\n' '::warning::COVERAGE_RUNNER_INTERRUPTED'
