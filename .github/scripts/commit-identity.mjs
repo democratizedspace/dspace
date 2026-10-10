@@ -215,7 +215,7 @@ async function enumerate(get, path, expected, compare, emit) {
     }
     const next = /rel="next"/.test(link);
     // Count agreement plus a terminal page are both required. Never trust a count alone.
-    if (!next && items.length < 100) {
+    if (!next && (items.length < 100 || commits.length === expected)) {
       complete = true;
       break;
     }

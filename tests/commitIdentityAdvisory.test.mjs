@@ -247,6 +247,33 @@ test('pagination uses generated paths, checks terminal page and stops at budget'
   assert.equal(pages, 30);
   assert.ok(has(exhausted, 'COVERAGE_INCOMPLETE_PAGINATION'));
 });
+test('complete full pages including the 3000-commit push boundary do not warn', async () => {
+  for (const count of [100, 3000]) {
+    let pages = 0;
+    const get = async (path) => {
+      if (path.includes('per_page=1&'))
+        return response({ total_commits: count, status: 'ahead' });
+      pages++;
+      const final = pages * 100 === count;
+      return {
+        data: {
+          total_commits: count,
+          commits: Array.from({ length: 100 }, (_, index) =>
+            commit({
+              sha: final && index === 99 ? head : sha(pages * 100 + index),
+            })
+          ),
+        },
+        link: final ? '' : '<ignored>; rel="next"',
+      };
+    };
+    const lines = await exercise(get, pushEvent, 'push');
+    assert.equal(pages, count / 100);
+    assert.ok(has(lines, 'COVERAGE_COMMIT_LIST_COMPLETE'));
+    assert.ok(!has(lines, 'COVERAGE_INCOMPLETE_PAGINATION'));
+  }
+});
+
 test('pushes, new branches, force pushes and deletions have honest coverage', async () => {
   const get = async (path) =>
     response(
