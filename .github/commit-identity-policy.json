@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "repositories": {
+    "democratizedspace/dspace": {
+      "committers": [
+        {
+          "accountId": 80668851,
+          "login": "futuroptimist",
+          "nameSha256": "e0ce59d3069e068602b6416027f583281e80182a76823f4b119dd78f9d05ac2c",
+          "emailSha256": "bff57321380741d94436fa560786d658ae9219a7f140147a96d8e7d6f72b177f"
+        }
+      ]
+    }
+  }
+}

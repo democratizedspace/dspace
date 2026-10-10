@@ -10,6 +10,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  commit-identity-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Test advisory and privacy boundaries
+        env:
+          HOME: ${{ runner.temp }}/identity-test-home
+          USERPROFILE: ${{ runner.temp }}/identity-test-home
+          XDG_CONFIG_HOME: ${{ runner.temp }}/identity-test-config
+          XDG_CACHE_HOME: ${{ runner.temp }}/identity-test-cache
+          npm_config_cache: ${{ runner.temp }}/identity-test-npm
+        run: node --test tests/commitIdentityAdvisory.test.mjs
+
   lint:
     runs-on: ubuntu-latest
     steps:
