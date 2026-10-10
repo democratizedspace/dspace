@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const solarSteps = [1, 2, 3, 4, 5];
-const solarDir = join(process.cwd(), 'assets', 'svg', 'solar');
+const solarDir = join(process.cwd(), 'frontend', 'public', 'assets', 'quests', 'solar');
 
 describe('solar basics illustrations', () => {
     it.each(solarSteps)('step %s icon is production-ready art', (step) => {
