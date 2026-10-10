@@ -330,12 +330,21 @@ test('full bootstrap and checker capture process stdout and stderr without fixtu
       const readFileSync = () => Buffer.from(${JSON.stringify(JSON.stringify(prEvent))});
       globalThis.fetch = async (url, options) => {
         if (options.redirect !== 'error') throw new Error(${JSON.stringify(poison)});
-        if (url.endsWith('/')) return Response.json({full_name:${JSON.stringify(repo)},default_branch:'main'});
-        if (url.includes('/commits/main')) return Response.json({sha:${JSON.stringify(base)}});
-        if (url.includes('/contents/')) {
-          if (!url.endsWith(${JSON.stringify(`?ref=${base}`)})) throw new Error(${JSON.stringify(poison)});
-          const content = url.includes('commit-identity.mjs') ? ${JSON.stringify(source)} : ${JSON.stringify(JSON.stringify(policy))};
+        const root = ${JSON.stringify(`https://api.github.com/repos/${repo}`)};
+        if (url === root) return Response.json({full_name:${JSON.stringify(repo)},default_branch:'main'});
+        if (url === root + '/commits/main') return Response.json({sha:${JSON.stringify(base)}});
+        const files = {
+          [root + ${JSON.stringify(`/contents/.github/scripts/commit-identity.mjs?ref=${base}`)}]: ${JSON.stringify(source)},
+          [root + ${JSON.stringify(`/contents/.github/commit-identity-policy.json?ref=${base}`)}]: ${JSON.stringify(JSON.stringify(policy))},
+        };
+        if (Object.hasOwn(files, url)) {
+          const content = files[url];
           return Response.json({type:'file',encoding:'base64',content:Buffer.from(content).toString('base64')});
+        }
+        // GitHub rejects the repository root with a trailing slash. Unknown
+        // routes must fail instead of accidentally supplying a valid fixture.
+        if (url !== root + '/pulls/1' && url !== root + '/pulls/1/commits?per_page=100&page=1') {
+          return new Response('Not Found', {status:404});
         }
         if (${JSON.stringify(mode)} === 'api') throw new Error(${JSON.stringify(poison)});
         if (${JSON.stringify(mode)} === 'malformed') return new Response(${JSON.stringify(poison)});
@@ -446,6 +455,50 @@ test('workflow has minimal permissions and no PR checkout, dependencies or shell
   assert.ok(workflow.includes('set +x'));
   assert.ok(!inline.includes('${{'));
 });
+test('bootstrap uses the canonical repository root and encoded child routes; 404 stays sanitized', async () => {
+  const root = `https://api.github.com/repos/${repo}`;
+  for (const unavailable of [false, true]) {
+    const lines = [];
+    const urls = [];
+    const context = {
+      Buffer,
+      TextDecoder,
+      AbortSignal,
+      readFileSync: () => Buffer.from(JSON.stringify(prEvent)),
+      process: {
+        env: {
+          IDENTITY_REPOSITORY: repo,
+          IDENTITY_EVENT: 'pull_request_target',
+        },
+        stdout: { write: (line) => lines.push(line) },
+        stderr: { write: (line) => lines.push(line) },
+        on: () => {},
+        exit: () => {},
+      },
+      fetch: async (url, options) => {
+        urls.push(url);
+        assert.equal(options.redirect, 'error');
+        if (!unavailable && url === root) {
+          return Response.json({
+            full_name: repo,
+            default_branch: 'release/next',
+          });
+        }
+        return new Response(poison, { status: 404 });
+      },
+    };
+    const body = inline.replace("import { readFileSync } from 'node:fs';", '');
+    await vm.runInNewContext(`(async () => { ${body} })()`, context);
+    assert.deepEqual(
+      urls,
+      unavailable ? [root] : [root, `${root}/commits/release%2Fnext`]
+    );
+    privateOutput(lines);
+    assert.equal(lines.length, 1);
+    assert.ok(lines[0].endsWith('COVERAGE_BOOTSTRAP_UNAVAILABLE\n'));
+  }
+});
+
 test('exact bootstrap sanitizes malformed event, network, content and exception paths', async () => {
   for (const mode of [
     'event',
@@ -482,8 +535,10 @@ test('exact bootstrap sanitizes malformed event, network, content and exception 
         if (mode === 'network') throw new Error(poison);
         if (mode === 'utf8') return new Response(new Uint8Array([0xc3, 0x28]));
         if (mode === 'json') return new Response(poison);
-        if (url.endsWith('/'))
+        if (url === `https://api.github.com/repos/${repo}`)
           return Response.json({ full_name: repo, default_branch: 'main' });
+        if (url === `https://api.github.com/repos/${repo}/`)
+          return new Response('Not Found', { status: 404 });
         if (url.includes('/commits/'))
           return Response.json({ sha: mode === 'sha' ? `${head}\n` : head });
         return Response.json({
