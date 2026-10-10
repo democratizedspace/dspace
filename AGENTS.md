@@ -2,6 +2,15 @@
 
 > Instructions for automation, Codex agents and other LLMs interacting with this repository.
 
+## Commit identity (required)
+
+Follow the canonical [agent commit identity contract](CONTRIBUTING.md#agent-commit-identity-contract)
+before every commit. For authorized new commits on Daniel's behalf, use its exact
+verified author and committer identity with repository-local or per-command Git
+settings, verify the effective identity, and stop on any mismatch. Never invent an
+email, change global Git configuration, or relabel another contributor's work.
+Authentication is separate from commit metadata.
+
 ## Project Structure for OpenAI Codex Navigation
 
 - `frontend/` – Svelte components and quests
