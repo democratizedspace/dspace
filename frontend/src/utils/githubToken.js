@@ -20,7 +20,7 @@ export async function loadGitHubToken() {
     return token;
 }
 export async function saveGitHubToken(token) {
-    return saveCredential('github', token);
+    return saveCredential('github', typeof token === 'string' ? token.trim() : token);
 }
 export async function clearGitHubToken() {
     const result = await clearCredential('github');

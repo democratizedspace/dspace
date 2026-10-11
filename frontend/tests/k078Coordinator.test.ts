@@ -5,6 +5,8 @@ let common: any, storage: any;
 beforeEach(async () => {
     vi.resetModules();
     vi.stubGlobal('indexedDB', new IDBFactory());
+    // Cross-tab delivery is covered by the real-browser harness, not module-reset fixtures.
+    vi.stubGlobal('BroadcastChannel', undefined);
     localStorage.clear();
     vi.stubGlobal(
         'fetch',
@@ -325,4 +327,56 @@ test('B05 mirror refresh refuses partially propagated metadata', async () => {
     expect(common.syncGameStateFromLocalIfStale('old-checksum')).toBe(false);
     localStorage.setItem('gameStateLite', completeMeta!);
     expect(common.syncGameStateFromLocalIfStale('old-checksum')).toBe(true);
+});
+
+test('C04 gameplay started during Clear advances to its scrubbed receipt', async () => {
+    await common.saveCredential('github', 'SENTINEL_CLEAR_QUEUE');
+    const clearing = common.clearCredential('github');
+    const first = common.loadGameState();
+    first.inventory.synthetic = 71;
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.processes.synthetic = { running: true };
+    const b = common.saveGameState(second);
+    await Promise.all([clearing, a, b]);
+    const db = await storage.openManagedGameDB();
+    const persisted = await storage.readManagedGame(db);
+    expect(persisted.state.inventory.synthetic).toBe(71);
+    expect(persisted.state.processes.synthetic.running).toBe(true);
+    expect(JSON.stringify(persisted)).not.toContain('SENTINEL_CLEAR_QUEUE');
+    expect(common.getGameStateChecksum()).toBe(persisted.state._meta.checksum);
+    db.close();
+});
+
+test('C04 snapshots captured before pending Clear remain stale and restore visible state', async () => {
+    await common.saveCredential('github', 'SENTINEL_STALE_CLEAR');
+    const old = common.loadGameState();
+    old.inventory.synthetic = 72;
+    const clearing = common.clearCredential('github');
+    const saving = common.saveGameState(old);
+    await expect(saving).rejects.toMatchObject({ code: 'stale-credential-epoch' });
+    await clearing;
+    expect(common.loadGameState().inventory.synthetic).not.toBe(72);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_STALE_CLEAR');
+});
+
+test('C04 gameplay after two pending Clears keeps both providers cleared', async () => {
+    await common.saveCredential('github', 'SENTINEL_MULTI_GH');
+    await common.saveCredential('openAI', 'SENTINEL_MULTI_AI');
+    const a = common.clearCredential('github');
+    const b = common.clearCredential('openAI');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 73;
+    await Promise.all([a, b, common.saveGameState(next)]);
+    expect(common.loadGameState().inventory.synthetic).toBe(73);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_MULTI');
+});
+
+test('C04 GitHub token saving normalizes whitespace for subsequent launch checks', async () => {
+    const { saveGitHubToken, loadGitHubToken } = await import('../src/utils/githubToken.js');
+    await saveGitHubToken('  SENTINEL_TRIMMED  ');
+    await expect(loadGitHubToken()).resolves.toBe('SENTINEL_TRIMMED');
+    await expect(common.assertCredentialLaunch('github', 'SENTINEL_TRIMMED')).resolves.toBe(
+        'SENTINEL_TRIMMED'
+    );
 });

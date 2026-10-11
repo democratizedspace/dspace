@@ -147,7 +147,17 @@ try {
           'invalid caused a write'
         );
         const stale = common.loadGameState();
-        const cleared = await common.clearCredential('github');
+        const clearing = common.clearCredential('github');
+        const freshDuringClear = common.loadGameState();
+        freshDuringClear.inventory.pendingClearGameplay = 1;
+        const [cleared] = await Promise.all([
+          clearing,
+          common.saveGameState(freshDuringClear),
+        ]);
+        assert(
+          common.loadGameState().inventory.pendingClearGameplay === 1,
+          'gameplay during Clear lost'
+        );
         assert(cleared.status === 'complete', 'clear complete');
         try {
           await common.saveGameState(stale);

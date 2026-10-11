@@ -29,6 +29,9 @@ const pendingCredentialSaves = new Set();
 let latestPendingGameSave = null;
 let managedCommitOrder = 0;
 const ownedSnapshots = new WeakMap();
+const snapshotClearGenerations = new WeakMap();
+let clearGeneration = 0;
+let credentialNotices;
 import { LEGACY_QUEST_ID_ALIASES } from '../questIdAliases.js';
 
 const DB_NAME = 'dspaceGameState';
@@ -499,6 +502,7 @@ export const ready = isBrowser
 
 if (isBrowser && typeof window.BroadcastChannel === 'function') {
     const notices = new window.BroadcastChannel('dspace-credential-epochs-v1');
+    credentialNotices = notices;
     notices.onmessage = ({ data }) => {
         if (!['github', 'openAI'].includes(data?.kind) || !Number.isSafeInteger(data?.epoch))
             return;
@@ -549,6 +553,7 @@ if (isBrowser) {
 export const loadGameState = () => {
     const snapshot = structuredClone(gameState);
     ownedSnapshots.set(snapshot, structuredClone(knownEpochs));
+    snapshotClearGenerations.set(snapshot, clearGeneration);
     return snapshot;
 };
 
@@ -560,6 +565,7 @@ export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 export const saveGameState = async (newState, { deliberateKind } = {}) => {
     const captured = structuredClone(newState);
     let capturedEpochs = ownedSnapshots.get(newState) ?? structuredClone(knownEpochs);
+    const capturedClearGeneration = snapshotClearGenerations.get(newState) ?? clearGeneration;
     const credentialDependencies = [...pendingCredentialSaves];
     const predecessor = latestPendingGameSave;
     const queued = { promise: null, checksum: null, order: 0 };
@@ -585,6 +591,8 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                 await dependency.promise;
                 const canAdvance =
                     dependency.authority &&
+                    (!dependency.clearGeneration ||
+                        capturedClearGeneration >= dependency.clearGeneration) &&
                     ['github', 'openAI'].every(
                         (kind) =>
                             capturedEpochs[kind].epoch === dependency.before[kind].epoch &&
@@ -617,7 +625,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     meta: buildLightweightSnapshot(safe),
                 });
                 useLocalStorage = true;
-                if (gameState === nextState) {
+                if (latestPendingGameSave === queued) {
                     gameState = safe;
                     durableChecksum = safe._meta.checksum;
                     state.set(gameState);
@@ -649,14 +657,14 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     throw new StorageOperationError('mirror-incomplete', ['game']);
                 }
                 // A later queued save already owns the newer UI snapshot.
-                if (gameState === nextState) {
+                if (latestPendingGameSave === queued) {
                     durableChecksum = receipt.state?._meta?.checksum ?? null;
                     gameState = receipt.state;
                     state.set(gameState);
                 }
                 return { status: 'complete', committed: ['game', 'mirrors'] };
             } catch (error) {
-                if (gameState === nextState) {
+                if (latestPendingGameSave === queued) {
                     const persisted = await readManagedGame(db);
                     knownEpochs = credentialAuthority(persisted.meta);
                     durableChecksum = persisted.state?._meta?.checksum ?? null;
@@ -672,12 +680,12 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                 db.close();
             }
         }).catch(async (error) => {
-            if (gameState === nextState) {
+            if (latestPendingGameSave === queued) {
                 let db;
                 try {
                     db = await openManagedGameDB();
                     const persisted = await readManagedGame(db);
-                    if (gameState === nextState) {
+                    if (latestPendingGameSave === queued) {
                         knownEpochs = credentialAuthority(persisted.meta);
                         durableChecksum = persisted.state?._meta?.checksum ?? null;
                         gameState = validateGameState(
@@ -689,7 +697,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                         state.set(gameState);
                     }
                 } catch {
-                    if (gameState === nextState) {
+                    if (latestPendingGameSave === queued) {
                         gameState = scrubCredential(
                             scrubCredential(previousSnapshot, 'github'),
                             'openAI'
@@ -776,9 +784,17 @@ const stampOwnedState = (value) => {
     for (const record of records.reverse()) stampStateChecksum(record);
 };
 export async function clearCredential(kind) {
-    await ready;
+    const dependency = {
+        kind,
+        before: structuredClone(knownEpochs),
+        authority: null,
+        promise: null,
+        clearGeneration: ++clearGeneration,
+    };
+    pendingCredentialSaves.add(dependency);
     let started = false;
-    return serializeManagedMutation(async () => {
+    dependency.promise = serializeManagedMutation(async () => {
+        await ready;
         let db;
         try {
             db = await openManagedGameDB();
@@ -786,6 +802,7 @@ export async function clearCredential(kind) {
             return { status: 'not-started', committed: [] };
         }
         try {
+            dependency.before = credentialAuthority((await readManagedGame(db)).meta);
             const result = await clearManagedCredential(
                 db,
                 kind,
@@ -801,6 +818,11 @@ export async function clearCredential(kind) {
                 const persisted = await readManagedGame(db);
                 knownEpochs = credentialAuthority(persisted.meta);
                 durableChecksum = persisted.state?._meta?.checksum ?? null;
+                if (result.status === 'complete') {
+                    dependency.authority = structuredClone(knownEpochs);
+                    dependency.checksum = durableChecksum;
+                    dependency.order = ++managedCommitOrder;
+                }
                 if (isBrowser && typeof window.BroadcastChannel === 'function') {
                     const notice = new window.BroadcastChannel('dspace-credential-epochs-v1');
                     notice.postMessage({ kind, epoch: knownEpochs[kind].epoch });
@@ -819,6 +841,11 @@ export async function clearCredential(kind) {
         status: started ? 'incomplete' : 'not-started',
         committed: started ? ['clear-intent'] : [],
     }));
+    try {
+        return await dependency.promise;
+    } finally {
+        pendingCredentialSaves.delete(dependency);
+    }
 }
 
 export const getPersistedGameStateChecksum = () => readChecksumMarker();
@@ -900,6 +927,8 @@ export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
     return true;
 };
 export const closeGameStateDatabaseForTesting = async () => {
+    credentialNotices?.close();
+    credentialNotices = undefined;
     try {
         await writeQueue.catch(() => undefined);
     } catch (err) {

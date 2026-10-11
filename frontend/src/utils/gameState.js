@@ -1,5 +1,6 @@
 import {
     loadGameState,
+    ready,
     saveGameState,
     validateGameState,
     isUsingLocalStorage,
@@ -301,6 +302,7 @@ const applyLegacyInProgressProcessCompensation = async (state) => {
 };
 
 const persistMigratedState = async (state) => {
+    await ready;
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
     await saveGameState(migrated);
