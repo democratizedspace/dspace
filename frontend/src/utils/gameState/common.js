@@ -30,6 +30,7 @@ let latestPendingGameSave = null;
 let managedCommitOrder = 0;
 const ownedSnapshots = new WeakMap();
 const snapshotClearGenerations = new WeakMap();
+const snapshotGameplayBases = new WeakMap();
 let clearGeneration = 0;
 let credentialNotices;
 import { LEGACY_QUEST_ID_ALIASES } from '../questIdAliases.js';
@@ -388,6 +389,20 @@ const computeChecksum = (state) => {
     return (hash >>> 0).toString(16).padStart(8, '0');
 };
 
+const gameplayChecksum = (value) => {
+    const next = scrubCredential(scrubCredential(value, 'github'), 'openAI');
+    const stack = [next];
+    while (stack.length) {
+        const record = stack.pop();
+        if (record._meta) {
+            delete record._meta.checksum;
+            delete record._meta.lastUpdated;
+        }
+        for (const key of ['gameState', 'payload']) if (record[key]) stack.push(record[key]);
+    }
+    return computeChecksum(next);
+};
+
 const stampStateChecksum = (state) => {
     ensureMeta(state);
     state[META_KEY].checksum = computeChecksum(state);
@@ -514,6 +529,8 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
             promise: null,
             clearGeneration: ++clearGeneration,
             refresh: true,
+            beforeGameplay: gameplayChecksum(gameState),
+            gameplayChecksum: null,
         };
         pendingCredentialSaves.add(dependency);
         recovery = null;
@@ -524,6 +541,9 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
                 const authority = credentialAuthority(persisted.meta);
                 knownEpochs = authority;
                 durableChecksum = persisted.state?._meta?.checksum ?? null;
+                dependency.gameplayChecksum = gameplayChecksum(
+                    persisted.state ?? initializeGameState()
+                );
                 dependency.authority = structuredClone(authority);
                 dependency.checksum = durableChecksum;
                 dependency.order = ++managedCommitOrder;
@@ -569,6 +589,7 @@ export const loadGameState = () => {
     const snapshot = structuredClone(gameState);
     ownedSnapshots.set(snapshot, structuredClone(knownEpochs));
     snapshotClearGenerations.set(snapshot, clearGeneration);
+    snapshotGameplayBases.set(snapshot, gameState);
     return snapshot;
 };
 
@@ -581,6 +602,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
     const captured = structuredClone(newState);
     let capturedEpochs = ownedSnapshots.get(newState) ?? structuredClone(knownEpochs);
     const capturedClearGeneration = snapshotClearGenerations.get(newState) ?? clearGeneration;
+    const capturedGameplayBase = snapshotGameplayBases.get(newState) ?? gameState;
     const credentialDependencies = [...pendingCredentialSaves];
     const predecessor = latestPendingGameSave;
     const queued = { promise: null, checksum: null, order: 0 };
@@ -604,6 +626,14 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             await ready;
             for (const dependency of credentialDependencies) {
                 await dependency.promise;
+                if (
+                    dependency.refresh &&
+                    dependency.gameplayChecksum &&
+                    dependency.beforeGameplay !== dependency.gameplayChecksum &&
+                    gameplayChecksum(capturedGameplayBase) !== dependency.gameplayChecksum
+                ) {
+                    throw new StorageOperationError('stale-state');
+                }
                 const canAdvance =
                     dependency.authority &&
                     (!dependency.clearGeneration ||

@@ -272,6 +272,43 @@ try {
         if (common.loadGameState().inventory.crossTabGameplay !== 2)
           throw new Error('cross-tab gameplay lost');
       });
+      stage = 'cross-tab Clear preserves newer remote gameplay';
+      await second.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        let attempted = false;
+        common.state.subscribe((value) => {
+          if (!attempted && !value.github?.token) {
+            attempted = true;
+            const staleGameplay = common.loadGameState();
+            staleGameplay.inventory.rejectedLocalAttempt = 1;
+            globalThis.conflictingSave = common
+              .saveGameState(staleGameplay)
+              .then(
+                () => ({ accepted: true }),
+                (error) => ({ code: error.code })
+              );
+          }
+        });
+      });
+      await page.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        const changed = common.loadGameState();
+        changed.inventory.newerRemoteProgress = 99;
+        await common.saveGameState(changed);
+        await common.clearCredential('github');
+      });
+      await second.waitForFunction(() => Boolean(globalThis.conflictingSave));
+      await second.evaluate(async () => {
+        const outcome = await globalThis.conflictingSave;
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        const current = common.loadGameState();
+        if (
+          outcome.code !== 'stale-state' ||
+          current.inventory.newerRemoteProgress !== 99 ||
+          current.inventory.rejectedLocalAttempt !== undefined
+        )
+          throw new Error('cross-tab Clear overwrote newer gameplay');
+      });
       await second.close();
       const processPeakWorkingSetBytes =
         process.platform === 'win32'
