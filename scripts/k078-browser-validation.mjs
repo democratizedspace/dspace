@@ -398,6 +398,29 @@ try {
       });
       if (durableBeforeFallback !== durableAfterFallback)
         throw new Error('no-lock fallback wrote IndexedDB');
+      stage = 'Web Locks return after fallback progress';
+      const restoredLocks = await context.newPage();
+      await restoredLocks.goto(origin + '/k078-harness');
+      await restoredLocks.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        await common.ready;
+        const next = common.loadGameState();
+        if (next.inventory.noLocks !== 1 || next.github?.token)
+          throw new Error('returning locks lost progress or Clear');
+        next.inventory.noLocks = 2;
+        await common.saveGameState(next);
+        const storage =
+          await import('/frontend/src/utils/managedImportStorage.js');
+        const db = await storage.openManagedGameDB();
+        try {
+          if ((await storage.readManagedGame(db)).state.inventory.noLocks !== 2)
+            throw new Error('returning locks failed to persist');
+        } finally {
+          db.close();
+        }
+      });
+      await restoredLocks.close();
+
       const processPeakWorkingSetBytes =
         process.platform === 'win32'
           ? Number(

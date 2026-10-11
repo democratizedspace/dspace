@@ -591,3 +591,45 @@ test('B05 missing locks recovers IDB-only progress and retains subsequent fallba
     expect(await storage.readManagedGame(check)).toEqual(before);
     check.close();
 });
+
+test.each([false, true])(
+    'B05 returning Web Locks retains fallback progress and durable credential authority (cleared=%s)',
+    async (cleared) => {
+        const locks = navigator.locks;
+        await common.saveCredential('github', 'SENTINEL_DURABLE_RETURN');
+        if (cleared) await common.clearCredential('github');
+        await common.closeGameStateDatabaseForTesting();
+        vi.stubGlobal('navigator', { locks: undefined });
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        const next = common.loadGameState();
+        next.inventory.fallbackProgress = 83;
+        await common.saveGameState(next);
+        const local = JSON.parse(localStorage.getItem('gameState')!);
+        local.github = { token: 'SENTINEL_UNTRUSTED_LOCAL' };
+        localStorage.setItem('gameState', JSON.stringify(local));
+        await common.closeGameStateDatabaseForTesting();
+        vi.stubGlobal('navigator', { locks });
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.fallbackProgress).toBe(83);
+        expect(common.loadGameState().github?.token).toBe(
+            cleared ? undefined : 'SENTINEL_DURABLE_RETURN'
+        );
+        await common.saveCredential('openAI', 'SENTINEL_AFTER_RETURN');
+        expect(common.loadGameState().inventory.fallbackProgress).toBe(83);
+        await common.clearCredential('openAI');
+        expect(common.loadGameState().inventory.fallbackProgress).toBe(83);
+        const continued = common.loadGameState();
+        continued.inventory.fallbackProgress = 84;
+        await common.saveGameState(continued);
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        db.close();
+        expect(persisted.state.inventory.fallbackProgress).toBe(84);
+        expect(persisted.state.github?.token).toBe(cleared ? undefined : 'SENTINEL_DURABLE_RETURN');
+        expect(persisted.meta.credentialEpochs.github.cleared).toBe(cleared);
+    }
+);

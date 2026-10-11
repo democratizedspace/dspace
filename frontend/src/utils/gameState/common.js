@@ -470,6 +470,8 @@ export const validateGameState = (state) => {
 
 let gameState = initializeGameState();
 export const state = writable(gameState);
+const savedAt = (value) =>
+    Number.isFinite(value?.[META_KEY]?.lastUpdated) ? value[META_KEY].lastUpdated : 0;
 const loadCredentialFreeFallback = async () => {
     useLocalStorage = true;
     let stored = lsRead(STATE_STORE),
@@ -485,9 +487,7 @@ const loadCredentialFreeFallback = async () => {
                 req(tx.objectStore(STATE_STORE).get('root'), done);
             }
         );
-        const updated = (value) =>
-            Number.isFinite(value?.[META_KEY]?.lastUpdated) ? value[META_KEY].lastUpdated : 0;
-        if (persisted && (!stored || updated(persisted) >= updated(stored))) stored = persisted;
+        if (persisted && (!stored || savedAt(persisted) >= savedAt(stored))) stored = persisted;
     } catch {
         // Unavailable durable storage retains the existing localStorage-only fallback.
     } finally {
@@ -510,14 +510,40 @@ export const ready = isBrowser
               const persisted = await readManagedGame(db);
               knownEpochs = credentialAuthority(persisted.meta);
               durableChecksum = persisted.state?._meta?.checksum ?? null;
-              const stored = persisted.state ?? lsRead(STATE_STORE);
+              const local = lsRead(STATE_STORE);
+              let stored = persisted.state ?? local;
+              const reconcileLocal =
+                  persisted.state && local && savedAt(local) > savedAt(persisted.state);
+              if (reconcileLocal) {
+                  // A newer credential-free fallback save can outlive missing lock support.
+                  // Reconcile its progress, but credentials remain owned by durable storage.
+                  stored = scrubCredential(scrubCredential(local, 'github'), 'openAI');
+                  for (const kind of ['github', 'openAI'])
+                      if (persisted.state[kind])
+                          stored[kind] = structuredClone(persisted.state[kind]);
+              }
               if (stored) {
                   gameState = validateGameState(applyCredentialAuthority(stored, knownEpochs));
+                  if (reconcileLocal) {
+                      // Make recovered progress durable before queued credential operations
+                      // read their gameplay base. Preserve the existing backup and authority.
+                      const receipt = await commitManagedGame(db, {
+                          next: gameState,
+                          backup: persisted.backup,
+                          expectedChecksum: durableChecksum,
+                          expectedEpochs: knownEpochs,
+                          stamp: stampStateChecksum,
+                          lightweight: buildLightweightSnapshot,
+                      });
+                      gameState = receipt.state;
+                      durableChecksum = gameState._meta.checksum;
+                      mirrorManagedGame(receipt);
+                  }
                   state.set(gameState);
                   loadedFromPersistence = true;
               }
-              // Normal startup retains the lightweight snapshot contract without changing
-              // state/backup or replacing durable credential authority.
+              // Outside explicit fallback reconciliation, startup only refreshes the
+              // lightweight snapshot and never replaces durable credential authority.
               const lightweight = buildLightweightSnapshot(gameState);
               await strictTransaction(db, ['meta'], 'readwrite', (tx, req) => {
                   req(tx.objectStore('meta').get('root'), (meta) => {
