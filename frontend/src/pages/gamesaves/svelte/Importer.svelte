@@ -21,13 +21,13 @@
     let recoveryMode = getImportRecoveryStatus();
 
     const handleImport = async () => {
-        if (!(await destinationReady)) {
-            errorMessage = 'Import storage is unavailable. Reload and try again.';
-            return;
-        }
+        await destinationReady;
         errorMessage = '';
         try {
-            await importGameStateString(importString);
+            const receipt = await importGameStateString(importString);
+            if (receipt.status === 'best-effort')
+                errorMessage =
+                    'Imported using best-effort local storage. Provider credentials remain disabled.';
             recoveryMode = getImportRecoveryStatus();
         } catch (err) {
             errorMessage = ['partial', 'mirror-incomplete'].includes(err.code)

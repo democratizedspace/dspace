@@ -240,7 +240,11 @@ export function commitManagedGame(
                 tx.objectStore('state').put(safeNext, 'root');
                 if (safeBackup === undefined) tx.objectStore('backup').delete('root');
                 else tx.objectStore('backup').put(safeBackup, 'root');
-                const nextMeta = { ...lightweight(safeNext), credentialEpochs: authority };
+                const nextMeta = {
+                    ...oldMeta,
+                    ...lightweight(safeNext),
+                    credentialEpochs: authority,
+                };
                 tx.objectStore('meta').put(nextMeta, 'root');
                 done({ state: safeNext, backup: safeBackup, meta: nextMeta });
             });
@@ -295,6 +299,7 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
                         }
                     }
                     values.meta = {
+                        ...scrubCredential(values.meta || {}, kind),
                         ...lightweight(values.state),
                         credentialEpochs: credentialAuthority(values.meta),
                     };

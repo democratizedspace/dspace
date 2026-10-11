@@ -73,3 +73,46 @@ describe('OpenAIAPIKeySettings', () => {
         expect(await findByLabelText(/openai api key/i)).toBeInTheDocument();
     });
 });
+
+it('reports incomplete Clear and erases the editor draft before retry', async () => {
+    vi.mocked(loadGameState).mockReturnValue({ openAI: { apiKey: '' } });
+    vi.mocked(clearCredential).mockResolvedValueOnce({ status: 'incomplete' });
+    const { findByLabelText, findByRole, findByText } = render(OpenAIAPIKeySettings);
+    const input = await findByLabelText(/openai api key/i);
+    await fireEvent.input(input, { target: { value: 'SENTINEL_UNSAVED_DRAFT' } });
+    await fireEvent.click(await findByRole('button', { name: /clear api key/i }));
+    expect(await findByText(/clear incomplete. Retry Clear to finish/i)).toBeInTheDocument();
+    expect(input).toHaveValue('');
+});
+
+it('reports Clear not started when authority is unavailable', async () => {
+    vi.mocked(loadGameState).mockReturnValue({ openAI: { apiKey: 'SENTINEL_CURRENT' } });
+    vi.mocked(clearCredential).mockRejectedValueOnce(new Error('synthetic storage failure'));
+    const { findByRole, findByText, findByLabelText } = render(OpenAIAPIKeySettings);
+    await fireEvent.click(await findByRole('button', { name: /clear api key/i }));
+    expect(
+        await findByText(/clear not started. Storage authority is unavailable/i)
+    ).toBeInTheDocument();
+    expect(await findByLabelText(/openai api key/i)).toHaveValue('');
+});
+
+it('clears only the selected provider draft on a cross-tab notice and removes the listener', async () => {
+    vi.mocked(loadGameState).mockReturnValue({ openAI: { apiKey: '' } });
+    const remove = vi.spyOn(window, 'removeEventListener');
+    const { findByLabelText, unmount } = render(OpenAIAPIKeySettings);
+    const input = await findByLabelText(/openai api key/i);
+    await fireEvent.input(input, { target: { value: 'SENTINEL_DRAFT' } });
+    await fireEvent(
+        window,
+        new CustomEvent('dspace-credential-cleared', { detail: { kind: 'github' } })
+    );
+    expect(input).toHaveValue('SENTINEL_DRAFT');
+    await fireEvent(
+        window,
+        new CustomEvent('dspace-credential-cleared', { detail: { kind: 'openAI' } })
+    );
+    expect(input).toHaveValue('');
+    unmount();
+    expect(remove).toHaveBeenCalledWith('dspace-credential-cleared', expect.any(Function));
+    remove.mockRestore();
+});

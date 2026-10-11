@@ -63,7 +63,10 @@ async function seed() {
     await strictTransaction(db, ['state', 'backup', 'meta'], 'readwrite', (tx: any) => {
         tx.objectStore('state').put(game(), 'root');
         tx.objectStore('backup').put(game(), 'root');
-        tx.objectStore('meta').put({ credentialEpochs: credentialAuthority() }, 'root');
+        tx.objectStore('meta').put(
+            { credentialEpochs: credentialAuthority(), extension: { synthetic: 'keep' } },
+            'root'
+        );
     });
     localStorage.setItem('gameState', JSON.stringify(game()));
     localStorage.setItem('gameStateBackup', JSON.stringify({ gameState: game() }));
@@ -306,6 +309,7 @@ describe('K078 synthetic regressions', () => {
             );
             expect(all).toContain(kind === 'github' ? 'SENTINEL_OPENAI_B' : 'SENTINEL_GITHUB_A');
             expect(localStorage.getItem('unrelated')).toBe('keep');
+            expect((await readManagedGame(db)).meta.extension).toEqual({ synthetic: 'keep' });
             db.close();
         }
     );
@@ -580,4 +584,23 @@ test('A04 dialogue goto and start normalize together with node IDs', () => {
     expect(plan.customContent.quests[0].dialogue[0].options[0].goto).toBe('target');
     input.quests[0].dialogue[0].options[0].goto = 'missing';
     expect(() => prepareImport(input, { kind: 'custom' })).toThrow('unresolved-reference');
+});
+
+test('B05 blocked normal schema setup releases the managed lock and cancels its late upgrade', async () => {
+    const old = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open('CustomContent', 2);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+    const { initializeCustomContentForImportUI } = await import('../src/utils/indexeddb.js');
+    await expect(initializeCustomContentForImportUI()).rejects.toThrow('blocked');
+    await expect(serializeManagedMutation(() => 'available')).resolves.toBe('available');
+    old.close();
+    const after = await new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open('CustomContent');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+    expect(after.version).toBe(2);
+    after.close();
 });

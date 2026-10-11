@@ -283,16 +283,26 @@ export const clearV3GameStateStorage = async (): Promise<boolean> => {
         try {
             const snapshot = await readManagedGame(db);
             const authority = credentialAuthority(snapshot.meta);
+            let hasLegacyV2Data = false;
+            let removedV3Keys = false;
             for (const key of LEGACY_V2_STORAGE_KEYS) {
                 const raw = localStorage.getItem(key);
-                if (!raw) continue;
+                if (raw === null) continue;
                 const parsed = parseLegacyV2Raw(raw);
-                if (parsed.isLegacy)
+                if (parsed.isLegacy) {
+                    hasLegacyV2Data = true;
                     localStorage.setItem(
                         key,
                         JSON.stringify(applyCredentialAuthority(JSON.parse(raw), authority))
                     );
-                else localStorage.removeItem(key);
+                } else {
+                    localStorage.removeItem(key);
+                    removedV3Keys = true;
+                }
+            }
+            if (removedV3Keys) {
+                if (hasLegacyV2Data) localStorage.setItem(LEGACY_V2_SEED_SKIP_KEY, 'true');
+                else localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
             }
             await strictTransaction(db, ['state', 'backup', 'meta'], 'readwrite', (tx) => {
                 tx.objectStore('state').delete('root');

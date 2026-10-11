@@ -310,8 +310,21 @@ export const openCustomContentDB = () => {
             return;
         }
         const request = idb.open('CustomContent', CUSTOM_CONTENT_DB_VERSION);
+        let cancelled = false;
+        request.onblocked = () => {
+            cancelled = true;
+            reject(
+                new Error(
+                    'Custom content database upgrade is blocked. Close older tabs and reload.'
+                )
+            );
+        };
 
         request.onupgradeneeded = (e) => {
+            if (cancelled) {
+                request.transaction.abort();
+                return;
+            }
             const db = e.target.result;
 
             if (!db.objectStoreNames.contains('meta')) {
@@ -337,6 +350,11 @@ export const openCustomContentDB = () => {
 
         request.onsuccess = async () => {
             const db = request.result;
+            if (cancelled) {
+                db.close();
+                return;
+            }
+            db.onversionchange = () => db.close();
             try {
                 await runMigrations(db, CUSTOM_CONTENT_DB_VERSION);
                 resolve(db);
@@ -354,6 +372,7 @@ export const openCustomContentDB = () => {
                     resolve(db);
                     return;
                 }
+                db.close();
                 reject(err);
             }
         };

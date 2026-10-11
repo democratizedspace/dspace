@@ -231,3 +231,81 @@ test('C04 consecutive gameplay snapshots remain distinct while a credential save
     expect(common.loadGameState().processes.synthetic.running).toBe(true);
     expect(common.loadGameState().inventory.synthetic).toBe(23);
 });
+
+test('B05 game-only localStorage fallback is explicit, fail-closed and propagates quota errors', async () => {
+    await common.saveCredential('github', 'SENTINEL_FALLBACK');
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValue(new Error('synthetic unavailable'));
+    await expect(
+        common.importGameStateString(JSON.stringify({ inventory: { synthetic: 31 } }))
+    ).resolves.toMatchObject({ status: 'best-effort', credentialsDisabled: true });
+    expect(localStorage.getItem('gameState')).not.toContain('SENTINEL_');
+    expect(localStorage.getItem('gameStateBackup')).not.toContain('SENTINEL_');
+    const before = localStorage.getItem('gameState');
+    await expect(common.importGameStateString(envelope())).rejects.toThrow();
+    expect(localStorage.getItem('gameState')).toBe(before);
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+        throw new Error('synthetic quota');
+    });
+    await expect(common.importGameStateString('{}')).rejects.toThrow('synthetic quota');
+});
+
+test('B06 later credential saving cannot overtake two earlier gameplay saves', async () => {
+    const first = common.loadGameState();
+    first.inventory.synthetic = 1;
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 2;
+    const b = common.saveGameState(second);
+    const credential = common.saveCredential('github', 'SENTINEL_AFTER_GAMEPLAY');
+    await Promise.all([a, b, credential]);
+    expect(common.loadGameState().inventory.synthetic).toBe(2);
+    const db = await storage.openManagedGameDB();
+    expect((await storage.readManagedGame(db)).state.inventory.synthetic).toBe(2);
+    db.close();
+});
+
+test('B02 rejected predecessor restores the latest optimistic gameplay snapshot', async () => {
+    const before = common.loadGameState();
+    vi.spyOn(storage, 'commitManagedGame').mockRejectedValueOnce(
+        new Error('synthetic write failure')
+    );
+    const first = common.loadGameState();
+    first.inventory.synthetic = 41;
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 42;
+    const b = common.saveGameState(second);
+    const results = await Promise.allSettled([a, b]);
+    expect(results.every((result) => result.status === 'rejected')).toBe(true);
+    expect(common.loadGameState().inventory).toEqual(before.inventory);
+});
+
+test('C04 rejected credential dependency restores optimistic gameplay', async () => {
+    const before = common.loadGameState();
+    vi.spyOn(storage, 'commitManagedGame').mockRejectedValueOnce(
+        new Error('synthetic credential failure')
+    );
+    const credential = common.saveCredential('github', 'SENTINEL_FAILED_SAVE');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 51;
+    const gameplay = common.saveGameState(next);
+    const results = await Promise.allSettled([credential, gameplay]);
+    expect(results.every((result) => result.status === 'rejected')).toBe(true);
+    expect(common.loadGameState().inventory).toEqual(before.inventory);
+});
+
+test('C02 legacy QA cleanup preserves a V2 save and restores its skip marker', async () => {
+    localStorage.setItem(
+        'gameState',
+        JSON.stringify({ versionNumberString: '2.1', inventory: { '3': 1 } })
+    );
+    localStorage.setItem(
+        'gameStateBackup',
+        JSON.stringify({ versionNumberString: '3', inventory: {} })
+    );
+    const { clearV3GameStateStorage } = await import('../src/utils/legacySaveSeeding');
+    await clearV3GameStateStorage();
+    expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
+    expect(JSON.parse(localStorage.getItem('gameState')!).versionNumberString).toBe('2.1');
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+});

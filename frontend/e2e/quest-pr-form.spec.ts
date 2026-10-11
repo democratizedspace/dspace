@@ -107,11 +107,41 @@ test('quest PR form submits and shows link', async ({ page }) => {
     await expect(page.getByLabel('GitHub Token*')).toHaveValue(validToken);
     await page.getByTestId('clear-token').click();
     await expect(page.getByLabel('GitHub Token*')).toHaveValue('');
-    const cleared = await page.evaluate(() => {
-        const state = JSON.parse(localStorage.getItem('gameState') || '{}');
-        return state.github?.token || '';
-    });
-    expect(cleared).toBe('');
+    await expect
+        .poll(async () =>
+            page.evaluate(async () => {
+                const copies = ['gameState', 'gameStateBackup'].map((key) =>
+                    JSON.parse(localStorage.getItem(key) || '{}')
+                );
+                const authority = await new Promise<{
+                    credentialEpochs?: { github?: { pending?: boolean; cleared?: boolean } };
+                }>((resolve, reject) => {
+                    const request = indexedDB.open('dspaceGameState');
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        const read = db
+                            .transaction('meta', 'readonly')
+                            .objectStore('meta')
+                            .get('root');
+                        read.onsuccess = () => {
+                            db.close();
+                            resolve(read.result);
+                        };
+                        read.onerror = () => {
+                            db.close();
+                            reject(read.error);
+                        };
+                    };
+                });
+                return (
+                    copies.every((state) => !state.github?.token) &&
+                    authority.credentialEpochs?.github?.pending === false &&
+                    authority.credentialEpochs?.github?.cleared === true
+                );
+            })
+        )
+        .toBe(true);
     await page.reload();
     await waitForHydration(page);
     await expect(page.getByLabel('GitHub Token*')).toHaveValue('');

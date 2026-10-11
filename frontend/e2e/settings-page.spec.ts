@@ -133,13 +133,14 @@ test.describe('Settings route', () => {
         );
 
         await page.getByRole('button', { name: 'Clear API key' }).click();
+        await expect(page.getByText('OpenAI API key cleared.', { exact: true })).toBeVisible();
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
         await expect
             .poll(async () => {
                 const state = await readStoredGameState(page);
                 return state.openAI?.apiKey;
             })
-            .toBe('');
+            .toBeUndefined();
 
         await chatPanel.locator('input[name="chat-provider"][value="token-place"]').check();
         await expect(
