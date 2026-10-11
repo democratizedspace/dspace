@@ -178,6 +178,7 @@ export function applyCredentialAuthority(value, authority) {
     return next;
 }
 export async function assertCredentialLaunch(kind, candidate) {
+    if (!globalThis.navigator?.locks?.request) throw error('credential-unavailable');
     const db = await openManagedGameDB();
     try {
         const snapshot = await readManagedGame(db),

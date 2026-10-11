@@ -469,6 +469,16 @@ export const validateGameState = (state) => {
 
 let gameState = initializeGameState();
 export const state = writable(gameState);
+const loadCredentialFreeFallback = () => {
+    useLocalStorage = true;
+    const stored = lsRead(STATE_STORE);
+    if (stored) {
+        gameState = validateGameState(scrubCredential(scrubCredential(stored, 'github'), 'openAI'));
+        loadedFromPersistence = true;
+        state.set(gameState);
+    }
+    logPersistenceIssue('Game state authority unavailable; credentials disabled.');
+};
 
 // Only execute in browser environment to avoid SSR issues with IndexedDB
 export const ready = isBrowser
@@ -501,15 +511,13 @@ export const ready = isBrowser
               );
               writeChecksumMarker(gameState[META_KEY].checksum);
           } catch (err) {
-              useLocalStorage = true;
-              const stored = lsRead(STATE_STORE);
-              if (stored) {
-                  gameState = validateGameState(
-                      scrubCredential(scrubCredential(stored, 'github'), 'openAI')
-                  );
-                  state.set(gameState);
-              }
-              logPersistenceIssue('Game state authority unavailable; credentials disabled.');
+              loadCredentialFreeFallback();
+          } finally {
+              readyResolved = true;
+          }
+      }).catch(() => {
+          try {
+              loadCredentialFreeFallback();
           } finally {
               readyResolved = true;
           }
@@ -603,6 +611,24 @@ export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
 export const saveGameState = async (newState, { deliberateKind } = {}) => {
     const captured = structuredClone(newState);
+    if (isBrowser && !globalThis.navigator?.locks?.request && !deliberateKind) {
+        if (!readyResolved) await ready;
+        const safe = validateGameState(
+            scrubCredential(scrubCredential(captured, 'github'), 'openAI')
+        );
+        const backup = scrubCredential(scrubCredential(gameState, 'github'), 'openAI');
+        safe[META_KEY].lastUpdated = Date.now();
+        stampStateChecksum(safe);
+        stampStateChecksum(backup);
+        // This synchronous, game-only mirror fallback never opens or mutates IndexedDB.
+        mirrorManagedGame({ state: safe, backup, meta: buildLightweightSnapshot(safe) });
+        useLocalStorage = true;
+        recovery = null;
+        durableChecksum = safe._meta.checksum;
+        gameState = safe;
+        state.set(gameState);
+        return { status: 'best-effort', committed: ['localStorage'], credentialsDisabled: true };
+    }
     let capturedEpochs = ownedSnapshots.get(newState) ?? structuredClone(knownEpochs);
     const capturedClearGeneration = snapshotClearGenerations.get(newState) ?? clearGeneration;
     const capturedGameplayBase = snapshotGameplayBases.get(newState) ?? gameState;

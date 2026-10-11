@@ -471,3 +471,46 @@ test.each(['clear', 'save'])(
         );
     }
 );
+
+test('B05 missing Web Locks loads and saves credential-free gameplay without IDB writes', async () => {
+    await common.saveCredential('github', 'SENTINEL_DURABLE_NO_LOCK');
+    const db = await storage.openManagedGameDB();
+    const before = await storage.readManagedGame(db);
+    db.close();
+    await common.closeGameStateDatabaseForTesting();
+    localStorage.setItem(
+        'gameState',
+        JSON.stringify({
+            inventory: { synthetic: 91 },
+            github: { token: 'SENTINEL_NO_LOCK' },
+            openAI: { apiKey: 'SENTINEL_NO_LOCK_AI' },
+        })
+    );
+    vi.stubGlobal('navigator', { locks: undefined });
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await expect(common.ready).resolves.toBeUndefined();
+    expect(common.isGameStateReady()).toBe(true);
+    expect(common.loadGameState().inventory.synthetic).toBe(91);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 92;
+    await expect(common.saveGameState(next)).resolves.toMatchObject({
+        status: 'best-effort',
+        credentialsDisabled: true,
+    });
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.synthetic).toBe(92);
+    expect(localStorage.getItem('gameState')).not.toContain('SENTINEL_');
+    await expect(
+        common.assertCredentialLaunch('github', 'SENTINEL_DURABLE_NO_LOCK')
+    ).rejects.toMatchObject({ code: 'credential-unavailable' });
+    await expect(common.saveCredential('github', 'SENTINEL_REJECTED')).rejects.toMatchObject({
+        code: 'storage-lock-unavailable',
+    });
+    await expect(common.importGameStateString('{}')).rejects.toMatchObject({
+        code: 'storage-lock-unavailable',
+    });
+    const check = await storage.openManagedGameDB();
+    expect(await storage.readManagedGame(check)).toEqual(before);
+    check.close();
+});

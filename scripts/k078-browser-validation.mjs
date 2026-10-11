@@ -310,6 +310,56 @@ try {
           throw new Error('cross-tab Clear overwrote newer gameplay');
       });
       await second.close();
+      stage = 'missing Web Locks game-only fallback';
+      const durableBeforeFallback = await page.evaluate(async () => {
+        const storage =
+          await import('/frontend/src/utils/managedImportStorage.js');
+        const db = await storage.openManagedGameDB();
+        try {
+          return JSON.stringify(await storage.readManagedGame(db));
+        } finally {
+          db.close();
+        }
+      });
+      const noLocks = await context.newPage();
+      await noLocks.addInitScript(() =>
+        Object.defineProperty(navigator, 'locks', { value: undefined })
+      );
+      await noLocks.goto(origin + '/k078-harness');
+      await noLocks.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        await common.ready;
+        const game = common.loadGameState();
+        if (
+          !common.isGameStateReady() ||
+          game.github?.token ||
+          game.openAI?.apiKey
+        )
+          throw new Error('unsafe no-lock startup');
+        game.inventory.noLocks = 1;
+        const receipt = await common.saveGameState(game);
+        if (receipt.status !== 'best-effort' || !receipt.credentialsDisabled)
+          throw new Error('no-lock fallback receipt');
+        try {
+          await common.assertCredentialLaunch('openAI', 'SENTINEL_OPENAI_B');
+          throw new Error('no-lock request accepted');
+        } catch (error) {
+          if (error.code !== 'credential-unavailable') throw error;
+        }
+      });
+      await noLocks.close();
+      const durableAfterFallback = await page.evaluate(async () => {
+        const storage =
+          await import('/frontend/src/utils/managedImportStorage.js');
+        const db = await storage.openManagedGameDB();
+        try {
+          return JSON.stringify(await storage.readManagedGame(db));
+        } finally {
+          db.close();
+        }
+      });
+      if (durableBeforeFallback !== durableAfterFallback)
+        throw new Error('no-lock fallback wrote IndexedDB');
       const processPeakWorkingSetBytes =
         process.platform === 'win32'
           ? Number(
