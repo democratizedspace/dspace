@@ -394,6 +394,9 @@ const gameplayChecksum = (value) => {
     const stack = [next];
     while (stack.length) {
         const record = stack.pop();
+        for (const kind of ['github', 'openAI']) {
+            if (record[kind] && Object.keys(record[kind]).length === 0) delete record[kind];
+        }
         if (record._meta) {
             delete record._meta.checksum;
             delete record._meta.lastUpdated;
@@ -627,7 +630,6 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             for (const dependency of credentialDependencies) {
                 await dependency.promise;
                 if (
-                    dependency.refresh &&
                     dependency.gameplayChecksum &&
                     dependency.beforeGameplay !== dependency.gameplayChecksum &&
                     gameplayChecksum(capturedGameplayBase) !== dependency.gameplayChecksum
@@ -771,6 +773,8 @@ export async function saveCredential(kind, value) {
     const dependency = {
         kind,
         before: structuredClone(knownEpochs),
+        beforeGameplay: gameplayChecksum(gameState),
+        gameplayChecksum: null,
         authority: null,
         promise: null,
     };
@@ -794,6 +798,7 @@ export async function saveCredential(kind, value) {
                 lightweight: buildLightweightSnapshot,
             });
             knownEpochs = credentialAuthority(receipt.meta);
+            dependency.gameplayChecksum = gameplayChecksum(receipt.state);
             dependency.authority = structuredClone(knownEpochs);
             dependency.checksum = receipt.state._meta.checksum;
             dependency.order = ++managedCommitOrder;
@@ -833,6 +838,8 @@ export async function clearCredential(kind) {
     const dependency = {
         kind,
         before: structuredClone(knownEpochs),
+        beforeGameplay: gameplayChecksum(gameState),
+        gameplayChecksum: null,
         authority: null,
         promise: null,
         clearGeneration: ++clearGeneration,
@@ -865,6 +872,9 @@ export async function clearCredential(kind) {
                 knownEpochs = credentialAuthority(persisted.meta);
                 durableChecksum = persisted.state?._meta?.checksum ?? null;
                 if (result.status === 'complete') {
+                    dependency.gameplayChecksum = gameplayChecksum(
+                        persisted.state ?? initializeGameState()
+                    );
                     dependency.authority = structuredClone(knownEpochs);
                     dependency.checksum = durableChecksum;
                     dependency.order = ++managedCommitOrder;

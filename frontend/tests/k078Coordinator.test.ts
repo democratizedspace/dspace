@@ -441,3 +441,33 @@ test.each([false, true])(
         });
     }
 );
+
+test.each(['clear', 'save'])(
+    'C04 local credential %s cannot overwrite remote gameplay',
+    async (mode) => {
+        await common.saveCredential('github', 'SENTINEL_LOCAL_AUTHORITY');
+        const origin = common;
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        const changed = remote.loadGameState();
+        changed.inventory.remote = 101;
+        await remote.saveGameState(changed);
+        await remote.closeGameStateDatabaseForTesting();
+        const credential =
+            mode === 'clear'
+                ? origin.clearCredential('github')
+                : origin.saveCredential('github', 'SENTINEL_NEW_LOCAL');
+        const oldGameplay = origin.loadGameState();
+        oldGameplay.inventory.synthetic = 82;
+        await expect(origin.saveGameState(oldGameplay)).rejects.toMatchObject({
+            code: 'stale-state',
+        });
+        await credential;
+        expect(origin.loadGameState().inventory.remote).toBe(101);
+        expect(origin.loadGameState().inventory.synthetic).toBeUndefined();
+        expect(origin.loadGameState().github?.token).toBe(
+            mode === 'clear' ? undefined : 'SENTINEL_NEW_LOCAL'
+        );
+    }
+);
