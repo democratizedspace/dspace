@@ -347,6 +347,10 @@ try {
           db.close();
         }
       });
+      await page.evaluate(() => {
+        localStorage.removeItem('gameState');
+        localStorage.removeItem('gameStateBackup');
+      });
       const noLocks = await context.newPage();
       await noLocks.addInitScript(() =>
         Object.defineProperty(navigator, 'locks', { value: undefined })
@@ -358,6 +362,7 @@ try {
         const game = common.loadGameState();
         if (
           !common.isGameStateReady() ||
+          game.inventory.newerRemoteProgress !== 99 ||
           game.github?.token ||
           game.openAI?.apiKey
         )
@@ -372,6 +377,13 @@ try {
         } catch (error) {
           if (error.code !== 'credential-unavailable') throw error;
         }
+      });
+      await noLocks.reload();
+      await noLocks.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        await common.ready;
+        if (common.loadGameState().inventory.noLocks !== 1)
+          throw new Error('fallback reload lost progress');
       });
       await noLocks.close();
       const durableAfterFallback = await page.evaluate(async () => {

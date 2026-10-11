@@ -482,6 +482,7 @@ test('B05 missing Web Locks loads and saves credential-free gameplay without IDB
         'gameState',
         JSON.stringify({
             inventory: { synthetic: 91 },
+            _meta: { lastUpdated: before.state._meta.lastUpdated + 1 },
             github: { token: 'SENTINEL_NO_LOCK' },
             openAI: { apiKey: 'SENTINEL_NO_LOCK_AI' },
         })
@@ -557,4 +558,36 @@ test('C03 a second module cannot launch ahead of a locally queued Clear', async 
     await clear;
     await denied;
     expect(fetch).not.toHaveBeenCalled();
+});
+
+test('B05 missing locks recovers IDB-only progress and retains subsequent fallback saves on reload', async () => {
+    const initial = common.loadGameState();
+    initial.inventory.idbOnly = 73;
+    await common.saveGameState(initial);
+    await common.saveCredential('github', 'SENTINEL_IDB_ONLY');
+    const db = await storage.openManagedGameDB();
+    const before = await storage.readManagedGame(db);
+    db.close();
+    localStorage.removeItem('gameState');
+    localStorage.removeItem('gameStateBackup');
+    await common.closeGameStateDatabaseForTesting();
+    vi.stubGlobal('navigator', { locks: undefined });
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    expect(common.hasLoadedPersistedGameState()).toBe(true);
+    expect(common.loadGameState().inventory.idbOnly).toBe(73);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_');
+    const next = common.loadGameState();
+    next.inventory.idbOnly = 74;
+    await common.saveGameState(next);
+    await common.closeGameStateDatabaseForTesting();
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    expect(common.loadGameState().inventory.idbOnly).toBe(74);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_');
+    const check = await storage.openManagedGameDB();
+    expect(await storage.readManagedGame(check)).toEqual(before);
+    check.close();
 });

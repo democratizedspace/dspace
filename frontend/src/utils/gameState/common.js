@@ -8,6 +8,7 @@ import {
     strictTransaction,
     flushManagedMutations,
     openManagedGameDB,
+    openExistingDatabase,
     readManagedGame,
     credentialAuthority,
     applyCredentialAuthority,
@@ -469,9 +470,30 @@ export const validateGameState = (state) => {
 
 let gameState = initializeGameState();
 export const state = writable(gameState);
-const loadCredentialFreeFallback = () => {
+const loadCredentialFreeFallback = async () => {
     useLocalStorage = true;
-    const stored = lsRead(STATE_STORE);
+    let stored = lsRead(STATE_STORE),
+        db;
+    try {
+        // Read legacy/existing progress without migrations, metadata writes or credentials.
+        db = await openExistingDatabase(DB_NAME, [STATE_STORE]);
+        const persisted = await strictTransaction(
+            db,
+            [STATE_STORE],
+            'readonly',
+            (tx, req, done) => {
+                req(tx.objectStore(STATE_STORE).get('root'), done);
+            }
+        );
+        const updated = (value) =>
+            Number.isFinite(value?.[META_KEY]?.lastUpdated) ? value[META_KEY].lastUpdated : 0;
+        if (persisted && (!stored || updated(persisted) >= updated(stored))) stored = persisted;
+    } catch {
+        // Unavailable durable storage retains the existing localStorage-only fallback.
+    } finally {
+        db?.close();
+    }
+
     if (stored) {
         gameState = validateGameState(scrubCredential(scrubCredential(stored, 'github'), 'openAI'));
         loadedFromPersistence = true;
@@ -511,13 +533,13 @@ export const ready = isBrowser
               );
               writeChecksumMarker(gameState[META_KEY].checksum);
           } catch (err) {
-              loadCredentialFreeFallback();
+              await loadCredentialFreeFallback();
           } finally {
               readyResolved = true;
           }
-      }).catch(() => {
+      }).catch(async () => {
           try {
-              loadCredentialFreeFallback();
+              await loadCredentialFreeFallback();
           } finally {
               readyResolved = true;
           }
@@ -617,7 +639,10 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             scrubCredential(scrubCredential(captured, 'github'), 'openAI')
         );
         const backup = scrubCredential(scrubCredential(gameState, 'github'), 'openAI');
-        safe[META_KEY].lastUpdated = Date.now();
+        safe[META_KEY].lastUpdated = Math.max(
+            Date.now(),
+            (gameState[META_KEY]?.lastUpdated ?? 0) + 1
+        );
         stampStateChecksum(safe);
         stampStateChecksum(backup);
         // This synchronous, game-only mirror fallback never opens or mutates IndexedDB.
