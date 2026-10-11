@@ -514,3 +514,20 @@ test('B05 missing Web Locks loads and saves credential-free gameplay without IDB
     expect(await storage.readManagedGame(check)).toEqual(before);
     check.close();
 });
+
+test('C03 launch waits behind a Clear queued after another managed operation', async () => {
+    await common.saveCredential('github', 'SENTINEL_QUEUED_CLEAR');
+    let release!: () => void;
+    const barrier = new Promise<void>((resolve) => {
+        release = resolve;
+    });
+    const blocked = storage.serializeManagedMutation(() => barrier);
+    const clear = common.clearCredential('github');
+    const launch = common.assertCredentialLaunch('github', 'SENTINEL_QUEUED_CLEAR');
+    const denied = expect(launch).rejects.toMatchObject({ code: 'credential-unavailable' });
+    release();
+    await blocked;
+    await clear;
+    await denied;
+    expect(fetch).not.toHaveBeenCalled();
+});

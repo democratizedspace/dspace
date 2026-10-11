@@ -179,22 +179,24 @@ export function applyCredentialAuthority(value, authority) {
 }
 export async function assertCredentialLaunch(kind, candidate) {
     if (!globalThis.navigator?.locks?.request) throw error('credential-unavailable');
-    const db = await openManagedGameDB();
-    try {
-        const snapshot = await readManagedGame(db),
-            authority = credentialAuthority(snapshot.meta);
-        const actual = snapshot.state?.[kind]?.[kind === 'github' ? 'token' : 'apiKey'];
-        if (
-            !candidate ||
-            authority[kind].pending ||
-            authority[kind].cleared ||
-            actual !== candidate
-        )
-            throw error('credential-unavailable');
-        return candidate;
-    } finally {
-        db.close();
-    }
+    return serializeManagedMutation(async () => {
+        const db = await openManagedGameDB();
+        try {
+            const snapshot = await readManagedGame(db),
+                authority = credentialAuthority(snapshot.meta);
+            const actual = snapshot.state?.[kind]?.[kind === 'github' ? 'token' : 'apiKey'];
+            if (
+                !candidate ||
+                authority[kind].pending ||
+                authority[kind].cleared ||
+                actual !== candidate
+            )
+                throw error('credential-unavailable');
+            return candidate;
+        } finally {
+            db.close();
+        }
+    });
 }
 export function commitManagedGame(
     db,

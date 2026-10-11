@@ -604,3 +604,44 @@ test('B05 blocked normal schema setup releases the managed lock and cancels its 
     expect(after.version).toBe(2);
     after.close();
 });
+
+test('A02 long nested property names never become regex-scanned validation paths', () => {
+    const key = 'synthetic-long-key-'.repeat(1000);
+    let nested: any = Object.fromEntries(
+        Array.from({ length: 100 }, (_, i) => [`leaf${i}`, 'data:synthetic'])
+    );
+    for (let depth = 0; depth < 30; depth++) nested = { [key]: nested };
+    const original = RegExp.prototype.test;
+    const scanned: number[] = [];
+    const spy = vi.spyOn(RegExp.prototype, 'test').mockImplementation(function (
+        this: RegExp,
+        value: string
+    ) {
+        if (String(value).includes(key)) scanned.push(String(value).length);
+        return original.call(this, value);
+    });
+    try {
+        expect(() => prepareImport({ extension: nested })).not.toThrow();
+        expect(scanned.every((length) => length <= key.length)).toBe(true);
+    } finally {
+        spy.mockRestore();
+    }
+    expect(() =>
+        prepareImport(
+            { extension: { images: [{ dataUrl: 'data:' + 'x'.repeat(100) }] } },
+            { limits: { stringBytes: 32 } }
+        )
+    ).toThrow('string-bytes');
+    expect(() =>
+        prepareImport(
+            {
+                schemaVersion: 1,
+                items: [{ id: 'a' }],
+                images: [
+                    { id: 'synthetic-raster', entityType: 'item', entityId: 'a', dataUrl: png },
+                ],
+            },
+            { kind: 'custom', limits: { stringBytes: 32 } }
+        )
+    ).not.toThrow();
+});

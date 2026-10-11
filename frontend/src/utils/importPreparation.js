@@ -176,8 +176,20 @@ function jsonStringSize(value) {
     }
     return size;
 }
+// Keep schema positions bounded; never accumulate untrusted property-name paths.
+function childImagePosition(position, key, array) {
+    if (array) return position === 'entities' ? 'entity' : position === 'images' ? 'image' : null;
+    if (position === 'root' && key === 'customContent') return 'content';
+    if (position === 'root' || position === 'content') {
+        if (key === 'items' || key === 'processes' || key === 'quests') return 'entities';
+        if (key === 'images') return 'images';
+    }
+    if ((position === 'entity' && key === 'image') || (position === 'image' && key === 'dataUrl'))
+        return 'data';
+    return null;
+}
 function inspectGraph(root, limits) {
-    const stack = [[root, 1, '', '']],
+    const stack = [[root, 1, '', 'root']],
         seen = new Set();
     let nodes = 0,
         jsonBytes = 0;
@@ -186,16 +198,13 @@ function inspectGraph(root, limits) {
         cap(jsonBytes, limits.jsonBytes, 'json-bytes');
     };
     while (stack.length) {
-        const [v, depth, key, path] = stack.pop();
+        const [v, depth, key, position] = stack.pop();
         cap(++nodes, limits.nodes, 'nodes');
         cap(depth, limits.depth, 'depth');
         if (typeof v === 'string') {
-            charge(jsonStringSize(v));
-            const imageData =
-                /^(?:customContent\.)?(?:(?:items|processes|quests)\.\[\]\.image|images\.\[\]\.dataUrl)$/.test(
-                    path
-                ) && /^data:/i.test(v);
+            const imageData = position === 'data' && /^data:/i.test(v);
             cap(v.length, imageData ? limits.jsonBytes : limits.stringBytes, 'string-bytes');
+            charge(jsonStringSize(v));
             cap(bytes(v), imageData ? limits.jsonBytes : limits.stringBytes, 'string-bytes');
         } else if (typeof v === 'number') {
             if (!Number.isFinite(v)) failImport('number');
@@ -223,6 +232,7 @@ function inspectGraph(root, limits) {
             );
             charge(2 + Math.max(0, keys.length - 1));
             for (const k of keys) {
+                cap(k.length, limits.stringBytes, 'string-bytes');
                 if (!Array.isArray(v)) charge(jsonStringSize(k) + 1);
                 if (badKeys.has(k)) failImport('dangerous-key');
                 cap(bytes(k), limits.stringBytes, 'string-bytes');
@@ -232,7 +242,7 @@ function inspectGraph(root, limits) {
                     descriptor.value,
                     depth + 1,
                     k,
-                    path ? `${path}.${Array.isArray(v) ? '[]' : k}` : k,
+                    childImagePosition(position, k, Array.isArray(v)),
                 ]);
             }
         } else if (v !== null && typeof v !== 'boolean') failImport('non-json');
