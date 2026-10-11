@@ -24,6 +24,23 @@ DSPACE is a free and open-source web-based space exploration idle game. The proj
 
 ## Project Setup
 
+### Solar illustration assets
+
+The five legacy Solar Basics SVG icons live in
+`frontend/public/assets/quests/solar/step1.svg` through `step5.svg`. Their served URLs are
+`/assets/quests/solar/step1.svg` through `/assets/quests/solar/step5.svg`.
+Astro copies public assets into `frontend/dist/client`, which the production Docker image includes.
+Root-level `assets/` is not part of that static serving pipeline.
+
+These icons are retained for reuse; the former root Solar Basics YAML quest no longer exists.
+The current `energy/solar` quest uses `/assets/quests/solar_panel_rooftop_setup.jpg`, and its
+dialogue schema does not define per-step images. Keep that primary image and quest content intact
+unless a separate quest integration is designed.
+
+After `npm run build`, run
+`npm --prefix frontend run test:e2e -- solar-assets.spec.ts` to verify all five URLs return HTTP 200,
+an SVG content type, and bytes matching both the source icons and the production build output.
+
 ### Prerequisites
 
 - Node.js 18.x or 20.x (LTS)

@@ -41,7 +41,7 @@ const TEST_GROUPS = [
     },
     {
         name: 'Build Identity',
-        files: ['build-identity.spec.ts'],
+        files: ['build-identity.spec.ts', 'solar-assets.spec.ts'],
         parallel: false,
         workers: 1,
     },
