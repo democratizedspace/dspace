@@ -138,6 +138,7 @@ test.describe('Logout flow', () => {
 
         await page.goto('/settings');
         await waitForHydration(page);
+        await expect(page.locator('.logout-panel')).toHaveAttribute('data-hydrated', 'true');
         const logoutButton = page.getByRole('button', { name: /log\s*out/i });
         await expect(logoutButton).toBeVisible();
         await logoutButton.click();

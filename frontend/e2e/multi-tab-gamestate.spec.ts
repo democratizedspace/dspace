@@ -87,11 +87,16 @@ test.describe('multi-tab game state writes', () => {
         await buyTab.waitForTimeout(3200);
         await buyTab.getByTestId('transaction-cta').click();
 
-        const finalState = await buyTab.evaluate(() =>
-            JSON.parse(localStorage.getItem('gameState') || '{}')
-        );
-
-        expect(Object.keys(finalState.quests || {}).length).toBeGreaterThan(0);
-        expect(finalState.inventory[ITEM_ID]).toBe(1);
+        await expect
+            .poll(async () =>
+                buyTab.evaluate((itemId) => {
+                    const finalState = JSON.parse(localStorage.getItem('gameState') || '{}');
+                    return {
+                        hasQuestProgress: Object.keys(finalState.quests || {}).length > 0,
+                        count: finalState.inventory?.[itemId],
+                    };
+                }, ITEM_ID)
+            )
+            .toEqual({ hasQuestProgress: true, count: 1 });
     });
 });
