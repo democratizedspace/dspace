@@ -645,3 +645,21 @@ test('A02 long nested property names never become regex-scanned validation paths
         )
     ).not.toThrow();
 });
+
+test.each(['root', 'nested', 'array'])(
+    'A02 rejects hidden serialization hooks without invoking them (%s)',
+    (location) => {
+        const hook = vi.fn(() => {
+            throw new Error('must not run');
+        });
+        const target = location === 'array' ? [] : {};
+        Object.defineProperty(target, 'toJSON', { value: hook, enumerable: false });
+        const raw = location === 'root' ? target : { extension: target };
+        expect(() => prepareImport(raw)).toThrow('non-json');
+        expect(hook).not.toHaveBeenCalled();
+        const getter = vi.fn(() => 'secret');
+        const accessor = Object.defineProperty({}, 'hidden', { get: getter, enumerable: false });
+        expect(() => prepareImport(accessor)).toThrow('non-json');
+        expect(getter).not.toHaveBeenCalled();
+    }
+);

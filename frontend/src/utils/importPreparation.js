@@ -219,7 +219,8 @@ function inspectGraph(root, limits) {
             )
                 failImport('non-json');
             if (Array.isArray(v)) cap(v.length, limits.entries, 'entries');
-            const keys = Object.keys(v);
+            const keys = Reflect.ownKeys(v).filter((k) => !Array.isArray(v) || k !== 'length');
+            if (keys.some((k) => typeof k !== 'string')) failImport('non-json');
             if (
                 Array.isArray(v) &&
                 (keys.length !== v.length || keys.some((k, i) => k !== String(i)))
@@ -237,7 +238,7 @@ function inspectGraph(root, limits) {
                 if (badKeys.has(k)) failImport('dangerous-key');
                 cap(bytes(k), limits.stringBytes, 'string-bytes');
                 const descriptor = Object.getOwnPropertyDescriptor(v, k);
-                if (!descriptor || !('value' in descriptor)) failImport('non-json');
+                if (!descriptor?.enumerable || !('value' in descriptor)) failImport('non-json');
                 stack.push([
                     descriptor.value,
                     depth + 1,
@@ -713,8 +714,7 @@ export function prepareImport(
     }
     inspectGraph(raw, limits);
     if (!record(raw)) failImport('root');
-    // Object entry points are bounded before cloning or checksum recursion, too.
-    if (typeof input !== 'string') cap(bytes(JSON.stringify(raw)), limits.jsonBytes, 'json-bytes');
+    // Graph inspection charges exact serialized bytes without invoking serialization hooks.
     if (kind === 'custom')
         return freezeImport({ customContent: normalizeCustom(raw, limits, origin) });
     if ('schemaVersion' in raw && raw.schemaVersion !== 1) failImport('schema-version');

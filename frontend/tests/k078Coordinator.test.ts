@@ -633,3 +633,25 @@ test.each([false, true])(
         expect(persisted.meta.credentialEpochs.github.cleared).toBe(cleared);
     }
 );
+
+test.each(['quest', 'bundle'])(
+    'C03 direct %s submission normalizes the gate and Authorization header',
+    async (kind) => {
+        await common.saveCredential('github', 'SENTINEL_DIRECT_NORMALIZED');
+        vi.mocked(fetch).mockResolvedValueOnce({
+            ok: false,
+            text: async () => 'synthetic-denied',
+        } as Response);
+        const submit =
+            kind === 'quest'
+                ? (await import('../src/utils/submitQuestPR.js')).submitQuestPR
+                : (await import('../src/utils/submitBundlePR.js')).submitBundlePR;
+        await expect(submit('  SENTINEL_DIRECT_NORMALIZED  ', 'synthetic', '{}')).rejects.toThrow(
+            'synthetic-denied'
+        );
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(vi.mocked(fetch).mock.calls[0][1]?.headers).toMatchObject({
+            Authorization: 'token SENTINEL_DIRECT_NORMALIZED',
+        });
+    }
+);

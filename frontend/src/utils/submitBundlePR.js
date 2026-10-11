@@ -1,5 +1,6 @@
 import { assertCredentialLaunch } from './managedImportStorage.js';
 export async function submitBundlePR(token, branch, bundleJson) {
+    token = token.trim();
     const credentialFetch = async (...args) => {
         await assertCredentialLaunch('github', token);
         return fetch(...args);
