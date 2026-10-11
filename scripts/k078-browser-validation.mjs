@@ -42,6 +42,12 @@ try {
     ['webkit', webkit, false],
     ['chromium-128MiB-heap-4xCPU', chromium, true],
   ]) {
+    if (
+      process.env.K078_BROWSER_FILTER &&
+      name !== process.env.K078_BROWSER_FILTER
+    )
+      continue;
+    let stage = 'primary import and Clear sequence';
     const browserServer = await engine.launchServer({
       headless: true,
       ...(constrained ? { args: ['--js-flags=--max-old-space-size=128'] } : {}),
@@ -175,10 +181,12 @@ try {
             : null,
         };
       });
+      stage = 'cross-tab setup credential';
       await page.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
         await common.saveCredential('github', 'SENTINEL_CROSS_TAB');
       });
+      stage = 'cross-tab stale capture';
       const second = await context.newPage();
       await second.goto(origin + '/k078-harness');
       await second.evaluate(async () => {
@@ -191,11 +199,13 @@ try {
           })
         );
       });
+      stage = 'cross-tab Clear';
       await page.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
         if ((await common.clearCredential('github')).status !== 'complete')
           throw new Error('cross-tab clear');
       });
+      stage = 'cross-tab stale rejection and fresh save';
       await second.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
         try {
@@ -212,6 +222,22 @@ try {
         if (common.loadGameState().github.token !== 'SENTINEL_CROSS_TAB_NEW')
           throw new Error('deliberate cross-tab save');
       });
+      stage = 'cross-tab mirror refresh and consecutive saves';
+      const mirroredEpoch = await second.evaluate(
+        () =>
+          JSON.parse(localStorage.getItem('gameStateLite')).credentialEpochs
+            .github.epoch
+      );
+      await page.waitForFunction((epoch) => {
+        const state = JSON.parse(localStorage.getItem('gameState') || '{}');
+        const meta = JSON.parse(localStorage.getItem('gameStateLite') || '{}');
+        const marker = localStorage.getItem('gameStateChecksum');
+        return (
+          meta.credentialEpochs?.github?.epoch === epoch &&
+          meta.checksum === marker &&
+          state._meta?.checksum === marker
+        );
+      }, mirroredEpoch);
       await page.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
         common.syncGameStateFromLocalIfStale();
@@ -259,8 +285,15 @@ try {
       );
       await context.close();
     } catch (error) {
-      evidence.profiles.push({ name, status: 'failed', error: error.message });
-      console.error(JSON.stringify({ profile: name, error: error.message }));
+      evidence.profiles.push({
+        name,
+        status: 'failed',
+        stage,
+        error: error.message,
+      });
+      console.error(
+        JSON.stringify({ profile: name, stage, error: error.message })
+      );
     } finally {
       await browser.close();
       await browserServer.close();

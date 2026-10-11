@@ -296,6 +296,9 @@ describe('gameState - common utilities', () => {
         localLatest.inventory['multi-tab-item'] = 7;
         localLatest._meta.checksum = 'force-different-checksum';
         localStorage.setItem('gameState', JSON.stringify(localLatest));
+        const lightweight = JSON.parse(localStorage.getItem('gameStateLite'));
+        lightweight.checksum = 'force-different-checksum';
+        localStorage.setItem('gameStateLite', JSON.stringify(lightweight));
         localStorage.setItem('gameStateChecksum', 'force-different-checksum');
 
         const changed = syncGameStateFromLocalIfStale('expected-stale-checksum');

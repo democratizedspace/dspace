@@ -474,7 +474,10 @@ export const ready = isBrowser
                       );
                   });
               });
-              localStorage.setItem(LS_LIGHTWEIGHT_KEY, JSON.stringify(lightweight));
+              localStorage.setItem(
+                  LS_LIGHTWEIGHT_KEY,
+                  JSON.stringify({ ...lightweight, credentialEpochs: knownEpochs })
+              );
               writeChecksumMarker(gameState[META_KEY].checksum);
           } catch (err) {
               useLocalStorage = true;
@@ -635,6 +638,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     stamp: stampStateChecksum,
                     lightweight: buildLightweightSnapshot,
                 });
+                recovery = null;
                 knownEpochs = credentialAuthority(receipt.meta);
                 queued.checksum = receipt.state._meta.checksum;
                 queued.order = ++managedCommitOrder;
@@ -873,14 +877,22 @@ export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
         return false;
     }
 
-    durableChecksum = persisted?._meta?.checksum ?? null;
+    let mirroredAuthority;
     try {
-        knownEpochs = credentialAuthority(
-            JSON.parse(localStorage.getItem(LS_LIGHTWEIGHT_KEY) || '{}')
-        );
+        const lightweight = JSON.parse(localStorage.getItem(LS_LIGHTWEIGHT_KEY) || '{}');
+        // Separate localStorage keys can become visible across tabs at different times.
+        // Never combine new state with authority from an older mirror receipt.
+        if (
+            persisted?._meta?.checksum !== persistedChecksum ||
+            lightweight.checksum !== persistedChecksum
+        )
+            return false;
+        mirroredAuthority = credentialAuthority(lightweight);
     } catch {
-        /* Preserve fail-closed authority when a mirror is malformed. */
+        return false;
     }
+    durableChecksum = persisted._meta.checksum;
+    knownEpochs = mirroredAuthority;
     gameState = validateGameState(applyCredentialAuthority(persisted, knownEpochs));
     state.set(gameState);
     lsWrite(META_STORE, { ...buildLightweightSnapshot(gameState), credentialEpochs: knownEpochs });
@@ -1042,18 +1054,28 @@ export const importGameStateString = async (input) => {
 
 // Explicit, bounded recovery of the committed game component after a failed second commit.
 // Never restores credentials, and refuses to overwrite any later state.
-export const getImportRecoveryStatus = () => recovery?.mode ?? null;
+export const getImportRecoveryStatus = () => {
+    if (recovery && durableChecksum !== recovery.expected) recovery = null;
+    return recovery?.mode ?? null;
+};
 export async function recoverImportGameState() {
-    if (!recovery || !recovery.expected || durableChecksum !== recovery.expected)
+    if (!recovery || !recovery.expected || durableChecksum !== recovery.expected) {
+        recovery = null;
         throw new StorageOperationError('recovery-stale-or-unavailable');
+    }
     const snapshot = recovery;
     if (snapshot.mode === 'mirrors') {
         return serializeManagedMutation(async () => {
             const db = await openManagedGameDB();
             try {
                 const persisted = await readManagedGame(db);
-                if (persisted.state?._meta?.checksum !== snapshot.expected || recovery !== snapshot)
+                if (
+                    persisted.state?._meta?.checksum !== snapshot.expected ||
+                    recovery !== snapshot
+                ) {
+                    if (recovery === snapshot) recovery = null;
                     throw new StorageOperationError('recovery-stale-or-unavailable');
+                }
                 mirrorManagedGame(persisted);
                 recovery = null;
                 return { status: 'complete', committed: ['mirrors'] };

@@ -343,10 +343,14 @@ async function selectOpenAI(page: Page, key?: string) {
     await page.goto('/settings');
     await waitForHydration(page);
     const option = page.locator('input[name="chat-provider"][value="openai"]');
-    if (!(await option.isChecked())) await option.check();
+    if (!(await option.isChecked())) {
+        await option.check();
+        await expect(page.getByText('Chat provider saved: OpenAI.', { exact: true })).toBeVisible();
+    }
     if (key) {
         await page.getByLabel('OpenAI API key', { exact: true }).fill(key);
         await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await expect(page.getByText('OpenAI API key saved.', { exact: true })).toBeVisible();
     }
 }
 

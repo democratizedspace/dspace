@@ -10,6 +10,7 @@ test.describe('chat RAG context', () => {
             ({ questId, processId, inventoryId }) => {
                 const now = Date.now();
                 const gameState = {
+                    versionNumberString: '3',
                     _meta: { lastUpdated: now },
                     settings: { showChatDebugPayload: true, chatProvider: 'openai' },
                     openAI: { apiKey: 'e2e-openai-key' },
@@ -21,7 +22,7 @@ test.describe('chat RAG context', () => {
                     processes: {
                         [processId]: {
                             startedAt: now - 15000,
-                            duration: 30000,
+                            duration: 3600000,
                             elapsedBeforePause: 0,
                         },
                     },

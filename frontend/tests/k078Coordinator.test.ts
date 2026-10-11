@@ -66,6 +66,7 @@ test('B04 recovery refuses a newer save', async () => {
     const newer = common.loadGameState();
     newer.inventory.synthetic = 3;
     await common.saveGameState(newer);
+    expect(common.getImportRecoveryStatus()).toBeNull();
     await expect(common.recoverImportGameState()).rejects.toMatchObject({
         code: 'recovery-stale-or-unavailable',
     });
@@ -191,7 +192,9 @@ test('B05 normal startup provides lightweight metadata without dropping credenti
         storage.credentialAuthority((await storage.readManagedGame(db)).meta).github.cleared
     ).toBe(true);
     db.close();
-    expect(localStorage.getItem('gameStateLite')).toBeTruthy();
+    expect(JSON.parse(localStorage.getItem('gameStateLite')!).credentialEpochs.github.cleared).toBe(
+        true
+    );
 });
 
 test('B06 pending writes are not replaced by their old local mirror', async () => {
@@ -308,4 +311,18 @@ test('C02 legacy QA cleanup preserves a V2 save and restores its skip marker', a
     expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
     expect(JSON.parse(localStorage.getItem('gameState')!).versionNumberString).toBe('2.1');
     expect(localStorage.getItem('gameStateBackup')).toBeNull();
+});
+
+test('B05 mirror refresh refuses partially propagated metadata', async () => {
+    const before = common.loadGameState();
+    const oldMeta = localStorage.getItem('gameStateLite');
+    const next = structuredClone(before);
+    next.inventory.synthetic = 88;
+    await common.saveGameState(next);
+    const completeMeta = localStorage.getItem('gameStateLite');
+    // The checksum marker and state arrived, but the matching metadata has not.
+    localStorage.setItem('gameStateLite', oldMeta!);
+    expect(common.syncGameStateFromLocalIfStale('old-checksum')).toBe(false);
+    localStorage.setItem('gameStateLite', completeMeta!);
+    expect(common.syncGameStateFromLocalIfStale('old-checksum')).toBe(true);
 });
