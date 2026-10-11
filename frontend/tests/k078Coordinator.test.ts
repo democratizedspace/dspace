@@ -655,3 +655,43 @@ test.each(['quest', 'bundle'])(
         });
     }
 );
+
+test('A03 exported images use one representation and round-trip at the aggregate budget', async () => {
+    const { default: rasters } = await import('./fixtures/k078Rasters.json');
+    const { openCustomContentDB } = await import('../src/utils/indexeddb.js');
+    const db = await openCustomContentDB();
+    await storage.strictTransaction(db, ['items', 'quests'], 'readwrite', (tx: any) => {
+        tx.objectStore('items').put({ id: 'raster-a', name: 'Synthetic A', image: rasters.png });
+        tx.objectStore('items').put({ id: 'raster-b', name: 'Synthetic B', image: rasters.png });
+        tx.objectStore('quests').put({
+            id: 'raster-q',
+            title: 'Synthetic Q',
+            dialogue: [],
+            image: rasters.png,
+        });
+    });
+    db.close();
+    const { buildCustomContentBackupData } = await import('../src/utils/customContentBackup.js');
+    const exported = await buildCustomContentBackupData();
+    expect(exported.images).toHaveLength(3);
+    expect(
+        [...exported.items, ...exported.quests].every((entity: any) => entity.image === undefined)
+    ).toBe(true);
+    const { prepareImport } = await import('../src/utils/importPreparation.js');
+    const totalImageBytes = atob(rasters.png.split(',')[1]).length * 3;
+    const plan = prepareImport(exported, {
+        kind: 'custom',
+        limits: { totalImageBytes, totalPixels: 3 },
+    });
+    expect(plan.customContent.items.every((entity: any) => entity.image === rasters.png)).toBe(
+        true
+    );
+    expect(plan.customContent.quests[0].image).toBe(rasters.png);
+    expect(() =>
+        prepareImport(exported, {
+            kind: 'custom',
+            limits: { totalImageBytes: totalImageBytes - 1 },
+        })
+    ).toThrow('image-total-bytes');
+    expect(fetch).not.toHaveBeenCalled();
+});

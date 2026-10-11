@@ -283,7 +283,8 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
                     throw new Error('Missing item image data.');
                 }
                 const target = exportedItems.get(asset.entity.id) ?? sanitizeEntity(asset.entity);
-                target.image = dataUrl;
+                // Image records are the single exported raster representation.
+                delete target.image;
                 exportedItems.set(asset.entity.id, target);
                 images.push(buildImageRecord('item', asset.entity.id, dataUrl));
             } else if (asset.kind === 'quest-image') {
@@ -292,7 +293,8 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
                     throw new Error('Missing quest image data.');
                 }
                 const target = exportedQuests.get(asset.entity.id) ?? sanitizeEntity(asset.entity);
-                target.image = dataUrl;
+                // Image records are the single exported raster representation.
+                delete target.image;
                 exportedQuests.set(asset.entity.id, target);
                 images.push(buildImageRecord('quest', asset.entity.id, dataUrl));
             }

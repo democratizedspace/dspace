@@ -176,4 +176,43 @@ describe('Cloud Sync token save flow', () => {
         expect(validateTokenMock).toHaveBeenCalledWith(typedCredential);
         expect(saveGitHubTokenMock).toHaveBeenCalledWith(typedCredential);
     });
+    it.each(['clear-incomplete', 'clear-not-started'])(
+        'reports %s and permits a Clear retry',
+        async (code) => {
+            clearGitHubTokenMock.mockRejectedValueOnce(new Error(code));
+            const { getByTestId } = render(Syncer);
+            const clear = getByTestId('clear-sync-token');
+            await waitFor(() => expect(clear).toBeEnabled());
+            await fireEvent.click(clear);
+            await waitFor(() =>
+                expect(getByTestId('sync-error')).toHaveTextContent(
+                    'managed token copies may remain. Retry Clear.'
+                )
+            );
+            expect(clear).toBeEnabled();
+            await fireEvent.click(clear);
+            await waitFor(() =>
+                expect(getByTestId('sync-success')).toHaveTextContent('GitHub token cleared')
+            );
+            expect(clearGitHubTokenMock).toHaveBeenCalledTimes(2);
+        }
+    );
+
+    it('reports incomplete cleanup after failed token validation without an unhandled rejection', async () => {
+        validateTokenMock.mockRejectedValueOnce(new Error('synthetic validation failure'));
+        clearGitHubTokenMock.mockRejectedValueOnce(new Error('clear-incomplete'));
+        const { getByLabelText, getByTestId } = render(Syncer);
+        await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+        await fireEvent.input(getByLabelText(/GitHub Token/i), {
+            target: { value: `ghp_${'s'.repeat(36)}` },
+        });
+        await fireEvent.click(getByTestId('save-token'));
+        await waitFor(() =>
+            expect(getByTestId('sync-error')).toHaveTextContent(
+                'managed token copies may remain. Retry Clear.'
+            )
+        );
+        expect(getByTestId('save-token')).toBeEnabled();
+        expect(getByLabelText(/GitHub Token/i)).toHaveValue('');
+    });
 });

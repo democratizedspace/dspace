@@ -45,6 +45,7 @@
     let toastType = '';
     let toastTimer;
     let savingToken = false;
+    let clearingToken = false;
     let uploading = false;
     let downloading = false;
     let downloadingId = '';
@@ -162,9 +163,8 @@
             announce('Token saved and validated', 'success');
             await loadBackups(trimmedToken);
         } catch (err) {
-            await clearGitHubToken();
-            token = '';
-            announce('Token validation failed', 'error');
+            if (await clearTokenLocal())
+                announce('Token validation failed; token cleared', 'error');
         } finally {
             savingToken = false;
         }
@@ -176,7 +176,17 @@
         backups = [];
         backupError = '';
         refreshing = false;
-        await clearGitHubToken();
+        clearingToken = true;
+        try {
+            await clearGitHubToken();
+            announce('GitHub token cleared', 'success');
+            return true;
+        } catch {
+            announce('Clear incomplete; managed token copies may remain. Retry Clear.', 'error');
+            return false;
+        } finally {
+            clearingToken = false;
+        }
     };
 
     const handleUpload = async () => {
@@ -298,7 +308,7 @@
                         text={savingToken ? 'Saving…' : 'Save'}
                         onClick={saveToken}
                         inverted={true}
-                        disabled={initializing || savingToken}
+                        disabled={initializing || savingToken || clearingToken}
                         dataTestId="save-token"
                     >
                         {#if savingToken}
@@ -310,7 +320,11 @@
                         onClick={clearTokenLocal}
                         hazard={true}
                         dataTestId="clear-sync-token"
-                        disabled={initializing || savingToken || uploading || downloading}
+                        disabled={initializing ||
+                            savingToken ||
+                            clearingToken ||
+                            uploading ||
+                            downloading}
                     />
                 </div>
             </div>
