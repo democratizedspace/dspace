@@ -23,14 +23,14 @@ describe('custom content backup', () => {
         const idItem = await db.items.add({
             id: 'i1',
             name: 'backup item',
-            image: 'data:image/png;base64,TEST',
+            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
         });
         const idProcess = await db.processes.add({ id: 'p1', title: 'backup process' });
         const idQuest = await db.quests.add({
             id: 'q1',
             title: 'backup quest',
             description: 'd',
-            image: 'data:image/png;base64,TEST',
+            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
         });
 
         const backup = await buildCustomContentBackupData();
@@ -103,7 +103,8 @@ describe('custom content backup', () => {
                     id: 'item:i-safe:image',
                     entityType: 'item',
                     entityId: 'i-safe',
-                    dataUrl: 'data:image/png;base64,TEST',
+                    dataUrl:
+                        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
                 },
             ],
         };
@@ -129,12 +130,13 @@ describe('custom content backup', () => {
                     id: 'item:missing:image',
                     entityType: 'item',
                     entityId: 'missing',
-                    dataUrl: 'data:image/png;base64,TEST',
+                    dataUrl:
+                        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
                 },
             ],
         };
 
-        await expect(restoreCustomContentBackup(invalid)).rejects.toThrow('Missing item for image');
+        await expect(restoreCustomContentBackup(invalid)).rejects.toThrow('image-reference');
 
         const items = await db.list('item');
         expect(items).toEqual([]);

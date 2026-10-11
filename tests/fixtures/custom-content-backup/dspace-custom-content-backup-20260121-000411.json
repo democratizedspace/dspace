@@ -12,7 +12,7 @@
             "id": "custom-item-only",
             "name": "Custom item only",
             "description": "Fixture item with image but no processes.",
-            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/xcAAgMBAp6J6X0AAAAASUVORK5CYII="
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC"
         }
     ],
     "processes": [],
@@ -22,7 +22,7 @@
             "id": "item:custom-item-only:image",
             "entityType": "item",
             "entityId": "custom-item-only",
-            "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/xcAAgMBAp6J6X0AAAAASUVORK5CYII="
+            "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC"
         }
     ]
 }

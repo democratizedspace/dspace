@@ -6,6 +6,7 @@ const MockOpenAI = vi.fn().mockImplementation(() => ({
 }));
 
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
+    assertCredentialLaunch: vi.fn(async (_kind, value) => value),
     loadGameState: vi.fn(() => ({ openAI: { ['api' + 'Key']: 'test-key' } })),
     ready: Promise.resolve(),
 }));

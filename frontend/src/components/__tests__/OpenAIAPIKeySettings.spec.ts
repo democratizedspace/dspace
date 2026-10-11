@@ -2,11 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/svelte';
 import OpenAIAPIKeySettings from '../svelte/OpenAIAPIKeySettings.svelte';
-import { loadGameState, saveGameState } from '../../utils/gameState/common.js';
+import { loadGameState, saveCredential, clearCredential } from '../../utils/gameState/common.js';
 
 vi.mock('../../utils/gameState/common.js', () => ({
     loadGameState: vi.fn(),
-    saveGameState: vi.fn(),
+    saveCredential: vi.fn(),
+    clearCredential: vi.fn(async () => ({ status: 'complete' })),
     ready: Promise.resolve(),
 }));
 
@@ -16,7 +17,7 @@ describe('OpenAIAPIKeySettings', () => {
             openAI: { apiKey: '' },
             inventory: { '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 3 },
         });
-        vi.mocked(saveGameState).mockResolvedValue(undefined);
+        vi.mocked(saveCredential).mockResolvedValue(undefined);
     });
 
     it('mentions the built-in knowledge base used for chat responses', async () => {
@@ -40,7 +41,7 @@ describe('OpenAIAPIKeySettings', () => {
         await fireEvent.click(await findByRole('button', { name: /edit api key/i }));
         await fireEvent.click(await findByRole('button', { name: /save openai api key/i }));
 
-        expect(saveGameState).not.toHaveBeenCalled();
+        expect(saveCredential).not.toHaveBeenCalled();
         expect(queryByText(/openai api key cleared/i)).not.toBeInTheDocument();
     });
 
@@ -52,9 +53,7 @@ describe('OpenAIAPIKeySettings', () => {
         });
         await fireEvent.click(await findByRole('button', { name: /save openai api key/i }));
 
-        expect(saveGameState).toHaveBeenCalledWith(
-            expect.objectContaining({ openAI: { apiKey: 'sk-new-key' } })
-        );
+        expect(saveCredential).toHaveBeenCalledWith('openAI', 'sk-new-key');
         expect(await findByText(/openai api key saved/i)).toBeInTheDocument();
         expect(await findByText(/openai api key configured/i)).toBeInTheDocument();
     });
@@ -69,9 +68,7 @@ describe('OpenAIAPIKeySettings', () => {
 
         await fireEvent.click(await findByRole('button', { name: /clear api key/i }));
 
-        expect(saveGameState).toHaveBeenCalledWith(
-            expect.objectContaining({ openAI: { apiKey: '' } })
-        );
+        expect(clearCredential).toHaveBeenCalledWith('openAI');
         expect(await findByText(/openai api key cleared/i)).toBeInTheDocument();
         expect(await findByLabelText(/openai api key/i)).toBeInTheDocument();
     });

@@ -45,10 +45,10 @@
             return;
         }
         try {
+            await saveGitHubToken(token);
             prUrl = await submitQuestPR(token, branch, questJson);
             submitError = '';
             dispatch('success', { message: 'Pull request created', url: prUrl });
-            await saveGitHubToken(token);
         } catch (err) {
             console.error(err);
             submitError = 'Failed to submit quest';
@@ -58,10 +58,24 @@
 
     async function clearToken() {
         token = '';
-        await clearGitHubToken();
+        try {
+            await clearGitHubToken();
+        } catch {
+            submitError = 'Credential clear incomplete. Retry Clear.';
+        }
     }
 
     export { handleSubmit, clearToken };
+
+    onMount(() => {
+        const clearDraft = (event) => {
+            if (event.detail?.kind === 'github') {
+                token = '';
+            }
+        };
+        window.addEventListener('dspace-credential-cleared', clearDraft);
+        return () => window.removeEventListener('dspace-credential-cleared', clearDraft);
+    });
 </script>
 
 <form on:submit={handleSubmit} class="pr-form" data-hydrated={hydrated ? 'true' : 'false'}>

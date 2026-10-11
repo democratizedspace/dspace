@@ -23,6 +23,7 @@ const MockOpenAI = function (config) {
 };
 
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
+    assertCredentialLaunch: vi.fn(async (_kind, value) => value),
   loadGameState: loadGameStateMock,
   ready: Promise.resolve(),
 }));

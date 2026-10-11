@@ -1,5 +1,9 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
+    import {
+        recoverImportGameState,
+        getImportRecoveryStatus,
+    } from '../../../utils/gameState/common.js';
     import Chip from '../../../components/svelte/Chip.svelte';
     import {
         clearCloudGistId,
@@ -15,6 +19,21 @@
     } from '../../../utils/githubToken.js';
     import { validateToken } from '../../../lib/cloudsync/githubGists';
 
+    let recoveryMode = null;
+    const recoverRestore = async () => {
+        try {
+            await recoverImportGameState();
+            announce(
+                recoveryMode === 'mirrors'
+                    ? 'Saved mirrors repaired'
+                    : 'Previous game state recovered; custom content unchanged',
+                'success'
+            );
+        } catch {
+            announce('Recovery unavailable or newer work exists', 'error');
+        }
+        recoveryMode = getImportRecoveryStatus();
+    };
     let root;
     let token = '';
     let gistId = '';
@@ -128,8 +147,8 @@
         }
         savingToken = true;
         try {
-            await validateToken(trimmedToken);
             await saveGitHubToken(trimmedToken);
+            await validateToken(trimmedToken);
             announce('Token saved and validated', 'success');
             await loadBackups(trimmedToken);
         } catch (err) {
@@ -192,7 +211,10 @@
                 trimmedId === gistId ? 'Download successful' : 'Restore successful';
             announce(successLabel, 'success');
         } catch (err) {
-            const errorLabel = trimmedId === gistId ? 'Download failed' : 'Restore failed';
+            recoveryMode = getImportRecoveryStatus();
+            const errorLabel = ['partial', 'mirror-incomplete'].includes(err.code)
+                ? err.message
+                : 'Restore failed';
             announce(errorLabel, 'error');
         } finally {
             downloading = false;
@@ -227,8 +249,26 @@
     onDestroy(() => {
         clearTimeout(toastTimer);
     });
+
+    onMount(() => {
+        const clearDraft = (event) => {
+            if (event.detail?.kind === 'github') {
+                token = '';
+                backups = [];
+            }
+        };
+        window.addEventListener('dspace-credential-cleared', clearDraft);
+        return () => window.removeEventListener('dspace-credential-cleared', clearDraft);
+    });
 </script>
 
+{#if recoveryMode}
+    <button type="button" on:click={recoverRestore}
+        >{recoveryMode === 'mirrors'
+            ? 'Retry saved mirrors'
+            : 'Recover previous game state'}</button
+    >
+{/if}
 <div class="chip-container" bind:this={root} data-testid="cloud-sync-form">
     <div class="vertical">
         <div class="form-group">
@@ -395,6 +435,11 @@
         <div class={`toast ${toastType}`} role="status" aria-live="polite">{toastMessage}</div>
     {/if}
 </div>
+
+<p>
+    Close or reload older DSPACE tabs before relying on Clear. Clear removes managed local copies;
+    it does not revoke the GitHub token.
+</p>
 
 <style>
     .vertical {

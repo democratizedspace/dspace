@@ -1,3 +1,5 @@
+import { assertCredentialLaunch } from '../../utils/managedImportStorage.js';
+import { isBrowser } from '../../utils/ssr.js';
 export const BACKUP_DESCRIPTION = 'DSPACE Cloud Sync backup';
 export const BACKUP_FILE_PREFIX = 'dspace-save';
 
@@ -71,6 +73,7 @@ export async function validateToken(token: string, fetchImpl?: typeof fetch) {
         throw new Error('Token is missing or appears invalid');
     }
 
+    if (isBrowser) await assertCredentialLaunch('github', trimmedToken);
     const response = await activeFetch('https://api.github.com/gists?per_page=1', {
         headers: {
             Authorization: `token ${trimmedToken}`,
@@ -90,6 +93,7 @@ export async function listBackups(token: string, fetchImpl?: typeof fetch) {
     if (!activeFetch) throw new Error('Fetch implementation unavailable');
     const trimmedToken = token?.trim?.() ?? '';
 
+    if (isBrowser) await assertCredentialLaunch('github', trimmedToken);
     const response = await activeFetch('https://api.github.com/gists?per_page=30', {
         headers: {
             Authorization: `token ${trimmedToken}`,
@@ -151,6 +155,7 @@ export async function createBackupGist({
     const trimmedToken = token?.trim?.() ?? '';
 
     const filename = formatBackupFilename(date);
+    if (isBrowser) await assertCredentialLaunch('github', trimmedToken);
     const response = await activeFetch('https://api.github.com/gists', {
         method: 'POST',
         headers: {

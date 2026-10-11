@@ -83,7 +83,15 @@ function getTransaction(storeName, mode) {
     }
     return openCustomContentDB().then((db) => {
         try {
-            const transaction = db.transaction([storeName], mode);
+            const transaction = db.transaction(
+                mode === 'readwrite' ? [...new Set([storeName, 'meta'])] : [storeName],
+                mode
+            );
+            if (mode === 'readwrite') {
+                const meta = transaction.objectStore('meta');
+                const revision = meta.get('contentRevision');
+                revision.onsuccess = () => meta.put((revision.result || 0) + 1, 'contentRevision');
+            }
             return { store: transaction.objectStore(storeName), transaction, db };
         } catch (error) {
             db.close();
@@ -107,6 +115,11 @@ function runTransactionWithResult({ transaction, db }, runner) {
         };
 
         const fail = (error) => {
+            try {
+                transaction.abort();
+            } catch {
+                /* already complete or aborted */
+            }
             finish(reject, error);
         };
 

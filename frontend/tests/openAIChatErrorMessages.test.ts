@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     hasExplicitChatProvider: vi.fn(() => true),
+    assertCredentialLaunch: vi.fn(async (_kind, value) => value),
     loadGameState: vi.fn(() => ({
         openAI: { apiKey: 'test-openai-key' },
         settings: {

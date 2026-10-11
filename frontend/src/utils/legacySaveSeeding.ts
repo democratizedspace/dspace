@@ -1,3 +1,11 @@
+import {
+    serializeManagedMutation,
+    openManagedGameDB,
+    readManagedGame,
+    credentialAuthority,
+    applyCredentialAuthority,
+    strictTransaction,
+} from './managedImportStorage.js';
 import { isBrowser } from './ssr.js';
 import v1Fixture from './legacySaveFixtures/legacy_v1_cookie_save.json' assert { type: 'json' };
 import v2Fixture from './legacySaveFixtures/legacy_v2_localstorage_save.json' assert { type: 'json' };
@@ -270,49 +278,32 @@ export const clearSeededLegacySaves = (): void => {
 
 export const clearV3GameStateStorage = async (): Promise<boolean> => {
     if (!isBrowser) return false;
-
-    let removedV3Keys = false;
-    let hasLegacyV2Data = false;
-    LEGACY_V2_STORAGE_KEYS.forEach((key) => {
-        const raw = localStorage.getItem(key);
-        if (raw === null) return;
-        const parsed = parseLegacyV2Raw(raw);
-        if (parsed.isLegacy) {
-            hasLegacyV2Data = true;
-            return;
+    return serializeManagedMutation(async () => {
+        const db = await openManagedGameDB();
+        try {
+            const snapshot = await readManagedGame(db);
+            const authority = credentialAuthority(snapshot.meta);
+            for (const key of LEGACY_V2_STORAGE_KEYS) {
+                const raw = localStorage.getItem(key);
+                if (!raw) continue;
+                const parsed = parseLegacyV2Raw(raw);
+                if (parsed.isLegacy)
+                    localStorage.setItem(
+                        key,
+                        JSON.stringify(applyCredentialAuthority(JSON.parse(raw), authority))
+                    );
+                else localStorage.removeItem(key);
+            }
+            await strictTransaction(db, ['state', 'backup', 'meta'], 'readwrite', (tx) => {
+                tx.objectStore('state').delete('root');
+                tx.objectStore('backup').delete('root');
+                tx.objectStore('meta').put({ credentialEpochs: authority }, 'root');
+            });
+            localStorage.removeItem('gameStateLite');
+            localStorage.removeItem('gameStateChecksum');
+            return true;
+        } finally {
+            db.close();
         }
-        localStorage.removeItem(key);
-        removedV3Keys = true;
     });
-    if (removedV3Keys) {
-        if (hasLegacyV2Data) {
-            localStorage.setItem(LEGACY_V2_SEED_SKIP_KEY, 'true');
-        } else {
-            localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
-        }
-    }
-
-    try {
-        localStorage.removeItem('root');
-        localStorage.removeItem('state');
-        localStorage.removeItem('backup');
-    } catch {
-        /* ignore */
-    }
-
-    const deleteResult =
-        'indexedDB' in globalThis
-            ? await new Promise<boolean>((resolve) => {
-                  try {
-                      const request = indexedDB.deleteDatabase(GAME_STATE_DB_NAME);
-                      request.onsuccess = () => resolve(true);
-                      request.onerror = () => resolve(false);
-                      request.onblocked = () => resolve(false);
-                  } catch {
-                      resolve(false);
-                  }
-              })
-            : false;
-
-    return deleteResult;
 };

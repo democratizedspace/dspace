@@ -1,4 +1,4 @@
-import { loadGameState, ready } from './gameState/common.js';
+import { loadGameState, ready, assertCredentialLaunch } from './gameState/common.js';
 import { buildDchatKnowledgePack } from './dchatKnowledge.js';
 import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
@@ -592,7 +592,7 @@ export const getOpenAIErrorSummary = (error) => {
 
 const secondsSinceMetricsStart = (start) => Math.max(0, (performance.now() - start) / 1000);
 
-async function createChatResponse(openai, input) {
+async function createChatResponse(openai, input, apiKey) {
     const { defaultModel: resolvedModel, fallbackModels: resolvedFallbackModels } =
         getChatModelConfig();
     const models = [resolvedModel, ...resolvedFallbackModels];
@@ -602,6 +602,7 @@ async function createChatResponse(openai, input) {
 
         const attemptStart = performance.now();
         try {
+            if (isBrowser) await assertCredentialLaunch('openAI', apiKey);
             const response = await openai.responses.create({ model, input });
             recordDependencyRequest({
                 dependency: 'openai',
@@ -975,12 +976,25 @@ const runGPT5Chat = async (messages, options = {}) => {
         !isBrowser && options.serverOpenAIApiKey
             ? options.serverOpenAIApiKey
             : gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
+    if (isBrowser) await assertCredentialLaunch('openAI', apiKey);
     const OpenAIClient = resolveOpenAIClient();
-    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
+    const openai = new OpenAIClient({
+        apiKey,
+        dangerouslyAllowBrowser: true,
+        ...(isBrowser
+            ? {
+                  fetch: async (...args) => {
+                      await assertCredentialLaunch('openAI', apiKey);
+                      return fetch(...args);
+                  },
+              }
+            : {}),
+    });
 
     const { response, fallbackUsed } = await createChatResponse(
         openai,
-        combinedMessages.map(toResponseMessage)
+        combinedMessages.map(toResponseMessage),
+        apiKey
     );
     const outputText = toOutputText(response);
     const { text } = validateChatResponseText(outputText, { contextSources });
@@ -995,12 +1009,25 @@ const runGPT5ChatV2 = async (messages, options = {}) => {
         !isBrowser && options.serverOpenAIApiKey
             ? options.serverOpenAIApiKey
             : gameState?.openAI?.apiKey || ''; // scan-secrets: ignore
+    if (isBrowser) await assertCredentialLaunch('openAI', apiKey);
     const OpenAIClient = resolveOpenAIClient();
-    const openai = new OpenAIClient({ apiKey, dangerouslyAllowBrowser: true });
+    const openai = new OpenAIClient({
+        apiKey,
+        dangerouslyAllowBrowser: true,
+        ...(isBrowser
+            ? {
+                  fetch: async (...args) => {
+                      await assertCredentialLaunch('openAI', apiKey);
+                      return fetch(...args);
+                  },
+              }
+            : {}),
+    });
 
     const { response, fallbackUsed } = await createChatResponse(
         openai,
-        combinedMessages.map(toResponseMessage)
+        combinedMessages.map(toResponseMessage),
+        apiKey
     );
     const outputText = toOutputText(response);
     const { text } = validateChatResponseText(outputText, { contextSources });

@@ -210,6 +210,8 @@ describe('cloud sync custom content', () => {
         );
 
         await deleteCustomContentDatabase();
+        const initialized = await openCustomContentDB();
+        initialized.close();
         await importGameStateString(encoded);
 
         const [items, processes, quests] = await Promise.all([
@@ -251,6 +253,8 @@ describe('cloud sync custom content', () => {
         });
 
         await overwriteCustomContent();
+        const initialized = await openCustomContentDB();
+        initialized.close();
         await importGameStateString(encoded);
 
         const [items, processes, quests] = await Promise.all([
