@@ -531,3 +531,30 @@ test('C03 launch waits behind a Clear queued after another managed operation', a
     await denied;
     expect(fetch).not.toHaveBeenCalled();
 });
+
+test('C03 a second module cannot launch ahead of a locally queued Clear', async () => {
+    await common.saveCredential('github', 'SENTINEL_GLOBAL_CLEAR');
+    vi.resetModules();
+    const remoteStorage = await import('../src/utils/managedImportStorage.js');
+    let globalQueue = Promise.resolve<unknown>(undefined);
+    const request = vi.fn((_name: string, operation: () => unknown) => {
+        const result = globalQueue.then(operation);
+        globalQueue = result.catch(() => undefined);
+        return result;
+    });
+    vi.stubGlobal('navigator', { locks: { request } });
+    let release!: () => void;
+    const barrier = new Promise<void>((resolve) => {
+        release = resolve;
+    });
+    const blocked = storage.serializeManagedMutation(() => barrier);
+    const clear = common.clearCredential('github');
+    const launch = remoteStorage.assertCredentialLaunch('github', 'SENTINEL_GLOBAL_CLEAR');
+    const denied = expect(launch).rejects.toMatchObject({ code: 'credential-unavailable' });
+    expect(request).toHaveBeenCalledTimes(3);
+    release();
+    await blocked;
+    await clear;
+    await denied;
+    expect(fetch).not.toHaveBeenCalled();
+});

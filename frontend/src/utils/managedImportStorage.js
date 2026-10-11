@@ -17,12 +17,21 @@ export class StorageOperationError extends Error {
 const error = (code) => new StorageOperationError(code);
 let queue = Promise.resolve();
 export function serializeManagedMutation(operation) {
-    const run = () => {
+    const predecessor = queue;
+    let result;
+    try {
         if (!isBrowser || !globalThis.navigator?.locks?.request)
             throw error('storage-lock-unavailable');
-        return navigator.locks.request('dspace-managed-storage-v1', operation);
-    };
-    const result = queue.then(run, run);
+        // Reserve the origin-wide FIFO position now, before waiting on local work.
+        // Otherwise another tab's launch could overtake an already-invoked Clear.
+        result = Promise.resolve(
+            navigator.locks.request('dspace-managed-storage-v1', () =>
+                predecessor.then(operation, operation)
+            )
+        );
+    } catch (failure) {
+        result = Promise.reject(failure);
+    }
     queue = result.catch(() => undefined);
     return result;
 }

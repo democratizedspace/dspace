@@ -218,11 +218,37 @@ try {
           })
         );
       });
-      stage = 'cross-tab Clear';
+      stage = 'cross-tab launch cannot overtake queued Clear';
       await page.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
-        if ((await common.clearCredential('github')).status !== 'complete')
+        const storage =
+          await import('/frontend/src/utils/managedImportStorage.js');
+        const barrier = new Promise((resolve) => {
+          globalThis.releaseClearBarrier = resolve;
+        });
+        globalThis.blockingMutation = storage.serializeManagedMutation(
+          () => barrier
+        );
+        globalThis.queuedClear = common.clearCredential('github');
+      });
+      await second.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        globalThis.queuedLaunch = common
+          .assertCredentialLaunch('github', 'SENTINEL_CROSS_TAB')
+          .then(
+            () => 'launched',
+            (error) => error.code
+          );
+      });
+      await page.evaluate(async () => {
+        globalThis.releaseClearBarrier();
+        await globalThis.blockingMutation;
+        if ((await globalThis.queuedClear).status !== 'complete')
           throw new Error('cross-tab clear');
+      });
+      await second.evaluate(async () => {
+        if ((await globalThis.queuedLaunch) !== 'credential-unavailable')
+          throw new Error('cross-tab launch overtook Clear');
       });
       stage = 'cross-tab stale rejection and fresh save';
       await second.evaluate(async () => {
