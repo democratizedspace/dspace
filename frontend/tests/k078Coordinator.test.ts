@@ -380,3 +380,50 @@ test('C04 GitHub token saving normalizes whitespace for subsequent launch checks
         'SENTINEL_TRIMMED'
     );
 });
+
+test('C04 a subscriber save during cross-tab scrub awaits refreshed authority', async () => {
+    await common.closeGameStateDatabaseForTesting();
+    const channels: any[] = [],
+        messages: any[] = [];
+    class TestChannel {
+        onmessage: any;
+        constructor() {
+            channels.push(this);
+        }
+        postMessage(data: any) {
+            messages.push(data);
+        }
+        close() {}
+    }
+    vi.stubGlobal('BroadcastChannel', TestChannel);
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    await common.saveCredential('github', 'SENTINEL_REFRESH');
+    const origin = common;
+    const stale = origin.loadGameState();
+    vi.resetModules();
+    const remote = await import('../src/utils/gameState/common.js');
+    await remote.ready;
+    await remote.clearCredential('github');
+    await remote.closeGameStateDatabaseForTesting();
+    let saving: Promise<any> | undefined;
+    let initiated = false;
+    const unsubscribe = origin.state.subscribe((value: any) => {
+        if (!initiated && !value.github?.token) {
+            initiated = true;
+            const fresh = origin.loadGameState();
+            fresh.inventory.synthetic = 81;
+            saving = origin.saveGameState(fresh);
+        }
+    });
+    channels[0].onmessage({ data: messages.at(-1) });
+    unsubscribe();
+    expect(saving).toBeDefined();
+    await saving;
+    expect(origin.loadGameState().inventory.synthetic).toBe(81);
+    expect(JSON.stringify(origin.loadGameState())).not.toContain('SENTINEL_REFRESH');
+    await expect(origin.saveGameState(stale)).rejects.toMatchObject({
+        code: 'stale-credential-epoch',
+    });
+});

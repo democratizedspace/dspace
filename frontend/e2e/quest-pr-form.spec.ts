@@ -146,3 +146,39 @@ test('quest PR form submits and shows link', async ({ page }) => {
     await waitForHydration(page);
     await expect(page.getByLabel('GitHub Token*')).toHaveValue('');
 });
+
+for (const form of [
+    {
+        path: '/quests/submit',
+        label: 'Quest JSON*',
+        json: '{"title":"Synthetic","description":"Test"}',
+    },
+    { path: '/bundles/submit', label: 'Bundle JSON*', json: '{"items":[{"name":"Synthetic"}]}' },
+]) {
+    test(`normalizes pasted credentials before saving and submitting ${form.path}`, async ({
+        page,
+    }) => {
+        const token = `ghp_${'a'.repeat(36)}`;
+        await page.route('https://api.github.com/**', (route) =>
+            route.fulfill({
+                status: 403,
+                contentType: 'application/json',
+                body: '{"message":"Synthetic denial"}',
+            })
+        );
+        await page.goto(form.path);
+        await waitForQuestPrFormHydration(page);
+        await page.getByLabel('GitHub Token*').fill(`  ${token}  `);
+        await page.getByLabel(form.label).fill(form.json);
+        const [request] = await Promise.all([
+            page.waitForRequest('https://api.github.com/**'),
+            page.getByRole('button', { name: 'Create Pull Request' }).click(),
+        ]);
+        expect(request.headers().authorization).toBe(`token ${token}`);
+        expect(
+            await page.evaluate(
+                () => JSON.parse(localStorage.getItem('gameState') || '{}').github?.token
+            )
+        ).toBe(token);
+    });
+}

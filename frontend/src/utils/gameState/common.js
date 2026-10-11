@@ -507,18 +507,27 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
         if (!['github', 'openAI'].includes(data?.kind) || !Number.isSafeInteger(data?.epoch))
             return;
         if (data.epoch < knownEpochs[data.kind].epoch) return;
-        gameState = scrubCredential(gameState, data.kind);
-        stampStateChecksum(gameState);
-        state.set(gameState);
+        const dependency = {
+            kind: data.kind,
+            before: structuredClone(knownEpochs),
+            authority: null,
+            promise: null,
+            clearGeneration: ++clearGeneration,
+            refresh: true,
+        };
+        pendingCredentialSaves.add(dependency);
         recovery = null;
-        void serializeManagedMutation(async () => {
+        dependency.promise = serializeManagedMutation(async () => {
             const db = await openManagedGameDB();
             try {
                 const persisted = await readManagedGame(db);
                 const authority = credentialAuthority(persisted.meta);
                 knownEpochs = authority;
                 durableChecksum = persisted.state?._meta?.checksum ?? null;
-                if (persisted.state) {
+                dependency.authority = structuredClone(authority);
+                dependency.checksum = durableChecksum;
+                dependency.order = ++managedCommitOrder;
+                if (persisted.state && pendingGameWrites === 0) {
                     gameState = validateGameState(
                         applyCredentialAuthority(persisted.state, authority)
                     );
@@ -534,9 +543,15 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
             } finally {
                 db.close();
             }
-        }).catch(() => {
-            /* The scrubbed runtime remains fail-closed until authority is readable. */
-        });
+        })
+            .catch(() => {
+                /* The scrubbed runtime remains fail-closed until authority is readable. */
+            })
+            .finally(() => pendingCredentialSaves.delete(dependency));
+        // Reserve the refresh dependency before publishing so subscribers can save safely.
+        gameState = scrubCredential(gameState, data.kind);
+        stampStateChecksum(gameState);
+        state.set(gameState);
     };
 }
 let writeQueue = Promise.resolve();
@@ -593,11 +608,12 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     dependency.authority &&
                     (!dependency.clearGeneration ||
                         capturedClearGeneration >= dependency.clearGeneration) &&
-                    ['github', 'openAI'].every(
-                        (kind) =>
-                            capturedEpochs[kind].epoch === dependency.before[kind].epoch &&
-                            dependency.authority[kind].epoch ===
-                                dependency.before[kind].epoch + (kind === dependency.kind ? 1 : 0)
+                    ['github', 'openAI'].every((kind) =>
+                        dependency.refresh
+                            ? dependency.authority[kind].epoch >= capturedEpochs[kind].epoch
+                            : capturedEpochs[kind].epoch === dependency.before[kind].epoch &&
+                              dependency.authority[kind].epoch ===
+                                  dependency.before[kind].epoch + (kind === dependency.kind ? 1 : 0)
                     );
                 if (canAdvance) capturedEpochs = structuredClone(dependency.authority);
             }

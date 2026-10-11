@@ -203,6 +203,15 @@ try {
         const common = await import('/frontend/src/utils/gameState/common.js');
         await common.ready;
         globalThis.staleK078 = common.loadGameState();
+        let savedDuringRefresh = false;
+        common.state.subscribe((value) => {
+          if (!savedDuringRefresh && !value.github?.token) {
+            savedDuringRefresh = true;
+            const fresh = common.loadGameState();
+            fresh.inventory.crossTabRefreshGameplay = 1;
+            globalThis.refreshGameplay = common.saveGameState(fresh);
+          }
+        });
         globalThis.clearNotified = new Promise((resolve) =>
           window.addEventListener('dspace-credential-cleared', resolve, {
             once: true,
@@ -225,6 +234,9 @@ try {
           if (e.code !== 'stale-credential-epoch') throw e;
         }
         await globalThis.clearNotified;
+        await globalThis.refreshGameplay;
+        if (common.loadGameState().inventory.crossTabRefreshGameplay !== 1)
+          throw new Error('gameplay during cross-tab refresh lost');
         const fresh = common.loadGameState();
         fresh.inventory.syntheticAfterClear = 1;
         await common.saveGameState(fresh);

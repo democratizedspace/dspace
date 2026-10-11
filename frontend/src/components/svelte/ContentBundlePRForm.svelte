@@ -55,8 +55,9 @@
             return;
         }
         try {
-            await saveGitHubToken(token);
-            prUrl = await submitBundlePR(token, branch, bundleJson);
+            const normalizedToken = token.trim();
+            await saveGitHubToken(normalizedToken);
+            prUrl = await submitBundlePR(normalizedToken, branch, bundleJson);
             submitError = '';
             dispatch('success', { message: 'Pull request created', url: prUrl });
         } catch (err) {
