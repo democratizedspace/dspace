@@ -304,7 +304,10 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
         });
         for (const [key, value] of Object.entries(local))
             localStorage.setItem(key, JSON.stringify(value));
-        const localMeta = lightweight(local.gameState || snapshot.state);
+        const localMeta = {
+            ...lightweight(local.gameState || snapshot.state),
+            credentialEpochs: credentialAuthority(snapshot.meta),
+        };
         localStorage.setItem('gameStateLite', JSON.stringify(localMeta));
         localStorage.setItem('gameStateChecksum', localMeta.checksum || '');
         for (const [key, value] of Object.entries(local))

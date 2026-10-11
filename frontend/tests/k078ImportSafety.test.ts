@@ -489,3 +489,95 @@ describe('K078 complete injected boundaries and transaction faults', () => {
         expect(fetch).not.toHaveBeenCalled();
     });
 });
+
+test('A02 raw sparse arrays reject before stringify or clone', () => {
+    const sparse = new Array(100);
+    expect(() => prepareImport({ extension: sparse }, { limits: { entries: 2 } })).toThrow(
+        'entries'
+    );
+    expect(() => prepareImport({ extension: new Array(2) })).toThrow('non-json');
+    expect(() => prepareImport({ extension: [null, null] })).not.toThrow();
+});
+
+test.each([0, 1, 2])(
+    'B02 asynchronous failure at write %i aborts every queued write',
+    async (position) => {
+        const db = await seed();
+        const before = await readManagedGame(db);
+        await expect(
+            strictTransaction(db, ['state'], 'readwrite', (tx: any) => {
+                const store = tx.objectStore('state');
+                for (let index = 0; index < 3; index++) {
+                    if (index === position) store.add({ synthetic: true }, 'root');
+                    else store.put({ synthetic: index }, `synthetic-${index}`);
+                }
+            })
+        ).rejects.toThrow();
+        expect(await readManagedGame(db)).toEqual(before);
+        const rows = await strictTransaction(
+            db,
+            ['state'],
+            'readonly',
+            (tx: any, req: any, done: any) => req(tx.objectStore('state').getAllKeys(), done)
+        );
+        expect(rows).toEqual(['root']);
+        db.close();
+    }
+);
+
+test.each([2, 3, 4])(
+    'C03 interruption at transaction boundary %i retains durable intent',
+    async (boundary) => {
+        const db = await seed();
+        const transaction = db.transaction.bind(db);
+        let calls = 0;
+        const fault = vi.spyOn(db, 'transaction').mockImplementation((...args: any[]) => {
+            if (++calls === boundary) throw new Error('synthetic interruption');
+            return transaction(...args);
+        });
+        expect((await clearManagedCredential(db, 'github', stamp, lightweight)).status).toBe(
+            'incomplete'
+        );
+        fault.mockRestore();
+        expect(credentialAuthority((await readManagedGame(db)).meta).github.pending).toBe(true);
+        await expect(assertCredentialLaunch('github', 'SENTINEL_GITHUB_A')).rejects.toThrow();
+        expect((await clearManagedCredential(db, 'github', stamp, lightweight)).status).toBe(
+            'complete'
+        );
+        db.close();
+    }
+);
+
+test('A02 aggregate raw JSON bytes reject before serialization with escaped UTF-8 accounting', () => {
+    const raw = { a: '�', b: '\n', c: 'synthetic' };
+    const size = new TextEncoder().encode(JSON.stringify(raw)).length;
+    expect(() => prepareImport(raw, { limits: { jsonBytes: size - 1 } })).toThrow('json-bytes');
+    expect(() => prepareImport(raw, { limits: { jsonBytes: size } })).not.toThrow();
+    const stringify = vi.spyOn(JSON, 'stringify');
+    expect(() =>
+        prepareImport({ a: 'abcdef', b: 'abcdef' }, { limits: { jsonBytes: 15 } })
+    ).toThrow('json-bytes');
+    expect(stringify).not.toHaveBeenCalled();
+    stringify.mockRestore();
+});
+
+test('A04 dialogue goto and start normalize together with node IDs', () => {
+    const input = {
+        schemaVersion: 1,
+        quests: [
+            {
+                id: 'q',
+                start: ' start ',
+                dialogue: [
+                    { id: ' start ', options: [{ text: 'Continue', goto: ' target ' }] },
+                    { id: ' target ', options: [{ text: 'Finish', goto: 'finish' }] },
+                ],
+            },
+        ],
+    };
+    const plan = prepareImport(input, { kind: 'custom' });
+    expect(plan.customContent.quests[0].start).toBe('start');
+    expect(plan.customContent.quests[0].dialogue[0].options[0].goto).toBe('target');
+    input.quests[0].dialogue[0].options[0].goto = 'missing';
+    expect(() => prepareImport(input, { kind: 'custom' })).toThrow('unresolved-reference');
+});

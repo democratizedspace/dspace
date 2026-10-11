@@ -1,4 +1,13 @@
 <script>
+    import { onMount } from 'svelte';
+    import { initializeCustomContentForImportUI } from '../../../utils/indexeddb.js';
+    let destinationReady = Promise.resolve(false);
+    onMount(() => {
+        destinationReady = initializeCustomContentForImportUI().then(
+            () => true,
+            () => false
+        );
+    });
     import Chip from '../../../components/svelte/Chip.svelte';
     import {
         importGameStateString,
@@ -12,6 +21,10 @@
     let recoveryMode = getImportRecoveryStatus();
 
     const handleImport = async () => {
+        if (!(await destinationReady)) {
+            errorMessage = 'Import storage is unavailable. Reload and try again.';
+            return;
+        }
         errorMessage = '';
         try {
             await importGameStateString(importString);

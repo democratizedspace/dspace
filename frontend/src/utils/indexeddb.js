@@ -1,3 +1,4 @@
+import { serializeManagedMutation } from './managedImportStorage.js';
 // import { log } from './devLog.js';
 import { DataIntegrityValidationError, runMigrations } from './migrations.js';
 import { isBrowser } from './ssr.js';
@@ -723,3 +724,11 @@ export const deleteQuest = async (id) => {
         return Promise.reject(error);
     }
 };
+
+// UI setup, deliberately separate from pure preparation and import preflight.
+export function initializeCustomContentForImportUI() {
+    return serializeManagedMutation(async () => {
+        const db = await openCustomContentDB();
+        db.close();
+    });
+}

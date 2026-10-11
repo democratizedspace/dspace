@@ -4,6 +4,7 @@
         recoverImportGameState,
         getImportRecoveryStatus,
     } from '../../../utils/gameState/common.js';
+    import { initializeCustomContentForImportUI } from '../../../utils/indexeddb.js';
     import Chip from '../../../components/svelte/Chip.svelte';
     import {
         clearCloudGistId,
@@ -19,6 +20,7 @@
     } from '../../../utils/githubToken.js';
     import { validateToken } from '../../../lib/cloudsync/githubGists';
 
+    let destinationReady = Promise.resolve(false);
     let recoveryMode = null;
     const recoverRestore = async () => {
         try {
@@ -88,6 +90,10 @@
         }
     };
 
+    const requireImportDestination = async () => {
+        if (!(await destinationReady))
+            throw new Error('Import storage is unavailable. Reload and try again.');
+    };
     const markReady = () => {
         initializing = false;
         root?.setAttribute('data-hydrated', 'true');
@@ -98,6 +104,10 @@
 
     onMount(() => {
         let mounted = true;
+        destinationReady = initializeCustomContentForImportUI().then(
+            () => true,
+            () => false
+        );
         if (typeof window !== 'undefined') {
             window.__cloudSyncReady = false;
         }
@@ -206,6 +216,7 @@
         downloading = true;
         downloadingId = trimmedId === gistId ? 'manual' : trimmedId;
         try {
+            await requireImportDestination();
             await downloadGameStateFromGist(trimmedToken, trimmedId);
             const successLabel =
                 trimmedId === gistId ? 'Download successful' : 'Restore successful';

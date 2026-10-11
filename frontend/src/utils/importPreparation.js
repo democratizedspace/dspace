@@ -155,15 +155,42 @@ export function parseImportJSON(text, limits = IMPORT_LIMITS) {
     }
 }
 
+function jsonStringSize(value) {
+    let size = 2;
+    for (let i = 0; i < value.length; i++) {
+        const code = value.charCodeAt(i);
+        if (code === 34 || code === 92) size += 2;
+        else if (code < 32) size += [8, 9, 10, 12, 13].includes(code) ? 2 : 6;
+        else if (code < 128) size++;
+        else if (code < 2048) size += 2;
+        else if (
+            code >= 0xd800 &&
+            code <= 0xdbff &&
+            value.charCodeAt(i + 1) >= 0xdc00 &&
+            value.charCodeAt(i + 1) <= 0xdfff
+        ) {
+            size += 4;
+            i++;
+        } else if (code >= 0xd800 && code <= 0xdfff) size += 6;
+        else size += 3;
+    }
+    return size;
+}
 function inspectGraph(root, limits) {
     const stack = [[root, 1, '', '']],
         seen = new Set();
-    let nodes = 0;
+    let nodes = 0,
+        jsonBytes = 0;
+    const charge = (size) => {
+        jsonBytes += size;
+        cap(jsonBytes, limits.jsonBytes, 'json-bytes');
+    };
     while (stack.length) {
         const [v, depth, key, path] = stack.pop();
         cap(++nodes, limits.nodes, 'nodes');
         cap(depth, limits.depth, 'depth');
         if (typeof v === 'string') {
+            charge(jsonStringSize(v));
             const imageData =
                 /^(?:customContent\.)?(?:(?:items|processes|quests)\.\[\]\.image|images\.\[\]\.dataUrl)$/.test(
                     path
@@ -172,6 +199,7 @@ function inspectGraph(root, limits) {
             cap(bytes(v), imageData ? limits.jsonBytes : limits.stringBytes, 'string-bytes');
         } else if (typeof v === 'number') {
             if (!Number.isFinite(v)) failImport('number');
+            charge(String(v).length);
         } else if (v && typeof v === 'object') {
             if (seen.has(v)) failImport('non-json');
             seen.add(v);
@@ -181,13 +209,21 @@ function inspectGraph(root, limits) {
                 Object.getPrototypeOf(v) !== null
             )
                 failImport('non-json');
+            if (Array.isArray(v)) cap(v.length, limits.entries, 'entries');
             const keys = Object.keys(v);
+            if (
+                Array.isArray(v) &&
+                (keys.length !== v.length || keys.some((k, i) => k !== String(i)))
+            )
+                failImport('non-json');
             cap(
                 keys.length,
                 Array.isArray(v) || mapFields.has(key) ? limits.entries : limits.keys,
                 'entries'
             );
+            charge(2 + Math.max(0, keys.length - 1));
             for (const k of keys) {
+                if (!Array.isArray(v)) charge(jsonStringSize(k) + 1);
                 if (badKeys.has(k)) failImport('dangerous-key');
                 cap(bytes(k), limits.stringBytes, 'string-bytes');
                 const descriptor = Object.getOwnPropertyDescriptor(v, k);
@@ -200,6 +236,7 @@ function inspectGraph(root, limits) {
                 ]);
             }
         } else if (v !== null && typeof v !== 'boolean') failImport('non-json');
+        else charge(v === false ? 5 : 4);
     }
 }
 export function freezeImport(value) {
@@ -584,8 +621,10 @@ function normalizeCustom(raw, limits, origin) {
                     if (nodeIds.has(nodeId)) failImport('duplicate-node-id');
                     nodeIds.add(nodeId);
                 }
-                if (entity.start !== undefined && !nodeIds.has(id(entity.start)))
-                    failImport('unresolved-reference');
+                if (entity.start !== undefined) {
+                    change.start = id(entity.start);
+                    if (!nodeIds.has(change.start)) failImport('unresolved-reference');
+                }
                 change.dialogue = entity.dialogue.map((node) => {
                     if (
                         node.text !== undefined &&
@@ -604,9 +643,10 @@ function normalizeCustom(raw, limits, origin) {
                             )
                                 failImport('preview-markup');
                             const next = { ...option };
-                            if (option.next !== undefined && option.next !== 'finish') {
-                                next.next = id(option.next);
-                                if (!nodeIds.has(next.next)) failImport('unresolved-reference');
+                            if (option.goto !== undefined) {
+                                next.goto = id(option.goto);
+                                if (next.goto !== 'finish' && !nodeIds.has(next.goto))
+                                    failImport('unresolved-reference');
                             }
                             for (const field of ['requiresItems', 'grantsItems', 'consumeItems'])
                                 links(option, next, field, itemIds, true);

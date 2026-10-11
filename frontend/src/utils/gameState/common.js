@@ -5,6 +5,7 @@ import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
 import {
     serializeManagedMutation,
+    strictTransaction,
     flushManagedMutations,
     openManagedGameDB,
     readManagedGame,
@@ -23,6 +24,10 @@ export { assertCredentialLaunch };
 let knownEpochs = credentialAuthority();
 let recovery = null;
 let durableChecksum = null;
+let pendingGameWrites = 0;
+const pendingCredentialSaves = new Set();
+let latestPendingGameSave = null;
+let managedCommitOrder = 0;
 const ownedSnapshots = new WeakMap();
 import { LEGACY_QUEST_ID_ALIASES } from '../questIdAliases.js';
 
@@ -446,7 +451,7 @@ export const state = writable(gameState);
 
 // Only execute in browser environment to avoid SSR issues with IndexedDB
 export const ready = isBrowser
-    ? (async () => {
+    ? serializeManagedMutation(async () => {
           try {
               const db = await openDB();
               const persisted = await readManagedGame(db);
@@ -458,6 +463,19 @@ export const ready = isBrowser
                   state.set(gameState);
                   loadedFromPersistence = true;
               }
+              // Normal startup retains the lightweight snapshot contract without changing
+              // state/backup or replacing durable credential authority.
+              const lightweight = buildLightweightSnapshot(gameState);
+              await strictTransaction(db, ['meta'], 'readwrite', (tx, req) => {
+                  req(tx.objectStore('meta').get('root'), (meta) => {
+                      tx.objectStore('meta').put(
+                          { ...lightweight, credentialEpochs: credentialAuthority(meta) },
+                          'root'
+                      );
+                  });
+              });
+              localStorage.setItem(LS_LIGHTWEIGHT_KEY, JSON.stringify(lightweight));
+              writeChecksumMarker(gameState[META_KEY].checksum);
           } catch (err) {
               useLocalStorage = true;
               const stored = lsRead(STATE_STORE);
@@ -471,7 +489,7 @@ export const ready = isBrowser
           } finally {
               readyResolved = true;
           }
-      })()
+      })
     : Promise.resolve().then(() => {
           readyResolved = true;
       });
@@ -486,9 +504,32 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
         stampStateChecksum(gameState);
         state.set(gameState);
         recovery = null;
-        window.dispatchEvent(
-            new CustomEvent('dspace-credential-cleared', { detail: { kind: data.kind } })
-        );
+        void serializeManagedMutation(async () => {
+            const db = await openManagedGameDB();
+            try {
+                const persisted = await readManagedGame(db);
+                const authority = credentialAuthority(persisted.meta);
+                knownEpochs = authority;
+                durableChecksum = persisted.state?._meta?.checksum ?? null;
+                if (persisted.state) {
+                    gameState = validateGameState(
+                        applyCredentialAuthority(persisted.state, authority)
+                    );
+                    state.set(gameState);
+                }
+                if (authority[data.kind].epoch === data.epoch) {
+                    window.dispatchEvent(
+                        new CustomEvent('dspace-credential-cleared', {
+                            detail: { kind: data.kind },
+                        })
+                    );
+                }
+            } finally {
+                db.close();
+            }
+        }).catch(() => {
+            /* The scrubbed runtime remains fail-closed until authority is readable. */
+        });
     };
 }
 let writeQueue = Promise.resolve();
@@ -515,125 +556,184 @@ export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
 export const saveGameState = async (newState, { deliberateKind } = {}) => {
     const captured = structuredClone(newState);
-    const capturedEpochs = ownedSnapshots.get(newState) ?? structuredClone(knownEpochs);
-    if (!readyResolved) await ready;
-    const previousSnapshot = structuredClone(gameState);
-    for (const kind of ['github', 'openAI']) {
-        if (kind === deliberateKind) continue;
-        delete captured[kind];
-        if (gameState[kind]) captured[kind] = structuredClone(gameState[kind]);
-    }
-    const nextState = validateGameState(captured);
-    nextState[META_KEY].lastUpdated = Date.now();
-    stampStateChecksum(nextState);
-    const expectedChecksum = durableChecksum;
-    durableChecksum = nextState._meta.checksum;
-    gameState = nextState;
-    state.set(gameState);
-    const result = serializeManagedMutation(async () => {
-        let db;
-        try {
-            db = await openManagedGameDB();
-        } catch (error) {
-            if (deliberateKind) throw error;
-            // Game-only fallback cannot authorize credentials without durable epochs.
-            const safe = scrubCredential(scrubCredential(nextState, 'github'), 'openAI');
-            const backup = scrubCredential(scrubCredential(previousSnapshot, 'github'), 'openAI');
-            stampStateChecksum(safe);
-            stampStateChecksum(backup);
-            mirrorManagedGame({ state: safe, backup, meta: buildLightweightSnapshot(safe) });
-            useLocalStorage = true;
-            if (gameState === nextState) {
-                gameState = safe;
-                durableChecksum = safe._meta.checksum;
-                state.set(gameState);
-            }
-            return {
-                status: 'best-effort',
-                committed: ['localStorage'],
-                credentialsDisabled: true,
-            };
+    let capturedEpochs = ownedSnapshots.get(newState) ?? structuredClone(knownEpochs);
+    const credentialDependencies = [...pendingCredentialSaves];
+    const predecessor = latestPendingGameSave;
+    const queued = { promise: null, checksum: null, order: 0 };
+    latestPendingGameSave = queued;
+    pendingGameWrites++;
+    try {
+        if (!readyResolved) await ready;
+        const previousSnapshot = structuredClone(gameState);
+        for (const kind of ['github', 'openAI']) {
+            if (kind === deliberateKind) continue;
+            delete captured[kind];
+            if (gameState[kind]) captured[kind] = structuredClone(gameState[kind]);
         }
-        try {
-            const receipt = await commitManagedGame(db, {
-                next: nextState,
-                backup: previousSnapshot,
-                expectedChecksum,
-                expectedEpochs: capturedEpochs,
-                deliberateKind,
-                stamp: stampStateChecksum,
-                lightweight: buildLightweightSnapshot,
-            });
-            knownEpochs = credentialAuthority(receipt.meta);
-            try {
-                mirrorManagedGame(receipt);
-            } catch {
-                throw new StorageOperationError('mirror-incomplete', ['game']);
-            }
-            // A later queued save already owns the newer UI snapshot.
-            if (gameState === nextState) {
-                durableChecksum = receipt.state?._meta?.checksum ?? null;
-                gameState = receipt.state;
-                state.set(gameState);
-            }
-            return { status: 'complete', committed: ['game', 'mirrors'] };
-        } catch (error) {
-            if (gameState === nextState) {
-                const persisted = await readManagedGame(db);
-                knownEpochs = credentialAuthority(persisted.meta);
-                durableChecksum = persisted.state?._meta?.checksum ?? null;
-                if (persisted.state) {
-                    gameState = validateGameState(
-                        applyCredentialAuthority(persisted.state, knownEpochs)
+        const nextState = validateGameState(captured);
+        nextState[META_KEY].lastUpdated = Date.now();
+        stampStateChecksum(nextState);
+        let expectedChecksum = durableChecksum;
+        durableChecksum = nextState._meta.checksum;
+        gameState = nextState;
+        state.set(gameState);
+        const result = (async () => {
+            for (const dependency of credentialDependencies) {
+                await dependency.promise;
+                const canAdvance =
+                    dependency.authority &&
+                    ['github', 'openAI'].every(
+                        (kind) =>
+                            capturedEpochs[kind].epoch === dependency.before[kind].epoch &&
+                            dependency.authority[kind].epoch ===
+                                dependency.before[kind].epoch + (kind === dependency.kind ? 1 : 0)
                     );
-                    state.set(gameState);
-                }
+                if (canAdvance) capturedEpochs = structuredClone(dependency.authority);
             }
-            throw error;
-        } finally {
-            db.close();
-        }
-    });
-    writeQueue = result.catch(() => undefined);
-    return result;
+            if (predecessor) await predecessor.promise;
+            const completed = [...credentialDependencies, ...(predecessor ? [predecessor] : [])]
+                .filter((entry) => entry.order)
+                .sort((a, b) => b.order - a.order)[0];
+            if (completed) expectedChecksum = completed.checksum;
+            return serializeManagedMutation(async () => {
+                let db;
+                try {
+                    db = await openManagedGameDB();
+                } catch (error) {
+                    if (deliberateKind) throw error;
+                    // Game-only fallback cannot authorize credentials without durable epochs.
+                    const safe = scrubCredential(scrubCredential(nextState, 'github'), 'openAI');
+                    const backup = scrubCredential(
+                        scrubCredential(previousSnapshot, 'github'),
+                        'openAI'
+                    );
+                    stampStateChecksum(safe);
+                    stampStateChecksum(backup);
+                    mirrorManagedGame({
+                        state: safe,
+                        backup,
+                        meta: buildLightweightSnapshot(safe),
+                    });
+                    useLocalStorage = true;
+                    if (gameState === nextState) {
+                        gameState = safe;
+                        durableChecksum = safe._meta.checksum;
+                        state.set(gameState);
+                    }
+                    return {
+                        status: 'best-effort',
+                        committed: ['localStorage'],
+                        credentialsDisabled: true,
+                    };
+                }
+                try {
+                    const receipt = await commitManagedGame(db, {
+                        next: nextState,
+                        backup: previousSnapshot,
+                        expectedChecksum,
+                        expectedEpochs: capturedEpochs,
+                        deliberateKind,
+                        stamp: stampStateChecksum,
+                        lightweight: buildLightweightSnapshot,
+                    });
+                    knownEpochs = credentialAuthority(receipt.meta);
+                    queued.checksum = receipt.state._meta.checksum;
+                    queued.order = ++managedCommitOrder;
+                    durableChecksum = queued.checksum;
+                    try {
+                        mirrorManagedGame(receipt);
+                    } catch {
+                        throw new StorageOperationError('mirror-incomplete', ['game']);
+                    }
+                    // A later queued save already owns the newer UI snapshot.
+                    if (gameState === nextState) {
+                        durableChecksum = receipt.state?._meta?.checksum ?? null;
+                        gameState = receipt.state;
+                        state.set(gameState);
+                    }
+                    return { status: 'complete', committed: ['game', 'mirrors'] };
+                } catch (error) {
+                    if (gameState === nextState) {
+                        const persisted = await readManagedGame(db);
+                        knownEpochs = credentialAuthority(persisted.meta);
+                        durableChecksum = persisted.state?._meta?.checksum ?? null;
+                        if (persisted.state) {
+                            gameState = validateGameState(
+                                applyCredentialAuthority(persisted.state, knownEpochs)
+                            );
+                            state.set(gameState);
+                        }
+                    }
+                    throw error;
+                } finally {
+                    db.close();
+                }
+            });
+        })();
+        queued.promise = result;
+        writeQueue = result.catch(() => undefined);
+        return await result;
+    } finally {
+        pendingGameWrites--;
+        if (latestPendingGameSave === queued) latestPendingGameSave = null;
+    }
 };
 
 export async function saveCredential(kind, value) {
     if (!['github', 'openAI'].includes(kind) || typeof value !== 'string' || !value.trim())
         throw new StorageOperationError('credential-value');
-    await ready;
-    return serializeManagedMutation(async () => {
-        const observedUI = gameState;
-        const db = await openManagedGameDB();
-        try {
-            const previous = await readManagedGame(db);
-            const next = validateGameState(structuredClone(previous.state ?? gameState));
-            next[kind] = { ...next[kind], [kind === 'github' ? 'token' : 'apiKey']: value };
-            const receipt = await commitManagedGame(db, {
-                next,
-                backup: previous.state ?? gameState,
-                expectedChecksum: previous.state?._meta?.checksum ?? null,
-                expectedEpochs: credentialAuthority(previous.meta),
-                deliberateKind: kind,
-                stamp: stampStateChecksum,
-                lightweight: buildLightweightSnapshot,
-            });
-            knownEpochs = credentialAuthority(receipt.meta);
-            if (gameState === observedUI) {
-                gameState = receipt.state;
-                durableChecksum = receipt.state._meta.checksum;
-                state.set(gameState);
-            }
+    const dependency = {
+        kind,
+        before: structuredClone(knownEpochs),
+        authority: null,
+        promise: null,
+    };
+    pendingCredentialSaves.add(dependency);
+    dependency.promise = (async () => {
+        await ready;
+        return serializeManagedMutation(async () => {
+            const observedUI = gameState;
+            const db = await openManagedGameDB();
             try {
-                mirrorManagedGame(receipt);
-            } catch {
-                throw new StorageOperationError('mirror-incomplete', ['game']);
+                const previous = await readManagedGame(db);
+                dependency.before = credentialAuthority(previous.meta);
+                const next = validateGameState(structuredClone(previous.state ?? gameState));
+                next[kind] = { ...next[kind], [kind === 'github' ? 'token' : 'apiKey']: value };
+                const receipt = await commitManagedGame(db, {
+                    next,
+                    backup: previous.state ?? gameState,
+                    expectedChecksum: previous.state?._meta?.checksum ?? null,
+                    expectedEpochs: credentialAuthority(previous.meta),
+                    deliberateKind: kind,
+                    stamp: stampStateChecksum,
+                    lightweight: buildLightweightSnapshot,
+                });
+                knownEpochs = credentialAuthority(receipt.meta);
+                dependency.authority = structuredClone(knownEpochs);
+                dependency.checksum = receipt.state._meta.checksum;
+                dependency.order = ++managedCommitOrder;
+                durableChecksum = dependency.checksum;
+                if (gameState === observedUI && pendingGameWrites === 0) {
+                    gameState = receipt.state;
+                    durableChecksum = receipt.state._meta.checksum;
+                    state.set(gameState);
+                }
+                try {
+                    mirrorManagedGame(receipt);
+                } catch {
+                    throw new StorageOperationError('mirror-incomplete', ['game']);
+                }
+                return { status: 'complete', committed: ['game', 'mirrors'] };
+            } finally {
+                db.close();
             }
-            return { status: 'complete', committed: ['game', 'mirrors'] };
-        } finally {
-            db.close();
-        }
-    });
+        });
+    })();
+    try {
+        return await dependency.promise;
+    } finally {
+        pendingCredentialSaves.delete(dependency);
+    }
 }
 const stampOwnedState = (value) => {
     const stack = [value],
@@ -731,7 +831,7 @@ export const getAuthoritativeQuestProgressSnapshot = (snapshot) => {
 };
 
 export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
-    if (!isBrowser) {
+    if (!isBrowser || pendingGameWrites || pendingCredentialSaves.size) {
         return false;
     }
 
@@ -747,9 +847,17 @@ export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
         return false;
     }
 
-    gameState = validateGameState(scrubCredential(scrubCredential(persisted, 'github'), 'openAI'));
+    durableChecksum = persisted?._meta?.checksum ?? null;
+    try {
+        knownEpochs = credentialAuthority(
+            JSON.parse(localStorage.getItem(LS_LIGHTWEIGHT_KEY) || '{}')
+        );
+    } catch {
+        /* Preserve fail-closed authority when a mirror is malformed. */
+    }
+    gameState = validateGameState(applyCredentialAuthority(persisted, knownEpochs));
     state.set(gameState);
-    lsWrite(META_STORE, buildLightweightSnapshot(gameState));
+    lsWrite(META_STORE, { ...buildLightweightSnapshot(gameState), credentialEpochs: knownEpochs });
     writeChecksumMarker(gameState?.[META_KEY]?.checksum ?? '');
     return true;
 };

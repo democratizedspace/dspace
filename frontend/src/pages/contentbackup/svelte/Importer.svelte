@@ -1,4 +1,13 @@
 <script>
+    import { onMount } from 'svelte';
+    import { initializeCustomContentForImportUI } from '../../../utils/indexeddb.js';
+    let destinationReady = Promise.resolve(false);
+    onMount(() => {
+        destinationReady = initializeCustomContentForImportUI().then(
+            () => true,
+            () => false
+        );
+    });
     import Chip from '../../../components/svelte/Chip.svelte';
     import { restoreCustomContentBackupFromFile } from '../../../utils/customContentBackup.js';
 
@@ -53,6 +62,11 @@
     };
 
     const handleImportFile = async (file) => {
+        if (!(await destinationReady)) {
+            status = 'error';
+            message = 'Import storage is unavailable. Reload and try again.';
+            return;
+        }
         if (!isValidBackupFile(file)) {
             status = 'error';
             message = 'Please choose a valid backup file.';

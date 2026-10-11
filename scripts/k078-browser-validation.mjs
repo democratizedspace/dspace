@@ -80,17 +80,12 @@ try {
         const assert = (v, message) => {
           if (!v) throw new Error(message);
         };
-        const db = await new Promise((resolve, reject) => {
-          const req = indexedDB.open('CustomContent', 3);
-          req.onupgradeneeded = () => {
-            for (const name of ['items', 'processes', 'quests'])
-              req.result.createObjectStore(name, { keyPath: 'id' });
-            req.result.createObjectStore('meta').put(3, 'schemaVersion');
-          };
-          req.onsuccess = () => resolve(req.result);
-          req.onerror = () => reject(req.error);
-        });
-        db.close();
+        const customStorage = await import('/frontend/src/utils/indexeddb.js');
+        await customStorage.initializeCustomContentForImportUI();
+        assert(
+          localStorage.getItem('gameStateLite'),
+          'normal startup lightweight snapshot'
+        );
         await common.saveCredential('github', 'SENTINEL_GITHUB_A');
         await common.saveCredential('openAI', 'SENTINEL_OPENAI_B');
         const cases = [],
@@ -190,6 +185,11 @@ try {
         const common = await import('/frontend/src/utils/gameState/common.js');
         await common.ready;
         globalThis.staleK078 = common.loadGameState();
+        globalThis.clearNotified = new Promise((resolve) =>
+          window.addEventListener('dspace-credential-cleared', resolve, {
+            once: true,
+          })
+        );
       });
       await page.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
@@ -204,9 +204,25 @@ try {
         } catch (e) {
           if (e.code !== 'stale-credential-epoch') throw e;
         }
+        await globalThis.clearNotified;
+        const fresh = common.loadGameState();
+        fresh.inventory.syntheticAfterClear = 1;
+        await common.saveGameState(fresh);
         await common.saveCredential('github', 'SENTINEL_CROSS_TAB_NEW');
         if (common.loadGameState().github.token !== 'SENTINEL_CROSS_TAB_NEW')
           throw new Error('deliberate cross-tab save');
+      });
+      await page.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        common.syncGameStateFromLocalIfStale();
+        const first = common.loadGameState();
+        first.inventory.crossTabGameplay = 1;
+        const a = common.saveGameState(first);
+        const second = common.loadGameState();
+        second.inventory.crossTabGameplay = 2;
+        await Promise.all([a, common.saveGameState(second)]);
+        if (common.loadGameState().inventory.crossTabGameplay !== 2)
+          throw new Error('cross-tab gameplay lost');
       });
       await second.close();
       const processPeakWorkingSetBytes =

@@ -177,3 +177,57 @@ test('C04 cached OpenAI prompt cannot launch after Clear', async () => {
     expect(client).not.toHaveBeenCalled();
     expect(fetch).not.toHaveBeenCalled();
 });
+
+test('B05 normal startup provides lightweight metadata without dropping credential authority', async () => {
+    expect(localStorage.getItem('gameStateLite')).toBeTruthy();
+    await common.saveCredential('github', 'SENTINEL_STARTUP');
+    await common.clearCredential('github');
+    await common.closeGameStateDatabaseForTesting();
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    const db = await storage.openManagedGameDB();
+    expect(
+        storage.credentialAuthority((await storage.readManagedGame(db)).meta).github.cleared
+    ).toBe(true);
+    db.close();
+    expect(localStorage.getItem('gameStateLite')).toBeTruthy();
+});
+
+test('B06 pending writes are not replaced by their old local mirror', async () => {
+    const first = common.loadGameState();
+    first.processes.synthetic = { running: true };
+    const a = common.saveGameState(first);
+    expect(common.syncGameStateFromLocalIfStale(common.getGameStateChecksum())).toBe(false);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 9;
+    const b = common.saveGameState(second);
+    await Promise.all([a, b]);
+    expect(common.loadGameState().processes.synthetic.running).toBe(true);
+    expect(common.loadGameState().inventory.synthetic).toBe(9);
+});
+
+test('C04 gameplay queued during deliberate credential saves preserves both mutations', async () => {
+    const credentialA = common.saveCredential('github', 'SENTINEL_QUEUED_GH');
+    const credentialB = common.saveCredential('openAI', 'SENTINEL_QUEUED_AI');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 19;
+    const gameplay = common.saveGameState(next);
+    await Promise.all([credentialA, credentialB, gameplay]);
+    expect(common.loadGameState().inventory.synthetic).toBe(19);
+    expect(common.loadGameState().github.token).toBe('SENTINEL_QUEUED_GH');
+    expect(common.loadGameState().openAI.apiKey).toBe('SENTINEL_QUEUED_AI');
+});
+
+test('C04 consecutive gameplay snapshots remain distinct while a credential save is pending', async () => {
+    const credential = common.saveCredential('github', 'SENTINEL_PENDING');
+    const first = common.loadGameState();
+    first.processes.synthetic = { running: true };
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 23;
+    const b = common.saveGameState(second);
+    await Promise.all([credential, a, b]);
+    expect(common.loadGameState().processes.synthetic.running).toBe(true);
+    expect(common.loadGameState().inventory.synthetic).toBe(23);
+});
