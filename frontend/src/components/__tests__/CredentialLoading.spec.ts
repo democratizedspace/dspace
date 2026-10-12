@@ -188,3 +188,40 @@ for (const [name, component, jsonLabel, submission] of [
         });
     });
 }
+
+for (const [name, component] of [
+    ['quest', QuestPRForm],
+    ['bundle', ContentBundlePRForm],
+] as const) {
+    for (const fails of [false, true]) {
+        it(`blocks ${name} token editing and submission until ${fails ? 'failed' : 'successful'} loading finishes`, async () => {
+            let resolveLoad!: (value: string) => void;
+            let rejectLoad!: (reason: Error) => void;
+            loadToken.mockReturnValue(
+                new Promise<string>((resolve, reject) => {
+                    resolveLoad = resolve;
+                    rejectLoad = reject;
+                })
+            );
+            const view = render(component);
+            const input = view.getByLabelText('GitHub Token*');
+            expect(input).toBeDisabled();
+            expect(view.getByTestId('clear-token')).toBeDisabled();
+            expect(view.getByRole('button', { name: 'Create Pull Request' })).toBeDisabled();
+            expect(view.getByRole('status')).toHaveTextContent('Loading saved credential');
+            await fireEvent.submit(view.container.querySelector('form')!);
+            expect(saveToken).not.toHaveBeenCalled();
+            expect(submitQuest).not.toHaveBeenCalled();
+            expect(submitBundle).not.toHaveBeenCalled();
+            if (fails) rejectLoad(new Error('credential-stale'));
+            else resolveLoad('synthetic-saved-token');
+            await waitFor(() => expect(input).toBeEnabled());
+            expect(view.getByTestId('clear-token')).toBeEnabled();
+            expect(view.getByRole('button', { name: 'Create Pull Request' })).toBeEnabled();
+            expect(view.queryByRole('status')).toBeNull();
+            expect(input).toHaveValue(fails ? '' : 'synthetic-saved-token');
+            await fireEvent.input(input, { target: { value: 'synthetic-replacement-token' } });
+            expect(input).toHaveValue('synthetic-replacement-token');
+        });
+    }
+}

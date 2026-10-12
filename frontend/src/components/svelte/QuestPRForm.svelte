@@ -42,6 +42,7 @@
 
     async function handleSubmit(event) {
         event.preventDefault();
+        if (!hydrated) return;
         submitError = '';
         if (!validateForm()) {
             submitError = 'Please fix the errors above';
@@ -83,7 +84,15 @@
     });
 </script>
 
-<form on:submit={handleSubmit} class="pr-form" data-hydrated={hydrated ? 'true' : 'false'}>
+<form
+    on:submit={handleSubmit}
+    class="pr-form"
+    data-hydrated={hydrated ? 'true' : 'false'}
+    aria-busy={!hydrated}
+>
+    {#if !hydrated}
+        <p role="status">Loading saved credential...</p>
+    {/if}
     <div class="form-group token-group">
         <label for="token">GitHub Token*</label>
         <div class="token-input">
@@ -91,11 +100,15 @@
                 id="token"
                 type="password"
                 bind:value={token}
+                disabled={!hydrated}
                 class:error={validationErrors.token}
                 required
             />
-            <button type="button" on:click={clearToken} data-testid="clear-token"
-                >Clear Token</button
+            <button
+                type="button"
+                on:click={clearToken}
+                disabled={!hydrated}
+                data-testid="clear-token">Clear Token</button
             >
         </div>
         {#if validationErrors.token}
@@ -122,7 +135,7 @@
         {/if}
     </div>
     <div class="form-submit">
-        <button type="submit">Create Pull Request</button>
+        <button type="submit" disabled={!hydrated}>Create Pull Request</button>
     </div>
 </form>
 
