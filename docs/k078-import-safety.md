@@ -49,3 +49,5 @@ Completed custom exports pass restore preparation; combined game envelopes use t
 Legacy numeric item prices normalize to strings consumed by inventory search. Dialogue options require runnable action types and required targets; legacy navigation-only options explicitly become goto actions, with the historical finish sentinel becoming a finish action when no such node exists.
 
 Container replacements also validate affected references in retained destination processes, quests and item links against the post-import catalog before either database commits. Unrelated legacy rows remain unchanged. Numeric duration adapters expand scientific notation and reject values whose runtime milliseconds would overflow.
+
+The legacy custom-backup regression suite is included in repository Vitest. Sparse imported records derive canonical entity type and custom-content metadata from their section, so native get/edit consumers recognize restored records.

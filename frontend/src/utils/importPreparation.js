@@ -663,6 +663,12 @@ function normalizeCustom(raw, limits, origin, deferDestinationReferences = false
             const normalizedId = id(entity.id);
             if (ids[section].has(normalizedId)) failImport('duplicate-id');
             const change = { id: normalizedId };
+            if (section !== 'images') {
+                change.entityType = { items: 'item', processes: 'process', quests: 'quest' }[
+                    section
+                ];
+                change.custom = true;
+            }
             ids[section].set(normalizedId, change);
             changes[section].push(change);
             for (const field of [
