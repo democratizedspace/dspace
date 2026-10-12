@@ -4,6 +4,7 @@ import { prepareImport, prepareImportFile } from './importPreparation.js';
 import {
     serializeManagedMutation,
     preflightCustomImport,
+    validateCustomImportDestination,
     commitCustomImport,
 } from './managedImportStorage.js';
 import { sanitizeSaveForBackup } from '../lib/cloudsync/githubGists';
@@ -342,6 +343,7 @@ async function restorePreparedCustomContent(plan, { onProgress, overwriteExistin
         const { db, snapshot } = await preflightCustomImport();
         const content = plan.customContent;
         try {
+            validateCustomImportDestination(content, snapshot, overwriteExisting);
             await commitCustomImport(db, content, snapshot, overwriteExisting);
         } finally {
             db.close();

@@ -867,7 +867,7 @@ describe('K078 explicit legacy backup compatibility', () => {
     });
 
     test.each(['items', 'processes', 'quests'])(
-        'treats numeric/whitespace destination %s keys as the same imported ID',
+        'rejects legacy destination %s aliases without changing rows or revisions',
         async (section) => {
             const db = await initialize('CustomContent');
             await strictTransaction(db, [section], 'readwrite', (tx: any) => {
@@ -879,26 +879,25 @@ describe('K078 explicit legacy backup compatibility', () => {
             const plan = await preflightCustomImport();
             const content: any = { items: [], processes: [], quests: [] };
             content[section] = [{ id: '1', name: 'replacement' }];
-            await expect(
-                commitCustomImport(plan.db, content, plan.snapshot, false)
-            ).rejects.toThrow('custom-conflict');
-            let fresh = await preflightCustomImport();
-            expect(fresh.snapshot[section]).toEqual(plan.snapshot[section]);
-            expect(fresh.snapshot.revision).toBe(plan.snapshot.revision);
-            fresh.db.close();
-            await commitCustomImport(plan.db, content, plan.snapshot, true);
-            fresh = await preflightCustomImport();
-            expect(fresh.snapshot[section]).toEqual([
-                { id: '1', name: 'replacement' },
-                { id: 'unrelated', name: 'keep' },
-            ]);
-            // Reapplying overwrite is idempotent with respect to logical records.
-            await commitCustomImport(fresh.db, content, fresh.snapshot, true);
-            fresh.db.close();
-            const final = await preflightCustomImport();
-            expect(final.snapshot[section]).toHaveLength(2);
-            final.db.close();
+            for (const overwrite of [false, true]) {
+                await expect(
+                    commitCustomImport(plan.db, content, plan.snapshot, overwrite)
+                ).rejects.toThrow('legacy-id-migration-required');
+                const fresh = await preflightCustomImport();
+                expect(fresh.snapshot).toEqual(plan.snapshot);
+                fresh.db.close();
+            }
             plan.db.close();
         }
     );
+});
+
+test('A04 rejects a combined backup whose normalized custom IDs would strand inventory keys', () => {
+    expect(() =>
+        prepareImport({
+            schemaVersion: 1,
+            payload: { inventory: { ' item-A ': 5 } },
+            customContent: { schemaVersion: 1, items: [{ id: ' item-A ', name: 'legacy' }] },
+        })
+    ).toThrow('legacy-id-reference');
 });

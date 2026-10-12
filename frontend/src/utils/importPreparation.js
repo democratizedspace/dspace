@@ -848,6 +848,27 @@ export function prepareImport(
         raw.customContent === undefined
             ? undefined
             : normalizeCustom(raw.customContent, limits, origin);
+    if (customContent) {
+        const importedIds = Object.fromEntries(
+            ['items', 'quests', 'processes'].map((section) => [
+                section,
+                new Set(customContent[section].map((entity) => entity.id)),
+            ])
+        );
+        for (const [section, target] of [
+            ['inventory', 'items'],
+            ['quests', 'quests'],
+            ['processes', 'processes'],
+            ['itemContainerCounts', 'items'],
+        ])
+            for (const key of Object.keys(source[section] || {}))
+                if (key !== key.trim() && importedIds[target].has(key.trim()))
+                    failImport('legacy-id-reference');
+        for (const counts of Object.values(source.itemContainerCounts || {}))
+            for (const key of Object.keys(counts))
+                if (key !== key.trim() && importedIds.items.has(key.trim()))
+                    failImport('legacy-id-reference');
+    }
     const game = structuredClone(source);
     delete game.customContent;
     // Credentials and epoch authority are never portable.

@@ -415,12 +415,32 @@ export async function preflightCustomImport() {
         throw e;
     }
 }
+// Renaming legacy keys can strand references in the other database or retained rows.
+// Reject before any import writes instead of silently migrating unrelated state.
+export function validateCustomImportDestination(content, snapshot, overwriteExisting) {
+    for (const section of ['items', 'processes', 'quests']) {
+        const importedIds = new Set(content[section].map((entity) => entity.id));
+        for (const record of snapshot[section]) {
+            if (typeof record.id !== 'string' && typeof record.id !== 'number') continue;
+            const normalized = String(record.id).trim();
+            if (!importedIds.has(normalized)) continue;
+            if (record.id !== normalized) throw error('legacy-id-migration-required');
+            if (!overwriteExisting) throw error('custom-conflict');
+        }
+    }
+}
 export function commitCustomImport(db, content, expected, overwriteExisting) {
     return strictTransaction(
         db,
         ['items', 'processes', 'quests', 'meta'],
         'readwrite',
         (tx, req, done, abort) => {
+            try {
+                validateCustomImportDestination(content, expected, overwriteExisting);
+            } catch (failure) {
+                abort(failure.code);
+                return;
+            }
             let count = 0;
             req(tx.objectStore('meta').get('contentRevision'), (revision) => {
                 if ((revision || 0) !== (expected.revision || 0)) abort('stale-custom-content');
@@ -435,26 +455,7 @@ export function commitCustomImport(db, content, expected, overwriteExisting) {
                     if (++count !== 3) return;
                     for (const section of ['items', 'processes', 'quests']) {
                         const store = tx.objectStore(section);
-                        const destinationKeys = new Map();
-                        for (const record of expected[section]) {
-                            if (typeof record.id !== 'string' && typeof record.id !== 'number')
-                                continue;
-                            const normalized = String(record.id).trim();
-                            const keys = destinationKeys.get(normalized) || [];
-                            keys.push(record.id);
-                            destinationKeys.set(normalized, keys);
-                        }
                         for (const entity of content[section]) {
-                            const existingKeys = destinationKeys.get(entity.id) || [];
-                            if (existingKeys.length && !overwriteExisting) {
-                                abort('custom-conflict');
-                                return;
-                            }
-                            // Overwrite replaces every alias of this logical ID atomically,
-                            // so legacy numeric/whitespace keys cannot survive as duplicates.
-                            for (const key of existingKeys)
-                                if (key !== entity.id)
-                                    store.delete(key).onerror = () => abort('custom-conflict');
                             const write = overwriteExisting
                                 ? store.put(structuredClone(entity))
                                 : store.add(structuredClone(entity));

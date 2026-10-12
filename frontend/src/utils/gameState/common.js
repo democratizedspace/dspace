@@ -17,6 +17,7 @@ import {
     mirrorManagedGame,
     clearManagedCredential,
     preflightCustomImport,
+    validateCustomImportDestination,
     commitCustomImport,
     StorageOperationError,
     assertCredentialLaunch,
@@ -1229,7 +1230,10 @@ export const importGameStateString = async (input) => {
         let custom;
         const committed = [];
         try {
-            if (plan.customContent) custom = await preflightCustomImport();
+            if (plan.customContent) {
+                custom = await preflightCustomImport();
+                validateCustomImportDestination(plan.customContent, custom.snapshot, true);
+            }
             const previous = await readManagedGame(db);
             if (previous.state && (previous.state._meta?.checksum ?? null) !== expectedChecksum)
                 throw new StorageOperationError('stale-plan');

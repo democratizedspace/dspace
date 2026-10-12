@@ -1429,3 +1429,45 @@ test('C04 a predecessor cannot bypass newer remote gameplay observed by a later 
         remoteAfterPredecessor: 99,
     });
 });
+
+test.each([7, ' item-A '])(
+    'B03 combined restore rejects legacy key %s before either database commits',
+    async (legacyId) => {
+        const initial = common.loadGameState();
+        initial.inventory[String(legacyId)] = 5;
+        await common.saveGameState(initial);
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, ['items', 'quests'], 'readwrite', (tx: any) => {
+            tx.objectStore('items').put({ id: legacyId, name: 'original' });
+            tx.objectStore('quests').put({
+                id: 'retained-quest',
+                rewards: [{ id: legacyId, count: 1 }],
+            });
+        });
+        custom.db.close();
+        const beforeCustom = await storage.preflightCustomImport();
+        const db = await storage.openManagedGameDB();
+        const beforeGame = await storage.readManagedGame(db);
+        const beforeMirror = localStorage.getItem('gameState');
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload: { inventory: { changed: 99 } },
+                    customContent: {
+                        schemaVersion: 1,
+                        items: [{ id: String(legacyId).trim(), name: 'replacement' }],
+                    },
+                })
+            )
+        ).rejects.toMatchObject({ code: 'legacy-id-migration-required' });
+        expect(await storage.readManagedGame(db)).toEqual(beforeGame);
+        expect(localStorage.getItem('gameState')).toBe(beforeMirror);
+        const afterCustom = await storage.preflightCustomImport();
+        expect(afterCustom.snapshot).toEqual(beforeCustom.snapshot);
+        expect(common.loadGameState().inventory[String(legacyId)]).toBe(5);
+        db.close();
+        beforeCustom.db.close();
+        afterCustom.db.close();
+    }
+);
