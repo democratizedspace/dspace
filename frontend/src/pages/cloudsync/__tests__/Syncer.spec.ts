@@ -246,4 +246,20 @@ describe('Cloud Sync token save flow', () => {
             );
         }
     );
+    it('asks for reload after fallback without validating or clearing the durable token', async () => {
+        saveGitHubTokenMock.mockRejectedValueOnce({ code: 'fallback-reload-required' });
+        const { getByLabelText, getByTestId } = render(Syncer);
+        await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+        await fireEvent.input(getByLabelText(/GitHub Token/i), {
+            target: { value: `ghp_${'s'.repeat(36)}` },
+        });
+        await fireEvent.click(getByTestId('save-token'));
+        await waitFor(() =>
+            expect(getByTestId('sync-error')).toHaveTextContent(
+                'Reload to reconcile saved progress, then retry Save.'
+            )
+        );
+        expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+        expect(validateTokenMock).not.toHaveBeenCalled();
+    });
 });

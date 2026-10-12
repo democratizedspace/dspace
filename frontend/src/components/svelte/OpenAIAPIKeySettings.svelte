@@ -34,9 +34,11 @@
             draftApiKey = '';
             isEditing = !apiKey;
             statusMessage = 'OpenAI API key saved.';
-        } catch {
+        } catch (error) {
             statusMessage =
-                'OpenAI API key save could not be confirmed. Check storage access and retry Save.';
+                error?.code === 'fallback-reload-required'
+                    ? 'Reload to reconcile saved progress, then retry Save.'
+                    : 'OpenAI API key save could not be confirmed. Check storage access and retry Save.';
         }
     }
 

@@ -7,7 +7,9 @@ export class StorageOperationError extends Error {
                 ? `Restore partially completed (${committed.join(', ')} committed). Custom content was not committed.`
                 : code === 'mirror-incomplete'
                   ? `Restore mirrors incomplete (${committed.join(', ')} committed).`
-                  : code
+                  : code === 'fallback-reload-required'
+                    ? 'Reload to reconcile saved progress before retrying this operation.'
+                    : code
         );
         this.name = 'StorageOperationError';
         this.code = code;

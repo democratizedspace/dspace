@@ -815,3 +815,72 @@ test.each([
         expect(common.loadGameState().github.token).toBe('SENTINEL_DURABLE_TIME');
     }
 );
+
+test.each(['import', 'save', 'no-locks'])(
+    'B05 recovered storage keeps %s fallback progress until startup reconciliation',
+    async (action) => {
+        await common.saveCredential('github', 'SENTINEL_RECOVERED_STORAGE');
+        const locks = navigator.locks;
+        const fault =
+            action === 'no-locks'
+                ? null
+                : vi
+                      .spyOn(storage, 'openManagedGameDB')
+                      .mockRejectedValueOnce(new Error('synthetic unavailable'));
+        if (action === 'no-locks') vi.stubGlobal('navigator', { locks: undefined });
+        const next = { ...common.loadGameState(), inventory: { recoveredProgress: 101 } };
+        await expect(
+            action === 'import'
+                ? common.importGameStateString(JSON.stringify(next))
+                : common.saveGameState(next)
+        ).resolves.toMatchObject({ status: 'best-effort', credentialsDisabled: true });
+        fault?.mockRestore();
+        if (action === 'no-locks') vi.stubGlobal('navigator', { locks });
+        const db = await storage.openManagedGameDB();
+        const durableBefore = await storage.readManagedGame(db);
+        const continued = common.loadGameState();
+        continued.inventory.recoveredProgress = 102;
+        await expect(common.saveGameState(continued)).resolves.toMatchObject({
+            status: 'best-effort',
+        });
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(102);
+        expect(await storage.readManagedGame(db)).toEqual(durableBefore);
+        await expect(
+            common.saveCredential('openAI', 'SENTINEL_BLOCKED_UNTIL_RELOAD')
+        ).rejects.toMatchObject({ code: 'fallback-reload-required' });
+        await expect(common.clearCredential('github')).resolves.toMatchObject({
+            status: 'complete',
+        });
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(102);
+        continued.inventory.recoveredProgress = 103;
+        await expect(common.saveGameState(continued)).resolves.toMatchObject({
+            status: 'best-effort',
+        });
+        expect(common.loadGameState().github?.token).toBeUndefined();
+        db.close();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(103);
+        expect(common.loadGameState().github?.token).toBeUndefined();
+        await expect(
+            common.saveCredential('openAI', 'SENTINEL_AFTER_RELOAD')
+        ).resolves.toMatchObject({ status: 'complete' });
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(103);
+    }
+);
+
+test('B05 already queued saves remain in fallback after the first write loses storage', async () => {
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+        new Error('synthetic unavailable')
+    );
+    const first = { ...common.loadGameState(), inventory: { queuedFallback: 201 } };
+    const firstWrite = common.saveGameState(first);
+    const second = { ...common.loadGameState(), inventory: { queuedFallback: 202 } };
+    const secondWrite = common.saveGameState(second);
+    await expect(firstWrite).resolves.toMatchObject({ status: 'best-effort' });
+    await expect(secondWrite).resolves.toMatchObject({ status: 'best-effort' });
+    expect(common.loadGameState().inventory.queuedFallback).toBe(202);
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.queuedFallback).toBe(202);
+});

@@ -138,3 +138,16 @@ it.each(['storage-lock-unavailable', 'mirror-incomplete'])(
         expect(await findByText('OpenAI API key saved.')).toBeInTheDocument();
     }
 );
+
+it('asks for reload when fallback progress has not been reconciled', async () => {
+    vi.mocked(loadGameState).mockReturnValue({ openAI: { apiKey: '' } });
+    vi.mocked(saveCredential).mockRejectedValueOnce({ code: 'fallback-reload-required' });
+    const { findByLabelText, findByRole, findByText } = render(OpenAIAPIKeySettings);
+    await fireEvent.input(await findByLabelText(/openai api key/i), {
+        target: { value: 'SENTINEL_RELOAD' },
+    });
+    await fireEvent.click(await findByRole('button', { name: /save openai api key/i }));
+    expect(
+        await findByText('Reload to reconcile saved progress, then retry Save.')
+    ).toBeInTheDocument();
+});

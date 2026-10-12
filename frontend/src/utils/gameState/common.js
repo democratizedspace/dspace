@@ -608,7 +608,7 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
                 dependency.authority = structuredClone(authority);
                 dependency.checksum = durableChecksum;
                 dependency.order = ++managedCommitOrder;
-                if (persisted.state && pendingGameWrites === 0) {
+                if (persisted.state && pendingGameWrites === 0 && !useLocalStorage) {
                     gameState = validateGameState(
                         applyCredentialAuthority(persisted.state, authority)
                     );
@@ -661,7 +661,12 @@ export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
 export const saveGameState = async (newState, { deliberateKind } = {}) => {
     const captured = structuredClone(newState);
-    if (isBrowser && !globalThis.navigator?.locks?.request && !deliberateKind) {
+    // Once fallback owns newer progress, only startup may reconcile it with durable state.
+    if (
+        isBrowser &&
+        (useLocalStorage || !globalThis.navigator?.locks?.request) &&
+        !deliberateKind
+    ) {
         if (!readyResolved) await ready;
         const safe = validateGameState(
             scrubCredential(scrubCredential(captured, 'github'), 'openAI')
@@ -732,6 +737,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             if (completed) expectedChecksum = completed.checksum;
             let db;
             try {
+                if (useLocalStorage) throw new StorageOperationError('fallback-reload-required');
                 db = await openManagedGameDB();
             } catch (error) {
                 if (deliberateKind) throw error;
@@ -858,6 +864,7 @@ export async function saveCredential(kind, value) {
     pendingCredentialSaves.add(dependency);
     dependency.promise = serializeManagedMutation(async () => {
         await ready;
+        if (useLocalStorage) throw new StorageOperationError('fallback-reload-required');
         const observedUI = gameState;
         const db = await openManagedGameDB();
         try {
@@ -1128,6 +1135,7 @@ export const importGameStateString = async (input) => {
         if (durableChecksum !== expectedChecksum) throw new StorageOperationError('stale-plan');
         let db;
         try {
+            if (useLocalStorage) throw new StorageOperationError('fallback-reload-required');
             db = await openManagedGameDB();
         } catch (error) {
             if (plan.customContent) throw error;

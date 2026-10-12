@@ -159,7 +159,9 @@
             announce('Token saved and validated', 'success');
             await loadBackups(trimmedToken);
         } catch (err) {
-            if (await clearTokenLocal())
+            if (err?.code === 'fallback-reload-required')
+                announce('Reload to reconcile saved progress, then retry Save.', 'error');
+            else if (await clearTokenLocal())
                 announce('Token validation failed; token cleared', 'error');
         } finally {
             savingToken = false;
