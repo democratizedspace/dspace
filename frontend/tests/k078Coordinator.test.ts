@@ -1989,8 +1989,10 @@ test('A02 combined export charges game and custom metadata as one envelope', asy
     expect(() =>
         actual(customContent, { kind: 'custom', limits: { jsonBytes: 300 } })
     ).not.toThrow();
-    vi.spyOn(prep, 'prepareImport').mockImplementation((input: any, options: any = {}) =>
-        actual(input, { ...options, limits: { jsonBytes: 300 } })
+    const budgets = await import('../src/utils/importBudgets.js');
+    const assertBudget = budgets.assertBackupBudget;
+    vi.spyOn(budgets, 'assertBackupBudget').mockImplementation((input: any) =>
+        assertBudget(input, { jsonBytes: 300 })
     );
     expect(() => common.exportGameStateString({ stateOverride: payload, customContent })).toThrow(
         /json-bytes/
