@@ -91,10 +91,6 @@
         }
     };
 
-    const requireImportDestination = async () => {
-        if (!(await destinationReady))
-            throw new Error('Import storage is unavailable. Reload and try again.');
-    };
     const markReady = () => {
         initializing = false;
         root?.setAttribute('data-hydrated', 'true');
@@ -226,7 +222,9 @@
         downloading = true;
         downloadingId = trimmedId === gistId ? 'manual' : trimmedId;
         try {
-            await requireImportDestination();
+            // The parsed backup determines whether custom storage is required.
+            // The coordinator preflights that store before any game write.
+            await destinationReady;
             await downloadGameStateFromGist(trimmedToken, trimmedId);
             const successLabel =
                 trimmedId === gistId ? 'Download successful' : 'Restore successful';
@@ -366,7 +364,7 @@
             </Chip>
             <Chip
                 text={downloading && downloadingId === 'manual' ? 'Downloading…' : 'Download'}
-                onClick={handleDownload}
+                onClick={() => handleDownload()}
                 disabled={initializing || downloading || savingToken}
             >
                 {#if downloading && downloadingId === 'manual'}

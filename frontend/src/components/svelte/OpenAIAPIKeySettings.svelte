@@ -27,12 +27,17 @@
         const trimmedApiKey = draftApiKey.trim();
         if (!trimmedApiKey) return;
 
-        await ready;
-        await saveCredential('openAI', trimmedApiKey);
-        apiKey = trimmedApiKey;
-        draftApiKey = '';
-        isEditing = !apiKey;
-        statusMessage = apiKey ? 'OpenAI API key saved.' : 'OpenAI API key cleared.';
+        try {
+            await ready;
+            await saveCredential('openAI', trimmedApiKey);
+            apiKey = trimmedApiKey;
+            draftApiKey = '';
+            isEditing = !apiKey;
+            statusMessage = 'OpenAI API key saved.';
+        } catch {
+            statusMessage =
+                'OpenAI API key save could not be confirmed. Check storage access and retry Save.';
+        }
     }
 
     async function deleteAPIKey() {

@@ -116,3 +116,25 @@ it('clears only the selected provider draft on a cross-tab notice and removes th
     expect(remove).toHaveBeenCalledWith('dspace-credential-cleared', expect.any(Function));
     remove.mockRestore();
 });
+
+it.each(['storage-lock-unavailable', 'mirror-incomplete'])(
+    'reports %s on Save and permits retry without claiming persistence',
+    async (code) => {
+        vi.mocked(loadGameState).mockReturnValue({ openAI: { apiKey: '' } });
+        vi.mocked(saveCredential)
+            .mockRejectedValueOnce(new Error(code))
+            .mockResolvedValueOnce(undefined);
+        const { findByLabelText, findByRole, findByText, queryByText } =
+            render(OpenAIAPIKeySettings);
+        const input = await findByLabelText(/openai api key/i);
+        await fireEvent.input(input, { target: { value: 'SENTINEL_SAVE_RETRY' } });
+        await fireEvent.click(await findByRole('button', { name: /save openai api key/i }));
+        expect(
+            await findByText(/save could not be confirmed. Check storage access and retry Save/i)
+        ).toBeInTheDocument();
+        expect(queryByText('OpenAI API key configured.')).not.toBeInTheDocument();
+        expect(input).toHaveValue('SENTINEL_SAVE_RETRY');
+        await fireEvent.click(await findByRole('button', { name: /save openai api key/i }));
+        expect(await findByText('OpenAI API key saved.')).toBeInTheDocument();
+    }
+);

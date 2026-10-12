@@ -9,6 +9,11 @@ const clearGitHubTokenMock = vi.fn();
 const clearCloudGistIdMock = vi.fn();
 const fetchBackupListMock = vi.fn();
 const validateTokenMock = vi.fn();
+const initializeCustomMock = vi.fn();
+const downloadMock = vi.fn();
+vi.mock('../../../utils/indexeddb.js', () => ({
+    initializeCustomContentForImportUI: (...args: unknown[]) => initializeCustomMock(...args),
+}));
 
 vi.mock('../../../utils/githubToken.js', () => ({
     ['clearGitHubToken']: (...args: unknown[]) => clearGitHubTokenMock(...args),
@@ -20,7 +25,7 @@ vi.mock('../../../utils/githubToken.js', () => ({
 
 vi.mock('../../../utils/cloudSync.js', () => ({
     clearCloudGistId: (...args: unknown[]) => clearCloudGistIdMock(...args),
-    downloadGameStateFromGist: vi.fn(),
+    downloadGameStateFromGist: (...args: unknown[]) => downloadMock(...args),
     fetchBackupList: (...args: unknown[]) => fetchBackupListMock(...args),
     uploadGameStateToGist: vi.fn(),
 }));
@@ -37,6 +42,8 @@ describe('Cloud Sync token save flow', () => {
         clearCloudGistIdMock.mockResolvedValue(undefined);
         fetchBackupListMock.mockResolvedValue([]);
         validateTokenMock.mockResolvedValue(true);
+        initializeCustomMock.mockResolvedValue(undefined);
+        downloadMock.mockResolvedValue(undefined);
     });
 
     afterEach(() => {
@@ -215,4 +222,28 @@ describe('Cloud Sync token save flow', () => {
         expect(getByTestId('save-token')).toBeEnabled();
         expect(getByLabelText(/GitHub Token/i)).toHaveValue('');
     });
+    it.each([false, true])(
+        'delegates restore requirements to the parsed backup when custom storage fails (custom=%s)',
+        async (custom) => {
+            initializeCustomMock.mockRejectedValueOnce(
+                new Error('synthetic custom storage unavailable')
+            );
+            if (custom) downloadMock.mockRejectedValueOnce(new Error('custom storage required'));
+            const { getByLabelText, getByRole, getByTestId } = render(Syncer);
+            const download = getByRole('button', { name: /^Download$/ });
+            await waitFor(() => expect(download).toBeEnabled());
+            await fireEvent.input(getByLabelText(/Gist ID/i), {
+                target: { value: 'synthetic-backup-id' },
+            });
+            await fireEvent.click(download);
+            await waitFor(() =>
+                expect(downloadMock).toHaveBeenCalledWith('', 'synthetic-backup-id')
+            );
+            await waitFor(() =>
+                expect(getByTestId(custom ? 'sync-error' : 'sync-success')).toHaveTextContent(
+                    custom ? 'Restore failed' : 'Download successful'
+                )
+            );
+        }
+    );
 });
