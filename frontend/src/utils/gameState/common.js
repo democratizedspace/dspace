@@ -590,6 +590,15 @@ export const ready = isBrowser
           readyResolved = true;
       });
 
+const publishCredentialNotice = (kind, type) => {
+    try {
+        // Reuse this tab's listening channel so it cannot receive its own notice.
+        credentialNotices?.postMessage({ type, kind, epoch: knownEpochs[kind].epoch });
+    } catch (error) {
+        logPersistenceIssue('Credential update notification unavailable.', error);
+    }
+};
+
 if (isBrowser && typeof window.BroadcastChannel === 'function') {
     const notices = new window.BroadcastChannel('dspace-credential-epochs-v1');
     credentialNotices = notices;
@@ -597,12 +606,14 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
         if (!['github', 'openAI'].includes(data?.kind) || !Number.isSafeInteger(data?.epoch))
             return;
         if (data.epoch < knownEpochs[data.kind].epoch) return;
+        if (data.type !== undefined && !['saved', 'cleared'].includes(data.type)) return;
+        const cleared = data.type !== 'saved';
         const dependency = {
             kind: data.kind,
             before: structuredClone(knownEpochs),
             authority: null,
             promise: null,
-            clearGeneration: ++clearGeneration,
+            clearGeneration: cleared ? ++clearGeneration : clearGeneration,
             refresh: true,
             beforeGameplay: gameplayChecksum(gameState),
             gameplayChecksum: null,
@@ -631,9 +642,12 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
                 }
                 if (authority[data.kind].epoch === data.epoch) {
                     window.dispatchEvent(
-                        new CustomEvent('dspace-credential-cleared', {
-                            detail: { kind: data.kind },
-                        })
+                        new CustomEvent(
+                            cleared ? 'dspace-credential-cleared' : 'dspace-credential-updated',
+                            {
+                                detail: { kind: data.kind },
+                            }
+                        )
                     );
                 }
             } finally {
@@ -645,9 +659,11 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
             })
             .finally(() => pendingCredentialSaves.delete(dependency));
         // Reserve the refresh dependency before publishing so subscribers can save safely.
-        gameState = scrubCredential(gameState, data.kind);
-        stampStateChecksum(gameState);
-        state.set(gameState);
+        if (cleared) {
+            gameState = scrubCredential(gameState, data.kind);
+            stampStateChecksum(gameState);
+            state.set(gameState);
+        }
     };
 }
 let writeQueue = Promise.resolve();
@@ -749,6 +765,17 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
         const result = serializeManagedMutation(async () => {
             await ready;
             if (useLocalStorage && !deliberateKind) return persistFallback();
+            if (predecessor) {
+                try {
+                    await predecessor.promise;
+                } catch (error) {
+                    // A strict transaction receipt remains usable when only its mirrors failed.
+                    if (!predecessor.order) throw error;
+                }
+            }
+            const inheritsPredecessor =
+                predecessor?.order &&
+                gameplayChecksum(capturedGameplayBase) === predecessor.gameplayChecksum;
             for (const dependency of credentialDependencies) {
                 try {
                     await dependency.promise;
@@ -758,6 +785,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     if (!['not-committed', 'committed'].includes(dependency.outcome)) throw error;
                 }
                 if (
+                    !(inheritsPredecessor && predecessor.order > dependency.order) &&
                     dependency.gameplayChecksum &&
                     dependency.beforeGameplay !== dependency.gameplayChecksum &&
                     gameplayChecksum(capturedGameplayBase) !== dependency.gameplayChecksum
@@ -776,14 +804,6 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                                   dependency.before[kind].epoch + (kind === dependency.kind ? 1 : 0)
                     );
                 if (canAdvance) capturedEpochs = structuredClone(dependency.authority);
-            }
-            if (predecessor) {
-                try {
-                    await predecessor.promise;
-                } catch (error) {
-                    // A strict transaction receipt remains usable when only its mirrors failed.
-                    if (!predecessor.order) throw error;
-                }
             }
             const completed = [...credentialDependencies, ...(predecessor ? [predecessor] : [])]
                 .filter((entry) => entry.order)
@@ -811,6 +831,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                 knownEpochs = credentialAuthority(receipt.meta);
                 queued.checksum = receipt.state._meta.checksum;
                 queued.lastUpdated = savedAt(receipt.state);
+                queued.gameplayChecksum = gameplayChecksum(receipt.state);
                 queued.order = ++managedCommitOrder;
                 durableChecksum = queued.checksum;
                 try {
@@ -937,6 +958,7 @@ export async function saveCredential(kind, value) {
                 durableChecksum = receipt.state._meta.checksum;
                 state.set(gameState);
             }
+            publishCredentialNotice(kind, 'saved');
             try {
                 mirrorManagedGame(receipt);
             } catch {
@@ -1012,11 +1034,7 @@ export async function clearCredential(kind) {
                     dependency.lastUpdated = savedAt(persisted.state);
                     dependency.order = ++managedCommitOrder;
                 }
-                if (isBrowser && typeof window.BroadcastChannel === 'function') {
-                    const notice = new window.BroadcastChannel('dspace-credential-epochs-v1');
-                    notice.postMessage({ kind, epoch: knownEpochs[kind].epoch });
-                    notice.close();
-                }
+                publishCredentialNotice(kind, 'cleared');
                 if (isBrowser)
                     window.dispatchEvent(
                         new CustomEvent('dspace-credential-cleared', { detail: { kind } })

@@ -1292,3 +1292,140 @@ test('C02 Clear removes only a malformed backup mirror when no durable backup ex
     expect(localStorage.getItem('gameStateBackup')).toBeNull();
     expect(localStorage.getItem('unrelated-synthetic-setting')).toBe('keep');
 });
+
+test.each([
+    [false, false],
+    [false, true],
+    [true, false],
+    [true, true],
+])(
+    'C04 typed Save notice preserves direct gameplay and drafts (remote=%s refreshed=%s)',
+    async (remoteProgress, afterRefresh) => {
+        await common.closeGameStateDatabaseForTesting();
+        const channels: any[] = [],
+            messages: any[] = [];
+        class TestChannel {
+            onmessage: any;
+            constructor() {
+                channels.push(this);
+            }
+            postMessage(data: any) {
+                messages.push(data);
+            }
+            close() {}
+        }
+        vi.stubGlobal('BroadcastChannel', TestChannel);
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        await common.saveCredential('github', 'SENTINEL_NOTICE_OLD');
+        expect(channels).toHaveLength(1);
+        const origin = common;
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        if (remoteProgress)
+            await remote.saveGameState({
+                ...remote.loadGameState(),
+                inventory: { remoteNoticeProgress: 44 },
+            });
+        await remote.saveCredential('github', 'SENTINEL_NOTICE_NEW');
+        await remote.closeGameStateDatabaseForTesting();
+        const notice = messages.at(-1);
+        expect(notice).toEqual({ type: 'saved', kind: 'github', epoch: expect.any(Number) });
+        const cleared = vi.fn();
+        window.addEventListener('dspace-credential-cleared', cleared);
+        channels[0].onmessage({ data: notice });
+        expect(origin.loadGameState().github.token).toBe('SENTINEL_NOTICE_OLD');
+        if (afterRefresh) await origin.flushGameStateWritesForTesting();
+        const next = origin.loadGameState();
+        next.inventory.directNoticeProgress = 45;
+        const saving = origin.saveGameState(next);
+        if (remoteProgress && !afterRefresh)
+            await expect(saving).rejects.toMatchObject({ code: 'stale-state' });
+        else {
+            await saving;
+            expect(origin.loadGameState().inventory.directNoticeProgress).toBe(45);
+        }
+        expect(origin.loadGameState().github.token).toBe('SENTINEL_NOTICE_NEW');
+        if (remoteProgress) expect(origin.loadGameState().inventory.remoteNoticeProgress).toBe(44);
+        expect(cleared).not.toHaveBeenCalled();
+        window.removeEventListener('dspace-credential-cleared', cleared);
+    }
+);
+
+test('C04 consecutive saves from a refreshed subscriber inherit only a validated predecessor', async () => {
+    await common.closeGameStateDatabaseForTesting();
+    const channels: any[] = [],
+        messages: any[] = [];
+    class TestChannel {
+        onmessage: any;
+        constructor() {
+            channels.push(this);
+        }
+        postMessage(data: any) {
+            messages.push(data);
+        }
+        close() {}
+    }
+    vi.stubGlobal('BroadcastChannel', TestChannel);
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    await common.saveCredential('github', 'SENTINEL_SUBSCRIBER_OLD');
+    const origin = common;
+    vi.resetModules();
+    const remote = await import('../src/utils/gameState/common.js');
+    await remote.ready;
+    await remote.saveGameState({ ...remote.loadGameState(), inventory: { subscriberRemote: 77 } });
+    await remote.saveCredential('github', 'SENTINEL_SUBSCRIBER_NEW');
+    await remote.closeGameStateDatabaseForTesting();
+    let writes: Promise<any>[] | undefined;
+    const unsubscribe = origin.state.subscribe((value: any) => {
+        if (!writes && value.github?.token === 'SENTINEL_SUBSCRIBER_NEW') {
+            writes = [];
+            const first = origin.loadGameState();
+            first.inventory.subscriberLocal = 1;
+            writes.push(origin.saveGameState(first));
+            const second = origin.loadGameState();
+            second.inventory.subscriberLocal = 2;
+            writes.push(origin.saveGameState(second));
+        }
+    });
+    channels[0].onmessage({ data: messages.at(-1) });
+    await origin.flushGameStateWritesForTesting();
+    expect(writes).toHaveLength(2);
+    await Promise.all(writes!);
+    unsubscribe();
+    expect(origin.loadGameState().inventory).toMatchObject({
+        subscriberRemote: 77,
+        subscriberLocal: 2,
+    });
+});
+
+test('C04 a predecessor cannot bypass newer remote gameplay observed by a later credential receipt', async () => {
+    const first = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { predecessorLocal: 1 },
+    });
+    const remoteWrite = storage.serializeManagedMutation(async () => {
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        persisted.state.inventory.remoteAfterPredecessor = 99;
+        persisted.state._meta.checksum = 'synthetic-newer-remote-checksum';
+        await storage.strictTransaction(db, ['state'], 'readwrite', (tx: any) =>
+            tx.objectStore('state').put(persisted.state, 'root')
+        );
+        db.close();
+    });
+    const credential = common.saveCredential('github', 'SENTINEL_LATER_RECEIPT');
+    const next = common.loadGameState();
+    next.inventory.predecessorLocal = 2;
+    const second = common.saveGameState(next);
+    const rejected = expect(second).rejects.toMatchObject({ code: 'stale-state' });
+    await Promise.all([first, remoteWrite, credential, rejected]);
+    expect(common.loadGameState().inventory).toMatchObject({
+        predecessorLocal: 1,
+        remoteAfterPredecessor: 99,
+    });
+});

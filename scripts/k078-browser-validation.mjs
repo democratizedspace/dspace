@@ -199,6 +199,48 @@ try {
       stage = 'cross-tab stale capture';
       const second = await context.newPage();
       await second.goto(origin + '/k078-harness');
+      stage = 'cross-tab credential Save refresh';
+      await second.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        await common.ready;
+        globalThis.saveNoticeClearCount = 0;
+        globalThis.countSaveNoticeClear = () =>
+          globalThis.saveNoticeClearCount++;
+        window.addEventListener(
+          'dspace-credential-cleared',
+          globalThis.countSaveNoticeClear
+        );
+        globalThis.savedNotice = new Promise((resolve) =>
+          window.addEventListener('dspace-credential-updated', resolve, {
+            once: true,
+          })
+        );
+      });
+      await page.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        await common.saveCredential('github', 'SENTINEL_CROSS_TAB');
+      });
+      await second.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        await globalThis.savedNotice;
+        const next = common.loadGameState();
+        next.inventory.savedNoticeProgress = 1;
+        await common.saveGameState(next);
+        if (common.loadGameState().inventory.savedNoticeProgress !== 1)
+          throw new Error('credential Save lost direct gameplay');
+        if (globalThis.saveNoticeClearCount !== 0)
+          throw new Error('credential Save invoked Clear draft behavior');
+        window.removeEventListener(
+          'dspace-credential-cleared',
+          globalThis.countSaveNoticeClear
+        );
+      });
+      await page.reload();
+      await page.evaluate(async () => {
+        const common = await import('/frontend/src/utils/gameState/common.js');
+        await common.ready;
+      });
+      stage = 'cross-tab stale capture';
       await second.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
         await common.ready;
@@ -288,6 +330,7 @@ try {
       }, mirroredEpoch);
       await page.evaluate(async () => {
         const common = await import('/frontend/src/utils/gameState/common.js');
+        await common.flushGameStateWritesForTesting();
         common.syncGameStateFromLocalIfStale();
         const first = common.loadGameState();
         first.inventory.crossTabGameplay = 1;
