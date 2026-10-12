@@ -329,14 +329,22 @@ describe('K078 synthetic regressions', () => {
         ).rejects.toThrow('stale-credential-epoch');
         db.close();
     });
-    test('C03 durable intent leaves malformed owned storage incomplete and gates launches', async () => {
+    test('C03 durable intent gates launches until malformed mirror repair can be written', async () => {
         const db = await seed();
         localStorage.setItem('gameStateBackup', '{bad');
+        const blocked = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+            throw new Error('synthetic quota');
+        });
         expect((await clearManagedCredential(db, 'github', stamp, lightweight)).status).toBe(
             'incomplete'
         );
         expect(credentialAuthority((await readManagedGame(db)).meta).github.pending).toBe(true);
         await expect(assertCredentialLaunch('github', 'SENTINEL_GITHUB_A')).rejects.toThrow();
+        blocked.mockRestore();
+        expect((await clearManagedCredential(db, 'github', stamp, lightweight)).status).toBe(
+            'complete'
+        );
+        expect(credentialAuthority((await readManagedGame(db)).meta).github.pending).toBe(false);
         db.close();
     });
     test('C04 deliberate later credential save advances epoch and old cached values cannot launch', async () => {

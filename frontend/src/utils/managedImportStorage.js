@@ -302,10 +302,18 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
     }
     try {
         const local = {};
+        const malformed = new Set();
         for (const key of ['gameState', 'gameStateBackup']) {
             const text = localStorage.getItem(key);
             if (text !== null) {
-                local[key] = scrubCredential(JSON.parse(text), kind);
+                let parsed;
+                try {
+                    parsed = JSON.parse(text);
+                } catch {
+                    malformed.add(key);
+                    continue;
+                }
+                local[key] = scrubCredential(parsed, kind);
                 stamp(local[key]);
             }
         }
@@ -332,6 +340,14 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
                     done(values);
                 });
         });
+        // A broken owned mirror must not block scrubbing the healthy durable stores.
+        // Repair from the corresponding scrubbed durable copy, or remove only that
+        // unusable mirror when there is no durable counterpart. No raw quarantine.
+        for (const key of malformed) {
+            const value = snapshot[key === 'gameState' ? 'state' : 'backup'];
+            if (value === undefined) localStorage.removeItem(key);
+            else local[key] = value;
+        }
         for (const [key, value] of Object.entries(local))
             localStorage.setItem(key, JSON.stringify(value));
         const localMeta = {
@@ -347,6 +363,9 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
             localStorage.getItem('gameStateChecksum') !== (localMeta.checksum || '')
         )
             throw error('clear-readback');
+        for (const key of malformed)
+            if (!(key in local) && localStorage.getItem(key) !== null)
+                throw error('clear-readback');
         const verified = await readManagedGame(db);
         for (const name of ['state', 'backup'])
             if (JSON.stringify(verified[name]) !== JSON.stringify(snapshot[name]))

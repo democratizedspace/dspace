@@ -10,7 +10,7 @@ Provisional caps: 24 MiB transport, 16 MiB JSON, depth 64, 100,000 nodes, 256 or
 
 Static PNG, JPEG, GIF and WebP receive structural metadata validation before browser rendering; animation and SVG reject. This does not replace a complete codec decoder. Routes are canonical internal routes; remote images require HTTPS, or same-origin URLs. Credentials in URLs, controls, backslashes and protocol-relative URLs reject. Literal angle-bracket defenses remain. Existing tiny PNG test fixtures had invalid IDAT CRCs and were replaced with generated synthetic images.
 
-Imported provider configuration and credential authority cannot replace destination credentials. Export filtering covers the entire game/custom-content envelope using the existing known-sensitive-field policy.
+Imported provider configuration and credential authority cannot replace destination credentials. Export filtering covers the entire game/custom-content envelope using the existing known-sensitive-field policy. That policy matches substrings (including `auth`), so extension fields such as `author` are also omitted. K078 preserves that filtering contract; narrowing it requires a separate reviewed policy change.
 
 ## Commit and recovery contract
 

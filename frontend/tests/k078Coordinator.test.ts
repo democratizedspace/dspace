@@ -1242,3 +1242,49 @@ test.each(['requirement', 'operation'])(
         custom.db.close();
     }
 );
+
+test.each([
+    ['github', 'gameState'],
+    ['github', 'gameStateBackup'],
+    ['openAI', 'gameState'],
+    ['openAI', 'gameStateBackup'],
+])(
+    'C02 Clear repairs malformed owned %s %s mirror from scrubbed durable data',
+    async (kind, key) => {
+        await common.saveCredential('github', 'SENTINEL_MALFORMED_GITHUB');
+        await common.saveCredential('openAI', 'SENTINEL_MALFORMED_OPENAI');
+        await common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { preservedMalformed: 31 },
+        });
+        localStorage.setItem('unrelated-synthetic-setting', 'keep');
+        localStorage.setItem(key, '{invalid synthetic JSON');
+        await expect(common.clearCredential(kind)).resolves.toMatchObject({ status: 'complete' });
+        const db = await storage.openManagedGameDB();
+        const durable = await storage.readManagedGame(db);
+        expect(JSON.parse(localStorage.getItem(key)!)).toEqual(
+            durable[key === 'gameState' ? 'state' : 'backup']
+        );
+        expect(durable.state[kind]?.[kind === 'github' ? 'token' : 'apiKey']).toBeUndefined();
+        expect(
+            durable.state[kind === 'github' ? 'openAI' : 'github'][
+                kind === 'github' ? 'apiKey' : 'token'
+            ]
+        ).toContain('SENTINEL_MALFORMED');
+        expect(durable.state.inventory.preservedMalformed).toBe(31);
+        expect(localStorage.getItem('unrelated-synthetic-setting')).toBe('keep');
+        expect(durable.meta.credentialEpochs[kind].pending).toBe(false);
+        db.close();
+        await expect(
+            common.saveCredential(kind, 'SENTINEL_NEW_AFTER_REPAIR')
+        ).resolves.toMatchObject({ status: 'complete' });
+    }
+);
+
+test('C02 Clear removes only a malformed backup mirror when no durable backup exists', async () => {
+    localStorage.setItem('gameStateBackup', '{invalid synthetic JSON');
+    localStorage.setItem('unrelated-synthetic-setting', 'keep');
+    await expect(common.clearCredential('github')).resolves.toMatchObject({ status: 'complete' });
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+    expect(localStorage.getItem('unrelated-synthetic-setting')).toBe('keep');
+});
