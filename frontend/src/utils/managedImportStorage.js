@@ -306,15 +306,13 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
         for (const key of ['gameState', 'gameStateBackup']) {
             const text = localStorage.getItem(key);
             if (text !== null) {
-                let parsed;
                 try {
-                    parsed = JSON.parse(text);
+                    const scrubbed = scrubCredential(JSON.parse(text), kind);
+                    stamp(scrubbed);
+                    local[key] = scrubbed;
                 } catch {
                     malformed.add(key);
-                    continue;
                 }
-                local[key] = scrubCredential(parsed, kind);
-                stamp(local[key]);
             }
         }
         const snapshot = await strictTransaction(db, gameStores, 'readwrite', (tx, req, done) => {

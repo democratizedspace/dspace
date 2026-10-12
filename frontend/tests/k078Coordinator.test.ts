@@ -1243,14 +1243,18 @@ test.each(['requirement', 'operation'])(
     }
 );
 
-test.each([
-    ['github', 'gameState'],
-    ['github', 'gameStateBackup'],
-    ['openAI', 'gameState'],
-    ['openAI', 'gameStateBackup'],
-])(
-    'C02 Clear repairs malformed owned %s %s mirror from scrubbed durable data',
-    async (kind, key) => {
+test.each(
+    [
+        ['github', 'gameState'],
+        ['github', 'gameStateBackup'],
+        ['openAI', 'gameState'],
+        ['openAI', 'gameStateBackup'],
+    ].flatMap(([kind, key]) =>
+        ['{invalid synthetic JSON', '"corrupt"', '{"payload":null}'].map((raw) => [kind, key, raw])
+    )
+)(
+    'C02 Clear repairs malformed owned %s %s mirror from scrubbed durable data (%s)',
+    async (kind, key, raw) => {
         await common.saveCredential('github', 'SENTINEL_MALFORMED_GITHUB');
         await common.saveCredential('openAI', 'SENTINEL_MALFORMED_OPENAI');
         await common.saveGameState({
@@ -1258,7 +1262,7 @@ test.each([
             inventory: { preservedMalformed: 31 },
         });
         localStorage.setItem('unrelated-synthetic-setting', 'keep');
-        localStorage.setItem(key, '{invalid synthetic JSON');
+        localStorage.setItem(key, raw);
         await expect(common.clearCredential(kind)).resolves.toMatchObject({ status: 'complete' });
         const db = await storage.openManagedGameDB();
         const durable = await storage.readManagedGame(db);
