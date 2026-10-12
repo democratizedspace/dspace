@@ -1,0 +1,33 @@
+# K080 inert privacy preparation
+
+`frontend/src/utils/chatPrivacyPreparation.js` is an unused, dependency-free pure helper. Only its synthetic direct-import tests consume it. It changes no production behavior, sends nothing, reads no live application state, and grants no consent, credential authority or recipient trust. Runtime integration and deployment require separate approval.
+
+## Explicit input contract
+
+Call `prepareChatPrivacyRequest(input, catalog, policy)` with plain data. The caller supplies `latestText`, `labels: { provider, model, route }`, a policy `{ id, text, limits? }`, and an injected built-in catalog. Labels are copied as data, not parsed, canonicalized, authenticated or treated as permission. Policy text and catalog provenance are the future caller's responsibility. Do not pass application credential/configuration objects as labels, policy text or catalog labels.
+
+Optional categories are off unless selected. False or absent selections exclude the category without reading its source. This helper does not inspect arbitrary game state or derive selections from debug flags, saved settings or import validation.
+
+- `selection.player` names exact ID arrays in `inventory`, `quests`, `processes` and `resources`. Corresponding `player` and `catalog` groups contain record arrays. Catalog records supply `{ id, title }`; player records supply only `count` for inventory/resources, `finished` for quests, or `status` (`running`/`paused`) for processes. Counts must be finite and nonnegative. Unknown built-in IDs and missing rows are omitted, never used as fallback text. Supplied player labels, notes, timestamps and extra keys are excluded.
+- `selection.custom` is an array of `{ kind, id, fields }`, where kind is `item`, `quest` or `process`, and fields is an explicit subset of `title` and `description`. `custom[kind]` supplies record arrays. The selected identifier is included; no descriptive field is included implicitly. An exact kind/ID match is required. Unknown field selections reject rather than permitting credentials, configuration or arbitrary object traversal.
+- `selection.history` lists exact message IDs. `history` supplies chronological `{ id, role, content }` records, with selected roles limited to `user` and `assistant`. Unchecked content is excluded. The caller must supply and establish current session/persona provenance; this inert helper neither reads sessions nor enforces consent or late-response acceptance.
+
+No RAG, provider adapter, raw-debug export, UI or settings migration is included. The latest deliberately typed text and explicitly selected custom/history text can contain private information; this helper is not a secret detector. Ignored application-held credential/configuration fields never enter its projection.
+
+## Provisional bounds and deterministic shaping
+
+Defaults are 8 KiB latest text, 8 KiB per message, 32 KiB aggregate message content, 16 messages, 4 KiB policy, 4 KiB player context, 4 KiB custom context, four history messages/8 KiB history, 32 records per player/custom category, and 64 KiB serialized prepared data. Injected limits can only reduce these defaults. Input lists have a 10,000-record structural ceiling, selections 256 entries, identifiers 256 UTF-8 bytes, provider/model labels and policy ID 256 bytes, and route label 2,048 bytes. These are provisional local application limits, not device guarantees, token estimates or K069 protocol limits.
+
+Policy and latest text reserve capacity first; if they cannot fit, preparation rejects without truncating either. Then player groups in the order above, selected custom records in selection order, and selected history fit remaining capacity. History considers newest selected messages first and emits retained messages in original chronology. Whole optional records/messages that cannot fit are omitted; later smaller records can still fit. Player/custom JSON punctuation and escaping count in their message/category budgets; complete prepared-data JSON escaping, labels and metadata count in the separate serialization budget. UTF-8 bytes, not UTF-16 character counts, determine capacity. Ill-formed surrogate strings reject.
+
+The result contains deeply frozen `data`, its stable local JSON `serialized`, exact content/serialization byte counts, and aggregated `{ category, reason, count }` omission records. Reasons describe missing/unknown IDs and shaping caps without echoing excluded values. Unselected categories are absent from messages; omission counts describe attempted selections only. Equivalent source object-key order does not alter serialization; explicit selection order remains meaningful. This serialization is an equality/mutation aid only, not cryptographic canonicalization, authentication, a consent receipt or a provider wire request. Diagnostics are local; they are not automatically transmitted or logged.
+
+Source objects are not retained or mutated. Own data fields are read explicitly; selected accessors, duplicate IDs/selections, malformed values and unsupported types reject with fixed error codes. Inputs must be ordinary plain data, not hostile JavaScript proxies or executable objects. Future callers must separately validate their trust boundary.
+
+## Validation and excluded integration
+
+`frontend/tests/chatPrivacyPreparation.test.ts` uses inline synthetic fixtures and inert `example.invalid` labels. It covers default exclusion, allowlisted player/custom fields, built-in versus unknown IDs, exact history, UTF-8 boundaries, serialized escaping, deterministic shaping, immutable detached outputs and forbidden application-held credential/configuration canaries. No live saves, credentials, provider calls, sockets, browser profiles, media or crypto vectors are required.
+
+The normal repository test glob discovers this new suite without configuration changes. Local checks must use existing tools with network denied. The full pre-PR runner includes browser bootstrap and socket-based E2E, and `audit:ci` includes a package-lock installation; these commands are outside this slice's local execution boundary and must be reported as not executed, not as passing. Unchanged repository CI supplies its usual broader validation. No dependency, lockfile, workflow, production module or existing test configuration changes accompany this helper.
+
+Future runtime work needs independent review of exact preview/consent, provider/proxy shaping, session acceptance, K078 credential launch authority, K069 recipient/crypto contracts, response bounds, renderer/media policy and cache repair. K078 storage and credential code remain unchanged. This helper does not fix current runtime propagation or establish any cross-tab, remote-recipient or deployed privacy guarantee.
