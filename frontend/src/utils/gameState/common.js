@@ -1135,7 +1135,9 @@ export const importGameStateString = async (input) => {
             // neither imported nor previously cached credentials can be enabled.
             assertRecoveryBudget(gameState);
             const next = validateGameState(structuredClone(plan.game));
+            next[META_KEY].lastUpdated = Math.max(Date.now(), savedAt(gameState) + 1);
             const backup = scrubCredential(scrubCredential(gameState, 'github'), 'openAI');
+            stampStateChecksum(next);
             stampStateChecksum(backup);
             mirrorManagedGame({ state: next, backup, meta: buildLightweightSnapshot(next) });
             gameState = next;
@@ -1158,6 +1160,7 @@ export const importGameStateString = async (input) => {
                 throw new StorageOperationError('stale-plan');
             const authority = credentialAuthority(previous.meta);
             const next = validateGameState(structuredClone(plan.game));
+            next[META_KEY].lastUpdated = Math.max(Date.now(), savedAt(gameState) + 1);
             for (const kind of ['github', 'openAI'])
                 if (previous.state?.[kind]) next[kind] = structuredClone(previous.state[kind]);
             stampStateChecksum(next);

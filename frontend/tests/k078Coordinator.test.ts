@@ -695,3 +695,44 @@ test('A03 exported images use one representation and round-trip at the aggregate
     ).toThrow('image-total-bytes');
     expect(fetch).not.toHaveBeenCalled();
 });
+
+test.each(['unavailable', 'mirror-failed'])(
+    'B05 old backup imports survive recovery/reload after %s storage',
+    async (mode) => {
+        await common.saveCredential('github', 'SENTINEL_IMPORT_RELOAD');
+        const beforeTime = common.loadGameState()._meta.lastUpdated;
+        vi.spyOn(Date, 'now').mockReturnValue(beforeTime - 10000);
+        const fault =
+            mode === 'unavailable'
+                ? vi
+                      .spyOn(storage, 'openManagedGameDB')
+                      .mockRejectedValueOnce(new Error('synthetic unavailable'))
+                : vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                      throw new Error('synthetic mirror failure');
+                  });
+        const imported = common.importGameStateString(
+            JSON.stringify({ inventory: { restoredProgress: 97 }, _meta: { lastUpdated: 1 } })
+        );
+        if (mode === 'unavailable')
+            await expect(imported).resolves.toMatchObject({
+                status: 'best-effort',
+                credentialsDisabled: true,
+            });
+        else
+            await expect(imported).rejects.toMatchObject({
+                code: 'mirror-incomplete',
+                committed: ['game'],
+            });
+        expect(common.loadGameState()._meta.lastUpdated).toBeGreaterThan(beforeTime);
+        fault.mockRestore();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.restoredProgress).toBe(97);
+        expect(common.loadGameState().github.token).toBe('SENTINEL_IMPORT_RELOAD');
+        const db = await storage.openManagedGameDB();
+        expect((await storage.readManagedGame(db)).state.inventory.restoredProgress).toBe(97);
+        db.close();
+    }
+);
