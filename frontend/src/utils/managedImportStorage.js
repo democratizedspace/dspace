@@ -372,11 +372,20 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
     } catch {
         return { status: 'not-started', committed: [] };
     }
+    const committed = ['clear-intent'];
     try {
         const local = {};
+        let unreadableMirror = false;
         const malformed = new Set();
         for (const key of ['gameState', 'gameStateBackup']) {
-            const text = localStorage.getItem(key);
+            let text;
+            try {
+                text = localStorage.getItem(key);
+            } catch {
+                // Preserve unknown mirror contents; still scrub every accessible copy.
+                unreadableMirror = true;
+                continue;
+            }
             if (text !== null) {
                 try {
                     const scrubbed = scrubCredential(JSON.parse(text), kind);
@@ -410,6 +419,7 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
                     done(values);
                 });
         });
+        committed.push('game');
         // A broken owned mirror must not block scrubbing the healthy durable stores.
         // Repair from the corresponding scrubbed durable copy, or remove only that
         // unusable mirror when there is no durable counterpart. No raw quarantine.
@@ -440,6 +450,7 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
         for (const name of ['state', 'backup'])
             if (JSON.stringify(verified[name]) !== JSON.stringify(snapshot[name]))
                 throw error('clear-readback');
+        if (unreadableMirror) throw error('clear-readback');
         await strictTransaction(db, ['meta'], 'readwrite', (tx, req) => {
             req(tx.objectStore('meta').get('root'), (meta) => {
                 const authority = credentialAuthority(meta);
@@ -449,7 +460,7 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
         });
         return { status: 'complete', committed: ['game', 'mirrors'], snapshot: verified };
     } catch {
-        return { status: 'incomplete', committed: ['clear-intent'] };
+        return { status: 'incomplete', committed };
     }
 }
 

@@ -2263,3 +2263,66 @@ test.each([false, true])(
         if (!replaceDependent) expect(after.snapshot.processes).toEqual(before.snapshot.processes);
     }
 );
+
+test.each(
+    ['github', 'openAI'].flatMap((kind) =>
+        ['gameState', 'gameStateBackup', 'all'].map((blockedKey) => ({ kind, blockedKey }))
+    )
+)(
+    'C02 Clear scrubs durable $kind copies despite unreadable $blockedKey mirrors',
+    async ({ kind, blockedKey }) => {
+        await common.saveCredential('github', 'SENTINEL_READ_GITHUB');
+        await common.saveCredential('openAI', 'SENTINEL_READ_OPENAI');
+        await common.saveGameState({ ...common.loadGameState(), inventory: { keepDurable: 23 } });
+        const mirror = { ...common.loadGameState(), inventory: { newerMirrorOnly: 41 } };
+        localStorage.setItem('gameState', JSON.stringify(mirror));
+        localStorage.setItem('gameStateBackup', JSON.stringify(mirror));
+        localStorage.setItem('unrelated-read-setting', 'keep');
+        const originalRead = Storage.prototype.getItem;
+        const originals = Object.fromEntries(
+            ['gameState', 'gameStateBackup'].map((key) => [
+                key,
+                originalRead.call(localStorage, key),
+            ])
+        );
+        const blocked = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (key) {
+            if (blockedKey === 'all' || key === blockedKey)
+                throw new Error('synthetic read denied');
+            return originalRead.call(this, key);
+        });
+        const removed = kind === 'github' ? 'SENTINEL_READ_GITHUB' : 'SENTINEL_READ_OPENAI';
+        const kept = kind === 'github' ? 'SENTINEL_READ_OPENAI' : 'SENTINEL_READ_GITHUB';
+        for (let retry = 0; retry < 2; retry++) {
+            await expect(common.clearCredential(kind)).resolves.toEqual({
+                status: 'incomplete',
+                committed: ['clear-intent', 'game'],
+            });
+            const db = await storage.openManagedGameDB();
+            const durable = await storage.readManagedGame(db);
+            db.close();
+            expect(JSON.stringify(durable)).not.toContain(removed);
+            expect(JSON.stringify(durable)).toContain(kept);
+            expect(durable.state.inventory.keepDurable).toBe(23);
+            expect(durable.meta.credentialEpochs[kind].pending).toBe(true);
+            expect(JSON.stringify(common.loadGameState())).not.toContain(removed);
+            await expect(storage.assertCredentialLaunch(kind, removed)).rejects.toThrow();
+        }
+        for (const key of ['gameState', 'gameStateBackup']) {
+            const raw = originalRead.call(localStorage, key);
+            if (blockedKey === 'all' || key === blockedKey) expect(raw).toBe(originals[key]);
+            else expect(raw).not.toContain(removed);
+        }
+        blocked.mockRestore();
+        await expect(common.clearCredential(kind)).resolves.toMatchObject({ status: 'complete' });
+        for (const key of ['gameState', 'gameStateBackup']) {
+            const raw = localStorage.getItem(key)!;
+            expect(raw).not.toContain(removed);
+            expect(raw).toContain(kept);
+            expect(JSON.parse(raw).inventory.newerMirrorOnly).toBe(41);
+        }
+        expect(localStorage.getItem('unrelated-read-setting')).toBe('keep');
+        const db = await storage.openManagedGameDB();
+        expect((await storage.readManagedGame(db)).meta.credentialEpochs[kind].pending).toBe(false);
+        db.close();
+    }
+);
