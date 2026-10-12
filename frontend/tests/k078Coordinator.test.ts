@@ -285,8 +285,7 @@ test('B02 rejected predecessor restores the latest optimistic gameplay snapshot'
     expect(common.loadGameState().inventory).toEqual(before.inventory);
 });
 
-test('C04 rejected credential dependency restores optimistic gameplay', async () => {
-    const before = common.loadGameState();
+test('C04 aborted credential transaction does not discard queued gameplay', async () => {
     vi.spyOn(storage, 'commitManagedGame').mockRejectedValueOnce(
         new Error('synthetic credential failure')
     );
@@ -295,8 +294,10 @@ test('C04 rejected credential dependency restores optimistic gameplay', async ()
     next.inventory.synthetic = 51;
     const gameplay = common.saveGameState(next);
     const results = await Promise.allSettled([credential, gameplay]);
-    expect(results.every((result) => result.status === 'rejected')).toBe(true);
-    expect(common.loadGameState().inventory).toEqual(before.inventory);
+    expect(results[0].status).toBe('rejected');
+    expect(results[1].status).toBe('fulfilled');
+    expect(common.loadGameState().inventory.synthetic).toBe(51);
+    expect(common.loadGameState().github?.token).toBeUndefined();
 });
 
 test('C02 legacy QA cleanup preserves a V2 save and restores its skip marker', async () => {
@@ -974,3 +975,71 @@ test('B05 a failed queued credential Save does not discard later fallback gamepl
     expect(JSON.parse(localStorage.getItem('gameState')!).inventory.fallbackCredential).toBe(502);
     expect(common.loadGameState().github?.token).toBeUndefined();
 });
+
+test.each([false, true])(
+    'B05 startup mirror failure retains working IndexedDB authority (reconcile=%s)',
+    async (reconcile) => {
+        await common.saveCredential('github', 'SENTINEL_STARTUP_MIRROR');
+        if (reconcile) {
+            const local = common.loadGameState();
+            local.inventory.startupProgress = 601;
+            local._meta.lastUpdated += 100;
+            localStorage.setItem('gameState', JSON.stringify(local));
+        }
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        const fault = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+            throw new Error('synthetic localStorage unavailable');
+        });
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.isUsingLocalStorage()).toBe(false);
+        expect(common.loadGameState().github.token).toBe('SENTINEL_STARTUP_MIRROR');
+        if (reconcile) expect(common.loadGameState().inventory.startupProgress).toBe(601);
+        const next = common.loadGameState();
+        next.inventory.startupProgress = 602;
+        await expect(common.saveGameState(next)).rejects.toMatchObject({
+            code: 'mirror-incomplete',
+            committed: ['game'],
+        });
+        const db = await storage.openManagedGameDB();
+        expect((await storage.readManagedGame(db)).state.inventory.startupProgress).toBe(602);
+        db.close();
+        fault.mockRestore();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.startupProgress).toBe(602);
+    }
+);
+
+test.each(['unavailable', 'mirror-failed'])(
+    'C03 failed credential Save (%s) does not poison queued gameplay',
+    async (mode) => {
+        await common.saveCredential('github', 'SENTINEL_OLD_DEPENDENCY');
+        if (mode === 'unavailable')
+            vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+                new Error('synthetic unavailable')
+            );
+        else
+            vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                throw new Error('synthetic mirror failure');
+            });
+        const credential = common.saveCredential('github', 'SENTINEL_NEW_DEPENDENCY');
+        const denied = expect(credential).rejects.toThrow();
+        const gameplay = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { afterCredentialFailure: 701 },
+        });
+        await denied;
+        await expect(gameplay).resolves.toMatchObject({ status: 'complete' });
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        expect(persisted.state.inventory.afterCredentialFailure).toBe(701);
+        expect(persisted.state.github.token).toBe(
+            mode === 'unavailable' ? 'SENTINEL_OLD_DEPENDENCY' : 'SENTINEL_NEW_DEPENDENCY'
+        );
+        db.close();
+    }
+);

@@ -539,7 +539,14 @@ export const ready = isBrowser
                       });
                       gameState = receipt.state;
                       durableChecksum = gameState._meta.checksum;
-                      mirrorManagedGame(receipt);
+                      try {
+                          mirrorManagedGame(receipt);
+                      } catch (error) {
+                          logPersistenceIssue(
+                              'Startup mirrors incomplete; IndexedDB remains authoritative.',
+                              error
+                          );
+                      }
                   }
                   state.set(gameState);
                   loadedFromPersistence = true;
@@ -555,11 +562,18 @@ export const ready = isBrowser
                       );
                   });
               });
-              localStorage.setItem(
-                  LS_LIGHTWEIGHT_KEY,
-                  JSON.stringify({ ...lightweight, credentialEpochs: knownEpochs })
-              );
-              writeChecksumMarker(gameState[META_KEY].checksum);
+              try {
+                  localStorage.setItem(
+                      LS_LIGHTWEIGHT_KEY,
+                      JSON.stringify({ ...lightweight, credentialEpochs: knownEpochs })
+                  );
+                  writeChecksumMarker(gameState[META_KEY].checksum);
+              } catch (error) {
+                  logPersistenceIssue(
+                      'Startup mirrors incomplete; IndexedDB remains authoritative.',
+                      error
+                  );
+              }
           } catch (err) {
               await loadCredentialFreeFallback();
           } finally {
@@ -729,7 +743,13 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             await ready;
             if (useLocalStorage && !deliberateKind) return persistFallback();
             for (const dependency of credentialDependencies) {
-                await dependency.promise;
+                try {
+                    await dependency.promise;
+                } catch (error) {
+                    // A failed credential attempt cannot poison later gameplay. A committed
+                    // attempt still supplies its receipt; an aborted attempt changes no authority.
+                    if (!['not-committed', 'committed'].includes(dependency.outcome)) throw error;
+                }
                 if (
                     dependency.gameplayChecksum &&
                     dependency.beforeGameplay !== dependency.gameplayChecksum &&
@@ -867,6 +887,7 @@ export async function saveCredential(kind, value) {
         gameplayChecksum: null,
         authority: null,
         promise: null,
+        outcome: 'pending',
     };
     pendingCredentialSaves.add(dependency);
     dependency.promise = serializeManagedMutation(async () => {
@@ -888,6 +909,7 @@ export async function saveCredential(kind, value) {
                 stamp: stampStateChecksum,
                 lightweight: buildLightweightSnapshot,
             });
+            dependency.outcome = 'committed';
             knownEpochs = credentialAuthority(receipt.meta);
             dependency.gameplayChecksum = gameplayChecksum(receipt.state);
             dependency.authority = structuredClone(knownEpochs);
@@ -908,6 +930,9 @@ export async function saveCredential(kind, value) {
         } finally {
             db.close();
         }
+    }).catch((error) => {
+        if (dependency.outcome === 'pending') dependency.outcome = 'not-committed';
+        throw error;
     });
     try {
         return await dependency.promise;
