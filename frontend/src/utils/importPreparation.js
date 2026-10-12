@@ -1,3 +1,4 @@
+import builtInProcesses from '../generated/processes.json';
 import builtInItems from '../pages/inventory/json/items/index.js';
 import { listBuiltInQuestIds } from './builtInQuests.js';
 // Pure import boundary: no browser storage, rendering, or network dependencies.
@@ -591,6 +592,10 @@ function normalizeCustom(raw, limits, origin) {
         map.get(change.entityId).image = change.dataUrl;
     }
     const itemIds = new Set([...builtInItems.map((item) => String(item.id)), ...ids.items.keys()]);
+    const processIds = new Set([
+        ...builtInProcesses.map((process) => String(process.id)),
+        ...ids.processes.keys(),
+    ]);
     const questIds = new Set([...listBuiltInQuestIds(), ...ids.quests.keys()]);
     const links = (source, target, field, catalog, counted = false) => {
         if (source[field] === undefined) return;
@@ -655,6 +660,11 @@ function normalizeCustom(raw, limits, origin) {
                             )
                                 failImport('preview-markup');
                             const next = { ...option };
+                            if (option.type === 'process' || option.process !== undefined) {
+                                next.process = id(option.process);
+                                if (!processIds.has(next.process))
+                                    failImport('unresolved-reference');
+                            }
                             if (option.goto !== undefined) {
                                 next.goto = id(option.goto);
                                 if (next.goto !== 'finish' && !nodeIds.has(next.goto))

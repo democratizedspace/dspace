@@ -621,6 +621,7 @@ if (isBrowser && typeof window.BroadcastChannel === 'function') {
                 );
                 dependency.authority = structuredClone(authority);
                 dependency.checksum = durableChecksum;
+                dependency.lastUpdated = savedAt(persisted.state);
                 dependency.order = ++managedCommitOrder;
                 if (persisted.state && pendingGameWrites === 0 && !useLocalStorage) {
                     gameState = validateGameState(
@@ -719,7 +720,13 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             // Game-only fallback cannot authorize credentials without durable epochs.
             const safe = scrubCredential(scrubCredential(nextState, 'github'), 'openAI');
             const backup = scrubCredential(scrubCredential(previousSnapshot, 'github'), 'openAI');
-            safe[META_KEY].lastUpdated = Math.max(savedAt(safe), fallbackWriteTime());
+            safe[META_KEY].lastUpdated = Math.max(
+                savedAt(safe),
+                fallbackWriteTime(),
+                ...[...credentialDependencies, ...(predecessor ? [predecessor] : [])].map(
+                    (entry) => (entry.lastUpdated ?? 0) + 1
+                )
+            );
             stampStateChecksum(safe);
             stampStateChecksum(backup);
             mirrorManagedGame({
@@ -803,6 +810,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                 recovery = null;
                 knownEpochs = credentialAuthority(receipt.meta);
                 queued.checksum = receipt.state._meta.checksum;
+                queued.lastUpdated = savedAt(receipt.state);
                 queued.order = ++managedCommitOrder;
                 durableChecksum = queued.checksum;
                 try {
@@ -921,6 +929,7 @@ export async function saveCredential(kind, value) {
             dependency.gameplayChecksum = gameplayChecksum(receipt.state);
             dependency.authority = structuredClone(knownEpochs);
             dependency.checksum = receipt.state._meta.checksum;
+            dependency.lastUpdated = savedAt(receipt.state);
             dependency.order = ++managedCommitOrder;
             durableChecksum = dependency.checksum;
             if (gameState === observedUI && pendingGameWrites === 0) {
@@ -1000,6 +1009,7 @@ export async function clearCredential(kind) {
                     );
                     dependency.authority = structuredClone(knownEpochs);
                     dependency.checksum = durableChecksum;
+                    dependency.lastUpdated = savedAt(persisted.state);
                     dependency.order = ++managedCommitOrder;
                 }
                 if (isBrowser && typeof window.BroadcastChannel === 'function') {

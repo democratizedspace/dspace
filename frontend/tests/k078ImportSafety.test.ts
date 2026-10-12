@@ -675,3 +675,28 @@ test('A04 quest rewards normalize known item references and finite nonnegative c
     );
     expect(plan.customContent.quests[0].rewards).toEqual([{ id: '700001', count: 2 }]);
 });
+
+test.each(['outlet-dWatt-1e3', 700002])(
+    'A04 dialogue process references accept and normalize known process %s',
+    (process) => {
+        const plan = prepareImport(
+            {
+                schemaVersion: 1,
+                processes: [{ id: 700002, title: 'Synthetic process' }],
+                quests: [
+                    {
+                        id: 'process-quest',
+                        dialogue: [
+                            {
+                                id: 'start',
+                                options: [{ type: 'process', text: 'Synthetic', process }],
+                            },
+                        ],
+                    },
+                ],
+            },
+            { kind: 'custom' }
+        );
+        expect(plan.customContent.quests[0].dialogue[0].options[0].process).toBe(String(process));
+    }
+);

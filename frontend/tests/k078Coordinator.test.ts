@@ -1108,3 +1108,83 @@ test.each([
     expect(custom.snapshot.quests).toHaveLength(0);
     custom.db.close();
 });
+
+test.each(['gameplay', 'credential'])(
+    'B05 fallback carries the committed %s dependency timestamp after its mirror fails',
+    async (kind) => {
+        await common.saveCredential('github', 'SENTINEL_TIME_BASE');
+        const db = await storage.openManagedGameDB();
+        const previous = await storage.readManagedGame(db);
+        const remoteTime = previous.state._meta.lastUpdated + 20000;
+        previous.state._meta.lastUpdated = remoteTime;
+        await storage.strictTransaction(db, ['state'], 'readwrite', (tx: any) =>
+            tx.objectStore('state').put(previous.state, 'root')
+        );
+        const open = storage.openManagedGameDB;
+        vi.spyOn(storage, 'openManagedGameDB')
+            .mockImplementationOnce(open)
+            .mockRejectedValueOnce(new Error('synthetic unavailable'));
+        vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+            throw new Error('synthetic mirror');
+        });
+        const first =
+            kind === 'gameplay'
+                ? common.saveGameState({
+                      ...common.loadGameState(),
+                      inventory: { receiptTime: 901 },
+                  })
+                : common.saveCredential('github', 'SENTINEL_TIME_NEW');
+        const failedMirror = expect(first).rejects.toMatchObject({ code: 'mirror-incomplete' });
+        const second = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { receiptTime: 902 },
+        });
+        await failedMirror;
+        await expect(second).resolves.toMatchObject({ status: 'best-effort' });
+        expect(JSON.parse(localStorage.getItem('gameState')!)._meta.lastUpdated).toBeGreaterThan(
+            (await storage.readManagedGame(db)).state._meta.lastUpdated
+        );
+        db.close();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.receiptTime).toBe(902);
+        expect(common.loadGameState().github.token).toBe(
+            kind === 'gameplay' ? 'SENTINEL_TIME_BASE' : 'SENTINEL_TIME_NEW'
+        );
+    }
+);
+
+test('A04 unresolved dialogue process rejects before any write', async () => {
+    const commit = vi.spyOn(storage, 'commitManagedGame');
+    await expect(
+        common.importGameStateString(
+            JSON.stringify({
+                schemaVersion: 1,
+                payload: {},
+                customContent: {
+                    schemaVersion: 1,
+                    quests: [
+                        {
+                            id: 'process-quest',
+                            dialogue: [
+                                {
+                                    id: 'start',
+                                    options: [
+                                        {
+                                            type: 'process',
+                                            text: 'Synthetic',
+                                            process: 'missing-synthetic-process',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            })
+        )
+    ).rejects.toMatchObject({ code: 'unresolved-reference' });
+    expect(commit).not.toHaveBeenCalled();
+});
