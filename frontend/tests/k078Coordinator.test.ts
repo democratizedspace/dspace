@@ -1188,3 +1188,57 @@ test('A04 unresolved dialogue process rejects before any write', async () => {
     ).rejects.toMatchObject({ code: 'unresolved-reference' });
     expect(commit).not.toHaveBeenCalled();
 });
+
+test.each(['requirement', 'operation'])(
+    'A04 malformed container %s rejects before any game/custom writes',
+    async (kind) => {
+        const commit = vi.spyOn(storage, 'commitManagedGame');
+        const content =
+            kind === 'requirement'
+                ? {
+                      quests: [
+                          {
+                              id: 'q',
+                              requiresItems: [
+                                  { id: 'contents', count: 1, containerItemId: 'missing' },
+                              ],
+                          },
+                      ],
+                  }
+                : {
+                      processes: [
+                          {
+                              id: 'p',
+                              itemCountOperations: [
+                                  {
+                                      operation: 'invalid',
+                                      itemId: 'contents',
+                                      containerItemId: 'container',
+                                      count: 1,
+                                  },
+                              ],
+                          },
+                      ],
+                  };
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload: {},
+                    customContent: {
+                        schemaVersion: 1,
+                        items: [
+                            { id: 'contents' },
+                            { id: 'container', itemCounts: { contents: 0 } },
+                        ],
+                        ...content,
+                    },
+                })
+            )
+        ).rejects.toThrow();
+        expect(commit).not.toHaveBeenCalled();
+        const custom = await storage.preflightCustomImport();
+        expect(custom.snapshot.items).toHaveLength(0);
+        custom.db.close();
+    }
+);

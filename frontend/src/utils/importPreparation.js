@@ -503,6 +503,7 @@ function normalizeCustom(raw, limits, origin) {
             failImport('id');
         if (typeof value === 'number' && !Number.isSafeInteger(value)) failImport('id');
         const normalized = String(value).trim();
+        if (badKeys.has(normalized)) failImport('id');
         cap(bytes(normalized), limits.idBytes, 'id-bytes');
         return normalized;
     };
@@ -597,6 +598,36 @@ function normalizeCustom(raw, limits, origin) {
         ...ids.processes.keys(),
     ]);
     const questIds = new Set([...listBuiltInQuestIds(), ...ids.quests.keys()]);
+    for (let index = 0; index < sections.items.length; index++) {
+        const counts = sections.items[index].itemCounts;
+        if (counts === undefined) continue;
+        if (!record(counts)) failImport('container-counts');
+        const normalized = {};
+        for (const [key, count] of Object.entries(counts)) {
+            const itemId = id(key);
+            if (!itemIds.has(itemId)) failImport('unresolved-reference');
+            if (Object.hasOwn(normalized, itemId)) failImport('duplicate-id');
+            if (typeof count !== 'number' || !Number.isFinite(count) || count < 0)
+                failImport('container-counts');
+            normalized[itemId] = count;
+        }
+        changes.items[index].itemCounts = normalized;
+    }
+    const itemCatalog = new Map([
+        ...builtInItems.map((item) => [String(item.id), item]),
+        ...sections.items.map((item, index) => [
+            changes.items[index].id,
+            { ...item, ...changes.items[index] },
+        ]),
+    ]);
+    const containerReference = (value, itemId) => {
+        const containerId = id(value);
+        if (!itemCatalog.has(containerId) || !itemIds.has(itemId))
+            failImport('unresolved-reference');
+        const counts = itemCatalog.get(containerId).itemCounts;
+        if (!record(counts) || !Object.hasOwn(counts, itemId)) failImport('container-reference');
+        return containerId;
+    };
     const links = (source, target, field, catalog, counted = false) => {
         if (source[field] === undefined) return;
         if (!Array.isArray(source[field])) failImport('reference-type');
@@ -611,7 +642,11 @@ function normalizeCustom(raw, limits, origin) {
                 failImport('reference-count');
             const linkedId = id(counted ? link.id : link);
             if (!catalog.has(linkedId)) failImport('unresolved-reference');
-            return counted ? { ...link, id: linkedId } : linkedId;
+            if (!counted) return linkedId;
+            const normalized = { ...link, id: linkedId };
+            if (link.containerItemId !== undefined)
+                normalized.containerItemId = containerReference(link.containerItemId, linkedId);
+            return normalized;
         });
     };
     for (const section of ['items', 'processes', 'quests']) {
@@ -626,6 +661,31 @@ function normalizeCustom(raw, limits, origin) {
                 'grantsItems',
             ])
                 links(entity, change, field, itemIds, true);
+            if (section === 'processes' && entity.itemCountOperations !== undefined) {
+                if (!Array.isArray(entity.itemCountOperations)) failImport('item-count-operation');
+                change.itemCountOperations = entity.itemCountOperations.map((operation) => {
+                    if (
+                        !record(operation) ||
+                        !['deposit', 'withdraw', 'withdraw-all'].includes(operation.operation) ||
+                        Object.keys(operation).some(
+                            (key) =>
+                                !['operation', 'containerItemId', 'itemId', 'count'].includes(key)
+                        )
+                    )
+                        failImport('item-count-operation');
+                    const itemId = id(operation.itemId);
+                    const containerItemId = containerReference(operation.containerItemId, itemId);
+                    if (operation.operation === 'withdraw-all') {
+                        if (operation.count !== undefined) failImport('operation-count');
+                    } else if (
+                        typeof operation.count !== 'number' ||
+                        !Number.isFinite(operation.count) ||
+                        operation.count <= 0
+                    )
+                        failImport('operation-count');
+                    return { ...operation, itemId, containerItemId };
+                });
+            }
             if (section === 'quests') links(entity, change, 'rewards', itemIds, true);
             links(entity, change, 'requiresQuests', questIds);
             links(entity, change, 'dependencies', itemIds);

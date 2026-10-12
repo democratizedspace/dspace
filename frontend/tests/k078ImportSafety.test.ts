@@ -700,3 +700,116 @@ test.each(['outlet-dWatt-1e3', 700002])(
         expect(plan.customContent.quests[0].dialogue[0].options[0].process).toBe(String(process));
     }
 );
+
+const containerImport = () => ({
+    schemaVersion: 1,
+    items: [
+        { id: 710001, name: 'Synthetic content' },
+        { id: 710002, name: 'Synthetic container', itemCounts: { '710001': 0 } },
+    ],
+});
+test.each(['missing-container', null, {}, 710001])(
+    'A04 rejects invalid/incompatible counted container reference %j',
+    (containerItemId) => {
+        expect(() =>
+            prepareImport(
+                {
+                    ...containerImport(),
+                    quests: [
+                        {
+                            id: 'container-quest',
+                            requiresItems: [{ id: 710001, count: 1, containerItemId }],
+                        },
+                    ],
+                },
+                { kind: 'custom' }
+            )
+        ).toThrow();
+    }
+);
+test('A04 normalizes a compatible counted container reference', () => {
+    const plan = prepareImport(
+        {
+            ...containerImport(),
+            quests: [
+                {
+                    id: 'container-quest',
+                    requiresItems: [{ id: 710001, count: 1, containerItemId: 710002 }],
+                },
+            ],
+        },
+        { kind: 'custom' }
+    );
+    expect(plan.customContent.quests[0].requiresItems[0]).toEqual({
+        id: '710001',
+        count: 1,
+        containerItemId: '710002',
+    });
+});
+test.each([
+    { operation: 'unknown', count: 1 },
+    { operation: 'deposit', count: '1' },
+    { operation: 'deposit', count: -1 },
+    { operation: 'withdraw', count: 0 },
+    { operation: 'withdraw' },
+    { operation: 'withdraw-all', count: 1 },
+    { operation: 'deposit', count: 1, itemId: 'unknown' },
+    { operation: 'deposit', count: 1, containerItemId: 'unknown' },
+    { operation: 'deposit', count: 1, containerItemId: 710001 },
+])('A04 rejects malformed item-count operations %j', (fields) => {
+    expect(() =>
+        prepareImport(
+            {
+                ...containerImport(),
+                processes: [
+                    {
+                        id: 'container-process',
+                        itemCountOperations: [
+                            { itemId: 710001, containerItemId: 710002, ...fields },
+                        ],
+                    },
+                ],
+            },
+            { kind: 'custom' }
+        )
+    ).toThrow();
+});
+test.each(['deposit', 'withdraw', 'withdraw-all'])(
+    'A04 normalizes supported item-count operation %s',
+    (operation) => {
+        const plan = prepareImport(
+            {
+                ...containerImport(),
+                processes: [
+                    {
+                        id: 'container-process',
+                        itemCountOperations: [
+                            {
+                                itemId: 710001,
+                                containerItemId: 710002,
+                                operation,
+                                ...(operation === 'withdraw-all' ? {} : { count: 2 }),
+                            },
+                        ],
+                    },
+                ],
+            },
+            { kind: 'custom' }
+        );
+        expect(plan.customContent.processes[0].itemCountOperations[0]).toEqual({
+            itemId: '710001',
+            containerItemId: '710002',
+            operation,
+            ...(operation === 'withdraw-all' ? {} : { count: 2 }),
+        });
+    }
+);
+
+test.each([' __proto__ ', ' constructor ', ' prototype '])(
+    'A04 rejects reserved IDs after normalization %s',
+    (id) => {
+        expect(() =>
+            prepareImport({ schemaVersion: 1, items: [{ id }] }, { kind: 'custom' })
+        ).toThrow('id');
+    }
+);
