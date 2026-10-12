@@ -69,7 +69,7 @@ test.describe('Custom content backup', () => {
                         id: 'e2e-item',
                         name: 'E2E Item',
                         description: 'backup item',
-                        image: 'data:image/png;base64,TEST',
+                        image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
                     });
                     tx.objectStore('processes').put({
                         id: 'e2e-process',
@@ -86,7 +86,7 @@ test.describe('Custom content backup', () => {
                         id: 'e2e-quest',
                         title: 'E2E Quest',
                         description: 'backup quest content',
-                        image: 'data:image/png;base64,TEST',
+                        image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
                         custom: true,
                     });
                     tx.oncomplete = () => {
@@ -158,7 +158,7 @@ test.describe('Custom content backup', () => {
         const fileInput = page.locator('input[type="file"]');
         await fileInput.setInputFiles(FIXTURE_PATH);
 
-        await expect(page.getByRole('status')).toContainText('Import complete');
+        await expect(page.getByRole('status')).toContainText('Backup import finished');
 
         await expect
             .poll(() =>
@@ -232,7 +232,9 @@ test.describe('Custom content backup', () => {
             buffer: Buffer.from(JSON.stringify(unsafeBackup)),
         });
 
-        await expect(page.getByRole('status')).toContainText(/Unsafe preview text/i);
+        await expect(page.getByRole('status')).toContainText(
+            /Invalid backup data: preview-markup/i
+        );
         expect(dialogOpened).toBe(false);
 
         const persistedIds = await page.evaluate(async () => {

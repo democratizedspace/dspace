@@ -1,6 +1,7 @@
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
+    assertCredentialLaunch: vi.fn(async (_kind, value) => value),
     loadGameState: vi.fn(() => ({
         openAI: {},
     })),

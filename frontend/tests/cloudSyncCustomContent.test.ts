@@ -130,6 +130,7 @@ describe('cloud sync custom content', () => {
 
     test('uploads custom content in gist payload', async () => {
         const customContent = {
+            schemaVersion: 1,
             items: [
                 {
                     id: 'custom-item-1',
@@ -210,6 +211,8 @@ describe('cloud sync custom content', () => {
         );
 
         await deleteCustomContentDatabase();
+        const initialized = await openCustomContentDB();
+        initialized.close();
         await importGameStateString(encoded);
 
         const [items, processes, quests] = await Promise.all([
@@ -251,6 +254,8 @@ describe('cloud sync custom content', () => {
         });
 
         await overwriteCustomContent();
+        const initialized = await openCustomContentDB();
+        initialized.close();
         await importGameStateString(encoded);
 
         const [items, processes, quests] = await Promise.all([

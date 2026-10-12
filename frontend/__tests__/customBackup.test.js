@@ -1,10 +1,9 @@
-/**
- * @jest-environment jsdom
- */
+// Synthetic custom-content export/restore regressions run by repository Vitest.
 import 'fake-indexeddb/auto';
 import fs from 'fs';
 import path from 'path';
 import { db } from '../src/utils/customcontent.js';
+import { openCustomContentDB } from '../src/utils/indexeddb.js';
 import {
     BACKUP_SCHEMA_VERSION,
     buildCustomContentBackupData,
@@ -18,24 +17,39 @@ const readFixture = (filename) => {
     return JSON.parse(contents);
 };
 
+async function resetCustomContent() {
+    await new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase('CustomContent');
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+        request.onblocked = () => reject(new Error('Synthetic database reset blocked'));
+    });
+    const database = await openCustomContentDB();
+    database.close();
+}
+
 describe('custom content backup', () => {
+    beforeEach(async () => {
+        localStorage.clear();
+        await resetCustomContent();
+    });
     test('export and import round trip', async () => {
         const idItem = await db.items.add({
             id: 'i1',
             name: 'backup item',
-            image: 'data:image/png;base64,TEST',
+            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
         });
         const idProcess = await db.processes.add({ id: 'p1', title: 'backup process' });
         const idQuest = await db.quests.add({
             id: 'q1',
             title: 'backup quest',
             description: 'd',
-            image: 'data:image/png;base64,TEST',
+            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
         });
 
         const backup = await buildCustomContentBackupData();
 
-        await indexedDB.deleteDatabase('CustomContent');
+        await resetCustomContent();
 
         await restoreCustomContentBackup(backup);
 
@@ -85,7 +99,7 @@ describe('custom content backup', () => {
     });
 
     test('restore does not overwrite main game state snapshots', async () => {
-        await indexedDB.deleteDatabase('CustomContent');
+        await resetCustomContent();
         const mainState = { inventory: { safe: 1 }, versionNumberString: '3.0' };
         const serialized = JSON.stringify(mainState);
         localStorage.setItem('gameState', serialized);
@@ -103,7 +117,8 @@ describe('custom content backup', () => {
                     id: 'item:i-safe:image',
                     entityType: 'item',
                     entityId: 'i-safe',
-                    dataUrl: 'data:image/png;base64,TEST',
+                    dataUrl:
+                        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
                 },
             ],
         };
@@ -114,6 +129,8 @@ describe('custom content backup', () => {
         expect(localStorage.getItem('gameStateBackup')).toBe(serialized);
         const imported = await db.items.get('i-safe');
         expect(imported?.name).toBe('custom item');
+        expect(imported?.entityType).toBe('item');
+        expect(imported?.custom).toBe(true);
     });
 
     test('invalid image references do not partially apply changes', async () => {
@@ -129,19 +146,20 @@ describe('custom content backup', () => {
                     id: 'item:missing:image',
                     entityType: 'item',
                     entityId: 'missing',
-                    dataUrl: 'data:image/png;base64,TEST',
+                    dataUrl:
+                        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC',
                 },
             ],
         };
 
-        await expect(restoreCustomContentBackup(invalid)).rejects.toThrow('Missing item for image');
+        await expect(restoreCustomContentBackup(invalid)).rejects.toThrow('image-reference');
 
         const items = await db.list('item');
         expect(items).toEqual([]);
     });
 
     test('imports item-only backups with images', async () => {
-        await indexedDB.deleteDatabase('CustomContent');
+        await resetCustomContent();
         const backup = readFixture('dspace-custom-content-backup-20260121-000411.json');
 
         const result = await restoreCustomContentBackup(backup);
@@ -156,7 +174,7 @@ describe('custom content backup', () => {
     });
 
     test('imports item-only backups with missing sections', async () => {
-        await indexedDB.deleteDatabase('CustomContent');
+        await resetCustomContent();
         const backup = readFixture('dspace-custom-content-backup-20260121-000411.json');
         const missingKeysBackup = JSON.parse(JSON.stringify(backup));
         delete missingKeysBackup.processes;
@@ -175,7 +193,7 @@ describe('custom content backup', () => {
     });
 
     test('imports backups that include processes', async () => {
-        await indexedDB.deleteDatabase('CustomContent');
+        await resetCustomContent();
         const backup = readFixture('dspace-custom-content-backup-20260121-002402.json');
 
         const result = await restoreCustomContentBackup(backup);

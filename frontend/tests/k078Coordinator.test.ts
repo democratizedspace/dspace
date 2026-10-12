@@ -1,0 +1,2328 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Synthetic fault injection exercises heterogeneous IDB records and module boundaries. */
+import { beforeEach, afterEach, expect, test, vi } from 'vitest';
+import { IDBFactory } from 'fake-indexeddb';
+let common: any, storage: any;
+beforeEach(async () => {
+    vi.resetModules();
+    vi.stubGlobal('indexedDB', new IDBFactory());
+    // Cross-tab delivery is covered by the real-browser harness, not module-reset fixtures.
+    vi.stubGlobal('BroadcastChannel', undefined);
+    localStorage.clear();
+    vi.stubGlobal(
+        'fetch',
+        vi.fn(() => {
+            throw new Error('network forbidden');
+        })
+    );
+    common = await import('../src/utils/gameState/common.js');
+    storage = await import('../src/utils/managedImportStorage.js');
+    await common.ready;
+    await common.resetGameState();
+    const { openCustomContentDB } = await import('../src/utils/indexeddb.js');
+    const db = await openCustomContentDB();
+    db.close();
+});
+afterEach(async () => {
+    vi.restoreAllMocks();
+    await common.closeGameStateDatabaseForTesting();
+    vi.unstubAllGlobals();
+});
+const envelope = () =>
+    JSON.stringify({
+        schemaVersion: 1,
+        payload: { inventory: { synthetic: 2 }, github: { token: 'SENTINEL_IMPORTED' } },
+        customContent: { schemaVersion: 1, items: [{ id: 'item-A', name: 'Synthetic item' }] },
+    });
+
+test('B04 actual coordinator reports partial, supports explicit recovery and idempotent retry', async () => {
+    await common.saveCredential('github', 'SENTINEL_DESTINATION');
+    const before = common.loadGameState();
+    const commit = vi
+        .spyOn(storage, 'commitCustomImport')
+        .mockRejectedValueOnce(new Error('injected'));
+    await expect(common.importGameStateString(envelope())).rejects.toMatchObject({
+        code: 'partial',
+        committed: ['game'],
+        recovery: 'game',
+    });
+    expect(common.loadGameState().inventory.synthetic).toBe(2);
+    await common.recoverImportGameState();
+    expect(common.loadGameState().inventory).toEqual(before.inventory);
+    expect(common.loadGameState().github.token).toBe('SENTINEL_DESTINATION');
+    commit.mockRestore();
+    await expect(common.importGameStateString(envelope())).resolves.toMatchObject({
+        status: 'complete',
+    });
+    await expect(common.importGameStateString(envelope())).resolves.toMatchObject({
+        status: 'complete',
+    });
+    const custom = await storage.preflightCustomImport();
+    expect(custom.snapshot.items).toHaveLength(1);
+    custom.db.close();
+});
+test('B04 recovery refuses a newer save', async () => {
+    vi.spyOn(storage, 'commitCustomImport').mockRejectedValueOnce(new Error('injected'));
+    await expect(common.importGameStateString(envelope())).rejects.toMatchObject({
+        code: 'partial',
+    });
+    const newer = common.loadGameState();
+    newer.inventory.synthetic = 3;
+    await common.saveGameState(newer);
+    expect(common.getImportRecoveryStatus()).toBeNull();
+    await expect(common.recoverImportGameState()).rejects.toMatchObject({
+        code: 'recovery-stale-or-unavailable',
+    });
+    expect(common.loadGameState().inventory.synthetic).toBe(3);
+});
+test('B05 actual coordinator reports mirror-incomplete and explicit retry repairs mirrors only', async () => {
+    const original = Storage.prototype.setItem;
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (key, value) {
+        if (key === 'gameState') throw new Error('quota');
+        return original.call(this, key, value);
+    });
+    await expect(common.importGameStateString(envelope())).rejects.toMatchObject({
+        code: 'mirror-incomplete',
+        committed: ['game', 'custom'],
+        recovery: 'mirrors',
+    });
+    write.mockRestore();
+    await common.recoverImportGameState();
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.synthetic).toBe(2);
+    const custom = await storage.preflightCustomImport();
+    expect(custom.snapshot.items).toHaveLength(1);
+    custom.db.close();
+});
+test('B06 queued saves persist their own snapshots and backups', async () => {
+    const first = common.loadGameState();
+    first.inventory.synthetic = 1;
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 2;
+    const b = common.saveGameState(second);
+    first.inventory.synthetic = 99;
+    second.inventory.synthetic = 99;
+    await Promise.all([a, b]);
+    const db = await storage.openManagedGameDB();
+    const persisted = await storage.readManagedGame(db);
+    db.close();
+    expect(persisted.state.inventory.synthetic).toBe(2);
+    expect(persisted.backup.inventory.synthetic).toBe(1);
+});
+test('C02 Clear invalidates recovery, survives rollback and fresh module load', async () => {
+    await common.saveCredential('github', 'SENTINEL_GITHUB_A');
+    await common.saveCredential('openAI', 'SENTINEL_OPENAI_B');
+    vi.spyOn(storage, 'commitCustomImport').mockRejectedValueOnce(new Error('injected'));
+    await expect(common.importGameStateString(envelope())).rejects.toMatchObject({
+        code: 'partial',
+    });
+    expect((await common.clearCredential('github')).status).toBe('complete');
+    await expect(common.recoverImportGameState()).rejects.toThrow();
+    await common.rollbackGameState();
+    expect(common.loadGameState().github?.token).toBeUndefined();
+    await common.closeGameStateDatabaseForTesting();
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    expect(common.loadGameState().github?.token).toBeUndefined();
+    expect(common.loadGameState().openAI.apiKey).toBe('SENTINEL_OPENAI_B');
+});
+test('C06 whole export envelope and mocked gist body omit recognized sensitive extensions', async () => {
+    await common.saveCredential('github', 'SENTINEL_GITHUB_A');
+    const exported = common.exportGameStateString({
+        customContent: {
+            schemaVersion: 1,
+            secret: 'SENTINEL_CUSTOM',
+            items: [
+                {
+                    id: 'a',
+                    apiKey: 'SENTINEL_ITEM',
+                    extension: { password: 'SENTINEL_PASSWORD', safe: true },
+                },
+            ],
+        },
+    });
+    const json = new TextDecoder().decode(Uint8Array.from(atob(exported), (c) => c.charCodeAt(0)));
+    expect(json).not.toContain('SENTINEL_');
+    expect(JSON.parse(json).customContent.items[0].extension.safe).toBe(true);
+    const gist = await import('../src/lib/cloudsync/githubGists');
+    const mockedFetch = vi.fn(async (_url: any, _options: any) => ({
+        ok: true,
+        json: async () => ({ id: 'synthetic-gist' }),
+    }));
+    await gist.createBackupGist({
+        token: 'SENTINEL_GITHUB_A',
+        content: exported,
+        fetchImpl: mockedFetch as any,
+    });
+    const files = JSON.parse(mockedFetch.mock.calls[0][1].body).files;
+    for (const file of Object.values(files) as { content: string }[]) {
+        const decoded = new TextDecoder().decode(
+            Uint8Array.from(atob(file.content), (c) => c.charCodeAt(0))
+        );
+        expect(decoded).not.toContain('SENTINEL_');
+    }
+});
+
+test('C04 cached OpenAI prompt cannot launch after Clear', async () => {
+    await common.saveCredential('openAI', 'SENTINEL_OPENAI_CACHED');
+    const promptPayload = {
+        gameState: common.loadGameState(),
+        combinedMessages: [],
+        contextSources: [],
+    };
+    await common.clearCredential('openAI');
+    const client = vi.fn();
+    vi.stubGlobal('__DSpaceOpenAIClient', client);
+    const { GPT5Chat } = await import('../src/utils/openAI.js');
+    await expect(GPT5Chat([], { promptPayload })).rejects.toMatchObject({
+        code: 'credential-unavailable',
+    });
+    expect(client).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
+});
+
+test('B05 normal startup provides lightweight metadata without dropping credential authority', async () => {
+    expect(localStorage.getItem('gameStateLite')).toBeTruthy();
+    await common.saveCredential('github', 'SENTINEL_STARTUP');
+    await common.clearCredential('github');
+    await common.closeGameStateDatabaseForTesting();
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    const db = await storage.openManagedGameDB();
+    expect(
+        storage.credentialAuthority((await storage.readManagedGame(db)).meta).github.cleared
+    ).toBe(true);
+    db.close();
+    expect(JSON.parse(localStorage.getItem('gameStateLite')!).credentialEpochs.github.cleared).toBe(
+        true
+    );
+});
+
+test('B06 pending writes are not replaced by their old local mirror', async () => {
+    const first = common.loadGameState();
+    first.processes.synthetic = { running: true };
+    const a = common.saveGameState(first);
+    expect(common.syncGameStateFromLocalIfStale(common.getGameStateChecksum())).toBe(false);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 9;
+    const b = common.saveGameState(second);
+    await Promise.all([a, b]);
+    expect(common.loadGameState().processes.synthetic.running).toBe(true);
+    expect(common.loadGameState().inventory.synthetic).toBe(9);
+});
+
+test('C04 gameplay queued during deliberate credential saves preserves both mutations', async () => {
+    const credentialA = common.saveCredential('github', 'SENTINEL_QUEUED_GH');
+    const credentialB = common.saveCredential('openAI', 'SENTINEL_QUEUED_AI');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 19;
+    const gameplay = common.saveGameState(next);
+    await Promise.all([credentialA, credentialB, gameplay]);
+    expect(common.loadGameState().inventory.synthetic).toBe(19);
+    expect(common.loadGameState().github.token).toBe('SENTINEL_QUEUED_GH');
+    expect(common.loadGameState().openAI.apiKey).toBe('SENTINEL_QUEUED_AI');
+});
+
+test('C04 consecutive gameplay snapshots remain distinct while a credential save is pending', async () => {
+    const credential = common.saveCredential('github', 'SENTINEL_PENDING');
+    const first = common.loadGameState();
+    first.processes.synthetic = { running: true };
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 23;
+    const b = common.saveGameState(second);
+    await Promise.all([credential, a, b]);
+    expect(common.loadGameState().processes.synthetic.running).toBe(true);
+    expect(common.loadGameState().inventory.synthetic).toBe(23);
+});
+
+test('B05 game-only localStorage fallback is explicit, fail-closed and propagates quota errors', async () => {
+    await common.saveCredential('github', 'SENTINEL_FALLBACK');
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValue(new Error('synthetic unavailable'));
+    await expect(
+        common.importGameStateString(JSON.stringify({ inventory: { synthetic: 31 } }))
+    ).resolves.toMatchObject({ status: 'best-effort', credentialsDisabled: true });
+    expect(localStorage.getItem('gameState')).not.toContain('SENTINEL_');
+    expect(localStorage.getItem('gameStateBackup')).not.toContain('SENTINEL_');
+    const before = localStorage.getItem('gameState');
+    await expect(common.importGameStateString(envelope())).rejects.toThrow();
+    expect(localStorage.getItem('gameState')).toBe(before);
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+        throw new Error('synthetic quota');
+    });
+    await expect(common.importGameStateString('{}')).rejects.toThrow('synthetic quota');
+});
+
+test('B06 later credential saving cannot overtake two earlier gameplay saves', async () => {
+    const first = common.loadGameState();
+    first.inventory.synthetic = 1;
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 2;
+    const b = common.saveGameState(second);
+    const credential = common.saveCredential('github', 'SENTINEL_AFTER_GAMEPLAY');
+    await Promise.all([a, b, credential]);
+    expect(common.loadGameState().inventory.synthetic).toBe(2);
+    const db = await storage.openManagedGameDB();
+    expect((await storage.readManagedGame(db)).state.inventory.synthetic).toBe(2);
+    db.close();
+});
+
+test('B02 rejected predecessor restores the latest optimistic gameplay snapshot', async () => {
+    const before = common.loadGameState();
+    vi.spyOn(storage, 'commitManagedGame').mockRejectedValueOnce(
+        new Error('synthetic write failure')
+    );
+    const first = common.loadGameState();
+    first.inventory.synthetic = 41;
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.inventory.synthetic = 42;
+    const b = common.saveGameState(second);
+    const results = await Promise.allSettled([a, b]);
+    expect(results.every((result) => result.status === 'rejected')).toBe(true);
+    expect(common.loadGameState().inventory).toEqual(before.inventory);
+});
+
+test('C04 aborted credential transaction does not discard queued gameplay', async () => {
+    vi.spyOn(storage, 'commitManagedGame').mockRejectedValueOnce(
+        new Error('synthetic credential failure')
+    );
+    const credential = common.saveCredential('github', 'SENTINEL_FAILED_SAVE');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 51;
+    const gameplay = common.saveGameState(next);
+    const results = await Promise.allSettled([credential, gameplay]);
+    expect(results[0].status).toBe('rejected');
+    expect(results[1].status).toBe('fulfilled');
+    expect(common.loadGameState().inventory.synthetic).toBe(51);
+    expect(common.loadGameState().github?.token).toBeUndefined();
+});
+
+test('C02 legacy QA cleanup preserves a V2 save and restores its skip marker', async () => {
+    localStorage.setItem(
+        'gameState',
+        JSON.stringify({ versionNumberString: '2.1', inventory: { '3': 1 } })
+    );
+    localStorage.setItem(
+        'gameStateBackup',
+        JSON.stringify({ versionNumberString: '3', inventory: {} })
+    );
+    const { clearV3GameStateStorage } = await import('../src/utils/legacySaveSeeding');
+    await clearV3GameStateStorage();
+    expect(localStorage.getItem('legacyV2Seeded')).toBe('true');
+    expect(JSON.parse(localStorage.getItem('gameState')!).versionNumberString).toBe('2.1');
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+});
+
+test('B05 mirror refresh refuses partially propagated metadata', async () => {
+    const before = common.loadGameState();
+    const oldMeta = localStorage.getItem('gameStateLite');
+    const next = structuredClone(before);
+    next.inventory.synthetic = 88;
+    await common.saveGameState(next);
+    const completeMeta = localStorage.getItem('gameStateLite');
+    // The checksum marker and state arrived, but the matching metadata has not.
+    localStorage.setItem('gameStateLite', oldMeta!);
+    expect(common.syncGameStateFromLocalIfStale('old-checksum')).toBe(false);
+    localStorage.setItem('gameStateLite', completeMeta!);
+    expect(common.syncGameStateFromLocalIfStale('old-checksum')).toBe(true);
+});
+
+test('C04 gameplay started during Clear advances to its scrubbed receipt', async () => {
+    await common.saveCredential('github', 'SENTINEL_CLEAR_QUEUE');
+    const clearing = common.clearCredential('github');
+    const first = common.loadGameState();
+    first.inventory.synthetic = 71;
+    const a = common.saveGameState(first);
+    const second = common.loadGameState();
+    second.processes.synthetic = { running: true };
+    const b = common.saveGameState(second);
+    await Promise.all([clearing, a, b]);
+    const db = await storage.openManagedGameDB();
+    const persisted = await storage.readManagedGame(db);
+    expect(persisted.state.inventory.synthetic).toBe(71);
+    expect(persisted.state.processes.synthetic.running).toBe(true);
+    expect(JSON.stringify(persisted)).not.toContain('SENTINEL_CLEAR_QUEUE');
+    expect(common.getGameStateChecksum()).toBe(persisted.state._meta.checksum);
+    db.close();
+});
+
+test('C04 snapshots captured before pending Clear remain stale and restore visible state', async () => {
+    await common.saveCredential('github', 'SENTINEL_STALE_CLEAR');
+    const old = common.loadGameState();
+    old.inventory.synthetic = 72;
+    const clearing = common.clearCredential('github');
+    const saving = common.saveGameState(old);
+    await expect(saving).rejects.toMatchObject({ code: 'stale-credential-epoch' });
+    await clearing;
+    expect(common.loadGameState().inventory.synthetic).not.toBe(72);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_STALE_CLEAR');
+});
+
+test('C04 gameplay after two pending Clears keeps both providers cleared', async () => {
+    await common.saveCredential('github', 'SENTINEL_MULTI_GH');
+    await common.saveCredential('openAI', 'SENTINEL_MULTI_AI');
+    const a = common.clearCredential('github');
+    const b = common.clearCredential('openAI');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 73;
+    await Promise.all([a, b, common.saveGameState(next)]);
+    expect(common.loadGameState().inventory.synthetic).toBe(73);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_MULTI');
+});
+
+test('C04 GitHub token saving normalizes whitespace for subsequent launch checks', async () => {
+    const { saveGitHubToken, loadGitHubToken } = await import('../src/utils/githubToken.js');
+    await saveGitHubToken('  SENTINEL_TRIMMED  ');
+    await expect(loadGitHubToken()).resolves.toBe('SENTINEL_TRIMMED');
+    await expect(common.assertCredentialLaunch('github', 'SENTINEL_TRIMMED')).resolves.toBe(
+        'SENTINEL_TRIMMED'
+    );
+});
+
+test.each([false, true])(
+    'C04 cross-tab refresh protects gameplay (remote progress: %s)',
+    async (remoteProgress) => {
+        await common.closeGameStateDatabaseForTesting();
+        const channels: any[] = [],
+            messages: any[] = [];
+        class TestChannel {
+            onmessage: any;
+            constructor() {
+                channels.push(this);
+            }
+            postMessage(data: any) {
+                messages.push(data);
+            }
+            close() {}
+        }
+        vi.stubGlobal('BroadcastChannel', TestChannel);
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        await common.saveCredential('github', 'SENTINEL_REFRESH');
+        const origin = common;
+        const stale = origin.loadGameState();
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        if (remoteProgress) {
+            const changed = remote.loadGameState();
+            changed.inventory.remote = 99;
+            await remote.saveGameState(changed);
+        }
+        await remote.clearCredential('github');
+        await remote.closeGameStateDatabaseForTesting();
+        let saving: Promise<any> | undefined;
+        let initiated = false;
+        const unsubscribe = origin.state.subscribe((value: any) => {
+            if (!initiated && !value.github?.token) {
+                initiated = true;
+                const fresh = origin.loadGameState();
+                fresh.inventory.synthetic = 81;
+                saving = origin.saveGameState(fresh);
+            }
+        });
+        channels[0].onmessage({ data: messages.at(-1) });
+        unsubscribe();
+        expect(saving).toBeDefined();
+        if (remoteProgress) {
+            await expect(saving).rejects.toMatchObject({ code: 'stale-state' });
+            expect(origin.loadGameState().inventory.remote).toBe(99);
+            expect(origin.loadGameState().inventory.synthetic).toBeUndefined();
+        } else {
+            await saving;
+            expect(origin.loadGameState().inventory.synthetic).toBe(81);
+        }
+        expect(JSON.stringify(origin.loadGameState())).not.toContain('SENTINEL_REFRESH');
+        await expect(origin.saveGameState(stale)).rejects.toMatchObject({
+            code: 'stale-credential-epoch',
+        });
+    }
+);
+
+test.each(['clear', 'save'])(
+    'C04 local credential %s cannot overwrite remote gameplay',
+    async (mode) => {
+        await common.saveCredential('github', 'SENTINEL_LOCAL_AUTHORITY');
+        const origin = common;
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        const changed = remote.loadGameState();
+        changed.inventory.remote = 101;
+        await remote.saveGameState(changed);
+        await remote.closeGameStateDatabaseForTesting();
+        const credential =
+            mode === 'clear'
+                ? origin.clearCredential('github')
+                : origin.saveCredential('github', 'SENTINEL_NEW_LOCAL');
+        const oldGameplay = origin.loadGameState();
+        oldGameplay.inventory.synthetic = 82;
+        await expect(origin.saveGameState(oldGameplay)).rejects.toMatchObject({
+            code: 'stale-state',
+        });
+        await credential;
+        expect(origin.loadGameState().inventory.remote).toBe(101);
+        expect(origin.loadGameState().inventory.synthetic).toBeUndefined();
+        expect(origin.loadGameState().github?.token).toBe(
+            mode === 'clear' ? undefined : 'SENTINEL_NEW_LOCAL'
+        );
+    }
+);
+
+test('B05 missing Web Locks loads and saves credential-free gameplay without IDB writes', async () => {
+    await common.saveCredential('github', 'SENTINEL_DURABLE_NO_LOCK');
+    const db = await storage.openManagedGameDB();
+    const before = await storage.readManagedGame(db);
+    db.close();
+    await common.closeGameStateDatabaseForTesting();
+    localStorage.setItem(
+        'gameState',
+        JSON.stringify({
+            inventory: { synthetic: 91 },
+            _meta: { lastUpdated: before.state._meta.lastUpdated + 1 },
+            github: { token: 'SENTINEL_NO_LOCK' },
+            openAI: { apiKey: 'SENTINEL_NO_LOCK_AI' },
+        })
+    );
+    vi.stubGlobal('navigator', { locks: undefined });
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await expect(common.ready).resolves.toBeUndefined();
+    expect(common.isGameStateReady()).toBe(true);
+    expect(common.loadGameState().inventory.synthetic).toBe(91);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_');
+    const next = common.loadGameState();
+    next.inventory.synthetic = 92;
+    await expect(common.saveGameState(next)).resolves.toMatchObject({
+        status: 'best-effort',
+        credentialsDisabled: true,
+    });
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.synthetic).toBe(92);
+    expect(localStorage.getItem('gameState')).not.toContain('SENTINEL_');
+    await expect(
+        common.assertCredentialLaunch('github', 'SENTINEL_DURABLE_NO_LOCK')
+    ).rejects.toMatchObject({ code: 'credential-unavailable' });
+    await expect(common.saveCredential('github', 'SENTINEL_REJECTED')).rejects.toMatchObject({
+        code: 'storage-lock-unavailable',
+    });
+    await expect(common.importGameStateString('{}')).rejects.toMatchObject({
+        code: 'storage-lock-unavailable',
+    });
+    const check = await storage.openManagedGameDB();
+    expect(await storage.readManagedGame(check)).toEqual(before);
+    check.close();
+});
+
+test('C03 launch waits behind a Clear queued after another managed operation', async () => {
+    await common.saveCredential('github', 'SENTINEL_QUEUED_CLEAR');
+    let release!: () => void;
+    const barrier = new Promise<void>((resolve) => {
+        release = resolve;
+    });
+    const blocked = storage.serializeManagedMutation(() => barrier);
+    const clear = common.clearCredential('github');
+    const launch = common.assertCredentialLaunch('github', 'SENTINEL_QUEUED_CLEAR');
+    const denied = expect(launch).rejects.toMatchObject({ code: 'credential-unavailable' });
+    release();
+    await blocked;
+    await clear;
+    await denied;
+    expect(fetch).not.toHaveBeenCalled();
+});
+
+test('C03 a second module cannot launch ahead of a locally queued Clear', async () => {
+    await common.saveCredential('github', 'SENTINEL_GLOBAL_CLEAR');
+    vi.resetModules();
+    const remoteStorage = await import('../src/utils/managedImportStorage.js');
+    let globalQueue = Promise.resolve<unknown>(undefined);
+    const request = vi.fn((_name: string, operation: () => unknown) => {
+        const result = globalQueue.then(operation);
+        globalQueue = result.catch(() => undefined);
+        return result;
+    });
+    vi.stubGlobal('navigator', { locks: { request } });
+    let release!: () => void;
+    const barrier = new Promise<void>((resolve) => {
+        release = resolve;
+    });
+    const blocked = storage.serializeManagedMutation(() => barrier);
+    const clear = common.clearCredential('github');
+    const launch = remoteStorage.assertCredentialLaunch('github', 'SENTINEL_GLOBAL_CLEAR');
+    const denied = expect(launch).rejects.toMatchObject({ code: 'credential-unavailable' });
+    expect(request).toHaveBeenCalledTimes(3);
+    release();
+    await blocked;
+    await clear;
+    await denied;
+    expect(fetch).not.toHaveBeenCalled();
+});
+
+test('B05 missing locks recovers IDB-only progress and retains subsequent fallback saves on reload', async () => {
+    const initial = common.loadGameState();
+    initial.inventory.idbOnly = 73;
+    await common.saveGameState(initial);
+    await common.saveCredential('github', 'SENTINEL_IDB_ONLY');
+    const db = await storage.openManagedGameDB();
+    const before = await storage.readManagedGame(db);
+    db.close();
+    localStorage.removeItem('gameState');
+    localStorage.removeItem('gameStateBackup');
+    await common.closeGameStateDatabaseForTesting();
+    vi.stubGlobal('navigator', { locks: undefined });
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    expect(common.hasLoadedPersistedGameState()).toBe(true);
+    expect(common.loadGameState().inventory.idbOnly).toBe(73);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_');
+    const next = common.loadGameState();
+    next.inventory.idbOnly = 74;
+    await common.saveGameState(next);
+    await common.closeGameStateDatabaseForTesting();
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    expect(common.loadGameState().inventory.idbOnly).toBe(74);
+    expect(JSON.stringify(common.loadGameState())).not.toContain('SENTINEL_');
+    const check = await storage.openManagedGameDB();
+    expect(await storage.readManagedGame(check)).toEqual(before);
+    check.close();
+});
+
+test.each([false, true])(
+    'B05 returning Web Locks retains fallback progress and durable credential authority (cleared=%s)',
+    async (cleared) => {
+        const locks = navigator.locks;
+        await common.saveCredential('github', 'SENTINEL_DURABLE_RETURN');
+        if (cleared) await common.clearCredential('github');
+        await common.closeGameStateDatabaseForTesting();
+        vi.stubGlobal('navigator', { locks: undefined });
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        const next = common.loadGameState();
+        next.inventory.fallbackProgress = 83;
+        await common.saveGameState(next);
+        const local = JSON.parse(localStorage.getItem('gameState')!);
+        local.github = { token: 'SENTINEL_UNTRUSTED_LOCAL' };
+        localStorage.setItem('gameState', JSON.stringify(local));
+        await common.closeGameStateDatabaseForTesting();
+        vi.stubGlobal('navigator', { locks });
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.fallbackProgress).toBe(83);
+        expect(common.loadGameState().github?.token).toBe(
+            cleared ? undefined : 'SENTINEL_DURABLE_RETURN'
+        );
+        await common.saveCredential('openAI', 'SENTINEL_AFTER_RETURN');
+        expect(common.loadGameState().inventory.fallbackProgress).toBe(83);
+        await common.clearCredential('openAI');
+        expect(common.loadGameState().inventory.fallbackProgress).toBe(83);
+        const continued = common.loadGameState();
+        continued.inventory.fallbackProgress = 84;
+        await common.saveGameState(continued);
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        db.close();
+        expect(persisted.state.inventory.fallbackProgress).toBe(84);
+        expect(persisted.state.github?.token).toBe(cleared ? undefined : 'SENTINEL_DURABLE_RETURN');
+        expect(persisted.meta.credentialEpochs.github.cleared).toBe(cleared);
+    }
+);
+
+test.each(['quest', 'bundle'])(
+    'C03 direct %s submission normalizes the gate and Authorization header',
+    async (kind) => {
+        await common.saveCredential('github', 'SENTINEL_DIRECT_NORMALIZED');
+        vi.mocked(fetch).mockResolvedValueOnce({
+            ok: false,
+            text: async () => 'synthetic-denied',
+        } as Response);
+        const submit =
+            kind === 'quest'
+                ? (await import('../src/utils/submitQuestPR.js')).submitQuestPR
+                : (await import('../src/utils/submitBundlePR.js')).submitBundlePR;
+        await expect(submit('  SENTINEL_DIRECT_NORMALIZED  ', 'synthetic', '{}')).rejects.toThrow(
+            'synthetic-denied'
+        );
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(vi.mocked(fetch).mock.calls[0][1]?.headers).toMatchObject({
+            Authorization: 'token SENTINEL_DIRECT_NORMALIZED',
+        });
+    }
+);
+
+test('A03 exported images use one representation and round-trip at the aggregate budget', async () => {
+    const { default: rasters } = await import('./fixtures/k078Rasters.json');
+    const { openCustomContentDB } = await import('../src/utils/indexeddb.js');
+    const db = await openCustomContentDB();
+    await storage.strictTransaction(db, ['items', 'quests'], 'readwrite', (tx: any) => {
+        tx.objectStore('items').put({ id: 'raster-a', name: 'Synthetic A', image: rasters.png });
+        tx.objectStore('items').put({ id: 'raster-b', name: 'Synthetic B', image: rasters.png });
+        tx.objectStore('quests').put({
+            id: 'raster-q',
+            title: 'Synthetic Q',
+            dialogue: [],
+            image: rasters.png,
+        });
+    });
+    db.close();
+    const { buildCustomContentBackupData } = await import('../src/utils/customContentBackup.js');
+    const exported = await buildCustomContentBackupData();
+    expect(exported.images).toHaveLength(3);
+    expect(
+        [...exported.items, ...exported.quests].every((entity: any) => entity.image === undefined)
+    ).toBe(true);
+    const { prepareImport } = await import('../src/utils/importPreparation.js');
+    const totalImageBytes = atob(rasters.png.split(',')[1]).length * 3;
+    const plan = prepareImport(exported, {
+        kind: 'custom',
+        limits: { totalImageBytes, totalPixels: 3 },
+    });
+    expect(plan.customContent.items.every((entity: any) => entity.image === rasters.png)).toBe(
+        true
+    );
+    expect(plan.customContent.quests[0].image).toBe(rasters.png);
+    expect(() =>
+        prepareImport(exported, {
+            kind: 'custom',
+            limits: { totalImageBytes: totalImageBytes - 1 },
+        })
+    ).toThrow('image-total-bytes');
+    expect(fetch).not.toHaveBeenCalled();
+});
+
+test.each([
+    ['unavailable', 'import'],
+    ['mirror-failed', 'import'],
+    ['unavailable', 'save'],
+    ['mirror-failed', 'save'],
+])('B05 %s storage: %s survives recovery/reload with a backward clock', async (mode, action) => {
+    await common.saveCredential('github', 'SENTINEL_IMPORT_RELOAD');
+    const beforeTime = common.loadGameState()._meta.lastUpdated;
+    vi.spyOn(Date, 'now').mockReturnValue(beforeTime - 10000);
+    const fault =
+        mode === 'unavailable'
+            ? vi
+                  .spyOn(storage, 'openManagedGameDB')
+                  .mockRejectedValueOnce(new Error('synthetic unavailable'))
+            : vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                  throw new Error('synthetic mirror failure');
+              });
+    const imported =
+        action === 'import'
+            ? common.importGameStateString(
+                  JSON.stringify({ inventory: { restoredProgress: 97 }, _meta: { lastUpdated: 1 } })
+              )
+            : common.saveGameState({
+                  ...common.loadGameState(),
+                  inventory: { restoredProgress: 97 },
+              });
+    if (mode === 'unavailable')
+        await expect(imported).resolves.toMatchObject({
+            status: 'best-effort',
+            credentialsDisabled: true,
+        });
+    else
+        await expect(imported).rejects.toMatchObject({
+            code: 'mirror-incomplete',
+            committed: ['game'],
+        });
+    expect(common.loadGameState()._meta.lastUpdated).toBeGreaterThan(beforeTime);
+    fault.mockRestore();
+    await common.closeGameStateDatabaseForTesting();
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    expect(common.loadGameState().inventory.restoredProgress).toBe(97);
+    expect(common.loadGameState().github.token).toBe('SENTINEL_IMPORT_RELOAD');
+    const db = await storage.openManagedGameDB();
+    expect((await storage.readManagedGame(db)).state.inventory.restoredProgress).toBe(97);
+    db.close();
+});
+
+test.each([
+    ['import', 'durable'],
+    ['save', 'durable'],
+    ['import', 'fallback'],
+    ['save', 'fallback'],
+    ['save', 'no-locks'],
+])(
+    'B05 %s (%s) uses retained timestamps after another tab writes identical gameplay',
+    async (action, mode) => {
+        await common.saveCredential('github', 'SENTINEL_DURABLE_TIME');
+        const stale = common.loadGameState();
+        const remoteTime = stale._meta.lastUpdated + 20000;
+        const db = await storage.openManagedGameDB();
+        const snapshot = await storage.readManagedGame(db);
+        snapshot.state._meta.lastUpdated = remoteTime;
+        snapshot.meta.lastUpdated = remoteTime;
+        await storage.strictTransaction(db, ['state', 'meta'], 'readwrite', (tx: any) => {
+            tx.objectStore('state').put(snapshot.state, 'root');
+            tx.objectStore('meta').put(snapshot.meta, 'root');
+        });
+        storage.mirrorManagedGame(snapshot);
+        expect(common.loadGameState()._meta.lastUpdated).toBeLessThan(remoteTime);
+        expect(common.loadGameState()._meta.checksum).toBe(snapshot.state._meta.checksum);
+        vi.spyOn(Date, 'now').mockReturnValue(stale._meta.lastUpdated - 10000);
+        const locks = navigator.locks;
+        const fault =
+            mode === 'durable'
+                ? vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                      throw new Error('synthetic mirror failure');
+                  })
+                : mode === 'fallback'
+                  ? vi
+                        .spyOn(storage, 'openManagedGameDB')
+                        .mockRejectedValueOnce(new Error('synthetic unavailable'))
+                  : null;
+        if (mode === 'no-locks') vi.stubGlobal('navigator', { locks: undefined });
+        const next = { ...stale, inventory: { durableTimeProgress: 98 } };
+        const write =
+            action === 'import'
+                ? common.importGameStateString(JSON.stringify(next))
+                : common.saveGameState(next);
+        if (mode === 'durable') {
+            await expect(write).rejects.toMatchObject({
+                code: 'mirror-incomplete',
+                committed: ['game'],
+            });
+            expect((await storage.readManagedGame(db)).state._meta.lastUpdated).toBeGreaterThan(
+                remoteTime
+            );
+        } else {
+            await expect(write).resolves.toMatchObject({
+                status: 'best-effort',
+                credentialsDisabled: true,
+            });
+            expect(
+                JSON.parse(localStorage.getItem('gameState')!)._meta.lastUpdated
+            ).toBeGreaterThan(remoteTime);
+            expect((await storage.readManagedGame(db)).state._meta.lastUpdated).toBe(remoteTime);
+        }
+        fault?.mockRestore();
+        if (mode === 'no-locks') vi.stubGlobal('navigator', { locks });
+        db.close();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.durableTimeProgress).toBe(98);
+        expect(common.loadGameState().github.token).toBe('SENTINEL_DURABLE_TIME');
+    }
+);
+
+test.each(['import', 'save', 'no-locks'])(
+    'B05 recovered storage keeps %s fallback progress until startup reconciliation',
+    async (action) => {
+        await common.saveCredential('github', 'SENTINEL_RECOVERED_STORAGE');
+        const locks = navigator.locks;
+        const fault =
+            action === 'no-locks'
+                ? null
+                : vi
+                      .spyOn(storage, 'openManagedGameDB')
+                      .mockRejectedValueOnce(new Error('synthetic unavailable'));
+        if (action === 'no-locks') vi.stubGlobal('navigator', { locks: undefined });
+        const next = { ...common.loadGameState(), inventory: { recoveredProgress: 101 } };
+        await expect(
+            action === 'import'
+                ? common.importGameStateString(JSON.stringify(next))
+                : common.saveGameState(next)
+        ).resolves.toMatchObject({ status: 'best-effort', credentialsDisabled: true });
+        fault?.mockRestore();
+        if (action === 'no-locks') vi.stubGlobal('navigator', { locks });
+        const db = await storage.openManagedGameDB();
+        const durableBefore = await storage.readManagedGame(db);
+        const continued = common.loadGameState();
+        continued.inventory.recoveredProgress = 102;
+        await expect(common.saveGameState(continued)).resolves.toMatchObject({
+            status: 'best-effort',
+        });
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(102);
+        expect(await storage.readManagedGame(db)).toEqual(durableBefore);
+        await expect(
+            common.saveCredential('openAI', 'SENTINEL_BLOCKED_UNTIL_RELOAD')
+        ).rejects.toMatchObject({ code: 'fallback-reload-required' });
+        await expect(common.clearCredential('github')).resolves.toMatchObject({
+            status: 'complete',
+        });
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(102);
+        continued.inventory.recoveredProgress = 103;
+        await expect(common.saveGameState(continued)).resolves.toMatchObject({
+            status: 'best-effort',
+        });
+        expect(common.loadGameState().github?.token).toBeUndefined();
+        db.close();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(103);
+        expect(common.loadGameState().github?.token).toBeUndefined();
+        await expect(
+            common.saveCredential('openAI', 'SENTINEL_AFTER_RELOAD')
+        ).resolves.toMatchObject({ status: 'complete' });
+        expect(common.loadGameState().inventory.recoveredProgress).toBe(103);
+    }
+);
+
+test('B05 already queued saves remain in fallback after the first write loses storage', async () => {
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+        new Error('synthetic unavailable')
+    );
+    const first = { ...common.loadGameState(), inventory: { queuedFallback: 201 } };
+    const firstWrite = common.saveGameState(first);
+    const second = { ...common.loadGameState(), inventory: { queuedFallback: 202 } };
+    const secondWrite = common.saveGameState(second);
+    await expect(firstWrite).resolves.toMatchObject({ status: 'best-effort' });
+    await expect(secondWrite).resolves.toMatchObject({ status: 'best-effort' });
+    expect(common.loadGameState().inventory.queuedFallback).toBe(202);
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.queuedFallback).toBe(202);
+});
+
+test.each([false, true])(
+    'B05 queued Clear cannot discard fallback progress (mirror failure=%s)',
+    async (mirrorFails) => {
+        await common.saveCredential('github', 'SENTINEL_QUEUED_CLEAR');
+        vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+            new Error('synthetic unavailable')
+        );
+        const firstWrite = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { queuedClear: 301 },
+        });
+        const clear = common.clearCredential('github');
+        const secondWrite = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { queuedClear: 302 },
+        });
+        await expect(firstWrite).resolves.toMatchObject({ status: 'best-effort' });
+        if (mirrorFails)
+            vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                throw new Error('synthetic quota');
+            });
+        await expect(clear).resolves.toMatchObject({ status: 'complete' });
+        if (mirrorFails) await expect(secondWrite).rejects.toThrow('synthetic quota');
+        else await expect(secondWrite).resolves.toMatchObject({ status: 'best-effort' });
+        const expected = mirrorFails ? 301 : 302;
+        expect(common.loadGameState().inventory.queuedClear).toBe(expected);
+        expect(common.loadGameState().github?.token).toBeUndefined();
+        expect(JSON.parse(localStorage.getItem('gameState')!).inventory.queuedClear).toBe(expected);
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.queuedClear).toBe(expected);
+        expect(common.loadGameState().github?.token).toBeUndefined();
+    }
+);
+
+test('B05 newer fallback saves stay behind older queued saves', async () => {
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+        new Error('synthetic unavailable')
+    );
+    const first = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackOrder: 401 },
+    });
+    let release!: () => void;
+    const barrier = storage.serializeManagedMutation(
+        () =>
+            new Promise<void>((resolve) => {
+                release = resolve;
+            })
+    );
+    const second = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackOrder: 402 },
+    });
+    await first;
+    await vi.waitFor(() => expect(release).toBeTypeOf('function'));
+    const third = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackOrder: 403 },
+    });
+    release();
+    await Promise.all([barrier, second, third]);
+    expect(common.loadGameState().inventory.fallbackOrder).toBe(403);
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.fallbackOrder).toBe(403);
+});
+
+test('B05 a failed queued credential Save does not discard later fallback gameplay', async () => {
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+        new Error('synthetic unavailable')
+    );
+    const first = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackCredential: 501 },
+    });
+    const credential = common.saveCredential('github', 'SENTINEL_REJECTED');
+    const denied = expect(credential).rejects.toMatchObject({ code: 'fallback-reload-required' });
+    const second = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackCredential: 502 },
+    });
+    await first;
+    await denied;
+    await expect(second).resolves.toMatchObject({ status: 'best-effort' });
+    expect(common.loadGameState().inventory.fallbackCredential).toBe(502);
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.fallbackCredential).toBe(502);
+    expect(common.loadGameState().github?.token).toBeUndefined();
+});
+
+test.each([false, true])(
+    'B05 startup mirror failure retains working IndexedDB authority (reconcile=%s)',
+    async (reconcile) => {
+        await common.saveCredential('github', 'SENTINEL_STARTUP_MIRROR');
+        if (reconcile) {
+            const local = common.loadGameState();
+            local.inventory.startupProgress = 601;
+            local._meta.lastUpdated += 100;
+            localStorage.setItem('gameState', JSON.stringify(local));
+        }
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        const fault = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+            throw new Error('synthetic localStorage unavailable');
+        });
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.isUsingLocalStorage()).toBe(false);
+        expect(common.loadGameState().github.token).toBe('SENTINEL_STARTUP_MIRROR');
+        if (reconcile) expect(common.loadGameState().inventory.startupProgress).toBe(601);
+        const next = common.loadGameState();
+        next.inventory.startupProgress = 602;
+        await expect(common.saveGameState(next)).rejects.toMatchObject({
+            code: 'mirror-incomplete',
+            committed: ['game'],
+        });
+        const db = await storage.openManagedGameDB();
+        expect((await storage.readManagedGame(db)).state.inventory.startupProgress).toBe(602);
+        db.close();
+        fault.mockRestore();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.startupProgress).toBe(602);
+    }
+);
+
+test.each(['unavailable', 'mirror-failed'])(
+    'C03 failed credential Save (%s) does not poison queued gameplay',
+    async (mode) => {
+        await common.saveCredential('github', 'SENTINEL_OLD_DEPENDENCY');
+        if (mode === 'unavailable')
+            vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+                new Error('synthetic unavailable')
+            );
+        else
+            vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                throw new Error('synthetic mirror failure');
+            });
+        const credential = common.saveCredential('github', 'SENTINEL_NEW_DEPENDENCY');
+        const denied = expect(credential).rejects.toThrow();
+        const gameplay = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { afterCredentialFailure: 701 },
+        });
+        await denied;
+        await expect(gameplay).resolves.toMatchObject({ status: 'complete' });
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        expect(persisted.state.inventory.afterCredentialFailure).toBe(701);
+        expect(persisted.state.github.token).toBe(
+            mode === 'unavailable' ? 'SENTINEL_OLD_DEPENDENCY' : 'SENTINEL_NEW_DEPENDENCY'
+        );
+        db.close();
+    }
+);
+
+test.each([false, true])(
+    'B03 overlapping gameplay advances a committed predecessor despite mirror failure (both=%s)',
+    async (both) => {
+        const mirror = vi.spyOn(storage, 'mirrorManagedGame');
+        const fail = () => {
+            throw new Error('synthetic quota');
+        };
+        if (both) mirror.mockImplementation(fail);
+        else mirror.mockImplementationOnce(fail);
+        const first = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { mirrorQueue: 801 },
+        });
+        const firstFailure = expect(first).rejects.toMatchObject({
+            code: 'mirror-incomplete',
+            committed: ['game'],
+        });
+        const second = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { mirrorQueue: 802 },
+        });
+        const secondResult = both
+            ? expect(second).rejects.toMatchObject({
+                  code: 'mirror-incomplete',
+                  committed: ['game'],
+              })
+            : expect(second).resolves.toMatchObject({ status: 'complete' });
+        await Promise.all([firstFailure, secondResult]);
+        const db = await storage.openManagedGameDB();
+        expect((await storage.readManagedGame(db)).state.inventory.mirrorQueue).toBe(802);
+        expect(common.loadGameState().inventory.mirrorQueue).toBe(802);
+        db.close();
+    }
+);
+
+test.each([
+    { rewards: [{ id: 'unknown-synthetic-item', count: 1 }], code: 'unresolved-reference' },
+    { rewards: [{ id: 'reward-item', count: '2' }], code: 'reference-count' },
+    { rewards: [{ id: 'reward-item', count: -1 }], code: 'reference-count' },
+    { rewards: [{ id: 'reward-item' }], code: 'reference-count' },
+    { rewards: [{ id: 'reward-item', count: null }], code: 'reference-count' },
+    { rewards: { id: 'reward-item', count: 1 }, code: 'reference-type' },
+])('A04 rejects malformed quest rewards before any writes (%j)', async ({ rewards, code }) => {
+    const before = common.loadGameState();
+    const commit = vi.spyOn(storage, 'commitManagedGame');
+    await expect(
+        common.importGameStateString(
+            JSON.stringify({
+                schemaVersion: 1,
+                payload: { inventory: { shouldNotImport: 1 } },
+                customContent: {
+                    schemaVersion: 1,
+                    items: [{ id: 'reward-item', name: 'Synthetic reward' }],
+                    quests: [{ id: 'reward-quest', rewards }],
+                },
+            })
+        )
+    ).rejects.toMatchObject({ code });
+    expect(commit).not.toHaveBeenCalled();
+    expect(common.loadGameState()).toEqual(before);
+    const custom = await storage.preflightCustomImport();
+    expect(custom.snapshot.quests).toHaveLength(0);
+    custom.db.close();
+});
+
+test.each(['gameplay', 'credential'])(
+    'B05 fallback carries the committed %s dependency timestamp after its mirror fails',
+    async (kind) => {
+        await common.saveCredential('github', 'SENTINEL_TIME_BASE');
+        const db = await storage.openManagedGameDB();
+        const previous = await storage.readManagedGame(db);
+        const remoteTime = previous.state._meta.lastUpdated + 20000;
+        previous.state._meta.lastUpdated = remoteTime;
+        await storage.strictTransaction(db, ['state'], 'readwrite', (tx: any) =>
+            tx.objectStore('state').put(previous.state, 'root')
+        );
+        const open = storage.openManagedGameDB;
+        vi.spyOn(storage, 'openManagedGameDB')
+            .mockImplementationOnce(open)
+            .mockRejectedValueOnce(new Error('synthetic unavailable'));
+        vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+            throw new Error('synthetic mirror');
+        });
+        const first =
+            kind === 'gameplay'
+                ? common.saveGameState({
+                      ...common.loadGameState(),
+                      inventory: { receiptTime: 901 },
+                  })
+                : common.saveCredential('github', 'SENTINEL_TIME_NEW');
+        const failedMirror = expect(first).rejects.toMatchObject({ code: 'mirror-incomplete' });
+        const second = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { receiptTime: 902 },
+        });
+        await failedMirror;
+        await expect(second).resolves.toMatchObject({ status: 'best-effort' });
+        expect(JSON.parse(localStorage.getItem('gameState')!)._meta.lastUpdated).toBeGreaterThan(
+            (await storage.readManagedGame(db)).state._meta.lastUpdated
+        );
+        db.close();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.receiptTime).toBe(902);
+        expect(common.loadGameState().github.token).toBe(
+            kind === 'gameplay' ? 'SENTINEL_TIME_BASE' : 'SENTINEL_TIME_NEW'
+        );
+    }
+);
+
+test('A04 unresolved dialogue process rejects before any write', async () => {
+    const commit = vi.spyOn(storage, 'commitManagedGame');
+    await expect(
+        common.importGameStateString(
+            JSON.stringify({
+                schemaVersion: 1,
+                payload: {},
+                customContent: {
+                    schemaVersion: 1,
+                    quests: [
+                        {
+                            id: 'process-quest',
+                            dialogue: [
+                                {
+                                    id: 'start',
+                                    options: [
+                                        {
+                                            type: 'process',
+                                            text: 'Synthetic',
+                                            process: 'missing-synthetic-process',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            })
+        )
+    ).rejects.toMatchObject({ code: 'unresolved-reference' });
+    expect(commit).not.toHaveBeenCalled();
+});
+
+test.each(['requirement', 'operation'])(
+    'A04 malformed container %s rejects before any game/custom writes',
+    async (kind) => {
+        const commit = vi.spyOn(storage, 'commitManagedGame');
+        const content =
+            kind === 'requirement'
+                ? {
+                      quests: [
+                          {
+                              id: 'q',
+                              requiresItems: [
+                                  { id: 'contents', count: 1, containerItemId: 'missing' },
+                              ],
+                          },
+                      ],
+                  }
+                : {
+                      processes: [
+                          {
+                              id: 'p',
+                              itemCountOperations: [
+                                  {
+                                      operation: 'invalid',
+                                      itemId: 'contents',
+                                      containerItemId: 'container',
+                                      count: 1,
+                                  },
+                              ],
+                          },
+                      ],
+                  };
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload: {},
+                    customContent: {
+                        schemaVersion: 1,
+                        items: [
+                            { id: 'contents' },
+                            { id: 'container', itemCounts: { contents: 0 } },
+                        ],
+                        ...content,
+                    },
+                })
+            )
+        ).rejects.toThrow();
+        expect(commit).not.toHaveBeenCalled();
+        const custom = await storage.preflightCustomImport();
+        expect(custom.snapshot.items).toHaveLength(0);
+        custom.db.close();
+    }
+);
+
+test.each(
+    [
+        ['github', 'gameState'],
+        ['github', 'gameStateBackup'],
+        ['openAI', 'gameState'],
+        ['openAI', 'gameStateBackup'],
+    ].flatMap(([kind, key]) =>
+        ['{invalid synthetic JSON', '"corrupt"', '{"payload":null}'].map((raw) => [kind, key, raw])
+    )
+)(
+    'C02 Clear repairs malformed owned %s %s mirror from scrubbed durable data (%s)',
+    async (kind, key, raw) => {
+        await common.saveCredential('github', 'SENTINEL_MALFORMED_GITHUB');
+        await common.saveCredential('openAI', 'SENTINEL_MALFORMED_OPENAI');
+        await common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { preservedMalformed: 31 },
+        });
+        localStorage.setItem('unrelated-synthetic-setting', 'keep');
+        localStorage.setItem(key, raw);
+        await expect(common.clearCredential(kind)).resolves.toMatchObject({ status: 'complete' });
+        const db = await storage.openManagedGameDB();
+        const durable = await storage.readManagedGame(db);
+        expect(JSON.parse(localStorage.getItem(key)!)).toEqual(
+            durable[key === 'gameState' ? 'state' : 'backup']
+        );
+        expect(durable.state[kind]?.[kind === 'github' ? 'token' : 'apiKey']).toBeUndefined();
+        expect(
+            durable.state[kind === 'github' ? 'openAI' : 'github'][
+                kind === 'github' ? 'apiKey' : 'token'
+            ]
+        ).toContain('SENTINEL_MALFORMED');
+        expect(durable.state.inventory.preservedMalformed).toBe(31);
+        expect(localStorage.getItem('unrelated-synthetic-setting')).toBe('keep');
+        expect(durable.meta.credentialEpochs[kind].pending).toBe(false);
+        db.close();
+        await expect(
+            common.saveCredential(kind, 'SENTINEL_NEW_AFTER_REPAIR')
+        ).resolves.toMatchObject({ status: 'complete' });
+    }
+);
+
+test('C02 Clear removes only a malformed backup mirror when no durable backup exists', async () => {
+    localStorage.setItem('gameStateBackup', '{invalid synthetic JSON');
+    localStorage.setItem('unrelated-synthetic-setting', 'keep');
+    await expect(common.clearCredential('github')).resolves.toMatchObject({ status: 'complete' });
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+    expect(localStorage.getItem('unrelated-synthetic-setting')).toBe('keep');
+});
+
+test.each([
+    [false, false],
+    [false, true],
+    [true, false],
+    [true, true],
+])(
+    'C04 typed Save notice preserves direct gameplay and drafts (remote=%s refreshed=%s)',
+    async (remoteProgress, afterRefresh) => {
+        await common.closeGameStateDatabaseForTesting();
+        const channels: any[] = [],
+            messages: any[] = [];
+        class TestChannel {
+            onmessage: any;
+            constructor() {
+                channels.push(this);
+            }
+            postMessage(data: any) {
+                messages.push(data);
+            }
+            close() {}
+        }
+        vi.stubGlobal('BroadcastChannel', TestChannel);
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        await common.saveCredential('github', 'SENTINEL_NOTICE_OLD');
+        expect(channels).toHaveLength(1);
+        const origin = common;
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        if (remoteProgress)
+            await remote.saveGameState({
+                ...remote.loadGameState(),
+                inventory: { remoteNoticeProgress: 44 },
+            });
+        await remote.saveCredential('github', 'SENTINEL_NOTICE_NEW');
+        await remote.closeGameStateDatabaseForTesting();
+        const notice = messages.at(-1);
+        expect(notice).toEqual({ type: 'saved', kind: 'github', epoch: expect.any(Number) });
+        const cleared = vi.fn();
+        window.addEventListener('dspace-credential-cleared', cleared);
+        channels[0].onmessage({ data: notice });
+        expect(origin.loadGameState().github.token).toBe('SENTINEL_NOTICE_OLD');
+        if (afterRefresh) await origin.flushGameStateWritesForTesting();
+        const next = origin.loadGameState();
+        next.inventory.directNoticeProgress = 45;
+        const saving = origin.saveGameState(next);
+        if (remoteProgress && !afterRefresh)
+            await expect(saving).rejects.toMatchObject({ code: 'stale-state' });
+        else {
+            await saving;
+            expect(origin.loadGameState().inventory.directNoticeProgress).toBe(45);
+        }
+        expect(origin.loadGameState().github.token).toBe('SENTINEL_NOTICE_NEW');
+        if (remoteProgress) expect(origin.loadGameState().inventory.remoteNoticeProgress).toBe(44);
+        expect(cleared).not.toHaveBeenCalled();
+        window.removeEventListener('dspace-credential-cleared', cleared);
+    }
+);
+
+test('C04 consecutive saves from a refreshed subscriber inherit only a validated predecessor', async () => {
+    await common.closeGameStateDatabaseForTesting();
+    const channels: any[] = [],
+        messages: any[] = [];
+    class TestChannel {
+        onmessage: any;
+        constructor() {
+            channels.push(this);
+        }
+        postMessage(data: any) {
+            messages.push(data);
+        }
+        close() {}
+    }
+    vi.stubGlobal('BroadcastChannel', TestChannel);
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    await common.saveCredential('github', 'SENTINEL_SUBSCRIBER_OLD');
+    const origin = common;
+    vi.resetModules();
+    const remote = await import('../src/utils/gameState/common.js');
+    await remote.ready;
+    await remote.saveGameState({ ...remote.loadGameState(), inventory: { subscriberRemote: 77 } });
+    await remote.saveCredential('github', 'SENTINEL_SUBSCRIBER_NEW');
+    await remote.closeGameStateDatabaseForTesting();
+    let writes: Promise<any>[] | undefined;
+    const unsubscribe = origin.state.subscribe((value: any) => {
+        if (!writes && value.github?.token === 'SENTINEL_SUBSCRIBER_NEW') {
+            writes = [];
+            const first = origin.loadGameState();
+            first.inventory.subscriberLocal = 1;
+            writes.push(origin.saveGameState(first));
+            const second = origin.loadGameState();
+            second.inventory.subscriberLocal = 2;
+            writes.push(origin.saveGameState(second));
+        }
+    });
+    channels[0].onmessage({ data: messages.at(-1) });
+    await origin.flushGameStateWritesForTesting();
+    expect(writes).toHaveLength(2);
+    await Promise.all(writes!);
+    unsubscribe();
+    expect(origin.loadGameState().inventory).toMatchObject({
+        subscriberRemote: 77,
+        subscriberLocal: 2,
+    });
+});
+
+test('C04 a predecessor cannot bypass newer remote gameplay observed by a later credential receipt', async () => {
+    const first = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { predecessorLocal: 1 },
+    });
+    const remoteWrite = storage.serializeManagedMutation(async () => {
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        persisted.state.inventory.remoteAfterPredecessor = 99;
+        persisted.state._meta.checksum = 'synthetic-newer-remote-checksum';
+        await storage.strictTransaction(db, ['state'], 'readwrite', (tx: any) =>
+            tx.objectStore('state').put(persisted.state, 'root')
+        );
+        db.close();
+    });
+    const credential = common.saveCredential('github', 'SENTINEL_LATER_RECEIPT');
+    const next = common.loadGameState();
+    next.inventory.predecessorLocal = 2;
+    const second = common.saveGameState(next);
+    const rejected = expect(second).rejects.toMatchObject({ code: 'stale-state' });
+    await Promise.all([first, remoteWrite, credential, rejected]);
+    expect(common.loadGameState().inventory).toMatchObject({
+        predecessorLocal: 1,
+        remoteAfterPredecessor: 99,
+    });
+});
+
+test.each([7, ' item-A '])(
+    'B03 combined restore rejects legacy key %s before either database commits',
+    async (legacyId) => {
+        const initial = common.loadGameState();
+        initial.inventory[String(legacyId)] = 5;
+        await common.saveGameState(initial);
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, ['items', 'quests'], 'readwrite', (tx: any) => {
+            tx.objectStore('items').put({ id: legacyId, name: 'original' });
+            tx.objectStore('quests').put({
+                id: 'retained-quest',
+                rewards: [{ id: legacyId, count: 1 }],
+            });
+        });
+        custom.db.close();
+        const beforeCustom = await storage.preflightCustomImport();
+        const db = await storage.openManagedGameDB();
+        const beforeGame = await storage.readManagedGame(db);
+        const beforeMirror = localStorage.getItem('gameState');
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload: { inventory: { changed: 99 } },
+                    customContent: {
+                        schemaVersion: 1,
+                        items: [{ id: String(legacyId).trim(), name: 'replacement' }],
+                    },
+                })
+            )
+        ).rejects.toMatchObject({ code: 'legacy-id-migration-required' });
+        expect(await storage.readManagedGame(db)).toEqual(beforeGame);
+        expect(localStorage.getItem('gameState')).toBe(beforeMirror);
+        const afterCustom = await storage.preflightCustomImport();
+        expect(afterCustom.snapshot).toEqual(beforeCustom.snapshot);
+        expect(common.loadGameState().inventory[String(legacyId)]).toBe(5);
+        db.close();
+        beforeCustom.db.close();
+        afterCustom.db.close();
+    }
+);
+
+test.each(['github', 'openAI'])(
+    'C04 delayed notices reconcile consecutive %s Saves atomically without losing queued gameplay',
+    async (kind) => {
+        await common.saveCredential(kind, 'SENTINEL_DELAYED_OLD');
+        const origin = common;
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        await remote.saveCredential(kind, 'SENTINEL_DELAYED_MIDDLE');
+        await remote.saveCredential(kind, 'SENTINEL_DELAYED_NEW');
+        await remote.closeGameStateDatabaseForTesting();
+        const first = origin.loadGameState();
+        first.inventory.delayedNoticeProgress = 1;
+        const saving = origin.saveGameState(first);
+        const second = origin.loadGameState();
+        second.inventory.delayedNoticeProgress = 2;
+        await Promise.all([saving, origin.saveGameState(second)]);
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        db.close();
+        expect(persisted.state.inventory.delayedNoticeProgress).toBe(2);
+        expect(persisted.state[kind][kind === 'github' ? 'token' : 'apiKey']).toBe(
+            'SENTINEL_DELAYED_NEW'
+        );
+    }
+);
+
+test.each(['remote-gameplay', 'clear', 'clear-then-save', 'incomplete-clear', 'unknown-history'])(
+    'C04 delayed notice reconciliation preserves the %s barrier',
+    async (barrier) => {
+        await common.saveCredential('github', 'SENTINEL_BARRIER_OLD');
+        const origin = common;
+        const captured = origin.loadGameState();
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        if (barrier === 'remote-gameplay')
+            await remote.saveGameState({
+                ...remote.loadGameState(),
+                inventory: { remoteBarrier: 9 },
+            });
+        if (barrier === 'clear' || barrier === 'clear-then-save')
+            await remote.clearCredential('github');
+        if (barrier !== 'clear') await remote.saveCredential('github', 'SENTINEL_BARRIER_NEW');
+        await remote.closeGameStateDatabaseForTesting();
+        const db = await storage.openManagedGameDB();
+        if (barrier === 'unknown-history' || barrier === 'incomplete-clear') {
+            await storage.strictTransaction(db, ['meta'], 'readwrite', (tx: any, req: any) => {
+                req(tx.objectStore('meta').get('root'), (meta: any) => {
+                    if (barrier === 'unknown-history') delete meta.credentialSaveBaseEpochs;
+                    else meta.credentialEpochs.github.pending = true;
+                    tx.objectStore('meta').put(meta, 'root');
+                });
+            });
+        }
+        const before = await storage.readManagedGame(db);
+        captured.inventory.mustNotCommit = 1;
+        await expect(origin.saveGameState(captured)).rejects.toMatchObject({
+            code: barrier === 'remote-gameplay' ? 'stale-state' : 'stale-credential-epoch',
+        });
+        expect(await storage.readManagedGame(db)).toEqual(before);
+        db.close();
+    }
+);
+
+test.each([
+    { payload: null },
+    { gameState: false },
+    { gameState: { payload: [] } },
+    { payload: { github: false } },
+])(
+    'A04 malformed durable wrapper rejects before writes and leaves credential operations usable: %j',
+    async (payload) => {
+        await common.saveCredential('github', 'SENTINEL_WRAPPER_DESTINATION');
+        const db = await storage.openManagedGameDB();
+        const before = await storage.readManagedGame(db);
+        const mirror = localStorage.getItem('gameState');
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload,
+                    customContent: { schemaVersion: 1, items: [{ id: 'must-not-import' }] },
+                })
+            )
+        ).rejects.toThrow();
+        expect(await storage.readManagedGame(db)).toEqual(before);
+        expect(localStorage.getItem('gameState')).toBe(mirror);
+        const custom = await storage.preflightCustomImport();
+        expect(custom.snapshot.items).toHaveLength(0);
+        custom.db.close();
+        db.close();
+        await expect(
+            common.saveCredential('github', 'SENTINEL_WRAPPER_NEW')
+        ).resolves.toMatchObject({ status: 'complete' });
+        await expect(common.clearCredential('github')).resolves.toMatchObject({
+            status: 'complete',
+        });
+    }
+);
+
+function observeCredentialLock() {
+    let held = false;
+    let tail = Promise.resolve<unknown>(undefined);
+    vi.stubGlobal('navigator', {
+        locks: {
+            request: (_name: string, operation: () => unknown) => {
+                const result = tail.then(async () => {
+                    held = true;
+                    try {
+                        return await operation();
+                    } finally {
+                        held = false;
+                    }
+                });
+                tail = result.catch(() => undefined);
+                return result;
+            },
+        },
+    });
+    return () => held;
+}
+
+test.each(['github', 'openAI'])(
+    'C03 %s request issuance is locked but Clear does not wait for the response',
+    async (kind) => {
+        await common.saveCredential(kind, 'SENTINEL_LOCKED_LAUNCH');
+        const held = observeCredentialLock();
+        vi.resetModules();
+        const remote = await import('../src/utils/managedImportStorage.js');
+        let resolveResponse!: (value: unknown) => void;
+        const response = new Promise((resolve) => {
+            resolveResponse = resolve;
+        });
+        const issue = vi.fn(() => {
+            expect(held()).toBe(true);
+            return response;
+        });
+        const request = remote.fetchWithCredential(
+            kind,
+            'SENTINEL_LOCKED_LAUNCH',
+            issue,
+            'synthetic'
+        );
+        let finished = false;
+        void request.then(() => {
+            finished = true;
+        });
+        await expect(common.clearCredential(kind)).resolves.toMatchObject({ status: 'complete' });
+        expect(issue).toHaveBeenCalledTimes(1);
+        expect(finished).toBe(false);
+        await expect(
+            remote.fetchWithCredential(kind, 'SENTINEL_LOCKED_LAUNCH', issue, 'synthetic')
+        ).rejects.toMatchObject({ code: 'credential-unavailable' });
+        expect(issue).toHaveBeenCalledTimes(1);
+        resolveResponse('synthetic response');
+        await expect(request).resolves.toBe('synthetic response');
+    }
+);
+
+test.each([
+    'validation',
+    'listing',
+    'backup',
+    'download',
+    'quest-pr',
+    'bundle-pr',
+    'openai',
+    'openai-v2',
+])('C03 %s issues its provider fetch while holding credential authority', async (path) => {
+    const token = 'ghp_' + 'S'.repeat(36);
+    await common.saveCredential(path.startsWith('openai') ? 'openAI' : 'github', token);
+    const held = observeCredentialLock();
+    const issuanceLockStates: boolean[] = [];
+    const issued = vi.fn(() => {
+        issuanceLockStates.push(held());
+        throw new Error('synthetic request stop');
+    });
+    vi.stubGlobal('fetch', issued);
+    let operation: Promise<unknown>;
+    if (['validation', 'listing', 'backup'].includes(path)) {
+        const gist = await import('../src/lib/cloudsync/githubGists');
+        operation =
+            path === 'validation'
+                ? gist.validateToken(token)
+                : path === 'listing'
+                  ? gist.listBackups(token)
+                  : gist.createBackupGist({ token, content: '{}' });
+    } else if (path === 'download') {
+        const cloud = await import('../src/utils/cloudSync.js');
+        operation = cloud.downloadGameStateFromGist(token, 'synthetic-gist');
+    } else if (path === 'quest-pr') {
+        const pr = await import('../src/utils/submitQuestPR.js');
+        operation = pr.submitQuestPR(token, 'synthetic-branch', '{}');
+    } else if (path === 'bundle-pr') {
+        const pr = await import('../src/utils/submitBundlePR.js');
+        operation = pr.submitBundlePR(token, 'synthetic-branch', '{}');
+    } else {
+        vi.stubGlobal(
+            '__DSpaceOpenAIClient',
+            class {
+                responses: any;
+                constructor(options: any) {
+                    this.responses = { create: () => options.fetch('https://synthetic.invalid') };
+                }
+            }
+        );
+        const ai = await import('../src/utils/openAI.js');
+        operation = (path === 'openai' ? ai.GPT5Chat : ai.GPT5ChatV2)([], {
+            promptPayload: {
+                gameState: common.loadGameState(),
+                combinedMessages: [],
+                contextSources: [],
+            },
+        });
+    }
+    await expect(operation).rejects.toThrow();
+    expect(issued).toHaveBeenCalled();
+    expect(issuanceLockStates.every(Boolean)).toBe(true);
+});
+
+test('B05 completed upload retains its remote receipt when local mirroring fails', async () => {
+    const next = common.loadGameState();
+    next.cloudSync = { gistId: 'old-synthetic-gist' };
+    await common.saveGameState(next);
+    const gist = await import('../src/lib/cloudsync/githubGists');
+    const create = vi.spyOn(gist, 'createBackupGist').mockResolvedValue({ id: 'uploaded-once' });
+    vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+        throw new Error('synthetic quota');
+    });
+    const cloud = await import('../src/utils/cloudSync.js');
+    await expect(cloud.uploadGameStateToGist('synthetic')).resolves.toMatchObject({
+        id: 'uploaded-once',
+        localWarning: 'mirror-incomplete',
+    });
+    expect(create).toHaveBeenCalledTimes(1);
+    const db = await storage.openManagedGameDB();
+    expect((await storage.readManagedGame(db)).state.cloudSync.gistId).toBe('');
+    db.close();
+});
+
+test.each(
+    ['animated-png', 'animated-gif', 'animated-webp'].flatMap((format) =>
+        ['items', 'quests'].flatMap((section) =>
+            ['data', 'blob', 'fetch'].map((representation) => ({ format, section, representation }))
+        )
+    )
+)(
+    'A03 incompatible export media fails before backup or upload success: %j',
+    async ({ format, section, representation }) => {
+        const { default: rasters } = await import('./fixtures/k078Rasters.json');
+        const dataUrl = (rasters as Record<string, string>)[format];
+        const binary = Uint8Array.from(atob(dataUrl.split(',')[1]), (c) => c.charCodeAt(0));
+        const blob = new Blob([binary], { type: dataUrl.slice(5, dataUrl.indexOf(';')) });
+        const image =
+            representation === 'data'
+                ? { image: dataUrl }
+                : representation === 'blob'
+                  ? { imageBlob: blob }
+                  : { image: '/synthetic-image.png' };
+        if (representation === 'fetch')
+            vi.stubGlobal(
+                'fetch',
+                vi.fn(async () => ({ ok: true, blob: async () => blob }))
+            );
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, [section], 'readwrite', (tx: any) =>
+            tx.objectStore(section).put({ id: 'synthetic-media', ...image })
+        );
+        custom.db.close();
+        const backup = await import('../src/utils/customContentBackup.js');
+        const events: any[] = [];
+        await expect(
+            backup.buildCustomContentBackupData({ onProgress: (event: any) => events.push(event) })
+        ).rejects.toThrow('Backup export failed');
+        expect(events.at(-1)).toEqual({ type: 'error', error: 'backup-export-failed' });
+        const gist = await import('../src/lib/cloudsync/githubGists');
+        const create = vi.spyOn(gist, 'createBackupGist');
+        const cloud = await import('../src/utils/cloudSync.js');
+        await expect(cloud.uploadGameStateToGist('synthetic')).rejects.toThrow(
+            'Backup export failed'
+        );
+        expect(create).not.toHaveBeenCalled();
+    }
+);
+
+test.each(['png', 'jpeg', 'gif', 'webp', 'fallback'])(
+    'A03 compatible %s export media remains restorable',
+    async (format) => {
+        const { default: rasters } = await import('./fixtures/k078Rasters.json');
+        const image =
+            format === 'fallback' ? '/favicon.ico' : (rasters as Record<string, string>)[format];
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, ['items', 'quests'], 'readwrite', (tx: any) => {
+            tx.objectStore('items').put({ id: 'static-item', image });
+            tx.objectStore('quests').put({ id: 'static-quest', image });
+        });
+        custom.db.close();
+        const backup = await import('../src/utils/customContentBackup.js');
+        const prepared = await import('../src/utils/importPreparation.js');
+        const data = await backup.buildCustomContentBackupData();
+        expect(prepared.prepareImport(data, { kind: 'custom' }).customContent.items[0].image).toBe(
+            image
+        );
+        expect(prepared.prepareImport(data, { kind: 'custom' }).customContent.quests[0].image).toBe(
+            image
+        );
+        expect(fetch).not.toHaveBeenCalled();
+    }
+);
+
+async function seedDestinationReferences() {
+    const custom = await storage.preflightCustomImport();
+    await storage.strictTransaction(
+        custom.db,
+        ['items', 'processes', 'quests'],
+        'readwrite',
+        (tx: any) => {
+            tx.objectStore('items').put({ id: 'destination-item', name: 'Keep item' });
+            tx.objectStore('items').put({
+                id: 'destination-container',
+                itemCounts: { 'destination-item': 0 },
+            });
+            tx.objectStore('processes').put({ id: 'destination-process', title: 'Keep process' });
+            tx.objectStore('quests').put({ id: 'destination-quest', title: 'Keep quest' });
+        }
+    );
+    custom.db.close();
+}
+
+const sparseDestinationBackup = () => ({
+    schemaVersion: 1,
+    processes: [
+        {
+            id: 'imported-process',
+            requireItems: [{ id: 'destination-item', count: 1 }],
+            itemCountOperations: [
+                {
+                    operation: 'deposit',
+                    itemId: 'destination-item',
+                    containerItemId: 'destination-container',
+                    count: 1,
+                },
+            ],
+        },
+    ],
+    quests: [
+        {
+            id: 'imported-quest',
+            rewards: [{ id: 'destination-item', count: 1 }],
+            requiresQuests: ['destination-quest'],
+            dependencies: ['destination-item'],
+            dialogue: [
+                {
+                    id: 'start',
+                    options: [
+                        {
+                            type: 'process',
+                            text: 'Use existing process',
+                            process: 'destination-process',
+                            requiresItems: [
+                                {
+                                    id: 'destination-item',
+                                    count: 1,
+                                    containerItemId: 'destination-container',
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+});
+
+test.each(['object', 'raw', 'base64', 'file', 'combined'])(
+    'A04 sparse %s import resolves destination item/process/quest/container references without rewriting them',
+    async (entry) => {
+        await seedDestinationReferences();
+        const before = await storage.preflightCustomImport();
+        before.db.close();
+        const source = sparseDestinationBackup();
+        const text = JSON.stringify(source);
+        const backup = await import('../src/utils/customContentBackup.js');
+        if (entry === 'combined')
+            await common.importGameStateString(
+                JSON.stringify({ schemaVersion: 1, payload: {}, customContent: source })
+            );
+        else if (entry === 'file')
+            await backup.restoreCustomContentBackupFromFile({
+                size: text.length,
+                text: async () => text,
+            });
+        else
+            await backup.restoreCustomContentBackup(
+                entry === 'object' ? source : entry === 'base64' ? btoa(text) : text
+            );
+        const after = await storage.preflightCustomImport();
+        expect(after.snapshot.items).toEqual(before.snapshot.items);
+        expect(
+            after.snapshot.processes.find((entity: any) => entity.id === 'destination-process')
+        ).toEqual(before.snapshot.processes[0]);
+        expect(
+            after.snapshot.quests.find((entity: any) => entity.id === 'destination-quest')
+        ).toEqual(before.snapshot.quests[0]);
+        expect(
+            after.snapshot.processes.find((entity: any) => entity.id === 'imported-process')
+        ).toBeTruthy();
+        expect(
+            after.snapshot.quests.find((entity: any) => entity.id === 'imported-quest')
+        ).toBeTruthy();
+        after.db.close();
+    }
+);
+
+test.each(['missing-item', 'missing-process', 'missing-quest', 'invalid-container'])(
+    'A04 destination reference %s rejects combined imports before either database writes',
+    async (failure) => {
+        await seedDestinationReferences();
+        const source = sparseDestinationBackup();
+        if (failure === 'missing-item') source.processes[0].requireItems[0].id = 'missing-item';
+        if (failure === 'missing-process')
+            source.quests[0].dialogue[0].options[0].process = 'missing-process';
+        if (failure === 'missing-quest') source.quests[0].requiresQuests = ['missing-quest'];
+        if (failure === 'invalid-container')
+            source.processes[0].itemCountOperations[0].containerItemId = 'destination-item';
+        const db = await storage.openManagedGameDB();
+        const beforeGame = await storage.readManagedGame(db);
+        const beforeCustom = await storage.preflightCustomImport();
+        beforeCustom.db.close();
+        const beforeMirror = localStorage.getItem('gameState');
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload: { inventory: { mustNotWrite: 1 } },
+                    customContent: source,
+                })
+            )
+        ).rejects.toThrow();
+        expect(await storage.readManagedGame(db)).toEqual(beforeGame);
+        expect(localStorage.getItem('gameState')).toBe(beforeMirror);
+        const after = await storage.preflightCustomImport();
+        expect(after.snapshot).toEqual(beforeCustom.snapshot);
+        after.db.close();
+        db.close();
+    }
+);
+
+test('A04 referenced destination changes after validation abort the custom commit', async () => {
+    await seedDestinationReferences();
+    const original = storage.commitCustomImport;
+    vi.spyOn(storage, 'commitCustomImport').mockImplementationOnce(
+        async (db: any, ...args: any[]) => {
+            await storage.strictTransaction(db, ['items'], 'readwrite', (tx: any) =>
+                tx.objectStore('items').delete('destination-item')
+            );
+            return original(db, ...args);
+        }
+    );
+    const backup = await import('../src/utils/customContentBackup.js');
+    await expect(
+        backup.restoreCustomContentBackup(sparseDestinationBackup())
+    ).rejects.toMatchObject({ code: 'stale-custom-content' });
+    const after = await storage.preflightCustomImport();
+    expect(after.snapshot.processes.some((entity: any) => entity.id === 'imported-process')).toBe(
+        false
+    );
+    expect(after.snapshot.quests.some((entity: any) => entity.id === 'imported-quest')).toBe(false);
+    after.db.close();
+});
+
+test.each([
+    { code: 'entities', limits: { entities: 2 }, items: [{ id: 'a' }, { id: 'b' }, { id: 'c' }] },
+    {
+        code: 'string-bytes',
+        limits: { stringBytes: 32 },
+        items: [{ id: 'a', description: 'x'.repeat(33) }],
+    },
+    {
+        code: 'json-bytes',
+        limits: { jsonBytes: 512 },
+        items: [{ id: 'a', description: 'x'.repeat(500) }],
+    },
+])(
+    'A02 complete custom export rejects $code before download or provider creation',
+    async ({ code, limits, items }) => {
+        const prep = await import('../src/utils/importPreparation.js');
+        const actual = prep.prepareImport;
+        vi.spyOn(prep, 'prepareImport').mockImplementation((input: any, options: any = {}) =>
+            actual(input, { ...options, limits })
+        );
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, ['items'], 'readwrite', (tx: any) => {
+            for (const item of items) tx.objectStore('items').put(item);
+        });
+        custom.db.close();
+        const backup = await import('../src/utils/customContentBackup.js');
+        await expect(backup.buildCustomContentBackupData()).rejects.toMatchObject({ code });
+        await expect(backup.buildCustomContentBackup()).rejects.toMatchObject({ code });
+        const gist = await import('../src/lib/cloudsync/githubGists');
+        const create = vi.spyOn(gist, 'createBackupGist');
+        const cloud = await import('../src/utils/cloudSync.js');
+        await expect(cloud.uploadGameStateToGist('synthetic')).rejects.toMatchObject({ code });
+        expect(create).not.toHaveBeenCalled();
+    }
+);
+
+test('A02 combined export charges game and custom metadata as one envelope', async () => {
+    const prep = await import('../src/utils/importPreparation.js');
+    const actual = prep.prepareImport;
+    const payload = { inventory: {}, extension: 'x'.repeat(120) };
+    const customContent = { schemaVersion: 1, items: [{ id: 'a', description: 'x'.repeat(120) }] };
+    expect(() => actual(payload, { limits: { jsonBytes: 300 } })).not.toThrow();
+    expect(() =>
+        actual(customContent, { kind: 'custom', limits: { jsonBytes: 300 } })
+    ).not.toThrow();
+    const budgets = await import('../src/utils/importBudgets.js');
+    const assertBudget = budgets.assertBackupBudget;
+    vi.spyOn(budgets, 'assertBackupBudget').mockImplementation((input: any) =>
+        assertBudget(input, { jsonBytes: 300 })
+    );
+    expect(() => common.exportGameStateString({ stateOverride: payload, customContent })).toThrow(
+        /json-bytes/
+    );
+});
+
+test('A02 pretty backup output charges whitespace before download success', async () => {
+    const prep = await import('../src/utils/importPreparation.js');
+    const actual = prep.prepareImport;
+    const backup = await import('../src/utils/customContentBackup.js');
+    const valid = await backup.buildCustomContentBackupData();
+    const jsonBytes = new TextEncoder().encode(JSON.stringify(valid)).length;
+    vi.spyOn(prep, 'prepareImport').mockImplementation((input: any, options: any = {}) =>
+        actual(input, { ...options, limits: { jsonBytes } })
+    );
+    await expect(backup.buildCustomContentBackupData()).resolves.toBeDefined();
+    await expect(backup.buildCustomContentBackup()).rejects.toMatchObject({ code: 'json-bytes' });
+});
+
+test.each([Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER * 2, Number.MAX_VALUE])(
+    'B05 imported timestamp %s cannot poison later fallback ordering',
+    async (lastUpdated) => {
+        await common.importGameStateString(
+            JSON.stringify({ inventory: { importedClock: 1 }, _meta: { lastUpdated } })
+        );
+        const imported = common.loadGameState();
+        expect(imported._meta.lastUpdated).toBeLessThan(Number.MAX_SAFE_INTEGER);
+        const db = await storage.openManagedGameDB();
+        const durable = await storage.readManagedGame(db);
+        db.close();
+        const locks = navigator.locks;
+        Object.defineProperty(navigator, 'locks', { configurable: true, value: undefined });
+        try {
+            const next = common.loadGameState();
+            next.inventory.importedClock = 2;
+            await common.saveGameState(next);
+            const local = JSON.parse(localStorage.getItem('gameState')!);
+            expect(local._meta.lastUpdated).toBeGreaterThan(durable.state._meta.lastUpdated);
+            await common.closeGameStateDatabaseForTesting();
+            vi.resetModules();
+            common = await import('../src/utils/gameState/common.js');
+            await common.ready;
+            expect(common.loadGameState().inventory.importedClock).toBe(2);
+        } finally {
+            Object.defineProperty(navigator, 'locks', { configurable: true, value: locks });
+        }
+    }
+);
+
+test('A03 native image-free item downloads and uploads a restorable backup', async () => {
+    const indexed = await import('../src/utils/indexeddb.js');
+    const added = vi.spyOn(indexed, 'addEntity');
+    const custom = await import('../src/utils/customcontent.js');
+    const id = custom.createItem('Synthetic no-image item', 'Created with native defaults');
+    await added.mock.results.at(-1)!.value;
+    const original = await custom.getItem(id);
+    expect(original.image).toBeNull();
+    const backup = await import('../src/utils/customContentBackup.js');
+    const prep = await import('../src/utils/importPreparation.js');
+    const legacy = prep.prepareImport({ schemaVersion: 1, items: [original] }, { kind: 'custom' });
+    expect(legacy.customContent.items[0].image).toBe('/favicon.ico');
+    const download = await backup.buildCustomContentBackup();
+    expect(download.data.items[0].image).toBeUndefined();
+    await backup.restoreCustomContentBackup(download.data, { overwriteExisting: true });
+    expect((await custom.getItem(id)).image).toBe('/favicon.ico');
+    const gist = await import('../src/lib/cloudsync/githubGists');
+    const create = vi.spyOn(gist, 'createBackupGist').mockResolvedValue({ id: 'no-image-backup' });
+    const cloud = await import('../src/utils/cloudSync.js');
+    await expect(cloud.uploadGameStateToGist('synthetic')).resolves.toMatchObject({
+        id: 'no-image-backup',
+    });
+    const plan = prep.prepareImport(create.mock.calls[0][0].content);
+    expect(plan.customContent.items[0].image).toBe('/favicon.ico');
+    expect(fetch).not.toHaveBeenCalled();
+});
+
+test.each([0, 10, 1.25])(
+    'A01 numeric legacy item price %s remains searchable after restore',
+    async (price) => {
+        const backup = await import('../src/utils/customContentBackup.js');
+        await backup.restoreCustomContentBackup({
+            schemaVersion: 1,
+            items: [{ id: 'priced-item', name: 'Synthetic price', price }],
+        });
+        const indexed = await import('../src/utils/indexeddb.js');
+        const items = await indexed.getItems();
+        expect(items[0].price).toBe(String(price));
+        const { render, fireEvent, cleanup } = await import('@testing-library/svelte');
+        const { default: SearchBar } = await import('../src/components/svelte/SearchBar.svelte');
+        try {
+            const view = render(SearchBar, { data: items });
+            const input = await view.findByLabelText('Search items');
+            await expect(
+                fireEvent.input(input, { target: { value: String(price) } })
+            ).resolves.toBe(true);
+        } finally {
+            cleanup();
+        }
+    }
+);
+
+test('A01 restored legacy navigation remains clickable through QuestChatOption', async () => {
+    const backup = await import('../src/utils/customContentBackup.js');
+    await backup.restoreCustomContentBackup({
+        schemaVersion: 1,
+        quests: [
+            {
+                id: 'legacy-action',
+                title: 'Synthetic dialogue',
+                start: 'start',
+                dialogue: [
+                    { id: 'start', options: [{ text: 'Continue synthetic quest', goto: 'next' }] },
+                    { id: 'next', options: [{ text: 'Finish', goto: 'finish' }] },
+                ],
+            },
+        ],
+    });
+    const { getQuests } = await import('../src/utils/indexeddb.js');
+    const [quest] = await getQuests();
+    expect(quest.dialogue[1].options[0].type).toBe('finish');
+    const { render, fireEvent, cleanup } = await import('@testing-library/svelte');
+    const { default: QuestChatOption } = await import(
+        '../src/pages/quests/svelte/QuestChatOption.svelte'
+    );
+    try {
+        const view = render(QuestChatOption, {
+            quest,
+            option: quest.dialogue[0].options[0],
+            questId: quest.id,
+            stepId: 'start',
+            optionIndex: 0,
+        });
+        await fireEvent.click(
+            await view.findByRole('button', { name: 'Continue synthetic quest' })
+        );
+        await storage.flushManagedMutations();
+        expect(common.loadGameState().quests[quest.id].stepId).toBe('next');
+    } finally {
+        cleanup();
+    }
+});
+
+test.each([0, 60, 0.5, 1e-7, 1e21])(
+    'A01 numeric legacy duration %s retains runtime timing',
+    async (duration) => {
+        const backup = await import('../src/utils/customContentBackup.js');
+        await backup.restoreCustomContentBackup({
+            schemaVersion: 1,
+            processes: [{ id: 'legacy-duration', duration }],
+        });
+        const { getProcesses } = await import('../src/utils/indexeddb.js');
+        const [process] = await getProcesses();
+        expect(typeof process.duration).toBe('string');
+        expect(process.duration).not.toContain('e');
+        const { startProcess } = await import('../src/utils/gameState/processes.js');
+        expect(startProcess(process.id, process)).toBe(true);
+        await storage.flushManagedMutations();
+        expect(common.loadGameState().processes[process.id].duration).toBe(duration * 1000);
+    }
+);
+
+async function retainedContainerFixture(location: string) {
+    const link = { id: 'retained-item', count: 1, containerItemId: 'retained-container' };
+    const process: any = { id: 'retained-process', duration: '60s' };
+    const quest: any = {
+        id: 'retained-quest',
+        dialogue: [{ id: 'start', options: [{ type: 'finish', text: 'Finish' }] }],
+    };
+    if (location === 'operation')
+        process.itemCountOperations = [
+            {
+                operation: 'withdraw',
+                itemId: link.id,
+                containerItemId: link.containerItemId,
+                count: 1,
+            },
+        ];
+    else if (location === 'process-link') process.consumeItems = [link];
+    else if (location === 'quest-link') quest.requiresItems = [link];
+    else if (location === 'reward') quest.rewards = [link];
+    else quest.dialogue[0].options[0][location] = [link];
+    const custom = await storage.preflightCustomImport();
+    await storage.strictTransaction(
+        custom.db,
+        ['items', 'processes', 'quests'],
+        'readwrite',
+        (tx: any) => {
+            tx.objectStore('items').put({ id: 'retained-item' });
+            tx.objectStore('items').put({
+                id: 'retained-container',
+                itemCounts: { 'retained-item': 0 },
+            });
+            tx.objectStore('processes').put(process);
+            tx.objectStore('quests').put(quest);
+            tx.objectStore('quests').put({
+                id: 'unrelated-legacy',
+                requiresItems: 'historical-invalid-shape',
+            });
+        }
+    );
+    custom.db.close();
+}
+
+test.each(
+    [
+        'operation',
+        'process-link',
+        'quest-link',
+        'reward',
+        'requiresItems',
+        'grantsItems',
+        'consumeItems',
+    ].flatMap((location) => ['standalone', 'combined'].map((entry) => ({ location, entry })))
+)(
+    'A04 container replacement protects retained $location in $entry restore',
+    async ({ location, entry }) => {
+        await retainedContainerFixture(location);
+        const before = await storage.preflightCustomImport();
+        before.db.close();
+        const gameBefore = common.loadGameState();
+        const mirrorBefore = localStorage.getItem('gameState');
+        const content = { schemaVersion: 1, items: [{ id: 'retained-container', itemCounts: {} }] };
+        const backup = await import('../src/utils/customContentBackup.js');
+        const operation =
+            entry === 'standalone'
+                ? backup.restoreCustomContentBackup(content, { overwriteExisting: true })
+                : common.importGameStateString(
+                      JSON.stringify({
+                          schemaVersion: 1,
+                          payload: { inventory: { shouldNotCommit: 1 } },
+                          customContent: content,
+                      })
+                  );
+        await expect(operation).rejects.toMatchObject({ code: 'container-reference' });
+        expect(common.loadGameState()).toEqual(gameBefore);
+        expect(localStorage.getItem('gameState')).toBe(mirrorBefore);
+        const after = await storage.preflightCustomImport();
+        after.db.close();
+        expect(after.snapshot).toEqual(before.snapshot);
+    }
+);
+
+test.each([false, true])(
+    'A04 safe container replacement preserves retained records (replace dependent=%s)',
+    async (replaceDependent) => {
+        await retainedContainerFixture('operation');
+        const before = await storage.preflightCustomImport();
+        before.db.close();
+        const content = {
+            schemaVersion: 1,
+            items: [
+                {
+                    id: 'retained-container',
+                    itemCounts: replaceDependent ? {} : { 'retained-item': 2 },
+                },
+            ],
+            ...(replaceDependent
+                ? { processes: [{ id: 'retained-process', duration: '60s' }] }
+                : {}),
+        };
+        const backup = await import('../src/utils/customContentBackup.js');
+        await expect(
+            backup.restoreCustomContentBackup(content, { overwriteExisting: true })
+        ).resolves.toMatchObject({ status: 'complete' });
+        const after = await storage.preflightCustomImport();
+        after.db.close();
+        expect(after.snapshot.quests).toEqual(before.snapshot.quests);
+        if (!replaceDependent) expect(after.snapshot.processes).toEqual(before.snapshot.processes);
+    }
+);
+
+test.each(
+    ['github', 'openAI'].flatMap((kind) =>
+        ['gameState', 'gameStateBackup', 'all'].map((blockedKey) => ({ kind, blockedKey }))
+    )
+)(
+    'C02 Clear scrubs durable $kind copies despite unreadable $blockedKey mirrors',
+    async ({ kind, blockedKey }) => {
+        await common.saveCredential('github', 'SENTINEL_READ_GITHUB');
+        await common.saveCredential('openAI', 'SENTINEL_READ_OPENAI');
+        await common.saveGameState({ ...common.loadGameState(), inventory: { keepDurable: 23 } });
+        const mirror = { ...common.loadGameState(), inventory: { newerMirrorOnly: 41 } };
+        localStorage.setItem('gameState', JSON.stringify(mirror));
+        localStorage.setItem('gameStateBackup', JSON.stringify(mirror));
+        localStorage.setItem('unrelated-read-setting', 'keep');
+        const originalRead = Storage.prototype.getItem;
+        const originals = Object.fromEntries(
+            ['gameState', 'gameStateBackup'].map((key) => [
+                key,
+                originalRead.call(localStorage, key),
+            ])
+        );
+        const blocked = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (key) {
+            if (blockedKey === 'all' || key === blockedKey)
+                throw new Error('synthetic read denied');
+            return originalRead.call(this, key);
+        });
+        const removed = kind === 'github' ? 'SENTINEL_READ_GITHUB' : 'SENTINEL_READ_OPENAI';
+        const kept = kind === 'github' ? 'SENTINEL_READ_OPENAI' : 'SENTINEL_READ_GITHUB';
+        for (let retry = 0; retry < 2; retry++) {
+            await expect(common.clearCredential(kind)).resolves.toEqual({
+                status: 'incomplete',
+                committed: ['clear-intent', 'game'],
+            });
+            const db = await storage.openManagedGameDB();
+            const durable = await storage.readManagedGame(db);
+            db.close();
+            expect(JSON.stringify(durable)).not.toContain(removed);
+            expect(JSON.stringify(durable)).toContain(kept);
+            expect(durable.state.inventory.keepDurable).toBe(23);
+            expect(durable.meta.credentialEpochs[kind].pending).toBe(true);
+            expect(JSON.stringify(common.loadGameState())).not.toContain(removed);
+            await expect(storage.assertCredentialLaunch(kind, removed)).rejects.toThrow();
+        }
+        for (const key of ['gameState', 'gameStateBackup']) {
+            const raw = originalRead.call(localStorage, key);
+            if (blockedKey === 'all' || key === blockedKey) expect(raw).toBe(originals[key]);
+            else expect(raw).not.toContain(removed);
+        }
+        blocked.mockRestore();
+        await expect(common.clearCredential(kind)).resolves.toMatchObject({ status: 'complete' });
+        for (const key of ['gameState', 'gameStateBackup']) {
+            const raw = localStorage.getItem(key)!;
+            expect(raw).not.toContain(removed);
+            expect(raw).toContain(kept);
+            expect(JSON.parse(raw).inventory.newerMirrorOnly).toBe(41);
+        }
+        expect(localStorage.getItem('unrelated-read-setting')).toBe('keep');
+        const db = await storage.openManagedGameDB();
+        expect((await storage.readManagedGame(db)).meta.credentialEpochs[kind].pending).toBe(false);
+        db.close();
+    }
+);

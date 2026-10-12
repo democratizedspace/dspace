@@ -13,7 +13,7 @@
             "name": "CI Test Item",
             "description": "Fixture item for end-to-end custom backup coverage",
             "type": "custom",
-            "image": "data:image/png;base64,TEST",
+            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC",
             "createdAt": "2024-01-01T00:00:00.000Z"
         }
     ],
@@ -24,7 +24,7 @@
             "id": "item:ci-item-e2e:image",
             "entityType": "item",
             "entityId": "ci-item-e2e",
-            "dataUrl": "data:image/png;base64,TEST"
+            "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo1nUGAAISAOxqN5/dAAAAAElFTkSuQmCC"
         }
     ]
 }

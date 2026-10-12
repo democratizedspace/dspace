@@ -1,3 +1,4 @@
+import { serializeManagedMutation } from './managedImportStorage.js';
 // import { log } from './devLog.js';
 import { DataIntegrityValidationError, runMigrations } from './migrations.js';
 import { isBrowser } from './ssr.js';
@@ -83,7 +84,15 @@ function getTransaction(storeName, mode) {
     }
     return openCustomContentDB().then((db) => {
         try {
-            const transaction = db.transaction([storeName], mode);
+            const transaction = db.transaction(
+                mode === 'readwrite' ? [...new Set([storeName, 'meta'])] : [storeName],
+                mode
+            );
+            if (mode === 'readwrite') {
+                const meta = transaction.objectStore('meta');
+                const revision = meta.get('contentRevision');
+                revision.onsuccess = () => meta.put((revision.result || 0) + 1, 'contentRevision');
+            }
             return { store: transaction.objectStore(storeName), transaction, db };
         } catch (error) {
             db.close();
@@ -107,6 +116,11 @@ function runTransactionWithResult({ transaction, db }, runner) {
         };
 
         const fail = (error) => {
+            try {
+                transaction.abort();
+            } catch {
+                /* already complete or aborted */
+            }
             finish(reject, error);
         };
 
@@ -296,8 +310,21 @@ export const openCustomContentDB = () => {
             return;
         }
         const request = idb.open('CustomContent', CUSTOM_CONTENT_DB_VERSION);
+        let cancelled = false;
+        request.onblocked = () => {
+            cancelled = true;
+            reject(
+                new Error(
+                    'Custom content database upgrade is blocked. Close older tabs and reload.'
+                )
+            );
+        };
 
         request.onupgradeneeded = (e) => {
+            if (cancelled) {
+                request.transaction.abort();
+                return;
+            }
             const db = e.target.result;
 
             if (!db.objectStoreNames.contains('meta')) {
@@ -323,6 +350,11 @@ export const openCustomContentDB = () => {
 
         request.onsuccess = async () => {
             const db = request.result;
+            if (cancelled) {
+                db.close();
+                return;
+            }
+            db.onversionchange = () => db.close();
             try {
                 await runMigrations(db, CUSTOM_CONTENT_DB_VERSION);
                 resolve(db);
@@ -340,6 +372,7 @@ export const openCustomContentDB = () => {
                     resolve(db);
                     return;
                 }
+                db.close();
                 reject(err);
             }
         };
@@ -710,3 +743,11 @@ export const deleteQuest = async (id) => {
         return Promise.reject(error);
     }
 };
+
+// UI setup, deliberately separate from pure preparation and import preflight.
+export function initializeCustomContentForImportUI() {
+    return serializeManagedMutation(async () => {
+        const db = await openCustomContentDB();
+        db.close();
+    });
+}

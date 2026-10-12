@@ -1,4 +1,7 @@
+import { fetchWithCredential } from './managedImportStorage.js';
 export async function submitBundlePR(token, branch, bundleJson) {
+    token = token.trim();
+    const credentialFetch = (...args) => fetchWithCredential('github', token, fetch, ...args);
     const branchName = branch || `bundle-${Date.now()}`;
     const headers = {
         Authorization: `token ${token}`,
@@ -6,7 +9,7 @@ export async function submitBundlePR(token, branch, bundleJson) {
     };
 
     // Get the SHA of the base branch (main)
-    const baseRefRes = await fetch(
+    const baseRefRes = await credentialFetch(
         'https://api.github.com/repos/democratizedspace/dspace/git/refs/heads/main',
         { headers }
     );
@@ -15,7 +18,7 @@ export async function submitBundlePR(token, branch, bundleJson) {
     const baseSha = baseRefData.object.sha;
 
     // Create the new branch
-    const createBranchRes = await fetch(
+    const createBranchRes = await credentialFetch(
         'https://api.github.com/repos/democratizedspace/dspace/git/refs',
         {
             method: 'POST',
@@ -31,7 +34,7 @@ export async function submitBundlePR(token, branch, bundleJson) {
     // Create the file on the new branch
     const content = btoa(unescape(encodeURIComponent(bundleJson)));
     const filePath = `submissions/bundles/${branchName}.json`;
-    const res = await fetch(
+    const res = await credentialFetch(
         `https://api.github.com/repos/democratizedspace/dspace/contents/${filePath}`,
         {
             method: 'PUT',
@@ -46,16 +49,19 @@ export async function submitBundlePR(token, branch, bundleJson) {
     if (!res.ok) throw new Error(await res.text());
 
     // Create the pull request
-    const prRes = await fetch('https://api.github.com/repos/democratizedspace/dspace/pulls', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-            title: `Custom content bundle: ${branchName}`,
-            head: branchName,
-            base: 'main',
-            body: 'Automated custom content bundle submission containing quests, items, and/or processes.',
-        }),
-    });
+    const prRes = await credentialFetch(
+        'https://api.github.com/repos/democratizedspace/dspace/pulls',
+        {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                title: `Custom content bundle: ${branchName}`,
+                head: branchName,
+                base: 'main',
+                body: 'Automated custom content bundle submission containing quests, items, and/or processes.',
+            }),
+        }
+    );
     if (!prRes.ok) throw new Error(await prRes.text());
     const prData = await prRes.json();
     return prData.html_url;

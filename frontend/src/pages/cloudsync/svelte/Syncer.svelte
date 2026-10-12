@@ -1,5 +1,10 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
+    import {
+        recoverImportGameState,
+        getImportRecoveryStatus,
+    } from '../../../utils/gameState/common.js';
+    import { initializeCustomContentForImportUI } from '../../../utils/indexeddb.js';
     import Chip from '../../../components/svelte/Chip.svelte';
     import {
         clearCloudGistId,
@@ -15,6 +20,22 @@
     } from '../../../utils/githubToken.js';
     import { validateToken } from '../../../lib/cloudsync/githubGists';
 
+    let destinationReady = Promise.resolve(false);
+    let recoveryMode = null;
+    const recoverRestore = async () => {
+        try {
+            await recoverImportGameState();
+            announce(
+                recoveryMode === 'mirrors'
+                    ? 'Saved mirrors repaired'
+                    : 'Previous game state recovered; custom content unchanged',
+                'success'
+            );
+        } catch {
+            announce('Recovery unavailable or newer work exists', 'error');
+        }
+        recoveryMode = getImportRecoveryStatus();
+    };
     let root;
     let token = '';
     let gistId = '';
@@ -24,7 +45,9 @@
     let toastType = '';
     let toastTimer;
     let savingToken = false;
+    let clearingToken = false;
     let uploading = false;
+    let uploadWarning = '';
     let downloading = false;
     let downloadingId = '';
     let refreshing = false;
@@ -79,6 +102,10 @@
 
     onMount(() => {
         let mounted = true;
+        destinationReady = initializeCustomContentForImportUI().then(
+            () => true,
+            () => false
+        );
         if (typeof window !== 'undefined') {
             window.__cloudSyncReady = false;
         }
@@ -120,34 +147,53 @@
         };
     });
 
+    const resetBackupList = () => {
+        backupRefreshSequence += 1;
+        backups = [];
+        backupError = '';
+        refreshing = false;
+    };
+
     const saveToken = async () => {
         const trimmedToken = token.trim();
         if (!isValidGitHubToken(trimmedToken)) {
             announce('GitHub token looks invalid', 'error');
             return;
         }
+        resetBackupList();
         savingToken = true;
         try {
-            await validateToken(trimmedToken);
             await saveGitHubToken(trimmedToken);
+            await validateToken(trimmedToken);
             announce('Token saved and validated', 'success');
             await loadBackups(trimmedToken);
         } catch (err) {
-            await clearGitHubToken();
-            token = '';
-            announce('Token validation failed', 'error');
+            if (err?.code === 'fallback-reload-required')
+                announce('Reload to reconcile saved progress, then retry Save.', 'error');
+            else
+                announce(
+                    'Token save or validation failed. Saved credentials were not cleared. Retry Save or use Clear.',
+                    'error'
+                );
         } finally {
             savingToken = false;
         }
     };
 
     const clearTokenLocal = async () => {
-        backupRefreshSequence += 1;
+        resetBackupList();
         token = '';
-        backups = [];
-        backupError = '';
-        refreshing = false;
-        await clearGitHubToken();
+        clearingToken = true;
+        try {
+            await clearGitHubToken();
+            announce('GitHub token cleared', 'success');
+            return true;
+        } catch {
+            announce('Clear incomplete; managed token copies may remain. Retry Clear.', 'error');
+            return false;
+        } finally {
+            clearingToken = false;
+        }
     };
 
     const handleUpload = async () => {
@@ -156,12 +202,15 @@
             announce('GitHub token looks invalid', 'error');
             return;
         }
+        uploadWarning = '';
         uploading = true;
         try {
             const result = await uploadGameStateToGist(trimmedToken);
             gistId = '';
-            await clearCloudGistId();
             announce('Upload successful', 'success');
+            if (result?.localWarning)
+                uploadWarning =
+                    'Your backup was uploaded, but local backup settings were not fully saved. Reload to reconcile local storage; do not repeat the upload for this warning.';
             if (result?.id) {
                 backups = [result, ...backups];
             }
@@ -187,12 +236,22 @@
         downloading = true;
         downloadingId = trimmedId === gistId ? 'manual' : trimmedId;
         try {
+            // The parsed backup determines whether custom storage is required.
+            // The coordinator preflights that store before any game write.
+            await destinationReady;
             await downloadGameStateFromGist(trimmedToken, trimmedId);
             const successLabel =
                 trimmedId === gistId ? 'Download successful' : 'Restore successful';
             announce(successLabel, 'success');
         } catch (err) {
-            const errorLabel = trimmedId === gistId ? 'Download failed' : 'Restore failed';
+            recoveryMode = getImportRecoveryStatus();
+            const errorLabel = [
+                'partial',
+                'mirror-incomplete',
+                'fallback-reload-required',
+            ].includes(err.code)
+                ? err.message
+                : 'Restore failed';
             announce(errorLabel, 'error');
         } finally {
             downloading = false;
@@ -227,8 +286,26 @@
     onDestroy(() => {
         clearTimeout(toastTimer);
     });
+
+    onMount(() => {
+        const clearDraft = (event) => {
+            if (event.detail?.kind === 'github') {
+                token = '';
+                backups = [];
+            }
+        };
+        window.addEventListener('dspace-credential-cleared', clearDraft);
+        return () => window.removeEventListener('dspace-credential-cleared', clearDraft);
+    });
 </script>
 
+{#if recoveryMode}
+    <button type="button" on:click={recoverRestore}
+        >{recoveryMode === 'mirrors'
+            ? 'Retry saved mirrors'
+            : 'Recover previous game state'}</button
+    >
+{/if}
 <div class="chip-container" bind:this={root} data-testid="cloud-sync-form">
     <div class="vertical">
         <div class="form-group">
@@ -238,6 +315,7 @@
                     id="token"
                     type="password"
                     bind:value={token}
+                    on:input={resetBackupList}
                     autocapitalize="none"
                     spellcheck={false}
                     autocomplete="new-password"
@@ -247,7 +325,7 @@
                         text={savingToken ? 'Saving…' : 'Save'}
                         onClick={saveToken}
                         inverted={true}
-                        disabled={initializing || savingToken}
+                        disabled={initializing || savingToken || clearingToken}
                         dataTestId="save-token"
                     >
                         {#if savingToken}
@@ -259,7 +337,11 @@
                         onClick={clearTokenLocal}
                         hazard={true}
                         dataTestId="clear-sync-token"
-                        disabled={initializing || savingToken || uploading || downloading}
+                        disabled={initializing ||
+                            savingToken ||
+                            clearingToken ||
+                            uploading ||
+                            downloading}
                     />
                 </div>
             </div>
@@ -301,7 +383,7 @@
             </Chip>
             <Chip
                 text={downloading && downloadingId === 'manual' ? 'Downloading…' : 'Download'}
-                onClick={handleDownload}
+                onClick={() => handleDownload()}
                 disabled={initializing || downloading || savingToken}
             >
                 {#if downloading && downloadingId === 'manual'}
@@ -320,6 +402,11 @@
                       : undefined}
             >
                 {message}
+            </p>
+        {/if}
+        {#if uploadWarning}
+            <p class="message warning" role="status" data-testid="upload-local-warning">
+                {uploadWarning}
             </p>
         {/if}
         <section class="backups">
@@ -396,6 +483,11 @@
     {/if}
 </div>
 
+<p>
+    Close or reload older DSPACE tabs before relying on Clear. Clear removes managed local copies;
+    it does not revoke the GitHub token.
+</p>
+
 <style>
     .vertical {
         display: flex;
@@ -422,6 +514,10 @@
     }
     .message {
         color: #90ee90;
+    }
+
+    .message.warning {
+        color: #ffd479;
     }
 
     .message.error {

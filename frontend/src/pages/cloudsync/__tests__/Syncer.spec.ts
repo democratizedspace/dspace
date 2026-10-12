@@ -9,6 +9,12 @@ const clearGitHubTokenMock = vi.fn();
 const clearCloudGistIdMock = vi.fn();
 const fetchBackupListMock = vi.fn();
 const validateTokenMock = vi.fn();
+const initializeCustomMock = vi.fn();
+const downloadMock = vi.fn();
+const uploadMock = vi.fn();
+vi.mock('../../../utils/indexeddb.js', () => ({
+    initializeCustomContentForImportUI: (...args: unknown[]) => initializeCustomMock(...args),
+}));
 
 vi.mock('../../../utils/githubToken.js', () => ({
     ['clearGitHubToken']: (...args: unknown[]) => clearGitHubTokenMock(...args),
@@ -20,9 +26,9 @@ vi.mock('../../../utils/githubToken.js', () => ({
 
 vi.mock('../../../utils/cloudSync.js', () => ({
     clearCloudGistId: (...args: unknown[]) => clearCloudGistIdMock(...args),
-    downloadGameStateFromGist: vi.fn(),
+    downloadGameStateFromGist: (...args: unknown[]) => downloadMock(...args),
     fetchBackupList: (...args: unknown[]) => fetchBackupListMock(...args),
-    uploadGameStateToGist: vi.fn(),
+    uploadGameStateToGist: (...args: unknown[]) => uploadMock(...args),
 }));
 
 vi.mock('../../../lib/cloudsync/githubGists', () => ({
@@ -37,11 +43,39 @@ describe('Cloud Sync token save flow', () => {
         clearCloudGistIdMock.mockResolvedValue(undefined);
         fetchBackupListMock.mockResolvedValue([]);
         validateTokenMock.mockResolvedValue(true);
+        initializeCustomMock.mockResolvedValue(undefined);
+        downloadMock.mockResolvedValue(undefined);
+        uploadMock.mockResolvedValue({ id: 'synthetic-upload' });
     });
 
     afterEach(() => {
         vi.clearAllMocks();
         delete (window as typeof window & { __cloudSyncReady?: boolean }).__cloudSyncReady;
+    });
+
+    it('keeps a successful upload visible when local mirroring reports a warning', async () => {
+        loadGitHubTokenMock.mockResolvedValue('ghp_' + 'S'.repeat(36));
+        uploadMock.mockResolvedValue({
+            id: 'uploaded-once',
+            filename: 'synthetic-backup',
+            localWarning: 'mirror-incomplete',
+        });
+        const { getByRole, getByTestId, queryByTestId, getByText } = render(Syncer);
+        await waitFor(() =>
+            expect(getByRole('button', { name: 'Upload', exact: true })).toBeEnabled()
+        );
+        clearCloudGistIdMock
+            .mockClear()
+            .mockRejectedValue(new Error('must not repeat local cleanup'));
+        await fireEvent.click(getByRole('button', { name: 'Upload', exact: true }));
+        await waitFor(() =>
+            expect(getByTestId('sync-success')).toHaveTextContent('Upload successful')
+        );
+        expect(getByTestId('upload-local-warning')).toHaveTextContent('do not repeat the upload');
+        expect(queryByTestId('sync-error')).toBeNull();
+        expect(getByText('synthetic-backup')).toBeInTheDocument();
+        expect(uploadMock).toHaveBeenCalledTimes(1);
+        expect(clearCloudGistIdMock).not.toHaveBeenCalled();
     });
 
     it('resets the global readiness flag on remount until the current startup finishes', async () => {
@@ -176,4 +210,187 @@ describe('Cloud Sync token save flow', () => {
         expect(validateTokenMock).toHaveBeenCalledWith(typedCredential);
         expect(saveGitHubTokenMock).toHaveBeenCalledWith(typedCredential);
     });
+    it.each(['clear-incomplete', 'clear-not-started'])(
+        'reports %s and permits a Clear retry',
+        async (code) => {
+            clearGitHubTokenMock.mockRejectedValueOnce(new Error(code));
+            const { getByTestId } = render(Syncer);
+            const clear = getByTestId('clear-sync-token');
+            await waitFor(() => expect(clear).toBeEnabled());
+            await fireEvent.click(clear);
+            await waitFor(() =>
+                expect(getByTestId('sync-error')).toHaveTextContent(
+                    'managed token copies may remain. Retry Clear.'
+                )
+            );
+            expect(clear).toBeEnabled();
+            await fireEvent.click(clear);
+            await waitFor(() =>
+                expect(getByTestId('sync-success')).toHaveTextContent('GitHub token cleared')
+            );
+            expect(clearGitHubTokenMock).toHaveBeenCalledTimes(2);
+        }
+    );
+
+    it.each(['credential-unavailable', 'validation failed', 'network unavailable'])(
+        'preserves a newer saved token when older validation rejects: %s',
+        async (code) => {
+            const tokenA = `ghp_${'a'.repeat(36)}`;
+            const tokenB = `ghp_${'b'.repeat(36)}`;
+            let durableToken = '';
+            let rejectValidation!: (reason: { code: string }) => void;
+            saveGitHubTokenMock.mockImplementation(async (value: string) => {
+                durableToken = value;
+            });
+            clearGitHubTokenMock.mockImplementation(async () => {
+                durableToken = '';
+            });
+            validateTokenMock.mockReturnValue(
+                new Promise((_resolve, reject) => {
+                    rejectValidation = reject;
+                })
+            );
+            const { getByLabelText, getByTestId } = render(Syncer);
+            await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+            await fireEvent.input(getByLabelText(/GitHub Token/i), { target: { value: tokenA } });
+            await fireEvent.click(getByTestId('save-token'));
+            await waitFor(() => expect(validateTokenMock).toHaveBeenCalledWith(tokenA));
+            expect(durableToken).toBe(tokenA);
+            // Simulate another tab's successful Save before A's validation settles.
+            durableToken = tokenB;
+            rejectValidation({ code });
+            await waitFor(() =>
+                expect(getByTestId('sync-error')).toHaveTextContent(
+                    'Saved credentials were not cleared'
+                )
+            );
+            expect(durableToken).toBe(tokenB);
+            expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+            expect(getByTestId('save-token')).toBeEnabled();
+            expect(getByLabelText(/GitHub Token/i)).toHaveValue(tokenA);
+            // Clear remains an explicit user action against current authority.
+            await fireEvent.click(getByTestId('clear-sync-token'));
+            await waitFor(() =>
+                expect(getByTestId('sync-success')).toHaveTextContent('GitHub token cleared')
+            );
+            expect(durableToken).toBe('');
+            expect(clearGitHubTokenMock).toHaveBeenCalledOnce();
+        }
+    );
+
+    it('does not clear existing credentials when Save itself fails', async () => {
+        saveGitHubTokenMock.mockRejectedValueOnce(new Error('storage unavailable'));
+        const { getByLabelText, getByTestId } = render(Syncer);
+        await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+        await fireEvent.input(getByLabelText(/GitHub Token/i), {
+            target: { value: `ghp_${'s'.repeat(36)}` },
+        });
+        await fireEvent.click(getByTestId('save-token'));
+        await waitFor(() =>
+            expect(getByTestId('sync-error')).toHaveTextContent(
+                'Saved credentials were not cleared'
+            )
+        );
+        expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+        expect(validateTokenMock).not.toHaveBeenCalled();
+        expect(getByTestId('save-token')).toBeEnabled();
+    });
+    it.each([false, true])(
+        'delegates restore requirements to the parsed backup when custom storage fails (custom=%s)',
+        async (custom) => {
+            initializeCustomMock.mockRejectedValueOnce(
+                new Error('synthetic custom storage unavailable')
+            );
+            if (custom) downloadMock.mockRejectedValueOnce(new Error('custom storage required'));
+            const { getByLabelText, getByRole, getByTestId } = render(Syncer);
+            const download = getByRole('button', { name: /^Download$/ });
+            await waitFor(() => expect(download).toBeEnabled());
+            await fireEvent.input(getByLabelText(/Gist ID/i), {
+                target: { value: 'synthetic-backup-id' },
+            });
+            await fireEvent.click(download);
+            await waitFor(() =>
+                expect(downloadMock).toHaveBeenCalledWith('', 'synthetic-backup-id')
+            );
+            await waitFor(() =>
+                expect(getByTestId(custom ? 'sync-error' : 'sync-success')).toHaveTextContent(
+                    custom ? 'Restore failed' : 'Download successful'
+                )
+            );
+        }
+    );
+    it('asks for reload after fallback without validating or clearing the durable token', async () => {
+        saveGitHubTokenMock.mockRejectedValueOnce({ code: 'fallback-reload-required' });
+        const { getByLabelText, getByTestId } = render(Syncer);
+        await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+        await fireEvent.input(getByLabelText(/GitHub Token/i), {
+            target: { value: `ghp_${'s'.repeat(36)}` },
+        });
+        await fireEvent.click(getByTestId('save-token'));
+        await waitFor(() =>
+            expect(getByTestId('sync-error')).toHaveTextContent(
+                'Reload to reconcile saved progress, then retry Save.'
+            )
+        );
+        expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+        expect(validateTokenMock).not.toHaveBeenCalled();
+    });
+    it('explains reload-required when restoring a combined backup in fallback mode', async () => {
+        const message = 'Reload to reconcile saved progress before retrying this operation.';
+        downloadMock.mockRejectedValueOnce({ code: 'fallback-reload-required', message });
+        const { getByLabelText, getByRole, getByTestId } = render(Syncer);
+        const download = getByRole('button', { name: /^Download$/ });
+        await waitFor(() => expect(download).toBeEnabled());
+        await fireEvent.input(getByLabelText(/Gist ID/i), {
+            target: { value: 'synthetic-backup-id' },
+        });
+        await fireEvent.click(download);
+        await waitFor(() => expect(getByTestId('sync-error')).toHaveTextContent(message));
+    });
+
+    it.each([false, true])(
+        'invalidates old-account backup lists and in-flight refreshes before a failed credential switch (pending=%s)',
+        async (pending) => {
+            const oldToken = `ghp_${'o'.repeat(36)}`;
+            const newToken = `ghp_${'n'.repeat(36)}`;
+            const oldBackups = [
+                {
+                    id: 'old-account',
+                    filename: 'Old account backup',
+                    htmlUrl: 'https://example.invalid/old',
+                    createdAt: '2026-10-12T00:00:00Z',
+                },
+            ];
+            let resolveOld!: (rows: unknown[]) => void;
+            loadGitHubTokenMock.mockResolvedValue(oldToken);
+            fetchBackupListMock.mockReturnValue(
+                pending
+                    ? new Promise((resolve) => {
+                          resolveOld = resolve;
+                      })
+                    : Promise.resolve(oldBackups)
+            );
+            validateTokenMock.mockRejectedValueOnce(new Error('validation failed'));
+            const { getByLabelText, getByTestId, queryByTestId } = render(Syncer);
+            await waitFor(() => expect(fetchBackupListMock).toHaveBeenCalledWith(oldToken));
+            if (!pending)
+                await waitFor(() =>
+                    expect(getByTestId('backup-link-old-account')).toBeInTheDocument()
+                );
+            await fireEvent.input(getByLabelText(/GitHub Token/i), { target: { value: newToken } });
+            expect(queryByTestId('backup-link-old-account')).not.toBeInTheDocument();
+            await fireEvent.click(getByTestId('save-token'));
+            await waitFor(() =>
+                expect(getByTestId('sync-error')).toHaveTextContent(
+                    'Saved credentials were not cleared'
+                )
+            );
+            if (pending) {
+                resolveOld(oldBackups);
+                await Promise.resolve();
+            }
+            expect(queryByTestId('backup-link-old-account')).not.toBeInTheDocument();
+            expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+        }
+    );
 });

@@ -1,12 +1,24 @@
 import { getItems, getProcesses, getQuests, openCustomContentDB } from './indexeddb.js';
 import { isBrowser } from './ssr.js';
+import {
+    prepareImport,
+    prepareImportFile,
+    validateCustomImportReferences,
+    inspectRaster,
+    IMPORT_LIMITS,
+} from './importPreparation.js';
+import {
+    serializeManagedMutation,
+    preflightCustomImport,
+    validateCustomImportDestination,
+    commitCustomImport,
+} from './managedImportStorage.js';
+import { sanitizeSaveForBackup } from '../lib/cloudsync/githubGists';
 
 export const BACKUP_SCHEMA_VERSION = 1;
 
-const IMAGE_DATA_PREFIX = 'data:image';
 const DATA_URL_PREFIX = 'data:';
 const DEFAULT_IMAGE_MIME = 'application/octet-stream';
-const MAX_BACKUP_FILE_SIZE = 50 * 1024 * 1024;
 const IMAGE_FETCH_TIMEOUT_MS = 30000;
 const INVALID_SVG_PREFIX = 'data:image/svg+xml';
 const ALLOWED_IMAGE_DATA_PREFIXES = [
@@ -17,137 +29,6 @@ const ALLOWED_IMAGE_DATA_PREFIXES = [
     'data:image/webp',
     'data:application/octet-stream',
 ];
-
-const UNSAFE_TEXT_PATTERN = /[<>]/;
-const UNSAFE_ROUTE_PREFIXES = ['//', '/\\'];
-const SAFE_FALLBACK_IMAGE = '/favicon.ico';
-
-function hasUnsafePreviewText(value) {
-    return typeof value === 'string' && UNSAFE_TEXT_PATTERN.test(value);
-}
-
-function assertSafePreviewText(value, label) {
-    if (hasUnsafePreviewText(value)) {
-        throw new Error(`Unsafe preview text in ${label}.`);
-    }
-}
-
-function assertSafePreviewTexts(entity, fields, entityLabel) {
-    fields.forEach((field) => {
-        if (field in entity) {
-            assertSafePreviewText(entity[field], `${entityLabel}.${field}`);
-        }
-    });
-}
-
-function assertSafeQuestDialogue(quest) {
-    if (!Array.isArray(quest.dialogue)) {
-        return;
-    }
-
-    quest.dialogue.forEach((node, nodeIndex) => {
-        if (!node || typeof node !== 'object') {
-            return;
-        }
-        assertSafePreviewText(node.text, `quest.dialogue[${nodeIndex}].text`);
-        if (!Array.isArray(node.options)) {
-            return;
-        }
-        node.options.forEach((option, optionIndex) => {
-            if (!option || typeof option !== 'object') {
-                return;
-            }
-            assertSafePreviewText(
-                option.text,
-                `quest.dialogue[${nodeIndex}].options[${optionIndex}].text`
-            );
-        });
-    });
-}
-
-function normalizeImportedRoute(route, fallbackRoute) {
-    if (typeof route !== 'string') {
-        return fallbackRoute;
-    }
-
-    const normalizedRoute = route.trim();
-    if (!normalizedRoute.startsWith('/')) {
-        return fallbackRoute;
-    }
-
-    if (UNSAFE_ROUTE_PREFIXES.some((prefix) => normalizedRoute.startsWith(prefix))) {
-        return fallbackRoute;
-    }
-
-    return normalizedRoute;
-}
-
-function normalizeImportedImage(image, fallbackImage = '') {
-    if (typeof image !== 'string') {
-        return fallbackImage;
-    }
-
-    const normalizedImage = image.trim();
-    if (!normalizedImage) {
-        return fallbackImage;
-    }
-
-    if (isDataUrl(normalizedImage)) {
-        if (!isValidImageDataUrl(normalizedImage)) {
-            throw new Error('Invalid image data in backup.');
-        }
-        return normalizedImage;
-    }
-
-    if (
-        normalizedImage.startsWith('javascript:') ||
-        normalizedImage.startsWith('//') ||
-        normalizedImage.startsWith('/\\')
-    ) {
-        return fallbackImage;
-    }
-
-    return normalizedImage;
-}
-
-function sanitizeImportedItem(item) {
-    if (!item || typeof item !== 'object') {
-        return item;
-    }
-
-    assertSafePreviewTexts(item, ['name', 'description', 'unit', 'type', 'price'], 'item');
-    return {
-        ...item,
-        image: normalizeImportedImage(item.image, SAFE_FALLBACK_IMAGE),
-    };
-}
-
-function sanitizeImportedProcess(process) {
-    if (!process || typeof process !== 'object') {
-        return process;
-    }
-
-    assertSafePreviewTexts(process, ['title', 'name', 'description', 'duration'], 'process');
-    return process;
-}
-
-function sanitizeImportedQuest(quest) {
-    if (!quest || typeof quest !== 'object') {
-        return quest;
-    }
-
-    assertSafePreviewTexts(quest, ['title', 'description', 'npc', 'start'], 'quest');
-    assertSafeQuestDialogue(quest);
-
-    const id = String(quest.id ?? '').trim();
-    const fallbackRoute = `/quests/${id || 'custom'}`;
-
-    return {
-        ...quest,
-        image: normalizeImportedImage(quest.image, SAFE_FALLBACK_IMAGE),
-        route: normalizeImportedRoute(quest.route, fallbackRoute),
-    };
-}
 
 function padNumber(value) {
     return String(value).padStart(2, '0');
@@ -170,6 +51,7 @@ function sanitizeEntity(entity) {
     }
 
     const sanitized = { ...entity };
+    if (sanitized.image === null) delete sanitized.image;
     if ('imageBlob' in sanitized) {
         delete sanitized.imageBlob;
     }
@@ -205,7 +87,7 @@ function buildBackupPlan(items, processes, quests) {
             label: formatAssetLabel('item', item),
             entity: item,
         });
-        if (item?.image || item?.imageBlob) {
+        if ((item?.image && item.image !== '/favicon.ico') || item?.imageBlob) {
             assets.push({
                 id: `item-image:${item.id}`,
                 kind: 'item-image',
@@ -231,7 +113,7 @@ function buildBackupPlan(items, processes, quests) {
             label: formatAssetLabel('quest', quest),
             entity: quest,
         });
-        if (quest?.image || quest?.imageBlob) {
+        if ((quest?.image && quest.image !== '/favicon.ico') || quest?.imageBlob) {
             assets.push({
                 id: `quest-image:${quest.id}`,
                 kind: 'quest-image',
@@ -342,14 +224,6 @@ async function readStoreAll(store) {
     });
 }
 
-async function writeToStore(store, entity, { overwriteExisting } = {}) {
-    const request = overwriteExisting ? store.put(entity) : store.add(entity);
-    return await new Promise((resolve, reject) => {
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject(request.error ?? new Error('IndexedDB write failed.'));
-    });
-}
-
 async function readCustomContentSnapshot() {
     if (!isBrowser || typeof indexedDB === 'undefined') {
         return null;
@@ -366,25 +240,6 @@ async function readCustomContentSnapshot() {
         return { items, processes, quests };
     } finally {
         dbInstance.close();
-    }
-}
-
-async function ensureCustomContentSchema() {
-    if (!isBrowser || typeof indexedDB === 'undefined') {
-        return;
-    }
-
-    const dbInstance = await openCustomContentDB();
-    const requiredStores = ['meta', 'items', 'processes', 'quests'];
-    const missingStores = requiredStores.filter(
-        (storeName) => !dbInstance.objectStoreNames.contains(storeName)
-    );
-    dbInstance.close();
-
-    if (missingStores.length > 0) {
-        throw new Error(
-            `Custom content database is missing required stores: ${missingStores.join(', ')}`
-        );
     }
 }
 
@@ -406,17 +261,22 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
         snapshot = null;
     }
 
-    const [items, processes, quests] = snapshot
+    const records = snapshot
         ? [snapshot.items, snapshot.processes, snapshot.quests]
         : await Promise.all([getItems(), getProcesses(), getQuests()]);
+    const [items, processes, quests] = sanitizeSaveForBackup(records);
     const plan = buildBackupPlan(items, processes, quests);
 
-    emitProgress(onProgress, { type: 'plan', assets: plan });
+    emitProgress(onProgress, {
+        type: 'plan',
+        assets: plan.map(({ id, kind }) => ({ id, kind, label: kind })),
+    });
 
     const exportedItems = new Map();
     const exportedQuests = new Map();
     const exportedProcesses = [];
     const images = [];
+    const imageTotals = { bytes: 0, pixels: 0 };
 
     for (const asset of plan) {
         try {
@@ -431,33 +291,40 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
                 if (!dataUrl) {
                     throw new Error('Missing item image data.');
                 }
+                if (images.length >= IMPORT_LIMITS.images)
+                    throw new Error('Image budget exceeded.');
+                const validatedDataUrl = inspectRaster(dataUrl, IMPORT_LIMITS, imageTotals);
                 const target = exportedItems.get(asset.entity.id) ?? sanitizeEntity(asset.entity);
-                target.image = dataUrl;
+                // Image records are the single exported raster representation.
+                delete target.image;
                 exportedItems.set(asset.entity.id, target);
-                images.push(buildImageRecord('item', asset.entity.id, dataUrl));
+                images.push(buildImageRecord('item', asset.entity.id, validatedDataUrl));
             } else if (asset.kind === 'quest-image') {
                 const dataUrl = await resolveImageData(asset.entity);
                 if (!dataUrl) {
                     throw new Error('Missing quest image data.');
                 }
+                if (images.length >= IMPORT_LIMITS.images)
+                    throw new Error('Image budget exceeded.');
+                const validatedDataUrl = inspectRaster(dataUrl, IMPORT_LIMITS, imageTotals);
                 const target = exportedQuests.get(asset.entity.id) ?? sanitizeEntity(asset.entity);
-                target.image = dataUrl;
+                // Image records are the single exported raster representation.
+                delete target.image;
                 exportedQuests.set(asset.entity.id, target);
-                images.push(buildImageRecord('quest', asset.entity.id, dataUrl));
+                images.push(buildImageRecord('quest', asset.entity.id, validatedDataUrl));
             }
 
             emitProgress(onProgress, { type: 'asset', assetId: asset.id });
         } catch (error) {
-            const message = error instanceof Error ? error.message : String(error);
-            emitProgress(onProgress, { type: 'error', assetId: asset.id, error: message });
-            throw new Error(`Failed to process ${asset.label}: ${message}`);
+            emitProgress(onProgress, { type: 'error', error: 'backup-export-failed' });
+            throw new Error('Backup export failed.');
         }
     }
 
     const itemsArray = Array.from(exportedItems.values());
     const questsArray = Array.from(exportedQuests.values());
 
-    return {
+    const backup = sanitizeSaveForBackup({
         schemaVersion: BACKUP_SCHEMA_VERSION,
         timestamp: new Date().toISOString(),
         counts: {
@@ -470,12 +337,19 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
         processes: exportedProcesses,
         quests: questsArray,
         images,
-    };
+    });
+    prepareImport(backup, {
+        kind: 'custom',
+        origin: isBrowser ? window.location.origin : undefined,
+    });
+    return backup;
 }
 
 export async function buildCustomContentBackup({ onProgress } = {}) {
     const data = await buildCustomContentBackupData({ onProgress });
     const json = JSON.stringify(data, null, 2);
+    // Whitespace counts toward the restore transport/JSON budgets too.
+    prepareImport(json, { kind: 'custom', origin: isBrowser ? window.location.origin : undefined });
     const blob = new Blob([json], { type: 'application/json' });
 
     return {
@@ -485,279 +359,45 @@ export async function buildCustomContentBackup({ onProgress } = {}) {
     };
 }
 
-function normalizeBackupData(raw) {
-    if (!raw || typeof raw !== 'object') {
-        throw new Error('Invalid backup data.');
-    }
-
-    if (raw.schemaVersion !== BACKUP_SCHEMA_VERSION) {
-        throw new Error('Unsupported backup schema version.');
-    }
-
-    const missingSections = [];
-    const readArray = (value, label) => {
-        if (value === undefined) {
-            missingSections.push(label);
-            return [];
+async function restorePreparedCustomContent(plan, { onProgress, overwriteExisting = false } = {}) {
+    return serializeManagedMutation(async () => {
+        const { db, snapshot } = await preflightCustomImport();
+        const content = plan.customContent;
+        try {
+            validateCustomImportReferences(content, snapshot);
+            validateCustomImportDestination(content, snapshot, overwriteExisting);
+            await commitCustomImport(db, content, snapshot, overwriteExisting);
+        } finally {
+            db.close();
         }
-        if (!Array.isArray(value)) {
-            throw new Error('Invalid backup data.');
-        }
-        return value;
-    };
-
-    const items = readArray(raw.items, 'items');
-    const processes = readArray(raw.processes, 'processes');
-    const quests = readArray(raw.quests, 'quests');
-    const images = readArray(raw.images, 'images');
-
-    return {
-        schemaVersion: raw.schemaVersion,
-        timestamp: raw.timestamp ?? null,
-        counts: raw.counts ?? null,
-        items,
-        processes,
-        quests,
-        images,
-        missingSections,
-    };
+        // Progress only describes committed records, and contains no imported labels/values.
+        if (typeof onProgress === 'function')
+            onProgress({ type: 'complete', counts: content.counts });
+        const { items, processes, quests, images } = content.counts;
+        const total = items + processes + quests + images;
+        const message =
+            `${total === 0 ? 'Backup import finished with 0 entities' : 'Backup import finished'} (items=${items}, processes=${processes}, quests=${quests}, images=${images}).` +
+            (content.missingSections.length
+                ? ` Missing sections defaulted to empty: ${content.missingSections.join(', ')}.`
+                : '');
+        return { status: 'complete', ...content.counts, message };
+    });
 }
-
-function buildImportPlan(items, processes, quests, images) {
-    const assets = [];
-
-    items.forEach((item) => {
-        assets.push({
-            id: `item:${item.id}`,
-            kind: 'item',
-            label: formatAssetLabel('item', item),
-            entity: item,
-        });
+export async function restoreCustomContentBackup(data, options = {}) {
+    const plan = prepareImport(data, {
+        ...options,
+        kind: 'custom',
+        deferDestinationReferences: true,
+        origin: isBrowser ? window.location.origin : undefined,
     });
-
-    processes.forEach((process) => {
-        assets.push({
-            id: `process:${process.id}`,
-            kind: 'process',
-            label: formatAssetLabel('process', process),
-            entity: process,
-        });
-    });
-
-    quests.forEach((quest) => {
-        assets.push({
-            id: `quest:${quest.id}`,
-            kind: 'quest',
-            label: formatAssetLabel('quest', quest),
-            entity: quest,
-        });
-    });
-
-    images.forEach((image) => {
-        const name = image?.entityId ?? 'unknown';
-        assets.push({
-            id: `image:${image.entityType}:${image.entityId}`,
-            kind: 'image',
-            label: `Image: ${name}`,
-        });
-    });
-
-    return assets;
+    return restorePreparedCustomContent(plan, options);
 }
-
-function buildImportSummary({ items, processes, quests, images, missingSections }) {
-    const totals = {
-        items,
-        processes,
-        quests,
-        images,
-    };
-    const totalCount = Object.values(totals).reduce((sum, value) => sum + value, 0);
-    const sectionSummary = `items=${items}, processes=${processes}, quests=${quests}, images=${images}`;
-    const missingSummary =
-        missingSections.length > 0
-            ? ` Missing sections defaulted to empty: ${missingSections.join(', ')}.`
-            : '';
-
-    if (totalCount === 0) {
-        return `Backup import finished with 0 entities (${sectionSummary}).${missingSummary}`;
-    }
-
-    if (missingSections.length > 0) {
-        return `Backup import finished (${sectionSummary}).${missingSummary}`;
-    }
-
-    return null;
-}
-
-function assertEntityHasId(entity, label) {
-    if (!entity || (typeof entity.id !== 'string' && typeof entity.id !== 'number')) {
-        throw new Error(`Invalid ${label} record in backup.`);
-    }
-}
-
-async function assertNoImportConflicts(items, processes, quests) {
-    const [existingItems, existingProcesses, existingQuests] = await Promise.all([
-        getItems(),
-        getProcesses(),
-        getQuests(),
-    ]);
-    const existingItemIds = new Set(existingItems.map((item) => item.id));
-    const existingProcessIds = new Set(existingProcesses.map((process) => process.id));
-    const existingQuestIds = new Set(existingQuests.map((quest) => quest.id));
-
-    const conflicts = [];
-
-    items.forEach((item) => {
-        if (existingItemIds.has(item.id)) {
-            conflicts.push(`item:${item.id}`);
-        }
-    });
-    processes.forEach((process) => {
-        if (existingProcessIds.has(process.id)) {
-            conflicts.push(`process:${process.id}`);
-        }
-    });
-    quests.forEach((quest) => {
-        if (existingQuestIds.has(quest.id)) {
-            conflicts.push(`quest:${quest.id}`);
-        }
-    });
-
-    if (conflicts.length > 0) {
-        throw new Error(`Import conflicts with existing data: ${conflicts.join(', ')}`);
-    }
-}
-
-export async function restoreCustomContentBackup(
-    data,
-    { onProgress, overwriteExisting = false } = {}
-) {
-    const normalized = normalizeBackupData(data);
-    const items = normalized.items.map((item) => sanitizeImportedItem(sanitizeEntity(item)));
-    const processes = normalized.processes.map((process) =>
-        sanitizeImportedProcess(sanitizeEntity(process))
-    );
-    const quests = normalized.quests.map((quest) => sanitizeImportedQuest(sanitizeEntity(quest)));
-    const images = normalized.images;
-
-    await ensureCustomContentSchema();
-
-    const itemMap = new Map(items.map((item) => [item.id, item]));
-    const questMap = new Map(quests.map((quest) => [quest.id, quest]));
-
-    items.forEach((item) => assertEntityHasId(item, 'item'));
-    processes.forEach((process) => assertEntityHasId(process, 'process'));
-    quests.forEach((quest) => assertEntityHasId(quest, 'quest'));
-
-    images.forEach((image) => {
-        if (!image || typeof image !== 'object') {
-            throw new Error('Invalid image record in backup.');
-        }
-        if (!image.entityId || !image.entityType) {
-            throw new Error('Invalid image record in backup.');
-        }
-        if (typeof image.dataUrl !== 'string' || !isValidImageDataUrl(image.dataUrl)) {
-            throw new Error('Invalid image data in backup.');
-        }
-
-        if (image.entityType === 'item') {
-            const item = itemMap.get(image.entityId);
-            if (!item) {
-                throw new Error(`Missing item for image ${image.entityId}.`);
-            }
-            item.image = image.dataUrl;
-        } else if (image.entityType === 'quest') {
-            const quest = questMap.get(image.entityId);
-            if (!quest) {
-                throw new Error(`Missing quest for image ${image.entityId}.`);
-            }
-            quest.image = image.dataUrl;
-        } else {
-            throw new Error('Invalid image record in backup.');
-        }
-    });
-
-    if (!overwriteExisting) {
-        await assertNoImportConflicts(items, processes, quests);
-    }
-
-    const plan = buildImportPlan(items, processes, quests, images);
-    emitProgress(onProgress, { type: 'plan', assets: plan });
-
-    const dbInstance = await openCustomContentDB();
-    try {
-        const tx = dbInstance.transaction(['items', 'processes', 'quests'], 'readwrite');
-        const stores = {
-            item: tx.objectStore('items'),
-            process: tx.objectStore('processes'),
-            quest: tx.objectStore('quests'),
-        };
-
-        for (const asset of plan) {
-            try {
-                if (asset.kind === 'image') {
-                    // Images are already applied during validation.
-                } else if (asset.kind === 'item') {
-                    await writeToStore(stores.item, asset.entity, { overwriteExisting });
-                } else if (asset.kind === 'process') {
-                    await writeToStore(stores.process, asset.entity, { overwriteExisting });
-                } else if (asset.kind === 'quest') {
-                    await writeToStore(stores.quest, asset.entity, { overwriteExisting });
-                }
-                emitProgress(onProgress, { type: 'asset', assetId: asset.id });
-            } catch (error) {
-                const message = error instanceof Error ? error.message : String(error);
-                emitProgress(onProgress, { type: 'error', assetId: asset.id, error: message });
-                throw new Error(`Failed to import ${asset.label}: ${message}`);
-            }
-        }
-
-        await new Promise((resolve, reject) => {
-            tx.oncomplete = resolve;
-            tx.onerror = () =>
-                reject(tx.error ?? new Error('IndexedDB transaction failed during import.'));
-            tx.onabort = () =>
-                reject(tx.error ?? new Error('IndexedDB transaction aborted during import.'));
-        });
-    } finally {
-        dbInstance.close();
-    }
-
-    const summaryMessage = buildImportSummary({
-        items: items.length,
-        processes: processes.length,
-        quests: quests.length,
-        images: images.length,
-        missingSections: normalized.missingSections,
-    });
-
-    return {
-        items: items.length,
-        processes: processes.length,
-        quests: quests.length,
-        images: images.length,
-        message: summaryMessage,
-    };
-}
-
 export async function restoreCustomContentBackupFromFile(file, options = {}) {
-    if (!(file instanceof File)) {
-        throw new Error('Invalid backup file.');
-    }
-
-    if (file.size > MAX_BACKUP_FILE_SIZE) {
-        throw new Error('Backup file is too large. Maximum size is 50MB.');
-    }
-
-    const text = await file.text();
-    let parsed;
-
-    try {
-        parsed = JSON.parse(text);
-    } catch (error) {
-        throw new Error('Invalid backup file.');
-    }
-
-    return await restoreCustomContentBackup(parsed, options);
+    const plan = await prepareImportFile(file, {
+        ...options,
+        kind: 'custom',
+        deferDestinationReferences: true,
+        origin: isBrowser ? window.location.origin : undefined,
+    });
+    return restorePreparedCustomContent(plan, options);
 }

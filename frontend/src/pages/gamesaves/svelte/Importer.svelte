@@ -1,19 +1,56 @@
 <script>
+    import { onMount } from 'svelte';
+    import { initializeCustomContentForImportUI } from '../../../utils/indexeddb.js';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { importGameStateString } from '../../../utils/gameState/common.js';
+    import {
+        importGameStateString,
+        recoverImportGameState,
+        getImportRecoveryStatus,
+    } from '../../../utils/gameState/common.js';
+
+    let destinationReady = Promise.resolve(false);
+    onMount(() => {
+        destinationReady = initializeCustomContentForImportUI().then(
+            () => true,
+            () => false
+        );
+    });
 
     let importString = '';
 
     let errorMessage = '';
+    let recoveryMode = getImportRecoveryStatus();
 
     const handleImport = async () => {
+        await destinationReady;
         errorMessage = '';
         try {
-            await importGameStateString(importString);
+            const receipt = await importGameStateString(importString);
+            if (receipt.status === 'best-effort')
+                errorMessage =
+                    'Imported using best-effort local storage. Provider credentials remain disabled.';
+            recoveryMode = getImportRecoveryStatus();
         } catch (err) {
-            console.error('Failed to import game state:', err);
-            errorMessage = 'Import failed. Please double-check the backup string and try again.';
+            errorMessage = ['partial', 'mirror-incomplete', 'fallback-reload-required'].includes(
+                err.code
+            )
+                ? err.message
+                : 'Import failed. Please double-check the backup string and try again.';
+            recoveryMode = getImportRecoveryStatus();
         }
+    };
+    const recover = async () => {
+        try {
+            await recoverImportGameState();
+            errorMessage =
+                recoveryMode === 'mirrors'
+                    ? 'Saved mirrors repaired.'
+                    : 'Previous game state recovered. Custom content was not imported.';
+        } catch {
+            errorMessage =
+                'Recovery could not finish or newer work exists. No automatic overwrite was attempted.';
+        }
+        recoveryMode = getImportRecoveryStatus();
     };
 </script>
 
@@ -27,6 +64,17 @@
         </div>
 
         <Chip text="Import" onClick={handleImport} inverted={true} />
+        {#if recoveryMode}
+            <button type="button" on:click={recover}
+                >{recoveryMode === 'mirrors'
+                    ? 'Retry saved mirrors'
+                    : 'Recover previous game state'}</button
+            >
+            <p>
+                Recovery is available only in this tab until reload, a newer change, or credential
+                Clear.
+            </p>
+        {/if}
         {#if errorMessage}
             <p class="error">{errorMessage}</p>
         {/if}

@@ -1,9 +1,41 @@
 import { writable } from 'svelte/store';
+import { assertBackupBudget } from '../importBudgets.js';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
-import { restoreCustomContentBackup } from '../customContentBackup.js';
+import {
+    serializeManagedMutation,
+    strictTransaction,
+    flushManagedMutations,
+    openManagedGameDB,
+    openExistingDatabase,
+    readManagedGame,
+    credentialAuthority,
+    applyCredentialAuthority,
+    scrubCredential,
+    commitManagedGame,
+    mirrorManagedGame,
+    clearManagedCredential,
+    preflightCustomImport,
+    validateCustomImportDestination,
+    commitCustomImport,
+    StorageOperationError,
+    assertCredentialLaunch,
+} from '../managedImportStorage.js';
+export { assertCredentialLaunch };
+let knownEpochs = credentialAuthority();
+let recovery = null;
+let durableChecksum = null;
+let pendingGameWrites = 0;
+const pendingCredentialSaves = new Set();
+let latestPendingGameSave = null;
+let managedCommitOrder = 0;
+const ownedSnapshots = new WeakMap();
+const snapshotClearGenerations = new WeakMap();
+const snapshotGameplayBases = new WeakMap();
+let clearGeneration = 0;
+let credentialNotices;
 import { LEGACY_QUEST_ID_ALIASES } from '../questIdAliases.js';
 
 const DB_NAME = 'dspaceGameState';
@@ -122,6 +154,7 @@ function openDB() {
                 resolve(db);
             };
             request.onerror = () => reject(request.error);
+            request.onblocked = () => reject(new Error('storage-blocked'));
         });
     }
     return dbPromise;
@@ -135,30 +168,6 @@ function idbRead(store) {
                 const req = tx.objectStore(store).get(ROOT_KEY);
                 req.onsuccess = () => resolve(req.result);
                 req.onerror = (e) => reject(e.target.error);
-            })
-    );
-}
-
-function idbWrite(store, value) {
-    return openDB().then(
-        (db) =>
-            new Promise((resolve, reject) => {
-                const tx = db.transaction(store, 'readwrite');
-                tx.objectStore(store).put(value, ROOT_KEY);
-                tx.oncomplete = () => resolve();
-                tx.onerror = (e) => reject(e.target.error);
-            })
-    );
-}
-
-function idbClear(store) {
-    return openDB().then(
-        (db) =>
-            new Promise((resolve, reject) => {
-                const tx = db.transaction(store, 'readwrite');
-                tx.objectStore(store).clear();
-                tx.oncomplete = () => resolve();
-                tx.onerror = (e) => reject(e.target.error);
             })
     );
 }
@@ -186,15 +195,6 @@ function lsWrite(store, value) {
         localStorage.setItem(lsKey(store), JSON.stringify(value));
     } catch (err) {
         logPersistenceIssue('Error writing to localStorage:', err);
-    }
-}
-
-function lsClear(store) {
-    if (!isBrowser) return;
-    try {
-        localStorage.removeItem(lsKey(store));
-    } catch (err) {
-        logPersistenceIssue('Error clearing localStorage:', err);
     }
 }
 
@@ -328,38 +328,6 @@ async function read(store) {
     }
 }
 
-async function write(store, value, options = {}) {
-    // On server, skip all persistence - storage is client-only
-    if (!isBrowser) return;
-    const { skipLocalStorage = false } = options;
-
-    if (!skipLocalStorage) {
-        lsWrite(store, value);
-    }
-    if (useLocalStorage) return;
-    try {
-        await idbWrite(store, value);
-    } catch (err) {
-        logPersistenceIssue('IndexedDB write failed:', err);
-        useLocalStorage = true;
-        warnFallback();
-    }
-}
-
-async function clearStore(store) {
-    // On server, skip all persistence - storage is client-only
-    if (!isBrowser) return;
-    lsClear(store);
-    if (useLocalStorage) return;
-    try {
-        await idbClear(store);
-    } catch (err) {
-        logPersistenceIssue('IndexedDB clear failed:', err);
-        useLocalStorage = true;
-        warnFallback();
-    }
-}
-
 const initializeGameState = () => ({
     quests: {},
     inventory: {},
@@ -422,6 +390,23 @@ const computeChecksum = (state) => {
     }
 
     return (hash >>> 0).toString(16).padStart(8, '0');
+};
+
+const gameplayChecksum = (value) => {
+    const next = scrubCredential(scrubCredential(value, 'github'), 'openAI');
+    const stack = [next];
+    while (stack.length) {
+        const record = stack.pop();
+        for (const kind of ['github', 'openAI']) {
+            if (record[kind] && Object.keys(record[kind]).length === 0) delete record[kind];
+        }
+        if (record._meta) {
+            delete record._meta.checksum;
+            delete record._meta.lastUpdated;
+        }
+        for (const key of ['gameState', 'payload']) if (record[key]) stack.push(record[key]);
+    }
+    return computeChecksum(next);
 };
 
 const stampStateChecksum = (state) => {
@@ -487,75 +472,594 @@ export const validateGameState = (state) => {
 
 let gameState = initializeGameState();
 export const state = writable(gameState);
+const savedAt = (value) =>
+    Number.isFinite(value?.[META_KEY]?.lastUpdated) ? value[META_KEY].lastUpdated : 0;
+const fallbackWriteTime = () =>
+    Math.max(Date.now(), savedAt(gameState) + 1, savedAt(lsRead(STATE_STORE)) + 1);
+const loadCredentialFreeFallback = async () => {
+    useLocalStorage = true;
+    let stored = lsRead(STATE_STORE),
+        db;
+    try {
+        // Read legacy/existing progress without migrations, metadata writes or credentials.
+        db = await openExistingDatabase(DB_NAME, [STATE_STORE]);
+        const persisted = await strictTransaction(
+            db,
+            [STATE_STORE],
+            'readonly',
+            (tx, req, done) => {
+                req(tx.objectStore(STATE_STORE).get('root'), done);
+            }
+        );
+        if (persisted && (!stored || savedAt(persisted) >= savedAt(stored))) stored = persisted;
+    } catch {
+        // Unavailable durable storage retains the existing localStorage-only fallback.
+    } finally {
+        db?.close();
+    }
+
+    if (stored) {
+        gameState = validateGameState(scrubCredential(scrubCredential(stored, 'github'), 'openAI'));
+        loadedFromPersistence = true;
+        state.set(gameState);
+    }
+    logPersistenceIssue('Game state authority unavailable; credentials disabled.');
+};
 
 // Only execute in browser environment to avoid SSR issues with IndexedDB
 export const ready = isBrowser
-    ? (async () => {
+    ? serializeManagedMutation(async () => {
           try {
-              const stored = await read(STATE_STORE);
+              const db = await openDB();
+              const persisted = await readManagedGame(db);
+              knownEpochs = credentialAuthority(persisted.meta);
+              durableChecksum = persisted.state?._meta?.checksum ?? null;
+              const local = lsRead(STATE_STORE);
+              let stored = persisted.state ?? local;
+              const reconcileLocal =
+                  persisted.state && local && savedAt(local) > savedAt(persisted.state);
+              if (reconcileLocal) {
+                  // A newer credential-free fallback save can outlive missing lock support.
+                  // Reconcile its progress, but credentials remain owned by durable storage.
+                  stored = scrubCredential(scrubCredential(local, 'github'), 'openAI');
+                  for (const kind of ['github', 'openAI'])
+                      if (persisted.state[kind])
+                          stored[kind] = structuredClone(persisted.state[kind]);
+              }
               if (stored) {
-                  gameState = validateGameState(stored);
+                  gameState = validateGameState(applyCredentialAuthority(stored, knownEpochs));
+                  if (reconcileLocal) {
+                      // Make recovered progress durable before queued credential operations
+                      // read their gameplay base. Preserve the existing backup and authority.
+                      const receipt = await commitManagedGame(db, {
+                          next: gameState,
+                          backup: persisted.backup,
+                          expectedChecksum: durableChecksum,
+                          expectedEpochs: knownEpochs,
+                          stamp: stampStateChecksum,
+                          lightweight: buildLightweightSnapshot,
+                      });
+                      gameState = receipt.state;
+                      durableChecksum = gameState._meta.checksum;
+                      try {
+                          mirrorManagedGame(receipt);
+                      } catch (error) {
+                          logPersistenceIssue(
+                              'Startup mirrors incomplete; IndexedDB remains authoritative.',
+                              error
+                          );
+                      }
+                  }
                   state.set(gameState);
                   loadedFromPersistence = true;
               }
-              await write(META_STORE, buildLightweightSnapshot(gameState));
-              writeChecksumMarker(gameState[META_KEY].checksum);
+              // Outside explicit fallback reconciliation, startup only refreshes the
+              // lightweight snapshot and never replaces durable credential authority.
+              const lightweight = buildLightweightSnapshot(gameState);
+              await strictTransaction(db, ['meta'], 'readwrite', (tx, req) => {
+                  req(tx.objectStore('meta').get('root'), (meta) => {
+                      tx.objectStore('meta').put(
+                          { ...meta, ...lightweight, credentialEpochs: credentialAuthority(meta) },
+                          'root'
+                      );
+                  });
+              });
+              try {
+                  localStorage.setItem(
+                      LS_LIGHTWEIGHT_KEY,
+                      JSON.stringify({ ...lightweight, credentialEpochs: knownEpochs })
+                  );
+                  writeChecksumMarker(gameState[META_KEY].checksum);
+              } catch (error) {
+                  logPersistenceIssue(
+                      'Startup mirrors incomplete; IndexedDB remains authoritative.',
+                      error
+                  );
+              }
           } catch (err) {
-              logPersistenceIssue('Error loading game state from IndexedDB:', err);
+              await loadCredentialFreeFallback();
           } finally {
               readyResolved = true;
           }
-      })()
+      }).catch(async () => {
+          try {
+              await loadCredentialFreeFallback();
+          } finally {
+              readyResolved = true;
+          }
+      })
     : Promise.resolve().then(() => {
           readyResolved = true;
       });
 
+const publishCredentialNotice = (kind, type) => {
+    try {
+        // Reuse this tab's listening channel so it cannot receive its own notice.
+        credentialNotices?.postMessage({ type, kind, epoch: knownEpochs[kind].epoch });
+    } catch (error) {
+        logPersistenceIssue('Credential update notification unavailable.', error);
+    }
+};
+
+if (isBrowser && typeof window.BroadcastChannel === 'function') {
+    const notices = new window.BroadcastChannel('dspace-credential-epochs-v1');
+    credentialNotices = notices;
+    notices.onmessage = ({ data }) => {
+        if (!['github', 'openAI'].includes(data?.kind) || !Number.isSafeInteger(data?.epoch))
+            return;
+        if (data.epoch < knownEpochs[data.kind].epoch) return;
+        if (data.type !== undefined && !['saved', 'cleared'].includes(data.type)) return;
+        const cleared = data.type !== 'saved';
+        const dependency = {
+            kind: data.kind,
+            before: structuredClone(knownEpochs),
+            authority: null,
+            promise: null,
+            clearGeneration: cleared ? ++clearGeneration : clearGeneration,
+            refresh: true,
+            beforeGameplay: gameplayChecksum(gameState),
+            gameplayChecksum: null,
+        };
+        pendingCredentialSaves.add(dependency);
+        recovery = null;
+        dependency.promise = serializeManagedMutation(async () => {
+            const db = await openManagedGameDB();
+            try {
+                const persisted = await readManagedGame(db);
+                const authority = credentialAuthority(persisted.meta);
+                knownEpochs = authority;
+                durableChecksum = persisted.state?._meta?.checksum ?? null;
+                dependency.gameplayChecksum = gameplayChecksum(
+                    persisted.state ?? initializeGameState()
+                );
+                dependency.authority = structuredClone(authority);
+                dependency.checksum = durableChecksum;
+                dependency.lastUpdated = savedAt(persisted.state);
+                dependency.order = ++managedCommitOrder;
+                if (persisted.state && pendingGameWrites === 0 && !useLocalStorage) {
+                    gameState = validateGameState(
+                        applyCredentialAuthority(persisted.state, authority)
+                    );
+                    state.set(gameState);
+                }
+                if (authority[data.kind].epoch === data.epoch) {
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            cleared ? 'dspace-credential-cleared' : 'dspace-credential-updated',
+                            {
+                                detail: { kind: data.kind },
+                            }
+                        )
+                    );
+                }
+            } finally {
+                db.close();
+            }
+        })
+            .catch(() => {
+                /* The scrubbed runtime remains fail-closed until authority is readable. */
+            })
+            .finally(() => pendingCredentialSaves.delete(dependency));
+        // Reserve the refresh dependency before publishing so subscribers can save safely.
+        if (cleared) {
+            gameState = scrubCredential(gameState, data.kind);
+            stampStateChecksum(gameState);
+            state.set(gameState);
+        }
+    };
+}
 let writeQueue = Promise.resolve();
 
 export const flushGameStateWritesForTesting = async () => {
     await writeQueue.catch(() => undefined);
+    await flushManagedMutations();
 };
 
 if (isBrowser) {
     globalThis.__dspaceFlushGameStateWrites = flushGameStateWritesForTesting;
 }
 
-export const loadGameState = () => structuredClone(gameState);
+export const loadGameState = () => {
+    const snapshot = structuredClone(gameState);
+    ownedSnapshots.set(snapshot, structuredClone(knownEpochs));
+    snapshotClearGenerations.set(snapshot, clearGeneration);
+    snapshotGameplayBases.set(snapshot, gameState);
+    return snapshot;
+};
 
 export const getGameStateChecksum = () => gameState?.[META_KEY]?.checksum ?? '';
 
 export const isGameStateReady = () => readyResolved;
 export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
-export const saveGameState = async (newState) => {
-    if (!readyResolved) {
-        await ready;
-    }
-    const previousSnapshot = structuredClone(gameState);
-    const nextState = validateGameState(structuredClone(newState));
-    nextState[META_KEY].lastUpdated = Date.now();
-    stampStateChecksum(nextState);
-    gameState = nextState;
-    state.set(gameState);
-
-    // Persist the latest snapshots to localStorage immediately so data survives
-    // page refreshes even if the pending IndexedDB writes are interrupted.
-    lsWrite(BACKUP_STORE, previousSnapshot);
-    lsWrite(STATE_STORE, gameState);
-    lsWrite(META_STORE, buildLightweightSnapshot(gameState));
-    writeChecksumMarker(gameState[META_KEY].checksum);
-
-    writeQueue = writeQueue.then(async () => {
-        await write(BACKUP_STORE, previousSnapshot, { skipLocalStorage: true }).catch(
-            () => undefined
+export const saveGameState = async (newState, { deliberateKind } = {}) => {
+    const captured = structuredClone(newState);
+    if (isBrowser && !globalThis.navigator?.locks?.request && !deliberateKind) {
+        if (!readyResolved) await ready;
+        const safe = validateGameState(
+            scrubCredential(scrubCredential(captured, 'github'), 'openAI')
         );
-        await write(STATE_STORE, gameState, { skipLocalStorage: true }).catch(() => undefined);
-        await write(META_STORE, buildLightweightSnapshot(gameState), {
-            skipLocalStorage: true,
-        }).catch(() => undefined);
-    });
-    return writeQueue;
+        const backup = scrubCredential(scrubCredential(gameState, 'github'), 'openAI');
+        safe[META_KEY].lastUpdated = fallbackWriteTime();
+        stampStateChecksum(safe);
+        stampStateChecksum(backup);
+        // This synchronous, game-only mirror fallback never opens or mutates IndexedDB.
+        mirrorManagedGame({ state: safe, backup, meta: buildLightweightSnapshot(safe) });
+        useLocalStorage = true;
+        recovery = null;
+        durableChecksum = safe._meta.checksum;
+        gameState = safe;
+        state.set(gameState);
+        return { status: 'best-effort', committed: ['localStorage'], credentialsDisabled: true };
+    }
+    let capturedEpochs = ownedSnapshots.get(newState) ?? structuredClone(knownEpochs);
+    const capturedClearGeneration = snapshotClearGenerations.get(newState) ?? clearGeneration;
+    const capturedGameplayBase = snapshotGameplayBases.get(newState) ?? gameState;
+    const credentialDependencies = [...pendingCredentialSaves];
+    const predecessor = latestPendingGameSave;
+    const queued = { promise: null, checksum: null, order: 0 };
+    latestPendingGameSave = queued;
+    pendingGameWrites++;
+    try {
+        const previousSnapshot = structuredClone(gameState);
+        for (const kind of ['github', 'openAI']) {
+            if (kind === deliberateKind) continue;
+            delete captured[kind];
+            if (gameState[kind]) captured[kind] = structuredClone(gameState[kind]);
+        }
+        const nextState = validateGameState(captured);
+        nextState[META_KEY].lastUpdated = Math.max(Date.now(), savedAt(gameState) + 1);
+        stampStateChecksum(nextState);
+        let expectedChecksum = durableChecksum;
+        durableChecksum = nextState._meta.checksum;
+        gameState = nextState;
+        state.set(gameState);
+        const persistFallback = () => {
+            // Game-only fallback cannot authorize credentials without durable epochs.
+            const safe = scrubCredential(scrubCredential(nextState, 'github'), 'openAI');
+            const backup = scrubCredential(scrubCredential(previousSnapshot, 'github'), 'openAI');
+            safe[META_KEY].lastUpdated = Math.max(
+                savedAt(safe),
+                fallbackWriteTime(),
+                ...[...credentialDependencies, ...(predecessor ? [predecessor] : [])].map(
+                    (entry) => (entry.lastUpdated ?? 0) + 1
+                )
+            );
+            stampStateChecksum(safe);
+            stampStateChecksum(backup);
+            mirrorManagedGame({
+                state: safe,
+                backup,
+                meta: buildLightweightSnapshot(safe),
+            });
+            useLocalStorage = true;
+            if (latestPendingGameSave === queued) {
+                gameState = safe;
+                durableChecksum = safe._meta.checksum;
+                state.set(gameState);
+            }
+            return {
+                status: 'best-effort',
+                committed: ['localStorage'],
+                credentialsDisabled: true,
+            };
+        };
+        const result = serializeManagedMutation(async () => {
+            await ready;
+            if (useLocalStorage && !deliberateKind) return persistFallback();
+            if (predecessor) {
+                try {
+                    await predecessor.promise;
+                } catch (error) {
+                    // A strict transaction receipt remains usable when only its mirrors failed.
+                    if (!predecessor.order) throw error;
+                }
+            }
+            const inheritsPredecessor =
+                predecessor?.order &&
+                gameplayChecksum(capturedGameplayBase) === predecessor.gameplayChecksum;
+            for (const dependency of credentialDependencies) {
+                try {
+                    await dependency.promise;
+                } catch (error) {
+                    // A failed credential attempt cannot poison later gameplay. A committed
+                    // attempt still supplies its receipt; an aborted attempt changes no authority.
+                    if (!['not-committed', 'committed'].includes(dependency.outcome)) throw error;
+                }
+                if (
+                    !(inheritsPredecessor && predecessor.order > dependency.order) &&
+                    dependency.gameplayChecksum &&
+                    dependency.beforeGameplay !== dependency.gameplayChecksum &&
+                    gameplayChecksum(capturedGameplayBase) !== dependency.gameplayChecksum
+                ) {
+                    throw new StorageOperationError('stale-state');
+                }
+                const canAdvance =
+                    dependency.authority &&
+                    (!dependency.clearGeneration ||
+                        capturedClearGeneration >= dependency.clearGeneration) &&
+                    ['github', 'openAI'].every((kind) =>
+                        dependency.refresh
+                            ? dependency.authority[kind].epoch >= capturedEpochs[kind].epoch
+                            : capturedEpochs[kind].epoch === dependency.before[kind].epoch &&
+                              dependency.authority[kind].epoch ===
+                                  dependency.before[kind].epoch + (kind === dependency.kind ? 1 : 0)
+                    );
+                if (canAdvance) capturedEpochs = structuredClone(dependency.authority);
+            }
+            const completed = [...credentialDependencies, ...(predecessor ? [predecessor] : [])]
+                .filter((entry) => entry.order)
+                .sort((a, b) => b.order - a.order)[0];
+            if (completed) expectedChecksum = completed.checksum;
+            let db;
+            try {
+                if (useLocalStorage) throw new StorageOperationError('fallback-reload-required');
+                db = await openManagedGameDB();
+            } catch (error) {
+                if (deliberateKind) throw error;
+                return persistFallback();
+            }
+            try {
+                const receipt = await commitManagedGame(db, {
+                    next: nextState,
+                    backup: previousSnapshot,
+                    expectedChecksum,
+                    expectedEpochs: capturedEpochs,
+                    reconcileGameplay: (previous) =>
+                        capturedClearGeneration === clearGeneration &&
+                        gameplayChecksum(previous ?? initializeGameState()) ===
+                            gameplayChecksum(capturedGameplayBase),
+                    deliberateKind,
+                    stamp: stampStateChecksum,
+                    lightweight: buildLightweightSnapshot,
+                });
+                recovery = null;
+                knownEpochs = credentialAuthority(receipt.meta);
+                queued.checksum = receipt.state._meta.checksum;
+                queued.lastUpdated = savedAt(receipt.state);
+                queued.gameplayChecksum = gameplayChecksum(receipt.state);
+                queued.order = ++managedCommitOrder;
+                durableChecksum = queued.checksum;
+                try {
+                    mirrorManagedGame(receipt);
+                } catch {
+                    throw new StorageOperationError('mirror-incomplete', ['game']);
+                }
+                // A later queued save already owns the newer UI snapshot.
+                if (latestPendingGameSave === queued) {
+                    durableChecksum = receipt.state?._meta?.checksum ?? null;
+                    gameState = receipt.state;
+                    state.set(gameState);
+                }
+                return { status: 'complete', committed: ['game', 'mirrors'] };
+            } catch (error) {
+                if (latestPendingGameSave === queued) {
+                    const persisted = await readManagedGame(db);
+                    knownEpochs = credentialAuthority(persisted.meta);
+                    durableChecksum = persisted.state?._meta?.checksum ?? null;
+                    if (persisted.state) {
+                        gameState = validateGameState(
+                            applyCredentialAuthority(persisted.state, knownEpochs)
+                        );
+                        state.set(gameState);
+                    }
+                }
+                throw error;
+            } finally {
+                db.close();
+            }
+        }).catch(async (error) => {
+            if (useLocalStorage) {
+                if (latestPendingGameSave === queued) {
+                    const retained = lsRead(STATE_STORE) ?? previousSnapshot;
+                    gameState = validateGameState(
+                        scrubCredential(scrubCredential(retained, 'github'), 'openAI')
+                    );
+                    durableChecksum = gameState._meta.checksum;
+                    state.set(gameState);
+                }
+                throw error;
+            }
+            if (latestPendingGameSave === queued) {
+                let db;
+                try {
+                    db = await openManagedGameDB();
+                    const persisted = await readManagedGame(db);
+                    if (latestPendingGameSave === queued) {
+                        knownEpochs = credentialAuthority(persisted.meta);
+                        durableChecksum = persisted.state?._meta?.checksum ?? null;
+                        gameState = validateGameState(
+                            applyCredentialAuthority(
+                                persisted.state ?? initializeGameState(),
+                                knownEpochs
+                            )
+                        );
+                        state.set(gameState);
+                    }
+                } catch {
+                    if (latestPendingGameSave === queued) {
+                        gameState = scrubCredential(
+                            scrubCredential(previousSnapshot, 'github'),
+                            'openAI'
+                        );
+                        state.set(gameState);
+                    }
+                } finally {
+                    db?.close();
+                }
+            }
+            throw error;
+        });
+        queued.promise = result;
+        writeQueue = result.catch(() => undefined);
+        return await result;
+    } finally {
+        pendingGameWrites--;
+        if (latestPendingGameSave === queued) latestPendingGameSave = null;
+    }
 };
+
+export async function saveCredential(kind, value) {
+    if (!['github', 'openAI'].includes(kind) || typeof value !== 'string' || !value.trim())
+        throw new StorageOperationError('credential-value');
+    const dependency = {
+        kind,
+        before: structuredClone(knownEpochs),
+        beforeGameplay: gameplayChecksum(gameState),
+        gameplayChecksum: null,
+        authority: null,
+        promise: null,
+        outcome: 'pending',
+    };
+    pendingCredentialSaves.add(dependency);
+    dependency.promise = serializeManagedMutation(async () => {
+        await ready;
+        if (useLocalStorage) throw new StorageOperationError('fallback-reload-required');
+        const observedUI = gameState;
+        const db = await openManagedGameDB();
+        try {
+            const previous = await readManagedGame(db);
+            dependency.before = credentialAuthority(previous.meta);
+            const next = validateGameState(structuredClone(previous.state ?? gameState));
+            next[kind] = { ...next[kind], [kind === 'github' ? 'token' : 'apiKey']: value };
+            const receipt = await commitManagedGame(db, {
+                next,
+                backup: previous.state ?? gameState,
+                expectedChecksum: previous.state?._meta?.checksum ?? null,
+                expectedEpochs: credentialAuthority(previous.meta),
+                deliberateKind: kind,
+                stamp: stampStateChecksum,
+                lightweight: buildLightweightSnapshot,
+            });
+            dependency.outcome = 'committed';
+            knownEpochs = credentialAuthority(receipt.meta);
+            dependency.gameplayChecksum = gameplayChecksum(receipt.state);
+            dependency.authority = structuredClone(knownEpochs);
+            dependency.checksum = receipt.state._meta.checksum;
+            dependency.lastUpdated = savedAt(receipt.state);
+            dependency.order = ++managedCommitOrder;
+            durableChecksum = dependency.checksum;
+            if (gameState === observedUI && pendingGameWrites === 0) {
+                gameState = receipt.state;
+                durableChecksum = receipt.state._meta.checksum;
+                state.set(gameState);
+            }
+            publishCredentialNotice(kind, 'saved');
+            try {
+                mirrorManagedGame(receipt);
+            } catch {
+                throw new StorageOperationError('mirror-incomplete', ['game']);
+            }
+            return { status: 'complete', committed: ['game', 'mirrors'] };
+        } finally {
+            db.close();
+        }
+    }).catch((error) => {
+        if (dependency.outcome === 'pending') dependency.outcome = 'not-committed';
+        throw error;
+    });
+    try {
+        return await dependency.promise;
+    } finally {
+        pendingCredentialSaves.delete(dependency);
+    }
+}
+const stampOwnedState = (value) => {
+    const stack = [value],
+        records = [];
+    while (stack.length) {
+        const record = stack.pop();
+        records.push(record);
+        for (const key of ['gameState', 'payload']) if (record[key]) stack.push(record[key]);
+    }
+    for (const record of records.reverse()) stampStateChecksum(record);
+};
+export async function clearCredential(kind) {
+    const dependency = {
+        kind,
+        before: structuredClone(knownEpochs),
+        beforeGameplay: gameplayChecksum(gameState),
+        gameplayChecksum: null,
+        authority: null,
+        promise: null,
+        clearGeneration: ++clearGeneration,
+    };
+    pendingCredentialSaves.add(dependency);
+    let started = false;
+    dependency.promise = serializeManagedMutation(async () => {
+        await ready;
+        let db;
+        try {
+            db = await openManagedGameDB();
+        } catch {
+            return { status: 'not-started', committed: [] };
+        }
+        try {
+            dependency.before = credentialAuthority((await readManagedGame(db)).meta);
+            const result = await clearManagedCredential(
+                db,
+                kind,
+                stampOwnedState,
+                buildLightweightSnapshot
+            );
+            if (result.status !== 'not-started') {
+                started = true;
+                gameState = scrubCredential(gameState, kind);
+                stampStateChecksum(gameState);
+                state.set(gameState);
+                recovery = null;
+                const persisted = await readManagedGame(db);
+                knownEpochs = credentialAuthority(persisted.meta);
+                durableChecksum = persisted.state?._meta?.checksum ?? null;
+                if (result.status === 'complete') {
+                    dependency.gameplayChecksum = gameplayChecksum(
+                        persisted.state ?? initializeGameState()
+                    );
+                    dependency.authority = structuredClone(knownEpochs);
+                    dependency.checksum = durableChecksum;
+                    dependency.lastUpdated = savedAt(persisted.state);
+                    dependency.order = ++managedCommitOrder;
+                }
+                publishCredentialNotice(kind, 'cleared');
+                if (isBrowser)
+                    window.dispatchEvent(
+                        new CustomEvent('dspace-credential-cleared', { detail: { kind } })
+                    );
+            }
+            return { status: result.status, committed: result.committed };
+        } finally {
+            db.close();
+        }
+    }).catch(() => ({
+        status: started ? 'incomplete' : 'not-started',
+        committed: started ? ['clear-intent'] : [],
+    }));
+    try {
+        return await dependency.promise;
+    } finally {
+        pendingCredentialSaves.delete(dependency);
+    }
+}
 
 export const getPersistedGameStateChecksum = () => readChecksumMarker();
 
@@ -597,7 +1101,7 @@ export const getAuthoritativeQuestProgressSnapshot = (snapshot) => {
 };
 
 export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
-    if (!isBrowser) {
+    if (!isBrowser || pendingGameWrites || pendingCredentialSaves.size) {
         return false;
     }
 
@@ -613,13 +1117,31 @@ export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
         return false;
     }
 
-    gameState = validateGameState(persisted);
+    let mirroredAuthority;
+    try {
+        const lightweight = JSON.parse(localStorage.getItem(LS_LIGHTWEIGHT_KEY) || '{}');
+        // Separate localStorage keys can become visible across tabs at different times.
+        // Never combine new state with authority from an older mirror receipt.
+        if (
+            persisted?._meta?.checksum !== persistedChecksum ||
+            lightweight.checksum !== persistedChecksum
+        )
+            return false;
+        mirroredAuthority = credentialAuthority(lightweight);
+    } catch {
+        return false;
+    }
+    durableChecksum = persisted._meta.checksum;
+    knownEpochs = mirroredAuthority;
+    gameState = validateGameState(applyCredentialAuthority(persisted, knownEpochs));
     state.set(gameState);
-    lsWrite(META_STORE, buildLightweightSnapshot(gameState));
+    lsWrite(META_STORE, { ...buildLightweightSnapshot(gameState), credentialEpochs: knownEpochs });
     writeChecksumMarker(gameState?.[META_KEY]?.checksum ?? '');
     return true;
 };
 export const closeGameStateDatabaseForTesting = async () => {
+    credentialNotices?.close();
+    credentialNotices = undefined;
     try {
         await writeQueue.catch(() => undefined);
     } catch (err) {
@@ -655,16 +1177,21 @@ const buildBackupEnvelope = (state, providerHint = LOCAL_EXPORT_PROVIDER, custom
         envelope.customContent = customContent;
     }
 
-    return envelope;
+    return sanitizeSaveForBackup(envelope);
 };
 
 export const exportGameStateString = (options = {}) => {
     const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride, customContent } = options;
     const sourceState = stateOverride ?? gameState;
     const envelope = buildBackupEnvelope(sourceState, providerHint, customContent);
+    assertBackupBudget(envelope);
     const jsonStr = JSON.stringify(envelope);
     if (typeof btoa === 'function') {
-        return btoa(jsonStr);
+        return btoa(
+            Array.from(new TextEncoder().encode(jsonStr), (byte) => String.fromCharCode(byte)).join(
+                ''
+            )
+        );
     }
     if (typeof Buffer !== 'undefined') {
         return Buffer.from(jsonStr, 'utf8').toString('base64');
@@ -672,88 +1199,194 @@ export const exportGameStateString = (options = {}) => {
     throw new Error('Base64 encoding is not supported in this environment');
 };
 
-const decodeBase64 = (value) => {
-    if (typeof atob === 'function') {
-        return atob(value);
-    }
-
-    if (typeof Buffer !== 'undefined') {
-        return Buffer.from(value, 'base64').toString('utf8');
-    }
-
-    throw new Error('Base64 decoding is not supported in this environment');
+export const importGameStateString = async (input) => {
+    const { prepareImport, assertRecoveryBudget, validateCustomImportReferences } = await import(
+        '../importPreparation.js'
+    );
+    // Structural/media preparation precedes readiness and preflight; destination
+    // references are checked against the snapshot before either database writes.
+    const plan = prepareImport(input, {
+        origin: isBrowser ? window.location.origin : undefined,
+        deferDestinationReferences: true,
+    });
+    await ready;
+    const expectedChecksum = durableChecksum;
+    return serializeManagedMutation(async () => {
+        if (durableChecksum !== expectedChecksum) throw new StorageOperationError('stale-plan');
+        let db;
+        try {
+            if (useLocalStorage) throw new StorageOperationError('fallback-reload-required');
+            db = await openManagedGameDB();
+        } catch (error) {
+            if (plan.customContent) throw error;
+            // Retain the existing game-only fallback. Without durable authority,
+            // neither imported nor previously cached credentials can be enabled.
+            assertRecoveryBudget(gameState);
+            const next = validateGameState(structuredClone(plan.game));
+            next[META_KEY].lastUpdated = fallbackWriteTime();
+            const backup = scrubCredential(scrubCredential(gameState, 'github'), 'openAI');
+            stampStateChecksum(next);
+            stampStateChecksum(backup);
+            mirrorManagedGame({ state: next, backup, meta: buildLightweightSnapshot(next) });
+            gameState = next;
+            durableChecksum = next._meta.checksum;
+            useLocalStorage = true;
+            recovery = null;
+            state.set(gameState);
+            return {
+                status: 'best-effort',
+                committed: ['localStorage'],
+                credentialsDisabled: true,
+            };
+        }
+        let custom;
+        const committed = [];
+        try {
+            if (plan.customContent) {
+                custom = await preflightCustomImport();
+                validateCustomImportReferences(plan.customContent, custom.snapshot);
+                validateCustomImportDestination(plan.customContent, custom.snapshot, true);
+            }
+            const previous = await readManagedGame(db);
+            if (previous.state && (previous.state._meta?.checksum ?? null) !== expectedChecksum)
+                throw new StorageOperationError('stale-plan');
+            const authority = credentialAuthority(previous.meta);
+            const next = validateGameState(structuredClone(plan.game));
+            next[META_KEY].lastUpdated = Math.max(Date.now(), savedAt(gameState) + 1);
+            for (const kind of ['github', 'openAI'])
+                if (previous.state?.[kind]) next[kind] = structuredClone(previous.state[kind]);
+            stampStateChecksum(next);
+            recovery = null;
+            try {
+                const before = {
+                    game: previous.state ?? gameState,
+                    custom: custom?.snapshot ?? null,
+                };
+                assertRecoveryBudget(before);
+                recovery = { before: sanitizeSaveForBackup(before), expected: null, mode: 'game' };
+            } catch {
+                /* Existing destination exceeds the bounded in-memory recovery budget. */
+            }
+            const receipt = await commitManagedGame(db, {
+                next,
+                backup: previous.state ?? gameState,
+                expectedChecksum: previous.state?._meta?.checksum,
+                expectedEpochs: authority,
+                stamp: stampStateChecksum,
+                lightweight: buildLightweightSnapshot,
+            });
+            committed.push('game');
+            if (recovery) recovery.expected = receipt.state._meta.checksum;
+            durableChecksum = receipt.state?._meta?.checksum ?? null;
+            gameState = receipt.state;
+            knownEpochs = credentialAuthority(receipt.meta);
+            state.set(gameState);
+            if (custom) {
+                try {
+                    await commitCustomImport(custom.db, plan.customContent, custom.snapshot, true);
+                    committed.push('custom');
+                } catch {
+                    const error = new StorageOperationError('partial', committed);
+                    error.recovery = recovery?.mode ?? null;
+                    throw error;
+                }
+            }
+            try {
+                mirrorManagedGame(receipt);
+                committed.push('mirrors');
+            } catch {
+                if (recovery) recovery.mode = 'mirrors';
+                const error = new StorageOperationError('mirror-incomplete', committed);
+                error.recovery = recovery?.mode ?? null;
+                throw error;
+            }
+            recovery = null;
+            return { status: 'complete', committed };
+        } finally {
+            custom?.db.close();
+            db.close();
+        }
+    });
 };
 
-export const importGameStateString = async (gameStateString) => {
-    if (typeof gameStateString !== 'string') {
-        throw new TypeError('Expected serialized game state to be a string');
-    }
-
-    const serialized = gameStateString.trim();
-    let imported;
-
-    try {
-        imported = JSON.parse(serialized);
-    } catch (directParseError) {
-        const decoded = decodeBase64(serialized);
-        try {
-            imported = JSON.parse(decoded);
-        } catch (decodedParseError) {
-            decodedParseError.cause = decodedParseError.cause ?? directParseError;
-            throw decodedParseError;
-        }
-    }
-
-    let payload = imported;
-    const customContent = imported?.customContent;
-
-    if (imported && typeof imported === 'object' && 'payload' in imported) {
-        if (
-            Object.prototype.hasOwnProperty.call(imported, 'schemaVersion') &&
-            imported.schemaVersion !== BACKUP_SCHEMA_VERSION
-        ) {
-            throw new Error(
-                `Unsupported backup schema version: ${imported.schemaVersion}, expected ${BACKUP_SCHEMA_VERSION}`
-            );
-        }
-
-        payload = imported.payload;
-    }
-
-    await saveGameState(payload);
-
-    if (customContent && isBrowser) {
-        try {
-            await restoreCustomContentBackup(customContent, { overwriteExisting: true });
-        } catch (err) {
-            logPersistenceIssue('Custom content restore failed:', err);
-            throw err;
-        }
-    }
+// Explicit, bounded recovery of the committed game component after a failed second commit.
+// Never restores credentials, and refuses to overwrite any later state.
+export const getImportRecoveryStatus = () => {
+    if (recovery && durableChecksum !== recovery.expected) recovery = null;
+    return recovery?.mode ?? null;
 };
-
+export async function recoverImportGameState() {
+    if (!recovery || !recovery.expected || durableChecksum !== recovery.expected) {
+        recovery = null;
+        throw new StorageOperationError('recovery-stale-or-unavailable');
+    }
+    const snapshot = recovery;
+    if (snapshot.mode === 'mirrors') {
+        return serializeManagedMutation(async () => {
+            const db = await openManagedGameDB();
+            try {
+                const persisted = await readManagedGame(db);
+                if (
+                    persisted.state?._meta?.checksum !== snapshot.expected ||
+                    recovery !== snapshot
+                ) {
+                    if (recovery === snapshot) recovery = null;
+                    throw new StorageOperationError('recovery-stale-or-unavailable');
+                }
+                mirrorManagedGame(persisted);
+                recovery = null;
+                return { status: 'complete', committed: ['mirrors'] };
+            } finally {
+                db.close();
+            }
+        });
+    }
+    const result = await saveGameState(snapshot.before.game);
+    if (recovery === snapshot) recovery = null;
+    return result;
+}
 export const resetGameState = async () => {
-    gameState = initializeGameState();
-    validateGameState(gameState);
-    state.set(gameState);
-    writeChecksumMarker(gameState[META_KEY].checksum);
-    await write(STATE_STORE, gameState).catch(() => undefined);
-    await write(META_STORE, buildLightweightSnapshot(gameState)).catch(() => undefined);
-    await clearStore(BACKUP_STORE).catch(() => undefined);
+    await ready;
+    return serializeManagedMutation(async () => {
+        const db = await openManagedGameDB();
+        try {
+            const previous = await readManagedGame(db);
+            const receipt = await commitManagedGame(db, {
+                next: validateGameState(initializeGameState()),
+                backup: undefined,
+                expectedChecksum: previous.state?._meta?.checksum,
+                expectedEpochs: credentialAuthority(previous.meta),
+                stamp: stampStateChecksum,
+                lightweight: buildLightweightSnapshot,
+            });
+            durableChecksum = receipt.state?._meta?.checksum ?? null;
+            gameState = receipt.state;
+            knownEpochs = credentialAuthority(receipt.meta);
+            state.set(gameState);
+            try {
+                mirrorManagedGame(receipt);
+            } catch {
+                throw new StorageOperationError('mirror-incomplete', ['game']);
+            }
+            recovery = null;
+            return { status: 'complete', committed: ['game', 'mirrors'] };
+        } finally {
+            db.close();
+        }
+    });
 };
-
 export const rollbackGameState = async () => {
+    await ready;
+    const db = await openManagedGameDB();
+    let snapshot;
     try {
-        const backup = await read(BACKUP_STORE);
-        if (!backup) return;
-        gameState = validateGameState(backup);
-        state.set(gameState);
-        writeChecksumMarker(gameState[META_KEY].checksum);
-        await write(STATE_STORE, gameState);
-        await write(META_STORE, buildLightweightSnapshot(gameState));
-    } catch (err) {
-        logPersistenceIssue('Error rolling back game state:', err);
+        snapshot = await readManagedGame(db);
+    } finally {
+        db.close();
     }
+    const backup = snapshot.backup ?? lsRead(BACKUP_STORE);
+    if (!backup) return;
+    return saveGameState(applyCredentialAuthority(backup, credentialAuthority(snapshot.meta)));
 };
 
 export const inspectGameStateStorage = async () => {

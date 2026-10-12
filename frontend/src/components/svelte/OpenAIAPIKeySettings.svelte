@@ -1,6 +1,11 @@
 <script>
     import { onMount } from 'svelte';
-    import { loadGameState, saveGameState, ready } from '../../utils/gameState/common.js';
+    import {
+        loadGameState,
+        saveCredential,
+        clearCredential,
+        ready,
+    } from '../../utils/gameState/common.js';
 
     let apiKey = '';
 
@@ -22,27 +27,35 @@
         const trimmedApiKey = draftApiKey.trim();
         if (!trimmedApiKey) return;
 
-        await ready;
-        const gameState = loadGameState();
-        gameState.openAI = gameState.openAI || {};
-        gameState.openAI.apiKey = trimmedApiKey;
-        await saveGameState(gameState);
-        apiKey = gameState.openAI.apiKey;
-        draftApiKey = '';
-        isEditing = !apiKey;
-        statusMessage = apiKey ? 'OpenAI API key saved.' : 'OpenAI API key cleared.';
+        try {
+            await ready;
+            await saveCredential('openAI', trimmedApiKey);
+            apiKey = trimmedApiKey;
+            draftApiKey = '';
+            isEditing = !apiKey;
+            statusMessage = 'OpenAI API key saved.';
+        } catch (error) {
+            statusMessage =
+                error?.code === 'fallback-reload-required'
+                    ? 'Reload to reconcile saved progress, then retry Save.'
+                    : 'OpenAI API key save could not be confirmed. Check storage access and retry Save.';
+        }
     }
 
     async function deleteAPIKey() {
         await ready;
-        const gameState = loadGameState();
-        gameState.openAI = gameState.openAI || {};
-        gameState.openAI.apiKey = '';
-        await saveGameState(gameState);
         apiKey = '';
         draftApiKey = '';
         isEditing = true;
-        statusMessage = 'OpenAI API key cleared.';
+        try {
+            const result = await clearCredential('openAI');
+            statusMessage =
+                result.status === 'complete'
+                    ? 'OpenAI API key cleared.'
+                    : `OpenAI API key clear ${result.status}. Retry Clear to finish.`;
+        } catch {
+            statusMessage = 'OpenAI API key clear not started. Storage authority is unavailable.';
+        }
     }
 
     function editAPIKey() {
@@ -50,6 +63,18 @@
         isEditing = true;
         statusMessage = '';
     }
+
+    onMount(() => {
+        const clearDraft = (event) => {
+            if (event.detail?.kind === 'openAI') {
+                apiKey = '';
+                draftApiKey = '';
+                isEditing = true;
+            }
+        };
+        window.addEventListener('dspace-credential-cleared', clearDraft);
+        return () => window.removeEventListener('dspace-credential-cleared', clearDraft);
+    });
 </script>
 
 {#if hydrated}
@@ -84,6 +109,11 @@
                 </div>
             </form>
         {/if}
+
+        <p>
+            Close or reload older DSPACE tabs before relying on Clear. Clear removes managed local
+            copies; it does not revoke the provider key.
+        </p>
 
         {#if statusMessage}
             <p class="status" role="status">{statusMessage}</p>

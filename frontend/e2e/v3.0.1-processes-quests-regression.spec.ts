@@ -394,13 +394,15 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
 
         await expect(page.getByRole('status')).toContainText(/Added/i, { timeout: 5000 });
 
-        const afterCount = await page.evaluate((itemId) => {
-            const raw = localStorage.getItem('gameState');
-            const parsed = raw ? JSON.parse(raw) : {};
-            return Number(parsed?.inventory?.[itemId] ?? 0);
-        }, requiredItem.requirementId);
-
-        expect(afterCount).toBeGreaterThan(beforeCount);
+        await expect
+            .poll(() =>
+                page.evaluate((itemId) => {
+                    const raw = localStorage.getItem('gameState');
+                    const parsed = raw ? JSON.parse(raw) : {};
+                    return Number(parsed?.inventory?.[itemId] ?? 0);
+                }, requiredItem.requirementId)
+            )
+            .toBeGreaterThan(beforeCount);
 
         await expect(
             page.getByRole('button', { name: /Start|Pause|Resume|Collect/i })

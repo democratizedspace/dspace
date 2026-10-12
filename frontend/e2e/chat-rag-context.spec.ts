@@ -10,6 +10,7 @@ test.describe('chat RAG context', () => {
             ({ questId, processId, inventoryId }) => {
                 const now = Date.now();
                 const gameState = {
+                    versionNumberString: '3',
                     _meta: { lastUpdated: now },
                     settings: { showChatDebugPayload: true, chatProvider: 'openai' },
                     openAI: { apiKey: 'e2e-openai-key' },
@@ -21,17 +22,13 @@ test.describe('chat RAG context', () => {
                     processes: {
                         [processId]: {
                             startedAt: now - 15000,
-                            duration: 30000,
+                            duration: 3600000,
                             elapsedBeforePause: 0,
                         },
                     },
                 };
 
                 localStorage.setItem('gameState', JSON.stringify(gameState));
-                Object.defineProperty(window, 'indexedDB', {
-                    value: undefined,
-                    configurable: true,
-                });
 
                 const payloads = [];
                 // @ts-expect-error test hook
@@ -50,6 +47,13 @@ test.describe('chat RAG context', () => {
             },
             { questId: QUEST_ID, processId: PROCESS_ID, inventoryId: INVENTORY_ITEM_ID }
         );
+        // The stubbed client still uses the real durable browser credential gate.
+        await page.route('https://api.openai.com/**', (route) => route.abort());
+        await page.goto('/settings');
+        await page.getByRole('button', { name: 'Edit API key' }).click();
+        await page.getByLabel('OpenAI API key', { exact: true }).fill('e2e-openai-key');
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await expect(page.getByText('OpenAI API key saved.', { exact: true })).toBeVisible();
     });
 
     test('sends persona prompt with live quest, process, and inventory context', async ({

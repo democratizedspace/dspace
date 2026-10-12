@@ -107,12 +107,78 @@ test('quest PR form submits and shows link', async ({ page }) => {
     await expect(page.getByLabel('GitHub Token*')).toHaveValue(validToken);
     await page.getByTestId('clear-token').click();
     await expect(page.getByLabel('GitHub Token*')).toHaveValue('');
-    const cleared = await page.evaluate(() => {
-        const state = JSON.parse(localStorage.getItem('gameState') || '{}');
-        return state.github?.token || '';
-    });
-    expect(cleared).toBe('');
+    await expect
+        .poll(async () =>
+            page.evaluate(async () => {
+                const copies = ['gameState', 'gameStateBackup'].map((key) =>
+                    JSON.parse(localStorage.getItem(key) || '{}')
+                );
+                const authority = await new Promise<{
+                    credentialEpochs?: { github?: { pending?: boolean; cleared?: boolean } };
+                }>((resolve, reject) => {
+                    const request = indexedDB.open('dspaceGameState');
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        const db = request.result;
+                        const read = db
+                            .transaction('meta', 'readonly')
+                            .objectStore('meta')
+                            .get('root');
+                        read.onsuccess = () => {
+                            db.close();
+                            resolve(read.result);
+                        };
+                        read.onerror = () => {
+                            db.close();
+                            reject(read.error);
+                        };
+                    };
+                });
+                return (
+                    copies.every((state) => !state.github?.token) &&
+                    authority.credentialEpochs?.github?.pending === false &&
+                    authority.credentialEpochs?.github?.cleared === true
+                );
+            })
+        )
+        .toBe(true);
     await page.reload();
     await waitForHydration(page);
     await expect(page.getByLabel('GitHub Token*')).toHaveValue('');
 });
+
+for (const form of [
+    {
+        path: '/quests/submit',
+        label: 'Quest JSON*',
+        json: '{"title":"Synthetic","description":"Test"}',
+    },
+    { path: '/bundles/submit', label: 'Bundle JSON*', json: '{"items":[{"name":"Synthetic"}]}' },
+]) {
+    test(`normalizes pasted credentials before saving and submitting ${form.path}`, async ({
+        page,
+    }) => {
+        const token = `ghp_${'a'.repeat(36)}`;
+        await page.route('https://api.github.com/**', (route) =>
+            route.fulfill({
+                status: 403,
+                contentType: 'application/json',
+                body: '{"message":"Synthetic denial"}',
+            })
+        );
+        await page.goto(form.path);
+        await waitForQuestPrFormHydration(page);
+        await page.getByLabel('GitHub Token*').fill(`  ${token}  `);
+        await page.getByLabel(form.label).fill(form.json);
+        const [request] = await Promise.all([
+            page.waitForRequest('https://api.github.com/**'),
+            page.getByRole('button', { name: 'Create Pull Request' }).click(),
+        ]);
+        expect(request.headers().authorization).toBe(`token ${token}`);
+        expect(
+            await page.evaluate(
+                () => JSON.parse(localStorage.getItem('gameState') || '{}').github?.token
+            )
+        ).toBe(token);
+    });
+}

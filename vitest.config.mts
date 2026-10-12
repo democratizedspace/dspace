@@ -109,6 +109,7 @@ export default defineConfig({
       'frontend/src/components/__tests__/**/*.spec.ts',
       'frontend/src/pages/**/__tests__/**/*.spec.ts',
       'frontend/__tests__/buildInfo.test.js',
+      'frontend/__tests__/customBackup.test.js',
       'frontend/__tests__/healthEndpoint.test.js',
       'frontend/__tests__/Quests.test.js',
       'frontend/__tests__/gameState/common.test.js',

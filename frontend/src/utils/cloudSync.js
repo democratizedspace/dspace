@@ -1,3 +1,4 @@
+import { fetchWithCredential } from './managedImportStorage.js';
 import {
     importGameStateString,
     loadGameState,
@@ -13,15 +14,6 @@ import {
     listBackups,
 } from '../lib/cloudsync/githubGists';
 import { buildCustomContentBackupData } from './customContentBackup.js';
-
-const buildCloudSyncCustomContent = async () => {
-    try {
-        return await buildCustomContentBackupData();
-    } catch (error) {
-        console.warn('Failed to build custom content backup for cloud sync:', error);
-        return null;
-    }
-};
 
 async function loadCloudGistId() {
     await ready;
@@ -44,7 +36,7 @@ async function uploadGameStateToGist(token) {
     }
     await ready;
     const state = loadGameState();
-    const customContent = await buildCloudSyncCustomContent();
+    const customContent = await buildCustomContentBackupData();
     const content = exportGameStateString({
         providerHint: 'github-gist',
         stateOverride: state,
@@ -55,7 +47,17 @@ async function uploadGameStateToGist(token) {
         content,
         description: BACKUP_DESCRIPTION,
     });
-    await clearCloudGistId();
+    try {
+        await clearCloudGistId();
+    } catch (error) {
+        // The remote backup already exists. A local bookkeeping/mirror failure
+        // must not turn success into a retry that creates another remote backup.
+        return {
+            ...result,
+            localWarning:
+                error?.code === 'mirror-incomplete' ? 'mirror-incomplete' : 'save-incomplete',
+        };
+    }
     return result;
 }
 
@@ -69,7 +71,10 @@ async function downloadGameStateFromGist(token, gistId) {
     }
     const trimmedToken = token?.trim?.();
     const headers = trimmedToken ? { Authorization: `token ${trimmedToken}` } : {};
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
+    const url = `https://api.github.com/gists/${gistId}`;
+    const res = trimmedToken
+        ? await fetchWithCredential('github', trimmedToken, fetch, url, { headers })
+        : await fetch(url, { headers });
     if (!res.ok) throw new Error('Failed to download game state');
     const data = await res.json();
     const files = data.files || {};
