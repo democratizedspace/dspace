@@ -1024,3 +1024,53 @@ test.each(['requiresItems', 'grantsItems', 'consumeItems'])(
         expect(prepareImport(source(1), { kind: 'custom' })).toBeTruthy();
     }
 );
+
+test.each(['false', 0, null, {}, []])(
+    'A01 rejects non-boolean GitHub gates %j',
+    (requiresGitHub) => {
+        for (const placement of ['quest', 'option']) {
+            const quest = {
+                id: 'gate',
+                ...(placement === 'quest' ? { requiresGitHub } : {}),
+                dialogue: [
+                    {
+                        id: 'start',
+                        options: [
+                            {
+                                text: 'Finish',
+                                type: 'finish',
+                                ...(placement === 'option' ? { requiresGitHub } : {}),
+                            },
+                        ],
+                    },
+                ],
+            };
+            expect(() =>
+                prepareImport({ schemaVersion: 1, quests: [quest] }, { kind: 'custom' })
+            ).toThrow(/field-type/);
+        }
+    }
+);
+test.each([true, false])('A01 preserves boolean GitHub gates %s', (requiresGitHub) => {
+    const quest = {
+        id: 'gate',
+        requiresGitHub,
+        dialogue: [{ id: 'start', options: [{ text: 'Finish', type: 'finish', requiresGitHub }] }],
+    };
+    const plan = prepareImport({ schemaVersion: 1, quests: [quest] }, { kind: 'custom' });
+    expect(plan.customContent.quests[0].requiresGitHub).toBe(requiresGitHub);
+    expect(plan.customContent.quests[0].dialogue[0].options[0].requiresGitHub).toBe(requiresGitHub);
+});
+test('A01 removes imported ordering metadata throughout owned wrappers without mutation', () => {
+    const source = {
+        _meta: { lastUpdated: Number.MAX_VALUE, checksum: 'foreign', extension: 1 },
+        payload: { _meta: { lastUpdated: Number.MAX_SAFE_INTEGER } },
+        gameState: { _meta: { lastUpdated: -1 } },
+    };
+    const input = { schemaVersion: 1, payload: source };
+    const plan = prepareImport(input);
+    expect(plan.game._meta).toEqual({ extension: 1 });
+    expect(plan.game.payload._meta).toEqual({});
+    expect(plan.game.gameState._meta).toEqual({});
+    expect(source._meta.lastUpdated).toBe(Number.MAX_VALUE);
+});

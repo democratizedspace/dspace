@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { prepareImport } from '../importPreparation.js';
 import { sanitizeSaveForBackup } from '../../lib/cloudsync/githubGists';
 import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
@@ -1183,6 +1184,10 @@ export const exportGameStateString = (options = {}) => {
     const { providerHint = LOCAL_EXPORT_PROVIDER, stateOverride, customContent } = options;
     const sourceState = stateOverride ?? gameState;
     const envelope = buildBackupEnvelope(sourceState, providerHint, customContent);
+    prepareImport(envelope, {
+        deferDestinationReferences: true,
+        origin: isBrowser ? window.location.origin : undefined,
+    });
     const jsonStr = JSON.stringify(envelope);
     if (typeof btoa === 'function') {
         return btoa(

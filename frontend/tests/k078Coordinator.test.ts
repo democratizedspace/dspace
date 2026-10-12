@@ -1943,3 +1943,99 @@ test('A04 referenced destination changes after validation abort the custom commi
     expect(after.snapshot.quests.some((entity: any) => entity.id === 'imported-quest')).toBe(false);
     after.db.close();
 });
+
+test.each([
+    { code: 'entities', limits: { entities: 2 }, items: [{ id: 'a' }, { id: 'b' }, { id: 'c' }] },
+    {
+        code: 'string-bytes',
+        limits: { stringBytes: 32 },
+        items: [{ id: 'a', description: 'x'.repeat(33) }],
+    },
+    {
+        code: 'json-bytes',
+        limits: { jsonBytes: 512 },
+        items: [{ id: 'a', description: 'x'.repeat(500) }],
+    },
+])(
+    'A02 complete custom export rejects $code before download or provider creation',
+    async ({ code, limits, items }) => {
+        const prep = await import('../src/utils/importPreparation.js');
+        const actual = prep.prepareImport;
+        vi.spyOn(prep, 'prepareImport').mockImplementation((input: any, options: any = {}) =>
+            actual(input, { ...options, limits })
+        );
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, ['items'], 'readwrite', (tx: any) => {
+            for (const item of items) tx.objectStore('items').put(item);
+        });
+        custom.db.close();
+        const backup = await import('../src/utils/customContentBackup.js');
+        await expect(backup.buildCustomContentBackupData()).rejects.toMatchObject({ code });
+        await expect(backup.buildCustomContentBackup()).rejects.toMatchObject({ code });
+        const gist = await import('../src/lib/cloudsync/githubGists');
+        const create = vi.spyOn(gist, 'createBackupGist');
+        const cloud = await import('../src/utils/cloudSync.js');
+        await expect(cloud.uploadGameStateToGist('synthetic')).rejects.toMatchObject({ code });
+        expect(create).not.toHaveBeenCalled();
+    }
+);
+
+test('A02 combined export charges game and custom metadata as one envelope', async () => {
+    const prep = await import('../src/utils/importPreparation.js');
+    const actual = prep.prepareImport;
+    const payload = { inventory: {}, extension: 'x'.repeat(120) };
+    const customContent = { schemaVersion: 1, items: [{ id: 'a', description: 'x'.repeat(120) }] };
+    expect(() => actual(payload, { limits: { jsonBytes: 300 } })).not.toThrow();
+    expect(() =>
+        actual(customContent, { kind: 'custom', limits: { jsonBytes: 300 } })
+    ).not.toThrow();
+    vi.spyOn(prep, 'prepareImport').mockImplementation((input: any, options: any = {}) =>
+        actual(input, { ...options, limits: { jsonBytes: 300 } })
+    );
+    expect(() => common.exportGameStateString({ stateOverride: payload, customContent })).toThrow(
+        /json-bytes/
+    );
+});
+
+test('A02 pretty backup output charges whitespace before download success', async () => {
+    const prep = await import('../src/utils/importPreparation.js');
+    const actual = prep.prepareImport;
+    const backup = await import('../src/utils/customContentBackup.js');
+    const valid = await backup.buildCustomContentBackupData();
+    const jsonBytes = new TextEncoder().encode(JSON.stringify(valid)).length;
+    vi.spyOn(prep, 'prepareImport').mockImplementation((input: any, options: any = {}) =>
+        actual(input, { ...options, limits: { jsonBytes } })
+    );
+    await expect(backup.buildCustomContentBackupData()).resolves.toBeDefined();
+    await expect(backup.buildCustomContentBackup()).rejects.toMatchObject({ code: 'json-bytes' });
+});
+
+test.each([Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER * 2, Number.MAX_VALUE])(
+    'B05 imported timestamp %s cannot poison later fallback ordering',
+    async (lastUpdated) => {
+        await common.importGameStateString(
+            JSON.stringify({ inventory: { importedClock: 1 }, _meta: { lastUpdated } })
+        );
+        const imported = common.loadGameState();
+        expect(imported._meta.lastUpdated).toBeLessThan(Number.MAX_SAFE_INTEGER);
+        const db = await storage.openManagedGameDB();
+        const durable = await storage.readManagedGame(db);
+        db.close();
+        const locks = navigator.locks;
+        Object.defineProperty(navigator, 'locks', { configurable: true, value: undefined });
+        try {
+            const next = common.loadGameState();
+            next.inventory.importedClock = 2;
+            await common.saveGameState(next);
+            const local = JSON.parse(localStorage.getItem('gameState')!);
+            expect(local._meta.lastUpdated).toBeGreaterThan(durable.state._meta.lastUpdated);
+            await common.closeGameStateDatabaseForTesting();
+            vi.resetModules();
+            common = await import('../src/utils/gameState/common.js');
+            await common.ready;
+            expect(common.loadGameState().inventory.importedClock).toBe(2);
+        } finally {
+            Object.defineProperty(navigator, 'locks', { configurable: true, value: locks });
+        }
+    }
+);

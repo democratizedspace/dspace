@@ -130,6 +130,7 @@ describe('cloud sync custom content', () => {
 
     test('uploads custom content in gist payload', async () => {
         const customContent = {
+            schemaVersion: 1,
             items: [
                 {
                     id: 'custom-item-1',

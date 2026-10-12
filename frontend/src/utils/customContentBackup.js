@@ -323,7 +323,7 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
     const itemsArray = Array.from(exportedItems.values());
     const questsArray = Array.from(exportedQuests.values());
 
-    return sanitizeSaveForBackup({
+    const backup = sanitizeSaveForBackup({
         schemaVersion: BACKUP_SCHEMA_VERSION,
         timestamp: new Date().toISOString(),
         counts: {
@@ -337,11 +337,18 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
         quests: questsArray,
         images,
     });
+    prepareImport(backup, {
+        kind: 'custom',
+        origin: isBrowser ? window.location.origin : undefined,
+    });
+    return backup;
 }
 
 export async function buildCustomContentBackup({ onProgress } = {}) {
     const data = await buildCustomContentBackupData({ onProgress });
     const json = JSON.stringify(data, null, 2);
+    // Whitespace counts toward the restore transport/JSON budgets too.
+    prepareImport(json, { kind: 'custom', origin: isBrowser ? window.location.origin : undefined });
     const blob = new Blob([json], { type: 'application/json' });
 
     return {

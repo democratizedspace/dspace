@@ -619,6 +619,8 @@ function normalizeCustomReferences(
                     return { ...operation, itemId, containerItemId };
                 });
             }
+            if (entity.requiresGitHub !== undefined && typeof entity.requiresGitHub !== 'boolean')
+                failImport('field-type');
             if (section === 'quests') links(entity, change, 'rewards', itemIds, true);
             links(entity, change, 'requiresQuests', questIds);
             links(entity, change, 'dependencies', itemIds);
@@ -652,6 +654,11 @@ function normalizeCustomReferences(
                                 /[<>]/.test(option.text)
                             )
                                 failImport('preview-markup');
+                            if (
+                                option.requiresGitHub !== undefined &&
+                                typeof option.requiresGitHub !== 'boolean'
+                            )
+                                failImport('field-type');
                             const next = { ...option };
                             if (option.type === 'process' || option.process !== undefined) {
                                 next.process = id(option.process);
@@ -951,6 +958,11 @@ export function prepareImport(
         const current = portable.pop();
         delete current.github;
         delete current.openAI;
+        // Import time is assigned locally at commit; foreign ordering metadata is not portable.
+        if (current._meta) {
+            delete current._meta.lastUpdated;
+            delete current._meta.checksum;
+        }
         for (const field of ['credentialEpochs', 'clearIntents', 'credentialSaveBaseEpochs']) {
             delete current[field];
             if (current._meta) delete current._meta[field];
