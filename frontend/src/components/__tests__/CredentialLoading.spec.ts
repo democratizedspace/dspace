@@ -114,3 +114,77 @@ it('retains the ordinary loaded logout state', async () => {
     expect(view.getByTestId('logout-state')).toHaveTextContent('Credentials stored');
     expect(view.queryByRole('alert')).toBeNull();
 });
+
+for (const [name, component, jsonLabel, submission] of [
+    ['quest', QuestPRForm, 'Quest JSON*', submitQuest],
+    ['bundle', ContentBundlePRForm, 'Bundle JSON*', submitBundle],
+] as const) {
+    describe(`${name} credential actions after hydration`, () => {
+        it('saves and submits the same normalized token after loading', async () => {
+            loadToken.mockResolvedValue('  synthetic-token  ');
+            submission.mockResolvedValue('https://example.invalid/pr/1');
+            const view = render(component);
+            await waitFor(() =>
+                expect(view.container.querySelector('form')).toHaveAttribute(
+                    'data-hydrated',
+                    'true'
+                )
+            );
+            expect(view.getByLabelText('GitHub Token*')).toHaveValue('  synthetic-token  ');
+            await fireEvent.input(view.getByLabelText(jsonLabel), {
+                target: { value: '{"quests":[]}' },
+            });
+            await fireEvent.submit(view.container.querySelector('form')!);
+            await waitFor(() =>
+                expect(submission).toHaveBeenCalledWith('synthetic-token', '', '{"quests":[]}')
+            );
+            expect(saveToken).toHaveBeenCalledWith('synthetic-token');
+            expect(view.getByTestId('pr-success')).toHaveTextContent('Pull request created');
+        });
+
+        it('clears the draft and handles an incomplete deliberate Clear', async () => {
+            loadToken.mockResolvedValue('synthetic-token');
+            clearToken.mockRejectedValue(new Error('incomplete'));
+            const view = render(component);
+            await waitFor(() =>
+                expect(view.container.querySelector('form')).toHaveAttribute(
+                    'data-hydrated',
+                    'true'
+                )
+            );
+            await fireEvent.click(view.getByTestId('clear-token'));
+            await waitFor(() =>
+                expect(view.getByTestId('submit-error')).toHaveTextContent(
+                    'Credential clear incomplete'
+                )
+            );
+            expect(view.getByLabelText('GitHub Token*')).toHaveValue('');
+            expect(clearToken).toHaveBeenCalledOnce();
+            expect(saveToken).not.toHaveBeenCalled();
+            expect(submission).not.toHaveBeenCalled();
+        });
+
+        it('clears the draft only for a GitHub Clear notice', async () => {
+            loadToken.mockResolvedValue('synthetic-token');
+            const view = render(component);
+            await waitFor(() =>
+                expect(view.container.querySelector('form')).toHaveAttribute(
+                    'data-hydrated',
+                    'true'
+                )
+            );
+            await fireEvent(
+                window,
+                new CustomEvent('dspace-credential-cleared', { detail: { kind: 'openai' } })
+            );
+            expect(view.getByLabelText('GitHub Token*')).toHaveValue('synthetic-token');
+            await fireEvent(
+                window,
+                new CustomEvent('dspace-credential-cleared', { detail: { kind: 'github' } })
+            );
+            expect(view.getByLabelText('GitHub Token*')).toHaveValue('');
+            expect(clearToken).not.toHaveBeenCalled();
+            expect(saveToken).not.toHaveBeenCalled();
+        });
+    });
+}
