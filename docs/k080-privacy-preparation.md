@@ -22,7 +22,7 @@ Policy and latest text reserve capacity first; if they cannot fit, preparation r
 
 The result contains deeply frozen `data`, its stable local JSON `serialized`, exact content/serialization byte counts, and aggregated `{ category, reason, count }` omission records. Reasons describe missing/unknown IDs and shaping caps without echoing excluded values. Unselected categories are absent from messages; omission counts describe attempted selections only. Equivalent source object-key order does not alter serialization; explicit selection order remains meaningful. This serialization is an equality/mutation aid only, not cryptographic canonicalization, authentication, a consent receipt or a provider wire request. Diagnostics are local; they are not automatically transmitted or logged.
 
-Source objects are not retained or mutated. Own data fields are read explicitly; selected accessors, duplicate IDs/selections, malformed values and unsupported types reject with fixed error codes. Inputs must be ordinary plain data, not hostile JavaScript proxies or executable objects. Future callers must separately validate their trust boundary.
+Source objects are not retained or mutated. Own data fields are read explicitly; inspected accessors, duplicate IDs/selections, malformed values and unsupported types reject with fixed error codes. UTF-8 counting does not allocate encoded copies. Optional strings are size-checked before JSON copying; oversized records are omitted whole. After a category count cap is full, omitted text is not read or validated. Inputs must be ordinary plain data, not hostile JavaScript proxies or executable objects. Future callers must separately validate their trust boundary.
 
 ## Validation and excluded integration
 

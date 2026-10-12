@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
     CHAT_PRIVACY_LIMITS,
     prepareChatPrivacyRequest,
@@ -51,6 +51,85 @@ const allPlayer = {
 };
 
 describe('inert chat privacy preparation', () => {
+    it('omits oversized optional strings before JSON copying with tiny injected limits', () => {
+        const canary = 'OVERSIZE_SYNTHETIC';
+        const original = JSON.stringify;
+        const copied = [];
+        const spy = vi.spyOn(JSON, 'stringify').mockImplementation((value) => {
+            const result = original(value);
+            copied.push(result);
+            return result;
+        });
+        try {
+            const result = prepareChatPrivacyRequest(
+                {
+                    latestText: 'x',
+                    labels,
+                    player: { inventory: [{ id: 'i', count: 1 }] },
+                    custom: { item: [{ id: 'c', description: canary }] },
+                    history: [{ id: 'h', role: 'user', content: canary }],
+                    selection: {
+                        player: { inventory: ['i'] },
+                        custom: [{ kind: 'item', id: 'c', fields: ['description'] }],
+                        history: ['h'],
+                    },
+                },
+                { inventory: [{ id: 'i', title: canary }] },
+                {
+                    id: 'p',
+                    text: 'p',
+                    limits: { playerBytes: 8, customBytes: 8, historyBytes: 8 },
+                }
+            );
+            expect(result.data.messages).toHaveLength(2);
+            expect(result.omissions.map((entry) => entry.reason)).toEqual([
+                'budget',
+                'budget',
+                'budget',
+            ]);
+            expect(copied.every((value) => !value.includes(canary))).toBe(true);
+        } finally {
+            spy.mockRestore();
+        }
+    });
+
+    it('does not read optional text after record or history capacity is full', () => {
+        const blocked = { id: 'blocked', role: 'user' };
+        Object.defineProperty(blocked, 'content', {
+            get: () => {
+                throw new Error('not read');
+            },
+        });
+        const blockedCustom = { id: 'blocked' };
+        Object.defineProperty(blockedCustom, 'title', {
+            get: () => {
+                throw new Error('not read');
+            },
+        });
+        const result = prepareChatPrivacyRequest(
+            {
+                latestText: 'x',
+                labels,
+                custom: { item: [{ id: 'first', title: 'First' }, blockedCustom] },
+                history: [blocked, { id: 'last', role: 'user', content: 'Last' }],
+                selection: {
+                    custom: [
+                        { kind: 'item', id: 'first', fields: ['title'] },
+                        { kind: 'item', id: 'blocked', fields: ['title'] },
+                    ],
+                    history: ['blocked', 'last'],
+                },
+            },
+            catalog,
+            { ...policy, limits: { categoryRecords: 1, historyCount: 1 } }
+        );
+        expect(contents(result, 'history').map((message) => message.id)).toEqual(['last']);
+        expect(result.omissions).toEqual([
+            { category: 'custom', reason: 'record-cap', count: 1 },
+            { category: 'history', reason: 'record-cap', count: 1 },
+        ]);
+    });
+
     it('detaches selected content and catalog data without mutating its sources', () => {
         const input = {
             ...fixture(),

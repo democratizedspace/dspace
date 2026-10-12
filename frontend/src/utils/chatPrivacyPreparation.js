@@ -13,14 +13,23 @@ export const CHAT_PRIVACY_LIMITS = Object.freeze({
     categoryRecords: 32,
 });
 
-const encoder = new TextEncoder();
 const groups = ['inventory', 'quests', 'processes', 'resources'];
 const kinds = ['item', 'quest', 'process'];
 const fields = ['title', 'description'];
 const fail = (code) => {
     throw new Error(`chat-privacy:${code}`);
 };
-const bytes = (value) => encoder.encode(value).byteLength;
+// Count without allocating an encoded copy. Callers can stop at a known capacity.
+function bytes(value, limit = Infinity) {
+    if (value.length > limit) return limit + 1;
+    let size = 0;
+    for (const character of value) {
+        const point = character.codePointAt(0);
+        size += point <= 0x7f ? 1 : point <= 0x7ff ? 2 : point <= 0xffff ? 3 : 4;
+        if (size > limit) return limit + 1;
+    }
+    return size;
+}
 
 function record(value) {
     if (
@@ -41,14 +50,16 @@ function own(value, key, fallback = undefined) {
     return descriptor.value;
 }
 
-function text(value, limit = Infinity) {
+function text(value, limit = Infinity, limitCode = 'text-limit') {
+    if (typeof value !== 'string') fail('invalid-text');
+    if (value.length > limit) fail(limitCode);
     if (
         typeof value !== 'string' ||
         /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(value)
     ) {
         fail('invalid-text');
     }
-    if (bytes(value) > limit) fail('text-limit');
+    if (bytes(value, limit) > limit) fail(limitCode);
     return value;
 }
 
@@ -117,10 +128,8 @@ export function prepareChatPrivacyRequest(input, catalog, policy) {
         route: text(own(sourceLabels, 'route'), 2048),
     };
     const policyId = text(own(policy, 'id'), 256);
-    const requiredPolicy = text(own(policy, 'text'));
-    const latest = text(own(input, 'latestText'));
-    if (bytes(latest) > limits.latestBytes) fail('latest-limit');
-    if (bytes(requiredPolicy) > limits.policyBytes) fail('policy-limit');
+    const requiredPolicy = text(own(policy, 'text'), limits.policyBytes, 'policy-limit');
+    const latest = text(own(input, 'latestText'), limits.latestBytes, 'latest-limit');
     const selection = own(input, 'selection', {});
     record(selection);
     const omissions = [];
@@ -173,6 +182,19 @@ export function prepareChatPrivacyRequest(input, catalog, policy) {
             omit(category, 'budget');
         }
     };
+    // Bound each selected string before copying it into JSON. Oversized optional records
+    // are omitted whole; an omitted/count-capped field never needs full validation or copying.
+    const optionalText = (value, category) => {
+        if (typeof value !== 'string') fail('invalid-text');
+        const capacity = Math.min(
+            limits[`${category}Bytes`],
+            limits.messageBytes,
+            limits.totalBytes,
+            limits.serializedBytes
+        );
+        if (bytes(value, capacity) > capacity) return null;
+        return text(value);
+    };
 
     const playerSelection = own(selection, 'player');
     if (playerSelection !== undefined && playerSelection !== false) {
@@ -193,7 +215,16 @@ export function prepareChatPrivacyRequest(input, catalog, policy) {
                     omit('player', 'missing-id');
                     continue;
                 }
-                const value = { group, id: key, title: text(own(builtIns.get(key), 'title')) };
+                if (player.length >= limits.categoryRecords) {
+                    omit('player', 'record-cap');
+                    continue;
+                }
+                const title = optionalText(own(builtIns.get(key), 'title'), 'player');
+                if (title === null) {
+                    omit('player', 'budget');
+                    continue;
+                }
+                const value = { group, id: key, title };
                 if (group === 'quests') {
                     value.finished = own(row, 'finished');
                     if (typeof value.finished !== 'boolean') fail('invalid-status');
@@ -236,12 +267,20 @@ export function prepareChatPrivacyRequest(input, catalog, policy) {
                 omit('custom', 'missing-id');
                 continue;
             }
+            if (custom.length >= limits.categoryRecords) {
+                omit('custom', 'record-cap');
+                continue;
+            }
             const value = { kind, id: key };
             // Fixed field order makes equivalent field selections serialize identically.
             for (const field of fields) {
-                if (selectedFields.includes(field)) value[field] = text(own(row, field));
+                if (selectedFields.includes(field)) {
+                    value[field] = optionalText(own(row, field), 'custom');
+                    if (value[field] === null) break;
+                }
             }
-            append('custom', custom, value);
+            if (Object.values(value).includes(null)) omit('custom', 'budget');
+            else append('custom', custom, value);
         }
     }
 
@@ -256,14 +295,18 @@ export function prepareChatPrivacyRequest(input, catalog, policy) {
             let historyBytes = 0;
             for (let index = candidates.length - 1; index >= 0; index -= 1) {
                 const [key, row] = candidates[index];
-                const role = own(row, 'role');
-                if (!['user', 'assistant'].includes(role)) fail('invalid-role');
-                const content = text(own(row, 'content'));
-                const size = bytes(content);
                 if (history.length >= limits.historyCount) {
                     omit('history', 'record-cap');
                     continue;
                 }
+                const role = own(row, 'role');
+                if (!['user', 'assistant'].includes(role)) fail('invalid-role');
+                const content = optionalText(own(row, 'content'), 'history');
+                if (content === null) {
+                    omit('history', 'budget');
+                    continue;
+                }
+                const size = bytes(content);
                 history.unshift({ category: 'history', id: key, role, content });
                 if (historyBytes + size > limits.historyBytes || !fits()) {
                     history.shift();
