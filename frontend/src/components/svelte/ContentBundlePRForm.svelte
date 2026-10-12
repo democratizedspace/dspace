@@ -19,6 +19,10 @@
     onMount(async () => {
         try {
             token = await loadGitHubToken();
+        } catch {
+            token = '';
+            submitError =
+                'Unable to load the saved GitHub token. Reload or enter a token to continue.';
         } finally {
             hydrated = true;
         }

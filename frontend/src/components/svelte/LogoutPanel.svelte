@@ -10,12 +10,21 @@
     let statusMessage = '';
     let errorMessage = '';
     let hydrated = false;
+    let loadFailed = false;
 
     onMount(async () => {
-        token = await loadGitHubToken();
-        gistId = await loadCloudGistId();
-        loading = false;
-        hydrated = true;
+        try {
+            token = await loadGitHubToken();
+            gistId = await loadCloudGistId();
+        } catch {
+            token = '';
+            gistId = '';
+            loadFailed = true;
+            errorMessage = 'Unable to load saved credentials. Reload or use Log out to clear them.';
+        } finally {
+            loading = false;
+            hydrated = true;
+        }
     });
 
     async function handleLogout() {
@@ -32,6 +41,7 @@
             }
             token = '';
             gistId = '';
+            loadFailed = false;
             statusMessage = 'Credentials cleared from this device.';
         } catch (err) {
             console.error(err);
@@ -59,9 +69,11 @@
     {/if}
     {#if !loading}
         <p class="state" data-testid="logout-state">
-            {token || gistId
-                ? 'Credentials stored on this device.'
-                : 'No saved credentials detected.'}
+            {loadFailed
+                ? 'Saved credential status is unavailable.'
+                : token || gistId
+                  ? 'Credentials stored on this device.'
+                  : 'No saved credentials detected.'}
         </p>
     {/if}
 </div>

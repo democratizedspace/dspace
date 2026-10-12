@@ -1,0 +1,116 @@
+import '@testing-library/jest-dom';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/svelte';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import LogoutPanel from '../svelte/LogoutPanel.svelte';
+import QuestPRForm from '../svelte/QuestPRForm.svelte';
+import ContentBundlePRForm from '../svelte/ContentBundlePRForm.svelte';
+
+const loadToken = vi.fn();
+const clearToken = vi.fn();
+const loadGist = vi.fn();
+const clearGist = vi.fn();
+const saveToken = vi.fn();
+const submitQuest = vi.fn();
+const submitBundle = vi.fn();
+vi.mock('../../utils/githubToken.js', () => ({
+    loadGitHubToken: (...args: unknown[]) => loadToken(...args),
+    clearGitHubToken: (...args: unknown[]) => clearToken(...args),
+    saveGitHubToken: (...args: unknown[]) => saveToken(...args),
+    isValidGitHubToken: () => true,
+}));
+vi.mock('../../utils/cloudSync.js', () => ({
+    loadCloudGistId: (...args: unknown[]) => loadGist(...args),
+    clearCloudGistId: (...args: unknown[]) => clearGist(...args),
+}));
+vi.mock('../../utils/submitQuestPR.js', () => ({
+    submitQuestPR: (...args: unknown[]) => submitQuest(...args),
+}));
+vi.mock('../../utils/submitBundlePR.js', () => ({
+    submitBundlePR: (...args: unknown[]) => submitBundle(...args),
+}));
+
+beforeEach(() => {
+    vi.resetAllMocks();
+    loadToken.mockResolvedValue('');
+    loadGist.mockResolvedValue('');
+    clearToken.mockResolvedValue(undefined);
+    clearGist.mockResolvedValue(undefined);
+});
+afterEach(cleanup);
+
+for (const failure of ['credential-stale', 'storage unavailable']) {
+    describe(`credential loading rejects: ${failure}`, () => {
+        it('finishes logout hydration with unknown status and permits deliberate Clear', async () => {
+            let rejectLoad!: (reason: Error) => void;
+            loadToken.mockReturnValue(
+                new Promise((_resolve, reject) => {
+                    rejectLoad = reject;
+                })
+            );
+            const view = render(LogoutPanel);
+            expect(view.container.firstElementChild).toHaveAttribute('data-hydrated', 'false');
+            rejectLoad(new Error(failure));
+            await waitFor(() =>
+                expect(view.container.firstElementChild).toHaveAttribute('data-hydrated', 'true')
+            );
+            expect(view.getByRole('alert')).toHaveTextContent('Unable to load saved credentials');
+            expect(view.getByTestId('logout-state')).toHaveTextContent('status is unavailable');
+            expect(loadGist).not.toHaveBeenCalled();
+            expect(clearToken).not.toHaveBeenCalled();
+            await fireEvent.click(view.getByRole('button', { name: 'Log out' }));
+            await waitFor(() =>
+                expect(view.getByRole('status')).toHaveTextContent('Credentials cleared')
+            );
+            expect(clearToken).toHaveBeenCalledOnce();
+            expect(clearGist).toHaveBeenCalledOnce();
+            expect(view.getByTestId('logout-state')).toHaveTextContent(
+                'No saved credentials detected'
+            );
+        });
+
+        for (const [name, component] of [
+            ['quest', QuestPRForm],
+            ['bundle', ContentBundlePRForm],
+        ] as const) {
+            it(`finishes ${name} hydration with an empty token and a handled error`, async () => {
+                loadToken.mockRejectedValue(new Error(failure));
+                const view = render(component, { token: 'synthetic-stale-token' });
+                await waitFor(() =>
+                    expect(view.container.querySelector('form')).toHaveAttribute(
+                        'data-hydrated',
+                        'true'
+                    )
+                );
+                expect(view.getByLabelText('GitHub Token*')).toHaveValue('');
+                expect(view.getByTestId('submit-error')).toHaveTextContent(
+                    'Unable to load the saved GitHub token'
+                );
+                expect(saveToken).not.toHaveBeenCalled();
+                expect(clearToken).not.toHaveBeenCalled();
+                expect(submitQuest).not.toHaveBeenCalled();
+                expect(submitBundle).not.toHaveBeenCalled();
+            });
+        }
+    });
+}
+
+it('handles logout gist loading failure without claiming credentials are absent', async () => {
+    loadToken.mockResolvedValue('synthetic-token');
+    loadGist.mockRejectedValue(new Error('storage unavailable'));
+    const view = render(LogoutPanel);
+    await waitFor(() =>
+        expect(view.container.firstElementChild).toHaveAttribute('data-hydrated', 'true')
+    );
+    expect(view.getByRole('alert')).toHaveTextContent('Unable to load saved credentials');
+    expect(view.getByTestId('logout-state')).toHaveTextContent('status is unavailable');
+});
+
+it('retains the ordinary loaded logout state', async () => {
+    loadToken.mockResolvedValue('synthetic-token');
+    const view = render(LogoutPanel);
+    await waitFor(() =>
+        expect(view.container.firstElementChild).toHaveAttribute('data-hydrated', 'true')
+    );
+    expect(view.getByTestId('logout-state')).toHaveTextContent('Credentials stored');
+    expect(view.queryByRole('alert')).toBeNull();
+});
