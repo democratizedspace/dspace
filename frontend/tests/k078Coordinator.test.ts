@@ -884,3 +884,93 @@ test('B05 already queued saves remain in fallback after the first write loses st
     expect(common.loadGameState().inventory.queuedFallback).toBe(202);
     expect(JSON.parse(localStorage.getItem('gameState')!).inventory.queuedFallback).toBe(202);
 });
+
+test.each([false, true])(
+    'B05 queued Clear cannot discard fallback progress (mirror failure=%s)',
+    async (mirrorFails) => {
+        await common.saveCredential('github', 'SENTINEL_QUEUED_CLEAR');
+        vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+            new Error('synthetic unavailable')
+        );
+        const firstWrite = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { queuedClear: 301 },
+        });
+        const clear = common.clearCredential('github');
+        const secondWrite = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { queuedClear: 302 },
+        });
+        await expect(firstWrite).resolves.toMatchObject({ status: 'best-effort' });
+        if (mirrorFails)
+            vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                throw new Error('synthetic quota');
+            });
+        await expect(clear).resolves.toMatchObject({ status: 'complete' });
+        if (mirrorFails) await expect(secondWrite).rejects.toThrow('synthetic quota');
+        else await expect(secondWrite).resolves.toMatchObject({ status: 'best-effort' });
+        const expected = mirrorFails ? 301 : 302;
+        expect(common.loadGameState().inventory.queuedClear).toBe(expected);
+        expect(common.loadGameState().github?.token).toBeUndefined();
+        expect(JSON.parse(localStorage.getItem('gameState')!).inventory.queuedClear).toBe(expected);
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.queuedClear).toBe(expected);
+        expect(common.loadGameState().github?.token).toBeUndefined();
+    }
+);
+
+test('B05 newer fallback saves stay behind older queued saves', async () => {
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+        new Error('synthetic unavailable')
+    );
+    const first = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackOrder: 401 },
+    });
+    let release!: () => void;
+    const barrier = storage.serializeManagedMutation(
+        () =>
+            new Promise<void>((resolve) => {
+                release = resolve;
+            })
+    );
+    const second = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackOrder: 402 },
+    });
+    await first;
+    await vi.waitFor(() => expect(release).toBeTypeOf('function'));
+    const third = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackOrder: 403 },
+    });
+    release();
+    await Promise.all([barrier, second, third]);
+    expect(common.loadGameState().inventory.fallbackOrder).toBe(403);
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.fallbackOrder).toBe(403);
+});
+
+test('B05 a failed queued credential Save does not discard later fallback gameplay', async () => {
+    vi.spyOn(storage, 'openManagedGameDB').mockRejectedValueOnce(
+        new Error('synthetic unavailable')
+    );
+    const first = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackCredential: 501 },
+    });
+    const credential = common.saveCredential('github', 'SENTINEL_REJECTED');
+    const denied = expect(credential).rejects.toMatchObject({ code: 'fallback-reload-required' });
+    const second = common.saveGameState({
+        ...common.loadGameState(),
+        inventory: { fallbackCredential: 502 },
+    });
+    await first;
+    await denied;
+    await expect(second).resolves.toMatchObject({ status: 'best-effort' });
+    expect(common.loadGameState().inventory.fallbackCredential).toBe(502);
+    expect(JSON.parse(localStorage.getItem('gameState')!).inventory.fallbackCredential).toBe(502);
+    expect(common.loadGameState().github?.token).toBeUndefined();
+});

@@ -262,4 +262,16 @@ describe('Cloud Sync token save flow', () => {
         expect(clearGitHubTokenMock).not.toHaveBeenCalled();
         expect(validateTokenMock).not.toHaveBeenCalled();
     });
+    it('explains reload-required when restoring a combined backup in fallback mode', async () => {
+        const message = 'Reload to reconcile saved progress before retrying this operation.';
+        downloadMock.mockRejectedValueOnce({ code: 'fallback-reload-required', message });
+        const { getByLabelText, getByRole, getByTestId } = render(Syncer);
+        const download = getByRole('button', { name: /^Download$/ });
+        await waitFor(() => expect(download).toBeEnabled());
+        await fireEvent.input(getByLabelText(/Gist ID/i), {
+            target: { value: 'synthetic-backup-id' },
+        });
+        await fireEvent.click(download);
+        await waitFor(() => expect(getByTestId('sync-error')).toHaveTextContent(message));
+    });
 });

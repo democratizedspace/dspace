@@ -661,12 +661,7 @@ export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
 export const saveGameState = async (newState, { deliberateKind } = {}) => {
     const captured = structuredClone(newState);
-    // Once fallback owns newer progress, only startup may reconcile it with durable state.
-    if (
-        isBrowser &&
-        (useLocalStorage || !globalThis.navigator?.locks?.request) &&
-        !deliberateKind
-    ) {
+    if (isBrowser && !globalThis.navigator?.locks?.request && !deliberateKind) {
         if (!readyResolved) await ready;
         const safe = validateGameState(
             scrubCredential(scrubCredential(captured, 'github'), 'openAI')
@@ -706,8 +701,33 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
         durableChecksum = nextState._meta.checksum;
         gameState = nextState;
         state.set(gameState);
+        const persistFallback = () => {
+            // Game-only fallback cannot authorize credentials without durable epochs.
+            const safe = scrubCredential(scrubCredential(nextState, 'github'), 'openAI');
+            const backup = scrubCredential(scrubCredential(previousSnapshot, 'github'), 'openAI');
+            safe[META_KEY].lastUpdated = Math.max(savedAt(safe), fallbackWriteTime());
+            stampStateChecksum(safe);
+            stampStateChecksum(backup);
+            mirrorManagedGame({
+                state: safe,
+                backup,
+                meta: buildLightweightSnapshot(safe),
+            });
+            useLocalStorage = true;
+            if (latestPendingGameSave === queued) {
+                gameState = safe;
+                durableChecksum = safe._meta.checksum;
+                state.set(gameState);
+            }
+            return {
+                status: 'best-effort',
+                committed: ['localStorage'],
+                credentialsDisabled: true,
+            };
+        };
         const result = serializeManagedMutation(async () => {
             await ready;
+            if (useLocalStorage && !deliberateKind) return persistFallback();
             for (const dependency of credentialDependencies) {
                 await dependency.promise;
                 if (
@@ -741,31 +761,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                 db = await openManagedGameDB();
             } catch (error) {
                 if (deliberateKind) throw error;
-                // Game-only fallback cannot authorize credentials without durable epochs.
-                const safe = scrubCredential(scrubCredential(nextState, 'github'), 'openAI');
-                const backup = scrubCredential(
-                    scrubCredential(previousSnapshot, 'github'),
-                    'openAI'
-                );
-                safe[META_KEY].lastUpdated = Math.max(savedAt(safe), fallbackWriteTime());
-                stampStateChecksum(safe);
-                stampStateChecksum(backup);
-                mirrorManagedGame({
-                    state: safe,
-                    backup,
-                    meta: buildLightweightSnapshot(safe),
-                });
-                useLocalStorage = true;
-                if (latestPendingGameSave === queued) {
-                    gameState = safe;
-                    durableChecksum = safe._meta.checksum;
-                    state.set(gameState);
-                }
-                return {
-                    status: 'best-effort',
-                    committed: ['localStorage'],
-                    credentialsDisabled: true,
-                };
+                return persistFallback();
             }
             try {
                 const receipt = await commitManagedGame(db, {
@@ -811,6 +807,17 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                 db.close();
             }
         }).catch(async (error) => {
+            if (useLocalStorage) {
+                if (latestPendingGameSave === queued) {
+                    const retained = lsRead(STATE_STORE) ?? previousSnapshot;
+                    gameState = validateGameState(
+                        scrubCredential(scrubCredential(retained, 'github'), 'openAI')
+                    );
+                    durableChecksum = gameState._meta.checksum;
+                    state.set(gameState);
+                }
+                throw error;
+            }
             if (latestPendingGameSave === queued) {
                 let db;
                 try {

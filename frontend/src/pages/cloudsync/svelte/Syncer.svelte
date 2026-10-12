@@ -233,7 +233,11 @@
             announce(successLabel, 'success');
         } catch (err) {
             recoveryMode = getImportRecoveryStatus();
-            const errorLabel = ['partial', 'mirror-incomplete'].includes(err.code)
+            const errorLabel = [
+                'partial',
+                'mirror-incomplete',
+                'fallback-reload-required',
+            ].includes(err.code)
                 ? err.message
                 : 'Restore failed';
             announce(errorLabel, 'error');

@@ -30,7 +30,9 @@
                     'Imported using best-effort local storage. Provider credentials remain disabled.';
             recoveryMode = getImportRecoveryStatus();
         } catch (err) {
-            errorMessage = ['partial', 'mirror-incomplete'].includes(err.code)
+            errorMessage = ['partial', 'mirror-incomplete', 'fallback-reload-required'].includes(
+                err.code
+            )
                 ? err.message
                 : 'Import failed. Please double-check the backup string and try again.';
             recoveryMode = getImportRecoveryStatus();

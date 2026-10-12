@@ -4,11 +4,16 @@ import {
   loadGitHubToken,
   saveGitHubToken,
 } from '../frontend/src/utils/githubToken.js';
-import { closeGameStateDatabaseForTesting } from '../frontend/src/utils/gameState/common.js';
+import {
+  closeGameStateDatabaseForTesting,
+  ready,
+} from '../frontend/src/utils/gameState/common.js';
 
 const TOKEN = 'ghp_' + 'a'.repeat(36);
 
 async function resetState() {
+  // Do not close the connection while startup is still reading its authority.
+  await ready;
   localStorage.clear();
   sessionStorage.clear();
   await closeGameStateDatabaseForTesting();
