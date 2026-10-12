@@ -933,3 +933,50 @@ test.each(['items', 'quests'])(
         expect(source).toEqual(before);
     }
 );
+
+test.each(
+    ['payload', 'gameState'].flatMap((wrapper) =>
+        [null, false, [], 'malformed'].flatMap((value) => [
+            { [wrapper]: value },
+            { gameState: { payload: { [wrapper]: value } } },
+        ])
+    )
+)('A04 malformed owned wrapper is rejected across entry paths: %j', async (payload) => {
+    const text = JSON.stringify({ schemaVersion: 1, payload });
+    expect(() => prepareImport(text)).toThrow();
+    expect(() => prepareImport(btoa(text))).toThrow();
+    expect(() => prepareImport(JSON.parse(text))).toThrow();
+    await expect(
+        prepareImportFile({ size: text.length, text: async () => text })
+    ).rejects.toThrow();
+});
+
+test('C06 valid legacy wrappers preserve unrelated fields but exclude nested credentials and authority', () => {
+    const payload = {
+        gameState: {
+            payload: {
+                inventory: { wrapped: 3 },
+                github: { token: 'SENTINEL_WRAPPED' },
+                openAI: { apiKey: 'SENTINEL_WRAPPED_KEY' },
+                credentialEpochs: { github: 77 },
+                credentialSaveBaseEpochs: { github: 55 },
+                _meta: { clearIntents: { github: true }, credentialSaveBaseEpochs: { github: 22 } },
+            },
+        },
+    };
+    const before = structuredClone(payload);
+    const plan = prepareImport({ schemaVersion: 1, payload });
+    expect(plan.game.gameState.payload.inventory.wrapped).toBe(3);
+    for (const excluded of [
+        'SENTINEL',
+        'credentialEpochs',
+        'credentialSaveBaseEpochs',
+        'clearIntents',
+    ])
+        expect(JSON.stringify(plan)).not.toContain(excluded);
+    expect(payload).toEqual(before);
+    for (const malformed of [{ github: false }, { openAI: [] }, { _meta: null }])
+        expect(() =>
+            prepareImport({ schemaVersion: 1, payload: { gameState: malformed } })
+        ).toThrow();
+});

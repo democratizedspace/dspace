@@ -28,6 +28,8 @@ Clear first durably increments the selected provider epoch and records a pending
 
 Close or reload older incompatible DSPACE tabs before relying on Clear: their writers do not participate in these locks/epochs. Clear removes managed local copies; it does not revoke provider credentials or search unrelated origin stores.
 
+Reserved game `payload`/`gameState` wrappers are validated recursively before writes. Malformed wrappers or owned credential/metadata sections reject without mutation; valid legacy wrappers retain unrelated fields while imported credentials and credential authority are excluded at every owned wrapper level.
+
 ## Regression and compatibility evidence
 
 `frontend/tests/k078ImportSafety.test.ts` names A01–A06, B01–B06 and C01–C06, with additional table-driven limit/media/fault cases. `k078Coordinator.test.ts` exercises the real coordinator, partial recovery, mirror repair, immutable saves, export filtering, reload/rollback and cached OpenAI prompts. All data and credentials are synthetic; network calls are denied or mocked.

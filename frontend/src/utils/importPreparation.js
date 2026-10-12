@@ -823,6 +823,19 @@ export function prepareImport(
     if ('schemaVersion' in raw && !('payload' in raw)) failImport('envelope-payload');
     const source = 'payload' in raw ? raw.payload : raw;
     if (!record(source)) failImport('root');
+    // These names are owned legacy wrappers in credential scrubbing/checksums.
+    // Validate every reachable wrapper before cloning or committing any state.
+    const owned = [source];
+    while (owned.length) {
+        const current = owned.pop();
+        for (const section of ['github', 'openAI', '_meta'])
+            if (section in current && !record(current[section])) failImport('section-type');
+        for (const wrapper of ['gameState', 'payload']) {
+            if (!(wrapper in current)) continue;
+            if (!record(current[wrapper])) failImport('wrapper-type');
+            owned.push(current[wrapper]);
+        }
+    }
     for (const section of [
         'quests',
         'inventory',
@@ -876,15 +889,19 @@ export function prepareImport(
     }
     const game = structuredClone(source);
     delete game.customContent;
-    // Credentials and epoch authority are never portable.
-    delete game.github;
-    delete game.openAI;
-    if (game._meta) {
-        delete game._meta.credentialEpochs;
-        delete game._meta.clearIntents;
+    // Credentials and epoch authority are never portable, including legacy wrappers.
+    const portable = [game];
+    while (portable.length) {
+        const current = portable.pop();
+        delete current.github;
+        delete current.openAI;
+        for (const field of ['credentialEpochs', 'clearIntents', 'credentialSaveBaseEpochs']) {
+            delete current[field];
+            if (current._meta) delete current._meta[field];
+        }
+        for (const wrapper of ['gameState', 'payload'])
+            if (current[wrapper]) portable.push(current[wrapper]);
     }
-    delete game.credentialEpochs;
-    delete game.clearIntents;
 
     return freezeImport({ game, ...(customContent ? { customContent } : {}) });
 }

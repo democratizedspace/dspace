@@ -1536,3 +1536,39 @@ test.each(['remote-gameplay', 'clear', 'clear-then-save', 'incomplete-clear', 'u
         db.close();
     }
 );
+
+test.each([
+    { payload: null },
+    { gameState: false },
+    { gameState: { payload: [] } },
+    { payload: { github: false } },
+])(
+    'A04 malformed durable wrapper rejects before writes and leaves credential operations usable: %j',
+    async (payload) => {
+        await common.saveCredential('github', 'SENTINEL_WRAPPER_DESTINATION');
+        const db = await storage.openManagedGameDB();
+        const before = await storage.readManagedGame(db);
+        const mirror = localStorage.getItem('gameState');
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload,
+                    customContent: { schemaVersion: 1, items: [{ id: 'must-not-import' }] },
+                })
+            )
+        ).rejects.toThrow();
+        expect(await storage.readManagedGame(db)).toEqual(before);
+        expect(localStorage.getItem('gameState')).toBe(mirror);
+        const custom = await storage.preflightCustomImport();
+        expect(custom.snapshot.items).toHaveLength(0);
+        custom.db.close();
+        db.close();
+        await expect(
+            common.saveCredential('github', 'SENTINEL_WRAPPER_NEW')
+        ).resolves.toMatchObject({ status: 'complete' });
+        await expect(common.clearCredential('github')).resolves.toMatchObject({
+            status: 'complete',
+        });
+    }
+);
