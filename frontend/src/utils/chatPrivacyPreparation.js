@@ -53,10 +53,7 @@ function own(value, key, fallback = undefined) {
 function text(value, limit = Infinity, limitCode = 'text-limit') {
     if (typeof value !== 'string') fail('invalid-text');
     if (value.length > limit) fail(limitCode);
-    if (
-        typeof value !== 'string' ||
-        /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(value)
-    ) {
+    if (/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(value)) {
         fail('invalid-text');
     }
     if (bytes(value, limit) > limit) fail(limitCode);
