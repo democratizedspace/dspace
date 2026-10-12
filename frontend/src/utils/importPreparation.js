@@ -491,7 +491,203 @@ export function inspectRaster(data, limits, totals) {
     return `data:${kind};base64,${match[2]}`;
 }
 
-function normalizeCustom(raw, limits, origin) {
+function normalizeCustomReferences(
+    sections,
+    changes,
+    ids,
+    id,
+    destination,
+    deferDestinationReferences = false
+) {
+    const existing = Object.fromEntries(
+        ['items', 'processes', 'quests'].map((section) => [
+            section,
+            (destination[section] || []).filter(
+                (entity) =>
+                    typeof entity.id === 'string' &&
+                    entity.id === entity.id.trim() &&
+                    !badKeys.has(entity.id)
+            ),
+        ])
+    );
+    const itemIds = new Set([
+        ...builtInItems.map((item) => String(item.id)),
+        ...existing.items.map((item) => item.id),
+        ...ids.items.keys(),
+    ]);
+    const processIds = new Set([
+        ...builtInProcesses.map((process) => String(process.id)),
+        ...existing.processes.map((process) => process.id),
+        ...ids.processes.keys(),
+    ]);
+    const questIds = new Set([
+        ...listBuiltInQuestIds(),
+        ...existing.quests.map((quest) => quest.id),
+        ...ids.quests.keys(),
+    ]);
+    for (let index = 0; index < sections.items.length; index++) {
+        const counts = sections.items[index].itemCounts;
+        if (counts === undefined) continue;
+        if (!record(counts)) failImport('container-counts');
+        const normalized = {};
+        for (const [key, count] of Object.entries(counts)) {
+            const itemId = id(key);
+            if (!itemIds.has(itemId) && !deferDestinationReferences)
+                failImport('unresolved-reference');
+            if (Object.hasOwn(normalized, itemId)) failImport('duplicate-id');
+            if (typeof count !== 'number' || !Number.isFinite(count) || count < 0)
+                failImport('container-counts');
+            normalized[itemId] = count;
+        }
+        changes.items[index].itemCounts = normalized;
+    }
+    const itemCatalog = new Map([
+        ...builtInItems.map((item) => [String(item.id), item]),
+        ...existing.items.map((item) => [item.id, item]),
+        ...sections.items.map((item, index) => [
+            changes.items[index].id,
+            { ...item, ...changes.items[index] },
+        ]),
+    ]);
+    const containerReference = (value, itemId) => {
+        const containerId = id(value);
+        if (!itemIds.has(itemId) && !deferDestinationReferences) failImport('unresolved-reference');
+        if (!itemCatalog.has(containerId)) {
+            if (deferDestinationReferences) return containerId;
+            failImport('unresolved-reference');
+        }
+        const counts = itemCatalog.get(containerId).itemCounts;
+        if (!record(counts) || !Object.hasOwn(counts, itemId)) failImport('container-reference');
+        return containerId;
+    };
+    const links = (source, target, field, catalog, counted = false) => {
+        if (source[field] === undefined) return;
+        if (!Array.isArray(source[field])) failImport('reference-type');
+        target[field] = source[field].map((link) => {
+            if (
+                counted &&
+                (!record(link) ||
+                    typeof link.count !== 'number' ||
+                    !Number.isFinite(link.count) ||
+                    link.count < 1)
+            )
+                failImport('reference-count');
+            const linkedId = id(counted ? link.id : link);
+            if (!catalog.has(linkedId) && !deferDestinationReferences)
+                failImport('unresolved-reference');
+            if (!counted) return linkedId;
+            const normalized = { ...link, id: linkedId };
+            if (link.containerItemId !== undefined)
+                normalized.containerItemId = containerReference(link.containerItemId, linkedId);
+            return normalized;
+        });
+    };
+    for (const section of ['items', 'processes', 'quests']) {
+        for (let i = 0; i < sections[section].length; i++) {
+            const entity = sections[section][i],
+                change = changes[section][i];
+            for (const field of [
+                'requireItems',
+                'consumeItems',
+                'createItems',
+                'requiresItems',
+                'grantsItems',
+            ])
+                links(entity, change, field, itemIds, true);
+            if (section === 'processes' && entity.itemCountOperations !== undefined) {
+                if (!Array.isArray(entity.itemCountOperations)) failImport('item-count-operation');
+                change.itemCountOperations = entity.itemCountOperations.map((operation) => {
+                    if (
+                        !record(operation) ||
+                        !['deposit', 'withdraw', 'withdraw-all'].includes(operation.operation) ||
+                        Object.keys(operation).some(
+                            (key) =>
+                                !['operation', 'containerItemId', 'itemId', 'count'].includes(key)
+                        )
+                    )
+                        failImport('item-count-operation');
+                    const itemId = id(operation.itemId);
+                    const containerItemId = containerReference(operation.containerItemId, itemId);
+                    if (operation.operation === 'withdraw-all') {
+                        if (operation.count !== undefined) failImport('operation-count');
+                    } else if (
+                        typeof operation.count !== 'number' ||
+                        !Number.isFinite(operation.count) ||
+                        operation.count <= 0
+                    )
+                        failImport('operation-count');
+                    return { ...operation, itemId, containerItemId };
+                });
+            }
+            if (section === 'quests') links(entity, change, 'rewards', itemIds, true);
+            links(entity, change, 'requiresQuests', questIds);
+            links(entity, change, 'dependencies', itemIds);
+            if (entity.dialogue !== undefined) {
+                if (!Array.isArray(entity.dialogue)) failImport('dialogue');
+                const nodeIds = new Set();
+                for (const node of entity.dialogue) {
+                    if (!record(node)) failImport('dialogue');
+                    const nodeId = id(node.id);
+                    if (nodeIds.has(nodeId)) failImport('duplicate-node-id');
+                    nodeIds.add(nodeId);
+                }
+                if (entity.start !== undefined) {
+                    change.start = id(entity.start);
+                    if (!nodeIds.has(change.start)) failImport('unresolved-reference');
+                }
+                change.dialogue = entity.dialogue.map((node) => {
+                    if (
+                        node.text !== undefined &&
+                        (typeof node.text !== 'string' || /[<>]/.test(node.text))
+                    )
+                        failImport('preview-markup');
+                    if (node.options !== undefined && !Array.isArray(node.options))
+                        failImport('dialogue');
+                    const normalized = { ...node, id: id(node.id) };
+                    if (node.options)
+                        normalized.options = node.options.map((option) => {
+                            if (
+                                !record(option) ||
+                                typeof option.text !== 'string' ||
+                                /[<>]/.test(option.text)
+                            )
+                                failImport('preview-markup');
+                            const next = { ...option };
+                            if (option.type === 'process' || option.process !== undefined) {
+                                next.process = id(option.process);
+                                if (!processIds.has(next.process) && !deferDestinationReferences)
+                                    failImport('unresolved-reference');
+                            }
+                            if (option.goto !== undefined) {
+                                next.goto = id(option.goto);
+                                if (next.goto !== 'finish' && !nodeIds.has(next.goto))
+                                    failImport('unresolved-reference');
+                            }
+                            for (const field of ['requiresItems', 'grantsItems', 'consumeItems'])
+                                links(option, next, field, itemIds, true);
+                            links(option, next, 'requiresQuests', questIds);
+                            return next;
+                        });
+                    return normalized;
+                });
+            }
+        }
+    }
+}
+
+// Consumes the frozen, structurally validated plan and a read-only destination
+// snapshot. No raster re-decoding or duplication of the imported media graph.
+export function validateCustomImportReferences(content, destination) {
+    const changes = {},
+        ids = {};
+    for (const section of ['items', 'processes', 'quests']) {
+        changes[section] = content[section].map((entity) => ({ id: entity.id }));
+        ids[section] = new Map(changes[section].map((entity) => [entity.id, entity]));
+    }
+    normalizeCustomReferences(content, changes, ids, (value) => String(value).trim(), destination);
+}
+
+function normalizeCustom(raw, limits, origin, deferDestinationReferences = false) {
     if (!record(raw) || raw.schemaVersion !== 1) failImport('schema-version');
     const sections = {},
         ids = {},
@@ -602,154 +798,7 @@ function normalizeCustom(raw, limits, origin) {
     for (const section of ['items', 'quests'])
         for (const change of changes[section])
             if (change.image === undefined) change.image = '/favicon.ico';
-    const itemIds = new Set([...builtInItems.map((item) => String(item.id)), ...ids.items.keys()]);
-    const processIds = new Set([
-        ...builtInProcesses.map((process) => String(process.id)),
-        ...ids.processes.keys(),
-    ]);
-    const questIds = new Set([...listBuiltInQuestIds(), ...ids.quests.keys()]);
-    for (let index = 0; index < sections.items.length; index++) {
-        const counts = sections.items[index].itemCounts;
-        if (counts === undefined) continue;
-        if (!record(counts)) failImport('container-counts');
-        const normalized = {};
-        for (const [key, count] of Object.entries(counts)) {
-            const itemId = id(key);
-            if (!itemIds.has(itemId)) failImport('unresolved-reference');
-            if (Object.hasOwn(normalized, itemId)) failImport('duplicate-id');
-            if (typeof count !== 'number' || !Number.isFinite(count) || count < 0)
-                failImport('container-counts');
-            normalized[itemId] = count;
-        }
-        changes.items[index].itemCounts = normalized;
-    }
-    const itemCatalog = new Map([
-        ...builtInItems.map((item) => [String(item.id), item]),
-        ...sections.items.map((item, index) => [
-            changes.items[index].id,
-            { ...item, ...changes.items[index] },
-        ]),
-    ]);
-    const containerReference = (value, itemId) => {
-        const containerId = id(value);
-        if (!itemCatalog.has(containerId) || !itemIds.has(itemId))
-            failImport('unresolved-reference');
-        const counts = itemCatalog.get(containerId).itemCounts;
-        if (!record(counts) || !Object.hasOwn(counts, itemId)) failImport('container-reference');
-        return containerId;
-    };
-    const links = (source, target, field, catalog, counted = false) => {
-        if (source[field] === undefined) return;
-        if (!Array.isArray(source[field])) failImport('reference-type');
-        target[field] = source[field].map((link) => {
-            if (
-                counted &&
-                (!record(link) ||
-                    typeof link.count !== 'number' ||
-                    !Number.isFinite(link.count) ||
-                    link.count < 1)
-            )
-                failImport('reference-count');
-            const linkedId = id(counted ? link.id : link);
-            if (!catalog.has(linkedId)) failImport('unresolved-reference');
-            if (!counted) return linkedId;
-            const normalized = { ...link, id: linkedId };
-            if (link.containerItemId !== undefined)
-                normalized.containerItemId = containerReference(link.containerItemId, linkedId);
-            return normalized;
-        });
-    };
-    for (const section of ['items', 'processes', 'quests']) {
-        for (let i = 0; i < sections[section].length; i++) {
-            const entity = sections[section][i],
-                change = changes[section][i];
-            for (const field of [
-                'requireItems',
-                'consumeItems',
-                'createItems',
-                'requiresItems',
-                'grantsItems',
-            ])
-                links(entity, change, field, itemIds, true);
-            if (section === 'processes' && entity.itemCountOperations !== undefined) {
-                if (!Array.isArray(entity.itemCountOperations)) failImport('item-count-operation');
-                change.itemCountOperations = entity.itemCountOperations.map((operation) => {
-                    if (
-                        !record(operation) ||
-                        !['deposit', 'withdraw', 'withdraw-all'].includes(operation.operation) ||
-                        Object.keys(operation).some(
-                            (key) =>
-                                !['operation', 'containerItemId', 'itemId', 'count'].includes(key)
-                        )
-                    )
-                        failImport('item-count-operation');
-                    const itemId = id(operation.itemId);
-                    const containerItemId = containerReference(operation.containerItemId, itemId);
-                    if (operation.operation === 'withdraw-all') {
-                        if (operation.count !== undefined) failImport('operation-count');
-                    } else if (
-                        typeof operation.count !== 'number' ||
-                        !Number.isFinite(operation.count) ||
-                        operation.count <= 0
-                    )
-                        failImport('operation-count');
-                    return { ...operation, itemId, containerItemId };
-                });
-            }
-            if (section === 'quests') links(entity, change, 'rewards', itemIds, true);
-            links(entity, change, 'requiresQuests', questIds);
-            links(entity, change, 'dependencies', itemIds);
-            if (entity.dialogue !== undefined) {
-                if (!Array.isArray(entity.dialogue)) failImport('dialogue');
-                const nodeIds = new Set();
-                for (const node of entity.dialogue) {
-                    if (!record(node)) failImport('dialogue');
-                    const nodeId = id(node.id);
-                    if (nodeIds.has(nodeId)) failImport('duplicate-node-id');
-                    nodeIds.add(nodeId);
-                }
-                if (entity.start !== undefined) {
-                    change.start = id(entity.start);
-                    if (!nodeIds.has(change.start)) failImport('unresolved-reference');
-                }
-                change.dialogue = entity.dialogue.map((node) => {
-                    if (
-                        node.text !== undefined &&
-                        (typeof node.text !== 'string' || /[<>]/.test(node.text))
-                    )
-                        failImport('preview-markup');
-                    if (node.options !== undefined && !Array.isArray(node.options))
-                        failImport('dialogue');
-                    const normalized = { ...node, id: id(node.id) };
-                    if (node.options)
-                        normalized.options = node.options.map((option) => {
-                            if (
-                                !record(option) ||
-                                typeof option.text !== 'string' ||
-                                /[<>]/.test(option.text)
-                            )
-                                failImport('preview-markup');
-                            const next = { ...option };
-                            if (option.type === 'process' || option.process !== undefined) {
-                                next.process = id(option.process);
-                                if (!processIds.has(next.process))
-                                    failImport('unresolved-reference');
-                            }
-                            if (option.goto !== undefined) {
-                                next.goto = id(option.goto);
-                                if (next.goto !== 'finish' && !nodeIds.has(next.goto))
-                                    failImport('unresolved-reference');
-                            }
-                            for (const field of ['requiresItems', 'grantsItems', 'consumeItems'])
-                                links(option, next, field, itemIds, true);
-                            links(option, next, 'requiresQuests', questIds);
-                            return next;
-                        });
-                    return normalized;
-                });
-            }
-        }
-    }
+    normalizeCustomReferences(sections, changes, ids, id, {}, deferDestinationReferences);
     if (
         raw.counts !== undefined &&
         (!record(raw.counts) ||
@@ -777,7 +826,12 @@ function normalizeCustom(raw, limits, origin) {
 
 export function prepareImport(
     input,
-    { kind = 'game', origin = 'https://dspace.invalid', limits: overrides = {} } = {}
+    {
+        kind = 'game',
+        origin = 'https://dspace.invalid',
+        limits: overrides = {},
+        deferDestinationReferences = false,
+    } = {}
 ) {
     const limits = { ...IMPORT_LIMITS, ...overrides };
     let raw = input;
@@ -818,7 +872,9 @@ export function prepareImport(
         failImport('utf8');
     // Graph inspection charges exact serialized bytes without invoking serialization hooks.
     if (kind === 'custom')
-        return freezeImport({ customContent: normalizeCustom(raw, limits, origin) });
+        return freezeImport({
+            customContent: normalizeCustom(raw, limits, origin, deferDestinationReferences),
+        });
     if ('schemaVersion' in raw && raw.schemaVersion !== 1) failImport('schema-version');
     if ('schemaVersion' in raw && !('payload' in raw)) failImport('envelope-payload');
     const source = 'payload' in raw ? raw.payload : raw;
@@ -865,7 +921,7 @@ export function prepareImport(
     const customContent =
         raw.customContent === undefined
             ? undefined
-            : normalizeCustom(raw.customContent, limits, origin);
+            : normalizeCustom(raw.customContent, limits, origin, deferDestinationReferences);
     if (customContent) {
         const importedIds = Object.fromEntries(
             ['items', 'quests', 'processes'].map((section) => [

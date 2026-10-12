@@ -1782,3 +1782,164 @@ test.each(['png', 'jpeg', 'gif', 'webp', 'fallback'])(
         expect(fetch).not.toHaveBeenCalled();
     }
 );
+
+async function seedDestinationReferences() {
+    const custom = await storage.preflightCustomImport();
+    await storage.strictTransaction(
+        custom.db,
+        ['items', 'processes', 'quests'],
+        'readwrite',
+        (tx: any) => {
+            tx.objectStore('items').put({ id: 'destination-item', name: 'Keep item' });
+            tx.objectStore('items').put({
+                id: 'destination-container',
+                itemCounts: { 'destination-item': 0 },
+            });
+            tx.objectStore('processes').put({ id: 'destination-process', title: 'Keep process' });
+            tx.objectStore('quests').put({ id: 'destination-quest', title: 'Keep quest' });
+        }
+    );
+    custom.db.close();
+}
+
+const sparseDestinationBackup = () => ({
+    schemaVersion: 1,
+    processes: [
+        {
+            id: 'imported-process',
+            requireItems: [{ id: 'destination-item', count: 1 }],
+            itemCountOperations: [
+                {
+                    operation: 'deposit',
+                    itemId: 'destination-item',
+                    containerItemId: 'destination-container',
+                    count: 1,
+                },
+            ],
+        },
+    ],
+    quests: [
+        {
+            id: 'imported-quest',
+            rewards: [{ id: 'destination-item', count: 1 }],
+            requiresQuests: ['destination-quest'],
+            dependencies: ['destination-item'],
+            dialogue: [
+                {
+                    id: 'start',
+                    options: [
+                        {
+                            type: 'process',
+                            text: 'Use existing process',
+                            process: 'destination-process',
+                            requiresItems: [
+                                {
+                                    id: 'destination-item',
+                                    count: 1,
+                                    containerItemId: 'destination-container',
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+});
+
+test.each(['object', 'raw', 'base64', 'file', 'combined'])(
+    'A04 sparse %s import resolves destination item/process/quest/container references without rewriting them',
+    async (entry) => {
+        await seedDestinationReferences();
+        const before = await storage.preflightCustomImport();
+        before.db.close();
+        const source = sparseDestinationBackup();
+        const text = JSON.stringify(source);
+        const backup = await import('../src/utils/customContentBackup.js');
+        if (entry === 'combined')
+            await common.importGameStateString(
+                JSON.stringify({ schemaVersion: 1, payload: {}, customContent: source })
+            );
+        else if (entry === 'file')
+            await backup.restoreCustomContentBackupFromFile({
+                size: text.length,
+                text: async () => text,
+            });
+        else
+            await backup.restoreCustomContentBackup(
+                entry === 'object' ? source : entry === 'base64' ? btoa(text) : text
+            );
+        const after = await storage.preflightCustomImport();
+        expect(after.snapshot.items).toEqual(before.snapshot.items);
+        expect(
+            after.snapshot.processes.find((entity: any) => entity.id === 'destination-process')
+        ).toEqual(before.snapshot.processes[0]);
+        expect(
+            after.snapshot.quests.find((entity: any) => entity.id === 'destination-quest')
+        ).toEqual(before.snapshot.quests[0]);
+        expect(
+            after.snapshot.processes.find((entity: any) => entity.id === 'imported-process')
+        ).toBeTruthy();
+        expect(
+            after.snapshot.quests.find((entity: any) => entity.id === 'imported-quest')
+        ).toBeTruthy();
+        after.db.close();
+    }
+);
+
+test.each(['missing-item', 'missing-process', 'missing-quest', 'invalid-container'])(
+    'A04 destination reference %s rejects combined imports before either database writes',
+    async (failure) => {
+        await seedDestinationReferences();
+        const source = sparseDestinationBackup();
+        if (failure === 'missing-item') source.processes[0].requireItems[0].id = 'missing-item';
+        if (failure === 'missing-process')
+            source.quests[0].dialogue[0].options[0].process = 'missing-process';
+        if (failure === 'missing-quest') source.quests[0].requiresQuests = ['missing-quest'];
+        if (failure === 'invalid-container')
+            source.processes[0].itemCountOperations[0].containerItemId = 'destination-item';
+        const db = await storage.openManagedGameDB();
+        const beforeGame = await storage.readManagedGame(db);
+        const beforeCustom = await storage.preflightCustomImport();
+        beforeCustom.db.close();
+        const beforeMirror = localStorage.getItem('gameState');
+        await expect(
+            common.importGameStateString(
+                JSON.stringify({
+                    schemaVersion: 1,
+                    payload: { inventory: { mustNotWrite: 1 } },
+                    customContent: source,
+                })
+            )
+        ).rejects.toThrow();
+        expect(await storage.readManagedGame(db)).toEqual(beforeGame);
+        expect(localStorage.getItem('gameState')).toBe(beforeMirror);
+        const after = await storage.preflightCustomImport();
+        expect(after.snapshot).toEqual(beforeCustom.snapshot);
+        after.db.close();
+        db.close();
+    }
+);
+
+test('A04 referenced destination changes after validation abort the custom commit', async () => {
+    await seedDestinationReferences();
+    const original = storage.commitCustomImport;
+    vi.spyOn(storage, 'commitCustomImport').mockImplementationOnce(
+        async (db: any, ...args: any[]) => {
+            await storage.strictTransaction(db, ['items'], 'readwrite', (tx: any) =>
+                tx.objectStore('items').delete('destination-item')
+            );
+            return original(db, ...args);
+        }
+    );
+    const backup = await import('../src/utils/customContentBackup.js');
+    await expect(
+        backup.restoreCustomContentBackup(sparseDestinationBackup())
+    ).rejects.toMatchObject({ code: 'stale-custom-content' });
+    const after = await storage.preflightCustomImport();
+    expect(after.snapshot.processes.some((entity: any) => entity.id === 'imported-process')).toBe(
+        false
+    );
+    expect(after.snapshot.quests.some((entity: any) => entity.id === 'imported-quest')).toBe(false);
+    after.db.close();
+});

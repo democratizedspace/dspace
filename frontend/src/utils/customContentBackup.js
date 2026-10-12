@@ -3,6 +3,7 @@ import { isBrowser } from './ssr.js';
 import {
     prepareImport,
     prepareImportFile,
+    validateCustomImportReferences,
     inspectRaster,
     IMPORT_LIMITS,
 } from './importPreparation.js';
@@ -355,6 +356,7 @@ async function restorePreparedCustomContent(plan, { onProgress, overwriteExistin
         const { db, snapshot } = await preflightCustomImport();
         const content = plan.customContent;
         try {
+            validateCustomImportReferences(content, snapshot);
             validateCustomImportDestination(content, snapshot, overwriteExisting);
             await commitCustomImport(db, content, snapshot, overwriteExisting);
         } finally {
@@ -377,6 +379,7 @@ export async function restoreCustomContentBackup(data, options = {}) {
     const plan = prepareImport(data, {
         ...options,
         kind: 'custom',
+        deferDestinationReferences: true,
         origin: isBrowser ? window.location.origin : undefined,
     });
     return restorePreparedCustomContent(plan, options);
@@ -385,6 +388,7 @@ export async function restoreCustomContentBackupFromFile(file, options = {}) {
     const plan = await prepareImportFile(file, {
         ...options,
         kind: 'custom',
+        deferDestinationReferences: true,
         origin: isBrowser ? window.location.origin : undefined,
     });
     return restorePreparedCustomContent(plan, options);

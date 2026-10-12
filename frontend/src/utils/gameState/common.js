@@ -1198,9 +1198,15 @@ export const exportGameStateString = (options = {}) => {
 };
 
 export const importGameStateString = async (input) => {
-    const { prepareImport, assertRecoveryBudget } = await import('../importPreparation.js');
-    // Complete preparation precedes readiness, queueing, preflight, and all writes.
-    const plan = prepareImport(input, { origin: isBrowser ? window.location.origin : undefined });
+    const { prepareImport, assertRecoveryBudget, validateCustomImportReferences } = await import(
+        '../importPreparation.js'
+    );
+    // Structural/media preparation precedes readiness and preflight; destination
+    // references are checked against the snapshot before either database writes.
+    const plan = prepareImport(input, {
+        origin: isBrowser ? window.location.origin : undefined,
+        deferDestinationReferences: true,
+    });
     await ready;
     const expectedChecksum = durableChecksum;
     return serializeManagedMutation(async () => {
@@ -1236,6 +1242,7 @@ export const importGameStateString = async (input) => {
         try {
             if (plan.customContent) {
                 custom = await preflightCustomImport();
+                validateCustomImportReferences(plan.customContent, custom.snapshot);
                 validateCustomImportDestination(plan.customContent, custom.snapshot, true);
             }
             const previous = await readManagedGame(db);
