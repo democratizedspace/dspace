@@ -51,6 +51,7 @@ function sanitizeEntity(entity) {
     }
 
     const sanitized = { ...entity };
+    if (sanitized.image === null) delete sanitized.image;
     if ('imageBlob' in sanitized) {
         delete sanitized.imageBlob;
     }

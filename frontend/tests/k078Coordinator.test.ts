@@ -2041,3 +2041,30 @@ test.each([Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER * 2, Number.MAX_VALU
         }
     }
 );
+
+test('A03 native image-free item downloads and uploads a restorable backup', async () => {
+    const indexed = await import('../src/utils/indexeddb.js');
+    const added = vi.spyOn(indexed, 'addEntity');
+    const custom = await import('../src/utils/customcontent.js');
+    const id = custom.createItem('Synthetic no-image item', 'Created with native defaults');
+    await added.mock.results.at(-1)!.value;
+    const original = await custom.getItem(id);
+    expect(original.image).toBeNull();
+    const backup = await import('../src/utils/customContentBackup.js');
+    const prep = await import('../src/utils/importPreparation.js');
+    const legacy = prep.prepareImport({ schemaVersion: 1, items: [original] }, { kind: 'custom' });
+    expect(legacy.customContent.items[0].image).toBe('/favicon.ico');
+    const download = await backup.buildCustomContentBackup();
+    expect(download.data.items[0].image).toBeUndefined();
+    await backup.restoreCustomContentBackup(download.data, { overwriteExisting: true });
+    expect((await custom.getItem(id)).image).toBe('/favicon.ico');
+    const gist = await import('../src/lib/cloudsync/githubGists');
+    const create = vi.spyOn(gist, 'createBackupGist').mockResolvedValue({ id: 'no-image-backup' });
+    const cloud = await import('../src/utils/cloudSync.js');
+    await expect(cloud.uploadGameStateToGist('synthetic')).resolves.toMatchObject({
+        id: 'no-image-backup',
+    });
+    const plan = prep.prepareImport(create.mock.calls[0][0].content);
+    expect(plan.customContent.items[0].image).toBe('/favicon.ico');
+    expect(fetch).not.toHaveBeenCalled();
+});

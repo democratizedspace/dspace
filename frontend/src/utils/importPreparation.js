@@ -648,7 +648,7 @@ function normalizeCustom(raw, limits, origin, deferDestinationReferences = false
             }
             if (entity.route !== undefined)
                 change.route = canonicalImportURL(entity.route, origin, true, limits);
-            if (entity.image !== undefined) {
+            if (entity.image !== undefined && !(section === 'items' && entity.image === null)) {
                 if (typeof entity.image !== 'string') failImport('image-type');
                 change.image = entity.image
                     ? /^data:/i.test(entity.image)
