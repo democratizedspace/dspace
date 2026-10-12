@@ -274,9 +274,12 @@ try {
         globalThis.queuedClear = common.clearCredential('github');
       });
       await second.evaluate(async () => {
-        const common = await import('/frontend/src/utils/gameState/common.js');
-        globalThis.queuedLaunch = common
-          .assertCredentialLaunch('github', 'SENTINEL_CROSS_TAB')
+        const storage =
+          await import('/frontend/src/utils/managedImportStorage.js');
+        globalThis.queuedLaunch = storage
+          .fetchWithCredential('github', 'SENTINEL_CROSS_TAB', () => {
+            throw new Error('provider request issued after queued Clear');
+          })
           .then(
             () => 'launched',
             (error) => error.code

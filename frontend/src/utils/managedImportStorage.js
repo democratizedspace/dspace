@@ -201,7 +201,7 @@ export function applyCredentialAuthority(value, authority) {
         if (authority[kind].pending || authority[kind].cleared) next = scrubCredential(next, kind);
     return next;
 }
-export async function assertCredentialLaunch(kind, candidate) {
+async function withCredentialAuthority(kind, candidate, operation) {
     if (!globalThis.navigator?.locks?.request) throw error('credential-unavailable');
     return serializeManagedMutation(async () => {
         const db = await openManagedGameDB();
@@ -216,11 +216,27 @@ export async function assertCredentialLaunch(kind, candidate) {
                 actual !== candidate
             )
                 throw error('credential-unavailable');
-            return candidate;
+            return operation();
         } finally {
             db.close();
         }
     });
+}
+export const assertCredentialLaunch = (kind, candidate) =>
+    withCredentialAuthority(kind, candidate, () => candidate);
+
+export async function fetchWithCredential(kind, candidate, fetchImpl, ...args) {
+    const { request } = await withCredentialAuthority(kind, candidate, () => ({
+        // Invoke fetch before releasing the reservation, but do not hold the lock
+        // for network completion. Attach both handlers now, even if this tab pauses.
+        request: Promise.resolve(fetchImpl(...args)).then(
+            (value) => ({ value }),
+            (failure) => ({ failure })
+        ),
+    }));
+    const outcome = await request;
+    if ('failure' in outcome) throw outcome.failure;
+    return outcome.value;
 }
 export function commitManagedGame(
     db,

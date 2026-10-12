@@ -1,3 +1,4 @@
+import { fetchWithCredential } from './managedImportStorage.js';
 import { loadGameState, ready, assertCredentialLaunch } from './gameState/common.js';
 import { buildDchatKnowledgePack } from './dchatKnowledge.js';
 import { mergeSources } from './contextSources.js';
@@ -983,10 +984,7 @@ const runGPT5Chat = async (messages, options = {}) => {
         dangerouslyAllowBrowser: true,
         ...(isBrowser
             ? {
-                  fetch: async (...args) => {
-                      await assertCredentialLaunch('openAI', apiKey);
-                      return fetch(...args);
-                  },
+                  fetch: (...args) => fetchWithCredential('openAI', apiKey, fetch, ...args),
               }
             : {}),
     });
@@ -1016,10 +1014,7 @@ const runGPT5ChatV2 = async (messages, options = {}) => {
         dangerouslyAllowBrowser: true,
         ...(isBrowser
             ? {
-                  fetch: async (...args) => {
-                      await assertCredentialLaunch('openAI', apiKey);
-                      return fetch(...args);
-                  },
+                  fetch: (...args) => fetchWithCredential('openAI', apiKey, fetch, ...args),
               }
             : {}),
     });

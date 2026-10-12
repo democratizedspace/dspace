@@ -1572,3 +1572,123 @@ test.each([
         });
     }
 );
+
+function observeCredentialLock() {
+    let held = false;
+    let tail = Promise.resolve<unknown>(undefined);
+    vi.stubGlobal('navigator', {
+        locks: {
+            request: (_name: string, operation: () => unknown) => {
+                const result = tail.then(async () => {
+                    held = true;
+                    try {
+                        return await operation();
+                    } finally {
+                        held = false;
+                    }
+                });
+                tail = result.catch(() => undefined);
+                return result;
+            },
+        },
+    });
+    return () => held;
+}
+
+test.each(['github', 'openAI'])(
+    'C03 %s request issuance is locked but Clear does not wait for the response',
+    async (kind) => {
+        await common.saveCredential(kind, 'SENTINEL_LOCKED_LAUNCH');
+        const held = observeCredentialLock();
+        vi.resetModules();
+        const remote = await import('../src/utils/managedImportStorage.js');
+        let resolveResponse!: (value: unknown) => void;
+        const response = new Promise((resolve) => {
+            resolveResponse = resolve;
+        });
+        const issue = vi.fn(() => {
+            expect(held()).toBe(true);
+            return response;
+        });
+        const request = remote.fetchWithCredential(
+            kind,
+            'SENTINEL_LOCKED_LAUNCH',
+            issue,
+            'synthetic'
+        );
+        let finished = false;
+        void request.then(() => {
+            finished = true;
+        });
+        await expect(common.clearCredential(kind)).resolves.toMatchObject({ status: 'complete' });
+        expect(issue).toHaveBeenCalledTimes(1);
+        expect(finished).toBe(false);
+        await expect(
+            remote.fetchWithCredential(kind, 'SENTINEL_LOCKED_LAUNCH', issue, 'synthetic')
+        ).rejects.toMatchObject({ code: 'credential-unavailable' });
+        expect(issue).toHaveBeenCalledTimes(1);
+        resolveResponse('synthetic response');
+        await expect(request).resolves.toBe('synthetic response');
+    }
+);
+
+test.each([
+    'validation',
+    'listing',
+    'backup',
+    'download',
+    'quest-pr',
+    'bundle-pr',
+    'openai',
+    'openai-v2',
+])('C03 %s issues its provider fetch while holding credential authority', async (path) => {
+    const token = 'ghp_' + 'S'.repeat(36);
+    await common.saveCredential(path.startsWith('openai') ? 'openAI' : 'github', token);
+    const held = observeCredentialLock();
+    const issuanceLockStates: boolean[] = [];
+    const issued = vi.fn(() => {
+        issuanceLockStates.push(held());
+        throw new Error('synthetic request stop');
+    });
+    vi.stubGlobal('fetch', issued);
+    let operation: Promise<unknown>;
+    if (['validation', 'listing', 'backup'].includes(path)) {
+        const gist = await import('../src/lib/cloudsync/githubGists');
+        operation =
+            path === 'validation'
+                ? gist.validateToken(token)
+                : path === 'listing'
+                  ? gist.listBackups(token)
+                  : gist.createBackupGist({ token, content: '{}' });
+    } else if (path === 'download') {
+        const cloud = await import('../src/utils/cloudSync.js');
+        operation = cloud.downloadGameStateFromGist(token, 'synthetic-gist');
+    } else if (path === 'quest-pr') {
+        const pr = await import('../src/utils/submitQuestPR.js');
+        operation = pr.submitQuestPR(token, 'synthetic-branch', '{}');
+    } else if (path === 'bundle-pr') {
+        const pr = await import('../src/utils/submitBundlePR.js');
+        operation = pr.submitBundlePR(token, 'synthetic-branch', '{}');
+    } else {
+        vi.stubGlobal(
+            '__DSpaceOpenAIClient',
+            class {
+                responses: any;
+                constructor(options: any) {
+                    this.responses = { create: () => options.fetch('https://synthetic.invalid') };
+                }
+            }
+        );
+        const ai = await import('../src/utils/openAI.js');
+        operation = (path === 'openai' ? ai.GPT5Chat : ai.GPT5ChatV2)([], {
+            promptPayload: {
+                gameState: common.loadGameState(),
+                combinedMessages: [],
+                contextSources: [],
+            },
+        });
+    }
+    await expect(operation).rejects.toThrow();
+    expect(issued).toHaveBeenCalled();
+    expect(issuanceLockStates.every(Boolean)).toBe(true);
+});

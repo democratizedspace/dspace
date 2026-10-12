@@ -672,7 +672,7 @@ test.each(['root', 'nested', 'array'])(
     }
 );
 
-test('A04 quest rewards normalize known item references and finite nonnegative counts', () => {
+test('A04 quest rewards normalize known item references and schema-minimum counts', () => {
     const plan = prepareImport(
         {
             schemaVersion: 1,
@@ -980,3 +980,47 @@ test('C06 valid legacy wrappers preserve unrelated fields but exclude nested cre
             prepareImport({ schemaVersion: 1, payload: { gameState: malformed } })
         ).toThrow();
 });
+
+test.each([
+    'requireItems',
+    'consumeItems',
+    'createItems',
+    'requiresItems',
+    'grantsItems',
+    'rewards',
+])('A04 item link %s rejects counts below one without rejecting empty stock', (field) => {
+    const section = field === 'rewards' ? 'quests' : 'processes';
+    const source = (count: number) => ({
+        schemaVersion: 1,
+        items: [{ id: 'item' }, { id: 'container', itemCounts: { item: 0 } }],
+        [section]: [{ id: 'entity', [field]: [{ id: 'item', count }] }],
+    });
+    for (const count of [0, 0.5, -1])
+        expect(() => prepareImport(source(count), { kind: 'custom' })).toThrow();
+    expect(
+        prepareImport(source(1), { kind: 'custom' }).customContent.items[1].itemCounts.item
+    ).toBe(0);
+});
+
+test.each(['requiresItems', 'grantsItems', 'consumeItems'])(
+    'A04 dialogue %s requires count at least one',
+    (field) => {
+        const source = (count: number) => ({
+            schemaVersion: 1,
+            items: [{ id: 'item' }],
+            quests: [
+                {
+                    id: 'quest',
+                    dialogue: [
+                        {
+                            id: 'start',
+                            options: [{ text: 'Synthetic', [field]: [{ id: 'item', count }] }],
+                        },
+                    ],
+                },
+            ],
+        });
+        expect(() => prepareImport(source(0), { kind: 'custom' })).toThrow();
+        expect(prepareImport(source(1), { kind: 'custom' })).toBeTruthy();
+    }
+);

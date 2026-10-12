@@ -647,7 +647,7 @@ function normalizeCustom(raw, limits, origin) {
                 (!record(link) ||
                     typeof link.count !== 'number' ||
                     !Number.isFinite(link.count) ||
-                    link.count < 0)
+                    link.count < 1)
             )
                 failImport('reference-count');
             const linkedId = id(counted ? link.id : link);

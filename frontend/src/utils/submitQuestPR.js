@@ -1,10 +1,7 @@
-import { assertCredentialLaunch } from './managedImportStorage.js';
+import { fetchWithCredential } from './managedImportStorage.js';
 export async function submitQuestPR(token, branch, questJson) {
     token = token.trim();
-    const credentialFetch = async (...args) => {
-        await assertCredentialLaunch('github', token);
-        return fetch(...args);
-    };
+    const credentialFetch = (...args) => fetchWithCredential('github', token, fetch, ...args);
     const branchName = branch || `quest-${Date.now()}`;
     const headers = {
         Authorization: `token ${token}`,

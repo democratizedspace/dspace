@@ -1,4 +1,4 @@
-import { assertCredentialLaunch } from '../../utils/managedImportStorage.js';
+import { fetchWithCredential } from '../../utils/managedImportStorage.js';
 import { isBrowser } from '../../utils/ssr.js';
 export const BACKUP_DESCRIPTION = 'DSPACE Cloud Sync backup';
 export const BACKUP_FILE_PREFIX = 'dspace-save';
@@ -7,6 +7,12 @@ const TOKEN_PATTERNS = [/^gh[pousr]_[A-Za-z0-9_]{36,}$/i, /^github_pat_[A-Za-z0-
 
 const resolveFetch = (fetchImpl?: typeof fetch) =>
     fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
+
+const credentialFetch = (
+    token: string,
+    fetchImpl: typeof fetch,
+    ...args: Parameters<typeof fetch>
+) => (isBrowser ? fetchWithCredential('github', token, fetchImpl, ...args) : fetchImpl(...args));
 
 export const isLikelyGitHubToken = (token?: string) => {
     if (typeof token !== 'string') return false;
@@ -73,13 +79,17 @@ export async function validateToken(token: string, fetchImpl?: typeof fetch) {
         throw new Error('Token is missing or appears invalid');
     }
 
-    if (isBrowser) await assertCredentialLaunch('github', trimmedToken);
-    const response = await activeFetch('https://api.github.com/gists?per_page=1', {
-        headers: {
-            Authorization: `token ${trimmedToken}`,
-            Accept: 'application/vnd.github+json',
-        },
-    });
+    const response = await credentialFetch(
+        trimmedToken,
+        activeFetch,
+        'https://api.github.com/gists?per_page=1',
+        {
+            headers: {
+                Authorization: `token ${trimmedToken}`,
+                Accept: 'application/vnd.github+json',
+            },
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Token validation failed');
@@ -93,14 +103,18 @@ export async function listBackups(token: string, fetchImpl?: typeof fetch) {
     if (!activeFetch) throw new Error('Fetch implementation unavailable');
     const trimmedToken = token?.trim?.() ?? '';
 
-    if (isBrowser) await assertCredentialLaunch('github', trimmedToken);
-    const response = await activeFetch('https://api.github.com/gists?per_page=30', {
-        headers: {
-            Authorization: `token ${trimmedToken}`,
-            Accept: 'application/vnd.github+json',
-        },
-        cache: 'no-store',
-    });
+    const response = await credentialFetch(
+        trimmedToken,
+        activeFetch,
+        'https://api.github.com/gists?per_page=30',
+        {
+            headers: {
+                Authorization: `token ${trimmedToken}`,
+                Accept: 'application/vnd.github+json',
+            },
+            cache: 'no-store',
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Failed to load gists');
@@ -155,22 +169,26 @@ export async function createBackupGist({
     const trimmedToken = token?.trim?.() ?? '';
 
     const filename = formatBackupFilename(date);
-    if (isBrowser) await assertCredentialLaunch('github', trimmedToken);
-    const response = await activeFetch('https://api.github.com/gists', {
-        method: 'POST',
-        headers: {
-            Authorization: `token ${trimmedToken}`,
-            'Content-Type': 'application/json',
-            Accept: 'application/vnd.github+json',
-        },
-        body: JSON.stringify({
-            description,
-            public: false,
-            files: {
-                [filename]: { content },
+    const response = await credentialFetch(
+        trimmedToken,
+        activeFetch,
+        'https://api.github.com/gists',
+        {
+            method: 'POST',
+            headers: {
+                Authorization: `token ${trimmedToken}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/vnd.github+json',
             },
-        }),
-    });
+            body: JSON.stringify({
+                description,
+                public: false,
+                files: {
+                    [filename]: { content },
+                },
+            }),
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Failed to create backup gist');

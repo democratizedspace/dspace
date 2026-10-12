@@ -1,9 +1,9 @@
+import { fetchWithCredential } from './managedImportStorage.js';
 import {
     importGameStateString,
     loadGameState,
     saveGameState,
     ready,
-    assertCredentialLaunch,
     exportGameStateString,
 } from './gameState/common.js';
 import { loadGitHubToken } from './githubToken.js';
@@ -70,8 +70,10 @@ async function downloadGameStateFromGist(token, gistId) {
     }
     const trimmedToken = token?.trim?.();
     const headers = trimmedToken ? { Authorization: `token ${trimmedToken}` } : {};
-    if (trimmedToken) await assertCredentialLaunch('github', trimmedToken);
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
+    const url = `https://api.github.com/gists/${gistId}`;
+    const res = trimmedToken
+        ? await fetchWithCredential('github', trimmedToken, fetch, url, { headers })
+        : await fetch(url, { headers });
     if (!res.ok) throw new Error('Failed to download game state');
     const data = await res.json();
     const files = data.files || {};
