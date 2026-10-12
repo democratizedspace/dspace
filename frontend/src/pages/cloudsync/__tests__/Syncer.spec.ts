@@ -205,9 +205,54 @@ describe('Cloud Sync token save flow', () => {
         }
     );
 
-    it('reports incomplete cleanup after failed token validation without an unhandled rejection', async () => {
-        validateTokenMock.mockRejectedValueOnce(new Error('synthetic validation failure'));
-        clearGitHubTokenMock.mockRejectedValueOnce(new Error('clear-incomplete'));
+    it.each(['credential-unavailable', 'validation failed', 'network unavailable'])(
+        'preserves a newer saved token when older validation rejects: %s',
+        async (code) => {
+            const tokenA = `ghp_${'a'.repeat(36)}`;
+            const tokenB = `ghp_${'b'.repeat(36)}`;
+            let durableToken = '';
+            let rejectValidation!: (reason: { code: string }) => void;
+            saveGitHubTokenMock.mockImplementation(async (value: string) => {
+                durableToken = value;
+            });
+            clearGitHubTokenMock.mockImplementation(async () => {
+                durableToken = '';
+            });
+            validateTokenMock.mockReturnValue(
+                new Promise((_resolve, reject) => {
+                    rejectValidation = reject;
+                })
+            );
+            const { getByLabelText, getByTestId } = render(Syncer);
+            await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+            await fireEvent.input(getByLabelText(/GitHub Token/i), { target: { value: tokenA } });
+            await fireEvent.click(getByTestId('save-token'));
+            await waitFor(() => expect(validateTokenMock).toHaveBeenCalledWith(tokenA));
+            expect(durableToken).toBe(tokenA);
+            // Simulate another tab's successful Save before A's validation settles.
+            durableToken = tokenB;
+            rejectValidation({ code });
+            await waitFor(() =>
+                expect(getByTestId('sync-error')).toHaveTextContent(
+                    'Saved credentials were not cleared'
+                )
+            );
+            expect(durableToken).toBe(tokenB);
+            expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+            expect(getByTestId('save-token')).toBeEnabled();
+            expect(getByLabelText(/GitHub Token/i)).toHaveValue(tokenA);
+            // Clear remains an explicit user action against current authority.
+            await fireEvent.click(getByTestId('clear-sync-token'));
+            await waitFor(() =>
+                expect(getByTestId('sync-success')).toHaveTextContent('GitHub token cleared')
+            );
+            expect(durableToken).toBe('');
+            expect(clearGitHubTokenMock).toHaveBeenCalledOnce();
+        }
+    );
+
+    it('does not clear existing credentials when Save itself fails', async () => {
+        saveGitHubTokenMock.mockRejectedValueOnce(new Error('storage unavailable'));
         const { getByLabelText, getByTestId } = render(Syncer);
         await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
         await fireEvent.input(getByLabelText(/GitHub Token/i), {
@@ -216,11 +261,12 @@ describe('Cloud Sync token save flow', () => {
         await fireEvent.click(getByTestId('save-token'));
         await waitFor(() =>
             expect(getByTestId('sync-error')).toHaveTextContent(
-                'managed token copies may remain. Retry Clear.'
+                'Saved credentials were not cleared'
             )
         );
+        expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+        expect(validateTokenMock).not.toHaveBeenCalled();
         expect(getByTestId('save-token')).toBeEnabled();
-        expect(getByLabelText(/GitHub Token/i)).toHaveValue('');
     });
     it.each([false, true])(
         'delegates restore requirements to the parsed backup when custom storage fails (custom=%s)',

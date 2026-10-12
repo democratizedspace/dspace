@@ -161,8 +161,11 @@
         } catch (err) {
             if (err?.code === 'fallback-reload-required')
                 announce('Reload to reconcile saved progress, then retry Save.', 'error');
-            else if (await clearTokenLocal())
-                announce('Token validation failed; token cleared', 'error');
+            else
+                announce(
+                    'Token save or validation failed. Saved credentials were not cleared. Retry Save or use Clear.',
+                    'error'
+                );
         } finally {
             savingToken = false;
         }
