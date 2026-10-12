@@ -563,6 +563,55 @@ function normalizeCustomReferences(
             }
         }
     }
+    // Validate only retained references affected by an imported container replacement.
+    // Do not re-normalize unrelated legacy rows or write retained destination records.
+    const retainedLink = (link, itemField = 'id') => {
+        if (!record(link) || link.containerItemId === undefined) return;
+        const containerId = id(link.containerItemId);
+        if (ids.items.has(containerId)) containerReference(containerId, id(link[itemField]));
+    };
+    for (const section of ['items', 'processes', 'quests']) {
+        for (const entity of destination[section] || []) {
+            if (ids[section].has(entity.id)) continue;
+            for (const field of [
+                'requireItems',
+                'consumeItems',
+                'createItems',
+                'requiresItems',
+                'grantsItems',
+                'rewards',
+            ])
+                if (Array.isArray(entity[field]))
+                    entity[field].forEach((link) => retainedLink(link));
+            if (Array.isArray(entity.itemCountOperations))
+                entity.itemCountOperations.forEach((operation) =>
+                    retainedLink(operation, 'itemId')
+                );
+            if (Array.isArray(entity.dialogue))
+                for (const node of entity.dialogue)
+                    if (Array.isArray(node?.options))
+                        for (const option of node.options)
+                            for (const field of ['requiresItems', 'grantsItems', 'consumeItems'])
+                                if (Array.isArray(option?.[field]))
+                                    option[field].forEach((link) => retainedLink(link));
+        }
+    }
+}
+
+// Expand scientific notation so the existing duration parser sees the original seconds.
+function secondsDuration(seconds) {
+    const [mantissa, exponent] = String(seconds).split('e');
+    if (exponent === undefined) return `${mantissa}s`;
+    const digits = mantissa.replace('.', '');
+    const point =
+        (mantissa.includes('.') ? mantissa.indexOf('.') : mantissa.length) + Number(exponent);
+    const decimal =
+        point <= 0
+            ? `0.${'0'.repeat(-point)}${digits}`
+            : point >= digits.length
+              ? `${digits}${'0'.repeat(point - digits.length)}`
+              : `${digits.slice(0, point)}.${digits.slice(point)}`;
+    return `${decimal}s`;
 }
 
 // Consumes the frozen, structurally validated plan and a read-only destination
@@ -645,8 +694,9 @@ function normalizeCustom(raw, limits, origin, deferDestinationReferences = false
                 change.price = String(entity.price);
             if (entity.duration !== undefined) {
                 if (typeof entity.duration === 'number') {
-                    if (entity.duration < 0 || !Number.isFinite(entity.duration))
+                    if (entity.duration < 0 || !Number.isFinite(entity.duration * 1000))
                         failImport('duration');
+                    change.duration = secondsDuration(entity.duration);
                 } else {
                     if (!/^(?:[0-9]+(?:\.[0-9]+)?[dhms]\s*)+$/i.test(entity.duration))
                         failImport('duration');
@@ -655,7 +705,7 @@ function normalizeCustom(raw, limits, origin, deferDestinationReferences = false
                         seconds +=
                             Number(part[1]) *
                             { d: 86400, h: 3600, m: 60, s: 1 }[part[2].toLowerCase()];
-                    if (!Number.isFinite(seconds)) failImport('duration');
+                    if (!Number.isFinite(seconds * 1000)) failImport('duration');
                 }
             }
             if (entity.route !== undefined)

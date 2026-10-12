@@ -2134,3 +2134,132 @@ test('A01 restored legacy navigation remains clickable through QuestChatOption',
         cleanup();
     }
 });
+
+test.each([0, 60, 0.5, 1e-7, 1e21])(
+    'A01 numeric legacy duration %s retains runtime timing',
+    async (duration) => {
+        const backup = await import('../src/utils/customContentBackup.js');
+        await backup.restoreCustomContentBackup({
+            schemaVersion: 1,
+            processes: [{ id: 'legacy-duration', duration }],
+        });
+        const { getProcesses } = await import('../src/utils/indexeddb.js');
+        const [process] = await getProcesses();
+        expect(typeof process.duration).toBe('string');
+        expect(process.duration).not.toContain('e');
+        const { startProcess } = await import('../src/utils/gameState/processes.js');
+        expect(startProcess(process.id, process)).toBe(true);
+        await storage.flushManagedMutations();
+        expect(common.loadGameState().processes[process.id].duration).toBe(duration * 1000);
+    }
+);
+
+async function retainedContainerFixture(location: string) {
+    const link = { id: 'retained-item', count: 1, containerItemId: 'retained-container' };
+    const process: any = { id: 'retained-process', duration: '60s' };
+    const quest: any = {
+        id: 'retained-quest',
+        dialogue: [{ id: 'start', options: [{ type: 'finish', text: 'Finish' }] }],
+    };
+    if (location === 'operation')
+        process.itemCountOperations = [
+            {
+                operation: 'withdraw',
+                itemId: link.id,
+                containerItemId: link.containerItemId,
+                count: 1,
+            },
+        ];
+    else if (location === 'process-link') process.consumeItems = [link];
+    else if (location === 'quest-link') quest.requiresItems = [link];
+    else if (location === 'reward') quest.rewards = [link];
+    else quest.dialogue[0].options[0][location] = [link];
+    const custom = await storage.preflightCustomImport();
+    await storage.strictTransaction(
+        custom.db,
+        ['items', 'processes', 'quests'],
+        'readwrite',
+        (tx: any) => {
+            tx.objectStore('items').put({ id: 'retained-item' });
+            tx.objectStore('items').put({
+                id: 'retained-container',
+                itemCounts: { 'retained-item': 0 },
+            });
+            tx.objectStore('processes').put(process);
+            tx.objectStore('quests').put(quest);
+            tx.objectStore('quests').put({
+                id: 'unrelated-legacy',
+                requiresItems: 'historical-invalid-shape',
+            });
+        }
+    );
+    custom.db.close();
+}
+
+test.each(
+    [
+        'operation',
+        'process-link',
+        'quest-link',
+        'reward',
+        'requiresItems',
+        'grantsItems',
+        'consumeItems',
+    ].flatMap((location) => ['standalone', 'combined'].map((entry) => ({ location, entry })))
+)(
+    'A04 container replacement protects retained $location in $entry restore',
+    async ({ location, entry }) => {
+        await retainedContainerFixture(location);
+        const before = await storage.preflightCustomImport();
+        before.db.close();
+        const gameBefore = common.loadGameState();
+        const mirrorBefore = localStorage.getItem('gameState');
+        const content = { schemaVersion: 1, items: [{ id: 'retained-container', itemCounts: {} }] };
+        const backup = await import('../src/utils/customContentBackup.js');
+        const operation =
+            entry === 'standalone'
+                ? backup.restoreCustomContentBackup(content, { overwriteExisting: true })
+                : common.importGameStateString(
+                      JSON.stringify({
+                          schemaVersion: 1,
+                          payload: { inventory: { shouldNotCommit: 1 } },
+                          customContent: content,
+                      })
+                  );
+        await expect(operation).rejects.toMatchObject({ code: 'container-reference' });
+        expect(common.loadGameState()).toEqual(gameBefore);
+        expect(localStorage.getItem('gameState')).toBe(mirrorBefore);
+        const after = await storage.preflightCustomImport();
+        after.db.close();
+        expect(after.snapshot).toEqual(before.snapshot);
+    }
+);
+
+test.each([false, true])(
+    'A04 safe container replacement preserves retained records (replace dependent=%s)',
+    async (replaceDependent) => {
+        await retainedContainerFixture('operation');
+        const before = await storage.preflightCustomImport();
+        before.db.close();
+        const content = {
+            schemaVersion: 1,
+            items: [
+                {
+                    id: 'retained-container',
+                    itemCounts: replaceDependent ? {} : { 'retained-item': 2 },
+                },
+            ],
+            ...(replaceDependent
+                ? { processes: [{ id: 'retained-process', duration: '60s' }] }
+                : {}),
+        };
+        const backup = await import('../src/utils/customContentBackup.js');
+        await expect(
+            backup.restoreCustomContentBackup(content, { overwriteExisting: true })
+        ).resolves.toMatchObject({ status: 'complete' });
+        const after = await storage.preflightCustomImport();
+        after.db.close();
+        expect(after.snapshot.quests).toEqual(before.snapshot.quests);
+        if (!replaceDependent) expect(after.snapshot.processes).toEqual(before.snapshot.processes);
+    }
+);

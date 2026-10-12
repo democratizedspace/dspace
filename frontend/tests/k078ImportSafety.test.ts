@@ -1125,3 +1125,15 @@ test('A01 explicitly adapts legacy navigation and finish options without changin
     expect(prepared.customContent.quests[0].dialogue[1].options[0].type).toBe('finish');
     expect(source.quests[0].dialogue[0].options[0]).not.toHaveProperty('type');
 });
+
+test.each([
+    Number.MAX_VALUE,
+    `${Number.MAX_VALUE.toLocaleString('en-US', { useGrouping: false })}s`,
+])('A01 rejects duration with non-finite runtime milliseconds', (duration) => {
+    expect(() =>
+        prepareImport(
+            { schemaVersion: 1, processes: [{ id: 'duration-overflow', duration }] },
+            { kind: 'custom' }
+        )
+    ).toThrow(/duration/);
+});
