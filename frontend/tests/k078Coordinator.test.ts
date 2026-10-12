@@ -2068,3 +2068,69 @@ test('A03 native image-free item downloads and uploads a restorable backup', asy
     expect(plan.customContent.items[0].image).toBe('/favicon.ico');
     expect(fetch).not.toHaveBeenCalled();
 });
+
+test.each([0, 10, 1.25])(
+    'A01 numeric legacy item price %s remains searchable after restore',
+    async (price) => {
+        const backup = await import('../src/utils/customContentBackup.js');
+        await backup.restoreCustomContentBackup({
+            schemaVersion: 1,
+            items: [{ id: 'priced-item', name: 'Synthetic price', price }],
+        });
+        const indexed = await import('../src/utils/indexeddb.js');
+        const items = await indexed.getItems();
+        expect(items[0].price).toBe(String(price));
+        const { render, fireEvent, cleanup } = await import('@testing-library/svelte');
+        const { default: SearchBar } = await import('../src/components/svelte/SearchBar.svelte');
+        try {
+            const view = render(SearchBar, { data: items });
+            const input = await view.findByLabelText('Search items');
+            await expect(
+                fireEvent.input(input, { target: { value: String(price) } })
+            ).resolves.toBe(true);
+        } finally {
+            cleanup();
+        }
+    }
+);
+
+test('A01 restored legacy navigation remains clickable through QuestChatOption', async () => {
+    const backup = await import('../src/utils/customContentBackup.js');
+    await backup.restoreCustomContentBackup({
+        schemaVersion: 1,
+        quests: [
+            {
+                id: 'legacy-action',
+                title: 'Synthetic dialogue',
+                start: 'start',
+                dialogue: [
+                    { id: 'start', options: [{ text: 'Continue synthetic quest', goto: 'next' }] },
+                    { id: 'next', options: [{ text: 'Finish', goto: 'finish' }] },
+                ],
+            },
+        ],
+    });
+    const { getQuests } = await import('../src/utils/indexeddb.js');
+    const [quest] = await getQuests();
+    expect(quest.dialogue[1].options[0].type).toBe('finish');
+    const { render, fireEvent, cleanup } = await import('@testing-library/svelte');
+    const { default: QuestChatOption } = await import(
+        '../src/pages/quests/svelte/QuestChatOption.svelte'
+    );
+    try {
+        const view = render(QuestChatOption, {
+            quest,
+            option: quest.dialogue[0].options[0],
+            questId: quest.id,
+            stepId: 'start',
+            optionIndex: 0,
+        });
+        await fireEvent.click(
+            await view.findByRole('button', { name: 'Continue synthetic quest' })
+        );
+        await storage.flushManagedMutations();
+        expect(common.loadGameState().quests[quest.id].stepId).toBe('next');
+    } finally {
+        cleanup();
+    }
+});

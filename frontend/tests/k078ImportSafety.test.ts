@@ -1014,7 +1014,13 @@ test.each(['requiresItems', 'grantsItems', 'consumeItems'])(
                     dialogue: [
                         {
                             id: 'start',
-                            options: [{ text: 'Synthetic', [field]: [{ id: 'item', count }] }],
+                            options: [
+                                {
+                                    type: 'finish',
+                                    text: 'Synthetic',
+                                    [field]: [{ id: 'item', count }],
+                                },
+                            ],
                         },
                     ],
                 },
@@ -1073,4 +1079,49 @@ test('A01 removes imported ordering metadata throughout owned wrappers without m
     expect(plan.game.payload._meta).toEqual({});
     expect(plan.game.gameState._meta).toEqual({});
     expect(source._meta.lastUpdated).toBe(Number.MAX_VALUE);
+});
+
+test.each([
+    {},
+    { type: null },
+    { type: 'unknown' },
+    { type: 'goto' },
+    { type: 'process' },
+    { type: 'grantsItems' },
+])('A01 rejects unrunnable dialogue action %j', (action) => {
+    expect(() =>
+        prepareImport(
+            {
+                schemaVersion: 1,
+                quests: [
+                    {
+                        id: 'quest',
+                        dialogue: [{ id: 'start', options: [{ text: 'Action', ...action }] }],
+                    },
+                ],
+            },
+            { kind: 'custom' }
+        )
+    ).toThrow();
+});
+test('A01 explicitly adapts legacy navigation and finish options without changing input', () => {
+    const source = {
+        schemaVersion: 1,
+        quests: [
+            {
+                id: 'quest',
+                dialogue: [
+                    { id: 'start', options: [{ text: 'Next', goto: ' next ' }] },
+                    { id: 'next', options: [{ text: 'Finish', goto: 'finish' }] },
+                ],
+            },
+        ],
+    };
+    const prepared = prepareImport(source, { kind: 'custom' });
+    expect(prepared.customContent.quests[0].dialogue[0].options[0]).toMatchObject({
+        type: 'goto',
+        goto: 'next',
+    });
+    expect(prepared.customContent.quests[0].dialogue[1].options[0].type).toBe('finish');
+    expect(source.quests[0].dialogue[0].options[0]).not.toHaveProperty('type');
 });

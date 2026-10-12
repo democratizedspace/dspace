@@ -533,15 +533,25 @@ function normalizeCustomReferences(
                             )
                                 failImport('field-type');
                             const next = { ...option };
-                            if (option.type === 'process' || option.process !== undefined) {
+                            // Explicit version-1 adapter for navigation-only legacy options.
+                            if (next.type === undefined && option.goto !== undefined)
+                                next.type = 'goto';
+                            if (!['goto', 'grantsItems', 'process', 'finish'].includes(next.type))
+                                failImport('option-type');
+                            if (next.type === 'goto') next.goto = id(option.goto);
+                            if (next.type === 'grantsItems' && !Array.isArray(option.grantsItems))
+                                failImport('reference-type');
+                            if (next.type === 'process' || option.process !== undefined) {
                                 next.process = id(option.process);
                                 if (!processIds.has(next.process) && !deferDestinationReferences)
                                     failImport('unresolved-reference');
                             }
                             if (option.goto !== undefined) {
                                 next.goto = id(option.goto);
-                                if (next.goto !== 'finish' && !nodeIds.has(next.goto))
-                                    failImport('unresolved-reference');
+                                if (!nodeIds.has(next.goto)) {
+                                    if (next.goto !== 'finish') failImport('unresolved-reference');
+                                    if (next.type === 'goto') next.type = 'finish';
+                                }
                             }
                             for (const field of ['requiresItems', 'grantsItems', 'consumeItems'])
                                 links(option, next, field, itemIds, true);
@@ -631,6 +641,8 @@ function normalizeCustom(raw, limits, origin, deferDestinationReferences = false
                 if (typeof entity[field] === 'string' && /[<>]/.test(entity[field]))
                     failImport('preview-markup');
             }
+            if (section === 'items' && typeof entity.price === 'number')
+                change.price = String(entity.price);
             if (entity.duration !== undefined) {
                 if (typeof entity.duration === 'number') {
                     if (entity.duration < 0 || !Number.isFinite(entity.duration))
