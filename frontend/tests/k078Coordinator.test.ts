@@ -1471,3 +1471,68 @@ test.each([7, ' item-A '])(
         afterCustom.db.close();
     }
 );
+
+test.each(['github', 'openAI'])(
+    'C04 delayed notices reconcile consecutive %s Saves atomically without losing queued gameplay',
+    async (kind) => {
+        await common.saveCredential(kind, 'SENTINEL_DELAYED_OLD');
+        const origin = common;
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        await remote.saveCredential(kind, 'SENTINEL_DELAYED_MIDDLE');
+        await remote.saveCredential(kind, 'SENTINEL_DELAYED_NEW');
+        await remote.closeGameStateDatabaseForTesting();
+        const first = origin.loadGameState();
+        first.inventory.delayedNoticeProgress = 1;
+        const saving = origin.saveGameState(first);
+        const second = origin.loadGameState();
+        second.inventory.delayedNoticeProgress = 2;
+        await Promise.all([saving, origin.saveGameState(second)]);
+        const db = await storage.openManagedGameDB();
+        const persisted = await storage.readManagedGame(db);
+        db.close();
+        expect(persisted.state.inventory.delayedNoticeProgress).toBe(2);
+        expect(persisted.state[kind][kind === 'github' ? 'token' : 'apiKey']).toBe(
+            'SENTINEL_DELAYED_NEW'
+        );
+    }
+);
+
+test.each(['remote-gameplay', 'clear', 'clear-then-save', 'incomplete-clear', 'unknown-history'])(
+    'C04 delayed notice reconciliation preserves the %s barrier',
+    async (barrier) => {
+        await common.saveCredential('github', 'SENTINEL_BARRIER_OLD');
+        const origin = common;
+        const captured = origin.loadGameState();
+        vi.resetModules();
+        const remote = await import('../src/utils/gameState/common.js');
+        await remote.ready;
+        if (barrier === 'remote-gameplay')
+            await remote.saveGameState({
+                ...remote.loadGameState(),
+                inventory: { remoteBarrier: 9 },
+            });
+        if (barrier === 'clear' || barrier === 'clear-then-save')
+            await remote.clearCredential('github');
+        if (barrier !== 'clear') await remote.saveCredential('github', 'SENTINEL_BARRIER_NEW');
+        await remote.closeGameStateDatabaseForTesting();
+        const db = await storage.openManagedGameDB();
+        if (barrier === 'unknown-history' || barrier === 'incomplete-clear') {
+            await storage.strictTransaction(db, ['meta'], 'readwrite', (tx: any, req: any) => {
+                req(tx.objectStore('meta').get('root'), (meta: any) => {
+                    if (barrier === 'unknown-history') delete meta.credentialSaveBaseEpochs;
+                    else meta.credentialEpochs.github.pending = true;
+                    tx.objectStore('meta').put(meta, 'root');
+                });
+            });
+        }
+        const before = await storage.readManagedGame(db);
+        captured.inventory.mustNotCommit = 1;
+        await expect(origin.saveGameState(captured)).rejects.toMatchObject({
+            code: barrier === 'remote-gameplay' ? 'stale-state' : 'stale-credential-epoch',
+        });
+        expect(await storage.readManagedGame(db)).toEqual(before);
+        db.close();
+    }
+);

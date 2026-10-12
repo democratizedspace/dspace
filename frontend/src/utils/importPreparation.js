@@ -597,6 +597,11 @@ function normalizeCustom(raw, limits, origin) {
         change.dataUrl = inspectRaster(image.dataUrl, limits, totals);
         map.get(change.entityId).image = change.dataUrl;
     }
+    // Legacy sparse records use the bundled fallback, after image records have
+    // had the opportunity to supply their validated raster representation.
+    for (const section of ['items', 'quests'])
+        for (const change of changes[section])
+            if (change.image === undefined) change.image = '/favicon.ico';
     const itemIds = new Set([...builtInItems.map((item) => String(item.id)), ...ids.items.keys()]);
     const processIds = new Set([
         ...builtInProcesses.map((process) => String(process.id)),

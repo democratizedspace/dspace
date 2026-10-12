@@ -901,3 +901,35 @@ test('A04 rejects a combined backup whose normalized custom IDs would strand inv
         })
     ).toThrow('legacy-id-reference');
 });
+
+test.each(['items', 'quests'])(
+    'A04 sparse legacy %s keep the bundled image fallback',
+    (section) => {
+        const source = {
+            schemaVersion: 1,
+            [section]: [
+                { id: 'sparse' },
+                { id: 'raster' },
+                { id: 'explicit', image: '/favicon.ico' },
+                { id: 'empty', image: '' },
+            ],
+            images: [
+                {
+                    id: 'image',
+                    entityId: 'raster',
+                    entityType: section === 'items' ? 'item' : 'quest',
+                    dataUrl: png,
+                },
+            ],
+        };
+        const before = structuredClone(source);
+        const plan = prepareImport(source, { kind: 'custom' });
+        expect(plan.customContent[section].map((entity: any) => entity.image)).toEqual([
+            '/favicon.ico',
+            png,
+            '/favicon.ico',
+            '',
+        ]);
+        expect(source).toEqual(before);
+    }
+);

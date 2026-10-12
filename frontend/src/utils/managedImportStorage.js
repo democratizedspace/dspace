@@ -151,6 +151,19 @@ export function credentialAuthority(meta) {
     }
     return value;
 }
+// The start of each uninterrupted run of deliberate Saves. Unknown legacy history
+// starts at the currently observed epoch; a Clear always starts a new run.
+function credentialSaveBases(meta, authority) {
+    const source = meta?.credentialSaveBaseEpochs;
+    const bases = {};
+    for (const kind of ['github', 'openAI']) {
+        const value = source?.[kind] ?? authority[kind].epoch;
+        if (!Number.isSafeInteger(value) || value < 0 || value > authority[kind].epoch)
+            throw error('credential-authority-invalid');
+        bases[kind] = value;
+    }
+    return bases;
+}
 export function scrubCredential(value, kind) {
     const next = structuredClone(value);
     if (!next || typeof next !== 'object' || Array.isArray(next))
@@ -211,23 +224,60 @@ export async function assertCredentialLaunch(kind, candidate) {
 }
 export function commitManagedGame(
     db,
-    { next, backup, expectedChecksum, expectedEpochs, stamp, lightweight, deliberateKind }
+    {
+        next,
+        backup,
+        expectedChecksum,
+        expectedEpochs,
+        stamp,
+        lightweight,
+        deliberateKind,
+        reconcileGameplay,
+    }
 ) {
     return strictTransaction(db, gameStores, 'readwrite', (tx, req, done, abort) => {
         req(tx.objectStore('meta').get('root'), (oldMeta) => {
             const authority = credentialAuthority(oldMeta);
+            const saveBases = credentialSaveBases(oldMeta, authority);
+            const epochChanged =
+                expectedEpochs &&
+                ['github', 'openAI'].some(
+                    (kind) => expectedEpochs[kind].epoch !== authority[kind].epoch
+                );
+            const saveOnlyAdvance =
+                epochChanged &&
+                !deliberateKind &&
+                reconcileGameplay &&
+                ['github', 'openAI'].every((kind) => {
+                    const before = expectedEpochs[kind].epoch,
+                        current = authority[kind];
+                    return (
+                        before === current.epoch ||
+                        (before < current.epoch &&
+                            !current.pending &&
+                            !current.cleared &&
+                            saveBases[kind] <= before)
+                    );
+                });
+            if (epochChanged && !saveOnlyAdvance) {
+                abort('stale-credential-epoch');
+                return;
+            }
             for (const kind of ['github', 'openAI']) {
-                if (expectedEpochs && expectedEpochs[kind].epoch !== authority[kind].epoch) {
-                    abort('stale-credential-epoch');
-                    return;
-                }
                 if (authority[kind].pending) {
                     abort('clear-incomplete');
                     return;
                 }
             }
             req(tx.objectStore('state').get('root'), (previous) => {
+                // Reconcile only credential-only advances against the actual transaction
+                // snapshot. A notification is advisory; gameplay and Clear remain barriers.
+                if (saveOnlyAdvance && !reconcileGameplay(previous)) {
+                    abort('stale-state');
+                    return;
+                }
                 if (
+                    !saveOnlyAdvance &&
                     expectedChecksum !== undefined &&
                     (previous?._meta?.checksum ?? null) !== expectedChecksum
                 ) {
@@ -269,6 +319,7 @@ export function commitManagedGame(
                     ...oldMeta,
                     ...lightweight(safeNext),
                     credentialEpochs: authority,
+                    credentialSaveBaseEpochs: saveBases,
                 };
                 tx.objectStore('meta').put(nextMeta, 'root');
                 done({ state: safeNext, backup: safeBackup, meta: nextMeta });
@@ -289,12 +340,17 @@ export async function clearManagedCredential(db, kind, stamp, lightweight) {
         await strictTransaction(db, ['meta'], 'readwrite', (tx, req) => {
             req(tx.objectStore('meta').get('root'), (old) => {
                 const authority = credentialAuthority(old);
+                const saveBases = credentialSaveBases(old, authority);
                 authority[kind] = {
                     epoch: authority[kind].epoch + 1,
                     pending: true,
                     cleared: true,
                 };
-                tx.objectStore('meta').put({ ...old, credentialEpochs: authority }, 'root');
+                saveBases[kind] = authority[kind].epoch;
+                tx.objectStore('meta').put(
+                    { ...old, credentialEpochs: authority, credentialSaveBaseEpochs: saveBases },
+                    'root'
+                );
             });
         });
     } catch {

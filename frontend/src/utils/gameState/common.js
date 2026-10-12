@@ -824,6 +824,10 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     backup: previousSnapshot,
                     expectedChecksum,
                     expectedEpochs: capturedEpochs,
+                    reconcileGameplay: (previous) =>
+                        capturedClearGeneration === clearGeneration &&
+                        gameplayChecksum(previous ?? initializeGameState()) ===
+                            gameplayChecksum(capturedGameplayBase),
                     deliberateKind,
                     stamp: stampStateChecksum,
                     lightweight: buildLightweightSnapshot,
