@@ -744,3 +744,74 @@ test.each([
     expect((await storage.readManagedGame(db)).state.inventory.restoredProgress).toBe(97);
     db.close();
 });
+
+test.each([
+    ['import', 'durable'],
+    ['save', 'durable'],
+    ['import', 'fallback'],
+    ['save', 'fallback'],
+    ['save', 'no-locks'],
+])(
+    'B05 %s (%s) uses retained timestamps after another tab writes identical gameplay',
+    async (action, mode) => {
+        await common.saveCredential('github', 'SENTINEL_DURABLE_TIME');
+        const stale = common.loadGameState();
+        const remoteTime = stale._meta.lastUpdated + 20000;
+        const db = await storage.openManagedGameDB();
+        const snapshot = await storage.readManagedGame(db);
+        snapshot.state._meta.lastUpdated = remoteTime;
+        snapshot.meta.lastUpdated = remoteTime;
+        await storage.strictTransaction(db, ['state', 'meta'], 'readwrite', (tx: any) => {
+            tx.objectStore('state').put(snapshot.state, 'root');
+            tx.objectStore('meta').put(snapshot.meta, 'root');
+        });
+        storage.mirrorManagedGame(snapshot);
+        expect(common.loadGameState()._meta.lastUpdated).toBeLessThan(remoteTime);
+        expect(common.loadGameState()._meta.checksum).toBe(snapshot.state._meta.checksum);
+        vi.spyOn(Date, 'now').mockReturnValue(stale._meta.lastUpdated - 10000);
+        const locks = navigator.locks;
+        const fault =
+            mode === 'durable'
+                ? vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                      throw new Error('synthetic mirror failure');
+                  })
+                : mode === 'fallback'
+                  ? vi
+                        .spyOn(storage, 'openManagedGameDB')
+                        .mockRejectedValueOnce(new Error('synthetic unavailable'))
+                  : null;
+        if (mode === 'no-locks') vi.stubGlobal('navigator', { locks: undefined });
+        const next = { ...stale, inventory: { durableTimeProgress: 98 } };
+        const write =
+            action === 'import'
+                ? common.importGameStateString(JSON.stringify(next))
+                : common.saveGameState(next);
+        if (mode === 'durable') {
+            await expect(write).rejects.toMatchObject({
+                code: 'mirror-incomplete',
+                committed: ['game'],
+            });
+            expect((await storage.readManagedGame(db)).state._meta.lastUpdated).toBeGreaterThan(
+                remoteTime
+            );
+        } else {
+            await expect(write).resolves.toMatchObject({
+                status: 'best-effort',
+                credentialsDisabled: true,
+            });
+            expect(
+                JSON.parse(localStorage.getItem('gameState')!)._meta.lastUpdated
+            ).toBeGreaterThan(remoteTime);
+            expect((await storage.readManagedGame(db)).state._meta.lastUpdated).toBe(remoteTime);
+        }
+        fault?.mockRestore();
+        if (mode === 'no-locks') vi.stubGlobal('navigator', { locks });
+        db.close();
+        await common.closeGameStateDatabaseForTesting();
+        vi.resetModules();
+        common = await import('../src/utils/gameState/common.js');
+        await common.ready;
+        expect(common.loadGameState().inventory.durableTimeProgress).toBe(98);
+        expect(common.loadGameState().github.token).toBe('SENTINEL_DURABLE_TIME');
+    }
+);

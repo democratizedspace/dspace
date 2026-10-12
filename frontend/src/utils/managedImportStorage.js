@@ -245,6 +245,17 @@ export function commitManagedGame(
                     if (previous?.[kind]) target[kind] = structuredClone(previous[kind]);
                 }
                 const safeNext = applyCredentialAuthority(target, authority);
+                // Checksums intentionally omit time. Use the actual transaction snapshot
+                // so a stale tab cannot assign a timestamp older than a same-data write.
+                const savedTime = (state) =>
+                    Number.isFinite(state?._meta?.lastUpdated) ? state._meta.lastUpdated : 0;
+                const lastUpdated = Math.max(
+                    Date.now(),
+                    savedTime(safeNext),
+                    savedTime(previous) + 1
+                );
+                safeNext._meta = { ...safeNext._meta, lastUpdated };
+
                 const safeBackup =
                     backup === undefined ? undefined : applyCredentialAuthority(backup, authority);
                 stamp(safeNext);

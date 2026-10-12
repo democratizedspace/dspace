@@ -472,6 +472,8 @@ let gameState = initializeGameState();
 export const state = writable(gameState);
 const savedAt = (value) =>
     Number.isFinite(value?.[META_KEY]?.lastUpdated) ? value[META_KEY].lastUpdated : 0;
+const fallbackWriteTime = () =>
+    Math.max(Date.now(), savedAt(gameState) + 1, savedAt(lsRead(STATE_STORE)) + 1);
 const loadCredentialFreeFallback = async () => {
     useLocalStorage = true;
     let stored = lsRead(STATE_STORE),
@@ -665,10 +667,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             scrubCredential(scrubCredential(captured, 'github'), 'openAI')
         );
         const backup = scrubCredential(scrubCredential(gameState, 'github'), 'openAI');
-        safe[META_KEY].lastUpdated = Math.max(
-            Date.now(),
-            (gameState[META_KEY]?.lastUpdated ?? 0) + 1
-        );
+        safe[META_KEY].lastUpdated = fallbackWriteTime();
         stampStateChecksum(safe);
         stampStateChecksum(backup);
         // This synchronous, game-only mirror fallback never opens or mutates IndexedDB.
@@ -742,6 +741,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     scrubCredential(previousSnapshot, 'github'),
                     'openAI'
                 );
+                safe[META_KEY].lastUpdated = Math.max(savedAt(safe), fallbackWriteTime());
                 stampStateChecksum(safe);
                 stampStateChecksum(backup);
                 mirrorManagedGame({
@@ -1135,7 +1135,7 @@ export const importGameStateString = async (input) => {
             // neither imported nor previously cached credentials can be enabled.
             assertRecoveryBudget(gameState);
             const next = validateGameState(structuredClone(plan.game));
-            next[META_KEY].lastUpdated = Math.max(Date.now(), savedAt(gameState) + 1);
+            next[META_KEY].lastUpdated = fallbackWriteTime();
             const backup = scrubCredential(scrubCredential(gameState, 'github'), 'openAI');
             stampStateChecksum(next);
             stampStateChecksum(backup);
