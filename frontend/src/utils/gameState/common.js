@@ -696,7 +696,7 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
             if (gameState[kind]) captured[kind] = structuredClone(gameState[kind]);
         }
         const nextState = validateGameState(captured);
-        nextState[META_KEY].lastUpdated = Date.now();
+        nextState[META_KEY].lastUpdated = Math.max(Date.now(), savedAt(gameState) + 1);
         stampStateChecksum(nextState);
         let expectedChecksum = durableChecksum;
         durableChecksum = nextState._meta.checksum;

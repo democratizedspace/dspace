@@ -696,43 +696,51 @@ test('A03 exported images use one representation and round-trip at the aggregate
     expect(fetch).not.toHaveBeenCalled();
 });
 
-test.each(['unavailable', 'mirror-failed'])(
-    'B05 old backup imports survive recovery/reload after %s storage',
-    async (mode) => {
-        await common.saveCredential('github', 'SENTINEL_IMPORT_RELOAD');
-        const beforeTime = common.loadGameState()._meta.lastUpdated;
-        vi.spyOn(Date, 'now').mockReturnValue(beforeTime - 10000);
-        const fault =
-            mode === 'unavailable'
-                ? vi
-                      .spyOn(storage, 'openManagedGameDB')
-                      .mockRejectedValueOnce(new Error('synthetic unavailable'))
-                : vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
-                      throw new Error('synthetic mirror failure');
-                  });
-        const imported = common.importGameStateString(
-            JSON.stringify({ inventory: { restoredProgress: 97 }, _meta: { lastUpdated: 1 } })
-        );
-        if (mode === 'unavailable')
-            await expect(imported).resolves.toMatchObject({
-                status: 'best-effort',
-                credentialsDisabled: true,
-            });
-        else
-            await expect(imported).rejects.toMatchObject({
-                code: 'mirror-incomplete',
-                committed: ['game'],
-            });
-        expect(common.loadGameState()._meta.lastUpdated).toBeGreaterThan(beforeTime);
-        fault.mockRestore();
-        await common.closeGameStateDatabaseForTesting();
-        vi.resetModules();
-        common = await import('../src/utils/gameState/common.js');
-        await common.ready;
-        expect(common.loadGameState().inventory.restoredProgress).toBe(97);
-        expect(common.loadGameState().github.token).toBe('SENTINEL_IMPORT_RELOAD');
-        const db = await storage.openManagedGameDB();
-        expect((await storage.readManagedGame(db)).state.inventory.restoredProgress).toBe(97);
-        db.close();
-    }
-);
+test.each([
+    ['unavailable', 'import'],
+    ['mirror-failed', 'import'],
+    ['unavailable', 'save'],
+    ['mirror-failed', 'save'],
+])('B05 %s storage: %s survives recovery/reload with a backward clock', async (mode, action) => {
+    await common.saveCredential('github', 'SENTINEL_IMPORT_RELOAD');
+    const beforeTime = common.loadGameState()._meta.lastUpdated;
+    vi.spyOn(Date, 'now').mockReturnValue(beforeTime - 10000);
+    const fault =
+        mode === 'unavailable'
+            ? vi
+                  .spyOn(storage, 'openManagedGameDB')
+                  .mockRejectedValueOnce(new Error('synthetic unavailable'))
+            : vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+                  throw new Error('synthetic mirror failure');
+              });
+    const imported =
+        action === 'import'
+            ? common.importGameStateString(
+                  JSON.stringify({ inventory: { restoredProgress: 97 }, _meta: { lastUpdated: 1 } })
+              )
+            : common.saveGameState({
+                  ...common.loadGameState(),
+                  inventory: { restoredProgress: 97 },
+              });
+    if (mode === 'unavailable')
+        await expect(imported).resolves.toMatchObject({
+            status: 'best-effort',
+            credentialsDisabled: true,
+        });
+    else
+        await expect(imported).rejects.toMatchObject({
+            code: 'mirror-incomplete',
+            committed: ['game'],
+        });
+    expect(common.loadGameState()._meta.lastUpdated).toBeGreaterThan(beforeTime);
+    fault.mockRestore();
+    await common.closeGameStateDatabaseForTesting();
+    vi.resetModules();
+    common = await import('../src/utils/gameState/common.js');
+    await common.ready;
+    expect(common.loadGameState().inventory.restoredProgress).toBe(97);
+    expect(common.loadGameState().github.token).toBe('SENTINEL_IMPORT_RELOAD');
+    const db = await storage.openManagedGameDB();
+    expect((await storage.readManagedGame(db)).state.inventory.restoredProgress).toBe(97);
+    db.close();
+});
