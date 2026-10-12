@@ -821,3 +821,84 @@ test.each([' __proto__ ', ' constructor ', ' prototype '])(
         ).toThrow('id');
     }
 );
+
+describe('K078 explicit legacy backup compatibility', () => {
+    test('adapts ordinary version-1 item null defaults in standalone and combined backups', () => {
+        const content: any = custom();
+        Object.assign(content.items[0], { price: null, unit: null, type: null });
+        for (const plan of [
+            prepareImport(content, { kind: 'custom' }),
+            prepareImport({ schemaVersion: 1, payload: { inventory: {} }, customContent: content }),
+        ]) {
+            expect(plan.customContent.items[0]).not.toHaveProperty('price');
+            expect(plan.customContent.items[0]).not.toHaveProperty('unit');
+            expect(plan.customContent.items[0]).not.toHaveProperty('type');
+        }
+        expect(content.items[0].price).toBeNull();
+        content.items[0].name = null;
+        expect(() => prepareImport(content, { kind: 'custom' })).toThrow('field-type');
+    });
+
+    test('adapts historical browser Latin-1 base64 while retaining UTF-8 and bounded validation', () => {
+        const legacy = {
+            schemaVersion: 1,
+            payload: { inventory: {}, settings: { label: 'Café £' } },
+        };
+        const text = JSON.stringify(legacy);
+        expect(prepareImport(btoa(text)).game.settings.label).toBe('Café £');
+        expect(
+            prepareImport(btoa(JSON.stringify({ inventory: {}, settings: { label: 'Café' } }))).game
+                .settings.label
+        ).toBe('Café');
+        expect(
+            prepareImport(Buffer.from(text, 'utf8').toString('base64')).game.settings.label
+        ).toBe('Café £');
+        expect(() => prepareImport(btoa(text), { limits: { jsonBytes: 10 } })).toThrow();
+        expect(() =>
+            prepareImport(btoa('{"schemaVersion":2,"payload":{"label":"Café"}}'))
+        ).toThrow();
+        expect(() => prepareImport(btoa('{"label":"Café"}'))).toThrow('utf8');
+        expect(() => prepareImport(btoa('{"inventory":{},"label":"Café","label":"x"}'))).toThrow();
+        expect(() =>
+            prepareImport(btoa('{"schemaVersion":1,"items":[{"id":"a","name":"Café"}]}'), {
+                kind: 'custom',
+            })
+        ).toThrow('utf8');
+    });
+
+    test.each(['items', 'processes', 'quests'])(
+        'treats numeric/whitespace destination %s keys as the same imported ID',
+        async (section) => {
+            const db = await initialize('CustomContent');
+            await strictTransaction(db, [section], 'readwrite', (tx: any) => {
+                for (const id of [1, ' 1 ', '1'])
+                    tx.objectStore(section).put({ id, name: 'legacy' });
+                tx.objectStore(section).put({ id: 'unrelated', name: 'keep' });
+            });
+            db.close();
+            const plan = await preflightCustomImport();
+            const content: any = { items: [], processes: [], quests: [] };
+            content[section] = [{ id: '1', name: 'replacement' }];
+            await expect(
+                commitCustomImport(plan.db, content, plan.snapshot, false)
+            ).rejects.toThrow('custom-conflict');
+            let fresh = await preflightCustomImport();
+            expect(fresh.snapshot[section]).toEqual(plan.snapshot[section]);
+            expect(fresh.snapshot.revision).toBe(plan.snapshot.revision);
+            fresh.db.close();
+            await commitCustomImport(plan.db, content, plan.snapshot, true);
+            fresh = await preflightCustomImport();
+            expect(fresh.snapshot[section]).toEqual([
+                { id: '1', name: 'replacement' },
+                { id: 'unrelated', name: 'keep' },
+            ]);
+            // Reapplying overwrite is idempotent with respect to logical records.
+            await commitCustomImport(fresh.db, content, fresh.snapshot, true);
+            fresh.db.close();
+            const final = await preflightCustomImport();
+            expect(final.snapshot[section]).toHaveLength(2);
+            final.db.close();
+            plan.db.close();
+        }
+    );
+});

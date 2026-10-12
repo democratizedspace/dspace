@@ -146,12 +146,20 @@
         };
     });
 
+    const resetBackupList = () => {
+        backupRefreshSequence += 1;
+        backups = [];
+        backupError = '';
+        refreshing = false;
+    };
+
     const saveToken = async () => {
         const trimmedToken = token.trim();
         if (!isValidGitHubToken(trimmedToken)) {
             announce('GitHub token looks invalid', 'error');
             return;
         }
+        resetBackupList();
         savingToken = true;
         try {
             await saveGitHubToken(trimmedToken);
@@ -172,11 +180,8 @@
     };
 
     const clearTokenLocal = async () => {
-        backupRefreshSequence += 1;
+        resetBackupList();
         token = '';
-        backups = [];
-        backupError = '';
-        refreshing = false;
         clearingToken = true;
         try {
             await clearGitHubToken();
@@ -306,6 +311,7 @@
                     id="token"
                     type="password"
                     bind:value={token}
+                    on:input={resetBackupList}
                     autocapitalize="none"
                     spellcheck={false}
                     autocomplete="new-password"

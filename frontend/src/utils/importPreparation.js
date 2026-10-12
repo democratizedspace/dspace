@@ -543,6 +543,11 @@ function normalizeCustom(raw, limits, origin) {
             ]) {
                 if (
                     entity[field] !== undefined &&
+                    !(
+                        section === 'items' &&
+                        ['price', 'unit', 'type'].includes(field) &&
+                        entity[field] === null
+                    ) &&
                     typeof entity[field] !== 'string' &&
                     !(typeof entity[field] === 'number' && ['price', 'duration'].includes(field))
                 )
@@ -752,6 +757,10 @@ function normalizeCustom(raw, limits, origin) {
         next[section].forEach((entity, index) => {
             Object.assign(entity, structuredClone(changes[section][index]));
             delete entity.imageBlob;
+            // Version 1 item creation persisted absent optional fields as null.
+            if (section === 'items')
+                for (const field of ['price', 'unit', 'type'])
+                    if (entity[field] === null) delete entity[field];
         });
     }
     next.counts = Object.fromEntries(
@@ -767,24 +776,41 @@ export function prepareImport(
 ) {
     const limits = { ...IMPORT_LIMITS, ...overrides };
     let raw = input;
+    let legacyLatin1 = false;
     if (typeof input === 'string') {
         cap(input.length, limits.transportBytes, 'transport-bytes');
         cap(bytes(input), limits.transportBytes, 'transport-bytes');
         let text = input.trim();
         if (!/^[{["\-0-9tfn]/.test(text)) {
+            const decoded = decodeImportBase64(text, limits.jsonBytes);
             try {
-                text = new TextDecoder('utf-8', { fatal: true }).decode(
-                    decodeImportBase64(text, limits.jsonBytes)
-                );
-            } catch (error) {
-                if (error instanceof ImportPreparationError) throw error;
-                failImport('utf8');
+                text = new TextDecoder('utf-8', { fatal: true }).decode(decoded);
+            } catch {
+                // The previous browser game exporter used btoa(JSON.stringify(...)).
+                // Adapt those byte-valued strings only for recognized legacy game shapes.
+                if (kind !== 'game') failImport('utf8');
+                legacyLatin1 = true;
+                const chunks = [];
+                for (let offset = 0; offset < decoded.length; offset += 4096)
+                    chunks.push(String.fromCharCode(...decoded.subarray(offset, offset + 4096)));
+                text = chunks.join('');
             }
         }
         raw = parseImportJSON(text, limits);
     }
     inspectGraph(raw, limits);
     if (!record(raw)) failImport('root');
+    if (
+        legacyLatin1 &&
+        !(
+            (raw.schemaVersion === 1 && record(raw.payload)) ||
+            (!('schemaVersion' in raw) &&
+                ['inventory', 'quests', 'processes', 'itemContainerCounts', 'settings'].some(
+                    (field) => record(raw[field])
+                ))
+        )
+    )
+        failImport('utf8');
     // Graph inspection charges exact serialized bytes without invoking serialization hooks.
     if (kind === 'custom')
         return freezeImport({ customContent: normalizeCustom(raw, limits, origin) });

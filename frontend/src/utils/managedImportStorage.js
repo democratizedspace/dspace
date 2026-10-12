@@ -435,7 +435,26 @@ export function commitCustomImport(db, content, expected, overwriteExisting) {
                     if (++count !== 3) return;
                     for (const section of ['items', 'processes', 'quests']) {
                         const store = tx.objectStore(section);
+                        const destinationKeys = new Map();
+                        for (const record of expected[section]) {
+                            if (typeof record.id !== 'string' && typeof record.id !== 'number')
+                                continue;
+                            const normalized = String(record.id).trim();
+                            const keys = destinationKeys.get(normalized) || [];
+                            keys.push(record.id);
+                            destinationKeys.set(normalized, keys);
+                        }
                         for (const entity of content[section]) {
+                            const existingKeys = destinationKeys.get(entity.id) || [];
+                            if (existingKeys.length && !overwriteExisting) {
+                                abort('custom-conflict');
+                                return;
+                            }
+                            // Overwrite replaces every alias of this logical ID atomically,
+                            // so legacy numeric/whitespace keys cannot survive as duplicates.
+                            for (const key of existingKeys)
+                                if (key !== entity.id)
+                                    store.delete(key).onerror = () => abort('custom-conflict');
                             const write = overwriteExisting
                                 ? store.put(structuredClone(entity))
                                 : store.add(structuredClone(entity));

@@ -320,4 +320,50 @@ describe('Cloud Sync token save flow', () => {
         await fireEvent.click(download);
         await waitFor(() => expect(getByTestId('sync-error')).toHaveTextContent(message));
     });
+
+    it.each([false, true])(
+        'invalidates old-account backup lists and in-flight refreshes before a failed credential switch (pending=%s)',
+        async (pending) => {
+            const oldToken = `ghp_${'o'.repeat(36)}`;
+            const newToken = `ghp_${'n'.repeat(36)}`;
+            const oldBackups = [
+                {
+                    id: 'old-account',
+                    filename: 'Old account backup',
+                    htmlUrl: 'https://example.invalid/old',
+                    createdAt: '2026-10-12T00:00:00Z',
+                },
+            ];
+            let resolveOld!: (rows: unknown[]) => void;
+            loadGitHubTokenMock.mockResolvedValue(oldToken);
+            fetchBackupListMock.mockReturnValue(
+                pending
+                    ? new Promise((resolve) => {
+                          resolveOld = resolve;
+                      })
+                    : Promise.resolve(oldBackups)
+            );
+            validateTokenMock.mockRejectedValueOnce(new Error('validation failed'));
+            const { getByLabelText, getByTestId, queryByTestId } = render(Syncer);
+            await waitFor(() => expect(fetchBackupListMock).toHaveBeenCalledWith(oldToken));
+            if (!pending)
+                await waitFor(() =>
+                    expect(getByTestId('backup-link-old-account')).toBeInTheDocument()
+                );
+            await fireEvent.input(getByLabelText(/GitHub Token/i), { target: { value: newToken } });
+            expect(queryByTestId('backup-link-old-account')).not.toBeInTheDocument();
+            await fireEvent.click(getByTestId('save-token'));
+            await waitFor(() =>
+                expect(getByTestId('sync-error')).toHaveTextContent(
+                    'Saved credentials were not cleared'
+                )
+            );
+            if (pending) {
+                resolveOld(oldBackups);
+                await Promise.resolve();
+            }
+            expect(queryByTestId('backup-link-old-account')).not.toBeInTheDocument();
+            expect(clearGitHubTokenMock).not.toHaveBeenCalled();
+        }
+    );
 });

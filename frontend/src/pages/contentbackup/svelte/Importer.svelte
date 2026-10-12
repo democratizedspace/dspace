@@ -32,28 +32,6 @@
 
     $: statusTone = status === 'success' ? 'success' : status === 'error' ? 'error' : '';
 
-    const updateAssets = (assetId, updates) => {
-        assets = assets.map((asset) =>
-            asset.id === assetId
-                ? {
-                      ...asset,
-                      ...updates,
-                  }
-                : asset
-        );
-    };
-
-    const formatAssetLabel = (label) => {
-        if (!label) {
-            return '';
-        }
-
-        return label
-            .replace(/Item:\s*/i, 'Item ')
-            .replace(/Process:\s*/i, 'Process ')
-            .replace(/Quest:\s*/i, 'Quest ');
-    };
-
     const isValidBackupFile = (file) => {
         if (!file) {
             return false;
@@ -82,18 +60,12 @@
         try {
             const result = await restoreCustomContentBackupFromFile(file, {
                 onProgress: (event) => {
-                    if (event.type === 'plan') {
-                        assets = event.assets.map((asset) => ({
-                            id: asset.id,
-                            label: asset.label,
-                            status: 'pending',
+                    if (event.type === 'complete') {
+                        assets = ['items', 'processes', 'quests', 'images'].map((section) => ({
+                            id: section,
+                            label: `${section}: ${event.counts[section]}`,
+                            status: 'done',
                         }));
-                    }
-                    if (event.type === 'asset') {
-                        updateAssets(event.assetId, { status: 'done' });
-                    }
-                    if (event.type === 'error') {
-                        updateAssets(event.assetId, { status: 'error' });
                     }
                 },
             });
@@ -163,7 +135,7 @@
                 {#each assets as asset}
                     <div class="progress-item" data-status={asset.status}>
                         <div class="progress-header">
-                            <span>{formatAssetLabel(asset.label)}</span>
+                            <span>{asset.label}</span>
                             <span class="status-label">
                                 {asset.status === 'done'
                                     ? 'Done'
