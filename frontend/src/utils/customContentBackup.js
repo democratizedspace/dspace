@@ -1,6 +1,11 @@
 import { getItems, getProcesses, getQuests, openCustomContentDB } from './indexeddb.js';
 import { isBrowser } from './ssr.js';
-import { prepareImport, prepareImportFile } from './importPreparation.js';
+import {
+    prepareImport,
+    prepareImportFile,
+    inspectRaster,
+    IMPORT_LIMITS,
+} from './importPreparation.js';
 import {
     serializeManagedMutation,
     preflightCustomImport,
@@ -80,7 +85,7 @@ function buildBackupPlan(items, processes, quests) {
             label: formatAssetLabel('item', item),
             entity: item,
         });
-        if (item?.image || item?.imageBlob) {
+        if ((item?.image && item.image !== '/favicon.ico') || item?.imageBlob) {
             assets.push({
                 id: `item-image:${item.id}`,
                 kind: 'item-image',
@@ -106,7 +111,7 @@ function buildBackupPlan(items, processes, quests) {
             label: formatAssetLabel('quest', quest),
             entity: quest,
         });
-        if (quest?.image || quest?.imageBlob) {
+        if ((quest?.image && quest.image !== '/favicon.ico') || quest?.imageBlob) {
             assets.push({
                 id: `quest-image:${quest.id}`,
                 kind: 'quest-image',
@@ -269,6 +274,7 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
     const exportedQuests = new Map();
     const exportedProcesses = [];
     const images = [];
+    const imageTotals = { bytes: 0, pixels: 0 };
 
     for (const asset of plan) {
         try {
@@ -283,21 +289,27 @@ export async function buildCustomContentBackupData({ onProgress } = {}) {
                 if (!dataUrl) {
                     throw new Error('Missing item image data.');
                 }
+                if (images.length >= IMPORT_LIMITS.images)
+                    throw new Error('Image budget exceeded.');
+                const validatedDataUrl = inspectRaster(dataUrl, IMPORT_LIMITS, imageTotals);
                 const target = exportedItems.get(asset.entity.id) ?? sanitizeEntity(asset.entity);
                 // Image records are the single exported raster representation.
                 delete target.image;
                 exportedItems.set(asset.entity.id, target);
-                images.push(buildImageRecord('item', asset.entity.id, dataUrl));
+                images.push(buildImageRecord('item', asset.entity.id, validatedDataUrl));
             } else if (asset.kind === 'quest-image') {
                 const dataUrl = await resolveImageData(asset.entity);
                 if (!dataUrl) {
                     throw new Error('Missing quest image data.');
                 }
+                if (images.length >= IMPORT_LIMITS.images)
+                    throw new Error('Image budget exceeded.');
+                const validatedDataUrl = inspectRaster(dataUrl, IMPORT_LIMITS, imageTotals);
                 const target = exportedQuests.get(asset.entity.id) ?? sanitizeEntity(asset.entity);
                 // Image records are the single exported raster representation.
                 delete target.image;
                 exportedQuests.set(asset.entity.id, target);
-                images.push(buildImageRecord('quest', asset.entity.id, dataUrl));
+                images.push(buildImageRecord('quest', asset.entity.id, validatedDataUrl));
             }
 
             emitProgress(onProgress, { type: 'asset', assetId: asset.id });

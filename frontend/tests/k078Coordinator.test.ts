@@ -1692,3 +1692,93 @@ test.each([
     expect(issued).toHaveBeenCalled();
     expect(issuanceLockStates.every(Boolean)).toBe(true);
 });
+
+test('B05 completed upload retains its remote receipt when local mirroring fails', async () => {
+    const next = common.loadGameState();
+    next.cloudSync = { gistId: 'old-synthetic-gist' };
+    await common.saveGameState(next);
+    const gist = await import('../src/lib/cloudsync/githubGists');
+    const create = vi.spyOn(gist, 'createBackupGist').mockResolvedValue({ id: 'uploaded-once' });
+    vi.spyOn(storage, 'mirrorManagedGame').mockImplementationOnce(() => {
+        throw new Error('synthetic quota');
+    });
+    const cloud = await import('../src/utils/cloudSync.js');
+    await expect(cloud.uploadGameStateToGist('synthetic')).resolves.toMatchObject({
+        id: 'uploaded-once',
+        localWarning: 'mirror-incomplete',
+    });
+    expect(create).toHaveBeenCalledTimes(1);
+    const db = await storage.openManagedGameDB();
+    expect((await storage.readManagedGame(db)).state.cloudSync.gistId).toBe('');
+    db.close();
+});
+
+test.each(
+    ['animated-png', 'animated-gif', 'animated-webp'].flatMap((format) =>
+        ['items', 'quests'].flatMap((section) =>
+            ['data', 'blob', 'fetch'].map((representation) => ({ format, section, representation }))
+        )
+    )
+)(
+    'A03 incompatible export media fails before backup or upload success: %j',
+    async ({ format, section, representation }) => {
+        const { default: rasters } = await import('./fixtures/k078Rasters.json');
+        const dataUrl = (rasters as Record<string, string>)[format];
+        const binary = Uint8Array.from(atob(dataUrl.split(',')[1]), (c) => c.charCodeAt(0));
+        const blob = new Blob([binary], { type: dataUrl.slice(5, dataUrl.indexOf(';')) });
+        const image =
+            representation === 'data'
+                ? { image: dataUrl }
+                : representation === 'blob'
+                  ? { imageBlob: blob }
+                  : { image: '/synthetic-image.png' };
+        if (representation === 'fetch')
+            vi.stubGlobal(
+                'fetch',
+                vi.fn(async () => ({ ok: true, blob: async () => blob }))
+            );
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, [section], 'readwrite', (tx: any) =>
+            tx.objectStore(section).put({ id: 'synthetic-media', ...image })
+        );
+        custom.db.close();
+        const backup = await import('../src/utils/customContentBackup.js');
+        const events: any[] = [];
+        await expect(
+            backup.buildCustomContentBackupData({ onProgress: (event: any) => events.push(event) })
+        ).rejects.toThrow('Backup export failed');
+        expect(events.at(-1)).toEqual({ type: 'error', error: 'backup-export-failed' });
+        const gist = await import('../src/lib/cloudsync/githubGists');
+        const create = vi.spyOn(gist, 'createBackupGist');
+        const cloud = await import('../src/utils/cloudSync.js');
+        await expect(cloud.uploadGameStateToGist('synthetic')).rejects.toThrow(
+            'Backup export failed'
+        );
+        expect(create).not.toHaveBeenCalled();
+    }
+);
+
+test.each(['png', 'jpeg', 'gif', 'webp', 'fallback'])(
+    'A03 compatible %s export media remains restorable',
+    async (format) => {
+        const { default: rasters } = await import('./fixtures/k078Rasters.json');
+        const image =
+            format === 'fallback' ? '/favicon.ico' : (rasters as Record<string, string>)[format];
+        const custom = await storage.preflightCustomImport();
+        await storage.strictTransaction(custom.db, ['items', 'quests'], 'readwrite', (tx: any) => {
+            tx.objectStore('items').put({ id: 'static-item', image });
+            tx.objectStore('quests').put({ id: 'static-quest', image });
+        });
+        custom.db.close();
+        const backup = await import('../src/utils/customContentBackup.js');
+        const prepared = await import('../src/utils/importPreparation.js');
+        const data = await backup.buildCustomContentBackupData();
+        expect(prepared.prepareImport(data, { kind: 'custom' }).customContent.items[0].image).toBe(
+            image
+        );
+        expect(prepared.prepareImport(data, { kind: 'custom' }).customContent.quests[0].image).toBe(
+            image
+        );
+        expect(fetch).not.toHaveBeenCalled();
+    }
+);

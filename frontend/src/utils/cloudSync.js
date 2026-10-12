@@ -15,15 +15,6 @@ import {
 } from '../lib/cloudsync/githubGists';
 import { buildCustomContentBackupData } from './customContentBackup.js';
 
-const buildCloudSyncCustomContent = async () => {
-    try {
-        return await buildCustomContentBackupData();
-    } catch (error) {
-        console.warn('Failed to build custom content backup for cloud sync:', error);
-        return null;
-    }
-};
-
 async function loadCloudGistId() {
     await ready;
     const state = loadGameState();
@@ -45,7 +36,7 @@ async function uploadGameStateToGist(token) {
     }
     await ready;
     const state = loadGameState();
-    const customContent = await buildCloudSyncCustomContent();
+    const customContent = await buildCustomContentBackupData();
     const content = exportGameStateString({
         providerHint: 'github-gist',
         stateOverride: state,
@@ -56,7 +47,17 @@ async function uploadGameStateToGist(token) {
         content,
         description: BACKUP_DESCRIPTION,
     });
-    await clearCloudGistId();
+    try {
+        await clearCloudGistId();
+    } catch (error) {
+        // The remote backup already exists. A local bookkeeping/mirror failure
+        // must not turn success into a retry that creates another remote backup.
+        return {
+            ...result,
+            localWarning:
+                error?.code === 'mirror-incomplete' ? 'mirror-incomplete' : 'save-incomplete',
+        };
+    }
     return result;
 }
 

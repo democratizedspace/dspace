@@ -11,6 +11,7 @@ const fetchBackupListMock = vi.fn();
 const validateTokenMock = vi.fn();
 const initializeCustomMock = vi.fn();
 const downloadMock = vi.fn();
+const uploadMock = vi.fn();
 vi.mock('../../../utils/indexeddb.js', () => ({
     initializeCustomContentForImportUI: (...args: unknown[]) => initializeCustomMock(...args),
 }));
@@ -27,7 +28,7 @@ vi.mock('../../../utils/cloudSync.js', () => ({
     clearCloudGistId: (...args: unknown[]) => clearCloudGistIdMock(...args),
     downloadGameStateFromGist: (...args: unknown[]) => downloadMock(...args),
     fetchBackupList: (...args: unknown[]) => fetchBackupListMock(...args),
-    uploadGameStateToGist: vi.fn(),
+    uploadGameStateToGist: (...args: unknown[]) => uploadMock(...args),
 }));
 
 vi.mock('../../../lib/cloudsync/githubGists', () => ({
@@ -44,11 +45,37 @@ describe('Cloud Sync token save flow', () => {
         validateTokenMock.mockResolvedValue(true);
         initializeCustomMock.mockResolvedValue(undefined);
         downloadMock.mockResolvedValue(undefined);
+        uploadMock.mockResolvedValue({ id: 'synthetic-upload' });
     });
 
     afterEach(() => {
         vi.clearAllMocks();
         delete (window as typeof window & { __cloudSyncReady?: boolean }).__cloudSyncReady;
+    });
+
+    it('keeps a successful upload visible when local mirroring reports a warning', async () => {
+        loadGitHubTokenMock.mockResolvedValue('ghp_' + 'S'.repeat(36));
+        uploadMock.mockResolvedValue({
+            id: 'uploaded-once',
+            filename: 'synthetic-backup',
+            localWarning: 'mirror-incomplete',
+        });
+        const { getByRole, getByTestId, queryByTestId, getByText } = render(Syncer);
+        await waitFor(() =>
+            expect(getByRole('button', { name: 'Upload', exact: true })).toBeEnabled()
+        );
+        clearCloudGistIdMock
+            .mockClear()
+            .mockRejectedValue(new Error('must not repeat local cleanup'));
+        await fireEvent.click(getByRole('button', { name: 'Upload', exact: true }));
+        await waitFor(() =>
+            expect(getByTestId('sync-success')).toHaveTextContent('Upload successful')
+        );
+        expect(getByTestId('upload-local-warning')).toHaveTextContent('do not repeat the upload');
+        expect(queryByTestId('sync-error')).toBeNull();
+        expect(getByText('synthetic-backup')).toBeInTheDocument();
+        expect(uploadMock).toHaveBeenCalledTimes(1);
+        expect(clearCloudGistIdMock).not.toHaveBeenCalled();
     });
 
     it('resets the global readiness flag on remount until the current startup finishes', async () => {

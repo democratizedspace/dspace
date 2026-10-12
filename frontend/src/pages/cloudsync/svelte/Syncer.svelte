@@ -47,6 +47,7 @@
     let savingToken = false;
     let clearingToken = false;
     let uploading = false;
+    let uploadWarning = '';
     let downloading = false;
     let downloadingId = '';
     let refreshing = false;
@@ -201,12 +202,15 @@
             announce('GitHub token looks invalid', 'error');
             return;
         }
+        uploadWarning = '';
         uploading = true;
         try {
             const result = await uploadGameStateToGist(trimmedToken);
             gistId = '';
-            await clearCloudGistId();
             announce('Upload successful', 'success');
+            if (result?.localWarning)
+                uploadWarning =
+                    'Your backup was uploaded, but local backup settings were not fully saved. Reload to reconcile local storage; do not repeat the upload for this warning.';
             if (result?.id) {
                 backups = [result, ...backups];
             }
@@ -400,6 +404,11 @@
                 {message}
             </p>
         {/if}
+        {#if uploadWarning}
+            <p class="message warning" role="status" data-testid="upload-local-warning">
+                {uploadWarning}
+            </p>
+        {/if}
         <section class="backups">
             <div class="backups-header">
                 <h3>Backups</h3>
@@ -505,6 +514,10 @@
     }
     .message {
         color: #90ee90;
+    }
+
+    .message.warning {
+        color: #ffd479;
     }
 
     .message.error {
