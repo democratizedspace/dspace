@@ -1,6 +1,9 @@
 <script>
     import { onMount } from 'svelte';
     import { initializeCustomContentForImportUI } from '../../../utils/indexeddb.js';
+    import Chip from '../../../components/svelte/Chip.svelte';
+    import { restoreCustomContentBackupFromFile } from '../../../utils/customContentBackup.js';
+
     let destinationReady = Promise.resolve(false);
     onMount(() => {
         destinationReady = initializeCustomContentForImportUI().then(
@@ -8,8 +11,6 @@
             () => false
         );
     });
-    import Chip from '../../../components/svelte/Chip.svelte';
-    import { restoreCustomContentBackupFromFile } from '../../../utils/customContentBackup.js';
 
     const fileInputId = 'custom-content-backup-file';
     const dropzoneLabelId = 'custom-content-backup-dropzone-label';

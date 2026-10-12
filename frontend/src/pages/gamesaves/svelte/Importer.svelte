@@ -1,6 +1,13 @@
 <script>
     import { onMount } from 'svelte';
     import { initializeCustomContentForImportUI } from '../../../utils/indexeddb.js';
+    import Chip from '../../../components/svelte/Chip.svelte';
+    import {
+        importGameStateString,
+        recoverImportGameState,
+        getImportRecoveryStatus,
+    } from '../../../utils/gameState/common.js';
+
     let destinationReady = Promise.resolve(false);
     onMount(() => {
         destinationReady = initializeCustomContentForImportUI().then(
@@ -8,12 +15,6 @@
             () => false
         );
     });
-    import Chip from '../../../components/svelte/Chip.svelte';
-    import {
-        importGameStateString,
-        recoverImportGameState,
-        getImportRecoveryStatus,
-    } from '../../../utils/gameState/common.js';
 
     let importString = '';
 
