@@ -1043,3 +1043,68 @@ test.each(['unavailable', 'mirror-failed'])(
         db.close();
     }
 );
+
+test.each([false, true])(
+    'B03 overlapping gameplay advances a committed predecessor despite mirror failure (both=%s)',
+    async (both) => {
+        const mirror = vi.spyOn(storage, 'mirrorManagedGame');
+        const fail = () => {
+            throw new Error('synthetic quota');
+        };
+        if (both) mirror.mockImplementation(fail);
+        else mirror.mockImplementationOnce(fail);
+        const first = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { mirrorQueue: 801 },
+        });
+        const firstFailure = expect(first).rejects.toMatchObject({
+            code: 'mirror-incomplete',
+            committed: ['game'],
+        });
+        const second = common.saveGameState({
+            ...common.loadGameState(),
+            inventory: { mirrorQueue: 802 },
+        });
+        const secondResult = both
+            ? expect(second).rejects.toMatchObject({
+                  code: 'mirror-incomplete',
+                  committed: ['game'],
+              })
+            : expect(second).resolves.toMatchObject({ status: 'complete' });
+        await Promise.all([firstFailure, secondResult]);
+        const db = await storage.openManagedGameDB();
+        expect((await storage.readManagedGame(db)).state.inventory.mirrorQueue).toBe(802);
+        expect(common.loadGameState().inventory.mirrorQueue).toBe(802);
+        db.close();
+    }
+);
+
+test.each([
+    { rewards: [{ id: 'unknown-synthetic-item', count: 1 }], code: 'unresolved-reference' },
+    { rewards: [{ id: 'reward-item', count: '2' }], code: 'reference-count' },
+    { rewards: [{ id: 'reward-item', count: -1 }], code: 'reference-count' },
+    { rewards: [{ id: 'reward-item' }], code: 'reference-count' },
+    { rewards: [{ id: 'reward-item', count: null }], code: 'reference-count' },
+    { rewards: { id: 'reward-item', count: 1 }, code: 'reference-type' },
+])('A04 rejects malformed quest rewards before any writes (%j)', async ({ rewards, code }) => {
+    const before = common.loadGameState();
+    const commit = vi.spyOn(storage, 'commitManagedGame');
+    await expect(
+        common.importGameStateString(
+            JSON.stringify({
+                schemaVersion: 1,
+                payload: { inventory: { shouldNotImport: 1 } },
+                customContent: {
+                    schemaVersion: 1,
+                    items: [{ id: 'reward-item', name: 'Synthetic reward' }],
+                    quests: [{ id: 'reward-quest', rewards }],
+                },
+            })
+        )
+    ).rejects.toMatchObject({ code });
+    expect(commit).not.toHaveBeenCalled();
+    expect(common.loadGameState()).toEqual(before);
+    const custom = await storage.preflightCustomImport();
+    expect(custom.snapshot.quests).toHaveLength(0);
+    custom.db.close();
+});

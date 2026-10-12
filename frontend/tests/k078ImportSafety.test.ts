@@ -663,3 +663,15 @@ test.each(['root', 'nested', 'array'])(
         expect(getter).not.toHaveBeenCalled();
     }
 );
+
+test('A04 quest rewards normalize known item references and finite nonnegative counts', () => {
+    const plan = prepareImport(
+        {
+            schemaVersion: 1,
+            items: [{ id: 700001, name: 'Synthetic reward' }],
+            quests: [{ id: 'reward-quest', rewards: [{ id: 700001, count: 2 }] }],
+        },
+        { kind: 'custom' }
+    );
+    expect(plan.customContent.quests[0].rewards).toEqual([{ id: '700001', count: 2 }]);
+});

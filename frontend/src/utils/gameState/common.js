@@ -770,7 +770,14 @@ export const saveGameState = async (newState, { deliberateKind } = {}) => {
                     );
                 if (canAdvance) capturedEpochs = structuredClone(dependency.authority);
             }
-            if (predecessor) await predecessor.promise;
+            if (predecessor) {
+                try {
+                    await predecessor.promise;
+                } catch (error) {
+                    // A strict transaction receipt remains usable when only its mirrors failed.
+                    if (!predecessor.order) throw error;
+                }
+            }
             const completed = [...credentialDependencies, ...(predecessor ? [predecessor] : [])]
                 .filter((entry) => entry.order)
                 .sort((a, b) => b.order - a.order)[0];

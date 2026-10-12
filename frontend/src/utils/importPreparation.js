@@ -621,6 +621,7 @@ function normalizeCustom(raw, limits, origin) {
                 'grantsItems',
             ])
                 links(entity, change, field, itemIds, true);
+            if (section === 'quests') links(entity, change, 'rewards', itemIds, true);
             links(entity, change, 'requiresQuests', questIds);
             links(entity, change, 'dependencies', itemIds);
             if (entity.dialogue !== undefined) {
