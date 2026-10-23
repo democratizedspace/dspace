@@ -272,13 +272,26 @@ async function installSuccessfulRelay(
                     'content-type': 'application/json',
                     'x-dspace-correlation-token': 'bounded-smoke-correlation',
                 },
-                body: '{"accepted":true}',
+                body: JSON.stringify({
+                    accepted: true,
+                    retrieval_credential: 'smoke-retrieval-proof',
+                }),
             });
         } else if (operation === 'retrieve') {
+            expect(payload.retrieval_credential).toBe('smoke-retrieval-proof');
+            if (payload.acknowledgement_token)
+                expect(payload.acknowledgement_token).toBe('smoke-acknowledgement-proof');
             await route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify(await encryptedResponse(payload)),
+                body: JSON.stringify(
+                    payload.acknowledgement_token
+                        ? { status: 'acknowledged' }
+                        : {
+                              ...(await encryptedResponse(payload)),
+                              acknowledgement_token: 'smoke-acknowledgement-proof',
+                          }
+                ),
             });
         } else if (operation === 'complete') {
             await route.fulfill({
@@ -568,6 +581,7 @@ test.describe('release-aware remote chat smoke', () => {
             expect(evidence.paths.filter((path) => path !== 'complete')).toEqual([
                 'select',
                 'dispatch',
+                'retrieve',
                 'retrieve',
             ]);
         }

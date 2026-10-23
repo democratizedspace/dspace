@@ -123,12 +123,22 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify({ accepted: true }),
+            body: JSON.stringify({ accepted: true, retrieval_credential: 'e2e-retrieval-proof' }),
         });
     });
 
     await page.route('https://token.place/api/v1/relay/responses/retrieve', async (route) => {
         const body = JSON.parse(route.request().postData() || '{}');
+        expect(body.retrieval_credential).toBe('e2e-retrieval-proof');
+        if (body.acknowledgement_token) {
+            expect(body.acknowledgement_token).toBe('e2e-acknowledgement-proof');
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ status: 'acknowledged' }),
+            });
+            return;
+        }
         const encrypted = await encryptRelayEnvelope(
             {
                 protocol: 'tokenplace_api_v1_relay_e2ee',
@@ -142,7 +152,10 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify(encrypted),
+            body: JSON.stringify({
+                ...encrypted,
+                acknowledgement_token: 'e2e-acknowledgement-proof',
+            }),
         });
     });
 

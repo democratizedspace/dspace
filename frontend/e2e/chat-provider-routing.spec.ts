@@ -105,7 +105,7 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify({ accepted: true }),
+            body: JSON.stringify({ accepted: true, retrieval_credential: 'e2e-retrieval-proof' }),
         });
     });
     await page.route(`${origin}/api/v1/relay/responses/retrieve`, async (route) => {
@@ -117,6 +117,16 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
             headers: request.headers(),
             body,
         });
+        expect(body.retrieval_credential).toBe('e2e-retrieval-proof');
+        if (body.acknowledgement_token) {
+            expect(body.acknowledgement_token).toBe('e2e-acknowledgement-proof');
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ status: 'acknowledged' }),
+            });
+            return;
+        }
         const encrypted = await encryptRelayEnvelope(
             {
                 protocol: 'tokenplace_api_v1_relay_e2ee',
@@ -130,7 +140,10 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify(encrypted),
+            body: JSON.stringify({
+                ...encrypted,
+                acknowledgement_token: 'e2e-acknowledgement-proof',
+            }),
         });
     });
     return requests;
@@ -268,6 +281,7 @@ test.describe('Chat provider routing', () => {
         expect(requestUrls.map((url) => `${url.origin}${url.pathname}`)).toEqual([
             'https://token.place/api/v1/relay/servers/next',
             'https://token.place/api/v1/relay/requests',
+            'https://token.place/api/v1/relay/responses/retrieve',
             'https://token.place/api/v1/relay/responses/retrieve',
         ]);
         expect(requestUrls[0].searchParams.get('context_tier')).toMatch(/^(8k-fast|64k-full)$/);

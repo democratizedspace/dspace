@@ -330,7 +330,12 @@ const TOKEN_PLACE_PAYLOAD_KEYS: Record<string, Set<string>> = {
         'auth_tag',
         'cancel_token',
     ]),
-    retrieve: new Set(['client_public_key', 'request_id']),
+    retrieve: new Set([
+        'client_public_key',
+        'request_id',
+        'retrieval_credential',
+        'acknowledgement_token',
+    ]),
     // correlationToken is required for complete; it proves a server-observed dispatch happened.
     // durationSeconds is accepted (ignored; duration is server-derived from dispatch timestamp).
     complete: new Set(['outcome', 'durationSeconds', 'correlationToken']),
@@ -364,6 +369,17 @@ const validateTokenPlaceRelayPayload = (operation: string, payload: unknown) => 
     }
     for (const key of Object.keys(payload)) {
         if (!allowedKeys.has(key) || TOKEN_PLACE_PROHIBITED_PAYLOAD_KEYS.has(key)) return false;
+    }
+    if (operation === 'retrieve') {
+        const body = payload as Record<string, unknown>;
+        return (
+            ['client_public_key', 'request_id', 'retrieval_credential'].every(
+                (key) => typeof body[key] === 'string' && (body[key] as string).trim().length > 0
+            ) &&
+            (body.acknowledgement_token === undefined ||
+                (typeof body.acknowledgement_token === 'string' &&
+                    body.acknowledgement_token.trim().length > 0))
+        );
     }
     if (operation === 'complete') {
         // correlationToken is required; it proves a server-observed dispatch happened before this
