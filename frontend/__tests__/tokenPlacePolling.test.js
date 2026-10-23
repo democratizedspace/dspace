@@ -16,7 +16,11 @@ const { pollTokenPlaceRelayResponse } = await import('../src/utils/tokenPlace.js
 const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
 const { recordDependencyRequest } = await import('../src/utils/metrics.js');
 const pending = () => new Promise(() => {});
-const body = { client_public_key: 'fixture-client', request_id: 'fixture-request' };
+const body = {
+    client_public_key: 'fixture-client',
+    request_id: 'fixture-request',
+    retrieval_credential: 'fixture-proof',
+};
 const startPolling = (options = {}) => {
     const observed = { result: undefined, error: undefined };
     pollTokenPlaceRelayResponse('https://relay.invalid', body, {
@@ -106,7 +110,11 @@ describe('token.place polling deadlines', () => {
         expect(observed.error).toMatchObject({ status: 408 });
         const cancellation = fetch.mock.calls.find(([url]) => url.endsWith('/cancel'));
         expect(cancellation).toBeDefined();
-        expect(JSON.parse(cancellation[1].body)).toEqual({ cancel_token: 'fixture-cancel' });
+        expect(JSON.parse(cancellation[1].body)).toEqual({
+            client_public_key: body.client_public_key,
+            request_id: body.request_id,
+            cancel_token: 'fixture-cancel',
+        });
         await vi.advanceTimersByTimeAsync(1000);
         expect(cancellation[1].signal.aborted).toBe(true);
         expect(vi.getTimerCount()).toBe(0);

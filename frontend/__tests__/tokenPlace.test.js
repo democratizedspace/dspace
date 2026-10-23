@@ -63,8 +63,10 @@ const makeRelayFetch = ({
     resolvedModel,
     replyForRetrieve = null,
     dispatchCorrelationValue = null,
-    dispatchJson = () => Promise.resolve({ accepted }),
+    dispatchJson = () => Promise.resolve({ accepted, retrieval_credential: 'fixture-proof' }),
     extraSelectionData = {},
+    envelopeOverrides = {},
+    responseOverrides = {},
 } = {}) => {
     let retrieveCount = 0;
     let selectionCount = 0;
@@ -123,16 +125,17 @@ const makeRelayFetch = ({
                                   : null,
                       }
                     : undefined,
-                json: dispatchJson,
+                json: () => dispatchJson(JSON.parse(init.body)),
             };
         }
         if (urlPathEndsWith(url, '/api/v1/relay/responses/retrieve')) {
+            const body = JSON.parse(init.body);
+            if (body.acknowledgement_token) return okResponse({ status: 'acknowledged' });
             const status = retrieveStatuses[Math.min(retrieveCount, retrieveStatuses.length - 1)];
             retrieveCount += 1;
             if (status === 202) return { ok: false, status: 202, json: () => Promise.resolve({}) };
             if (status === 404 || status === 410)
                 return { ok: false, status, json: () => Promise.resolve({ message: 'gone' }) };
-            const body = JSON.parse(init.body);
             const clientPublicPem = decodeBase64Text(body.client_public_key);
             const encrypted = await encryptTokenPlaceEnvelope(
                 {
@@ -143,13 +146,20 @@ const makeRelayFetch = ({
                     api_v1_response: replyForRetrieve
                         ? replyForRetrieve({ requestBody: body })
                         : relayReply,
+                    ...envelopeOverrides,
                 },
                 clientPublicPem
             );
             return {
                 ok: true,
                 status: 200,
-                json: () => Promise.resolve({ ...encrypted, chat_history: encrypted.ciphertext }),
+                json: () =>
+                    Promise.resolve({
+                        ...encrypted,
+                        chat_history: encrypted.ciphertext,
+                        acknowledgement_token: 'fixture-ack',
+                        ...responseOverrides,
+                    }),
             };
         }
         if (urlPathEndsWith(url, '/api/v1/relay/requests/cancel')) {
@@ -1308,7 +1318,16 @@ ${ragExcerpt.repeat(4000)}`,
         const retrieveCalls = fetch.mock.calls.filter(([url]) =>
             urlPathEndsWith(url, '/api/v1/relay/responses/retrieve')
         );
-        expect(retrieveCalls).toHaveLength(3);
+        expect(retrieveCalls).toHaveLength(4);
+        expect(retrieveCalls.map(([, init]) => JSON.parse(init.body))).toEqual([
+            expect.objectContaining({ retrieval_credential: 'fixture-proof' }),
+            expect.objectContaining({ retrieval_credential: 'fixture-proof' }),
+            expect.objectContaining({ retrieval_credential: 'fixture-proof' }),
+            expect.objectContaining({
+                retrieval_credential: 'fixture-proof',
+                acknowledgement_token: 'fixture-ack',
+            }),
+        ]);
     });
 
     test('terminal selected-server failure clears selected server and can reselect', async () => {
@@ -1344,6 +1363,90 @@ ${ragExcerpt.repeat(4000)}`,
             fetch.mock.calls.some(([url]) => urlPathEndsWith(url, '/api/v1/relay/requests/cancel'))
         ).toBe(true);
     });
+
+    test.each([undefined, null, '', '   ', 42, {}])(
+        'rejects invalid admission proof %j before retrieval',
+        async (proof) => {
+            global.fetch = makeRelayFetch({
+                dispatchJson: async () => ({ retrieval_credential: proof }),
+            });
+            await expect(TokenPlaceChatV2([])).rejects.toMatchObject({ type: 'malformed' });
+            expect(getFetchCallByPath('/api/v1/relay/responses/retrieve')).toBeUndefined();
+        }
+    );
+
+    test.each([
+        { protocol: 'wrong' },
+        { version: 2 },
+        { request_id: 'another-request' },
+        { client_public_key: 'another-client' },
+        { api_v1_response: null },
+        { api_v1_response: { choices: [{ message: { content: 'stub' } }] } },
+    ])('never acknowledges an invalid decrypted response %j', async (envelopeOverrides) => {
+        global.fetch = makeRelayFetch({ envelopeOverrides });
+        await expect(TokenPlaceChatV2([])).rejects.toThrow();
+        const reads = getFetchCalls().filter((call) =>
+            urlPathEndsWith(call.url, '/api/v1/relay/responses/retrieve')
+        );
+        expect(reads).toHaveLength(1);
+        expect(reads[0].body.acknowledgement_token).toBeUndefined();
+    });
+
+    test.each([
+        { ciphertext: 'bad', chat_history: 'bad' },
+        { acknowledgement_token: '' },
+        { acknowledgement_token: 42 },
+    ])('never acknowledges malformed encrypted response metadata %j', async (responseOverrides) => {
+        global.fetch = makeRelayFetch({ responseOverrides });
+        await expect(TokenPlaceChatV2([])).rejects.toThrow();
+        expect(getFetchCalls().filter((call) => call.body?.acknowledgement_token)).toHaveLength(0);
+    });
+
+    test('reselection uses only its own proof and acknowledges the validated attempt', async () => {
+        global.fetch = makeRelayFetch({
+            retrieveStatuses: [410, 200],
+            dispatchJson: async (body) => ({ retrieval_credential: `proof-${body.request_id}` }),
+        });
+        const result = await TokenPlaceChatV2([]);
+        const calls = getFetchCalls();
+        const dispatches = calls.filter((call) =>
+            urlPathEndsWith(call.url, '/api/v1/relay/requests')
+        );
+        expect(dispatches).toHaveLength(2);
+        expect(dispatches[0].body.request_id).not.toBe(dispatches[1].body.request_id);
+        const reads = calls.filter((call) =>
+            urlPathEndsWith(call.url, '/api/v1/relay/responses/retrieve')
+        );
+        expect(reads).toHaveLength(3);
+        for (const read of reads)
+            expect(read.body.retrieval_credential).toBe(`proof-${read.body.request_id}`);
+        expect(reads[2].body).toEqual({ ...reads[1].body, acknowledgement_token: 'fixture-ack' });
+        expect(JSON.stringify(result)).not.toContain('proof-');
+        expect(JSON.stringify(result)).not.toContain('fixture-ack');
+    });
+
+    test.each(['network', 'http', 'stalled'])(
+        'acknowledgement %s failure preserves validated answer without redispatch',
+        async (failure) => {
+            const relayFetch = makeRelayFetch();
+            global.fetch = jest.fn((url, init) => {
+                const body = init?.body && JSON.parse(init.body);
+                if (body?.acknowledgement_token) {
+                    if (failure === 'network')
+                        return Promise.reject(new Error('private-proof-must-not-leak'));
+                    if (failure === 'stalled') return new Promise(() => {});
+                    return Promise.resolve({ ok: false, status: 503, json: async () => ({}) });
+                }
+                return relayFetch(url, init);
+            });
+            await expect(TokenPlaceChatV2([])).resolves.toMatchObject({ text: 'mocked reply' });
+            expect(
+                getFetchCalls().filter((call) =>
+                    urlPathEndsWith(call.url, '/api/v1/relay/requests')
+                )
+            ).toHaveLength(1);
+        }
+    );
 
     test('relay accepted false fast-fails before polling', async () => {
         global.fetch = makeRelayFetch({ accepted: false });
@@ -1491,7 +1594,7 @@ ${ragExcerpt.repeat(4000)}`,
                 return `dispatch-correlation-${dispatchCount}`;
             },
             dispatchJson: () => {
-                return Promise.resolve({ accepted: true });
+                return Promise.resolve({ accepted: true, retrieval_credential: 'fixture-proof' });
             },
         });
 
@@ -1877,10 +1980,14 @@ ${ragExcerpt.repeat(4000)}`,
                         get: (name) =>
                             name === 'X-DSpace-Correlation-Token' ? relayCorrelationValue : null,
                     },
-                    json: () => Promise.resolve({ accepted: true }),
+                    json: () =>
+                        Promise.resolve({ accepted: true, retrieval_credential: 'fixture-proof' }),
                 };
             }
             if (body.operation === 'retrieve') {
+                expect(body.payload.retrieval_credential).toBe('fixture-proof');
+                if (body.payload.acknowledgement_token)
+                    return okResponse({ status: 'acknowledged' });
                 const clientPublicPem = decodeBase64Text(body.payload.client_public_key);
                 const encrypted = await encryptTokenPlaceEnvelope(
                     {
@@ -1896,7 +2003,11 @@ ${ragExcerpt.repeat(4000)}`,
                     ok: true,
                     status: 200,
                     json: () =>
-                        Promise.resolve({ ...encrypted, chat_history: encrypted.ciphertext }),
+                        Promise.resolve({
+                            ...encrypted,
+                            chat_history: encrypted.ciphertext,
+                            acknowledgement_token: 'fixture-ack',
+                        }),
                 };
             }
             if (body.operation === 'complete') {
