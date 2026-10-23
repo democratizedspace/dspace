@@ -31,6 +31,7 @@ export const TOKEN_PLACE_FULL_TIER_TIMEOUT_MS = 120_000;
 const DEFAULT_RELAY_TIMEOUT_MS = TOKEN_PLACE_FAST_TIER_TIMEOUT_MS;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const RELAY_CANCEL_TIMEOUT_MS = 1000;
+const RELAY_ACK_TIMEOUT_MS = 1000;
 export {
     sanitizeTokenPlaceMessages,
     TOKEN_PLACE_API_V1_MAX_MESSAGES,
@@ -935,11 +936,11 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
 };
 
 const cancelRelayRequest = async (baseUrl, body, cancelToken) => {
-    if (!cancelToken) return;
+    if (!cancelToken) return false;
     try {
-        await withRelayDeadline(
-            (signal) =>
-                fetch(`${baseUrl}/api/v1/relay/requests/cancel`, {
+        return await withRelayDeadline(
+            async (signal) => {
+                const response = await fetch(`${baseUrl}/api/v1/relay/requests/cancel`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -949,11 +950,20 @@ const cancelRelayRequest = async (baseUrl, body, cancelToken) => {
                     }),
                     signal,
                     credentials: 'omit',
-                }),
+                });
+                if (!response.ok) return false;
+                const result = await response.json();
+                signal.throwIfAborted();
+                return (
+                    result?.request_id === body.request_id &&
+                    ['cancelled', 'expired'].includes(result?.status)
+                );
+            },
             { timeoutMs: RELAY_CANCEL_TIMEOUT_MS, timeoutError: createRelayTimeoutError() }
         );
     } catch {
         // Best-effort timeout cleanup only; preserve the user-facing timeout error.
+        return false;
     }
 };
 
@@ -1183,15 +1193,40 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
             // Keep proofs in this attempt's closure, never in results, diagnostics or errors.
             acknowledge: async () => {
                 try {
-                    await withRelayDeadline(
-                        (signal) =>
-                            retrieveRelayResponse(
-                                baseUrl,
-                                { ...retrievalBody, acknowledgement_token: acknowledgementToken },
-                                { ...options, signal }
-                            ),
+                    return await withRelayDeadline(
+                        async (signal) => {
+                            for (let attempt = 0; attempt < 2; attempt += 1) {
+                                signal.throwIfAborted();
+                                try {
+                                    const result = await retrieveRelayResponse(
+                                        baseUrl,
+                                        {
+                                            ...retrievalBody,
+                                            acknowledgement_token: acknowledgementToken,
+                                        },
+                                        { ...options, signal }
+                                    );
+                                    return result.ready && result.data?.status === 'acknowledged';
+                                } catch (error) {
+                                    // Replay the same acknowledgement once for transient failure.
+                                    // Neither an invalid proof nor malformed control data is retryable.
+                                    if (
+                                        signal.aborted ||
+                                        attempt > 0 ||
+                                        !(
+                                            error?.type === 'network' ||
+                                            error?.status === 408 ||
+                                            error?.status === 429 ||
+                                            error?.status >= 500
+                                        )
+                                    )
+                                        return false;
+                                }
+                            }
+                            return false;
+                        },
                         {
-                            timeoutMs: RELAY_CANCEL_TIMEOUT_MS,
+                            timeoutMs: RELAY_ACK_TIMEOUT_MS,
                             signal: options.signal,
                             timeoutError: createRelayTimeoutError(),
                         }
@@ -1199,6 +1234,7 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
                 } catch {
                     // Cleanup is best effort. A lost acknowledgement must not discard a
                     // validated answer or cause another model dispatch.
+                    return false;
                 }
             },
             correlationToken: relayCorrelation, // scan-secrets: ignore
@@ -1298,6 +1334,9 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
     }
 
     try {
+        if (data?.error && typeof data.error === 'object' && !Array.isArray(data.error)) {
+            await attempt.acknowledge();
+        }
         throwStructuredTokenPlaceApiError(data);
         const outputText = extractTokenPlaceAssistantText(data);
         const { text } = validateChatResponseText(outputText, { contextSources });

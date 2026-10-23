@@ -1083,6 +1083,7 @@ ${ragExcerpt.repeat(4000)}`,
             type: 'content_policy',
             status: 400,
         });
+        expect(getFetchCalls().filter((call) => call.body?.acknowledgement_token)).toHaveLength(1);
     });
 
     test('richer helper returns text, DSPACE contextSources, usage, and metadata', async () => {
@@ -1445,6 +1446,103 @@ ${ragExcerpt.repeat(4000)}`,
                     urlPathEndsWith(call.url, '/api/v1/relay/requests')
                 )
             ).toHaveLength(1);
+        }
+    );
+
+    test.each([403, 500, 'network'])(
+        'acknowledgement retry for %s keeps exact identity and delivers once',
+        async (failure) => {
+            const relayFetch = makeRelayFetch();
+            const acknowledgements = [];
+            global.fetch = jest.fn((url, init) => {
+                const body = init?.body && JSON.parse(init.body);
+                if (body?.acknowledgement_token) {
+                    acknowledgements.push(body);
+                    if (acknowledgements.length === 1) {
+                        if (failure === 'network')
+                            return Promise.reject(new TypeError('Failed to fetch'));
+                        return Promise.resolve({
+                            ok: false,
+                            status: failure,
+                            json: async () => ({}),
+                        });
+                    }
+                }
+                return relayFetch(url, init);
+            });
+            await expect(TokenPlaceChatV2([])).resolves.toMatchObject({ text: 'mocked reply' });
+            expect(acknowledgements).toHaveLength(failure === 403 ? 1 : 2);
+            if (failure !== 403) expect(acknowledgements[1]).toEqual(acknowledgements[0]);
+            expect(
+                getFetchCalls().filter((call) =>
+                    urlPathEndsWith(call.url, '/api/v1/relay/requests')
+                )
+            ).toHaveLength(1);
+        }
+    );
+
+    test('acknowledged control response is never delivered as an assistant answer', async () => {
+        global.fetch = makeRelayFetch({
+            responseOverrides: {
+                status: 'acknowledged',
+                ciphertext: undefined,
+                chat_history: undefined,
+                cipherkey: undefined,
+                iv: undefined,
+            },
+        });
+        await expect(TokenPlaceChatV2([])).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCalls().filter((call) => call.body?.acknowledgement_token)).toHaveLength(0);
+    });
+
+    test.each(['success', 'failed', 'stalled'])(
+        'overflow acknowledgement %s preserves original proof before a fresh retry',
+        async (cleanup) => {
+            let firstRequest;
+            const relayFetch = makeRelayFetch({
+                dispatchJson: async (body) => {
+                    firstRequest ||= body.request_id;
+                    return { retrieval_credential: `proof-${body.request_id}` };
+                },
+                replyForRetrieve: ({ requestBody }) =>
+                    requestBody.request_id === firstRequest
+                        ? {
+                              error: {
+                                  code: 'compute_node_context_window_exceeded',
+                                  retryable: true,
+                              },
+                          }
+                        : { message: { content: 'retry answer' } },
+            });
+            global.fetch = jest.fn((url, init) => {
+                const body = init?.body && JSON.parse(init.body);
+                if (body?.acknowledgement_token && body.request_id === firstRequest) {
+                    if (cleanup === 'stalled') return new Promise(() => {});
+                    if (cleanup === 'failed')
+                        return Promise.reject(new TypeError('Failed to fetch'));
+                }
+                return relayFetch(url, init);
+            });
+            await expect(TokenPlaceChatV2([])).resolves.toMatchObject({ text: 'retry answer' });
+            const calls = getFetchCalls();
+            const dispatches = calls.filter((call) =>
+                urlPathEndsWith(call.url, '/api/v1/relay/requests')
+            );
+            expect(dispatches).toHaveLength(2);
+            const acknowledgements = calls.filter((call) => call.body?.acknowledgement_token);
+            expect(calls.indexOf(acknowledgements[0])).toBeLessThan(calls.indexOf(dispatches[1]));
+            for (const acknowledgement of acknowledgements) {
+                const request = dispatches.find(
+                    (call) => call.body.request_id === acknowledgement.body.request_id
+                ).body;
+                expect(acknowledgement.body).toEqual({
+                    client_public_key: request.client_public_key,
+                    request_id: request.request_id,
+                    retrieval_credential: `proof-${request.request_id}`,
+                    acknowledgement_token: 'fixture-ack',
+                });
+            }
+            expect(dispatches[1].body.request_id).not.toBe(firstRequest);
         }
     );
 
