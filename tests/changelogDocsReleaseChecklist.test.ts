@@ -26,15 +26,17 @@ describe('April 1, 2026 changelog release checklist', () => {
     expect(content).not.toMatch(/💯/);
   });
 
-  it('keeps rc.6 SHA/range gate open until immutable tag proof is attached', () => {
+  it('preserves the recorded rc.6 SHA/range evidence without implying full QA', () => {
     const content = readFileSync(qaChecklistPath, 'utf8');
 
     expect(content).toContain(
-      '- [ ] QA signoff confirms the audited commit delta above resolves to the immutable rc.6 SHA and'
+      '- [x] QA signoff confirms the audited commit delta above resolves to the immutable rc.6 SHA and'
     );
     expect(content).toMatch(/SHA\/range resolution gate only/i);
-    expect(content).toMatch(/origin.*unavailable|no configured `origin`/i);
-    expect(content).toMatch(/must attach remote tag/i);
+    expect(content).toContain(
+      'Evidence (2026-05-19 UTC, maintainer checkout with `origin` configured)'
+    );
+    expect(content).toContain('does not certify execution of every mapped');
     expect(content).toMatch(/git ls-remote --tags origin v3\.0\.1-rc\.6/i);
     expect(content).toContain('8a1fa6ca2b4206c3e481da6b8f02c912b56dfdb0');
     expect(content).not.toMatch(/resolves to `8a1fa6ca.*` in this checkout/i);
@@ -50,7 +52,7 @@ describe('April 1, 2026 changelog release checklist', () => {
     const content = readFileSync(changelogPath, 'utf8');
 
     expect(content).toContain(
-      '## June 1, 2026 — DSPACE v3.0.1 (patch addendum)'
+      '## May 21, 2026 — DSPACE v3.0.1 (patch addendum)'
     );
     expect(content).toContain('### Reader guide and verification routes');
     expect(content).toContain('The player-visible route checks for v3.0.1');

@@ -4,4 +4,4 @@ name: dspace
 version: 3.0.1
 description: Helm chart for deploying the DSPACE application
 type: application
-appVersion: "v3.0.1"
+appVersion: "v3.0.2"
