@@ -110,6 +110,48 @@ describe('manual maintenance publication authorization', () => {
 });
 
 describe('exact source and review gate', () => {
+  it('accepts captured public GitHub API review evidence from the approved source PR', () => {
+    const captured = JSON.parse(
+      readFileSync('tests/fixtures/maintenanceReviews.json', 'utf8').replace(
+        /^\uFEFF/,
+        ''
+      )
+    );
+    expect(() =>
+      validateEvidence({
+        ...evidence(),
+        comments: captured.comments,
+        reviews: captured.reviews,
+      })
+    ).not.toThrow();
+  });
+  it('rejects a synthetic later blocking event using an actual captured finding body', () => {
+    const captured = JSON.parse(
+      readFileSync('tests/fixtures/maintenanceReviews.json', 'utf8').replace(
+        /^\uFEFF/,
+        ''
+      )
+    );
+    const finding = captured.reviews.find((review) =>
+      review.body.includes('1 open issue')
+    );
+    expect(finding).toBeDefined();
+    // The body is verbatim public evidence; only event identity/time/source are
+    // synthetic, to exercise a regression without claiming a real later finding.
+    const later = {
+      ...finding,
+      id: 999999999999,
+      submitted_at: '2099-01-01T00:00:00Z',
+      commit_id: policy.source,
+    };
+    expect(() =>
+      validateEvidence({
+        ...evidence(),
+        comments: captured.comments,
+        reviews: [...captured.reviews, later],
+      })
+    ).toThrow();
+  });
   it('does not clear requested changes with a later comment-only review', () => {
     const e = evidence();
     e.reviews.push({ ...e.reviews[0], id: 99, state: 'CHANGES_REQUESTED' });

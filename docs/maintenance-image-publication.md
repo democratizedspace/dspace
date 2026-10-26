@@ -51,6 +51,16 @@ the default branch), choose branch `release/v3.0.x`,
 and enter the full approved `source_sha` above. First leave `publish=false` and
 `confirmation` empty. Inspect both architecture smoke results and download
 `maintenance-validation-receipt`. A skipped job or missing receipt is not success.
+If the web UI shows only default-branch inputs, use an existing authenticated
+GitHub CLI/API connection with an explicit maintenance ref; do not change the
+default branch or create a token. For example, this **owner-only future action**
+starts validation without publication:
+
+```bash
+gh workflow run build.yml --repo democratizedspace/dspace --ref release/v3.0.x \
+  -f source_sha=47900748f61e1ef38c6289fc697f7a070f7fa3c9 -F publish=false
+```
+
 Do not dispatch another branch, `ci-image.yml`, `ci-helm.yml`, or either legacy
 Raspberry Pi deployment workflow.
 
@@ -59,6 +69,14 @@ After owner approval of validation, run the same maintenance workflow with
 
 ```text
 publish v3.0.2 47900748f61e1ef38c6289fc697f7a070f7fa3c9
+```
+
+The corresponding **separately approved owner publication action** is:
+
+```bash
+gh workflow run build.yml --repo democratizedspace/dspace --ref release/v3.0.x \
+  -f source_sha=47900748f61e1ef38c6289fc697f7a070f7fa3c9 -F publish=true \
+  -f 'confirmation=publish v3.0.2 47900748f61e1ef38c6289fc697f7a070f7fa3c9'
 ```
 
 The job revalidates the source, merged PR, ancestry, tree, version, full CI/run
