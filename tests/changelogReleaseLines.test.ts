@@ -46,6 +46,22 @@ describe('changelog release-line convention', () => {
   );
 
   it.each([
+    ' ```md\n## DSPACE v9.0.1\n ```',
+    '   ~~~~md\n## DSPACE v9.0.1\n   ~~~~~',
+    '````md\n```\n## DSPACE v9.0.1\n````',
+  ])('ignores valid indented and longer fences: %s', (example) => {
+    const { manifest, files } = fixture();
+    files['20270115.md'] += `\n${example}\n`;
+    expect(validateChangelogReleaseLines(manifest, files, '4.2.2')).toEqual([]);
+  });
+
+  it.each([
+    [
+      'misplaced indented patch heading',
+      (f) => {
+        f.files['20221003.md'] += '\n   ## DSPACE v4.2.3\n';
+      },
+    ],
     [
       'new legacy bypass',
       (f) => {
