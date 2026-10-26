@@ -17,6 +17,8 @@ jobs:
           node-version-file: .nvmrc
       - name: Verify Node runtime and build pins
         run: node scripts/check-node-runtime.mjs
+      - name: Verify changelog release-line convention
+        run: node scripts/check-changelog-release-lines.mjs
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:

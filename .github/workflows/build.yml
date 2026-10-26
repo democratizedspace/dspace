@@ -5,8 +5,6 @@ on:
     branches:
       - main
       - 'codex/**'
-    tags:
-      - 'v*'
   pull_request:
   workflow_dispatch:
 
@@ -17,7 +15,9 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  PUSH_IMAGE: ${{ github.event_name == 'push' && (github.ref_name == 'main' || startsWith(github.ref, 'refs/tags/v')) }}
+  # The owner records v3.0.2 with a Git tag only after production cutover.
+  # That tag must not rebuild or republish the already deployed image.
+  PUSH_IMAGE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
 jobs:
   build:
@@ -54,7 +54,7 @@ jobs:
           echo "branch_sha=${branch}-${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Safety guard – fail if trying to push from non-trusted ref
-        if: ${{ env.PUSH_IMAGE == 'true' && !(github.ref_name == 'main' || startsWith(github.ref, 'refs/tags/v')) }}
+        if: ${{ env.PUSH_IMAGE == 'true' && github.ref != 'refs/heads/main' }}
         run: |
           echo "Ref $GITHUB_REF is not allowed to publish images" >&2
           exit 1
@@ -81,8 +81,6 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
             type=sha,format=long,prefix=sha-
             type=ref,event=branch
             type=raw,value=${{ steps.vars.outputs.branch_sha }},enable=${{ steps.vars.outputs.branch_sha != '' }}
