@@ -16,7 +16,11 @@ const { pollTokenPlaceRelayResponse } = await import('../src/utils/tokenPlace.js
 const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
 const { recordDependencyRequest } = await import('../src/utils/metrics.js');
 const pending = () => new Promise(() => {});
-const body = { client_public_key: 'fixture-client', request_id: 'fixture-request' };
+const body = {
+    client_public_key: 'fixture-client',
+    request_id: 'fixture-request',
+    retrieval_credential: 'fixture-proof',
+};
 const startPolling = (options = {}) => {
     const observed = { result: undefined, error: undefined };
     pollTokenPlaceRelayResponse('https://relay.invalid', body, {
@@ -106,7 +110,11 @@ describe('token.place polling deadlines', () => {
         expect(observed.error).toMatchObject({ status: 408 });
         const cancellation = fetch.mock.calls.find(([url]) => url.endsWith('/cancel'));
         expect(cancellation).toBeDefined();
-        expect(JSON.parse(cancellation[1].body)).toEqual({ cancel_token: 'fixture-cancel' });
+        expect(JSON.parse(cancellation[1].body)).toEqual({
+            client_public_key: body.client_public_key,
+            request_id: body.request_id,
+            cancel_token: 'fixture-cancel',
+        });
         await vi.advanceTimersByTimeAsync(1000);
         expect(cancellation[1].signal.aborted).toBe(true);
         expect(vi.getTimerCount()).toBe(0);
@@ -124,6 +132,37 @@ describe('token.place polling deadlines', () => {
         expect(fetch.mock.calls[0][1].signal.aborted).toBe(true);
         expect(vi.getTimerCount()).toBe(0);
     });
+
+    test.each(['cancelled', 'completed_unavailable', 'wrong-request', 'forbidden', 'stalled-body'])(
+        'cancellation %s cannot replace the timeout or deliver a late answer',
+        async (outcome) => {
+            fetch.mockImplementation((url) => {
+                if (!url.endsWith('/cancel')) return Promise.resolve({ status: 202, ok: true });
+                return Promise.resolve({
+                    ok: outcome !== 'forbidden',
+                    status: outcome === 'forbidden' ? 403 : 200,
+                    json:
+                        outcome === 'stalled-body'
+                            ? pending
+                            : async () => ({
+                                  status: outcome,
+                                  request_id:
+                                      outcome === 'wrong-request' ? 'other' : body.request_id,
+                              }),
+                });
+            });
+            const observed = startPolling({ cancelToken: 'fixture-cancel' });
+            await vi.advanceTimersByTimeAsync(50);
+            expect(observed.error).toMatchObject({ status: 408 });
+            expect(observed.result).toBeUndefined();
+            const cancellation = fetch.mock.calls.find(([url]) => url.endsWith('/cancel'));
+            expect(cancellation[1].signal.aborted).toBe(false);
+            await vi.advanceTimersByTimeAsync(1000);
+            expect(observed.error).toMatchObject({ status: 408 });
+            expect(observed.result).toBeUndefined();
+            expect(vi.getTimerCount()).toBe(0);
+        }
+    );
 
     test('does not fetch when the caller already aborted', async () => {
         const controller = new AbortController();

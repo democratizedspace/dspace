@@ -292,6 +292,7 @@ describe('DSPACE application metrics', () => {
         const rateLimitCounts = new Map<string, number>();
         const redisStore = new Map<string, string>();
         const relayCalls: string[] = [];
+        const relayBodies: unknown[] = [];
         let lastCorrelationToken: string | null = null;
         let getdelCount = 0;
         let redisUnavailable = false;
@@ -340,6 +341,7 @@ describe('DSPACE application metrics', () => {
                 });
             }
             relayCalls.push(href);
+            relayBodies.push(init?.body ? JSON.parse(String(init.body)) : null);
             return new Response(JSON.stringify({ server_public_key: 'relay-public-key' }), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
@@ -552,12 +554,58 @@ describe('DSPACE application metrics', () => {
                     body: JSON.stringify({
                         provider: 'tokenplace',
                         operation: 'retrieve',
-                        payload: { client_public_key: 'client', request_id: 'request' },
+                        payload: {
+                            client_public_key: 'client',
+                            request_id: 'request',
+                            retrieval_credential: 'fixture-retrieval-proof',
+                            acknowledgement_token: 'fixture-acknowledgement-proof',
+                        },
                     }),
                 }),
             });
             expect(authenticatedRetrieve.status).toBe(200);
             expect(relayCalls).toHaveLength(3);
+
+            expect(relayBodies[2]).toEqual({
+                client_public_key: 'client',
+                request_id: 'request',
+                retrieval_credential: 'fixture-retrieval-proof',
+                acknowledgement_token: 'fixture-acknowledgement-proof',
+            });
+            for (const invalid of [
+                {},
+                { retrieval_credential: '' },
+                { retrieval_credential: 42 },
+                { retrieval_credential: 'fixture-proof', acknowledgement_token: null },
+                { retrieval_credential: 'fixture-proof', acknowledgement_token: '' },
+                { retrieval_credential: 'fixture-proof', private_key: 'secret' },
+                { retrieval_credential: 'fixture-proof', messages: [] },
+            ]) {
+                const response = await endpoint.POST({
+                    request: new Request('http://dspace.local/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Origin: 'http://dspace.local',
+                            Cookie: chatCookie(),
+                        },
+                        body: JSON.stringify({
+                            provider: 'tokenplace',
+                            operation: 'retrieve',
+                            payload: {
+                                client_public_key: 'client',
+                                request_id: 'request',
+                                ...invalid,
+                            },
+                        }),
+                    }),
+                });
+                expect(response.status).toBe(400);
+            }
+            expect(relayCalls).toHaveLength(3);
+            const proofMetrics = await metrics.register.metrics();
+            expect(proofMetrics).not.toContain('fixture-retrieval-proof');
+            expect(proofMetrics).not.toContain('fixture-acknowledgement-proof');
 
             const tokenPlaceMetricsBeforeInvalidPayload = await metrics.register.metrics();
             const tokenPlaceLinesBeforeInvalidPayload =
@@ -925,7 +973,10 @@ describe('DSPACE application metrics', () => {
             rateLimitCounts.clear();
             for (const [op, pl] of [
                 ['select', { model: 'open-model', contextTier: 'small' }] as const,
-                ['retrieve', { client_public_key: 'client', request_id: 'req2' }] as const,
+                ['retrieve', {
+                    client_public_key: 'client', request_id: 'req2',
+                    retrieval_credential: 'fixture-proof',
+                }] as const,
             ]) {
                 const nonDispatch = await endpoint.POST({
                     request: new Request('http://dspace.local/api/chat', {

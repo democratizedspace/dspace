@@ -31,6 +31,7 @@ export const TOKEN_PLACE_FULL_TIER_TIMEOUT_MS = 120_000;
 const DEFAULT_RELAY_TIMEOUT_MS = TOKEN_PLACE_FAST_TIER_TIMEOUT_MS;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const RELAY_CANCEL_TIMEOUT_MS = 1000;
+const RELAY_ACK_TIMEOUT_MS = 1000;
 export {
     sanitizeTokenPlaceMessages,
     TOKEN_PLACE_API_V1_MAX_MESSAGES,
@@ -934,22 +935,35 @@ const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
     }
 };
 
-const cancelRelayRequest = async (baseUrl, cancelToken) => {
-    if (!cancelToken) return;
+const cancelRelayRequest = async (baseUrl, body, cancelToken) => {
+    if (!cancelToken) return false;
     try {
-        await withRelayDeadline(
-            (signal) =>
-                fetch(`${baseUrl}/api/v1/relay/requests/cancel`, {
+        return await withRelayDeadline(
+            async (signal) => {
+                const response = await fetch(`${baseUrl}/api/v1/relay/requests/cancel`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cancel_token: cancelToken }),
+                    body: JSON.stringify({
+                        client_public_key: body.client_public_key,
+                        request_id: body.request_id,
+                        cancel_token: cancelToken,
+                    }),
                     signal,
                     credentials: 'omit',
-                }),
+                });
+                if (!response.ok) return false;
+                const result = await response.json();
+                signal.throwIfAborted();
+                return (
+                    result?.request_id === body.request_id &&
+                    ['cancelled', 'expired'].includes(result?.status)
+                );
+            },
             { timeoutMs: RELAY_CANCEL_TIMEOUT_MS, timeoutError: createRelayTimeoutError() }
         );
     } catch {
         // Best-effort timeout cleanup only; preserve the user-facing timeout error.
+        return false;
     }
 };
 
@@ -978,7 +992,7 @@ export const pollTokenPlaceRelayResponse = async (baseUrl, body, options = {}) =
         if (error === timeoutError) {
             // Cleanup must not delay the timeout shown to the player. It has its own
             // bounded signal because the polling transport has already been aborted.
-            void cancelRelayRequest(baseUrl, options.cancelToken);
+            void cancelRelayRequest(baseUrl, body, options.cancelToken);
         }
         throw error;
     }
@@ -1131,18 +1145,25 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
         );
     }
     try {
-        const encryptedResponse = await pollTokenPlaceRelayResponse(
-            baseUrl,
-            { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
-            {
-                ...options,
-                cancelToken,
-                timeoutMs: getTimeoutForTier(
-                    server.selectedContextTier || options.contextTier,
-                    options
-                ),
-            }
-        );
+        const retrievalCredential = dispatched?.retrieval_credential;
+        if (typeof retrievalCredential !== 'string' || !retrievalCredential.trim()) {
+            throw createMalformedTokenPlaceResponseError(
+                'Malformed token.place admission: missing retrieval credential.'
+            );
+        }
+        const retrievalBody = {
+            client_public_key: clientKeys.publicKeyBase64,
+            request_id: requestId,
+            retrieval_credential: retrievalCredential,
+        };
+        const encryptedResponse = await pollTokenPlaceRelayResponse(baseUrl, retrievalBody, {
+            ...options,
+            cancelToken,
+            timeoutMs: getTimeoutForTier(
+                server.selectedContextTier || options.contextTier,
+                options
+            ),
+        });
         if (encryptedResponse?.terminalSelectedServerFailure) {
             return { ...encryptedResponse, correlationToken: relayCorrelation }; // scan-secrets: ignore
         }
@@ -1161,8 +1182,61 @@ const runRelayAttempt = async (baseUrl, messages, options = {}) => {
             requestId,
             clientPublicKey: clientKeys.publicKeyBase64,
         });
+        const acknowledgementToken = encryptedResponse?.acknowledgement_token;
+        if (typeof acknowledgementToken !== 'string' || !acknowledgementToken.trim()) {
+            throw createMalformedTokenPlaceResponseError(
+                'Malformed token.place response: missing acknowledgement token.'
+            );
+        }
         return {
             apiResponse,
+            // Keep proofs in this attempt's closure, never in results, diagnostics or errors.
+            acknowledge: async () => {
+                try {
+                    return await withRelayDeadline(
+                        async (signal) => {
+                            for (let attempt = 0; attempt < 2; attempt += 1) {
+                                signal.throwIfAborted();
+                                try {
+                                    const result = await retrieveRelayResponse(
+                                        baseUrl,
+                                        {
+                                            ...retrievalBody,
+                                            acknowledgement_token: acknowledgementToken,
+                                        },
+                                        { ...options, signal }
+                                    );
+                                    return result.ready && result.data?.status === 'acknowledged';
+                                } catch (error) {
+                                    // Replay the same acknowledgement once for transient failure.
+                                    // Neither an invalid proof nor malformed control data is retryable.
+                                    if (
+                                        signal.aborted ||
+                                        attempt > 0 ||
+                                        !(
+                                            error?.type === 'network' ||
+                                            error?.status === 408 ||
+                                            error?.status === 429 ||
+                                            error?.status >= 500
+                                        )
+                                    )
+                                        return false;
+                                }
+                            }
+                            return false;
+                        },
+                        {
+                            timeoutMs: RELAY_ACK_TIMEOUT_MS,
+                            signal: options.signal,
+                            timeoutError: createRelayTimeoutError(),
+                        }
+                    );
+                } catch {
+                    // Cleanup is best effort. A lost acknowledgement must not discard a
+                    // validated answer or cause another model dispatch.
+                    return false;
+                }
+            },
             correlationToken: relayCorrelation, // scan-secrets: ignore
             diagnostics: {
                 requestedTier: options.contextTier,
@@ -1224,6 +1298,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
 
     let data = attempt.apiResponse;
     if (shouldRetryContextOverflow(data, attempt.diagnostics)) {
+        await attempt.acknowledge();
         const retryAttemptOptions = {
             ...baseAttemptOptions,
             contextTier: '64k-full',
@@ -1259,9 +1334,13 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
     }
 
     try {
+        if (data?.error && typeof data.error === 'object' && !Array.isArray(data.error)) {
+            await attempt.acknowledge();
+        }
         throwStructuredTokenPlaceApiError(data);
         const outputText = extractTokenPlaceAssistantText(data);
         const { text } = validateChatResponseText(outputText, { contextSources });
+        await attempt.acknowledge();
 
         return {
             text,
