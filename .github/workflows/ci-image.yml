@@ -10,6 +10,7 @@ on:
       - v3
       - main
       - release/v3.0.x
+      - codex/v3.0.2-node-security
   workflow_dispatch:
     inputs:
       branch:
