@@ -62,7 +62,7 @@ SKIP_E2E=1 npm test
 - Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
 - If a proxy is required, set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables
   instead of using `.npmrc` proxy settings.
-- Use `nvm use` to match the Node.js version specified in `.nvmrc` (Node 20 LTS).
+- Use `nvm use` to match the Node.js version specified in `.nvmrc` (Node 24.22.1 LTS).
 
 ## Code Formatting with Prettier
 

@@ -8,7 +8,10 @@ import {
 } from '../scripts/run-remote-completionist-award-iii.mjs';
 
 type ChildProcessLike = {
-  on: (event: string, handler: (...args: unknown[]) => void) => ChildProcessLike;
+  on: (
+    event: string,
+    handler: (...args: unknown[]) => void
+  ) => ChildProcessLike;
 };
 
 type SpawnFn = (
@@ -24,10 +27,13 @@ type SpawnFn = (
 describe('resolvePlaywrightCli', () => {
   it('looks up the Playwright CLI package via require.resolve search paths', () => {
     const calls = [];
-    const resolved = resolvePlaywrightCli(['/repo/frontend', '/repo'], (id, options) => {
-      calls.push({ id, options });
-      return '/repo/node_modules/@playwright/test/cli.js';
-    });
+    const resolved = resolvePlaywrightCli(
+      ['/repo/frontend', '/repo'],
+      (id, options) => {
+        calls.push({ id, options });
+        return '/repo/node_modules/@playwright/test/cli.js';
+      }
+    );
 
     expect(resolved).toBe('/repo/node_modules/@playwright/test/cli.js');
     expect(calls).toEqual([
@@ -52,14 +58,19 @@ describe('resolvePlaywrightCli', () => {
   });
 
   it('resolves when the search path is frontend only', () => {
-    const resolved = resolvePlaywrightCli(['/repo/frontend'], (_id, options) => {
-      if (options?.paths?.[0] === '/repo/frontend') {
-        return '/repo/frontend/node_modules/@playwright/test/cli.js';
+    const resolved = resolvePlaywrightCli(
+      ['/repo/frontend'],
+      (_id, options) => {
+        if (options?.paths?.[0] === '/repo/frontend') {
+          return '/repo/frontend/node_modules/@playwright/test/cli.js';
+        }
+        throw new Error('not found');
       }
-      throw new Error('not found');
-    });
+    );
 
-    expect(resolved).toBe('/repo/frontend/node_modules/@playwright/test/cli.js');
+    expect(resolved).toBe(
+      '/repo/frontend/node_modules/@playwright/test/cli.js'
+    );
   });
 
   it('returns null when Playwright CLI is not resolvable from either path', () => {
@@ -78,22 +89,24 @@ describe('Node version preflight', () => {
     const message = getUnsupportedNodeVersionMessage('18.18.0');
     expect(message).toContain('[qa:remote-completionist-award-iii]');
     expect(message).toContain('18.18.0');
-    expect(message).toContain('20 || >=22');
+    expect(message).toContain('>=24.22.1 <25');
     expect(message).toContain('nvm use');
     expect(message).toContain('pnpm install');
   });
 
   it('accepts supported versions in the declared engine range', () => {
     expect(isSupportedNodeVersion('19.9.0')).toBe(false);
-    expect(isSupportedNodeVersion('20.0.0')).toBe(true);
+    expect(isSupportedNodeVersion('20.0.0')).toBe(false);
     expect(isSupportedNodeVersion('21.9.0')).toBe(false);
-    expect(isSupportedNodeVersion('22.0.0')).toBe(true);
+    expect(isSupportedNodeVersion('24.22.0')).toBe(false);
+    expect(isSupportedNodeVersion('24.22.1')).toBe(true);
+    expect(isSupportedNodeVersion('25.0.0')).toBe(false);
   });
 
   it('rejects malformed versions and accepts optional v-prefix versions', () => {
     expect(isSupportedNodeVersion('')).toBe(false);
     expect(isSupportedNodeVersion('not-a-version')).toBe(false);
-    expect(isSupportedNodeVersion('v20.11.0')).toBe(true);
+    expect(isSupportedNodeVersion('v24.22.1')).toBe(true);
   });
 
   it('fails before attempting Playwright launch on unsupported Node', () => {
@@ -116,7 +129,9 @@ describe('Node version preflight', () => {
     expect(spawnFn).not.toHaveBeenCalled();
     expect(exitFn).toHaveBeenCalledWith(1);
     expect(errorLog).toHaveBeenCalledTimes(1);
-    expect(errorLog.mock.calls[0][0]).toContain('Unsupported Node.js version 18.18.0');
+    expect(errorLog.mock.calls[0][0]).toContain(
+      'Unsupported Node.js version 18.18.0'
+    );
   });
 
   it('uses the current Node runtime to launch Playwright', () => {
@@ -133,9 +148,10 @@ describe('Node version preflight', () => {
 
     main({
       argv: ['--baseURL=https://staging.democratized.space'],
-      nodeVersion: '20.11.0',
+      nodeVersion: '24.22.1',
       spawnFn,
-      resolvePlaywrightCliFn: () => '/repo/node_modules/@playwright/test/cli.js',
+      resolvePlaywrightCliFn: () =>
+        '/repo/node_modules/@playwright/test/cli.js',
       errorLog: vi.fn(),
       infoLog: vi.fn(),
       printChecklistSummaryFn,

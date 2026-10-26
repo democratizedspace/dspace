@@ -15,62 +15,14 @@ const packageJsonPath = join(repoRoot, 'package.json');
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 
 const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
-const SUPPORTED_NODE_RANGE = packageJson?.engines?.node ?? '>=20 <22';
-
-function parseNodeMajorRangeClause(clause) {
-  const comparators = String(clause)
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-
-  if (comparators.length === 0) {
-    return null;
-  }
-
-  const checks = comparators.map((comparator) => {
-    const match = /^(>=|<=|>|<)?(\d+)$/.exec(comparator);
-    if (!match) {
-      return null;
-    }
-
-    const operator = match[1] ?? '=';
-    const major = Number(match[2]);
-
-    return (candidateMajor) => {
-      if (operator === '=') return candidateMajor === major;
-      if (operator === '>=') return candidateMajor >= major;
-      if (operator === '<=') return candidateMajor <= major;
-      if (operator === '>') return candidateMajor > major;
-      return candidateMajor < major;
-    };
-  });
-
-  if (checks.some((check) => check === null)) {
-    return null;
-  }
-
-  return (candidateMajor) => checks.every((check) => check(candidateMajor));
-}
-
-function parseNodeMajorRange(range) {
-  const clauses = String(range)
-    .split('||')
-    .map((clause) => parseNodeMajorRangeClause(clause))
-    .filter(Boolean);
-
-  if (clauses.length === 0) {
-    return null;
-  }
-
-  return (candidateMajor) => clauses.some((clause) => clause(candidateMajor));
-}
-
-const SUPPORTED_NODE_MAJOR_RANGE =
-  parseNodeMajorRange(SUPPORTED_NODE_RANGE) ?? ((major) => major >= 20 && major < 22);
+const SUPPORTED_NODE_RANGE = packageJson.engines.node;
 
 const require = createRequire(import.meta.url);
 
-export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], resolveFn = require.resolve) {
+export function resolvePlaywrightCli(
+  searchPaths = [frontendDir, repoRoot],
+  resolveFn = require.resolve
+) {
   try {
     return resolveFn('@playwright/test/cli', {
       paths: searchPaths,
@@ -81,16 +33,15 @@ export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], reso
 }
 
 export function isSupportedNodeVersion(version = process.versions.node) {
-  const majorMatch = /^v?(\d+)\./.exec(String(version));
-  if (!majorMatch) {
-    return false;
-  }
-
-  const major = Number(majorMatch[1]);
-  return SUPPORTED_NODE_MAJOR_RANGE(major);
+  const match = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(String(version));
+  if (!match) return false;
+  const [, major, minor, patch] = match.map(Number);
+  return major === 24 && (minor > 22 || (minor === 22 && patch >= 1));
 }
 
-export function getUnsupportedNodeVersionMessage(version = process.versions.node) {
+export function getUnsupportedNodeVersionMessage(
+  version = process.versions.node
+) {
   return (
     `[qa:remote-completionist-award-iii] Unsupported Node.js version ${version}. ` +
     `Required range: ${SUPPORTED_NODE_RANGE}. ` +
@@ -143,7 +94,9 @@ function parseArgs(argv) {
 function printChecklistSummary(reportPath) {
   const absolutePath = join(frontendDir, reportPath);
   if (!existsSync(absolutePath)) {
-    console.warn(`[qa:remote-completionist-award-iii] No harness report found at ${absolutePath}`);
+    console.warn(
+      `[qa:remote-completionist-award-iii] No harness report found at ${absolutePath}`
+    );
     return;
   }
 
@@ -159,7 +112,8 @@ function printChecklistSummary(reportPath) {
     console.log(`  pass=${passed} fail=${failed} manual=${manual}`);
 
     for (const row of rows) {
-      const marker = row.status === 'pass' ? '✅' : row.status === 'fail' ? '❌' : '🧭';
+      const marker =
+        row.status === 'pass' ? '✅' : row.status === 'fail' ? '❌' : '🧭';
       const detail = row.detail ? ` — ${row.detail}` : '';
       console.log(`  ${marker} ${row.id}: ${row.label}${detail}`);
     }
@@ -174,16 +128,20 @@ function main(runtime = {}) {
   const argv = runtime.argv ?? process.argv.slice(2);
   const nodeVersion = runtime.nodeVersion ?? process.versions.node;
   const spawnFn = runtime.spawnFn ?? spawn;
-  const resolvePlaywrightCliFn = runtime.resolvePlaywrightCliFn ?? resolvePlaywrightCli;
+  const resolvePlaywrightCliFn =
+    runtime.resolvePlaywrightCliFn ?? resolvePlaywrightCli;
   const exitFn = runtime.exitFn ?? ((code) => process.exit(code));
   const errorLog = runtime.errorLog ?? console.error;
   const infoLog = runtime.infoLog ?? console.log;
-  const printChecklistSummaryFn = runtime.printChecklistSummaryFn ?? printChecklistSummary;
+  const printChecklistSummaryFn =
+    runtime.printChecklistSummaryFn ?? printChecklistSummary;
 
   const options = parseArgs(argv);
 
   if (!/^https?:\/\//i.test(options.baseURL)) {
-    errorLog(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
+    errorLog(
+      `Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`
+    );
     exitFn(1);
     return;
   }
@@ -244,7 +202,9 @@ function main(runtime = {}) {
   });
 
   child.on('error', (err) => {
-    errorLog(`[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`);
+    errorLog(
+      `[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`
+    );
     exitFn(1);
   });
 
@@ -254,12 +214,17 @@ function main(runtime = {}) {
       return;
     }
 
-    printChecklistSummaryFn('test-results/remote-completionist-award-iii-harness-report.json');
+    printChecklistSummaryFn(
+      'test-results/remote-completionist-award-iii-harness-report.json'
+    );
     exitFn(code ?? 1);
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
   main();
 }
 
