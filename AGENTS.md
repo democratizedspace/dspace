@@ -62,7 +62,7 @@ SKIP_E2E=1 npm test
 - Set `ESLINT_USE_FLAT_CONFIG=false` if running ESLint manually.
 - If a proxy is required, set `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables
   instead of using `.npmrc` proxy settings.
-- Use `nvm use` to match the Node.js version specified in `.nvmrc` (Node 20 LTS).
+- Use `nvm use` to match the Node.js version specified in `.nvmrc` (Node 24.22.1 LTS).
 
 ## Code Formatting with Prettier
 
@@ -357,11 +357,26 @@ Run `npm test` to verify configuration stays in sync.
 
 ## Historical changelog policy
 
+- Each new major or minor application release gets one `YYYYMMDD.md` changelog file,
+  named for that release's date. Register its `major.minor.0` version in
+  `docs/changelog-release-lines.json`; do not reuse another release line's file.
+- Patch releases append a dated patch-addendum section to that major/minor file,
+  in consecutive patch order, immediately after the preceding patch. Do not create a separate date file for a patch.
+  For example, v3.0.1 and v3.0.2 belong in `20260401.md`; v3.0.2 follows the
+  complete v3.0.1 section. This explicit patch-addendum exception permits appending
+  new release notes without rewriting the previously published narrative.
+- Keep future patch notes labeled pending until the release owner verifies cutover.
+  For v3.0.2, the owner creates the Git tag only after verified production cutover;
+  staging and production use the reviewed commit and immutable image digest first.
+- Run `node scripts/check-changelog-release-lines.mjs` and the
+  `tests/changelogReleaseLines.test.ts` regressions. Legacy unversioned entries and
+  the old redirect retain an explicit file allowlist; never add a new release to
+  that allowlist to bypass the major/minor mapping.
 - Treat published changelog markdown under `frontend/src/pages/docs/md/changelog/` as
   immutable narrative history.
-- Only fix typos, spacing, or broken links in historical files — document those adjustments in
+- Within existing published sections, only fix typos, spacing, or broken links - document those adjustments in
   `frontend/tests/fixtures/changelogCorrections.json` and refresh the associated snapshots.
-- When you need to reference newer context from an older release, add an entry to
+- For newer context that is not an explicitly requested patch addendum, add an entry to
   `frontend/src/utils/changelogNotes.ts` so the UI appends a note at render time instead of
   editing the archived markdown body.
 

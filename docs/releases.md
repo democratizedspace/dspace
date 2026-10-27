@@ -35,6 +35,39 @@ exists:
 
 ## Update checklist
 
+### Changelog files and patch addenda
+
+Each new major or minor version creates one `YYYYMMDD.md` file under
+`frontend/src/pages/docs/md/changelog/`, using that release's date. Record the
+`major.minor.0` to filename mapping in `docs/changelog-release-lines.json`.
+Each patch version appends a dated patch-addendum section to the same major/minor
+file; it does not create a new date file. Keep patch sections unique and in
+consecutive version order, with each patch following its predecessor. New major/minor
+files require a full stable version heading; only the explicitly enumerated historical
+base releases retain their original heading formats. Full stable version headings declare release sections;
+ordinary prose references and fenced examples do not.
+
+For example, `20260401.md` contains v3.0.0 and the complete v3.0.1 addendum;
+v3.0.2 is appended immediately after v3.0.1. A future v3.1.0 or v4.0.0 needs its
+own dated file and mapping. Preserve existing published prose when appending.
+The manifest explicitly preserves the older unversioned entries and redirect;
+that exception list is historical, not a way to register new releases.
+
+`node scripts/check-changelog-release-lines.mjs` validates the mapping, date
+filenames, current application version, unique patch sections and placement.
+`tests/changelogReleaseLines.test.ts` exercises positive and negative fixtures.
+
+### v3.0.2 cutover before tagging
+
+The owner publishes the reviewed commit as an immutable image coordinate before
+staging, verifies staging, and promotes the same digest to production. Only after
+production verification may the owner create and push Git tag `v3.0.2` on that
+exact deployed source commit. A pending changelog addendum is not proof of a tag,
+release, or deployment. Do not add a historical tag row before the tag exists.
+See [the hotfix handoff](v3.0.2-security-hotfix.md) for publication and rollback gates.
+
+### After an authorized tag exists
+
 When cutting a new release or RC tag:
 
 1. Verify the tag exists (`git fetch --tags && git tag --list`).

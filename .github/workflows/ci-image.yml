@@ -9,6 +9,7 @@ on:
     branches:
       - v3
       - main
+      - release/v3.0.x
   workflow_dispatch:
     inputs:
       branch:
@@ -136,6 +137,11 @@ jobs:
             -v "$PWD/scripts:/scripts:ro" \
             dspace-test:latest \
             node /scripts/verify-build-sha.mjs /app/dist
+
+      - name: Verify fixed Node runtime in final image
+        run: |
+          docker run --rm --entrypoint node dspace-test:latest \
+            -e "require('node:assert/strict').equal(process.versions.node, '24.22.1'); console.log(process.versions)"
 
       - name: Canvas native deps smoke test
         run: |

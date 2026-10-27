@@ -4,7 +4,7 @@ Thank you for your interest in helping the project! Below is a quick overview of
 
 ## Getting Started
 
-**Prerequisites**: Node.js 20 LTS or later (required for development dependencies like `cross-env@10`)
+**Prerequisites**: Node.js 24.22.1 LTS (see `.nvmrc`) (required for development dependencies like `cross-env@10`)
 
 1. Fork and clone the repo.
 2. Install dependencies:

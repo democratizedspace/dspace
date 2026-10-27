@@ -5,7 +5,7 @@ fullnameOverride: ""
 
 image:
   repository: ghcr.io/democratizedspace/dspace
-  tag: v3.0.1
+  tag: v3.0.2
   pullPolicy: IfNotPresent
 
 service:

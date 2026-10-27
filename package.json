@@ -1,9 +1,9 @@
 {
   "name": "dspace",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "packageManager": "pnpm@9.0.0",
   "engines": {
-    "node": "20 || >=22"
+    "node": ">=24.22.1 <25"
   },
   "main": "index.js",
   "scripts": {
@@ -50,8 +50,8 @@
     "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts",
     "spellcheck": "cspell --no-progress --no-summary \"docs/**/*.md\" \"frontend/src/pages/docs/**/*.md\" \"README.md\" \"AGENTS.md\"",
     "qa:remote-smoke": "node scripts/run-remote-smoke.mjs",
-    "qa:remote-migration": "npx -y node@20 scripts/run-remote-migration.mjs",
-    "qa:remote-completionist-award-iii": "npx -y node@20 scripts/run-remote-completionist-award-iii.mjs",
+    "qa:remote-migration": "npx -y node@24.22.1 scripts/run-remote-migration.mjs",
+    "qa:remote-completionist-award-iii": "npx -y node@24.22.1 scripts/run-remote-completionist-award-iii.mjs",
     "generate-quest": "cd frontend && npm run generate-quest",
     "preview": "cd frontend && npm run preview",
     "lint:a11y": "cd frontend && npm run lint:a11y",
