@@ -7,6 +7,21 @@ on:
       - 'codex/**'
   pull_request:
   workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full approved v3.0.2 hotfix SHA (required for maintenance validation)
+        required: true
+        type: string
+      publish:
+        description: Publish the validated immutable image (owner approval required)
+        required: true
+        default: false
+        type: boolean
+      confirmation:
+        description: To publish, type publish v3.0.2 followed by the full source SHA
+        required: false
+        default: ''
+        type: string
 
 permissions:
   contents: read
@@ -21,6 +36,7 @@ env:
 
 jobs:
   build:
+    if: github.event_name != 'workflow_dispatch'
     name: Build multi-arch image
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -105,3 +121,97 @@ jobs:
             ENFORCE_VITE_GIT_SHA=1
           cache-from: ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache', env.REGISTRY, env.IMAGE_NAME) || '' }}
           cache-to: ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache,mode=max', env.REGISTRY, env.IMAGE_NAME) || '' }}
+
+  maintenance-validate:
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'democratizedspace/dspace' && github.ref == 'refs/heads/release/v3.0.x'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+      checks: read
+      statuses: read
+      pull-requests: read
+      issues: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
+        with:
+          platforms: arm64
+      - uses: docker/setup-buildx-action@v3
+      - name: Validate exact maintenance source and both image architectures
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          MODE: validate
+        run: node scripts/maintenance-image.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: maintenance-validation-receipt
+          path: maintenance-receipt.json
+          if-no-files-found: warn
+
+  maintenance-publish:
+    needs: maintenance-validate
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'democratizedspace/dspace' && github.ref == 'refs/heads/release/v3.0.x' && inputs.publish == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: dspace-v3.0.2-immutable-publication
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      actions: read
+      checks: read
+      statuses: read
+      pull-requests: read
+      issues: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
+        with:
+          platforms: arm64
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - name: Revalidate and publish only the immutable hotfix coordinate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          MODE: publish
+          PUBLICATION_CONFIRMATION: ${{ inputs.confirmation }}
+        run: node scripts/maintenance-image.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: maintenance-publication-receipt
+          path: maintenance-receipt.json
+          if-no-files-found: warn

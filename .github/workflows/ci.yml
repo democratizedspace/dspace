@@ -3,7 +3,7 @@ on:
   push:
     branches: [v3, main]
   pull_request:
-    branches: [v3, main, release/v3.0.x]
+    branches: [v3, main, release/v3.0.x, codex/v3.0.2-node-security]
 
 jobs:
   build:
