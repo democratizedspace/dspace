@@ -110,6 +110,30 @@ describe('manual maintenance publication authorization', () => {
 });
 
 describe('exact source and review gate', () => {
+  it.each([
+    [40433560737, '.github/workflows/deploy-to-raspi.yml'],
+    [40433559761, '.github/workflows/rpi-deploy.yml'],
+  ])(
+    'bounds restored-branch exception %s to the exact source, path and zero jobs',
+    (id, path) => {
+      const input = evidence();
+      input.runs[0] = { ...input.runs[0], id: Number(id), path: String(path) };
+      expect(() => validateEvidence(input)).not.toThrow();
+      for (const invalid of [
+        { id: 999 },
+        { path: 'other.yml' },
+        { head_sha: 'b'.repeat(40) },
+        { jobCount: 1 },
+      ]) {
+        expect(() =>
+          validateEvidence({
+            ...input,
+            runs: [{ ...input.runs[0], ...invalid }],
+          })
+        ).toThrow();
+      }
+    }
+  );
   it('accepts captured public GitHub API review evidence from the approved source PR', () => {
     const captured = JSON.parse(
       readFileSync('tests/fixtures/maintenanceReviews.json', 'utf8').replace(

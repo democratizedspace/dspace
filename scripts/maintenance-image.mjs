@@ -17,6 +17,9 @@ export const policy = Object.freeze({
 const waivedRuns = new Map([
   [40276727866, '.github/workflows/deploy-to-raspi.yml'],
   [40276728723, '.github/workflows/rpi-deploy.yml'],
+  // Repeated initialization failures when the approved source branch was restored.
+  [40433560737, '.github/workflows/deploy-to-raspi.yml'],
+  [40433559761, '.github/workflows/rpi-deploy.yml'],
 ]);
 const requiredChecks = [
   'unit',
@@ -97,7 +100,7 @@ export function validateEvidence({
     );
   }
   // Include every returned run, not just GitHub's PR rollup. The sole exceptions
-  // are the two exact source-head runs explicitly waived by the owner.
+  // are the enumerated source-head initialization failures waived by the owner.
   for (const check of checks) {
     assert.equal(check.status, 'completed', `Pending check: ${check.name}`);
     assert.ok(

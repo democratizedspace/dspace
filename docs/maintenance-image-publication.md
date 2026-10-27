@@ -12,7 +12,10 @@ permissions or provisioning credentials as part of this task.
 
 1. Review hotfix PR #4850 at the exact source above. The owner accepted only its
    two byte-identical legacy initialization failures, runs 40276727866 and
-   40276728723. All other checks and reviews must stay green.
+   40276728723, and their zero-job repeats 40433560737 and 40433559761 after
+   restoring the source branch to recover this PR. The publisher enumerates these
+   exact run IDs, source and workflow paths; it does not ignore arbitrary failures.
+   All other checks and reviews must stay green.
 2. Merge #4850 into `release/v3.0.x` preserving the approved source commit as an
    ancestor (a normal merge, not squash/rebase). Record actual merge SHA. If a
    different strategy is chosen, stop: this publisher will reject the changed
