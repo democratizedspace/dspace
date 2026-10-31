@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, rmSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { parse } from 'yaml';
 
@@ -39,24 +41,46 @@ describe('Helm Chat provider deployment coordinate', () => {
     const result = helm('lint', chart, '--set', 'chat.defaultProvider=invalid');
     expect(result.status).not.toBe(0);
     const output = result.stdout + result.stderr;
-    expect(output).toMatch(/[/.]chat[/.]defaultProvider/);
+    expect(output).toMatch(/(?:^|[\s/.])chat[/.]defaultProvider/m);
     expect(output).toContain('token-place');
     expect(output).toContain('openai');
   });
 
-  it('rejects invalid values during template rendering', () => {
-    const result = helm(
-      'template',
-      'dspace',
-      chart,
-      '--skip-schema-validation',
-      '--set',
-      'chat.defaultProvider=invalid'
-    );
-    expect(result.status).not.toBe(0);
-    expect(result.stdout + result.stderr).toContain(
-      'chat.defaultProvider must be exactly one of: token-place, openai'
-    );
+  it('rejects invalid values during template rendering without relying on schema validation', () => {
+    // CI pins Helm 3.12.3, which has no --skip-schema-validation flag. Remove
+    // only the schema from a disposable chart copy to exercise the real template guard.
+    const originalSchema = readFileSync(`${chart}/values.schema.json`, 'utf8');
+    const fixture = mkdtempSync(join(tmpdir(), 'dspace-chat-chart-'));
+    try {
+      cpSync(chart, fixture, { recursive: true });
+      unlinkSync(join(fixture, 'values.schema.json'));
+      for (const provider of ['token-place', 'openai']) {
+        const valid = helm(
+          'template',
+          'dspace',
+          fixture,
+          '--set',
+          `chat.defaultProvider=${provider}`
+        );
+        expect(valid.status, valid.stderr).toBe(0);
+      }
+      const result = helm(
+        'template',
+        'dspace',
+        fixture,
+        '--set',
+        'chat.defaultProvider=invalid'
+      );
+      expect(result.status).not.toBe(0);
+      expect(result.stdout + result.stderr).toContain(
+        'chat.defaultProvider must be exactly one of: token-place, openai'
+      );
+      expect(readFileSync(`${chart}/values.schema.json`, 'utf8')).toBe(
+        originalSchema
+      );
+    } finally {
+      rmSync(fixture, { recursive: true, force: true });
+    }
   });
 
   it('rejects a duplicate generic environment entry', () => {
