@@ -73,6 +73,42 @@ SKIP_E2E=1 npm test
   instead of using `.npmrc` proxy settings.
 - Use `nvm use` to match the Node.js version specified in `.nvmrc` (Node 20 LTS).
 
+## Release QA checklist ownership
+
+Agents should actively advance the current release checklist (for v3.1.0,
+[docs/qa/v3.1.md](docs/qa/v3.1.md)) during authorized project work. Do not leave a
+verifiable item open solely because an LLM performed the verification. Deliver
+small, evidence-backed milestone PRs rather than waiting for the entire release.
+
+- Read each item's exact acceptance criterion and dependencies before acting.
+  Perform authorized checks, fix in-scope failures, and mark an item `[x]` only
+  when recorded evidence satisfies that criterion. Do not weaken, delete, or
+  silently reinterpret a gate to make it pass.
+- For every newly checked item, include a nearby evidence reference or a linked
+  evidence record with the tested commit/artifact identity, date, environment,
+  command or procedure, result, and relevant limitations. Keep evidence durable
+  and reviewable; redact credentials and private data. Revalidate affected items
+  after changes to their tested code, configuration, dependencies, or artifacts.
+- Distinguish source inspection, mocked/unit tests, local browser checks, built
+  packages, published artifacts, staging validation, and production validation.
+  A local pass cannot close a deployed-behavior gate. A merged PR cannot establish
+  deployment, and a successful check cannot waive another failed or unrun check.
+- Human-review requirements should be narrow and explicit, not a blanket reason
+  to defer checks an agent can perform. The release owner's actual PR review may
+  satisfy a criterion that calls for review of the evidence or change itself.
+  Keep that item unchecked while review is pending; after the qualifying review,
+  record its link and scope before checking it. Opening a PR, requesting review,
+  or receiving approval for a different scope is not completed review.
+- Owner PR review does not substitute for a required hands-on observation,
+  deployment, staging/production validation, or an explicitly separate sign-off.
+  Record those results only when the specified action actually occurs. Checklist
+  ownership does not authorize merging, publishing, deploying, remote operations,
+  or bypassing the user's work-hour and approval restrictions.
+- When blocked, leave the item unchecked and record the exact missing evidence,
+  dependency, or authorization and the next bounded action. Continue independent
+  authorized items. Keep post-release follow-ups separate from release blockers;
+  never infer release readiness from the number of checked boxes or a target date.
+
 ## Docs RAG discovery on Windows
 
 `npm run build:docs-rag` uses `scripts/docs-rag-files.mjs` for filesystem globbing.
