@@ -90,6 +90,7 @@ const TEST_GROUPS = [
             'cookie-consent.spec.ts',
             'docs-navigation.spec.ts',
             'docs-changelog.spec.ts',
+            'astro-migration-ssr.spec.ts',
             'changelog-container.spec.ts',
             'homepage-responsive-width.spec.ts',
             'failover-status.spec.ts',

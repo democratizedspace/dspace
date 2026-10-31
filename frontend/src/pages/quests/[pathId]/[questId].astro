@@ -7,7 +7,7 @@ let quest;
 
 const { pathId, questId } = Astro.params;
 
-quests = await Astro.glob('../json/*/*.json');
+quests = Object.values(import.meta.glob('../json/*/*.json', { eager: true }));
 
 quest = quests.find((quest) => {
     return quest.default.id === `${pathId}/${questId}`;

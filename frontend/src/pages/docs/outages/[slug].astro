@@ -6,12 +6,12 @@ import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 
 const { slug } = Astro.params;
-const outages = await Astro.glob('../md/outages/*.md');
+const outages = Object.values(import.meta.glob('../md/outages/*.md', { eager: true }));
 const outage = outages.find((doc) => doc.frontmatter.slug === slug);
 
 const title = outage?.frontmatter?.title ?? 'Outage not found';
 const DOMPurify = createDOMPurify((new JSDOM('')).window as unknown as Window);
-const html = outage ? DOMPurify.sanitize(fixMarkdownText(outage.compiledContent())) : '';
+const html = outage ? DOMPurify.sanitize(fixMarkdownText(await outage.compiledContent())) : '';
 ---
 
 <Page title={title} columns="1">

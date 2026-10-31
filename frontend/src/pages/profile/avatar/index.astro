@@ -2,7 +2,7 @@
 import Page from '../../../components/Page.astro';
 import AvatarPicker from '../../../components/svelte/AvatarPicker.svelte';
 
-const defaultPFPs = await Astro.glob('../../../../public/assets/pfp/*.jpg');
+const defaultPFPs = Object.values(import.meta.glob('../../../../public/assets/pfp/*.jpg', { eager: true }));
 
 const assetUrls = defaultPFPs
     .map((entry) => {

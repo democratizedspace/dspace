@@ -38,7 +38,7 @@ function prepareHtml(html, slug) {
 }
 
 try {
-    changelogs = await Astro.glob('../pages/docs/md/changelog/*.md');
+    changelogs = Object.values(import.meta.glob('../pages/docs/md/changelog/*.md', { eager: true }));
 } catch (error) {
     changelogError = error instanceof Error ? error : new Error(String(error));
     logServerError({
@@ -56,7 +56,7 @@ try {
     if (published.length > 0) {
         const [latest] = published;
         latestUpdateTitle = latest?.frontmatter?.title;
-        latestUpdateHtml = prepareHtml(latest?.compiledContent(), latest?.frontmatter?.slug);
+        latestUpdateHtml = prepareHtml(await latest?.compiledContent(), latest?.frontmatter?.slug);
     }
 } catch (error) {
     changelogRenderError = error instanceof Error ? error : new Error(String(error));

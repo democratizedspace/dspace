@@ -4,7 +4,7 @@ ARG DSPACE_VERSION=dev
 ARG GIT_SHA=unknown
 ARG VITE_GIT_SHA=${GIT_SHA}
 
-FROM node:20-bookworm-slim AS base
+FROM node:22.23.4-bookworm-slim AS base
 ARG DSPACE_VERSION
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
