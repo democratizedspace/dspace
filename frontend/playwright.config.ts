@@ -301,7 +301,9 @@ export default defineConfig({
         ? {
               // Ensure preview always has complete, test-compatible build artifacts, including
               // quest-graph debug marker checks for direct Playwright invocation.
-              command: `node ./scripts/ensure-astro-build.mjs && node ./node_modules/astro/astro.js preview --host 0.0.0.0 --port ${port}`,
+              // --ignore-lock keeps Astro 7 in the foreground under agents so Playwright
+              // owns the server lifecycle instead of Astro auto-backgrounding it.
+              command: `node ./scripts/ensure-astro-build.mjs && node ./node_modules/astro/bin/astro.mjs preview --ignore-lock --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
