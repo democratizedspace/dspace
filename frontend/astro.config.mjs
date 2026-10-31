@@ -9,7 +9,16 @@ import 'prism-svelte';
 export default defineConfig({
     output: 'server',
     adapter: node({ mode: 'standalone' }),
-    integrations: [svelte()],
+    // Keep optional graph styles inside its lazy client module. Astro 7 otherwise
+    // hoists these descendant styles onto /quests even while the graph is disabled.
+    integrations: [
+        svelte({
+            dynamicCompileOptions: ({ filename }) =>
+                /\/QuestGraph(?:Visualizer|Card)\.svelte$/.test(filename.replaceAll('\\', '/'))
+                    ? { css: 'injected' }
+                    : undefined,
+        }),
+    ],
     style: {
         postcss: {},
     },

@@ -288,7 +288,7 @@ test('verify playwright web server is properly configured', async ({ page }, tes
     // Check that the webServer config exists and is properly configured
     expect(configContent).toContain('webServer:');
     expect(configContent).toMatch(
-        /command:\s*`[^`]*?(?:(?:npx\s+)?astro|node\s+\.\/node_modules\/astro\/astro\.js) preview --host 0\.0\.0\.0 --port \$\{port}/
+        /command:\s*`[^`]*?node\s+\.\/node_modules\/astro\/bin\/astro\.mjs preview --ignore-lock --host 0\.0\.0\.0 --port \$\{port}/
     );
     expect(configContent).toContain('url: baseURL');
 });
