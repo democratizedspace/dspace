@@ -133,7 +133,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '22.23.4'
 
       - name: Install validation dependencies
         working-directory: pr-workspace
@@ -226,7 +226,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '22.23.4'
 
       - name: Install validation dependencies
         run: /usr/local/bin/dspace-claude-validate prepare-deps

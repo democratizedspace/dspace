@@ -3,7 +3,7 @@ import Page from '../components/Page.astro';
 import { appendChangelogNotes } from '../utils/changelogNotes';
 import { draftChangelogRedirects, partitionChangelogs } from '../utils/changelogState.mjs';
 
-const changelogs = await Astro.glob('./docs/md/changelog/*.md');
+const changelogs = Object.values(import.meta.glob('./docs/md/changelog/*.md', { eager: true }));
 
 const { draft, published } = partitionChangelogs(changelogs);
 const groups = [
@@ -16,6 +16,13 @@ const slugToHeadingId = (slug) => (slug ? String(slug).toLowerCase() : 'changelo
 function prepareHtml(html, slug) {
     return appendChangelogNotes(html, slug);
 }
+
+const renderedHtmlBySlug = new Map(
+    await Promise.all(changelogs.map(async (doc) => [
+        doc.frontmatter.slug,
+        prepareHtml(await doc.compiledContent(), doc.frontmatter.slug),
+    ]))
+);
 
 const CHANGELOG_SCROLL_BUFFER_PX = 16;
 ---
@@ -43,7 +50,7 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
                                 {group.status === 'draft' && <p>Unpublished draft — date is tentative.</p>}
                                 <div
                                     class="entry-body"
-                                    set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
+                                    set:html={renderedHtmlBySlug.get(doc.frontmatter.slug)}
                                 ></div>
                             </div>
                         </section>

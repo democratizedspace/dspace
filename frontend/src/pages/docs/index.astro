@@ -5,7 +5,7 @@ import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
 import { getQuestTreesFromModulePaths, mergeSkillLinks } from '../../utils/docsSkillsIndex.js';
 
-const docModules = await Astro.glob('./md/**/*.md');
+const docModules = Object.values(import.meta.glob('./md/**/*.md', { eager: true }));
 
 const buildDocIndex = async () => {
     const entries = await Promise.all(

@@ -1,13 +1,24 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import svelte from '@astrojs/svelte';
+// prism-svelte extends the Prism singleton; Astro no longer initializes it first.
+import 'prismjs';
 import 'prism-svelte';
 
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
     adapter: node({ mode: 'standalone' }),
-    integrations: [svelte()],
+    // Keep optional graph styles inside its lazy client module. Astro 7 otherwise
+    // hoists these descendant styles onto /quests even while the graph is disabled.
+    integrations: [
+        svelte({
+            dynamicCompileOptions: ({ filename }) =>
+                /\/QuestGraph(?:Visualizer|Card)\.svelte$/.test(filename.replaceAll('\\', '/'))
+                    ? { css: 'injected' }
+                    : undefined,
+        }),
+    ],
     style: {
         postcss: {},
     },

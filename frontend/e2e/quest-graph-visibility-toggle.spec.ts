@@ -38,13 +38,19 @@ test.describe('Quest graph visibility toggle', () => {
 
         await enableQuestGraphVisualizer(page);
 
+        const visualizerScript = page.waitForResponse((response) =>
+            /\/QuestGraphVisualizer\.[^/]+\.js$/.test(new URL(response.url()).pathname)
+        );
         await page.goto('/quests');
+        expect((await visualizerScript).ok()).toBe(true);
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
         const visualizer = page.getByTestId('quest-graph-visualizer');
         await visualizer.scrollIntoViewIfNeeded();
         await expect(visualizer).toBeVisible();
+        await expect(visualizer).toHaveCSS('border-radius', '16px');
+        await expect(visualizer.locator('.card').first()).toHaveCSS('border-radius', '12px');
 
         await page.reload();
         await page.waitForLoadState('networkidle');
@@ -53,5 +59,10 @@ test.describe('Quest graph visibility toggle', () => {
         const visualizerAfterReload = page.getByTestId('quest-graph-visualizer');
         await visualizerAfterReload.scrollIntoViewIfNeeded();
         await expect(visualizerAfterReload).toBeVisible();
+        await expect(visualizerAfterReload).toHaveCSS('border-radius', '16px');
+        await expect(visualizerAfterReload.locator('.card').first()).toHaveCSS(
+            'border-radius',
+            '12px'
+        );
     });
 });

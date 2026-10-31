@@ -78,22 +78,26 @@ describe('Node version preflight', () => {
     const message = getUnsupportedNodeVersionMessage('18.18.0');
     expect(message).toContain('[qa:remote-completionist-award-iii]');
     expect(message).toContain('18.18.0');
-    expect(message).toContain('20 || >=22');
+    expect(message).toContain('>=22.23.4');
     expect(message).toContain('nvm use');
     expect(message).toContain('pnpm install');
   });
 
   it('accepts supported versions in the declared engine range', () => {
     expect(isSupportedNodeVersion('19.9.0')).toBe(false);
-    expect(isSupportedNodeVersion('20.0.0')).toBe(true);
+    expect(isSupportedNodeVersion('20.0.0')).toBe(false);
     expect(isSupportedNodeVersion('21.9.0')).toBe(false);
-    expect(isSupportedNodeVersion('22.0.0')).toBe(true);
+    expect(isSupportedNodeVersion('22.0.0')).toBe(false);
+    expect(isSupportedNodeVersion('22.23.3')).toBe(false);
+    expect(isSupportedNodeVersion('22.23.4')).toBe(true);
+    expect(isSupportedNodeVersion('22.24.0')).toBe(true);
+    expect(isSupportedNodeVersion('24.0.0')).toBe(true);
   });
 
   it('rejects malformed versions and accepts optional v-prefix versions', () => {
     expect(isSupportedNodeVersion('')).toBe(false);
     expect(isSupportedNodeVersion('not-a-version')).toBe(false);
-    expect(isSupportedNodeVersion('v20.11.0')).toBe(true);
+    expect(isSupportedNodeVersion('v22.23.4')).toBe(true);
   });
 
   it('fails before attempting Playwright launch on unsupported Node', () => {
@@ -133,7 +137,7 @@ describe('Node version preflight', () => {
 
     main({
       argv: ['--baseURL=https://staging.democratized.space'],
-      nodeVersion: '20.11.0',
+      nodeVersion: '22.23.4',
       spawnFn,
       resolvePlaywrightCliFn: () => '/repo/node_modules/@playwright/test/cli.js',
       errorLog: vi.fn(),

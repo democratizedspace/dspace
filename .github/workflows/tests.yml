@@ -20,7 +20,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22.23.4'
       - name: Test advisory and privacy boundaries
         env:
           HOME: ${{ runner.temp }}/identity-test-home
@@ -39,7 +39,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22.23.4'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -75,7 +75,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22.23.4'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -124,7 +124,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22.23.4'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

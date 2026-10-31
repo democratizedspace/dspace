@@ -3,7 +3,7 @@ import Page from '../../../components/Page.astro';
 import Card from '../../../components/Card.astro';
 import Chip from '../../../components/Chip.astro';
 
-const outages = (await Astro.glob('../md/outages/*.md'))
+const outages = (Object.values(import.meta.glob('../md/outages/*.md', { eager: true })))
     .map((doc) => ({
         slug: doc?.frontmatter?.slug ?? '',
         title: doc?.frontmatter?.title ?? doc?.frontmatter?.slug ?? 'Outage',

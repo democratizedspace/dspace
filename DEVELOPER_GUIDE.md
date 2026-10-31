@@ -43,11 +43,11 @@ an SVG content type, and bytes matching both the source icons and the production
 
 ### Prerequisites
 
-- Node.js 18.x or 20.x (LTS)
+- Node.js 22.23.4 or a newer compatible LTS
 - npm 7.x or higher
 - Git
 
-The repo includes a `.nvmrc` file targeting Node.js 20. Run `nvm use` after cloning
+The repo includes a `.nvmrc` file targeting Node.js 22.23.4. Run `nvm use` after cloning
 to automatically switch to the correct version.
 
 ### Installation
