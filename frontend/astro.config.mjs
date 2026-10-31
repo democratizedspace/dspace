@@ -1,6 +1,8 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import svelte from '@astrojs/svelte';
+// prism-svelte extends the Prism singleton; Astro no longer initializes it first.
+import 'prismjs';
 import 'prism-svelte';
 
 // https://astro.build/config

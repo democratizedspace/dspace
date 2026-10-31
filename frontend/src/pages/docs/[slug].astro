@@ -45,7 +45,7 @@ const buildLatestChangelogHtml = (entries = []) => {
 const { slug } = Astro.params;
 let title, html, doc;
 
-const docs = await Astro.glob('./md/*.md');
+const docs = Object.values(import.meta.glob('./md/*.md', { eager: true }));
 
 const slugString = typeof slug === 'string' ? slug : '';
 const normalizedSlug = slugString.toLowerCase();
@@ -61,7 +61,7 @@ try {
         let compiled = await doc.compiledContent();
 
         if (normalizedSlug === 'changelog') {
-            const changelogEntries = await Astro.glob('./md/changelog/*.md');
+            const changelogEntries = Object.values(import.meta.glob('./md/changelog/*.md', { eager: true }));
             const { published, draft } = partitionChangelogs(changelogEntries);
             const latestHtml = buildLatestChangelogHtml(published);
             compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);

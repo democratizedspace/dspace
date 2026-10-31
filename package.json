@@ -3,7 +3,7 @@
   "version": "3.1.0",
   "packageManager": "pnpm@9.0.0",
   "engines": {
-    "node": "20 || >=22"
+    "node": ">=22.23.4"
   },
   "main": "index.js",
   "scripts": {
@@ -51,8 +51,8 @@
     "spellcheck": "cspell --no-progress --no-summary \"docs/**/*.md\" \"frontend/src/pages/docs/**/*.md\" \"README.md\" \"AGENTS.md\"",
     "qa:remote-smoke": "node scripts/run-remote-smoke.mjs",
     "qa:remote-chat-smoke": "node scripts/run-remote-chat-smoke.mjs",
-    "qa:remote-migration": "npx -y node@20 scripts/run-remote-migration.mjs",
-    "qa:remote-completionist-award-iii": "npx -y node@20 scripts/run-remote-completionist-award-iii.mjs",
+    "qa:remote-migration": "npx -y node@22.23.4 scripts/run-remote-migration.mjs",
+    "qa:remote-completionist-award-iii": "npx -y node@22.23.4 scripts/run-remote-completionist-award-iii.mjs",
     "generate-quest": "cd frontend && npm run generate-quest",
     "preview": "cd frontend && npm run preview",
     "lint:a11y": "cd frontend && npm run lint:a11y",
@@ -88,7 +88,7 @@
     "prettier-plugin-svelte": "^2.10.1",
     "prism-svelte": "^0.5.0",
     "prismjs": "^1.30.0",
-    "svelte": "^5.46.0",
+    "svelte": "5.57.3",
     "ts-jest": "^29.4.1",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4",
@@ -98,7 +98,8 @@
   },
   "dependencies": {
     "@dspace/feature-flags": "file:packages/feature-flags",
-    "openai": "^5.16.0"
+    "openai": "^5.16.0",
+    "zod": "3.25.76"
   },
   "overrides": {
     "caniuse-lite": ">=1.0.30001792",
