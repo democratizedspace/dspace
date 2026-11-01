@@ -6,7 +6,7 @@ it('passes the standalone published-image verifier contracts without Docker', ()
     process.execPath,
     ['--test', 'scripts/test-verify-published-image.mjs'],
     {
-      stdio: 'pipe',
+      stdio: 'inherit',
       timeout: 30000,
     }
   );
