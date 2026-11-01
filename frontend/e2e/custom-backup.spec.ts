@@ -19,7 +19,7 @@ test.describe('Custom content backup', () => {
         });
 
         await page.goto('/contentbackup');
-        await waitForHydration(page);
+        await waitForImporter(page);
 
         const exportPanel = page.getByTestId('contentbackup-export');
         const importPanel = page.getByTestId('contentbackup-import');
@@ -200,7 +200,7 @@ test.describe('Custom content backup', () => {
         });
 
         await page.goto('/contentbackup');
-        await waitForHydration(page);
+        await waitForImporter(page);
 
         const unsafeBackup = {
             schemaVersion: 1,
@@ -270,3 +270,11 @@ test.describe('Custom content backup', () => {
         expect(persistedIds).not.toContain('unsafe-import-quest');
     });
 });
+
+async function waitForImporter(page: import('@playwright/test').Page) {
+    await waitForHydration(page, 'data-testid=contentbackup-import');
+    await expect(page.getByTestId('contentbackup-import')).toHaveAttribute(
+        'data-import-ready',
+        'true'
+    );
+}

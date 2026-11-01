@@ -5,9 +5,15 @@
     import { restoreCustomContentBackupFromFile } from '../../../utils/customContentBackup.js';
 
     let destinationReady = Promise.resolve(false);
+    let hydrated = false;
+    let importReady = false;
     onMount(() => {
+        hydrated = true;
         destinationReady = initializeCustomContentForImportUI().then(
-            () => true,
+            () => {
+                importReady = true;
+                return true;
+            },
             () => false
         );
     });
@@ -102,7 +108,12 @@
 </script>
 
 <div class="panel">
-    <section class="vertical" data-hydrated="true" data-testid="contentbackup-import">
+    <section
+        class="vertical"
+        data-hydrated={hydrated ? 'true' : 'false'}
+        data-import-ready={importReady ? 'true' : 'false'}
+        data-testid="contentbackup-import"
+    >
         <h2>Import custom content</h2>
         <p id={dropzoneLabelId}>Drag and drop your backup file here, or click to browse.</p>
         <label
