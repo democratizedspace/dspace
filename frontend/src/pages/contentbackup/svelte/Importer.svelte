@@ -110,8 +110,8 @@
 <div class="panel">
     <section
         class="vertical"
-        data-hydrated={hydrated}
-        data-import-ready={importReady}
+        data-hydrated={hydrated ? 'true' : 'false'}
+        data-import-ready={importReady ? 'true' : 'false'}
         data-testid="contentbackup-import"
     >
         <h2>Import custom content</h2>
