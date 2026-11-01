@@ -30,20 +30,59 @@ const env = {
   GITHUB_ACTOR: fixed.owner,
   GITHUB_TRIGGERING_ACTOR: fixed.owner,
 };
-const monday = new Date('2026-11-02T15:00:00Z');
 const labels = {
   'org.opencontainers.image.revision': fixed.source,
   'org.opencontainers.image.version': fixed.version,
   'org.opencontainers.image.source': `https://github.com/${fixed.repository}`,
 };
 
-test('manual owner/host/ref/input/time restrictions fail closed', () => {
-  guard(env, {}, monday);
+test('manual owner/host/ref/input restrictions fail closed', () => {
+  guard(env, {});
   for (const key of Object.keys(env))
-    assert.throws(() => guard({ ...env, [key]: 'wrong' }, {}, monday));
-  assert.throws(() => guard(env, { inputs: { image: 'other' } }, monday));
-  for (const date of ['2026-11-01T20:00:00Z', '2026-11-02T14:59:00Z'])
-    assert.throws(() => guard(env, {}, new Date(date)));
+    assert.throws(() => guard({ ...env, [key]: 'wrong' }, {}));
+  assert.throws(() => guard(env, { inputs: { image: 'other' } }));
+});
+
+test('registry errors identify bounded stages without remote messages or credentials', async () => {
+  const secret = 'https://signed.invalid/blob?token=secret';
+  for (const phase of ['token', 'token-body', 'tag', 'tag-body']) {
+    let calls = 0;
+    await assert.rejects(
+      registry(async () => {
+        if (++calls === 1) {
+          if (phase === 'token') throw new Error(secret);
+          return {
+            status: 200,
+            json: async () => {
+              if (phase === 'token-body') throw new Error(secret);
+              return { token: 'secret' };
+            },
+          };
+        }
+        if (phase === 'tag') throw new Error(secret);
+        return {
+          status: 200,
+          arrayBuffer: async () => {
+            throw new Error(secret);
+          },
+        };
+      }),
+      (error) => {
+        assert.match(
+          error.message,
+          phase.startsWith('token')
+            ? /Registry pull token/
+            : /Registry tag index/
+        );
+        assert.ok(error.message.length < 120);
+        assert.ok(
+          !error.message.includes('secret') && !error.message.includes('https:')
+        );
+        assert.equal(error.cause, undefined);
+        return true;
+      }
+    );
+  }
 });
 
 test('source checkout checks full revision, tree, clean files and versions', () => {

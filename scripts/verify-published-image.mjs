@@ -20,7 +20,7 @@ export const fixed = Object.freeze({
   }),
 });
 
-export function guard(env, event, now = new Date()) {
+export function guard(env, event) {
   assert.equal(env.GITHUB_ACTIONS, 'true', 'GitHub runner only');
   assert.equal(env.RUNNER_ENVIRONMENT, 'github-hosted');
   assert.equal(env.GITHUB_EVENT_NAME, 'workflow_dispatch');
@@ -33,17 +33,6 @@ export function guard(env, event, now = new Date()) {
     'Owner rerun required'
   );
   assert.deepEqual(event.inputs || {}, {}, 'No image or other inputs allowed');
-  const local = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Los_Angeles',
-    weekday: 'short',
-    hour: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(now);
-  const part = (name) => local.find((p) => p.type === name).value;
-  assert.ok(
-    !['Sat', 'Sun'].includes(part('weekday')) && Number(part('hour')) >= 7,
-    'Owner dispatch must wait until a weekday at or after 07:00 America/Los_Angeles'
-  );
 }
 
 const command = (binary, args, cwd) =>
@@ -65,27 +54,49 @@ export function checkSource(run = command) {
   assert.equal(git('show', 'HEAD:.nvmrc').trim(), '24.22.1');
 }
 
+// Never forward fetch errors, response bodies, tokens, or signed redirect URLs.
+// Stage labels are fixed at the call sites below, not derived from remote data.
+async function registryOperation(stage, operation) {
+  try {
+    return await operation();
+  } catch (error) {
+    const reason = ['TimeoutError', 'AbortError'].includes(error.name)
+      ? 'request timed out or aborted'
+      : 'transport or response decoding failed';
+    throw new Error(`Registry ${stage}: ${reason}`);
+  }
+}
+
 export async function registry(request = fetch) {
-  const get = async (url, headers = {}, redirect = 'error') => {
-    const response = await request(url, {
-      headers,
-      redirect,
-      signal: AbortSignal.timeout(30000),
-    });
+  const get = async (stage, url, headers = {}, redirect = 'error') => {
+    const response = await registryOperation(stage, () =>
+      request(url, {
+        headers,
+        redirect,
+        signal: AbortSignal.timeout(30000),
+      })
+    );
     assert.equal(
       response.status,
       200,
-      'Registry read failed; no credential escalation'
+      `Registry ${stage}: HTTP ${response.status}; no credential escalation`
     );
     return response;
   };
   const tokenResponse = await get(
+    'pull token',
     'https://ghcr.io/token?service=ghcr.io&scope=repository:democratizedspace/dspace:pull'
   );
-  const { token } = await tokenResponse.json();
-  assert.ok(typeof token === 'string' && token.length > 0);
-  const read = async (kind, ref, expected) => {
+  const { token } = await registryOperation('pull token body', () =>
+    tokenResponse.json()
+  );
+  assert.ok(
+    typeof token === 'string' && token.length > 0,
+    'Registry pull token missing'
+  );
+  const read = async (stage, kind, ref, expected) => {
     const response = await get(
+      stage,
       `https://ghcr.io/v2/${fixed.repository}/${kind}/${ref}`,
       {
         Authorization: `Bearer ${token}`,
@@ -94,26 +105,43 @@ export async function registry(request = fetch) {
       },
       kind === 'blobs' ? 'follow' : 'error'
     );
-    const bytes = Buffer.from(await response.arrayBuffer());
+    const bytes = Buffer.from(
+      await registryOperation(`${stage} body`, () => response.arrayBuffer())
+    );
     assert.equal(
       `sha256:${createHash('sha256').update(bytes).digest('hex')}`,
       expected,
-      'Registry content digest mismatch'
+      `Registry ${stage}: content digest mismatch`
     );
     if (kind === 'manifests')
-      assert.equal(response.headers.get('docker-content-digest'), expected);
-    return JSON.parse(bytes);
+      assert.equal(
+        response.headers.get('docker-content-digest'),
+        expected,
+        `Registry ${stage}: header digest mismatch`
+      );
+    return registryOperation(`${stage} JSON`, () => JSON.parse(bytes));
   };
-  const index = await read('manifests', `hotfix-${fixed.source}`, fixed.index);
-  await read('manifests', fixed.index, fixed.index);
+  const index = await read(
+    'tag index',
+    'manifests',
+    `hotfix-${fixed.source}`,
+    fixed.index
+  );
+  await read('immutable index', 'manifests', fixed.index, fixed.index);
   assert.deepEqual(
     validatePublishedIndex(200, fixed.index, fixed.index, index),
     fixed.platforms
   );
   for (const [arch, digest] of Object.entries(fixed.platforms)) {
-    const manifest = await read('manifests', digest, digest);
+    const manifest = await read(
+      `${arch} manifest`,
+      'manifests',
+      digest,
+      digest
+    );
     assert.match(manifest.config.digest, /^sha256:[a-f0-9]{64}$/);
     const config = await read(
+      `${arch} config blob`,
       'blobs',
       manifest.config.digest,
       manifest.config.digest
