@@ -140,10 +140,12 @@ API v1 chat semantics inside the encrypted envelope:
 
 - API v1 is non-streaming. Do not include `stream: true`; if a future helper accepts options, force
   or omit `stream` rather than passing user-provided streaming options through.
-- Prefer model `llama-3.1-8b-instruct` for DSPACE compatibility. token.place's public integration
-  test sends a DSPACE-style request with this model and asserts the same response model and a
-  non-empty `api_v1_response.choices[0].message.content`; token.place exposes
-  `llama-3.1-8b-instruct` from the API v1 models endpoint as the canonical launch model.
+- The current DSPACE client defaults to `qwen3-8b-instruct`. An explicit
+  `llama-3.1-8b-instruct` request is a legacy compatibility path, not the default: the client
+  accepts relay metadata resolving that request to `qwen3-8b-instruct` while retaining the
+  requested legacy identifier in the encrypted request. This source behavior does not establish
+  current live model availability; verify the selected candidate and configured deployment
+  separately.
 - API v1 returns structured OpenAI-style errors as `{ error: { message, type, param?, code? } }`
   inside the decrypted `api_v1_response`. The client should preserve status/type/code/message for
   UI summaries and tests.
@@ -210,7 +212,7 @@ Normalization rules:
 - There must be no `tokenPlace.apiKey`, token.place credential form, or token.place
   `Authorization` header.
 - Recommended optional deployment model override: `DSPACE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
-  `llama-3.1-8b-instruct`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
+  `qwen3-8b-instruct`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
   fallback. Do not make the model a user-facing key-management setting in v3.1.
 
 ## Post-staging runtime routing correction
@@ -376,7 +378,8 @@ Unit tests:
 - token.place client calls `GET /api/v1/relay/servers/next`, `POST /api/v1/relay/requests`, and
   `POST /api/v1/relay/responses/retrieve`.
 - token.place client defaults the encrypted `api_v1_request.model` to
-  `llama-3.1-8b-instruct`.
+  `qwen3-8b-instruct`; explicit legacy Llama requests may resolve to Qwen through validated
+  relay selection metadata.
 - token.place client sends ciphertext-only relay request payloads and does not expose plaintext
   `model`, `messages`, `PlayerState`, docs grounding, inventory, save data, or secrets to
   relay-owned state.
