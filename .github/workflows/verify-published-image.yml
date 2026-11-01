@@ -1,0 +1,42 @@
+name: Verify existing v3.0.2 image
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  verify:
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'democratizedspace/dspace' && github.ref == 'refs/heads/release/v3.0.x' && github.actor == 'futuroptimist' && github.triggering_actor == 'futuroptimist'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: dspace-v3.0.2-existing-image-verification
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Enforce owner, ref, and weekday dispatch window before emulation
+        run: node scripts/verify-published-image.mjs --guard-only
+      - uses: actions/checkout@v4
+        with:
+          ref: 47900748f61e1ef38c6289fc697f7a070f7fa3c9
+          path: source
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
+        with:
+          platforms: arm64
+      - name: Verify registry content and smoke both immutable platform images
+        run: node scripts/verify-published-image.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: published-image-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: published-image-verification-receipt.json
+          if-no-files-found: warn
