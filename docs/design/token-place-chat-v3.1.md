@@ -94,7 +94,7 @@ DSPACE `/chat` must not send the default prompt as plaintext directly to
     "request_id": "dspace-generated-request-id",
     "client_public_key": "browser-client-public-key",
     "api_v1_request": {
-        "model": "llama-3.1-8b-instruct",
+        "model": "qwen3-8b-instruct",
         "messages": [
             { "role": "system", "content": "..." },
             { "role": "user", "content": "..." }
@@ -106,10 +106,11 @@ DSPACE `/chat` must not send the default prompt as plaintext directly to
 }
 ```
 
-> Historical launch-state note: the example above preserves the legacy `llama-3.1-8b-instruct`
-> request identifier used during the API v1 rollout. Current operators should use canonical
-> `qwen3-8b-instruct` unless they are intentionally testing the explicit legacy Llama → Qwen
-> resolution path.
+> Current API contract (November 1, 2026): token.place uses API v1 and supports only
+> `qwen3-8b-instruct`. The previous API v1 model, `llama-3.1-8b-instruct`, is no longer
+> supported. Use Qwen in current requests; selecting from this one-model catalog is API
+> conformance, not a meaningful choice between supported models. See the
+> [provider documentation and evidence limitations](../qa/evidence/2026-11-01-model-default-docs.md).
 
 5. Encrypt that envelope with the selected compute node public key.
 6. Dispatch only ciphertext plus safe routing metadata to `POST /api/v1/relay/requests`. The relay
@@ -140,12 +141,11 @@ API v1 chat semantics inside the encrypted envelope:
 
 - API v1 is non-streaming. Do not include `stream: true`; if a future helper accepts options, force
   or omit `stream` rather than passing user-provided streaming options through.
-- The current DSPACE client defaults to `qwen3-8b-instruct`. An explicit
-  `llama-3.1-8b-instruct` request is a legacy compatibility path, not the default: the client
-  accepts relay metadata resolving that request to `qwen3-8b-instruct` while retaining the
-  requested legacy identifier in the encrypted request. This source behavior does not establish
-  current live model availability; verify the selected candidate and configured deployment
-  separately.
+- Use `qwen3-8b-instruct`, the sole currently supported token.place API v1 model and the
+  DSPACE client default. The frontend still contains legacy Llama selection-metadata handling
+  and retains the requested identifier in the encrypted request; that compatibility code and
+  its mocked tests do not establish provider support for Llama. Do not send the obsolete Llama
+  identifier in current requests. Candidate and deployed request success require separate evidence.
 - API v1 returns structured OpenAI-style errors as `{ error: { message, type, param?, code? } }`
   inside the decrypted `api_v1_response`. The client should preserve status/type/code/message for
   UI summaries and tests.
@@ -213,7 +213,8 @@ Normalization rules:
   `Authorization` header.
 - Recommended optional deployment model override: `DSPACE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
   `qwen3-8b-instruct`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
-  fallback. Do not make the model a user-facing key-management setting in v3.1.
+  fallback. An override does not make an unsupported model available: the current provider
+  supports only Qwen. Do not make the model a user-facing key-management setting in v3.1.
 
 ## Post-staging runtime routing correction
 
@@ -378,8 +379,8 @@ Unit tests:
 - token.place client calls `GET /api/v1/relay/servers/next`, `POST /api/v1/relay/requests`, and
   `POST /api/v1/relay/responses/retrieve`.
 - token.place client defaults the encrypted `api_v1_request.model` to
-  `qwen3-8b-instruct`; explicit legacy Llama requests may resolve to Qwen through validated
-  relay selection metadata.
+  `qwen3-8b-instruct`. Existing mocked legacy-selection tests describe frontend compatibility
+  only; they do not prove that the provider accepts the obsolete Llama request identifier.
 - token.place client sends ciphertext-only relay request payloads and does not expose plaintext
   `model`, `messages`, `PlayerState`, docs grounding, inventory, save data, or secrets to
   relay-owned state.
