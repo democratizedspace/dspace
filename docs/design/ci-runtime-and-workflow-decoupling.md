@@ -1,6 +1,6 @@
-# CI runtime and workflow decoupling (K-391)
+# CI runtime and workflow decoupling
 
-Status: design only; P4. Recorded 2026-11-01 UTC (Saturday evening Pacific).
+Status: design only. Recorded 2026-11-01 UTC.
 No workflow, required check, release gate, infrastructure, or credential change is
 implemented by this document. Implementation requires separately reviewed work.
 
@@ -23,19 +23,19 @@ evidence only; they do not prove deployed behavior or release readiness.
 All listed jobs use GitHub-hosted `ubuntu-latest`. There is no `deploy.yml` at
 this snapshot, despite an older overview in AGENTS.md mentioning it.
 
-| File under `.github/workflows/` | Triggers | Jobs, dependencies, and repeated work |
-| --- | --- | --- |
-| `ci.yml` | Push main/v3; PR targeting main/v3 | Four independent jobs: `build` runs root coverage; `docs-links` runs Lychee; `root-tests` serially runs lint, type-check, build, npm test, internal links; `frontend-indexeddb-regression-e2e` installs Chromium, runs IndexedDB regression and local chat smoke including negative cases. No `needs` edges. |
-| `tests.yml` | Push main/v3; all PRs | Independent identity tests, lint, unit coverage, and two E2E shards. Each shard installs dependencies, builds, verifies stamps/RAG SHA, installs browser runtime libraries and Chromium/Firefox/WebKit, then tests. Shard 1 also runs OpenAI-default contracts. Per-ref concurrency cancels obsolete runs. |
-| `build.yml` | Push main and codex/**; v* tags; all PRs; manual | One multi-architecture validation job; QEMU/Buildx, amd64 and arm64. No publish/login/registry-cache export. No external cache configured. A codex branch update with an open PR can create both push and PR builds. |
-| `ci-image.yml` | Push main/v3; PR main/v3; published release; manual with branch/release inputs | Independent conditional jobs: `local-build` installs host dependencies, builds/stamp-checks, builds amd64 with host node_modules present, verifies SHA/native canvas and container smoke. `image` on push/branch manual builds host output, verifies an amd64 image, then builds/pushes multi-arch with immutable-tag guards. `semantic-release` verifies immutable image/chart prerequisites and aliases the digest without rebuilding. No `needs` edges between these mutually scoped paths. |
-| `ci-sentinel.yml` | Push main; all PRs | `workflow-integrity` installs dependencies, checks workflow contracts and legacy coverage requirements. |
-| `link-check.yml` | Push main; PR main | `lychee` checks all tracked Markdown; overlaps CI docs-links' narrower docs globs. Different timeout/retry arguments prevent treating the two as identical. |
-| `commit-identity.yml` | All branch pushes; PR-target opened/synchronize/reopened/ready | Read-only advisory job, continue-on-error. No checkout or PR code execution; policy/source pinned to default-branch SHA. Do not couple untrusted tests into it. |
-| `ci-helm.yml` | chart-v* tag push only | One ordered publish job: authorize source, validate coordinates, absence guard, stage/lint/package, publish, verify provenance. Per-tag concurrency does not cancel publication. |
-| `quest-chart.yml` | Push v3; manual | Install, generate/upload chart image, conditionally commit chart text. Outside the measured PR path. |
-| `npm-check-updates.yml` | Monday 00:00 UTC; manual | Root/frontend dependency reports via npx. Outside PR latency. |
-| `claude.yml` | Issue comments, review comments, opened issues, submitted reviews | `authorize` gates `claude-validation`; `claude` depends on both and checks authorization. Inventoried only; do not invoke this reviewer for this task. |
+| File under `.github/workflows/` | Triggers                                                                       | Jobs, dependencies, and repeated work                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`                        | Push main/v3; PR targeting main/v3                                             | Four independent jobs: `build` runs root coverage; `docs-links` runs Lychee; `root-tests` serially runs lint, type-check, build, npm test, internal links; `frontend-indexeddb-regression-e2e` installs Chromium, runs IndexedDB regression and local chat smoke including negative cases. No `needs` edges.                                                                                                                                                                                                                                                  |
+| `tests.yml`                     | Push main/v3; all PRs                                                          | Independent identity tests, lint, unit coverage, and two E2E shards. Each shard installs dependencies, builds, verifies stamps/RAG SHA, installs browser runtime libraries and Chromium/Firefox/WebKit, then tests. Shard 1 also runs OpenAI-default contracts. Per-ref concurrency cancels obsolete runs.                                                                                                                                                                                                                                                    |
+| `build.yml`                     | Push main and codex/\*_; v_ tags; all PRs; manual                              | One multi-architecture validation job; QEMU/Buildx, amd64 and arm64. No publish/login/registry-cache export. No external cache configured. A codex branch update with an open PR can create both push and PR builds.                                                                                                                                                                                                                                                                                                                                          |
+| `ci-image.yml`                  | Push main/v3; PR main/v3; published release; manual with branch/release inputs | Independent conditional jobs: `local-build` installs host dependencies, builds/stamp-checks, builds amd64 with host node_modules present, verifies SHA/native canvas and container smoke. `image` on push/branch manual builds host output, verifies an amd64 image, then builds/pushes multi-arch with immutable-tag guards. `semantic-release` verifies immutable image/chart prerequisites and aliases the digest without rebuilding. No `needs` edges: local-build and image overlap on branch publication events; semantic-release is separately scoped. |
+| `ci-sentinel.yml`               | Push main; all PRs                                                             | `workflow-integrity` installs dependencies, checks workflow contracts and legacy coverage requirements.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `link-check.yml`                | Push main; PR main                                                             | `lychee` checks all tracked Markdown; overlaps CI docs-links' narrower docs globs. Different timeout/retry arguments prevent treating the two as identical.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `commit-identity.yml`           | All branch pushes; PR-target opened/synchronize/reopened/ready                 | Read-only advisory job, continue-on-error. No checkout or PR code execution; policy/source pinned to default-branch SHA. Do not couple untrusted tests into it.                                                                                                                                                                                                                                                                                                                                                                                               |
+| `ci-helm.yml`                   | chart-v\* tag push only                                                        | One ordered publish job: authorize source, validate coordinates, absence guard, stage/lint/package, publish, verify provenance. Per-tag concurrency does not cancel publication.                                                                                                                                                                                                                                                                                                                                                                              |
+| `quest-chart.yml`               | Push v3; manual                                                                | Install, generate/upload chart image, conditionally commit chart text. Outside the measured PR path.                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `npm-check-updates.yml`         | Monday 00:00 UTC; manual                                                       | Root/frontend dependency reports via npx. Outside PR latency.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `claude.yml`                    | Issue comments, review comments, opened issues, submitted reviews              | `authorize` gates `claude-validation`; `claude` depends on both and checks authorization. Inventoried only; do not invoke this reviewer for this task.                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 The workflow files and `package.json`, `run-tests.js`,
 `frontend/scripts/prepare-pr.sh`, `frontend/playwright.config.ts`, and `Dockerfile`
@@ -95,17 +95,17 @@ Definitions (seconds, using GitHub's UTC timestamps):
   bookkeeping. Latest job completion is also recorded below; never substitute
   summed job duration for critical-path latency.
 
-| Cohort | Workflow/run | Created UTC | Updated UTC | Wall proxy (s) |
-| --- | --- | --- | --- | ---: |
-| main | [CI 41254275652](https://github.com/democratizedspace/dspace/actions/runs/41254275652) | Oct 31 23:51:50 | Nov 1 00:07:50 | 960 |
-| main | [tests 41254275690](https://github.com/democratizedspace/dspace/actions/runs/41254275690) | Oct 31 23:51:50 | Nov 1 00:01:04 | 554 |
-| main | [container 41254275708](https://github.com/democratizedspace/dspace/actions/runs/41254275708) | Oct 31 23:51:50 | Nov 1 00:01:32 | 582 |
-| main | [image 41254275642](https://github.com/democratizedspace/dspace/actions/runs/41254275642) | Oct 31 23:51:50 | Nov 1 00:06:40 | 890 |
-| PR | [CI 41255003765](https://github.com/democratizedspace/dspace/actions/runs/41255003765) | Nov 1 00:02:45 | Nov 1 00:12:46 | 601 |
-| PR | [tests 41255003865](https://github.com/democratizedspace/dspace/actions/runs/41255003865) | Nov 1 00:02:45 | Nov 1 00:13:37 | 652 |
-| PR | [container 41255003819](https://github.com/democratizedspace/dspace/actions/runs/41255003819) | Nov 1 00:02:45 | Nov 1 00:12:10 | 565 |
-| PR | [image 41255003801](https://github.com/democratizedspace/dspace/actions/runs/41255003801) | Nov 1 00:02:45 | Nov 1 00:07:57 | 312 |
-| branch push | [container 41254986661](https://github.com/democratizedspace/dspace/actions/runs/41254986661) | Nov 1 00:02:28 | Nov 1 00:11:56 | 568 |
+| Cohort      | Workflow/run                                                                                  | Created UTC     | Updated UTC    | Wall proxy (s) |
+| ----------- | --------------------------------------------------------------------------------------------- | --------------- | -------------- | -------------: |
+| main        | [CI 41254275652](https://github.com/democratizedspace/dspace/actions/runs/41254275652)        | Oct 31 23:51:50 | Nov 1 00:07:50 |            960 |
+| main        | [tests 41254275690](https://github.com/democratizedspace/dspace/actions/runs/41254275690)     | Oct 31 23:51:50 | Nov 1 00:01:04 |            554 |
+| main        | [container 41254275708](https://github.com/democratizedspace/dspace/actions/runs/41254275708) | Oct 31 23:51:50 | Nov 1 00:01:32 |            582 |
+| main        | [image 41254275642](https://github.com/democratizedspace/dspace/actions/runs/41254275642)     | Oct 31 23:51:50 | Nov 1 00:06:40 |            890 |
+| PR          | [CI 41255003765](https://github.com/democratizedspace/dspace/actions/runs/41255003765)        | Nov 1 00:02:45  | Nov 1 00:12:46 |            601 |
+| PR          | [tests 41255003865](https://github.com/democratizedspace/dspace/actions/runs/41255003865)     | Nov 1 00:02:45  | Nov 1 00:13:37 |            652 |
+| PR          | [container 41255003819](https://github.com/democratizedspace/dspace/actions/runs/41255003819) | Nov 1 00:02:45  | Nov 1 00:12:10 |            565 |
+| PR          | [image 41255003801](https://github.com/democratizedspace/dspace/actions/runs/41255003801)     | Nov 1 00:02:45  | Nov 1 00:07:57 |            312 |
+| branch push | [container 41254986661](https://github.com/democratizedspace/dspace/actions/runs/41254986661) | Nov 1 00:02:28  | Nov 1 00:11:56 |            568 |
 
 The main cohort's longest observed path is CI/root-tests (959 seconds from run
 creation to job finish). The PR cohort's is tests shard 2 (651 seconds).
@@ -173,22 +173,22 @@ corrupt archive or incompatible entry must fall back to normal verified install 
 build, not skip a gate. Do not cache secrets, credentials, reports as proof of
 success, mutable deployment coordinates, or unverified generated application output.
 
-| Candidate | Proposed key/invalidation | Trust and required fallback |
-| --- | --- | --- |
-| pnpm content store | Schema epoch + OS/architecture + Node major + pnpm version + lockfile and pnpmfile/workspace configuration hashes; restore prefixes must retain toolchain and trust scope | Frozen lockfile installation always runs, including scripts/native compilation. Keep PR writes isolated from trusted branch/release readers; no generic fallback crossing that boundary. |
-| Playwright browser files | Schema epoch + exact runner OS/image identity + architecture + resolved Playwright version/browser revision + lockfile + browser set | Validate executable locations and version; install OS dependencies every job. Forks retain a cold/no-write baseline initially. Same-repository PRs are also untrusted for privileged publication. Never reuse their entries in a privileged job. |
-| BuildKit validation layers | Explicit validation-only scope per platform/toolchain; Dockerfile/context/build arguments remain content inputs; epoch for emergency invalidation | Preserve Docker layer correctness and source/build-version stamps. Never import PR-produced layers into release publication; keep fork cache bypass. No registry-cache export/login from build.yml. |
-| Future frontend artifact (deferred) | Exact tested checkout SHA, OS/toolchain, lockfile, build environment, workflow run/attempt and artifact digest | Consume only from an explicit dependency in the same unprivileged run, validate metadata and expected stamp, rebuild/fail on mismatch. No promotion into release jobs. |
+| Candidate                           | Proposed key/invalidation                                                                                                                                                 | Trust and required fallback                                                                                                                                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| pnpm content store                  | Schema epoch + OS/architecture + Node major + pnpm version + lockfile and pnpmfile/workspace configuration hashes; restore prefixes must retain toolchain and trust scope | Frozen lockfile installation always runs, including scripts/native compilation. Keep PR writes isolated from trusted branch/release readers; no generic fallback crossing that boundary.                                                         |
+| Playwright browser files            | Schema epoch + exact runner OS/image identity + architecture + resolved Playwright version/browser revision + lockfile + browser set                                      | Validate executable locations and version; install OS dependencies every job. Forks retain a cold/no-write baseline initially. Same-repository PRs are also untrusted for privileged publication. Never reuse their entries in a privileged job. |
+| BuildKit validation layers          | Explicit validation-only scope per platform/toolchain; Dockerfile/context/build arguments remain content inputs; epoch for emergency invalidation                         | Preserve Docker layer correctness and source/build-version stamps. Never import PR-produced layers into release publication; keep fork cache bypass. No registry-cache export/login from build.yml.                                              |
+| Future frontend artifact (deferred) | Exact tested checkout SHA, OS/toolchain, lockfile, build environment, workflow run/attempt and artifact digest                                                            | Consume only from an explicit dependency in the same unprivileged run, validate metadata and expected stamp, rebuild/fail on mismatch. No promotion into release jobs.                                                                           |
 
 An explicit scope string alone is not a security boundary. Before implementation,
 verify GitHub's actual ref visibility/save behavior and producer identity for the
-selected cache backend, using current platform documentation and nonprivileged
+selected cache backend, using current platform documentation and unprivileged
 tests. Fork and same-repository PR writes must not become trusted branch/release
 inputs. Do not use pull_request_target, privileged workflow_run consumers, or new
 credentials to transport PR caches. No permission changes are part of this proposal.
 
 Publication remains governed by the existing immutable branch-SHA image, chart
-provenance, tombstoned chart coordinate and semantic-alias digest checks.
+provenance, retired chart coordinate and semantic-alias digest checks.
 The semantic-release path already avoids rebuilding. Preserve its source
 authorization, non-404 fail-closed behavior, per-tag serialization and release
 manifest. Cache hits never authorize release, deployment or a QA checkbox.
@@ -198,7 +198,7 @@ manifest. Cache hits never authorize release, deployment or a QA checkbox.
 1. In a future instrumentation PR, split the root-tests compound step in
    `.github/workflows/ci.yml` into the same ordered commands; add timing boundaries
    for browser download versus OS installation in `.github/workflows/tests.yml`.
-   Keep job names, triggers and command coverage intact. Extend
+   Record installer and test UID, HOME, `PLAYWRIGHT_BROWSERS_PATH`, resolved browser executable paths and downloads during test-configuration startup. Installation currently runs under sudo while tests run as the runner user; `ensurePlaywrightBrowsers` may install missing assets during configuration. A second download is possible, not established by this sample. Keep job names, triggers and command coverage intact. Extend
    `tests/workflowIntegrityScript.test.ts` to prove all launch commands still run
    and failures remain fatal; retain `scripts/check-workflows.mjs` contracts.
 2. In a separate cache experiment, change only tests.yml browser setup, with
@@ -240,27 +240,22 @@ Rollback each experiment independently by reverting its workflow/script commit.
 For suspected cache contamination, disable restore/save or bump the cache epoch,
 then rebuild with verified inputs; no global cache purge or credential changes are
 authorized here. Restore original command graph and gates before removing any
-compatibility job. Never roll back by weakening checks, retagging published images,
+compatibility job. Never roll back by weakening checks, tag reassignment published images,
 overwriting chart coordinates, or changing the release/v3.0.x hotfix.
 
 ## Review and local verification status
 
-Copilot, Codex and Greptile review remain required by the task. Greptile credits are
-unavailable until November 5; keep the PR draft and record that review as blocked,
-without purchasing credits or waiving it. No Claude review is requested.
+Applicable repository checks and review remain necessary before merge. This design
+does not waive any validation or authorize workflow changes.
 
 The read-only main branch-protection response at collection returned
 `required_status_checks: null` and zero required approving reviews. That snapshot
 does not establish all ruleset/external gates and does not waive task or repository
 requirements. No protection setting was changed.
 
-Local checkout has Node 18.17.1 and npm 10.1.0; pnpm and installed dependencies are
-absent. The repository requires Node 22.23.4 or compatible newer LTS. Per the task's
-no-install constraint, no tooling or dependencies were installed. `npm run check`
-failed loading estree-walker; `npm test` failed in pretest loading prettier;
-`node scripts/link-check.mjs` failed loading glob. These are blocked checks, not
-passes. Dependency-free document checks and `git diff --check` are appropriate
-bounded validation; full checks and reviewers remain necessary before readiness.
+Validation of this documentation change is reported in its PR. Local tooling
+limitations are not passes and do not waive full required CI or review. No workflow
+implementation, runtime validation or deployment is claimed.
 
 ## Appendix: exact job observations
 
@@ -272,29 +267,29 @@ execution time or evidence of publication.
 
 <!-- Job rows below are derived from the read-only Actions jobs responses. -->
 
-| Run | Job | Start offset (s) | Execution (s) |
-| --- | --- | ---: | ---: |
-| 41254275642 | [Validate Docker build with host node_modules](https://github.com/democratizedspace/dspace/actions/runs/41254275642/job/124694014057) | 3 | 318 |
-| 41254275642 | [Build and push image](https://github.com/democratizedspace/dspace/actions/runs/41254275642/job/124694014271) | 4 | 886 |
-| 41254275652 | [frontend-indexeddb-regression-e2e](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014103) | 4 | 169 |
-| 41254275652 | [docs-links](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014118) | 8 | 7 |
-| 41254275652 | [build](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014122) | 3 | 285 |
-| 41254275652 | [root-tests](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014144) | 3 | 956 |
-| 41254275690 | [lint](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014678) | 4 | 56 |
-| 41254275690 | [e2e (2/2)](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014826) | 4 | 543 |
-| 41254275690 | [unit](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014854) | 4 | 452 |
-| 41254275690 | [e2e (1/2)](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014866) | 3 | 245 |
-| 41254275690 | [commit-identity-tests](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014877) | 4 | 7 |
-| 41254275708 | [Build multi-arch image](https://github.com/democratizedspace/dspace/actions/runs/41254275708/job/124694014307) | 14 | 568 |
-| 41254986661 | [Build multi-arch image](https://github.com/democratizedspace/dspace/actions/runs/41254986661/job/124696128193) | 4 | 564 |
-| 41255003765 | [root-tests](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696183992) | 3 | 598 |
-| 41255003765 | [docs-links](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696184005) | 3 | 14 |
-| 41255003765 | [frontend-indexeddb-regression-e2e](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696184049) | 3 | 121 |
-| 41255003765 | [build](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696184065) | 3 | 371 |
-| 41255003801 | [Validate Docker build with host node_modules](https://github.com/democratizedspace/dspace/actions/runs/41255003801/job/124696183979) | 3 | 308 |
-| 41255003819 | [Build multi-arch image](https://github.com/democratizedspace/dspace/actions/runs/41255003819/job/124696184233) | 3 | 561 |
-| 41255003865 | [commit-identity-tests](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184353) | 3 | 8 |
-| 41255003865 | [unit](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184508) | 3 | 259 |
-| 41255003865 | [lint](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184535) | 3 | 65 |
-| 41255003865 | [e2e (1/2)](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184567) | 3 | 321 |
-| 41255003865 | [e2e (2/2)](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184601) | 3 | 648 |
+| Run         | Job                                                                                                                                   | Start offset (s) | Execution (s) |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------: | ------------: |
+| 41254275642 | [Validate Docker build with host node_modules](https://github.com/democratizedspace/dspace/actions/runs/41254275642/job/124694014057) |                3 |           318 |
+| 41254275642 | [Build and push image](https://github.com/democratizedspace/dspace/actions/runs/41254275642/job/124694014271)                         |                4 |           886 |
+| 41254275652 | [frontend-indexeddb-regression-e2e](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014103)            |                4 |           169 |
+| 41254275652 | [docs-links](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014118)                                   |                8 |             7 |
+| 41254275652 | [build](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014122)                                        |                3 |           285 |
+| 41254275652 | [root-tests](https://github.com/democratizedspace/dspace/actions/runs/41254275652/job/124694014144)                                   |                3 |           956 |
+| 41254275690 | [lint](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014678)                                         |                4 |            56 |
+| 41254275690 | [e2e (2/2)](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014826)                                    |                4 |           543 |
+| 41254275690 | [unit](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014854)                                         |                4 |           452 |
+| 41254275690 | [e2e (1/2)](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014866)                                    |                3 |           245 |
+| 41254275690 | [commit-identity-tests](https://github.com/democratizedspace/dspace/actions/runs/41254275690/job/124694014877)                        |                4 |             7 |
+| 41254275708 | [Build multi-arch image](https://github.com/democratizedspace/dspace/actions/runs/41254275708/job/124694014307)                       |               14 |           568 |
+| 41254986661 | [Build multi-arch image](https://github.com/democratizedspace/dspace/actions/runs/41254986661/job/124696128193)                       |                4 |           564 |
+| 41255003765 | [root-tests](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696183992)                                   |                3 |           598 |
+| 41255003765 | [docs-links](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696184005)                                   |                3 |            14 |
+| 41255003765 | [frontend-indexeddb-regression-e2e](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696184049)            |                3 |           121 |
+| 41255003765 | [build](https://github.com/democratizedspace/dspace/actions/runs/41255003765/job/124696184065)                                        |                3 |           371 |
+| 41255003801 | [Validate Docker build with host node_modules](https://github.com/democratizedspace/dspace/actions/runs/41255003801/job/124696183979) |                3 |           308 |
+| 41255003819 | [Build multi-arch image](https://github.com/democratizedspace/dspace/actions/runs/41255003819/job/124696184233)                       |                3 |           561 |
+| 41255003865 | [commit-identity-tests](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184353)                        |                3 |             8 |
+| 41255003865 | [unit](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184508)                                         |                3 |           259 |
+| 41255003865 | [lint](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184535)                                         |                3 |            65 |
+| 41255003865 | [e2e (1/2)](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184567)                                    |                3 |           321 |
+| 41255003865 | [e2e (2/2)](https://github.com/democratizedspace/dspace/actions/runs/41255003865/job/124696184601)                                    |                3 |           648 |
