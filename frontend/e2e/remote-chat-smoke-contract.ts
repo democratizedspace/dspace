@@ -54,15 +54,17 @@ export function validateProviderConfig(
         }
     } else if (contract === 'hotfix-openai-config-v1') {
         // Exact old config shape; provider proof still requires the unchanged isolated UI journey.
+        if (expectedProvider !== 'openai') {
+            throw new Error('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
+        }
         if (
-            expectedProvider !== 'openai' ||
             Object.keys(config).sort().join(',') !== 'featureFlags,offlineWorker,telemetry' ||
             typeof record(config.offlineWorker, 'offlineWorker').enabled !== 'boolean' ||
             typeof record(config.telemetry, 'telemetry').enabled !== 'boolean' ||
             !Array.isArray(config.featureFlags) ||
             !config.featureFlags.every((flag) => typeof flag === 'string')
         ) {
-            throw new Error('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
+            throw new Error('routing/configuration: hotfix config shape or types are invalid');
         }
     } else if (contract === 'legacy-no-default-provider-v1') {
         if (chat && Object.hasOwn(chat, 'defaultProvider')) {

@@ -148,13 +148,15 @@ describe('exact hotfix artifact, runtime, and provider contracts', () => {
     (bad) => {
       expect(() =>
         validateProviderConfig(bad, 'hotfix-openai-config-v1', 'openai')
-      ).toThrow();
+      ).toThrow(
+        'routing/configuration: hotfix config shape or types are invalid'
+      );
     }
   );
   it('never accepts token-place or grants this exception to the standard contract', () => {
     expect(() =>
       validateProviderConfig(config, 'hotfix-openai-config-v1', 'token-place')
-    ).toThrow();
+    ).toThrow('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
     expect(() =>
       validateProviderConfig(config, 'chat-default-provider-v1', 'openai')
     ).toThrow('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
