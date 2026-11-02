@@ -15,6 +15,12 @@ import { basename, dirname, join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
+import {
+  artifactProofPrefix,
+  hotfix302,
+  verifyHotfixArtifact,
+} from './hotfix-302-contract.mjs';
+
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const frontendDir = join(scriptDir, '..', 'frontend');
 const defaultIdentityContract = 'build-info-v1';
@@ -37,6 +43,10 @@ const legacyIdentityProfiles = [
 const definitions = {
   baseURL: ['base-url', 'DSPACE_SMOKE_BASE_URL'],
   expectedVersion: ['expected-version', 'DSPACE_EXPECTED_VERSION'],
+  expectedImageDigest: [
+    'expected-image-digest',
+    'DSPACE_EXPECTED_IMAGE_DIGEST',
+  ],
   expectedRevision: ['expected-revision', 'DSPACE_EXPECTED_REVISION'],
   identityContract: ['identity-contract', 'DSPACE_EXPECTED_IDENTITY_CONTRACT'],
   providerConfigContract: [
@@ -164,14 +174,20 @@ export function parseAndValidateArgs(argv, env = process.env) {
     );
   }
   if (
-    !['build-info-v1', 'legacy-build-meta-v1'].includes(result.identityContract)
+    ![
+      'build-info-v1',
+      'legacy-build-meta-v1',
+      hotfix302.identityContract,
+    ].includes(result.identityContract)
   ) {
     throw new Error('validation: identity contract is unsupported');
   }
   if (
-    !['chat-default-provider-v1', 'legacy-no-default-provider-v1'].includes(
-      result.providerConfigContract
-    )
+    ![
+      'chat-default-provider-v1',
+      'legacy-no-default-provider-v1',
+      hotfix302.providerConfigContract,
+    ].includes(result.providerConfigContract)
   ) {
     throw new Error('validation: provider config contract is unsupported');
   }
@@ -191,6 +207,17 @@ export function parseAndValidateArgs(argv, env = process.env) {
     )
   ) {
     throw new Error('validation: legacy identity contract is restricted');
+  }
+
+  if (result.identityContract === hotfix302.identityContract) {
+    result.artifactVersionEvidence = verifyHotfixArtifact(result);
+  } else if (
+    result.expectedImageDigest ||
+    result.providerConfigContract === hotfix302.providerConfigContract
+  ) {
+    throw new Error(
+      'validation: hotfix evidence requires the exact hotfix identity contract'
+    );
   }
 
   if (result.expectedProvider === 'token-place') {
@@ -252,9 +279,16 @@ export function buildSmokeEnv(
     PW_WORKERS: '1',
     BASE_URL: options.baseURL,
     REMOTE_CHAT_SMOKE: '1',
-    REMOTE_CHAT_SMOKE_USE_WEBSERVER: local ? '1' : '0',
+    // The hotfix contract must inspect the existing immutable image, never build this checkout.
+    REMOTE_CHAT_SMOKE_USE_WEBSERVER:
+      options.identityContract === hotfix302.identityContract
+        ? '0'
+        : local
+          ? '1'
+          : '0',
     PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
     DSPACE_EXPECTED_VERSION: options.expectedVersion,
+    DSPACE_EXPECTED_IMAGE_DIGEST: options.expectedImageDigest || '',
     DSPACE_EXPECTED_REVISION: options.expectedRevision,
     DSPACE_EXPECTED_IDENTITY_CONTRACT: options.identityContract,
     DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT: options.providerConfigContract,
@@ -439,6 +473,11 @@ export async function main(argv = process.argv.slice(2)) {
     );
   }
   if ('exitCode' in outcome) process.exitCode = outcome.exitCode;
+  if (outcome.exitCode === 0 && options.artifactVersionEvidence) {
+    console.log(
+      artifactProofPrefix + JSON.stringify(options.artifactVersionEvidence)
+    );
+  }
   return outcome.exitCode;
 }
 

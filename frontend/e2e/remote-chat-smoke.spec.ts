@@ -1,3 +1,4 @@
+import { hotfix302, validateHotfixRuntime } from '../../scripts/hotfix-302-contract.mjs';
 import { constants, publicEncrypt, webcrypto } from 'node:crypto';
 import { createRequire } from 'node:module';
 
@@ -23,7 +24,11 @@ function normalizeIdentityContract(value: string | undefined): IdentityContract 
     if (value === undefined) return 'build-info-v1';
 
     const normalized = value.trim();
-    if (normalized === 'build-info-v1' || normalized === 'legacy-build-meta-v1') {
+    if (
+        normalized === 'build-info-v1' ||
+        normalized === 'legacy-build-meta-v1' ||
+        normalized === hotfix302.identityContract
+    ) {
         return normalized;
     }
 
@@ -389,6 +394,24 @@ test.describe('release-aware remote chat smoke', () => {
     });
 
     test('identity: approved build identity matches JSON and HTML', async ({ page, request }) => {
+        if (identityContract === hotfix302.identityContract) {
+            const meta = await request.get('/build-meta.json');
+            const health = await request.get('/healthz');
+            for (const response of [meta, health]) {
+                expect(new URL(response.url()).origin).toBe(requestedOrigin);
+                expect(response.status()).toBe(200);
+            }
+            const proof = validateHotfixRuntime(await meta.json(), await health.json(), {
+                expectedVersion,
+                expectedRevision,
+                expectedProvider,
+                identityContract,
+                providerConfigContract,
+                expectedImageDigest: process.env.DSPACE_EXPECTED_IMAGE_DIGEST,
+            });
+            expect(proof.applicationVersion).toBe(expectedVersion);
+            return;
+        }
         if (identityContract === 'legacy-build-meta-v1') {
             const response = await request.get('/build-meta.json');
             expect(

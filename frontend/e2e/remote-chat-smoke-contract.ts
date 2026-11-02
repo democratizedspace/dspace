@@ -1,13 +1,20 @@
-export type IdentityContract = 'build-info-v1' | 'legacy-build-meta-v1';
+export type IdentityContract =
+    | 'build-info-v1'
+    | 'legacy-build-meta-v1'
+    | 'hotfix-build-meta-oci-v1';
 export type SmokeProvider = 'token-place' | 'openai';
 export type ChatUiContract = 'modern-settings-v1' | 'legacy-inline-openai-v1';
-export type ProviderConfigContract = 'chat-default-provider-v1' | 'legacy-no-default-provider-v1';
+export type ProviderConfigContract =
+    | 'chat-default-provider-v1'
+    | 'legacy-no-default-provider-v1'
+    | 'hotfix-openai-config-v1';
 
 export function normalizeProviderConfigContract(value: string | undefined): ProviderConfigContract {
     const normalized = value?.trim();
     if (
         normalized === 'chat-default-provider-v1' ||
-        normalized === 'legacy-no-default-provider-v1'
+        normalized === 'legacy-no-default-provider-v1' ||
+        normalized === 'hotfix-openai-config-v1'
     ) {
         return normalized;
     }
@@ -45,6 +52,18 @@ export function validateProviderConfig(
         if (chat?.defaultProvider !== expectedProvider) {
             throw new Error('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
         }
+    } else if (contract === 'hotfix-openai-config-v1') {
+        // Exact old config shape; provider proof still requires the unchanged isolated UI journey.
+        if (
+            expectedProvider !== 'openai' ||
+            Object.keys(config).sort().join(',') !== 'featureFlags,offlineWorker,telemetry' ||
+            typeof record(config.offlineWorker, 'offlineWorker').enabled !== 'boolean' ||
+            typeof record(config.telemetry, 'telemetry').enabled !== 'boolean' ||
+            !Array.isArray(config.featureFlags) ||
+            !config.featureFlags.every((flag) => typeof flag === 'string')
+        ) {
+            throw new Error('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
+        }
     } else if (contract === 'legacy-no-default-provider-v1') {
         if (chat && Object.hasOwn(chat, 'defaultProvider')) {
             throw new Error('routing/configuration: legacy config claims chat.defaultProvider');
@@ -78,7 +97,8 @@ export function chatUiContractFor(
     identityContract: IdentityContract,
     provider: SmokeProvider
 ): ChatUiContract {
-    return identityContract === 'legacy-build-meta-v1' && provider === 'openai'
+    return ['legacy-build-meta-v1', 'hotfix-build-meta-oci-v1'].includes(identityContract) &&
+        provider === 'openai'
         ? 'legacy-inline-openai-v1'
         : 'modern-settings-v1';
 }
