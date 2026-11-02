@@ -205,6 +205,14 @@ const expectValidApiV1Messages = (messages) => {
     ).toBeLessThanOrEqual(131_072);
 };
 
+const plaintextPayloadKeys = ['messages', 'model', 'metadata', 'conversation_id'];
+const expectNoPlaintextPayloadKeys = (body) => {
+    // Base64 ciphertext may contain field names by chance; inspect JSON keys instead.
+    for (const key of plaintextPayloadKeys) {
+        expect(Object.keys(body)).not.toContain(key);
+    }
+};
+
 describe('token.place API v1 client', () => {
     beforeEach(async () => {
         relayServerKeys = [
@@ -354,9 +362,7 @@ describe('token.place API v1 client', () => {
         expect(serialized).not.toContain('raw-save-data-canary-delta');
         expect(serialized).not.toContain('secret-canary-echo');
         expect(serialized).not.toContain('conv-42');
-        expect(serialized).not.toContain('conversation_id');
-        expect(serialized).not.toContain('metadata');
-        expect(body).not.toHaveProperty('metadata');
+        expectNoPlaintextPayloadKeys(body);
     });
 
     test('relay request body stays ciphertext-only and does not request streaming', async () => {
@@ -385,7 +391,7 @@ describe('token.place API v1 client', () => {
             })
         );
         expect(JSON.stringify(body)).not.toContain('hello');
-        expect(JSON.stringify(body)).not.toContain('model');
+        expectNoPlaintextPayloadKeys(body);
         expect(decodeBase64Text(body.client_public_key)).toMatch(/^-----BEGIN PUBLIC KEY-----/);
         expect(Uint8Array.from(atob(body.iv), (char) => char.charCodeAt(0))).toHaveLength(16);
         expect(body).not.toHaveProperty('mode');
@@ -410,8 +416,7 @@ describe('token.place API v1 client', () => {
         expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
         expect(decrypted.api_v1_request.options).not.toHaveProperty('metadata');
         expect(JSON.stringify(body)).not.toContain('conv-42');
-        expect(JSON.stringify(body)).not.toContain('conversation_id');
-        expect(JSON.stringify(body)).not.toContain('metadata');
+        expectNoPlaintextPayloadKeys(body);
     });
 
     test('default token.place mode uses docs-skipped full dChat prompt path for player-state questions', async () => {
@@ -508,7 +513,7 @@ describe('token.place API v1 client', () => {
         expect(serializedMessages).not.toContain('old user history should not appear');
         expect(serializedMessages).not.toContain('older assistant history should not appear');
         expect(JSON.stringify(body)).not.toContain('latest token-lite user text');
-        expect(Object.keys(body)).not.toEqual(expect.arrayContaining(['messages', 'model']));
+        expectNoPlaintextPayloadKeys(body);
     });
 
     test('token-lite setting ignores prebuilt debug prompt payloads', async () => {
@@ -571,7 +576,7 @@ describe('token.place API v1 client', () => {
                 iv: expect.any(String),
             })
         );
-        expect(Object.keys(body)).not.toEqual(expect.arrayContaining(['messages', 'model']));
+        expectNoPlaintextPayloadKeys(body);
     });
 
     test('saved token-lite setting ignores prebuilt debug prompt payloads', async () => {
@@ -662,8 +667,7 @@ ${ragExcerpt.repeat(4000)}`,
         expectValidApiV1Messages(messages);
 
         const serializedOuterBody = JSON.stringify(body);
-        expect(serializedOuterBody).not.toContain('messages');
-        expect(serializedOuterBody).not.toContain('model');
+        expectNoPlaintextPayloadKeys(body);
         expect(serializedOuterBody).not.toContain(userPrompt);
         expect(serializedOuterBody).not.toContain('DSPACE knowledge base');
         expect(serializedOuterBody).not.toContain('PlayerState');
@@ -725,10 +729,8 @@ ${ragExcerpt.repeat(4000)}`,
         expectValidApiV1Messages(messages);
 
         const serializedOuterBody = JSON.stringify(body);
-        expect(serializedOuterBody).not.toContain('messages');
-        expect(serializedOuterBody).not.toContain('model');
+        expectNoPlaintextPayloadKeys(body);
         expect(serializedOuterBody).not.toContain('Please continue.');
-        expect(serializedOuterBody).not.toContain('metadata');
     });
 
     test('preserves primary system prompt when latest user input exceeds total budget', async () => {
@@ -1308,7 +1310,7 @@ ${ragExcerpt.repeat(4000)}`,
         expect(serialized).not.toContain('PLAYERSTATE_SECRET_SENTINEL');
         expect(serialized).not.toContain('DOCS_GROUNDING_SECRET_SENTINEL');
         expect(serialized).not.toContain('INVENTORY_SAVE_SECRET_SENTINEL');
-        expect(serialized).not.toContain('messages');
+        expectNoPlaintextPayloadKeys(getFetchCallByPath('/api/v1/relay/requests').body);
     });
 
     test('HTTP 202 retrieve polling continues until final response', async () => {
@@ -2154,5 +2156,24 @@ ${ragExcerpt.repeat(4000)}`,
         const serializedRequest = JSON.stringify(getFetchCallByPath('/api/v1/relay/requests').body);
         expect(serializedRequest).not.toMatch(/token\.place is deferred/i);
         expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
+    });
+});
+
+describe('encrypted request envelope key assertions', () => {
+    test.each(['modelAAA', 'messages', 'metadata'])(
+        'allows the deterministic base64 ciphertext collision %s',
+        (ciphertext) => {
+            // Synthetic ciphertext bytes exercise the assertion, not cryptographic validity.
+            expect(
+                bytesToBase64(Uint8Array.from(atob(ciphertext), (char) => char.charCodeAt(0)))
+            ).toBe(ciphertext);
+            const body = { ciphertext };
+            expect(JSON.stringify(body)).toContain(ciphertext);
+            expectNoPlaintextPayloadKeys(body);
+        }
+    );
+
+    test.each(plaintextPayloadKeys)('rejects an exposed %s key even when empty', (key) => {
+        expect(() => expectNoPlaintextPayloadKeys({ ciphertext: 'modelAAA', [key]: '' })).toThrow();
     });
 });
