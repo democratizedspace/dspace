@@ -42,7 +42,7 @@ spec:
             - name: PORT
               value: "{{ .Values.service.port }}"
             - name: DSPACE_VERSION
-              value: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
+              value: {{ .Values.runtimeVersion | default (.Values.image.tag | default .Chart.AppVersion) | quote }}
             - name: DSPACE_ENV
               value: {{ .Values.environment | default "production" | quote }}
             - name: DSPACE_DEFAULT_CHAT_PROVIDER
