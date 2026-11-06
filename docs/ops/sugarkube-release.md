@@ -9,6 +9,16 @@ setup in their existing runbooks.
 
 Set the reviewed Helm value `chat.defaultProvider` to exactly `token-place` or `openai`. The chart renders this once as `DSPACE_DEFAULT_CHAT_PROVIDER`, and `/config.json` reports it as `chat.defaultProvider` for release-aware smoke agreement. This deployment default affects only missing or invalid saved browser state: it never overwrites a valid provider explicitly saved by a user. Selecting OpenAI does not bypass its local API-key gate, and no provider credential belongs in chart values.
 
+## Runtime version configuration
+
+The optional Helm value `runtimeVersion` sets `DSPACE_VERSION` independently of the image
+coordinate. Leave it empty (the default) to preserve the existing fallback to `image.tag`, then
+`Chart.yaml:appVersion`. For a digest-qualified image whose health version differs from its tag,
+set the reviewed runtime version explicitly with `--set-string runtimeVersion=...`; do not add
+a second `DSPACE_VERSION` entry through `env`. This is application configuration, not measured
+source or artifact identity: image digest, revision, version proof, and provider verification
+remain separate release gates. This option neither publishes a chart nor authorizes deployment.
+
 ## Release contract
 
 - **Application image:** `ghcr.io/democratizedspace/dspace`

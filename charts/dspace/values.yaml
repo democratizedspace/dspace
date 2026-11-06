@@ -1,4 +1,6 @@
 replicaCount: 2
+# Optional DSPACE_VERSION override; empty preserves image.tag, then Chart.appVersion.
+runtimeVersion: ""
 
 nameOverride: ""
 fullnameOverride: ""
