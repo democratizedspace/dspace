@@ -8,6 +8,9 @@
 {{- if eq .name "DSPACE_DEFAULT_CHAT_PROVIDER" }}
 {{- fail "env must not contain DSPACE_DEFAULT_CHAT_PROVIDER; use chat.defaultProvider" }}
 {{- end }}
+{{- if eq .name "DSPACE_VERSION" }}
+{{- fail "env must not contain DSPACE_VERSION; use runtimeVersion" }}
+{{- end }}
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment

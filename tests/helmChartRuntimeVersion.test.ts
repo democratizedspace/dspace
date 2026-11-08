@@ -1,15 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse, parseAllDocuments } from 'yaml';
 
-const chart = 'charts/dspace';
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const chart = join(root, 'charts/dspace');
 const values = parse(readFileSync(`${chart}/values.yaml`, 'utf8'));
 const metadata = parse(readFileSync(`${chart}/Chart.yaml`, 'utf8'));
 const imageTag =
   'hotfix-47900748f61e1ef38c6289fc697f7a070f7fa3c9@sha256:5d16cde03df4cfe9a52341c26bb6167234d315f896d422af38383b760bebcfe0';
 const helm = (...args: string[]) =>
-  spawnSync('helm', args, { encoding: 'utf8' });
+  spawnSync('helm', args, { cwd: root, encoding: 'utf8' });
 const render = (...args: string[]) => {
   const result = helm('template', 'dspace', chart, ...args);
   expect(result.status, result.stderr).toBe(0);
@@ -85,6 +88,52 @@ describe('Helm runtime version override', () => {
         )
       ).value
     ).toBe('v3.0.2+4790074');
+  });
+
+  it.each([
+    ['', 'env[1].value=duplicate-version'],
+    ['', 'env[1].valueFrom.fieldRef.fieldPath=metadata.name'],
+    ['v3.0.2+4790074', 'env[1].value=duplicate-version'],
+    ['v3.0.2+4790074', 'env[1].valueFrom.fieldRef.fieldPath=metadata.name'],
+  ])(
+    'rejects a duplicate DSPACE_VERSION with runtimeVersion=%s and %s',
+    (runtimeVersion, source) => {
+      const result = helm(
+        'template',
+        'dspace',
+        chart,
+        '--set-string',
+        `runtimeVersion=${runtimeVersion}`,
+        '--set-string',
+        'env[0].name=CUSTOM_SETTING',
+        '--set-string',
+        'env[0].value=preserved',
+        '--set-string',
+        'env[1].name=DSPACE_VERSION',
+        '--set-string',
+        source
+      );
+      expect(result.status).not.toBe(0);
+      expect(result.stderr).toContain(
+        'env must not contain DSPACE_VERSION; use runtimeVersion'
+      );
+    }
+  );
+
+  it('preserves unrelated generic environment entries', () => {
+    const documents = render(
+      '--set-string',
+      'runtimeVersion=v3.0.2+4790074',
+      '--set-string',
+      'env[0].name=CUSTOM_SETTING',
+      '--set-string',
+      'env[0].value=preserved'
+    );
+    expect(version(documents).value).toBe('v3.0.2+4790074');
+    expect(container(documents).env).toContainEqual({
+      name: 'CUSTOM_SETTING',
+      value: 'preserved',
+    });
   });
 
   it.each(['true', '302'])('rejects non-string runtimeVersion %s', (value) => {

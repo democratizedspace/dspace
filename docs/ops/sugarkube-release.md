@@ -15,9 +15,10 @@ The optional Helm value `runtimeVersion` sets `DSPACE_VERSION` independently of 
 coordinate. Leave it empty (the default) to preserve the existing fallback to `image.tag`, then
 `Chart.yaml:appVersion`. For a digest-qualified image whose health version differs from its tag,
 set the reviewed runtime version explicitly with `--set-string runtimeVersion=...`; do not add
-a second `DSPACE_VERSION` entry through `env`. This is application configuration, not measured
-source or artifact identity: image digest, revision, version proof, and provider verification
-remain separate release gates. This option neither publishes a chart nor authorizes deployment.
+a second `DSPACE_VERSION` entry through `env` (the chart rejects it). This is application
+configuration, not measured source or artifact identity: image digest, revision, version proof,
+and provider verification remain separate release gates. This option neither publishes a chart nor
+authorizes deployment.
 
 ## Release contract
 
