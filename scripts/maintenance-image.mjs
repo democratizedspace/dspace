@@ -16,9 +16,25 @@ export const policy = Object.freeze({
   base: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
   image: 'ghcr.io/democratizedspace/dspace',
 });
-// Old-source waivers never transfer to this source. The two legacy initialization
-// failures on #4870 remain blocking until a separately reviewed owner decision.
-const waivedRuns = new Map();
+// Accept only the two owner-approved zero-job initialization failures on #4870.
+// Pin their source independently so a future policy source cannot inherit them.
+// Reruns and publisher-head failures require a separate reviewed owner decision.
+const waivedRuns = new Map([
+  [
+    42994229967,
+    {
+      source: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
+      path: '.github/workflows/deploy-to-raspi.yml',
+    },
+  ],
+  [
+    42994228265,
+    {
+      source: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
+      path: '.github/workflows/rpi-deploy.yml',
+    },
+  ],
+]);
 const capturedGreptileReview = Object.freeze({
   id: 6792068364,
   // Hash all review text after redacting only the retrigger URL's signature.
@@ -125,7 +141,12 @@ export function validateEvidence({
     assert.equal(status.state, 'success', `Commit status: ${status.context}`);
   for (const run of runs) {
     assert.equal(run.head_sha, policy.source);
-    if (run.conclusion === 'failure' && waivedRuns.get(run.id) === run.path) {
+    assert.equal(run.status, 'completed', `Pending workflow: ${run.name}`);
+    const waiver = waivedRuns.get(run.id);
+    if (run.conclusion === 'failure' && waiver) {
+      assert.equal(run.head_sha, waiver.source, 'Waived source changed');
+      assert.equal(run.path, waiver.path, 'Waived workflow path changed');
+      assert.equal(run.run_attempt, 1, 'Waiver does not cover reruns');
       assert.equal(
         run.jobCount,
         0,
@@ -133,7 +154,6 @@ export function validateEvidence({
       );
       continue;
     }
-    assert.equal(run.status, 'completed', `Pending workflow: ${run.name}`);
     assert.ok(
       ['success', 'skipped', 'neutral'].includes(run.conclusion),
       `Unwaived workflow failure: ${run.name}`
@@ -382,7 +402,9 @@ export async function main() {
     'workflow_runs'
   );
   for (const run of runs.filter((r) => waivedRuns.has(r.id))) {
-    run.jobCount = api(`${endpoint}/actions/runs/${run.id}/jobs`).total_count;
+    run.jobCount = api(
+      `${endpoint}/actions/runs/${run.id}/jobs?filter=all`
+    ).total_count;
   }
   const threadData = JSON.parse(
     command(
