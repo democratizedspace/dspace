@@ -1,0 +1,34 @@
+{
+  "source": "https://github.com/democratizedspace/dspace/pull/4870",
+  "note": "Captured public source-PR review evidence; retrigger signature redacted. Review commit verified from the public REST reviews endpoint.",
+  "comments": [
+    {
+      "id": 6792033381,
+      "updated_at": "2026-11-11T09:21:20Z",
+      "user": {
+        "login": "chatgpt-codex-connector[bot]"
+      },
+      "body": "<!-- codex-pull-request-review-summary -->\n<!-- codex-review-state:v1 {\"code_review\":{\"commit_sha\":\"558ce3c35163d97aea5594d6aba430c6a3dde1a3\",\"has_any_findings\":false,\"has_unresolved_findings\":false,\"status\":\"completed\"},\"security_review\":{\"commit_sha\":null,\"has_any_findings\":null,\"has_unresolved_findings\":null,\"status\":null}} -->\n\n<details>\n<summary><strong>Codex Review Summary</strong>: ✅ Completed</summary>\n\nThis comment shows the latest Codex review activity on this pull request.\n\n| Review | Status | Commit | Review trigger |\n| --- | --- | --- | --- |\n| 📝 **Code Review** | ✅ **Completed** <relative-time datetime=\"2026-11-11T09:21:19.598410Z\">2026-11-11T09:21:19.598410Z</relative-time> | `558ce3c` | Draft marked ready |\n\n\n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\" or \"@codex security review\".\n\nCodex reacts with 👀 while any review is running, comments if it has suggestions, and reacts with 👍 once all reviews finish with no findings.\n\n</details>\n\n</details>"
+    },
+    {
+      "id": 6792068364,
+      "updated_at": "2026-11-11T09:22:19Z",
+      "user": {
+        "login": "greptile-apps[bot]"
+      },
+      "body": "<!-- greptile_summary -->\n\n<h2><a href=\"https://app.greptile.com/api/retrigger?id=103027003&amp;sig=REDACTED\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/RetriggerDark.svg?v=2\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/Retrigger.svg?v=2\"><img alt=\"Retrigger\" src=\"https://greptile-static-assets.s3.amazonaws.com/badges/Retrigger.svg?v=2\" align=\"right\"></picture></a><a href=\"https://app.greptile.com/-/switch-tenant?tenant=futuroptimist&amp;next=%2Fdemocratizedspace%2Fdspace%2Fpull%2F4870&amp;utm_source=greptile_review&amp;utm_medium=github&amp;utm_campaign=view_in_greptile\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/ViewInGreptileDark.svg?v=2\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/ViewInGreptile.svg?v=2\"><img alt=\"View in Greptile\" src=\"https://greptile-static-assets.s3.amazonaws.com/badges/ViewInGreptile.svg?v=2\" align=\"right\"></picture></a>Confidence Score: 5/5</h2>\n\n**[Low impact]** The one-line date change appears safe to merge.\n\n<h3>Summary</h3>\n\nUpdates the pending `v3.0.2` addendum date from October 26 to November 11, 2026.\n- The pending v3.0.2 addendum shows November 11, 2026.\n\n<!-- greptile_confidence_score:5 -->\n\n<sub>Reviews (1) · Last reviewed commit: [\"docs: update pending v3.0.2 addendum dat...\"](https://github.com/democratizedspace/dspace/commit/558ce3c35163d97aea5594d6aba430c6a3dde1a3) · [Reviewed by Greptile](https://www.greptile.com/?utm_source=greptile_review&utm_medium=github&utm_campaign=review_public&utm_content=democratizedspace/dspace)</sub>"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 5856489828,
+      "submitted_at": "2026-11-11T09:21:46Z",
+      "commit_id": "558ce3c35163d97aea5594d6aba430c6a3dde1a3",
+      "state": "COMMENTED",
+      "body": "<!-- ccr-overview-v2 -->\n\n### 🟢 Approval recommended\n\nNo active review issues remain for the changelog date update ahead of the planned November 11 release.\n\n**No open issues** 🎉\n\n<details>\n<summary><strong>What changed in this PR</strong></summary>\n\nUpdates the pending v3.0.2 changelog date in preparation for the planned November 11 release on the v3.0.x release line.\n\n**Changes:**\n- Changes the patch-addendum heading from October 26 to November 11, 2026.\n- Preserves the pending-release label, patch notes, and published release text. No runtime or deployment changes are included.\n\nValidation is reported as passing for the release-line validator and Node runtime/build pin guard; broader checks remain in progress.\n\n| File | Description |\r\n| ---- | ----------- |\r\n| `frontend/​src/​pages/​docs/​md/​changelog/​20260401.md` | Updates only the pending v3.0.2 addendum date. |\n</details>\n\n<sub>Review effort: Balanced</sub>",
+      "user": {
+        "login": "copilot-pull-request-reviewer[bot]"
+      }
+    }
+  ]
+}

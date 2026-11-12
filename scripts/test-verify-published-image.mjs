@@ -36,6 +36,16 @@ const labels = {
   'org.opencontainers.image.source': `https://github.com/${fixed.repository}`,
 };
 
+test('historical source and digest stay pinned when the publisher advances', () => {
+  assert.equal(fixed.source, '47900748f61e1ef38c6289fc697f7a070f7fa3c9');
+  assert.equal(fixed.tree, '35391f8fb62827713889915cba3c906090e45c7f');
+  assert.equal(fixed.version, 'v3.0.2+4790074');
+  assert.equal(
+    fixed.index,
+    'sha256:5d16cde03df4cfe9a52341c26bb6167234d315f896d422af38383b760bebcfe0'
+  );
+});
+
 test('manual owner/host/ref/input restrictions fail closed', () => {
   guard(env, {});
   for (const key of Object.keys(env))

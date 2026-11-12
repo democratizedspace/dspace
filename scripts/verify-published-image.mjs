@@ -4,10 +4,17 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { policy, validatePublishedIndex } from './maintenance-image.mjs';
+import { validatePublishedIndex } from './maintenance-image.mjs';
 
+// This historical verifier stays bound to the already-published image even when
+// the maintenance publisher advances to a newer reviewed source.
 export const fixed = Object.freeze({
-  ...policy,
+  repository: 'democratizedspace/dspace',
+  branch: 'release/v3.0.x',
+  source: '47900748f61e1ef38c6289fc697f7a070f7fa3c9',
+  tree: '35391f8fb62827713889915cba3c906090e45c7f',
+  base: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
+  image: 'ghcr.io/democratizedspace/dspace',
   owner: 'futuroptimist',
   version: 'v3.0.2+4790074',
   index:

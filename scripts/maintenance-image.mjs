@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -9,18 +10,29 @@ import { pathToFileURL } from 'node:url';
 export const policy = Object.freeze({
   repository: 'democratizedspace/dspace',
   branch: 'release/v3.0.x',
-  source: '47900748f61e1ef38c6289fc697f7a070f7fa3c9',
-  tree: '35391f8fb62827713889915cba3c906090e45c7f',
+  source: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
+  sourcePr: 4870,
+  tree: 'e3896f76dbdfa6c2cc615a31a85075eb49afa02f',
   base: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
   image: 'ghcr.io/democratizedspace/dspace',
 });
-const waivedRuns = new Map([
-  [40276727866, '.github/workflows/deploy-to-raspi.yml'],
-  [40276728723, '.github/workflows/rpi-deploy.yml'],
-  // Repeated initialization failures when the approved source branch was restored.
-  [40433560737, '.github/workflows/deploy-to-raspi.yml'],
-  [40433559761, '.github/workflows/rpi-deploy.yml'],
-]);
+// Old-source waivers never transfer to this source. The two legacy initialization
+// failures on #4870 remain blocking until a separately reviewed owner decision.
+const waivedRuns = new Map();
+const capturedGreptileReview = Object.freeze({
+  id: 6792068364,
+  // Hash all review text after redacting only the retrigger URL's signature.
+  // This accepts the exact clear review, not arbitrary confidence-5 summaries.
+  sha256: 'a428d8b20715709dcd13dddc1b1e929f46a5ad04576fc610583cca87575dd5a2',
+});
+
+function greptileReviewDigest(body) {
+  const redacted = body.replace(
+    /(https:\/\/app\.greptile\.com\/api\/retrigger\?[^"<>]*?(?:&amp;|&)sig=)[^"&<>]+/g,
+    '$1REDACTED'
+  );
+  return createHash('sha256').update(redacted).digest('hex');
+}
 const requiredChecks = [
   'unit',
   'lint',
@@ -79,7 +91,8 @@ export function validateEvidence({
   reviews,
   threads,
 }) {
-  assert.equal(pr.merged, true, 'Hotfix PR must be merged first');
+  assert.equal(pr.number, policy.sourcePr, 'Wrong source PR');
+  assert.equal(pr.merged, true, 'Source PR must be merged first');
   assert.equal(pr.base.ref, policy.branch, 'Wrong PR base');
   assert.equal(pr.head.sha, policy.source, 'Approved hotfix head changed');
   assert.equal(tree, policy.tree, 'Source tree changed');
@@ -153,7 +166,8 @@ export function validateEvidence({
   );
   assert.ok(
     greptile?.body.includes(`/commit/${policy.source}`) &&
-      greptile.body.includes('no outstanding findings'),
+      greptile.id === capturedGreptileReview.id &&
+      greptileReviewDigest(greptile.body) === capturedGreptileReview.sha256,
     'Greptile review not clear on source'
   );
   for (const login of new Set(reviews.map((r) => r.user.login))) {
@@ -360,7 +374,7 @@ export async function main() {
     assert.equal(
       git('rev-parse', `${policy.source}:${path}`),
       blob,
-      'Waived legacy file changed'
+      'Legacy deployment file changed'
     );
   const endpoint = `repos/${policy.repository}`;
   const runs = pages(
@@ -377,7 +391,7 @@ export async function main() {
         'api',
         'graphql',
         '-f',
-        'query=query { repository(owner:"democratizedspace",name:"dspace") { pullRequest(number:4850) { reviewThreads(first:100) { pageInfo { hasNextPage } nodes { isResolved } } } } }',
+        `query=query { repository(owner:"democratizedspace",name:"dspace") { pullRequest(number:${policy.sourcePr}) { reviewThreads(first:100) { pageInfo { hasNextPage } nodes { isResolved } } } } }`,
       ],
       undefined,
       true
@@ -390,7 +404,7 @@ export async function main() {
     'Too many review threads; manual review required'
   );
   validateEvidence({
-    pr: api(`${endpoint}/pulls/4850`),
+    pr: api(`${endpoint}/pulls/${policy.sourcePr}`),
     tree: git('rev-parse', 'HEAD^{tree}'),
     versions: [
       JSON.parse(readFileSync(resolve(source, 'package.json'))).version,
@@ -406,8 +420,8 @@ export async function main() {
       pages(`${endpoint}/commits/${policy.source}/statuses`)
     ),
     runs,
-    comments: pages(`${endpoint}/issues/4850/comments`),
-    reviews: pages(`${endpoint}/pulls/4850/reviews`),
+    comments: pages(`${endpoint}/issues/${policy.sourcePr}/comments`),
+    reviews: pages(`${endpoint}/pulls/${policy.sourcePr}/reviews`),
     threads: threads.nodes,
   });
   command('node', ['scripts/check-node-runtime.mjs'], source);
