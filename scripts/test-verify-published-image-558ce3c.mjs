@@ -217,7 +217,15 @@ test('standalone receipt never claims verification on partial or registry failur
     saved.publication.workflowSha,
     'a8013a7838edfffbc97787f45f9c3f3d3494f0c9'
   );
-  assert.match(saved.publication.receiptUrl, /artifacts\/13920537034$/);
+  assert.equal(
+    saved.publication.runUrl,
+    'https://github.com/democratizedspace/dspace/actions/runs/43164575478'
+  );
+  assert.equal(saved.publication.artifactId, '13920537034');
+  assert.equal(
+    saved.publication.artifactName,
+    'maintenance-publication-receipt'
+  );
   await assert.rejects(
     verify({
       ...deps,

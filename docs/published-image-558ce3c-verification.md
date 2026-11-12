@@ -2,11 +2,16 @@
 
 [Publication run 43164575478](https://github.com/democratizedspace/dspace/actions/runs/43164575478)
 pushed the reviewed November image, then failed during post-publication registry
-verification with `fetch failed`. Its
-[original receipt](https://github.com/democratizedspace/dspace/actions/runs/43164575478/artifacts/13920537034)
+verification with `fetch failed`. Its original receipt artifact,
+`maintenance-publication-receipt` (ID `13920537034`), is listed on the run above and
 records `published: true`, `verified: false` and no completed platform proofs.
 Preserve that receipt unchanged. **Do not rerun the publisher, rebuild the image,
 or overwrite its tag to recover verification.**
+
+GitHub reported this artifact unexpired on November 12, 2026, with retention
+ending February 10, 2027. Direct artifact browser links may return 404; use the
+run page to locate/download it while retained, and preserve an authorized copy
+before expiry. The artifact ID is a provenance identifier, not a permanent link.
 
 ## Fixed artifact
 

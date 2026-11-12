@@ -16,8 +16,10 @@ export const fixed = Object.freeze({
   publication: Object.freeze({
     runId: '43164575478',
     workflowSha: 'a8013a7838edfffbc97787f45f9c3f3d3494f0c9',
-    receiptUrl:
-      'https://github.com/democratizedspace/dspace/actions/runs/43164575478/artifacts/13920537034',
+    runUrl:
+      'https://github.com/democratizedspace/dspace/actions/runs/43164575478',
+    artifactId: '13920537034',
+    artifactName: 'maintenance-publication-receipt',
   }),
   image: 'ghcr.io/democratizedspace/dspace',
   owner: 'futuroptimist',
