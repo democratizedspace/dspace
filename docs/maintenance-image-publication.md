@@ -8,7 +8,7 @@ access to dispatch, not local Docker or a new token. Existing repository
 `GITHUB_TOKEN` package access must work; stop on access failure without granting
 permissions or provisioning credentials as part of this task.
 
-## Review and blocking source evidence
+## Review and bounded source exceptions
 
 PR [#4870](https://github.com/democratizedspace/dspace/pull/4870) is merged into
 `release/v3.0.x` as `9b0867402aefbd5acae61129b8e680407b7a4a04`. The publisher builds
@@ -17,18 +17,20 @@ or a later publisher tip. That source includes the November 11 pending changelog
 heading and preserves application 3.0.2 and Node 24.22.1. It remains descended
 from the original hotfix source; no main/v3.1 application changes are imported.
 
-**Validation and publication are currently blocked.** The new source has two
-unchanged legacy initialization failures, each with zero jobs:
+The owner-approved exception covers only these two unchanged legacy
+initialization failures on source `558ce3c35163d97aea5594d6aba430c6a3dde1a3`:
 
 - [`deploy-to-raspi.yml`, run 42994229967](https://github.com/democratizedspace/dspace/actions/runs/42994229967)
 - [`rpi-deploy.yml`, run 42994228265](https://github.com/democratizedspace/dspace/actions/runs/42994228265)
 
-The source-specific exceptions for the prior `4790074` image do not apply here.
-The allowlist is empty. Both new failures are rejected, even though #4870 is
-merged. The owner must explicitly decide whether to accept these exact zero-job
-failures; any accepted exception needs another reviewed code change bounded to
-source, run ID, workflow path and zero jobs. Any failures on this publisher PR
-need their own owner decision. Do not dispatch either legacy deployment workflow.
+Each exception requires its exact full source SHA, numeric run ID and workflow
+path, `status=completed`, `conclusion=failure`, `run_attempt=1`, and exactly zero
+jobs across all attempts. Missing or changed evidence fails closed. The
+source-specific exceptions for the prior `4790074` image do not transfer; neither
+do these exceptions cover another source, run, workflow path, rerun, or a failure
+that starts jobs. Publisher-head failures, including runs 43125103519 and
+43125101846 from #4871, require their own owner decision and are not allowlisted.
+Do not dispatch either legacy deployment workflow.
 
 All other source-head checks, full workflow history and repository AI reviews
 remain required. The new Greptile summary uses different wording: the publisher
@@ -37,7 +39,7 @@ signature redacted before hashing), not arbitrary high-confidence summaries.
 Changed or newer blocking evidence remains rejected. The author is not required
 to approve their own PR; outstanding requested changes still block publication.
 
-After the blocker is settled, review and merge this publisher into
+Review and merge this exception change into
 `release/v3.0.x`, then verify the merged publisher files match the reviewed tree.
 Record the workflow SHA separately from the application source SHA.
 `build.yml` already exists on default branch main with manual dispatch; invoke

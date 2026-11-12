@@ -111,14 +111,92 @@ describe('manual maintenance publication authorization', () => {
 });
 
 describe('exact source and review gate', () => {
+  const waivedFailures = [
+    {
+      id: 42994229967,
+      path: '.github/workflows/deploy-to-raspi.yml',
+    },
+    {
+      id: 42994228265,
+      path: '.github/workflows/rpi-deploy.yml',
+    },
+  ].map((run) => ({
+    ...run,
+    name: run.path,
+    head_sha: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
+    status: 'completed',
+    conclusion: 'failure',
+    run_attempt: 1,
+    jobCount: 0,
+  }));
+  it('accepts only the two exact approved source initialization failures', () => {
+    expect(() =>
+      validateEvidence({
+        ...evidence(),
+        runs: [...evidence().runs, ...waivedFailures],
+      })
+    ).not.toThrow();
+  });
+  it.each(waivedFailures)(
+    'bounds exception $id to its source, path, first completed attempt and zero jobs',
+    (run) => {
+      expect(() =>
+        validateEvidence({ ...evidence(), runs: [run] })
+      ).not.toThrow();
+      for (const invalid of [
+        { id: 999 },
+        { id: String(run.id) },
+        { id: undefined },
+        { path: waivedFailures.find((other) => other.id !== run.id)!.path },
+        { path: run.path.replace('.github/workflows/', '') },
+        { path: undefined },
+        { head_sha: 'b'.repeat(40) },
+        { head_sha: run.head_sha.slice(0, 7) },
+        { head_sha: undefined },
+        { status: 'in_progress' },
+        { status: 'queued' },
+        { status: undefined },
+        { conclusion: 'cancelled' },
+        { conclusion: 'timed_out' },
+        { conclusion: 'action_required' },
+        { conclusion: undefined },
+        { run_attempt: 2 },
+        { run_attempt: '1' },
+        { run_attempt: undefined },
+        { jobCount: 1 },
+        { jobCount: -1 },
+        { jobCount: '0' },
+        { jobCount: null },
+        { jobCount: undefined },
+      ]) {
+        expect(() =>
+          validateEvidence({ ...evidence(), runs: [{ ...run, ...invalid }] })
+        ).toThrow();
+      }
+    }
+  );
+  it('does not let approved failures hide another failing or pending run', () => {
+    for (const change of [{ conclusion: 'failure' }, { status: 'in_progress' }])
+      expect(() =>
+        validateEvidence({
+          ...evidence(),
+          runs: [...waivedFailures, { ...evidence().runs[0], ...change }],
+        })
+      ).toThrow();
+  });
+  it('counts jobs across all attempts instead of trusting the latest attempt', () => {
+    expect(readFileSync('scripts/maintenance-image.mjs', 'utf8')).toContain(
+      '/actions/runs/${run.id}/jobs?filter=all'
+    );
+  });
   it.each([
     [40276727866, '.github/workflows/deploy-to-raspi.yml'],
     [40276728723, '.github/workflows/rpi-deploy.yml'],
     [40433560737, '.github/workflows/deploy-to-raspi.yml'],
     [40433559761, '.github/workflows/rpi-deploy.yml'],
-    [42994229967, '.github/workflows/deploy-to-raspi.yml'],
-    [42994228265, '.github/workflows/rpi-deploy.yml'],
-  ])('does not transfer old waivers or waive new source run %s', (id, path) => {
+    [43125103519, '.github/workflows/deploy-to-raspi.yml'],
+    [43125101846, '.github/workflows/rpi-deploy.yml'],
+  ])('does not waive old-source or publisher-head run %s', (id, path) => {
     const input = evidence();
     input.runs[0] = {
       ...input.runs[0],
