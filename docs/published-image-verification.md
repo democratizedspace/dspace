@@ -1,5 +1,11 @@
 # Verify the published v3.0.2 image
 
+> Historical procedure for source `4790074`. The active maintenance-branch
+> `verify-published-image.yml` now runs the separately pinned
+> [November recovery verifier](published-image-558ce3c-verification.md).
+> The historical script and coordinates below remain unchanged; do not use
+> this old image's evidence to qualify the November image.
+
 The owner may manually dispatch `verify-published-image.yml` on `release/v3.0.x`
 after reviewing and merging this change. This workflow has no time-of-day or
 weekday restriction on owner actions. It has no inputs and accepts only owner

@@ -1,16 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  readFileSync,
-  mkdtempSync,
-  mkdirSync,
-  writeFileSync,
-  rmSync,
-} from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { parse } from 'yaml';
 import {
   fixed,
   guard,
@@ -248,32 +241,5 @@ test('existing bundle verifier behavior: valid fixture, missing SHA, forbidden m
   }
 });
 
-test('workflow is manual, read-only, fixed source and guard precedes QEMU', () => {
-  const workflow = parse(
-    readFileSync('.github/workflows/verify-published-image.yml', 'utf8')
-  );
-  assert.deepEqual(Object.keys(workflow.on), ['workflow_dispatch']);
-  assert.deepEqual(workflow.permissions, {
-    contents: 'read',
-    packages: 'read',
-  });
-  const steps = workflow.jobs.verify.steps;
-  assert.ok(
-    steps.findIndex((s) => s.run?.endsWith('--guard-only')) <
-      steps.findIndex((s) => s.uses?.startsWith('docker/setup-qemu'))
-  );
-  assert.equal(
-    steps.find((s) => s.with?.path === 'source').with.ref,
-    fixed.source
-  );
-  assert.ok(
-    steps
-      .filter((s) => s.uses?.startsWith('actions/checkout'))
-      .every((s) => s.with['persist-credentials'] === false)
-  );
-  assert.ok(
-    !JSON.stringify(workflow).match(
-      /build-push|login-action|secrets\.|packages:write|claude/i
-    )
-  );
-});
+// The registered workflow now targets the separately pinned November recovery
+// verifier. Its launch contract is covered by test-verify-published-image-558ce3c.mjs.
