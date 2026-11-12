@@ -10,6 +10,10 @@ import {
   validatePublishedIndex,
 } from '../scripts/maintenance-image.mjs';
 
+const capturedReviews = JSON.parse(
+  readFileSync('tests/fixtures/maintenanceChangelogReviews.json', 'utf8')
+);
+
 const request = () => ({
   event: 'workflow_dispatch',
   repository: policy.repository,
@@ -20,6 +24,7 @@ const request = () => ({
 });
 const evidence = () => ({
   pr: {
+    number: policy.sourcePr,
     merged: true,
     base: { ref: policy.branch },
     head: { sha: policy.source },
@@ -43,13 +48,13 @@ const evidence = () => ({
   statuses: [] as Array<{ context: string; state: string }>,
   runs: [
     {
-      id: 40276727866,
-      path: '.github/workflows/deploy-to-raspi.yml',
-      name: 'legacy',
+      id: 42994230000,
+      path: '.github/workflows/tests.yml',
+      name: 'tests',
       head_sha: policy.source,
       status: 'completed',
-      conclusion: 'failure',
-      jobCount: 0,
+      conclusion: 'success',
+      jobCount: 1,
     },
   ],
   comments: [
@@ -58,11 +63,7 @@ const evidence = () => ({
       user: { login: 'chatgpt-codex-connector[bot]' },
       body: `<!-- codex-review-state:v1 ${JSON.stringify({ code_review: { commit_sha: policy.source, status: 'completed', has_unresolved_findings: false } })} -->`,
     },
-    {
-      id: 2,
-      user: { login: 'greptile-apps[bot]' },
-      body: `<!-- greptile_summary --> /commit/${policy.source} no outstanding findings`,
-    },
+    { ...capturedReviews.comments[1] },
   ],
   reviews: [
     {
@@ -111,35 +112,44 @@ describe('manual maintenance publication authorization', () => {
 
 describe('exact source and review gate', () => {
   it.each([
+    [40276727866, '.github/workflows/deploy-to-raspi.yml'],
+    [40276728723, '.github/workflows/rpi-deploy.yml'],
     [40433560737, '.github/workflows/deploy-to-raspi.yml'],
     [40433559761, '.github/workflows/rpi-deploy.yml'],
-  ])(
-    'bounds restored-branch exception %s to the exact source, path and zero jobs',
-    (id, path) => {
-      const input = evidence();
-      input.runs[0] = { ...input.runs[0], id: Number(id), path: String(path) };
-      expect(() => validateEvidence(input)).not.toThrow();
-      for (const invalid of [
-        { id: 999 },
-        { path: 'other.yml' },
-        { head_sha: 'b'.repeat(40) },
-        { jobCount: 1 },
-      ]) {
-        expect(() =>
-          validateEvidence({
-            ...input,
-            runs: [{ ...input.runs[0], ...invalid }],
-          })
-        ).toThrow();
-      }
-    }
-  );
+    [42994229967, '.github/workflows/deploy-to-raspi.yml'],
+    [42994228265, '.github/workflows/rpi-deploy.yml'],
+  ])('does not transfer old waivers or waive new source run %s', (id, path) => {
+    const input = evidence();
+    input.runs[0] = {
+      ...input.runs[0],
+      id: Number(id),
+      path: String(path),
+      conclusion: 'failure',
+      jobCount: 0,
+    };
+    expect(() => validateEvidence(input)).toThrow('Unwaived workflow failure');
+  });
+  it('rejects the prior source, merge commit and publisher tip as build inputs', () => {
+    for (const source of [
+      '47900748f61e1ef38c6289fc697f7a070f7fa3c9',
+      '9b0867402aefbd5acae61129b8e680407b7a4a04',
+      'a'.repeat(40),
+    ])
+      expect(() => validateRequest({ ...request(), source })).toThrow();
+  });
+  it('keeps review API endpoints on the pinned source PR', () => {
+    const script = readFileSync('scripts/maintenance-image.mjs', 'utf8');
+    expect(script).toContain('pullRequest(number:${policy.sourcePr})');
+    expect(script).toContain('/pulls/${policy.sourcePr}');
+    expect(script).toContain('/issues/${policy.sourcePr}/comments');
+    expect(script).not.toContain('/pulls/4850');
+  });
   it('accepts captured public GitHub API review evidence from the approved source PR', () => {
     const captured = JSON.parse(
-      readFileSync('tests/fixtures/maintenanceReviews.json', 'utf8').replace(
-        /^\uFEFF/,
-        ''
-      )
+      readFileSync(
+        'tests/fixtures/maintenanceChangelogReviews.json',
+        'utf8'
+      ).replace(/^\uFEFF/, '')
     );
     expect(() =>
       validateEvidence({
@@ -171,8 +181,53 @@ describe('exact source and review gate', () => {
     expect(() =>
       validateEvidence({
         ...evidence(),
-        comments: captured.comments,
-        reviews: [...captured.reviews, later],
+        comments: evidence().comments,
+        reviews: [...evidence().reviews, later],
+      })
+    ).toThrow();
+  });
+  it('rejects historical review evidence and changed or newer captured Greptile text', () => {
+    const old = JSON.parse(
+      readFileSync('tests/fixtures/maintenanceReviews.json', 'utf8')
+    );
+    expect(() => validateEvidence({ ...evidence(), ...old })).toThrow();
+    const captured = JSON.parse(
+      readFileSync('tests/fixtures/maintenanceChangelogReviews.json', 'utf8')
+    );
+    for (const change of [
+      { body: captured.comments[1].body + '\nNew finding' },
+      { id: captured.comments[1].id + 1 },
+      { body: captured.comments[1].body.replace('5/5', '1/5') },
+      {
+        body: captured.comments[1].body.replace(policy.source, 'b'.repeat(40)),
+      },
+    ]) {
+      const comments = [
+        captured.comments[0],
+        { ...captured.comments[1], ...change },
+      ];
+      expect(() =>
+        validateEvidence({ ...evidence(), comments, reviews: captured.reviews })
+      ).toThrow();
+    }
+  });
+  it('rejects later Greptile findings even when they quote the old clear phrase', () => {
+    const later = {
+      ...capturedReviews.comments[1],
+      id: 6792068365,
+      updated_at: '2099-01-01T00:00:00Z',
+      body: `<!-- greptile_summary --> /commit/${policy.source} Previous review said no outstanding findings. New blocking security finding; do not merge.`,
+    };
+    expect(() =>
+      validateEvidence({
+        ...evidence(),
+        comments: [...evidence().comments, later],
+      })
+    ).toThrow();
+    expect(() =>
+      validateEvidence({
+        ...evidence(),
+        comments: [evidence().comments[0], { ...later, id: 6792068364 }],
       })
     ).toThrow();
   });
@@ -184,7 +239,7 @@ describe('exact source and review gate', () => {
     e.reviews.push({ ...e.reviews[0], id: 101, state: 'APPROVED' });
     expect(() => validateEvidence(e)).not.toThrow();
   });
-  it('accepts only the bounded source-head exception with otherwise green evidence', () => {
+  it('accepts green evidence with no workflow exceptions', () => {
     expect(() => validateEvidence(evidence())).not.toThrow();
   });
   it.each(['codex', 'greptile', 'copilot', 'dismissed'])(
@@ -203,7 +258,8 @@ describe('exact source and review gate', () => {
       if (bot === 'greptile')
         e.comments.push({
           ...e.comments[1],
-          id: 99,
+          id: 999999999999,
+          updated_at: '2099-01-01T00:00:00Z',
           body: `<!-- greptile_summary --> /commit/${policy.source} Outstanding finding`,
         });
       if (bot === 'copilot')
@@ -223,6 +279,12 @@ describe('exact source and review gate', () => {
       'unmerged hotfix',
       (e) => {
         e.pr.merged = false;
+      },
+    ],
+    [
+      'wrong source PR',
+      (e) => {
+        e.pr.number = 4850;
       },
     ],
     [
@@ -292,23 +354,25 @@ describe('exact source and review gate', () => {
     [
       'new failure outside waiver',
       (e) => {
-        e.runs[0].id = 999;
+        e.runs[0].conclusion = 'failure';
       },
     ],
     [
-      'same run ID with different workflow',
+      'failed run with different workflow',
       (e) => {
         e.runs[0].path = 'other.yml';
+        e.runs[0].conclusion = 'failure';
       },
     ],
     [
-      'waived run starts jobs',
+      'failed run with jobs',
       (e) => {
         e.runs[0].jobCount = 1;
+        e.runs[0].conclusion = 'failure';
       },
     ],
     [
-      'waiver applied to different source',
+      'run on different source',
       (e) => {
         e.runs[0].head_sha = 'b'.repeat(40);
       },

@@ -1,51 +1,50 @@
 # Owner-run v3.0.2 image publication
 
 This separate publisher builds only reviewed source
-`47900748f61e1ef38c6289fc697f7a070f7fa3c9`, tree
-`35391f8fb62827713889915cba3c906090e45c7f`. It does not deploy or create releases.
+`558ce3c35163d97aea5594d6aba430c6a3dde1a3`, tree
+`e3896f76dbdfa6c2cc615a31a85075eb49afa02f`. It does not deploy or create releases.
 GitHub-hosted runners provide Docker/Buildx/QEMU. The owner needs repository write
 access to dispatch, not local Docker or a new token. Existing repository
 `GITHUB_TOKEN` package access must work; stop on access failure without granting
 permissions or provisioning credentials as part of this task.
 
-## Merge and review sequence
+## Review and blocking source evidence
 
-1. Review hotfix PR #4850 at the exact source above. The owner accepted only its
-   two byte-identical legacy initialization failures, runs 40276727866 and
-   40276728723, and their zero-job repeats 40433560737 and 40433559761 after
-   restoring the source branch to recover this PR. The publisher enumerates these
-   exact run IDs, source and workflow paths; it does not ignore arbitrary failures.
-   All other checks and reviews must stay green.
-2. Merge #4850 into `release/v3.0.x` preserving the approved source commit as an
-   ancestor (a normal merge, not squash/rebase). Record actual merge SHA. If a
-   different strategy is chosen, stop: this publisher will reject the changed
-   source and requires separately reviewed policy/validation changes.
-3. This publisher PR is initially stacked on `codex/v3.0.2-node-security`. After
-   #4850 merges, retarget it to `release/v3.0.x`, verify only publisher changes
-   remain, and repeat required final-head CI/reviews. Do not merge main/v3 code.
-   Its workflow/script tests and independent review are required. Any legacy
-   failures at its new head need a separate owner decision: the source waiver
-   does not extend to this publisher PR. Do not merge it until that gate is settled.
-4. Merge the approved publisher into `release/v3.0.x`, record its actual workflow
-   SHA and verify the merged files match the reviewed tree. `build.yml` already
-   exists on default branch main with manual dispatch; invoke its maintenance
-   version explicitly. No main-branch synchronization is needed to publish.
+PR [#4870](https://github.com/democratizedspace/dspace/pull/4870) is merged into
+`release/v3.0.x` as `9b0867402aefbd5acae61129b8e680407b7a4a04`. The publisher builds
+its reviewed head `558ce3c35163d97aea5594d6aba430c6a3dde1a3`, not the merge commit
+or a later publisher tip. That source includes the November 11 pending changelog
+heading and preserves application 3.0.2 and Node 24.22.1. It remains descended
+from the original hotfix source; no main/v3.1 application changes are imported.
 
-Owner review here means inspecting the PR and authorizing/performing its merge;
-the author is not required to submit an approval review on their own PR. The
-publisher checks completed repository AI reviews and outstanding requested changes.
-It does not demand a human GitHub APPROVED event from the author.
+**Validation and publication are currently blocked.** The new source has two
+unchanged legacy initialization failures, each with zero jobs:
 
-The maintenance branch does not automatically run the full suite on merge:
-`ci.yml` and `tests.yml` push triggers cover main/v3, and `build.yml` push triggers
-cover main/codex branches. Full checks run on the hotfix/publisher PR heads. This
-publisher uses the already tested hotfix source SHA, never an untested merge SHA;
-its exact tree is pinned and must remain an ancestor of the maintenance tip.
-The separately reviewed publisher workflow tree must match the merged files.
-If retargeting or conflict resolution changes either reviewed tree, stop for fresh
-checks/review. An empty merge-SHA check list is not a substitute for the required
-source-head evidence. The subsequent validation-only dispatch is an explicit new
-owner action; publication is a second, separately confirmed action.
+- [`deploy-to-raspi.yml`, run 42994229967](https://github.com/democratizedspace/dspace/actions/runs/42994229967)
+- [`rpi-deploy.yml`, run 42994228265](https://github.com/democratizedspace/dspace/actions/runs/42994228265)
+
+The source-specific exceptions for the prior `4790074` image do not apply here.
+The allowlist is empty. Both new failures are rejected, even though #4870 is
+merged. The owner must explicitly decide whether to accept these exact zero-job
+failures; any accepted exception needs another reviewed code change bounded to
+source, run ID, workflow path and zero jobs. Any failures on this publisher PR
+need their own owner decision. Do not dispatch either legacy deployment workflow.
+
+All other source-head checks, full workflow history and repository AI reviews
+remain required. The new Greptile summary uses different wording: the publisher
+accepts only the exact captured source-bound comment body (with its retrigger
+signature redacted before hashing), not arbitrary high-confidence summaries.
+Changed or newer blocking evidence remains rejected. The author is not required
+to approve their own PR; outstanding requested changes still block publication.
+
+After the blocker is settled, review and merge this publisher into
+`release/v3.0.x`, then verify the merged publisher files match the reviewed tree.
+Record the workflow SHA separately from the application source SHA.
+`build.yml` already exists on default branch main with manual dispatch; invoke
+its maintenance version explicitly. No main-branch synchronization is needed.
+An empty merge-SHA check list is not a substitute for source-head evidence. If
+conflict resolution changes a reviewed tree, stop for fresh checks and review.
+The validation-only dispatch and later publication are separate owner actions.
 
 ## Validate first, then explicitly publish
 
@@ -61,7 +60,7 @@ starts validation without publication:
 
 ```bash
 gh workflow run build.yml --repo democratizedspace/dspace --ref release/v3.0.x \
-  -f source_sha=47900748f61e1ef38c6289fc697f7a070f7fa3c9 -F publish=false
+  -f source_sha=558ce3c35163d97aea5594d6aba430c6a3dde1a3 -F publish=false
 ```
 
 Do not dispatch another branch, `ci-image.yml`, `ci-helm.yml`, or either legacy
@@ -71,22 +70,22 @@ After owner approval of validation, run the same maintenance workflow with
 `publish=true` and confirmation exactly:
 
 ```text
-publish v3.0.2 47900748f61e1ef38c6289fc697f7a070f7fa3c9
+publish v3.0.2 558ce3c35163d97aea5594d6aba430c6a3dde1a3
 ```
 
 The corresponding **separately approved owner publication action** is:
 
 ```bash
 gh workflow run build.yml --repo democratizedspace/dspace --ref release/v3.0.x \
-  -f source_sha=47900748f61e1ef38c6289fc697f7a070f7fa3c9 -F publish=true \
-  -f 'confirmation=publish v3.0.2 47900748f61e1ef38c6289fc697f7a070f7fa3c9'
+  -f source_sha=558ce3c35163d97aea5594d6aba430c6a3dde1a3 -F publish=true \
+  -f 'confirmation=publish v3.0.2 558ce3c35163d97aea5594d6aba430c6a3dde1a3'
 ```
 
 The job revalidates the source, merged PR, ancestry, tree, version, full CI/run
 history and repository review evidence. The only registry coordinate it may push is:
 
 ```text
-ghcr.io/democratizedspace/dspace:hotfix-47900748f61e1ef38c6289fc697f7a070f7fa3c9
+ghcr.io/democratizedspace/dspace:hotfix-558ce3c35163d97aea5594d6aba430c6a3dde1a3
 ```
 
 It fails closed unless GHCR explicitly reports that manifest absent. A publication
@@ -105,6 +104,14 @@ Use the verified receipt's actual image digest; none is known in advance. Comple
 the private pre-rollout log/inventory preservation checkpoint, confirm environment
 identities and prior artifact/rollback receipts, and select an existing verified
 compatible chart. Do not package the modified historical chart 3.0.1.
+
+The prior image digest and its staging evidence remain historical: neither proves
+this changed source. Before staging, update the DSPACE companion smoke runner and
+Sugarkube verifier with the actual published source/tag/digest tuple and verified
+OCI index, manifest and config bytes. Preserve the old tuples. Do not substitute
+the prior digest or enable a wildcard. Chart 3.1.3 may remain unchanged if its
+existing provenance is verified. Configure this source's separate health label
+as `v3.0.2+558ce3c`; health text is not artifact-version proof.
 
 The owner applies the explicit image override to staging, checks the deployed
 digest/source, Node 24.22.1, health and functional paths, then approves promotion of
