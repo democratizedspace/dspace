@@ -125,3 +125,11 @@ SHA and workflow-control SHA separate in the receipt. See
 
 The separate P1 postmortem and development-branch changelog guidance/validator sync
 remain follow-ups. No publication or rollout is performed by this PR.
+
+## Recover November publication verification
+
+Run 43164575478 published the November image but failed its post-push fetch.
+Do not rerun the publisher or overwrite the image. Use the separate
+[November verification-only recovery procedure](published-image-558ce3c-verification.md)
+to verify the existing digests and retain both the original failure receipt and
+the new verification receipt. Staging and production remain separate gates.
