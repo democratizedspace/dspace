@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
@@ -32,4 +32,33 @@ describe('locked Playwright runner compatibility', () => {
       )
     ).toBe(true);
   });
+});
+
+describe('explicit Ubuntu runner policy', () => {
+  const workflowFiles = readdirSync(
+    path.join(repoRoot, '.github/workflows')
+  ).filter((filename) => /\.ya?ml$/.test(filename));
+
+  it.each(workflowFiles)(
+    '%s does not use the rolling Ubuntu image',
+    (filename) => {
+      const source = readFileSync(
+        path.join(repoRoot, '.github/workflows', filename),
+        'utf8'
+      );
+      expect(source).not.toContain('ubuntu-latest');
+      for (const job of Object.values(readJobs(filename)) as Array<{
+        'runs-on'?: string | string[];
+      }>) {
+        const runners = Array.isArray(job['runs-on'])
+          ? job['runs-on']
+          : [job['runs-on']];
+        for (const runner of runners) {
+          if (typeof runner === 'string' && runner.startsWith('ubuntu-')) {
+            expect(runner).toMatch(/^ubuntu-\d{2}\.\d{2}(?:-arm)?$/);
+          }
+        }
+      }
+    }
+  );
 });

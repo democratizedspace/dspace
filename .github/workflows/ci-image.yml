@@ -36,7 +36,7 @@ permissions:
 jobs:
   local-build:
     name: Validate Docker build with host node_modules
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Release publication gets its own build in the semantic-release job below; skip the
     # redundant PR-style validate/smoke pass for release events.
     if: github.event_name != 'release' && !(github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')
@@ -272,7 +272,7 @@ jobs:
 
   image:
     name: Build and push image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Ordinary branch-build publish path. Must never run for release events — that is the
     # exact class of bug that let branch builds move vX.Y.Z (see DSPACE #4727 and
     # outages/2026-07-23-dspace-production-version-drift.md); semantic tags are published
@@ -551,7 +551,7 @@ jobs:
 
   semantic-release:
     name: Publish semantic release image alias and manifest
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: (github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')
     concurrency:
       group: dspace-semantic-image-${{ github.event.release.tag_name || github.event.inputs.release_tag }}
