@@ -92,7 +92,8 @@ jobs:
           node scripts/link-check.mjs
 
   frontend-indexeddb-regression-e2e:
-    runs-on: ubuntu-latest
+    # Playwright 1.54.2 supports Ubuntu 24.04, not the rolling latest image.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 22.23.4
