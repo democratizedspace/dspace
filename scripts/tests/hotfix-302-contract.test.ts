@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   hotfix302,
+  hotfix302November,
   verifyHotfixArtifact,
   validateHotfixRuntime,
 } from '../hotfix-302-contract.mjs';
@@ -160,5 +161,100 @@ describe('exact hotfix artifact, runtime, and provider contracts', () => {
     expect(() =>
       validateProviderConfig(config, 'chat-default-provider-v1', 'openai')
     ).toThrow('LIVE_DEFAULT_PROVIDER_DISAGREEMENT');
+  });
+});
+
+describe('November exact hotfix compatibility', () => {
+  const november = {
+    ...options,
+    expectedRevision: hotfix302November.revision,
+    expectedImageDigest: hotfix302November.imageDigest,
+  };
+  it('accepts both unchanged historical and independently authenticated November proofs', () => {
+    expect(verifyHotfixArtifact(options).imageVersionLabel).toBe(
+      'v3.0.2+4790074'
+    );
+    expect(verifyHotfixArtifact(november)).toEqual({
+      method: 'sha256-index-platform-config-version-label',
+      applicationVersion: '3.0.2',
+      sourceRevision: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
+      imageDigest:
+        'sha256:4503e9aa941c842893bd02a05edfc7fb2f61afca916d06b0c160c5b798477ec5',
+      imageVersionLabel: 'v3.0.2+558ce3c',
+    });
+    expect(
+      validateHotfixRuntime(
+        { ...meta, gitSha: november.expectedRevision },
+        { status: 'ready', version: 'v3.0.2+558ce3c' },
+        november
+      ).applicationVersion
+    ).toBe('3.0.2');
+  });
+  it.each(Object.keys(november))(
+    'rejects drift or absence of November coordinate %s',
+    (key) => {
+      expect(() =>
+        verifyHotfixArtifact({ ...november, [key]: 'drift' })
+      ).toThrow();
+      expect(() =>
+        verifyHotfixArtifact({ ...november, [key]: undefined })
+      ).toThrow();
+    }
+  );
+  it('rejects historical evidence and health for the new image', () => {
+    expect(() =>
+      verifyHotfixArtifact({
+        ...november,
+        expectedImageDigest: options.expectedImageDigest,
+      })
+    ).toThrow();
+    expect(() =>
+      validateHotfixRuntime(
+        { ...meta, gitSha: november.expectedRevision },
+        health,
+        november
+      )
+    ).toThrow();
+    expect(() =>
+      validateHotfixRuntime(
+        meta,
+        { status: 'ready', version: 'v3.0.2+558ce3c' },
+        november
+      )
+    ).toThrow();
+    const old = JSON.parse(
+      readFileSync('scripts/fixtures/hotfix-302-oci-proof.json', 'utf8')
+    );
+    const fresh = JSON.parse(
+      readFileSync(
+        'scripts/fixtures/hotfix-302-november-oci-proof.json',
+        'utf8'
+      )
+    );
+    expect(() => verifyHotfixArtifact(november, old)).toThrow();
+    expect(() => verifyHotfixArtifact(options, fresh)).toThrow();
+  });
+  it.each([
+    'index',
+    'amd64-manifest',
+    'amd64-config',
+    'arm64-manifest',
+    'arm64-config',
+    'missing-platform',
+  ])('rejects corrupted November proof %s', (field) => {
+    const bundle = JSON.parse(
+      readFileSync(
+        'scripts/fixtures/hotfix-302-november-oci-proof.json',
+        'utf8'
+      )
+    );
+    if (field === 'index') bundle.index = Buffer.from('{}').toString('base64');
+    else if (field === 'missing-platform') bundle.platforms.pop();
+    else {
+      const [arch, kind] = field.split('-');
+      bundle.platforms[arch === 'amd64' ? 0 : 1][kind] =
+        Buffer.from('{}').toString('base64');
+    }
+    expect(() => verifyHotfixArtifact(november, bundle)).toThrow();
   });
 });

@@ -1,6 +1,7 @@
-// This contract is restricted to one published immutable image, not a rollout approval.
+// These exact published immutable images are compatibility entries, not rollout approvals.
 import { createHash } from 'node:crypto';
 import artifactBundle from './fixtures/hotfix-302-oci-proof.json' with { type: 'json' };
+import novemberBundle from './fixtures/hotfix-302-november-oci-proof.json' with { type: 'json' };
 
 export const hotfix302 = Object.freeze({
   version: '3.0.2',
@@ -12,6 +13,17 @@ export const hotfix302 = Object.freeze({
   providerConfigContract: 'hotfix-openai-config-v1',
   provider: 'openai',
 });
+export const hotfix302November = Object.freeze({
+  ...hotfix302,
+  revision: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
+  imageDigest:
+    'sha256:4503e9aa941c842893bd02a05edfc7fb2f61afca916d06b0c160c5b798477ec5',
+  imageVersionLabel: 'v3.0.2+558ce3c',
+});
+const profiles = [
+  { coordinates: hotfix302, bundle: artifactBundle },
+  { coordinates: hotfix302November, bundle: novemberBundle },
+];
 export const artifactProofPrefix = 'DSPACE_ARTIFACT_VERSION_PROOF ';
 
 function fail() {
@@ -27,17 +39,20 @@ function decode(raw, digest) {
   return JSON.parse(bytes.toString('utf8'));
 }
 
-export function verifyHotfixArtifact(options, bundle = artifactBundle) {
-  if (
-    options.expectedVersion !== hotfix302.version ||
-    options.expectedRevision !== hotfix302.revision ||
-    options.expectedImageDigest !== hotfix302.imageDigest ||
-    options.expectedProvider !== hotfix302.provider ||
-    options.identityContract !== hotfix302.identityContract ||
-    options.providerConfigContract !== hotfix302.providerConfigContract
-  )
-    fail();
-  const index = decode(bundle.index, hotfix302.imageDigest);
+export function verifyHotfixArtifact(options, bundle) {
+  const profile = profiles.find(
+    ({ coordinates: value }) =>
+      options.expectedVersion === value.version &&
+      options.expectedRevision === value.revision &&
+      options.expectedImageDigest === value.imageDigest &&
+      options.expectedProvider === value.provider &&
+      options.identityContract === value.identityContract &&
+      options.providerConfigContract === value.providerConfigContract
+  );
+  if (!profile) fail();
+  const selected = profile.coordinates;
+  if (bundle === undefined) bundle = profile.bundle;
+  const index = decode(bundle.index, selected.imageDigest);
   const descriptors = index.manifests.filter(
     (entry) =>
       entry.platform?.os === 'linux' &&
@@ -56,25 +71,25 @@ export function verifyHotfixArtifact(options, bundle = artifactBundle) {
     if (
       config.architecture !== descriptor.platform.architecture ||
       config.os !== 'linux' ||
-      labels?.['org.opencontainers.image.revision'] !== hotfix302.revision ||
+      labels?.['org.opencontainers.image.revision'] !== selected.revision ||
       labels?.['org.opencontainers.image.source'] !==
         'https://github.com/democratizedspace/dspace' ||
       labels?.['org.opencontainers.image.version'] !==
-        hotfix302.imageVersionLabel
+        selected.imageVersionLabel
     )
       fail();
   }
   if (architectures.size !== 2) fail();
   // Extract the application release from the authenticated OCI label, never from runtime env.
   const applicationVersion = observedVersionLabel.match(
-    /^v(3\.0\.2)\+4790074$/
+    /^v(3\.0\.2)\+[a-f0-9]{7}$/
   )?.[1];
   if (applicationVersion !== options.expectedVersion) fail();
   return {
     method: 'sha256-index-platform-config-version-label',
     applicationVersion,
-    sourceRevision: hotfix302.revision,
-    imageDigest: hotfix302.imageDigest,
+    sourceRevision: selected.revision,
+    imageDigest: selected.imageDigest,
     imageVersionLabel: observedVersionLabel,
   };
 }
