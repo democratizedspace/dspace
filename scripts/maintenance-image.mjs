@@ -537,20 +537,171 @@ export async function main() {
     published: true,
     verified: false,
   };
-  writeFileSync('maintenance-receipt.json', JSON.stringify(receipt, null, 2));
-  const published = await manifest(tag, await registryToken());
-  const platforms = validatePublishedIndex(
-    published.status,
-    published.headers.get('docker-content-digest'),
-    digest,
-    await published.json()
+  await verifyPublication(receipt, source);
+}
+
+// This retry boundary is deliberately reachable only after a completed push.
+// Never wrap the publisher, absence check, build, push, or smoke in retries.
+const transientStatuses = new Set([408, 429, 500, 502, 503, 504]);
+const transientCodes = new Set([
+  'ECONNRESET',
+  'ECONNREFUSED',
+  'ETIMEDOUT',
+  'EAI_AGAIN',
+  'UND_ERR_CONNECT_TIMEOUT',
+  'UND_ERR_HEADERS_TIMEOUT',
+  'UND_ERR_BODY_TIMEOUT',
+  'UND_ERR_SOCKET',
+]);
+class RegistryReadError extends Error {}
+const registryFailure = (stage, reason) =>
+  new RegistryReadError(`Registry ${stage}: ${reason}`);
+
+async function postPushRead(stage, url, headers, { request, wait, log }) {
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    let reason;
+    try {
+      const response = await request(url, {
+        method: 'GET',
+        redirect: 'error',
+        headers,
+        signal: AbortSignal.timeout(30000),
+      });
+      if (response.status === 200) {
+        // Reading the body is part of the timed attempt; JSON decoding is not.
+        const bytes = Buffer.from(await response.arrayBuffer());
+        return { response, bytes };
+      }
+      // Do not consume or print error bodies or redirect locations.
+      await response.body?.cancel().catch(() => {});
+      if (!transientStatuses.has(response.status))
+        throw registryFailure(stage, `HTTP ${response.status}; not retryable`);
+      reason = `HTTP ${response.status}`;
+    } catch (error) {
+      if (error instanceof RegistryReadError) throw error;
+      const code = error.cause?.code || error.code;
+      if (['TimeoutError', 'AbortError'].includes(error.name))
+        reason = 'request timed out or aborted';
+      else if (
+        transientCodes.has(code) ||
+        (!code &&
+          error instanceof TypeError &&
+          error.message === 'fetch failed')
+      )
+        reason = 'transient transport failure';
+      else
+        throw registryFailure(stage, 'non-retryable transport or body failure');
+    }
+    if (attempt === 4)
+      throw registryFailure(stage, `${reason}; exhausted 4 attempts`);
+    log(`Registry ${stage}: ${reason}; retry ${attempt}/3`);
+    await wait(1000 * 2 ** (attempt - 1));
+  }
+}
+
+function registryJson(stage, bytes) {
+  try {
+    return JSON.parse(bytes.toString('utf8'));
+  } catch {
+    throw registryFailure(stage, 'invalid JSON body; not retryable');
+  }
+}
+
+export async function readPublishedIndex(
+  digest,
+  {
+    request = fetch,
+    wait = (ms) => new Promise((done) => setTimeout(done, ms)),
+    log = (message) => console.error(message),
+    env = process.env,
+  } = {}
+) {
+  assert.match(digest, /^sha256:[a-f0-9]{64}$/);
+  if (!env.GH_TOKEN || !env.GITHUB_ACTOR)
+    throw registryFailure(
+      'pull token',
+      'existing workflow credentials unavailable'
+    );
+  const dependencies = { request, wait, log };
+  const tokenResult = await postPushRead(
+    'pull token',
+    'https://ghcr.io/token?service=ghcr.io&scope=repository:democratizedspace/dspace:pull',
+    {
+      Authorization: `Basic ${Buffer.from(`${env.GITHUB_ACTOR}:${env.GH_TOKEN}`).toString('base64')}`,
+    },
+    dependencies
   );
-  receipt.platforms = platforms;
-  writeFileSync('maintenance-receipt.json', JSON.stringify(receipt, null, 2));
-  for (const arch of ['amd64', 'arm64'])
-    smoke(`${policy.image}@${platforms[arch]}`, arch, source);
+  const token = registryJson('pull token', tokenResult.bytes)?.token;
+  if (typeof token !== 'string' || !token.length)
+    throw registryFailure('pull token', 'invalid token body; not retryable');
+  const { response, bytes } = await postPushRead(
+    'published tag index',
+    `https://ghcr.io/v2/democratizedspace/dspace/manifests/hotfix-${policy.source}`,
+    {
+      Authorization: `Bearer ${token}`,
+      Accept:
+        'application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json',
+    },
+    dependencies
+  );
+  if (`sha256:${createHash('sha256').update(bytes).digest('hex')}` !== digest)
+    throw registryFailure(
+      'published tag index',
+      'content digest mismatch; not retryable'
+    );
+  if (response.headers.get('docker-content-digest') !== digest)
+    throw registryFailure(
+      'published tag index',
+      'header digest mismatch; not retryable'
+    );
+  const index = registryJson('published tag index', bytes);
+  try {
+    return validatePublishedIndex(200, digest, digest, index);
+  } catch {
+    throw registryFailure(
+      'published tag index',
+      'invalid architecture index; not retryable'
+    );
+  }
+}
+
+export async function verifyPublication(
+  receipt,
+  source,
+  {
+    readIndex = readPublishedIndex,
+    runSmoke = smoke,
+    save = (value) =>
+      writeFileSync('maintenance-receipt.json', JSON.stringify(value, null, 2)),
+  } = {}
+) {
+  receipt.verified = false;
+  receipt.platforms = {};
+  receipt.smokes = {};
+  delete receipt.failure;
+  save(receipt);
+  let stage = 'published registry verification';
+  try {
+    receipt.platforms = await readIndex(receipt.digest);
+    save(receipt);
+    for (const arch of ['amd64', 'arm64']) {
+      stage = `${arch} smoke`;
+      await runSmoke(
+        `${policy.image}@${receipt.platforms[arch]}`,
+        arch,
+        source
+      );
+      receipt.smokes[arch] = true;
+      save(receipt);
+    }
+  } catch (error) {
+    receipt.failure =
+      error instanceof RegistryReadError ? error.message : `${stage}: failed`;
+    save(receipt);
+    throw new Error(receipt.failure);
+  }
   receipt.verified = true;
-  writeFileSync('maintenance-receipt.json', JSON.stringify(receipt, null, 2));
+  save(receipt);
 }
 
 function smoke(image, arch, source) {

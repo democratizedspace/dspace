@@ -133,3 +133,31 @@ Do not rerun the publisher or overwrite the image. Use the separate
 [November verification-only recovery procedure](published-image-558ce3c-verification.md)
 to verify the existing digests and retain both the original failure receipt and
 the new verification receipt. Staging and production remain separate gates.
+
+## Bounded post-push reads
+
+Only the post-push pull-token and published-tag index GETs retry: at most four
+attempts per request, each with a 30-second timeout covering headers and body,
+with 1, 2, and 4 seconds between attempts. Retryable responses are HTTP 408,
+429, 500, 502, 503 and 504, plus transient connection, socket and timeout errors.
+Redirects, authorization failures, other HTTP responses, certificate failures,
+invalid JSON/schema and digest mismatches stop immediately. No response bodies,
+credentials, signed URLs or raw transport errors appear in diagnostics.
+
+The publisher hashes the raw index bytes against the Buildx metadata digest and
+also requires the registry digest header to match before using platform digests.
+Its receipt remains `published: true, verified: false` on any verification
+failure, with a sanitized failure stage and completed smoke results. Only both
+successful architecture smokes set `verified: true`.
+
+Exhaustion never retries a build, push, workflow or smoke. Preserve the failure
+receipt and use the separate fixed-digest November verification-only procedure
+linked above; do not dispatch the publisher to recover. The existing historical
+verifier and November recovery workflow retain their fixed identities and guards.
+These offline checks do not establish live published-image verification:
+
+```sh
+node --test scripts/test-maintenance-image-reads.mjs
+node --test scripts/test-verify-published-image-558ce3c.mjs
+node --test scripts/test-verify-published-image.mjs
+```
