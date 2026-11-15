@@ -16,8 +16,24 @@ export const policy = Object.freeze({
   base: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
   image: 'ghcr.io/democratizedspace/dspace',
 });
-// No workflow-failure exceptions transfer from the historical source.
-const waivedRuns = new Map();
+// Owner excludes the two obsolete RPi initialization failures from this candidate.
+// Exact evidence only: no deployment job, another source, or unrelated CI is waived.
+const waivedRuns = new Map([
+  [
+    43764737285,
+    {
+      source: 'bfb910201e23119cb26902d8ca6787070150b695',
+      path: '.github/workflows/rpi-deploy.yml',
+    },
+  ],
+  [
+    43764736304,
+    {
+      source: 'bfb910201e23119cb26902d8ca6787070150b695',
+      path: '.github/workflows/deploy-to-raspi.yml',
+    },
+  ],
+]);
 
 // Owner waived AI-review completion for #4876's one-line date change only.
 // Independently pin all coordinates: updating policy cannot inherit this waiver.
@@ -150,6 +166,11 @@ export function validateEvidence({
     if (run.conclusion === 'failure' && waiver) {
       assert.equal(run.head_sha, waiver.source, 'Waived source changed');
       assert.equal(run.path, waiver.path, 'Waived workflow path changed');
+      assert.equal(
+        run.event,
+        'push',
+        'Waiver does not cover manual deployment'
+      );
       assert.equal(run.run_attempt, 1, 'Waiver does not cover reruns');
       assert.equal(
         run.jobCount,
