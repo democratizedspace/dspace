@@ -1,0 +1,21 @@
+{
+  "source": "https://github.com/democratizedspace/dspace/pull/4876",
+  "note": "Actual clear source PR summaries captured 2026-11-15; Greptile retrigger signature redacted.",
+  "summaries": [
+    {
+      "id": 5913107400,
+      "user": {
+        "login": "copilot-pull-request-reviewer[bot]"
+      },
+      "body": "<!-- ccr-overview-v2 -->\n\n### 🟢 Approval recommended\n\nNo active review issues block the date-only changelog update.\n\n**No open issues** 🎉\n\n<details>\n<summary><strong>What changed in this PR</strong></summary>\n\nUpdates the planned v3.0.2 patch-release date without changing application behavior or claiming release completion.\n\n**Changes:**\n- Moves the patch-addendum date from November 11 to November 15, 2026.\n- Preserves the April changelog route and pending-release label.\n\nThe PR reports that the changelog release-line validator and whitespace check passed; full application QA was not repeated for this date-only change.\n\n| File | Description |\r\n| ---- | ----------- |\r\n| frontend/​src/​pages/​docs/​md/​changelog/​20260401.md | Updates only the v3.0.2 patch-addendum heading date. |\n</details>\n\n<sub>Review effort: Balanced</sub>",
+      "state": "COMMENTED"
+    },
+    {
+      "id": 6901953861,
+      "user": {
+        "login": "greptile-apps[bot]"
+      },
+      "body": "<!-- greptile_summary -->\n\n<h2><a href=\"https://app.greptile.com/api/retrigger?id=107766439&amp;sig=REDACTED\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/RetriggerDark.svg?v=2\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/Retrigger.svg?v=2\"><img alt=\"Retrigger\" src=\"https://greptile-static-assets.s3.amazonaws.com/badges/Retrigger.svg?v=2\" align=\"right\"></picture></a><a href=\"https://app.greptile.com/-/switch-tenant?tenant=futuroptimist&amp;next=%2Fdemocratizedspace%2Fdspace%2Fpull%2F4876&amp;utm_source=greptile_review&amp;utm_medium=github&amp;utm_campaign=view_in_greptile\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/ViewInGreptileDark.svg?v=2\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://greptile-static-assets.s3.amazonaws.com/badges/ViewInGreptile.svg?v=2\"><img alt=\"View in Greptile\" src=\"https://greptile-static-assets.s3.amazonaws.com/badges/ViewInGreptile.svg?v=2\" align=\"right\"></picture></a>Confidence Score: 5/5</h2>\n\n**[Low impact]** This date-only change appears safe to merge.\n\n<h3>Summary</h3>\n\nChanges the pending `v3.0.2` patch-addendum date from November 11 to November 15, 2026.\n- The v3.0.2 changelog entry now shows November 15.\n\n<!-- greptile_confidence_score:5 -->\n\n<sub>Reviews (1) · Last reviewed commit: [\"docs: target November 15 for v3.0.2 patc...\"](https://github.com/democratizedspace/dspace/commit/bfb910201e23119cb26902d8ca6787070150b695) · [Reviewed by Greptile](https://www.greptile.com/?utm_source=greptile_review&utm_medium=github&utm_campaign=review_public&utm_content=democratizedspace/dspace)</sub>"
+    }
+  ]
+}
