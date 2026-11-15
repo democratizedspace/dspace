@@ -6,6 +6,28 @@ const readJobs = (filename: string) =>
   parse(readFileSync(`.github/workflows/${filename}`, 'utf8')).jobs;
 
 describe('maintenance Playwright runner compatibility', () => {
+  it('pins the indirect browser job and preserves every aggregate launch gate', () => {
+    const workflow = parse(readFileSync('.github/workflows/ci.yml', 'utf8'));
+    const job = workflow.jobs['root-tests'];
+    expect(job['runs-on']).toBe('ubuntu-24.04');
+    expect(job['continue-on-error']).toBeUndefined();
+    expect(workflow.env?.SKIP_E2E).toBeUndefined();
+    expect(job.env?.SKIP_E2E).toBeUndefined();
+    const gate = job.steps.find(
+      (step: { name?: string }) =>
+        step.name === 'Run launch-gate checks from repo root'
+    );
+    expect(gate.run.trim().split('\n')).toEqual([
+      'npm run lint',
+      'npm run type-check',
+      'npm run build',
+      'npm test',
+      'node scripts/link-check.mjs',
+    ]);
+    expect(gate.env?.SKIP_E2E).toBeUndefined();
+    expect(gate['continue-on-error']).toBeUndefined();
+  });
+
   it('pins the IndexedDB browser gate to supported Ubuntu 24.04', () => {
     const job = readJobs('ci.yml')['frontend-indexeddb-regression-e2e'];
     expect(job['runs-on']).toBe('ubuntu-24.04');
