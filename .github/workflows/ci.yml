@@ -60,7 +60,8 @@ jobs:
           format: markdown
           output: lychee/out.md
   root-tests:
-    runs-on: ubuntu-latest
+    # The aggregate test command runs grouped Playwright E2E too.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -96,7 +97,8 @@ jobs:
           node scripts/link-check.mjs
 
   frontend-indexeddb-regression-e2e:
-    runs-on: ubuntu-latest
+    # Playwright 1.54.2 supports Ubuntu 24.04, not the rolling latest image.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Use pinned Node.js
