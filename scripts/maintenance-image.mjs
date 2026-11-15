@@ -10,45 +10,49 @@ import { pathToFileURL } from 'node:url';
 export const policy = Object.freeze({
   repository: 'democratizedspace/dspace',
   branch: 'release/v3.0.x',
-  source: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
-  sourcePr: 4870,
-  tree: 'e3896f76dbdfa6c2cc615a31a85075eb49afa02f',
+  source: 'bfb910201e23119cb26902d8ca6787070150b695',
+  sourcePr: 4876,
+  tree: '5f5b75243bb51b71d13e04f9b42dcc5609b5bcff',
   base: '1a31a569aff2dbeb238e8c2688b9e85140d2077d',
   image: 'ghcr.io/democratizedspace/dspace',
 });
-// Accept only the two owner-approved zero-job initialization failures on #4870.
-// Pin their source independently so a future policy source cannot inherit them.
-// Reruns and publisher-head failures require a separate reviewed owner decision.
-const waivedRuns = new Map([
-  [
-    42994229967,
-    {
-      source: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
-      path: '.github/workflows/deploy-to-raspi.yml',
-    },
-  ],
-  [
-    42994228265,
-    {
-      source: '558ce3c35163d97aea5594d6aba430c6a3dde1a3',
-      path: '.github/workflows/rpi-deploy.yml',
-    },
-  ],
-]);
-const capturedGreptileReview = Object.freeze({
-  id: 6792068364,
-  // Hash all review text after redacting only the retrigger URL's signature.
-  // This accepts the exact clear review, not arbitrary confidence-5 summaries.
-  sha256: 'a428d8b20715709dcd13dddc1b1e929f46a5ad04576fc610583cca87575dd5a2',
-});
+// No workflow-failure exceptions transfer from the historical source.
+const waivedRuns = new Map();
 
-function greptileReviewDigest(body) {
-  const redacted = body.replace(
+// Owner waived AI-review completion for #4876's one-line date change only.
+// Independently pin all coordinates: updating policy cannot inherit this waiver.
+export function hasOwnerReviewWaiver(pr, tree) {
+  return (
+    pr.number === 4876 &&
+    pr.head.sha === 'bfb910201e23119cb26902d8ca6787070150b695' &&
+    tree === '5f5b75243bb51b71d13e04f9b42dcc5609b5bcff'
+  );
+}
+
+// Actual clear #4876 summaries, not a requirement that absent bots finish.
+const clearSummaries = {
+  'greptile-apps[bot]': {
+    id: 6901953861,
+    sha256: 'a6824580be041027c481f74095470629f248fb971bd593a6e84a1c497bbc9cca',
+  },
+  'copilot-pull-request-reviewer[bot]': {
+    id: 5913107400,
+    sha256: '8caf1113c96de2353ff48debb4a345b5f2ba5e430cece49296ffebf926f8999f',
+  },
+};
+function assertCapturedClearSummary(summary, login) {
+  const body = summary.body.replace(
     /(https:\/\/app\.greptile\.com\/api\/retrigger\?[^"<>]*?(?:&amp;|&)sig=)[^"&<>]+/g,
     '$1REDACTED'
   );
-  return createHash('sha256').update(redacted).digest('hex');
+  const captured = clearSummaries[login];
+  assert.ok(
+    summary.id === captured.id &&
+      createHash('sha256').update(body).digest('hex') === captured.sha256,
+    `Changed or unrecognized ${login} findings; inspect before publication`
+  );
 }
+
 const requiredChecks = [
   'unit',
   'lint',
@@ -163,6 +167,11 @@ export function validateEvidence({
     threads.every((t) => t.isResolved),
     'Unresolved review thread'
   );
+  assert.ok(
+    hasOwnerReviewWaiver(pr, tree),
+    'Owner review waiver is source-specific'
+  );
+  // Waiving completion is not permission to ignore an observed unresolved finding.
   const codex = latestEvidence(
     comments,
     (c) =>
@@ -170,26 +179,29 @@ export function validateEvidence({
       c.body.includes('codex-review-state:v1')
   );
   const match = codex?.body.match(/codex-review-state:v1 (\{[^\n]+\}) -->/);
-  const review = match && JSON.parse(match[1]).code_review;
-  assert.ok(
-    review &&
-      review.commit_sha === policy.source &&
-      review.status === 'completed' &&
-      review.has_unresolved_findings === false,
-    'Codex review not clear on source'
-  );
+  if (match) {
+    const review = JSON.parse(match[1]).code_review;
+    assert.notEqual(
+      review?.has_unresolved_findings,
+      true,
+      'Unresolved Codex finding'
+    );
+  }
   const greptile = latestEvidence(
     comments,
     (c) =>
       c.user.login === 'greptile-apps[bot]' &&
       c.body.includes('greptile_summary')
   );
-  assert.ok(
-    greptile?.body.includes(`/commit/${policy.source}`) &&
-      greptile.id === capturedGreptileReview.id &&
-      greptileReviewDigest(greptile.body) === capturedGreptileReview.sha256,
-    'Greptile review not clear on source'
+  if (greptile) assertCapturedClearSummary(greptile, 'greptile-apps[bot]');
+  const copilot = latestEvidence(
+    reviews,
+    (r) =>
+      r.user.login === 'copilot-pull-request-reviewer[bot]' &&
+      r.state !== 'PENDING'
   );
+  if (copilot)
+    assertCapturedClearSummary(copilot, 'copilot-pull-request-reviewer[bot]');
   for (const login of new Set(reviews.map((r) => r.user.login))) {
     const decisive = latestEvidence(
       reviews,
@@ -203,21 +215,17 @@ export function validateEvidence({
       `Outstanding requested changes: ${login}`
     );
     const latest = latestEvidence(reviews, (r) => r.user.login === login);
+    const waivedBot = [
+      'chatgpt-codex-connector[bot]',
+      'greptile-apps[bot]',
+      'copilot-pull-request-reviewer[bot]',
+    ].includes(login);
     assert.ok(
-      !['CHANGES_REQUESTED', 'DISMISSED', 'PENDING'].includes(latest.state),
+      !['CHANGES_REQUESTED', 'DISMISSED'].includes(latest.state) &&
+        (latest.state !== 'PENDING' || waivedBot),
       `Review not clear: ${login}`
     );
   }
-  const copilot = latestEvidence(
-    reviews,
-    (r) => r.user.login === 'copilot-pull-request-reviewer[bot]'
-  );
-  assert.ok(
-    copilot?.commit_id === policy.source &&
-      copilot.body.includes('No open issues') &&
-      ['COMMENTED', 'APPROVED'].includes(copilot.state),
-    'Copilot review not clear on source'
-  );
 }
 
 function latestEvidence(items, predicate) {

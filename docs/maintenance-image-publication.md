@@ -1,46 +1,35 @@
 # Owner-run v3.0.2 image publication
 
 This separate publisher builds only reviewed source
-`558ce3c35163d97aea5594d6aba430c6a3dde1a3`, tree
-`e3896f76dbdfa6c2cc615a31a85075eb49afa02f`. It does not deploy or create releases.
+`bfb910201e23119cb26902d8ca6787070150b695`, tree
+`5f5b75243bb51b71d13e04f9b42dcc5609b5bcff`. It does not deploy or create releases.
 GitHub-hosted runners provide Docker/Buildx/QEMU. The owner needs repository write
 access to dispatch, not local Docker or a new token. Existing repository
 `GITHUB_TOKEN` package access must work; stop on access failure without granting
 permissions or provisioning credentials as part of this task.
 
-## Review and bounded source exceptions
+## Exact source and owner review waiver
 
-PR [#4870](https://github.com/democratizedspace/dspace/pull/4870) is merged into
-`release/v3.0.x` as `9b0867402aefbd5acae61129b8e680407b7a4a04`. The publisher builds
-its reviewed head `558ce3c35163d97aea5594d6aba430c6a3dde1a3`, not the merge commit
-or a later publisher tip. That source includes the November 11 pending changelog
-heading and preserves application 3.0.2 and Node 24.22.1. It remains descended
-from the original hotfix source; no main/v3.1 application changes are imported.
+PR [#4876](https://github.com/democratizedspace/dspace/pull/4876) merged into
+`release/v3.0.x` as `25db174e27c0e66493284cbddb931dd54a466745`. Build its reviewed
+head `bfb910201e23119cb26902d8ca6787070150b695`, not the merge commit or publisher
+tip. Its only change from the preceding maintenance commit is the November 15
+pending changelog heading. Application 3.0.2 and Node 24.22.1 remain unchanged.
+The owner accepts intervening release-tooling changes and reuses the intermediate
+staging revision 32 functional checks, including successful live chat.
 
-The owner-approved exception covers only these two unchanged legacy
-initialization failures on source `558ce3c35163d97aea5594d6aba430c6a3dde1a3`:
+The owner explicitly waived AI-review completion for this one-line date change.
+The code binds this exception independently to PR #4876, its full head SHA and
+source tree. It does not fabricate completed bot reviews or create an input flag
+that could waive another source. Unresolved review threads, observed unresolved
+Codex findings, outstanding requested changes and dismissed reviews still block.
+When present, completed Greptile/Copilot summaries must match the captured clear
+#4876 bodies and IDs; changed or unknown summaries stop for inspection rather than
+being silently ignored. Absence still does not require waiting for completion.
+All required CI checks and the complete workflow/status gates remain enforced.
+No historical RPi workflow failure exceptions transfer to this source.
 
-- [`deploy-to-raspi.yml`, run 42994229967](https://github.com/democratizedspace/dspace/actions/runs/42994229967)
-- [`rpi-deploy.yml`, run 42994228265](https://github.com/democratizedspace/dspace/actions/runs/42994228265)
-
-Each exception requires its exact full source SHA, numeric run ID and workflow
-path, `status=completed`, `conclusion=failure`, `run_attempt=1`, and exactly zero
-jobs across all attempts. Missing or changed evidence fails closed. The
-source-specific exceptions for the prior `4790074` image do not transfer; neither
-do these exceptions cover another source, run, workflow path, rerun, or a failure
-that starts jobs. Publisher-head failures, including runs 43125103519 and
-43125101846 from #4871, require their own owner decision and are not allowlisted.
-Do not dispatch either legacy deployment workflow.
-
-All other source-head checks, full workflow history and repository AI reviews
-remain required. The new Greptile summary uses different wording: the publisher
-accepts only the exact captured source-bound comment body (with its retrigger
-signature redacted before hashing), not arbitrary high-confidence summaries.
-Changed or newer blocking evidence remains rejected. The author is not required
-to approve their own PR; outstanding requested changes still block publication.
-
-Review and merge this exception change into
-`release/v3.0.x`, then verify the merged publisher files match the reviewed tree.
+Review and merge this publisher update into `release/v3.0.x` before dispatch.
 Record the workflow SHA separately from the application source SHA.
 `build.yml` already exists on default branch main with manual dispatch; invoke
 its maintenance version explicitly. No main-branch synchronization is needed.
@@ -62,7 +51,7 @@ starts validation without publication:
 
 ```bash
 gh workflow run build.yml --repo democratizedspace/dspace --ref release/v3.0.x \
-  -f source_sha=558ce3c35163d97aea5594d6aba430c6a3dde1a3 -F publish=false
+  -f source_sha=bfb910201e23119cb26902d8ca6787070150b695 -F publish=false
 ```
 
 Do not dispatch another branch, `ci-image.yml`, `ci-helm.yml`, or either legacy
@@ -72,22 +61,22 @@ After owner approval of validation, run the same maintenance workflow with
 `publish=true` and confirmation exactly:
 
 ```text
-publish v3.0.2 558ce3c35163d97aea5594d6aba430c6a3dde1a3
+publish v3.0.2 bfb910201e23119cb26902d8ca6787070150b695
 ```
 
 The corresponding **separately approved owner publication action** is:
 
 ```bash
 gh workflow run build.yml --repo democratizedspace/dspace --ref release/v3.0.x \
-  -f source_sha=558ce3c35163d97aea5594d6aba430c6a3dde1a3 -F publish=true \
-  -f 'confirmation=publish v3.0.2 558ce3c35163d97aea5594d6aba430c6a3dde1a3'
+  -f source_sha=bfb910201e23119cb26902d8ca6787070150b695 -F publish=true \
+  -f 'confirmation=publish v3.0.2 bfb910201e23119cb26902d8ca6787070150b695'
 ```
 
 The job revalidates the source, merged PR, ancestry, tree, version, full CI/run
 history and repository review evidence. The only registry coordinate it may push is:
 
 ```text
-ghcr.io/democratizedspace/dspace:hotfix-558ce3c35163d97aea5594d6aba430c6a3dde1a3
+ghcr.io/democratizedspace/dspace:hotfix-bfb910201e23119cb26902d8ca6787070150b695
 ```
 
 It fails closed unless GHCR explicitly reports that manifest absent. A publication
@@ -113,7 +102,7 @@ Sugarkube verifier with the actual published source/tag/digest tuple and verifie
 OCI index, manifest and config bytes. Preserve the old tuples. Do not substitute
 the prior digest or enable a wildcard. Chart 3.1.3 may remain unchanged if its
 existing provenance is verified. Configure this source's separate health label
-as `v3.0.2+558ce3c`; health text is not artifact-version proof.
+as `v3.0.2+bfb9102`; health text is not artifact-version proof.
 
 The owner applies the explicit image override to staging, checks the deployed
 digest/source, Node 24.22.1, health and functional paths, then approves promotion of
@@ -129,10 +118,11 @@ remain follow-ups. No publication or rollout is performed by this PR.
 ## Recover November publication verification
 
 Run 43164575478 published the November image but failed its post-push fetch.
-Do not rerun the publisher or overwrite the image. Use the separate
-[November verification-only recovery procedure](published-image-558ce3c-verification.md)
-to verify the existing digests and retain both the original failure receipt and
-the new verification receipt. Staging and production remain separate gates.
+Do not rerun the publisher or overwrite the image. Preserve the failure receipt
+and stop for a verification-only recovery bound to this new source and its published
+digests. The [historical November recovery](published-image-558ce3c-verification.md)
+is fixed to source `558ce3c` and cannot verify this candidate. Staging and production
+remain separate owner gates.
 
 ## Bounded post-push reads
 
@@ -151,8 +141,8 @@ failure, with a sanitized failure stage and completed smoke results. Only both
 successful architecture smokes set `verified: true`.
 
 Exhaustion never retries a build, push, workflow or smoke. Preserve the failure
-receipt and use the separate fixed-digest November verification-only procedure
-linked above; do not dispatch the publisher to recover. The existing historical
+receipt and prepare a source-specific fixed-digest verification-only recovery;
+do not dispatch the publisher to recover. The existing historical
 verifier and November recovery workflow retain their fixed identities and guards.
 These offline checks do not establish live published-image verification:
 
