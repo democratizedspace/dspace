@@ -119,6 +119,48 @@ describe('exact source and review gate', () => {
       expect(() => validateEvidence(e)).toThrow('Unwaived workflow failure');
     }
   );
+  it.each([
+    [43764737285, '.github/workflows/rpi-deploy.yml'],
+    [43764736304, '.github/workflows/deploy-to-raspi.yml'],
+  ])(
+    'accepts only exact obsolete zero-job RPi initialization failure %s',
+    (id, path) => {
+      const run = {
+        id,
+        path,
+        name: path,
+        head_sha: policy.source,
+        event: 'push',
+        status: 'completed',
+        conclusion: 'failure',
+        run_attempt: 1,
+        jobCount: 0,
+      };
+      expect(() =>
+        validateEvidence({ ...evidence(), runs: [run] })
+      ).not.toThrow();
+      for (const mutation of [
+        { id: 999 },
+        { path: '.github/workflows/tests.yml' },
+        { head_sha: 'a'.repeat(40) },
+        { event: 'workflow_dispatch' },
+        { run_attempt: 2 },
+        { jobCount: 1 },
+        { jobCount: undefined },
+        { status: 'in_progress' },
+        { conclusion: 'cancelled' },
+      ])
+        expect(() =>
+          validateEvidence({ ...evidence(), runs: [{ ...run, ...mutation }] })
+        ).toThrow();
+      expect(() =>
+        validateEvidence({
+          ...evidence(),
+          runs: [run, { ...evidence().runs[0], conclusion: 'failure' }],
+        })
+      ).toThrow();
+    }
+  );
   it('does not ignore unresolved Codex findings', () => {
     const e = evidence();
     e.comments.push({

@@ -27,7 +27,18 @@ When present, completed Greptile/Copilot summaries must match the captured clear
 #4876 bodies and IDs; changed or unknown summaries stop for inspection rather than
 being silently ignored. Absence still does not require waiting for completion.
 All required CI checks and the complete workflow/status gates remain enforced.
-No historical RPi workflow failure exceptions transfer to this source.
+The owner excludes the two obsolete RPi workflows from this candidate gate:
+`rpi-deploy.yml` run `43764737285` and `deploy-to-raspi.yml` run `43764736304`.
+These are exact source-head push initialization failures, completed on attempt 1
+with zero jobs across all attempts. The exception checks source SHA, run ID,
+workflow path, push event, first attempt and zero jobs. It does not ignore another
+source, a manual deployment, a rerun, a job failure or unrelated CI. Historical
+run IDs remain rejected. Workflow deletion is separate cleanup (K-424).
+
+Publication attempt [43769239728](https://github.com/democratizedspace/dspace/actions/runs/43769239728)
+stopped at this evidence gate before the image build; publication was skipped and
+no receipt was uploaded. After merging this correction, use the new workflow-control
+SHA for a new owner dispatch. Do not rerun the old workflow revision.
 
 Review and merge this publisher update into `release/v3.0.x` before dispatch.
 Record the workflow SHA separately from the application source SHA.
