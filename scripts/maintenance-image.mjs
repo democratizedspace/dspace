@@ -582,13 +582,7 @@ async function postPushRead(stage, url, headers, { request, wait, log }) {
       const code = error.cause?.code || error.code;
       if (['TimeoutError', 'AbortError'].includes(error.name))
         reason = 'request timed out or aborted';
-      else if (
-        transientCodes.has(code) ||
-        (!code &&
-          error instanceof TypeError &&
-          error.message === 'fetch failed')
-      )
-        reason = 'transient transport failure';
+      else if (transientCodes.has(code)) reason = 'transient transport failure';
       else
         throw registryFailure(stage, 'non-retryable transport or body failure');
     }

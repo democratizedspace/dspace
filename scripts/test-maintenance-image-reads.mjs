@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { createServer } from 'node:http';
+import { once } from 'node:events';
 import {
   readPublishedIndex,
   verifyPublication,
@@ -128,7 +130,11 @@ for (const stage of ['token', 'index']) {
     });
   }
   test(`${stage}: certificate/unknown failures are not retried or exposed`, async () => {
-    for (const error of [transport('CERT_HAS_EXPIRED'), new Error(secret)]) {
+    for (const error of [
+      transport('CERT_HAS_EXPIRED'),
+      new Error(secret),
+      new TypeError('fetch failed'),
+    ]) {
       const h = harness({
         [stage]: () => {
           throw error;
@@ -336,3 +342,113 @@ test('missing credentials stop before any registry access', async () => {
   );
   assert.equal(h.calls.length, 0);
 });
+
+// Local HTTP fixtures exercise Node fetch itself, never GHCR or Docker.
+async function localRegistry(t, handler) {
+  const server = createServer(handler);
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  t.after(async () => {
+    server.closeAllConnections();
+    await new Promise((done) => server.close(done));
+  });
+  return `http://127.0.0.1:${server.address().port}`;
+}
+
+for (const stage of ['token', 'index']) {
+  test(
+    `${stage}: actual fetch redirect rejection stops after one attempt`,
+    { timeout: 3000 },
+    async (t) => {
+      const counts = { token: 0, index: 0, redirected: 0 };
+      const base = await localRegistry(t, (req, res) => {
+        const current = req.url.slice(1);
+        counts[current]++;
+        if (current === stage) {
+          res.writeHead(302, { Location: '/redirected' });
+          res.end(secret);
+        } else {
+          res.end(JSON.stringify({ token: secret }));
+        }
+      });
+      const h = harness();
+      let rejected;
+      const request = async (url, options) => {
+        const current = url.includes('/token?') ? 'token' : 'index';
+        try {
+          return await fetch(`${base}/${current}`, options);
+        } catch (error) {
+          rejected = error;
+          throw error;
+        }
+      };
+      await assert.rejects(
+        readPublishedIndex(digest, { ...h.options, request }),
+        /non-retryable transport or body failure/
+      );
+      assert.equal(rejected.name, 'TypeError');
+      assert.equal(rejected.message, 'fetch failed');
+      assert.equal(rejected.cause?.code, undefined);
+      assert.equal(counts[stage], 1);
+      assert.equal(counts.redirected, 0);
+      assert.deepEqual(h.delays, []);
+      assert.deepEqual(h.logs, []);
+    }
+  );
+
+  test(
+    `${stage}: 30-second deadline aborts a stalled body and retries with a fresh signal`,
+    { timeout: 5000 },
+    async (t) => {
+      const deadlines = [],
+        signals = [],
+        abortedAfterHeaders = [];
+      const realTimeout = AbortSignal.timeout.bind(AbortSignal);
+      t.mock.method(AbortSignal, 'timeout', (ms) => {
+        deadlines.push(ms);
+        assert.equal(ms, 30000);
+        // Accelerate the real timer; retain Node fetch's actual abort/body behavior.
+        return realTimeout(250);
+      });
+      const counts = { token: 0, index: 0 };
+      const base = await localRegistry(t, (req, res) => {
+        const current = req.url.slice(1);
+        counts[current]++;
+        res.writeHead(200, { 'docker-content-digest': digest });
+        if (current === stage && counts[current] === 1) {
+          res.flushHeaders(); // Deliberately never finish this response body.
+          return;
+        }
+        res.end(
+          current === 'token' ? JSON.stringify({ token: secret }) : bytes
+        );
+      });
+      const h = harness();
+      const request = async (url, options) => {
+        const current = url.includes('/token?') ? 'token' : 'index';
+        signals.push(options.signal);
+        const response = await fetch(`${base}/${current}`, options);
+        assert.equal(response.status, 200);
+        if (current === stage && counts[current] === 1)
+          options.signal.addEventListener(
+            'abort',
+            () => abortedAfterHeaders.push(current),
+            { once: true }
+          );
+        return response;
+      };
+      assert.deepEqual(
+        await readPublishedIndex(digest, { ...h.options, request }),
+        platforms
+      );
+      assert.deepEqual(abortedAfterHeaders, [stage]);
+      assert.equal(counts[stage], 2);
+      assert.deepEqual(deadlines, [30000, 30000, 30000]);
+      assert.equal(new Set(signals).size, 3);
+      assert.deepEqual(h.delays, [1000]);
+      assert.equal(h.logs.length, 1);
+      assert.match(h.logs[0], /request timed out or aborted/);
+      assert.ok(!h.logs[0].includes(secret));
+    }
+  );
+}
