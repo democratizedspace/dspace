@@ -3,6 +3,8 @@ import { createHash } from 'node:crypto';
 import artifactBundle from './fixtures/hotfix-302-oci-proof.json' with { type: 'json' };
 import novemberBundle from './fixtures/hotfix-302-november-oci-proof.json' with { type: 'json' };
 
+import finalBundle from './fixtures/hotfix-302-nov15-oci-proof.json' with { type: 'json' };
+
 export const hotfix302 = Object.freeze({
   version: '3.0.2',
   revision: '47900748f61e1ef38c6289fc697f7a070f7fa3c9',
@@ -20,9 +22,17 @@ export const hotfix302November = Object.freeze({
     'sha256:4503e9aa941c842893bd02a05edfc7fb2f61afca916d06b0c160c5b798477ec5',
   imageVersionLabel: 'v3.0.2+558ce3c',
 });
+export const hotfix302November15 = Object.freeze({
+  ...hotfix302,
+  revision: 'bfb910201e23119cb26902d8ca6787070150b695',
+  imageDigest:
+    'sha256:e9331b4319a9d475b910be6265613202a93d133fe33a8c6685dd962746a8e485',
+  imageVersionLabel: 'v3.0.2+bfb9102',
+});
 const profiles = [
   { coordinates: hotfix302, bundle: artifactBundle },
   { coordinates: hotfix302November, bundle: novemberBundle },
+  { coordinates: hotfix302November15, bundle: finalBundle },
 ];
 export const artifactProofPrefix = 'DSPACE_ARTIFACT_VERSION_PROOF ';
 
