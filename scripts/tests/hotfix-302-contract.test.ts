@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   hotfix302,
   hotfix302November,
+  hotfix302November15,
   verifyHotfixArtifact,
   validateHotfixRuntime,
 } from '../hotfix-302-contract.mjs';
@@ -257,4 +258,120 @@ describe('November exact hotfix compatibility', () => {
     }
     expect(() => verifyHotfixArtifact(november, bundle)).toThrow();
   });
+});
+
+describe('November 15 final candidate compatibility', () => {
+  const november = {
+    ...options,
+    expectedRevision: hotfix302November15.revision,
+    expectedImageDigest: hotfix302November15.imageDigest,
+  };
+  it('accepts both unchanged historical and independently authenticated November proofs', () => {
+    expect(verifyHotfixArtifact(options).imageVersionLabel).toBe(
+      'v3.0.2+4790074'
+    );
+    expect(verifyHotfixArtifact(november)).toEqual({
+      method: 'sha256-index-platform-config-version-label',
+      applicationVersion: '3.0.2',
+      sourceRevision: 'bfb910201e23119cb26902d8ca6787070150b695',
+      imageDigest:
+        'sha256:e9331b4319a9d475b910be6265613202a93d133fe33a8c6685dd962746a8e485',
+      imageVersionLabel: 'v3.0.2+bfb9102',
+    });
+    expect(
+      validateHotfixRuntime(
+        { ...meta, gitSha: november.expectedRevision },
+        { status: 'ready', version: 'v3.0.2+bfb9102' },
+        november
+      ).applicationVersion
+    ).toBe('3.0.2');
+  });
+  it.each(Object.keys(november))(
+    'rejects drift or absence of November coordinate %s',
+    (key) => {
+      expect(() =>
+        verifyHotfixArtifact({ ...november, [key]: 'drift' })
+      ).toThrow();
+      expect(() =>
+        verifyHotfixArtifact({ ...november, [key]: undefined })
+      ).toThrow();
+    }
+  );
+  it('rejects historical evidence and health for the new image', () => {
+    expect(() =>
+      verifyHotfixArtifact({
+        ...november,
+        expectedImageDigest: options.expectedImageDigest,
+      })
+    ).toThrow();
+    expect(() =>
+      validateHotfixRuntime(
+        { ...meta, gitSha: november.expectedRevision },
+        health,
+        november
+      )
+    ).toThrow();
+    expect(() =>
+      validateHotfixRuntime(
+        meta,
+        { status: 'ready', version: 'v3.0.2+bfb9102' },
+        november
+      )
+    ).toThrow();
+    const old = JSON.parse(
+      readFileSync('scripts/fixtures/hotfix-302-oci-proof.json', 'utf8')
+    );
+    const fresh = JSON.parse(
+      readFileSync('scripts/fixtures/hotfix-302-nov15-oci-proof.json', 'utf8')
+    );
+    expect(() => verifyHotfixArtifact(november, old)).toThrow();
+    expect(() => verifyHotfixArtifact(options, fresh)).toThrow();
+  });
+  it.each([
+    'index',
+    'amd64-manifest',
+    'amd64-config',
+    'arm64-manifest',
+    'arm64-config',
+    'missing-platform',
+  ])('rejects corrupted November proof %s', (field) => {
+    const bundle = JSON.parse(
+      readFileSync('scripts/fixtures/hotfix-302-nov15-oci-proof.json', 'utf8')
+    );
+    if (field === 'index') bundle.index = Buffer.from('{}').toString('base64');
+    else if (field === 'missing-platform') bundle.platforms.pop();
+    else {
+      const [arch, kind] = field.split('-');
+      bundle.platforms[arch === 'amd64' ? 0 : 1][kind] =
+        Buffer.from('{}').toString('base64');
+    }
+    expect(() => verifyHotfixArtifact(november, bundle)).toThrow();
+  });
+});
+
+// The intermediate image remains valid, but never substitutes for the final candidate.
+it('rejects intermediate November proof and metadata for the final candidate', () => {
+  const finalOptions = {
+    ...options,
+    expectedRevision: hotfix302November15.revision,
+    expectedImageDigest: hotfix302November15.imageDigest,
+  };
+  const intermediate = JSON.parse(
+    readFileSync('scripts/fixtures/hotfix-302-november-oci-proof.json', 'utf8')
+  );
+  expect(() => verifyHotfixArtifact(finalOptions, intermediate)).toThrow();
+  expect(() =>
+    validateHotfixRuntime(
+      { ...meta, gitSha: hotfix302November.revision },
+      { status: 'ready', version: hotfix302November15.imageVersionLabel },
+      finalOptions
+    )
+  ).toThrow();
+  expect(() =>
+    validateHotfixRuntime(
+      { ...meta, gitSha: hotfix302November15.revision },
+      { status: 'ready', version: hotfix302November.imageVersionLabel },
+      finalOptions
+    )
+  ).toThrow();
 });
