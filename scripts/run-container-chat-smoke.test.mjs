@@ -12,9 +12,87 @@ import {
   validProof,
   runContainer,
 } from './run-container-chat-smoke.mjs';
-import { parseAndValidateArgs } from './run-remote-chat-smoke.mjs';
+import {
+  parseAndValidateArgs,
+  publishResult,
+} from './run-remote-chat-smoke.mjs';
 
 const revision = 'a'.repeat(40);
+test('cancellation after attach, during publication and cleanup removes all results', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'smoke-cancel-test-'));
+  const result = join(directory, 'result.json');
+  try {
+    for (const stage of ['inspect', 'cp', 'publish', 'rm']) {
+      for (const [signal, code] of [
+        ['SIGINT', 130],
+        ['SIGTERM', 143],
+      ]) {
+        const signals = new EventEmitter();
+        const io = mock();
+        const invoke = io.docker;
+        let copiedFile;
+        io.docker = (args, budget) => {
+          if (args[0] === 'cp') copiedFile = args[2];
+          if (args[0] === 'rm') {
+            assert.equal(
+              signals.listenerCount(signal),
+              1,
+              'handler survives through cleanup'
+            );
+            assert.equal(budget, 10000);
+          }
+          const value = invoke(args);
+          if (args[0] === stage) signals.emit(signal);
+          return value;
+        };
+        io.publishResult = async (...args) => {
+          await publishResult(...args);
+          if (stage === 'publish') signals.emit(signal);
+        };
+        const args = [
+          ...argv,
+          '--result-file',
+          result,
+          '--runner-revision',
+          revision,
+        ];
+        assert.equal(await runContainer(args, env, io, () => 0, signals), code);
+        assert.equal(io.calls.at(-1)[0], 'rm');
+        await assert.rejects(readFile(result), { code: 'ENOENT' });
+        if (copiedFile)
+          await assert.rejects(readFile(copiedFile), { code: 'ENOENT' });
+        assert.equal(signals.listenerCount('SIGINT'), 0);
+        assert.equal(signals.listenerCount('SIGTERM'), 0);
+      }
+    }
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('lifecycle forwards cancellation to active attach and still performs final cleanup', async () => {
+  const signals = new EventEmitter();
+  const child = new EventEmitter();
+  const io = mock();
+  let killed;
+  child.kill = (signal) => {
+    killed = signal;
+    queueMicrotask(() => child.emit('close', null));
+  };
+  io.attach = (name, timeout, options) => {
+    const pending = attach(name, timeout, {
+      ...options,
+      spawnImpl: () => child,
+    });
+    queueMicrotask(() => signals.emit('SIGTERM'));
+    return pending;
+  };
+  assert.equal(await runContainer(argv, env, io, () => 0, signals), 143);
+  assert.equal(killed, 'SIGKILL');
+  assert.equal(io.calls.at(-1)[0], 'rm');
+  assert.equal(signals.listenerCount('SIGTERM'), 0);
+});
+
 test('unexpected attach client signal/null exit never becomes success', async () => {
   const child = new EventEmitter();
   const signals = new EventEmitter();

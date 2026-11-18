@@ -96,7 +96,10 @@ exit zero without fresh matching proof becomes failure.
 Smoke exit codes propagate; adapter/preflight errors use 2, timeout 124, SIGINT 130,
 and SIGTERM 143. Unexpected Docker client signal/null exit is failure, never zero.
 SIGINT/SIGTERM and timeout force-remove the uniquely named
-container, with a final cleanup retry. The default 240-second monotonic budget
+container, with a final cleanup retry. SIGINT/SIGTERM handling stays active through
+result collection, publication and
+final cleanup; cancellation removes any result published during the interrupted run.
+The default 240-second monotonic budget
 includes preflight, attach, inspection and proof copy; each Docker control command
 is bounded to at most 10 seconds within that budget. Final removal gets an additional
 10 seconds, leaving 50 seconds within Sugarkube's 300-second outer timeout. Keep

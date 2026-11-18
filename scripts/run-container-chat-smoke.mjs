@@ -5,6 +5,7 @@ import { mkdtemp, readFile, rm, unlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { EventEmitter } from 'node:events';
 import { fileURLToPath } from 'node:url';
 import {
   parseAndValidateArgs,
@@ -138,7 +139,8 @@ export async function runContainer(
   argv,
   env = process.env,
   io = { docker, attach },
-  now = () => performance.now()
+  now = () => performance.now(),
+  signals = process
 ) {
   // Only contract inputs are read by the existing strict parser. No host env is
   // passed to the container (including API keys, NODE_OPTIONS, and fault hooks).
@@ -158,7 +160,16 @@ export async function runContainer(
   // One monotonic budget includes preflight, attach, inspection and proof copy.
   // Final removal has one extra bounded 10s allowance (250s default < 300s verifier).
   const deadline = now() + timeout;
+  let cancelled;
+  const throwIfCancelled = () => {
+    if (cancelled) {
+      const error = new Error('container smoke cancelled');
+      error.exitCode = cancelled;
+      throw error;
+    }
+  };
   const remaining = () => {
+    throwIfCancelled();
     const milliseconds = Math.floor(deadline - now());
     if (milliseconds <= 0) {
       const error = new Error('container smoke deadline exceeded');
@@ -177,9 +188,23 @@ export async function runContainer(
   const revision = image.Config.Labels?.['org.opencontainers.image.revision'];
   const args = containerArgs(options, revision);
   const name = `dspace-smoke-${randomUUID()}`;
-  const directory = await mkdtemp(join(tmpdir(), 'dspace-container-smoke-'));
+  // Own OS signals until every container/file cleanup has finished. attach only
+  // subscribes to this private bus while it owns a running Docker client.
+  const attachSignals = new EventEmitter();
+  const cancel = (signal, code) => {
+    if (cancelled) return;
+    cancelled = code;
+    attachSignals.emit(signal);
+  };
+  const onTerm = () => cancel('SIGTERM', 143);
+  const onInt = () => cancel('SIGINT', 130);
+  signals.on('SIGTERM', onTerm);
+  signals.on('SIGINT', onInt);
+  let directory;
   const started = Math.floor(Date.now() / 1000);
-  try {
+  const execute = async () => {
+    directory = await mkdtemp(join(tmpdir(), 'dspace-container-smoke-'));
+    throwIfCancelled();
     console.log(
       `[container-smoke] image=${image.Id} runnerRevision=${revision} platform=${platform}`
     );
@@ -196,6 +221,7 @@ export async function runContainer(
     ]);
     const attached = await io.attach(name, remaining(), {
       dockerImpl: boundedDocker,
+      signals: attachSignals,
     });
     if ([124, 130, 143].includes(attached)) return attached;
     const state = JSON.parse(
@@ -216,13 +242,15 @@ export async function runContainer(
       );
       if (!validProof(proof, revision, started, code))
         throw new Error('invalid completion proof');
+      throwIfCancelled();
       if (options.resultFile)
-        await publishResult(
+        await (io.publishResult || publishResult)(
           options.resultFile,
           revision,
           code === 0,
           () => proof.executedAt * 1000
         );
+      throwIfCancelled();
     } catch (error) {
       console.error(
         `[container-smoke] completion proof unavailable: ${error.message}`
@@ -230,6 +258,12 @@ export async function runContainer(
       return code || error.exitCode || 1;
     }
     return code;
+  };
+  let exitCode;
+  try {
+    exitCode = await execute();
+  } catch (error) {
+    if (!cancelled) throw error;
   } finally {
     try {
       io.docker(['rm', '--force', name], 10_000);
@@ -238,9 +272,24 @@ export async function runContainer(
       if (!String(error.stderr || error.message).includes('No such container'))
         throw error;
     } finally {
-      await rm(directory, { recursive: true, force: true });
+      try {
+        if (directory) await rm(directory, { recursive: true, force: true });
+      } finally {
+        try {
+          // Cancellation during publication/final cleanup must not leave a
+          // successful result behind, even when the atomic rename completed.
+          if (cancelled && options.resultFile)
+            await unlink(options.resultFile).catch((error) => {
+              if (error.code !== 'ENOENT') throw error;
+            });
+        } finally {
+          signals.off('SIGTERM', onTerm);
+          signals.off('SIGINT', onInt);
+        }
+      }
     }
   }
+  return cancelled || exitCode;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
