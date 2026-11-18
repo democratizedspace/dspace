@@ -178,8 +178,19 @@ export async function runContainer(
     }
     return milliseconds;
   };
-  const boundedDocker = (args) =>
-    io.docker(args, Math.min(10_000, remaining()));
+  const boundedDocker = (args) => {
+    const commandTimeout = Math.min(10_000, remaining());
+    try {
+      return io.docker(args, commandTimeout);
+    } catch (error) {
+      throwIfCancelled();
+      // execFileSync's ETIMEDOUT has no exitCode. Only classify it as
+      // overall exhaustion once that deadline actually expired; a shorter
+      // per-command timeout keeps its original failure classification.
+      if (error.code === 'ETIMEDOUT' && now() >= deadline) error.exitCode = 124;
+      throw error;
+    }
+  };
   const info = JSON.parse(boundedDocker(['info', '--format', '{{json .}}']));
   const image = JSON.parse(
     boundedDocker(['image', 'inspect', env.DSPACE_SMOKE_IMAGE])

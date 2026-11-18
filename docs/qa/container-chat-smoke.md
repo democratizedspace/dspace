@@ -93,7 +93,7 @@ runtime preflight; valid results are atomically replaced. Do not share a result 
 between simultaneous runs. The runner's completion marker remains authoritative;
 exit zero without fresh matching proof becomes failure.
 
-Smoke exit codes propagate; adapter/preflight errors use 2, timeout 124, SIGINT 130,
+Smoke exit codes propagate; adapter/preflight errors use 2, overall deadline expiry 124, SIGINT 130,
 and SIGTERM 143. Unexpected Docker client signal/null exit is failure, never zero.
 SIGINT/SIGTERM and timeout force-remove the uniquely named
 container, with a final cleanup retry. SIGINT/SIGTERM handling stays active through
@@ -101,7 +101,11 @@ result collection, publication and
 final cleanup; cancellation removes any result published during the interrupted run.
 The default 240-second monotonic budget
 includes preflight, attach, inspection and proof copy; each Docker control command
-is bounded to at most 10 seconds within that budget. Final removal gets an additional
+is bounded to at most 10 seconds within that budget.
+Command timeouts before the overall deadline keep their ordinary failure code (2
+for adapter/preflight failures, 1 for proof-copy failure after smoke exit zero).
+A nonzero smoke exit still takes precedence over a later proof-copy failure.
+Final removal gets an additional
 10 seconds, leaving 50 seconds within Sugarkube's 300-second outer timeout. Keep
 custom budgets at least 60 seconds below the outer timeout. SIGKILL/power loss
 cannot be trapped; inspect and remove any orphan `dspace-smoke-*` container before

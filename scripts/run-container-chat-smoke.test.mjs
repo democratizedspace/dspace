@@ -18,6 +18,136 @@ import {
 } from './run-remote-chat-smoke.mjs';
 
 const revision = 'a'.repeat(40);
+test('Docker ETIMEDOUT at the overall deadline maps to 124 across command phases', async () => {
+  for (const phase of ['info', 'image', 'create', 'inspect', 'cp']) {
+    let clock = 0;
+    const io = mock();
+    const invoke = io.docker;
+    const failure = Object.assign(new Error('spawnSync docker ETIMEDOUT'), {
+      code: 'ETIMEDOUT',
+    });
+    io.docker = (args, budget) => {
+      if (args[0] === phase) {
+        assert.equal(budget, 5000);
+        clock += budget;
+        throw failure;
+      }
+      return invoke(args);
+    };
+    const result = runContainer(
+      argv,
+      { ...env, DSPACE_SMOKE_TIMEOUT_MS: '5000' },
+      io,
+      () => clock
+    );
+    if (phase === 'cp') assert.equal(await result, 124);
+    else
+      await assert.rejects(
+        result,
+        (error) => error === failure && error.exitCode === 124
+      );
+    if (!['info', 'image'].includes(phase))
+      assert.equal(io.calls.at(-1)[0], 'rm');
+  }
+});
+
+test('shorter command timeouts and genuine command failures retain their original classification', async () => {
+  for (const phase of ['info', 'inspect', 'cp']) {
+    for (const [errorCode, elapsed] of [
+      ['ETIMEDOUT', 10000],
+      ['EACCES', 240000],
+    ]) {
+      let clock = 0;
+      const io = mock();
+      const invoke = io.docker;
+      const failure = Object.assign(new Error(`docker ${errorCode}`), {
+        code: errorCode,
+      });
+      io.docker = (args, budget) => {
+        if (args[0] === phase) {
+          assert.equal(budget, 10000);
+          clock += elapsed;
+          throw failure;
+        }
+        return invoke(args);
+      };
+      const result = runContainer(argv, env, io, () => clock);
+      if (phase === 'cp') assert.equal(await result, 1);
+      else
+        await assert.rejects(
+          result,
+          (error) => error === failure && error.exitCode === undefined
+        );
+      assert.equal(failure.exitCode, undefined);
+    }
+  }
+});
+
+test('cancellation takes precedence over a simultaneous deadline-exhausting command timeout', async () => {
+  let clock = 0;
+  const signals = new EventEmitter();
+  const io = mock();
+  const invoke = io.docker;
+  io.docker = (args, budget) => {
+    if (args[0] === 'inspect') {
+      clock += budget;
+      signals.emit('SIGTERM');
+      throw Object.assign(new Error('docker ETIMEDOUT'), { code: 'ETIMEDOUT' });
+    }
+    return invoke(args);
+  };
+  assert.equal(
+    await runContainer(
+      argv,
+      { ...env, DSPACE_SMOKE_TIMEOUT_MS: '5000' },
+      io,
+      () => clock,
+      signals
+    ),
+    143
+  );
+  assert.equal(io.calls.at(-1)[0], 'rm');
+  assert.equal(signals.listenerCount('SIGTERM'), 0);
+});
+
+test('proof-copy deadline preserves a nonzero smoke exit and never reuses a stale result', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'smoke-timeout-test-'));
+  const resultFile = join(directory, 'result.json');
+  let clock = 0;
+  const io = mock({ code: 7 });
+  const invoke = io.docker;
+  io.docker = (args, budget) => {
+    if (args[0] === 'cp') {
+      clock += budget;
+      throw Object.assign(new Error('docker ETIMEDOUT'), { code: 'ETIMEDOUT' });
+    }
+    return invoke(args);
+  };
+  try {
+    await writeFile(resultFile, JSON.stringify(proof()));
+    const args = [
+      ...argv,
+      '--result-file',
+      resultFile,
+      '--runner-revision',
+      revision,
+    ];
+    assert.equal(
+      await runContainer(
+        args,
+        { ...env, DSPACE_SMOKE_TIMEOUT_MS: '5000' },
+        io,
+        () => clock
+      ),
+      7
+    );
+    await assert.rejects(readFile(resultFile), { code: 'ENOENT' });
+    assert.equal(io.calls.at(-1)[0], 'rm');
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 test('cancellation after attach, during publication and cleanup removes all results', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'smoke-cancel-test-'));
   const result = join(directory, 'result.json');
