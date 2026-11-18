@@ -1,4 +1,13 @@
+FROM node:22.23.4-bookworm-slim@sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d AS node-runtime
 FROM mcr.microsoft.com/playwright:v1.54.2-noble@sha256:18b4bcff4f8ba0ac8c44b09f09def6a4f6cb8579e5f26381c21f38b50935d5d8
+
+# The historical browser image's Node is below the repository's patched floor.
+# Copy the native official runtime (not a build-platform/emulated executable).
+COPY --from=node-runtime /usr/local/bin/node /usr/local/bin/node
+COPY --from=node-runtime /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+RUN ln -sf /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -sf /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && node -e "if(process.versions.node !== '22.23.4') process.exit(1)"
 
 ARG RUNNER_REVISION
 LABEL org.opencontainers.image.revision=$RUNNER_REVISION
@@ -16,6 +25,7 @@ COPY scripts/run-remote-chat-smoke.mjs scripts/hotfix-302-contract.mjs scripts/r
 COPY scripts/fixtures/hotfix-302*-oci-proof.json ./scripts/fixtures/
 COPY frontend/e2e ./frontend/e2e
 COPY containers/remote-chat-smoke/playwright.config.ts ./frontend/playwright.config.ts
+COPY containers/remote-chat-smoke/self-check.mjs ./containers/remote-chat-smoke/self-check.mjs
 RUN mkdir /artifacts && chown pwuser:pwuser /artifacts
 USER pwuser
 ENTRYPOINT ["node", "/opt/dspace/scripts/run-remote-chat-smoke.mjs"]

@@ -27,6 +27,10 @@ The official Playwright 1.54.2 Noble multiarch base is pinned by index digest
 Its native children are amd64
 `sha256:78b0b0dd476f868e443cfdf58a01f747524504f0bdbe0fff9e6a47b334198f19`
 and arm64 `sha256:5877f80096c0980bf602a85e1ddbb95b99a2ba64d5c068a7c75d833dd8bffb94`.
+Node and npm are copied from the native official Node 22.23.4 Bookworm stage pinned
+to index `sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d`.
+Both the build and offline self-check enforce Node 22.23.4, satisfying the repo's
+patched minimum rather than relying on the historical browser base's Node.
 The repo's pnpm lockfile freezes dependencies; pnpm is 9.0.0. Build-time lifecycle
 scripts are disabled because this remote-only runner needs no app build or native
 canvas build. Playwright package version is checked against the installed browser
@@ -36,9 +40,7 @@ updating the base digest/version together and validating both native architectur
 Before staging use, verify actual Chromium launch (no target network request):
 
 ```sh
-docker run --rm --init --cap-drop=ALL --security-opt=no-new-privileges \
-  --shm-size=256m --entrypoint node "$DSPACE_SMOKE_IMAGE" \
-  --input-type=module -e 'import {chromium} from "@playwright/test"; const b=await chromium.launch(); await b.close();'
+node scripts/check-container-chat-smoke.mjs "$DSPACE_SMOKE_IMAGE"
 ```
 
 ## Verifier integration
@@ -92,9 +94,13 @@ between simultaneous runs. The runner's completion marker remains authoritative;
 exit zero without fresh matching proof becomes failure.
 
 Smoke exit codes propagate; adapter/preflight errors use 2, timeout 124, SIGINT 130,
-and SIGTERM 143. SIGINT/SIGTERM and timeout force-remove the uniquely named
-container, with a final cleanup retry. Set the adapter timeout below the verifier's
-outer timeout, allowing at least 60 seconds for Docker cleanup. SIGKILL/power loss
+and SIGTERM 143. Unexpected Docker client signal/null exit is failure, never zero.
+SIGINT/SIGTERM and timeout force-remove the uniquely named
+container, with a final cleanup retry. The default 240-second monotonic budget
+includes preflight, attach, inspection and proof copy; each Docker control command
+is bounded to at most 10 seconds within that budget. Final removal gets an additional
+10 seconds, leaving 50 seconds within Sugarkube's 300-second outer timeout. Keep
+custom budgets at least 60 seconds below the outer timeout. SIGKILL/power loss
 cannot be trapped; inspect and remove any orphan `dspace-smoke-*` container before
 retrying. An unavailable daemon can also prevent cleanup; errors are not suppressed.
 
@@ -111,4 +117,11 @@ They do not establish actual signal delivery, container build, browser launch, n
 ARM64 execution or deployed behavior. Validate the build and browser command above
 on each intended native runner, then perform the authorized staging smoke and retain
 the logged runner image ID/source revision and fresh JSON beside target image evidence.
+The PR-only `Container chat smoke tooling` workflow builds this dedicated Dockerfile
+on hosted native AMD64 and ARM64 runners, without publishing an image or using secrets.
+It invokes `check-container-chat-smoke.mjs`, which shares the adapter's hardening flags
+and additionally disables container networking. The check loads all real smoke test
+imports with Playwright `--list`, launches Chromium and renders an in-memory page,
+then verifies a missing-browser negative control fails at launch. CI is tooling
+evidence only; no staging requests or live inference occur.
 No release QA gate is closed by these mock tests.

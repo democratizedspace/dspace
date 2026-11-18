@@ -1,0 +1,41 @@
+name: Container chat smoke tooling
+on:
+  pull_request:
+    branches: [main, v3]
+permissions:
+  contents: read
+concurrency:
+  group: container-chat-smoke-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  native-container:
+    name: Smoke image (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+      - name: Adapter regression tests
+        run: node --test scripts/run-container-chat-smoke.test.mjs
+      - name: Build dedicated smoke image locally (never push)
+        env:
+          RUNNER_REVISION: ${{ github.event.pull_request.head.sha }}
+        run: >-
+          docker build -f containers/remote-chat-smoke/Dockerfile
+          --build-arg RUNNER_REVISION="$RUNNER_REVISION"
+          -t dspace-chat-smoke:ci .
+      - name: Native Chromium launch, suite load and missing-browser control (offline)
+        run: node scripts/check-container-chat-smoke.mjs dspace-chat-smoke:ci

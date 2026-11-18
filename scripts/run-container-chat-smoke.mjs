@@ -73,10 +73,22 @@ export function validProof(proof, revision, started, code) {
   );
 }
 
-function docker(args) {
+export function containerSecurityArgs() {
+  return [
+    '--init',
+    '--cap-drop=ALL',
+    '--security-opt=no-new-privileges',
+    '--tmpfs',
+    '/tmp:rw,nosuid,nodev,size=512m,mode=1777',
+    '--shm-size=256m',
+  ];
+}
+
+function docker(args, timeout = 10_000) {
   return execFileSync('docker', args, {
     encoding: 'utf8',
-    timeout: 30_000,
+    timeout,
+    killSignal: 'SIGKILL',
     stdio: ['ignore', 'pipe', 'pipe'],
   }).trim();
 }
@@ -117,7 +129,7 @@ export function attach(
     });
     child.once('close', (code) => {
       cleanup();
-      resolve(interrupted || code || 0);
+      resolve(interrupted ?? code ?? 1);
     });
   });
 }
@@ -125,7 +137,8 @@ export function attach(
 export async function runContainer(
   argv,
   env = process.env,
-  io = { docker, attach }
+  io = { docker, attach },
+  now = () => performance.now()
 ) {
   // Only contract inputs are read by the existing strict parser. No host env is
   // passed to the container (including API keys, NODE_OPTIONS, and fault hooks).
@@ -142,9 +155,23 @@ export async function runContainer(
   const timeout = Number(env.DSPACE_SMOKE_TIMEOUT_MS || 240000);
   if (!Number.isSafeInteger(timeout) || timeout < 1000 || timeout > 1800000)
     throw new Error('timeout must be 1000..1800000 ms');
-  const info = JSON.parse(io.docker(['info', '--format', '{{json .}}']));
+  // One monotonic budget includes preflight, attach, inspection and proof copy.
+  // Final removal has one extra bounded 10s allowance (250s default < 300s verifier).
+  const deadline = now() + timeout;
+  const remaining = () => {
+    const milliseconds = Math.floor(deadline - now());
+    if (milliseconds <= 0) {
+      const error = new Error('container smoke deadline exceeded');
+      error.exitCode = 124;
+      throw error;
+    }
+    return milliseconds;
+  };
+  const boundedDocker = (args) =>
+    io.docker(args, Math.min(10_000, remaining()));
+  const info = JSON.parse(boundedDocker(['info', '--format', '{{json .}}']));
   const image = JSON.parse(
-    io.docker(['image', 'inspect', env.DSPACE_SMOKE_IMAGE])
+    boundedDocker(['image', 'inspect', env.DSPACE_SMOKE_IMAGE])
   )[0];
   const platform = nativePlatform(info, image);
   const revision = image.Config.Labels?.['org.opencontainers.image.revision'];
@@ -156,33 +183,30 @@ export async function runContainer(
     console.log(
       `[container-smoke] image=${image.Id} runnerRevision=${revision} platform=${platform}`
     );
-    io.docker([
+    boundedDocker([
       'create',
       '--pull=never',
       '--name',
       name,
       '--platform',
       platform,
-      '--init',
-      '--cap-drop=ALL',
-      '--security-opt=no-new-privileges',
-      '--tmpfs',
-      '/tmp:rw,nosuid,nodev,size=512m,mode=1777',
-      '--shm-size=256m',
+      ...containerSecurityArgs(),
       image.Id,
       ...args,
     ]);
-    const attached = await io.attach(name, timeout);
+    const attached = await io.attach(name, remaining(), {
+      dockerImpl: boundedDocker,
+    });
     if ([124, 130, 143].includes(attached)) return attached;
     const state = JSON.parse(
-      io.docker(['inspect', '--format', '{{json .State}}', name])
+      boundedDocker(['inspect', '--format', '{{json .State}}', name])
     );
     if (state.Running || !Number.isInteger(state.ExitCode))
       throw new Error('container did not finish');
     const code = state.ExitCode || attached;
     // Copy a fresh result only; no host directories or sockets are mounted.
     try {
-      io.docker([
+      boundedDocker([
         'cp',
         `${name}:/artifacts/result.json`,
         join(directory, 'result.json'),
@@ -203,12 +227,12 @@ export async function runContainer(
       console.error(
         `[container-smoke] completion proof unavailable: ${error.message}`
       );
-      return code || 1;
+      return code || error.exitCode || 1;
     }
     return code;
   } finally {
     try {
-      io.docker(['rm', '--force', name]);
+      io.docker(['rm', '--force', name], 10_000);
     } catch (error) {
       // Timeout/signal cleanup may have already removed this unique container.
       if (!String(error.stderr || error.message).includes('No such container'))
@@ -224,6 +248,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exitCode = await runContainer(process.argv.slice(2));
   } catch (error) {
     console.error(`[container-smoke] ${error.message}`);
-    process.exitCode = 2;
+    process.exitCode = error.exitCode || 2;
   }
 }

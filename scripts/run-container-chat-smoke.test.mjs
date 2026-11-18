@@ -15,6 +15,38 @@ import {
 import { parseAndValidateArgs } from './run-remote-chat-smoke.mjs';
 
 const revision = 'a'.repeat(40);
+test('unexpected attach client signal/null exit never becomes success', async () => {
+  const child = new EventEmitter();
+  const signals = new EventEmitter();
+  const pending = attach('test', 10000, { spawnImpl: () => child, signals });
+  child.emit('close', null, 'SIGKILL');
+  assert.equal(await pending, 1);
+  assert.equal(signals.listenerCount('SIGTERM'), 0);
+});
+
+test('one deadline includes preflight, attach and proof; cleanup has bounded reserve', async () => {
+  let clock = 0;
+  const io = mock();
+  const invoke = io.docker;
+  const budgets = [];
+  io.docker = (args, budget) => {
+    budgets.push([args[0], budget]);
+    if (['info', 'image', 'create'].includes(args[0])) clock += 9000;
+    return invoke(args);
+  };
+  io.attach = async (_name, budget) => {
+    assert.equal(budget, 240000 - 27000);
+    clock = 240000;
+    return 0;
+  };
+  await assert.rejects(
+    runContainer(argv, env, io, () => clock),
+    { exitCode: 124 }
+  );
+  assert.ok(budgets.every(([, budget]) => budget <= 10000));
+  assert.deepEqual(budgets.at(-1), ['rm', 10000]);
+});
+
 test('attach timeout and signals remove container, kill client, detach listeners', async () => {
   for (const [signal, expected] of [
     [undefined, 124],
