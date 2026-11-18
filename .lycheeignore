@@ -3,3 +3,8 @@
 /processes/
 
 https://democratized.space/assets/npc/vega.jpg
+
+# Operator-network Grafana links cannot resolve on public CI runners.
+# Reachability and dashboard acceptance remain release QA gates.
+^http://sugarkube3:30300/d/sugarkube-staging-observability/sugarkube-staging-observability$
+^http://sugarkube0:30300/d/sugarkube-prod-observability/sugarkube-production-observability$
