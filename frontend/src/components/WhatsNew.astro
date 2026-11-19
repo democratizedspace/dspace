@@ -1,13 +1,15 @@
 ---
 import Button from './Button.astro';
 import { appendChangelogNotes } from '../utils/changelogNotes';
-import { partitionChangelogs } from '../utils/changelogState.mjs';
+import { getLatestChangelog } from '../utils/changelogState.mjs';
+import { isStagingEnvironment } from '../utils/cheatsAvailability';
 import { logServerError } from '../utils/serverLogger';
 
 let changelogs = [];
 let changelogError: Error | undefined;
 let latestUpdateHtml: string | undefined;
 let latestUpdateTitle: string | undefined;
+let latestUpdateIsDraft = false;
 let changelogRenderError: Error | undefined;
 const route = Astro.url?.pathname ?? '/';
 const method = Astro.request?.method ?? 'GET';
@@ -52,9 +54,9 @@ try {
 }
 
 try {
-    const { published } = partitionChangelogs(changelogs);
-    if (published.length > 0) {
-        const [latest] = published;
+    const latest = getLatestChangelog(changelogs, isStagingEnvironment());
+    if (latest) {
+        latestUpdateIsDraft = latest.frontmatter.status === 'draft';
         latestUpdateTitle = latest?.frontmatter?.title;
         latestUpdateHtml = prepareHtml(await latest?.compiledContent(), latest?.frontmatter?.slug);
     }
@@ -75,7 +77,10 @@ try {
 <span class="wrapper">
     {latestUpdateHtml && latestUpdateTitle ? (
         <>
-            <h3>Latest update: {latestUpdateTitle}</h3>
+            <h3>
+                {latestUpdateIsDraft ? 'Upcoming update (draft)' : 'Latest update'}: {latestUpdateTitle}
+            </h3>
+            {latestUpdateIsDraft && <p>Unpublished draft - date is tentative.</p>}
             <span class="latest-update-html" set:html={latestUpdateHtml}></span>
         </>
     ) : (

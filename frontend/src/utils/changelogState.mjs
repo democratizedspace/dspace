@@ -25,3 +25,10 @@ export function partitionChangelogs(entries) {
     }
     return groups;
 }
+
+// Staging previews the next draft without changing its publication state.
+// All other callers default to published releases only.
+export function getLatestChangelog(entries, includeDrafts = false) {
+    const { draft, published } = partitionChangelogs(entries);
+    return (includeDrafts === true ? draft[0] : undefined) ?? published[0];
+}
