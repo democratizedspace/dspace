@@ -466,3 +466,26 @@ test('host proof is cleared on failure and atomically published on completion', 
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+test('smoke image runtime matches the application pin without changing Playwright', async () => {
+  const source = async (path) =>
+    readFile(new URL(`../${path}`, import.meta.url), 'utf8');
+  const version = (await source('.nvmrc')).trim();
+  assert.equal(version, '24.22.3');
+  const dockerfile = await source('containers/remote-chat-smoke/Dockerfile');
+  const selfCheck = await source('containers/remote-chat-smoke/self-check.mjs');
+  assert.ok(
+    dockerfile.startsWith(
+      `FROM node:${version}-bookworm-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54 AS node-runtime`
+    )
+  );
+  assert.ok(dockerfile.includes(`process.versions.node !== '${version}'`));
+  assert.ok(
+    selfCheck.includes(`assert.equal(process.versions.node, '${version}')`)
+  );
+  assert.ok(
+    dockerfile.includes(
+      'FROM mcr.microsoft.com/playwright:v1.54.2-noble@sha256:18b4bcff4f8ba0ac8c44b09f09def6a4f6cb8579e5f26381c21f38b50935d5d8'
+    )
+  );
+});

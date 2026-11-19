@@ -26,13 +26,14 @@ The official Playwright 1.54.2 Noble multiarch base is pinned by index digest
 Its native children are amd64
 `sha256:78b0b0dd476f868e443cfdf58a01f747524504f0bdbe0fff9e6a47b334198f19`
 and arm64 `sha256:5877f80096c0980bf602a85e1ddbb95b99a2ba64d5c068a7c75d833dd8bffb94`.
-Node and npm are copied from the native official Node 22.23.4 Bookworm stage pinned
-to index `sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d`.
-Both the build and offline self-check enforce this independent runner's Node 22.23.4
-pin rather than relying on the historical browser base's Node. This remote-only
-browser runner is not the application runtime: the application, development and
-CI host runtime use the Node 24 security release in `.nvmrc`. The native smoke
-image jobs separately verify the runner's locked dependencies and Chromium.
+Node and npm are copied from the native official Node 24.22.3 Bookworm stage pinned
+to index `sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54`.
+Both the build and offline self-check enforce Node 24.22.3, matching the application
+and `.nvmrc`. The browser base and Playwright version remain unchanged. Native
+amd64 (`ubuntu-24.04`) and arm64 (`ubuntu-24.04-arm`) CI jobs build the image, load
+the actual remote suite, launch Chromium, and verify missing-browser failure with
+`--network=none`. This is runner compatibility evidence, not a live staging test
+or proof of the target application's deployed runtime.
 The repo's pnpm lockfile freezes dependencies; pnpm is 9.0.0. Build-time lifecycle
 scripts are disabled because this remote-only runner needs no app build or native
 canvas build. Playwright package version is checked against the installed browser
