@@ -20,7 +20,7 @@ A free and open-source web-based space exploration idle game combining resource 
 
 ### Getting Started
 
-**Prerequisites**: Node.js 22.23.4 or a newer compatible LTS (required for development dependencies)
+**Prerequisites**: Node.js 24.22.3 or a newer Node 24 patch (required for development dependencies)
 
 ```bash
 git clone https://github.com/democratizedspace/dspace.git

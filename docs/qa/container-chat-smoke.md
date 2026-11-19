@@ -7,8 +7,7 @@ and provider contracts remain mandatory. TLS verification is enabled.
 
 ## Build once on the runner host
 
-Requires an existing Linux Docker daemon and Node.js (22.23.4 or newer compatible
-LTS) for the executable adapter. Linux amd64 and native Linux arm64 are supported;
+Requires an existing Linux Docker daemon and Node.js (24.22.3 or newer Node 24 patch) for the executable adapter. Linux amd64 and native Linux arm64 are supported;
 ARM32 and implicit emulation are rejected. Docker Desktop must use a Linux daemon.
 No browser or npm packages are installed on the host. Build from a clean checkout
 of the reviewed runner commit; do not label dirty source as a reviewed commit.
@@ -29,8 +28,11 @@ Its native children are amd64
 and arm64 `sha256:5877f80096c0980bf602a85e1ddbb95b99a2ba64d5c068a7c75d833dd8bffb94`.
 Node and npm are copied from the native official Node 22.23.4 Bookworm stage pinned
 to index `sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d`.
-Both the build and offline self-check enforce Node 22.23.4, satisfying the repo's
-patched minimum rather than relying on the historical browser base's Node.
+Both the build and offline self-check enforce this independent runner's Node 22.23.4
+pin rather than relying on the historical browser base's Node. This remote-only
+browser runner is not the application runtime: the application, development and
+CI host runtime use the Node 24 security release in `.nvmrc`. The native smoke
+image jobs separately verify the runner's locked dependencies and Chromium.
 The repo's pnpm lockfile freezes dependencies; pnpm is 9.0.0. Build-time lifecycle
 scripts are disabled because this remote-only runner needs no app build or native
 canvas build. Playwright package version is checked against the installed browser
