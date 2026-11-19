@@ -6,6 +6,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { getChangelogStatus } from '../frontend/src/utils/changelogState.mjs';
 
 const { parse } = createRequire(import.meta.url)('yaml');
+const MarkdownIt = createRequire(
+  new URL('../frontend/package.json', import.meta.url)
+)('markdown-it');
+const markdown = new MarkdownIt({ html: true });
 const versionPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 // Closed historical exceptions, not a bypass for new releases.
 const historicalFiles = new Set([
@@ -35,29 +39,19 @@ function dateFilename(name) {
   );
 }
 
-function withoutFences(body) {
-  let fence;
-  return body
-    .split('\n')
-    .filter((line) => {
-      const marker = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
-      if (fence) {
-        if (
-          marker &&
-          marker[1][0] === fence[0] &&
-          marker[1].length >= fence.length &&
-          !marker[2].trim()
-        )
-          fence = undefined;
-        return false;
-      }
-      if (marker && !(marker[1][0] === '`' && marker[2].includes('`'))) {
-        fence = marker[1];
-        return false;
-      }
-      return true;
-    })
-    .join('\n');
+function releaseHeadings(body) {
+  const tokens = markdown.parse(body, {});
+  return tokens.flatMap((token, index) => {
+    if (token.type !== 'heading_open') return [];
+    // Use rendered heading text, excluding inline HTML comments/code markup.
+    const text = (tokens[index + 1]?.children ?? [])
+      .filter((child) => child.type === 'text' || child.type === 'code_inline')
+      .map((child) => child.content)
+      .join('');
+    return [...text.matchAll(/\bv(\d+\.\d+\.\d+)(?![\w.+-])/g)].map(
+      (match) => match[1]
+    );
+  });
 }
 
 export function validateChangelogReleaseLines(
@@ -121,13 +115,10 @@ export function validateChangelogReleaseLines(
     const base = owners.get(file);
     if (tagline && tagline !== base)
       errors.push(`${file}: tagline version must match mapped base ${base}`);
-    const body = withoutFences(content.slice(match[0].length));
+    const headings = releaseHeadings(content.slice(match[0].length));
     let previousPatch = 0;
     let baseHeading = false;
-    for (const heading of body.matchAll(
-      /^ {0,3}#{1,6}[ \t]+.*\bv(\d+\.\d+\.\d+)(?![\w.+-])[^\n]*$/gm
-    )) {
-      const version = heading[1];
+    for (const version of headings) {
       const parts = versionPattern.exec(version);
       if (!parts) {
         errors.push(`${file}: invalid version ${version}`);

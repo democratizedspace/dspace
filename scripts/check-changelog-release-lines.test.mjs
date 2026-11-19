@@ -110,6 +110,62 @@ for (const example of [
     assert.deepEqual(errors(f), []);
   });
 
+for (const hidden of [
+  '<!--\n## v9.0.1\n-->',
+  '<!--\nv9.0.1\n------\n-->',
+  '    ## v9.0.1',
+  '```md\n<!--\n```\n<!-- ## v9.0.1 -->',
+])
+  test(`ignores non-rendered release heading ${JSON.stringify(hidden)}`, () => {
+    const f = fixture();
+    f.files['20270115.md'] += `\n${hidden}\n`;
+    assert.deepEqual(errors(f), []);
+  });
+
+test('commented-out current patch cannot satisfy the addendum requirement', () => {
+  const f = fixture();
+  f.files['20270115.md'] = entry(
+    '20270115',
+    '# v4.2.0\n<!--\n## v4.2.1\nTODO\n-->'
+  );
+  f.version = '4.2.1';
+  assert.ok(
+    errors(f).some((error) => error.includes('current patch needs an addendum'))
+  );
+});
+
+test('commented-out base cannot satisfy the base declaration requirement', () => {
+  const f = fixture();
+  f.files['20270115.md'] = entry('20270115', '<!--\n# v4.2.0\n-->');
+  f.version = '4.2.0';
+  assert.ok(errors(f).some((error) => error.includes('missing major/minor')));
+});
+
+test('inline HTML comments do not add a second release declaration', () => {
+  const f = fixture();
+  f.files['20270115.md'] = f.files['20270115.md'].replace(
+    '## v4.2.1',
+    '## v4.2.1 <!-- v9.0.1 -->'
+  );
+  assert.deepEqual(errors(f), []);
+});
+
+test('Setext base and current patch headings satisfy release requirements', () => {
+  const f = fixture();
+  f.files['20270115.md'] = entry(
+    '20270115',
+    'DSPACE v4.2.0\n=====\n\nv4.2.1\n------\n\nv4.2.2\n------'
+  );
+  assert.deepEqual(errors(f), []);
+});
+
+for (const heading of ['v9.0.1\n------', 'v4.2.2\n======'])
+  test(`rejects misplaced or duplicate Setext release ${JSON.stringify(heading)}`, () => {
+    const f = fixture();
+    f.files['20270115.md'] += `\n${heading}\n`;
+    assert.notDeepEqual(errors(f), []);
+  });
+
 for (const version of ['4.3.0', '5.0.0'])
   test(`new release ${version} gets its own mapped file`, () => {
     const f = fixture();
