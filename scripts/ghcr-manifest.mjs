@@ -99,7 +99,7 @@ export async function fetchGhcrToken({
     return body.token;
 }
 
-// Returns { status: 'absent' } only on an authoritative registry 404. Every other outcome
+// Returns { status: 'absent' } only on an authenticated MANIFEST_UNKNOWN registry 404. Every other outcome
 // (found, auth failure, network failure, timeout, unexpected status, malformed body) is
 // surfaced to the caller as either status: 'present' or a thrown GhcrGuardError, so callers
 // can fail closed rather than assume absence.
@@ -131,6 +131,26 @@ export async function getManifest({
     );
 
     if (response.status === 404) {
+        // A proxy, unknown repository, or masked authorization failure can also
+        // return 404. Only an unambiguous registry manifest-absence envelope
+        // permits publication; never include the remote body in diagnostics.
+        let body;
+        try {
+            body = await response.json();
+        } catch {
+            throw new GhcrGuardError('GHCR manifest 404 response was not valid JSON', {
+                code: 'malformed',
+            });
+        }
+        if (
+            !Array.isArray(body?.errors) ||
+            body.errors.length === 0 ||
+            !body.errors.every((error) => error?.code === 'MANIFEST_UNKNOWN')
+        ) {
+            throw new GhcrGuardError('GHCR manifest 404 did not establish manifest absence', {
+                code: 'indeterminate',
+            });
+        }
         return { status: 'absent' };
     }
 
