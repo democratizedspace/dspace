@@ -88,10 +88,10 @@ describe('independent DSPACE application and chart coordinates', () => {
     );
     const smokeExamples = [...active.matchAll(/```bash\n([\s\S]*?)```/g)]
       .map((match) => match[1])
-      .filter((block) =>
-        /qa:remote-chat-smoke|run-remote-chat-smoke\.mjs/.test(block)
-      );
+      .filter((block) => /node "\$DSPACE_SMOKE_RUNNER"/.test(block));
     expect(smokeExamples).toHaveLength(2);
+    expect(active).toContain('--runner-revision "${RUNNER_REVISION:?');
+    expect(active).not.toContain('--runner-revision "${CANDIDATE_SOURCE_SHA:?');
     for (const block of smokeExamples) {
       expect(block).toContain('chat-default-provider-v1');
       expect(block).toContain('build-info-v1');

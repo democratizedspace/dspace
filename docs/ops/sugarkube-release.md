@@ -251,13 +251,15 @@ production example still contains the historical Llama model: reconcile the revi
 separate configuration change before promotion. Do not change the expected smoke result to match
 that stale value. Preserve valid browser-saved provider choices; fresh-user default QA is separate.
 
-Set operator-provided paths and approval metadata (never invent an approver or timestamp):
+Configure the container adapter as described under [release-aware smoke](#release-aware-chat-smoke)
+before invoking a guarded recipe. Set operator-provided paths and approval metadata (never invent
+an approver or timestamp):
 
 ```bash
 UPSTREAM_MANIFEST=/reviewed/dspace-release-manifest/dspace-release-manifest.json
 STAGING_KUBECONFIG=/operator/path/to/staging-kubeconfig
 PROD_KUBECONFIG=/operator/path/to/prod-kubeconfig
-DSPACE_SMOKE_RUNNER=/reviewed/dspace/scripts/run-remote-chat-smoke.mjs
+DSPACE_SMOKE_RUNNER=/reviewed/dspace/scripts/run-container-chat-smoke.mjs
 STAGING_APPROVED_AT='<UTC timestamp from staging approval>'
 STAGING_APPROVED_BY='<staging operator or review record>'
 CANDIDATE_IMAGE_TAG=$(jq -er '.imageTag' "$UPSTREAM_MANIFEST")
@@ -275,8 +277,10 @@ python3 scripts/dspace_release_manifest.py validate \
 Verify the approved full source SHA, branch-SHA image tag, image index/platform digests, chart
 version and chart digest against successful workflow evidence. Application and chart versions are
 independent; the OCI chart manifest digest also differs from the downloaded archive hash. Keep
-existing artifact coordinates immutable. Pin the smoke runner to reviewed source and install its
-dependencies/browser before use; a path alone does not prove runner identity.
+existing artifact coordinates immutable. Pin the adapter and prebuilt smoke image to the same reviewed runner source; a path alone does
+not prove runner identity. Keep that runner revision separate from the approved application SHA.
+The adapter needs an existing compatible host Node runtime and Linux Docker daemon; do not
+install host dependencies or browsers as part of a release verification attempt.
 
 ## Deploy staging
 
@@ -352,14 +356,45 @@ curl -fsS https://democratized.space/livez
 
 ### Release-aware `/chat` smoke
 
-From a DSPACE checkout with dependencies and the Playwright Chromium browser installed, verify the
-remotely served frontend against release expectations taken from the approved artifact (never from
-the runtime under test). Select the provider-config contract from that approved immutable source,
-not from the live `/config.json` response, version ordering, or missing fields. Replace the revision
-with `CANDIDATE_SOURCE_SHA` from the approved image evidence. The normalized November candidate
-uses application version `3.1.0`, modern `build-info-v1` identity and
-`chat-default-provider-v1` configuration; older allowlisted compatibility examples are separated
-below and must not be used for this candidate:
+Use the [containerized remote chat smoke runbook](https://github.com/democratizedspace/dspace/blob/main/docs/qa/container-chat-smoke.md)
+merged in [#4882](https://github.com/democratizedspace/dspace/pull/4882) and aligned with
+Node **24.22.3** in [#4889](https://github.com/democratizedspace/dspace/pull/4889).
+It requires an existing host Node 24.22.3 or newer Node 24 patch and a Linux Docker daemon;
+use native Linux amd64 or arm64, not ARM32 or implicit emulation. If prerequisites are absent,
+stop and arrange a separately approved runner environment. Do not install npm packages or
+Chromium on the operator host. Image-build dependencies and browser binaries stay in the image.
+
+Prepare the image from a clean checkout of a reviewed runner commit containing both changes,
+following that runbook. Keep the adapter checkout and image revision label identical. The adapter
+resolves an already built local image to its immutable image ID and never pulls automatically.
+Record that ID and full runner SHA independently of the target application SHA/digests. The
+Playwright 1.54.2 base remains digest-pinned; Node 24.22.3 is enforced in the image build/self-check.
+This proves neither the deployed application's Node runtime nor a successful live provider call.
+
+In the environment that invokes Sugarkube, configure:
+
+```bash
+export DSPACE_SMOKE_IMAGE='dspace-chat-smoke:<reviewed-full-runner-SHA>'
+export DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1
+export DSPACE_SMOKE_TIMEOUT_MS=240000
+export DSPACE_SMOKE_RUNNER=/reviewed/dspace/scripts/run-container-chat-smoke.mjs
+RUNNER_REVISION='<reviewed-full-runner-SHA>'
+```
+
+The explicit provider-config environment setting is required because Sugarkube's modern verifier
+argv omits that flag; do not infer it from a live response. The 240-second adapter budget plus
+10-second final cleanup allowance fits the verifier's 300-second outer timeout. Preserve these
+bounds and fail-closed cleanup/completion checks. For a different historical contract, select its
+explicit flag rather than inheriting the modern setting.
+
+Run the documented offline image self-check on the intended native runner before separately
+authorized target verification. CI test discovery, an in-memory Chromium page and the missing-browser
+negative control are tooling evidence only; they do not execute staging journeys or close release QA.
+
+For the current candidate, derive target expectations from the approved immutable artifact,
+never from the runtime under test. Use application `3.1.0`, `build-info-v1`,
+`chat-default-provider-v1`, `token-place` and Qwen with the appropriate environment origin.
+These standalone intercepted checks supplement, not replace, guarded finalization and live QA:
 
 ```bash
 # Staging
@@ -371,7 +406,7 @@ DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1 \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://staging.token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
-npm run qa:remote-chat-smoke
+node "$DSPACE_SMOKE_RUNNER"
 
 # Production (run only after the staging result and promotion are approved)
 DSPACE_SMOKE_BASE_URL=https://democratized.space \
@@ -382,16 +417,17 @@ DSPACE_EXPECTED_PROVIDER=token-place \
 DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1 \
 DSPACE_EXPECTED_TOKEN_PLACE_ORIGIN=https://token.place \
 DSPACE_EXPECTED_TOKEN_PLACE_MODEL=qwen3-8b-instruct \
-npm run qa:remote-chat-smoke
+node "$DSPACE_SMOKE_RUNNER"
 ```
 
-For the scheduled Sugarkube release-integrity probe, opt in to the versioned machine-readable
-result contract by pinning the DSPACE checkout/tooling and passing that same full immutable commit
-SHA as `--runner-revision`:
+For a standalone machine-readable completion record, pass the reviewed **runner** revision,
+not `CANDIDATE_SOURCE_SHA`, and a fresh result path in an existing writable directory. Do not
+share a result path between concurrent runs. Scheduled probe integration must follow its own
+[release-integrity contract](https://github.com/futuroptimist/sugarkube/blob/main/docs/observability-dspace-release-integrity.md);
+this standalone example does not configure or validate that integration.
 
 ```bash
-git checkout "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}"
-node scripts/run-remote-chat-smoke.mjs \
+node "$DSPACE_SMOKE_RUNNER" \
   --base-url https://staging.democratized.space \
   --expected-version 3.1.0 \
   --expected-revision "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
@@ -400,29 +436,25 @@ node scripts/run-remote-chat-smoke.mjs \
   --provider-config-contract chat-default-provider-v1 \
   --expected-token-place-origin https://staging.token.place \
   --expected-token-place-model qwen3-8b-instruct \
-  --runner-revision "${CANDIDATE_SOURCE_SHA:?Set the approved full source SHA}" \
-  --result-file /run/dspace-chat/result.json
+  --runner-revision "${RUNNER_REVISION:?Set the reviewed full runner SHA}" \
+  --result-file /run/dspace-chat/fresh-result.json
 ```
 
-The two result options are paired and opt-in; omitting both preserves the existing runner behavior.
-The destination directory (for example, `/run/dspace-chat`) must already exist and be writable by
-the operator account; the runner neither creates it nor recursively creates parent directories.
-After Playwright exits and the selected `/chat` journey fixture confirms that the test body ran to
-teardown, the runner atomically replaces the result with schema version 1, the
-`/chat` journey, the completion timestamp, the pinned runner revision, intercepted transport,
-mutation disabled, and `passed` reflecting Playwright's exit status. A completed failing test still
-publishes `passed: false` and retains the test's nonzero status. Validation, launch, interruption,
-missing or invalid completion evidence, and other incomplete-execution failures do not replace a
-prior result. Publication failure after a completed run fails closed with a nonzero runner status.
-
-When omitted, `DSPACE_EXPECTED_IDENTITY_CONTRACT` defaults to the modern `build-info-v1`
-contract. That contract requires same-origin `/build-info.json` identity (including the exact
-version, full revision, and derived short revision) and the exact HTML build-revision marker.
+The adapter clears an existing result path before runtime preflight and only publishes fresh,
+matching completion proof. Exit zero without that proof is failure. A completed failing journey
+may produce `passed: false`; errors, cancellation or missing proof must never be treated as a pass.
+The container mounts no host checkout, home, credentials, kubeconfig or Docker socket. Its
+intercepted provider transport sends no live inference request. Preserve the target identity,
+runner image ID/revision, result and exit status together, without credentials or payloads.
+Sugarkube's bounded `runtimeVerification` in a finalized record is distinct from this standalone
+JSON; neither substitutes for live relay E2EE, metrics, monitoring, soak or production sign-off.
 
 ### Historical compatibility checks
 
 These explicit checks apply only to the named retained artifacts, not to the November candidate
-or its promotion sign-off.
+or its promotion sign-off. The original host-runner invocations below are historical references
+for already provisioned checkouts, not instructions to install dependencies. When using the
+container adapter, preserve the exact target contracts and independent reviewed runner provenance.
 
 Some immutable artifacts predate those surfaces but are still supported by exact compatibility
 profiles. `legacy-build-meta-v1` verifies the same-origin `/build-meta.json` response. Build
