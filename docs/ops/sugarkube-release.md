@@ -3,8 +3,8 @@
 Use this page as the release source of truth for Sugarkube operators, together with the
 [Sugarkube DSPACE runbook](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md).
 Commands below describe separately authorized operations, not evidence that they ran. Current
-source metadata is application `3.1.0` and provisional chart `3.1.3`; neither identifies a deployed
-release. Candidate selection, artifact publication, staging sign-off and production approval remain
+source metadata is application `3.1.0` and chart `3.1.3`; that chart coordinate is already occupied
+(see the candidate handoff below). Source metadata alone does not identify a deployed release. Candidate selection, artifact publication, staging sign-off and production approval remain
 separate gates. Keep lower-level Kubernetes, chart and Cloudflare setup in their existing runbooks.
 
 ## Operator entry points and release gates
@@ -207,7 +207,12 @@ Required post-merge evidence for Refs #4727 and Refs #4730:
 
 ### November v3.1.0 candidate handoff (publication blocked)
 
-Prepared application metadata is now `3.1.0`; independent chart `3.1.3` remains provisional.
+Prepared application metadata is `3.1.0`, and source still names independent chart `3.1.3`.
+That chart coordinate is already published from source
+`2d2c4c7d384d5da270a94654a87c71a5bdfd0420` with OCI manifest digest
+`sha256:ee1a6bcdd5f601d473e81ea42c8dfb4055fa0016e7c4fd5fcd163ef3dba7a366`;
+[publication run 42975610091](https://github.com/democratizedspace/dspace/actions/runs/42975610091)
+succeeded. Preserve that historical artifact; never republish chart `3.1.3` from a newer commit.
 The retained older `v3.1.0` image occupies the semantic coordinate. The source normalization does
 not turn that image into the candidate or authorize any registry mutation. Keep the existing
 absence/provenance guards: semantic publication remains blocked pending a separate release-owner
@@ -215,8 +220,11 @@ decision. See [source and artifact reconciliation](../releases.md#application-ve
 
 For later authorized release work, record the reviewed full source SHA, its newly published
 immutable `main-SHORT_SHA` (or supported `v3-SHORT_SHA`) image index and platform digests, and a
-verified chart from that same source. Confirm chart `3.1.3` is available before publication; if
-occupied, obtain approval for an unused chart coordinate rather than replacing it. Do not use the
+verified chart from that same source. Reconcile the occupied chart with the approved candidate
+and manifest contract before selection. Its historical source does not satisfy the ordinary
+same-source full-release contract for a newer application commit; that path requires a separately
+reviewed unused chart coordinate. This documentation neither selects nor changes a version.
+Do not use the
 default semantic image tag or the retained `main-8b3f6d5` build as evidence for the new candidate.
 Staging deployment identity, browser QA, monitoring, soak and rollback evidence remain required
 before separately authorized production promotion. The November changelog remains `status: draft`.
@@ -378,21 +386,36 @@ Record that ID and full runner SHA independently of the target application SHA/d
 Playwright 1.54.2 base remains digest-pinned; Node 24.22.3 is enforced in the image build/self-check.
 This proves neither the deployed application's Node runtime nor a successful live provider call.
 
-In the environment that invokes Sugarkube, configure:
+Before invoking Sugarkube, compare the image label with the reviewed clean adapter checkout and
+retain the two printed coordinates alongside release evidence. The guarded verifier captures
+adapter stdout and does not pass `--runner-revision`; do not rely on its output to establish this
+preflight. Use the inspected immutable image ID, not a local tag that can move between invocations.
+These checks inspect existing local state only; they neither build nor pull an image:
 
 ```bash
-export DSPACE_SMOKE_IMAGE='dspace-chat-smoke:<reviewed-full-runner-SHA>'
+set -euo pipefail
+RUNNER_REVISION='REPLACE_WITH_REVIEWED_FULL_RUNNER_SHA'
+RUNNER_CHECKOUT=/reviewed/dspace
+[[ "$RUNNER_REVISION" =~ ^[0-9a-f]{40}$ ]]
+test -z "$(git -C "$RUNNER_CHECKOUT" status --porcelain)"
+test "$(git -C "$RUNNER_CHECKOUT" rev-parse HEAD)" = "$RUNNER_REVISION"
+RUNNER_IMAGE_ID=$(docker image inspect --format '{{.Id}}' "dspace-chat-smoke:$RUNNER_REVISION")
+[[ "$RUNNER_IMAGE_ID" =~ ^sha256:[0-9a-f]{64}$ ]]
+test "$(docker image inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' "$RUNNER_IMAGE_ID")" = "$RUNNER_REVISION"
+printf 'runnerRevision=%s\nrunnerImageID=%s\n' "$RUNNER_REVISION" "$RUNNER_IMAGE_ID"
+export DSPACE_SMOKE_IMAGE="$RUNNER_IMAGE_ID"
+export DSPACE_SMOKE_RUNNER="$RUNNER_CHECKOUT/scripts/run-container-chat-smoke.mjs"
+test -x "$DSPACE_SMOKE_RUNNER"
 export DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1
 export DSPACE_SMOKE_TIMEOUT_MS=240000
-export DSPACE_SMOKE_RUNNER=/reviewed/dspace/scripts/run-container-chat-smoke.mjs
-RUNNER_REVISION='<reviewed-full-runner-SHA>'
 ```
 
 The explicit provider-config environment setting is required because Sugarkube's modern verifier
 argv omits that flag; do not infer it from a live response. The 240-second adapter budget plus
 10-second final cleanup allowance fits the verifier's 300-second outer timeout. Preserve these
-bounds and fail-closed cleanup/completion checks. For a different historical contract, select its
-explicit flag rather than inheriting the modern setting.
+bounds and fail-closed cleanup/completion checks. For exact legacy targets, use the command-scoped overrides under [Rollback](#rollback), rather
+than allowing the modern environment setting to reach a legacy smoke. Explicit verifier flags
+for recognized 3.1.1/hotfix tuples still take precedence; preserve those exact contracts.
 
 Run the documented offline image self-check on the intended native runner before separately
 authorized target verification. CI test discovery, an in-memory Chromium page and the missing-browser
@@ -518,17 +541,45 @@ checklist for the release.
 Use Sugarkube's `dspace-manifest-rollback` with a genuine, previously finalized record for the
 selected environment, a fresh evidence destination, an explicit kubeconfig and the reviewed smoke
 runner. A candidate or staging record is not a production rollback target. Confirm that the target
-satisfies the current verifier contract before approving recovery.
+satisfies the current verifier contract before approving recovery. Select the provider-config
+contract from the complete target tuple **before** choosing an invocation. The first example is
+for a modern target only; use the [legacy alternative](#legacy-rollback-provider-contract) for an
+exact allowlisted legacy target, not a modern attempt followed by a retry.
 
 ```bash
 # Example: separately approved production rollback on sugarkube0
 ROLLBACK_MANIFEST=/reviewed/previous-finalized-production-release.json
 ROLLBACK_EVIDENCE=/private/evidence/new-production-rollback.json
 TARGET_SHA=$(jq -er '.sourceRevision' "$ROLLBACK_MANIFEST")
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=chat-default-provider-v1 \
 just dspace-manifest-rollback env=prod manifest="$ROLLBACK_MANIFEST" \
   evidence="$ROLLBACK_EVIDENCE" kubeconfig="$PROD_KUBECONFIG" \
   smoke_runner="$DSPACE_SMOKE_RUNNER" confirm="dspace:prod:${TARGET_SHA}"
 ```
+
+### Legacy rollback provider contract
+
+Before any rollback mutation, select the provider-config contract from the target's complete
+allowlisted tuple, never its application version alone. The exact legacy 3.0.1 recovery tuple
+and original 3.1.0 staging tuple use `legacy-no-default-provider-v1`; the verifier does not pass
+that flag for those two cases. Current candidates use `chat-default-provider-v1`. For a separately
+approved rollback to the exact legacy **production** tuple, scope the override to that command:
+
+```bash
+ROLLBACK_MANIFEST=/reviewed/previous-finalized-legacy-production-release.json
+ROLLBACK_EVIDENCE=/private/evidence/new-legacy-production-rollback.json
+TARGET_SHA=$(jq -er '.sourceRevision' "$ROLLBACK_MANIFEST")
+DSPACE_EXPECTED_PROVIDER_CONFIG_CONTRACT=legacy-no-default-provider-v1 \
+just dspace-manifest-rollback env=prod manifest="$ROLLBACK_MANIFEST" \
+  evidence="$ROLLBACK_EVIDENCE" kubeconfig="$PROD_KUBECONFIG" \
+  smoke_runner="$DSPACE_SMOKE_RUNNER" confirm="dspace:prod:${TARGET_SHA}"
+```
+
+Use the same scoped override with `env=staging`, its kubeconfig and finalized staging record for
+the exact original legacy staging tuple. This is an alternative invocation, not a second rollback
+after the modern example. Do not retry automatically after mutation. The override applies only to
+that process; it leaves the modern default intact for current candidates. Other recognized tuples,
+including the hotfix, retain their explicit verifier-supplied provider-config flag.
 
 For staging, select `env=staging`, its finalized record and staging kubeconfig. The target record
 supplies immutable chart and image coordinates; do not rebuild, retag, substitute a semantic tag,
