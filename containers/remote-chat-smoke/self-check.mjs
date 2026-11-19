@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { chromium } from '@playwright/test';
 import { parseAndValidateArgs } from '../../scripts/run-remote-chat-smoke.mjs';
 
-assert.equal(process.versions.node, '22.23.4');
+assert.equal(process.versions.node, '24.22.3');
 assert.notEqual(process.getuid(), 0);
 const env = {
   ...process.env,
