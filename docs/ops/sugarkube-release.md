@@ -240,8 +240,15 @@ an upstream manifest, reuse an older manifest, or bypass guards to make these ex
 From the reviewed Sugarkube checkout, resolve each environment with `just app-config app=dspace
 env=staging` (and `env=prod`). Review the complete ordered values chain and chart pin. The
 repository's historical pins are not a v3.1.0 candidate selection. After a separately authorized
-chart publication succeeds, `just app-chart-bump app=dspace version="$CHART_VERSION" env=staging`
-checks the published chart with Helm and updates the selected local version file. It neither
+chart publication succeeds, copy its exact version from the reviewed successful publication
+evidence, replacing this placeholder rather than reusing a historical shell variable or an old pin:
+
+```bash
+CHART_VERSION='REPLACE_WITH_REVIEWED_PUBLISHED_CHART_VERSION'
+just app-chart-bump app=dspace version="$CHART_VERSION" env=staging
+```
+
+This checks the published chart with Helm and updates the selected local version file. It neither
 publishes nor deploys; review and commit that pin separately. Production pin changes need their
 own approval after staging sign-off.
 
