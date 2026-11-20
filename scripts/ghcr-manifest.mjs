@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { appendFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 
 const REGISTRY_HOST = 'https://ghcr.io';
 const DEFAULT_TIMEOUT_MS = 15000;
@@ -224,6 +225,266 @@ export async function getBlob({
   }
 }
 
+const VERIFICATION_TIMEOUT_MS = 30000;
+const READ_BACKOFF_MS = [1000, 2000, 4000];
+const RETRY_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
+const RETRY_TRANSPORT_CODES = new Set([
+  'ECONNRESET',
+  'ECONNREFUSED',
+  'ETIMEDOUT',
+  'EAI_AGAIN',
+  'UND_ERR_CONNECT_TIMEOUT',
+  'UND_ERR_HEADERS_TIMEOUT',
+  'UND_ERR_BODY_TIMEOUT',
+  'UND_ERR_SOCKET',
+]);
+
+// This is only for verification of artifacts expected to exist; the absence guard
+// deliberately retains its independent, non-retrying path.
+async function readVerificationBytes({
+  fetchImpl,
+  url,
+  headers,
+  timeoutMs,
+  stage,
+  allowMissing,
+}) {
+  for (let attempt = 0; ; attempt += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let retry;
+    try {
+      const response = await fetchImpl(url, {
+        method: 'GET',
+        redirect: 'error',
+        headers,
+        signal: controller.signal,
+      });
+      if (response.status === 200) {
+        // Keep the same deadline active until the last body byte arrives.
+        const bytes = Buffer.from(await response.arrayBuffer());
+        return { headers: response.headers, bytes };
+      }
+      // Neither print nor consume an error body or redirect location.
+      void response.body?.cancel().catch(() => {});
+      if (response.status === 404 && allowMissing) return null;
+      if (!RETRY_STATUSES.has(response.status)) {
+        const code = [401, 403].includes(response.status)
+          ? 'auth'
+          : 'indeterminate';
+        throw new GhcrGuardError(
+          `GHCR ${stage} returned HTTP ${response.status}`,
+          { code }
+        );
+      }
+      retry = { reason: `HTTP ${response.status}`, code: 'indeterminate' };
+    } catch (error) {
+      if (error instanceof GhcrGuardError) throw error;
+      if (controller.signal.aborted) {
+        retry = { reason: 'request deadline exceeded', code: 'timeout' };
+      } else if (RETRY_TRANSPORT_CODES.has(error?.cause?.code ?? error?.code)) {
+        retry = { reason: 'transient transport failure', code: 'network' };
+      } else {
+        throw new GhcrGuardError(
+          `GHCR ${stage} encountered a non-retryable transport failure`,
+          {
+            code: 'network',
+          }
+        );
+      }
+    } finally {
+      clearTimeout(timer);
+    }
+    if (attempt === READ_BACKOFF_MS.length) {
+      throw new GhcrGuardError(
+        `GHCR ${stage}: ${retry.reason}; exhausted 4 attempts`,
+        {
+          code: retry.code,
+        }
+      );
+    }
+    await new Promise((resolve) =>
+      setTimeout(resolve, READ_BACKOFF_MS[attempt])
+    );
+  }
+}
+
+function verifyBytes(bytes, expected, stage) {
+  if (!DIGEST.test(expected ?? '')) {
+    throw new GhcrGuardError(
+      `GHCR ${stage} has an invalid or missing SHA-256 digest`,
+      {
+        code: 'malformed',
+      }
+    );
+  }
+  if (
+    `sha256:${createHash('sha256').update(bytes).digest('hex')}` !== expected
+  ) {
+    throw new GhcrGuardError(
+      `GHCR ${stage} bytes do not match the expected digest`,
+      {
+        code: 'digest-mismatch',
+      }
+    );
+  }
+}
+
+function verificationJson(bytes, stage) {
+  let body;
+  try {
+    body = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+  } catch {
+    throw new GhcrGuardError(`GHCR ${stage} has an invalid JSON body`, {
+      code: 'malformed',
+    });
+  }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    throw new GhcrGuardError(`GHCR ${stage} requires a JSON object`, {
+      code: 'malformed',
+    });
+  }
+  return body;
+}
+
+async function fetchVerificationToken({
+  owner,
+  repo,
+  username,
+  password,
+  fetchImpl,
+  timeoutMs,
+}) {
+  requireField(owner, 'owner');
+  requireField(repo, 'repo');
+  requireField(username, 'username');
+  requireField(password, 'password');
+  const scope = `repository:${owner}/${repo}:pull`;
+  const basicAuth = Buffer.from(`${username}:${password}`).toString('base64');
+  const stage = 'verification token';
+  const { bytes } = await readVerificationBytes({
+    fetchImpl,
+    url: `${REGISTRY_HOST}/token?service=ghcr.io&scope=${encodeURIComponent(scope)}`,
+    headers: { Authorization: `Basic ${basicAuth}` },
+    timeoutMs,
+    stage,
+  });
+  const { token } = verificationJson(bytes, stage);
+  if (typeof token !== 'string' || !token) {
+    throw new GhcrGuardError('GHCR token response did not include a token', {
+      code: 'malformed',
+    });
+  }
+  return token;
+}
+
+async function getVerifiedManifest({
+  owner,
+  repo,
+  tag,
+  token,
+  fetchImpl,
+  timeoutMs,
+}) {
+  requireField(tag, 'tag');
+  const stage = 'verification manifest';
+  const result = await readVerificationBytes({
+    fetchImpl,
+    url: `${REGISTRY_HOST}/v2/${owner}/${repo}/manifests/${encodeURIComponent(tag)}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: MANIFEST_ACCEPT_HEADER,
+    },
+    timeoutMs,
+    stage,
+    allowMissing: true,
+  });
+  if (!result) return { status: 'absent' };
+  const digest = result.headers.get('docker-content-digest');
+  verifyBytes(result.bytes, digest, stage);
+  const body = verificationJson(result.bytes, stage);
+  if (body.schemaVersion !== 2) {
+    throw new GhcrGuardError(
+      'GHCR verification manifest must use schemaVersion 2',
+      {
+        code: 'malformed',
+      }
+    );
+  }
+  return { status: 'present', digest, body };
+}
+
+function runtimeDigests(body) {
+  const linux = Array.isArray(body.manifests)
+    ? body.manifests.filter((entry) => entry?.platform?.os === 'linux')
+    : [];
+  const amd64 = linux.filter(
+    (entry) => entry.platform.architecture === 'amd64'
+  );
+  const arm64 = linux.filter(
+    (entry) => entry.platform.architecture === 'arm64'
+  );
+  if (
+    linux.length !== 2 ||
+    amd64.length !== 1 ||
+    arm64.length !== 1 ||
+    !DIGEST.test(amd64[0].digest ?? '') ||
+    !DIGEST.test(arm64[0].digest ?? '') ||
+    amd64[0].digest === arm64[0].digest
+  ) {
+    throw new GhcrGuardError(
+      'Image requires exactly one distinct linux/amd64 and linux/arm64 manifest',
+      {
+        code: 'missing-platform',
+      }
+    );
+  }
+  return { amd64: amd64[0].digest, arm64: arm64[0].digest };
+}
+
+async function getVerifiedBlob({
+  owner,
+  repo,
+  digest,
+  token,
+  fetchImpl = fetch,
+  timeoutMs = VERIFICATION_TIMEOUT_MS,
+}) {
+  requireField(owner, 'owner');
+  requireField(repo, 'repo');
+  requireField(token, 'token');
+  if (!DIGEST.test(digest)) {
+    throw new GhcrGuardError('Invalid OCI blob digest', { code: 'malformed' });
+  }
+  const stage = 'verification blob';
+  const result = await readVerificationBytes({
+    fetchImpl,
+    url: `${REGISTRY_HOST}/v2/${owner}/${repo}/blobs/${digest}`,
+    headers: { Authorization: `Bearer ${token}` },
+    timeoutMs,
+    stage,
+  });
+  verifyBytes(result.bytes, digest, stage);
+  const headerDigest = result.headers.get('docker-content-digest');
+  if (headerDigest !== null && headerDigest !== digest) {
+    throw new GhcrGuardError(
+      'GHCR blob digest header does not match its descriptor',
+      {
+        code: 'digest-mismatch',
+      }
+    );
+  }
+  return verificationJson(result.bytes, stage);
+}
+
+// Existing workflows retain their current reads until the strict registry path
+// has compatibility evidence. No release CLI entry point opts in.
+function verificationReaders(boundedReads) {
+  return boundedReads === true
+    ? { acquireCredential: fetchVerificationToken, readManifest: getVerifiedManifest, readBlob: getVerifiedBlob }
+    : { acquireCredential: fetchGhcrToken, readManifest: getManifest, readBlob: getBlob };
+}
+
 export async function inspectImage({
   owner,
   repo,
@@ -232,9 +493,11 @@ export async function inspectImage({
   password,
   revision,
   fetchImpl = fetch,
-  timeoutMs = DEFAULT_TIMEOUT_MS,
+  boundedReads = false,
+  timeoutMs = boundedReads === true ? VERIFICATION_TIMEOUT_MS : DEFAULT_TIMEOUT_MS,
 }) {
-  const token = await fetchGhcrToken({ // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+  const { acquireCredential, readManifest, readBlob } = verificationReaders(boundedReads);
+  const token = await acquireCredential({ // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     owner,
     repo,
     username,
@@ -242,7 +505,7 @@ export async function inspectImage({
     fetchImpl,
     timeoutMs,
   });
-  const index = await getManifest({
+  const index = await readManifest({
     owner,
     repo,
     tag,
@@ -259,26 +522,29 @@ export async function inspectImage({
     throw new GhcrGuardError('Invalid image index digest', {
       code: 'malformed',
     });
-  const platforms = {};
+  const platforms = boundedReads === true ? runtimeDigests(index.body) : {};
   for (const architecture of ['amd64', 'arm64']) {
-    const candidates = index.manifests.filter(
-      (item) => item.os === 'linux' && item.architecture === architecture
-    );
-    if (candidates.length !== 1 || !DIGEST.test(candidates[0].digest)) {
-      throw new GhcrGuardError(
-        `Image requires exactly one linux/${architecture} manifest`,
-        { code: 'missing-platform' }
+    if (boundedReads !== true) {
+      const candidates = index.manifests.filter(
+        (item) => item.os === 'linux' && item.architecture === architecture
       );
+      if (candidates.length !== 1 || !DIGEST.test(candidates[0].digest)) {
+        throw new GhcrGuardError(
+          `Image requires exactly one linux/${architecture} manifest`,
+          { code: 'missing-platform' }
+        );
+      }
+      platforms[architecture] = candidates[0].digest;
     }
-    const manifest = await getManifest({
+    const manifest = await readManifest({
       owner,
       repo,
-      tag: candidates[0].digest,
+      tag: platforms[architecture],
       token,
       fetchImpl,
       timeoutMs,
     });
-    if (manifest.status !== 'present' || manifest.digest !== candidates[0].digest)
+    if (manifest.status !== 'present' || manifest.digest !== platforms[architecture])
       throw new GhcrGuardError(
         `linux/${architecture} manifest digest does not match its index descriptor`,
         { code: 'digest-mismatch' }
@@ -290,7 +556,7 @@ export async function inspectImage({
         `linux/${architecture} manifest has an invalid config`,
         { code: 'malformed' }
       );
-    const config = await getBlob({
+    const config = await readBlob({
       owner,
       repo,
       digest: configDigest,
@@ -298,6 +564,11 @@ export async function inspectImage({
       fetchImpl,
       timeoutMs,
     });
+    if (boundedReads === true && (config.architecture !== architecture || config.os !== 'linux')) {
+      throw new GhcrGuardError('GHCR config platform does not match its index descriptor', {
+        code: 'platform-mismatch',
+      });
+    }
     if (
       config?.config?.Labels?.['org.opencontainers.image.revision'] !== revision
     ) {
@@ -306,7 +577,6 @@ export async function inspectImage({
         { code: 'revision-mismatch' }
       );
     }
-    platforms[architecture] = candidates[0].digest;
   }
   return {
     indexDigest: index.digest,
@@ -325,9 +595,11 @@ export async function inspectChart({
   appVersion,
   revision,
   fetchImpl = fetch,
-  timeoutMs = DEFAULT_TIMEOUT_MS,
+  boundedReads = false,
+  timeoutMs = boundedReads === true ? VERIFICATION_TIMEOUT_MS : DEFAULT_TIMEOUT_MS,
 }) {
-  const token = await fetchGhcrToken({ // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+  const { acquireCredential, readManifest, readBlob } = verificationReaders(boundedReads);
+  const token = await acquireCredential({ // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     owner,
     repo,
     username,
@@ -335,7 +607,7 @@ export async function inspectChart({
     fetchImpl,
     timeoutMs,
   });
-  const artifact = await getManifest({
+  const artifact = await readManifest({
     owner,
     repo,
     tag,
@@ -353,7 +625,7 @@ export async function inspectChart({
     throw new GhcrGuardError('Chart artifact has an invalid digest or config', {
       code: 'malformed',
     });
-  const config = await getBlob({
+  const config = await readBlob({
     owner,
     repo,
     digest: configDigest,
@@ -412,16 +684,23 @@ export async function describeManifest({
     username,
     password,
     fetchImpl = fetch,
-    timeoutMs = DEFAULT_TIMEOUT_MS,
+    boundedReads = false,
+    timeoutMs = boundedReads === true ? VERIFICATION_TIMEOUT_MS : DEFAULT_TIMEOUT_MS,
 }) {
-    const token = await fetchGhcrToken({ owner, repo, username, password, fetchImpl, timeoutMs }); // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
-    const manifest = await getManifest({ owner, repo, tag, token, fetchImpl, timeoutMs });
+    const { acquireCredential, readManifest } = verificationReaders(boundedReads);
+    const token = await acquireCredential({ owner, repo, username, password, fetchImpl, timeoutMs }); // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+    const manifest = await readManifest({ owner, repo, tag, token, fetchImpl, timeoutMs });
 
     if (manifest.status !== 'present') {
         throw new GhcrGuardError(
             `Expected GHCR tag ${owner}/${repo}:${tag} to exist after publish, but the registry reported it as absent`,
             { code: 'missing-after-publish' }
         );
+    }
+
+    if (boundedReads === true) {
+        const { amd64, arm64 } = runtimeDigests(manifest.body);
+        return { indexDigest: manifest.digest, amd64Digest: amd64, arm64Digest: arm64 };
     }
 
     const findDigest = (architecture) =>

@@ -18,13 +18,17 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
-    name: Build multi-arch image
+  native-amd64:
+    name: Build native image (linux/amd64)
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    steps:
+    env:
+      VALIDATION_PLATFORM: linux/amd64
+    steps: &native-build-steps
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Ensure build SHA is present
         run: |
@@ -51,10 +55,17 @@ jobs:
           fi
           echo "branch_sha=${branch}-${short_sha}" >> "$GITHUB_OUTPUT"
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
-        with:
-          platforms: arm64
+      - name: Confirm native runner and Docker engine
+        run: |
+          set -euo pipefail
+          case "${VALIDATION_PLATFORM}:${RUNNER_ARCH}" in
+            linux/amd64:X64|linux/arm64:ARM64) ;;
+            *) echo "::error::Runner architecture does not match the requested platform"; exit 1 ;;
+          esac
+          if [[ "$(docker version --format '{{.Server.Os}}/{{.Server.Arch}}')" != "$VALIDATION_PLATFORM" ]]; then
+            echo "::error::Docker engine platform does not match the native runner"
+            exit 1
+          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -83,7 +94,7 @@ jobs:
           context: .
           file: Dockerfile
           push: false
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ env.VALIDATION_PLATFORM }}
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -91,3 +102,33 @@ jobs:
             GIT_SHA=${{ github.sha }}
             VITE_GIT_SHA=${{ github.sha }}
             ENFORCE_VITE_GIT_SHA=1
+
+  native-arm64:
+    name: Build native image (linux/arm64)
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 45
+    env:
+      VALIDATION_PLATFORM: linux/arm64
+    steps: *native-build-steps
+
+  # Keep the existing check name and ID. Separate job results ensure a missing,
+  # skipped, cancelled or failed architecture cannot be hidden by the other job.
+  build:
+    name: Build multi-arch image
+    needs: [native-amd64, native-arm64]
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Require both native builds to succeed
+        env:
+          AMD64_RESULT: ${{ needs.native-amd64.result }}
+          ARM64_RESULT: ${{ needs.native-arm64.result }}
+        run: |
+          set -euo pipefail
+          printf 'Native validation: amd64=%s arm64=%s\n' "$AMD64_RESULT" "$ARM64_RESULT"
+          if [[ "$AMD64_RESULT" != success || "$ARM64_RESULT" != success ]]; then
+            echo "::error::Both native container builds must succeed"
+            exit 1
+          fi
