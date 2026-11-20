@@ -28,17 +28,22 @@ function requireField(value, label) {
     return value;
 }
 
-async function fetchWithTimeout(fetchImpl, url, init, timeoutMs, describeAction) {
+async function fetchWithTimeout(fetchImpl, url, init, timeoutMs, describeAction, consume) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let receivedResponse = false;
     try {
-        return await fetchImpl(url, { ...init, signal: controller.signal });
+        const response = await fetchImpl(url, { ...init, signal: controller.signal });
+        receivedResponse = true;
+        return consume ? await consume(response) : response;
     } catch (error) {
-        if (error && error.name === 'AbortError') {
+        if (controller.signal.aborted || error?.name === 'AbortError') {
             throw new GhcrGuardError(`Timed out after ${timeoutMs}ms while ${describeAction}`, {
                 code: 'timeout',
             });
         }
+        // The only consumer is the 404 parser, which sanitizes its errors below.
+        if (receivedResponse && error instanceof GhcrGuardError) throw error;
         // Fetch errors can contain credential-bearing request details. Classify
         // the failure without propagating the underlying error message.
         throw new GhcrGuardError(`Network error while ${describeAction}`, {
@@ -100,7 +105,7 @@ export async function fetchGhcrToken({
     return body.token;
 }
 
-// Returns { status: 'absent' } only on an authoritative registry 404. Every other outcome
+// Returns { status: 'absent' } only on an authenticated MANIFEST_UNKNOWN registry 404. Every other outcome
 // (found, auth failure, network failure, timeout, unexpected status, malformed body) is
 // surfaced to the caller as either status: 'present' or a thrown GhcrGuardError, so callers
 // can fail closed rather than assume absence.
@@ -128,12 +133,36 @@ export async function getManifest({
             },
         },
         timeoutMs,
-        'requesting the GHCR manifest'
+        'requesting the GHCR manifest',
+        async (response) => {
+            if (response.status !== 404) return response;
+
+            // A proxy, unknown repository, or masked authorization failure can also
+            // return 404. Only an unambiguous registry manifest-absence envelope
+            // permits publication; read it under the same request deadline.
+            let body;
+            try {
+                body = await response.json();
+            } catch (error) {
+                if (error?.name === 'AbortError') throw error;
+                throw new GhcrGuardError('GHCR manifest 404 response was not valid JSON', {
+                    code: 'indeterminate',
+                });
+            }
+            if (
+                !Array.isArray(body?.errors) ||
+                body.errors.length === 0 ||
+                !body.errors.every((error) => error?.code === 'MANIFEST_UNKNOWN')
+            ) {
+                throw new GhcrGuardError('GHCR manifest 404 did not establish manifest absence', {
+                    code: 'indeterminate',
+                });
+            }
+            return null;
+        }
     );
 
-    if (response.status === 404) {
-        return { status: 'absent' };
-    }
+    if (response === null) return { status: 'absent' };
 
     if (response.status === 401 || response.status === 403) {
         throw new GhcrGuardError(`GHCR manifest request was denied with status ${response.status}`, {

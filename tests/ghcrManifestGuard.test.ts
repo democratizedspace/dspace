@@ -1,3 +1,6 @@
+// @vitest-environment node
+
+import { createServer } from 'node:http';
 import { describe, expect, it } from 'vitest';
 import {
   GhcrGuardError,
@@ -133,7 +136,7 @@ describe('fetchGhcrToken', () => {
 
 describe('getManifest', () => {
   it('reports an authoritative 404 as absent', async () => {
-    const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, {}) });
+    const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, { errors: [{ code: 'MANIFEST_UNKNOWN' }] }) });
     // getManifest is tested directly with a raw token, bypassing the token exchange.
     const result = await getManifest({
       owner: 'o',
@@ -195,11 +198,104 @@ describe('getManifest', () => {
 });
 
 describe('assertTagAbsent', () => {
-  it('resolves when the registry authoritatively reports the tag absent', async () => {
-    const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, {}) });
+  it('resolves only after a scoped token exchange and authenticated MANIFEST_UNKNOWN', async () => {
+    const calls: string[] = [];
+    const fetchImpl = async (url: string, init: RequestInit) => {
+      calls.push(url);
+      if (url.includes('/token')) {
+        expect(new URL(url).searchParams.get('scope')).toBe('repository:o/r:pull');
+        expect((init.headers as Record<string, string>).Authorization).toMatch(/^Basic /);
+        return okToken;
+      }
+      expect(url).toBe('https://ghcr.io/v2/o/r/manifests/v1.0.0');
+      expect((init.headers as Record<string, string>).Authorization).toBe('Bearer fake-bearer-token');
+      return jsonResponse(404, { errors: [{ code: 'MANIFEST_UNKNOWN' }] });
+    };
     await expect(
       assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).resolves.toEqual({ status: 'absent' });
+    expect(calls).toHaveLength(2);
+  });
+
+  it.each([
+    ['bare 404', {}],
+    ['empty errors', { errors: [] }],
+    ['non-array errors', { errors: 'MANIFEST_UNKNOWN' }],
+    ['missing error code', { errors: [{}] }],
+    ['null error', { errors: [null] }],
+    ['unknown repository', { errors: [{ code: 'NAME_UNKNOWN' }] }],
+    ['masked authorization error', { errors: [{ code: 'UNAUTHORIZED' }] }],
+    ['mixed errors', { errors: [{ code: 'MANIFEST_UNKNOWN' }, { code: 'DENIED' }] }],
+  ])('fails closed after token exchange for %s', async (_name, body) => {
+    const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, body) });
+    await expect(
+      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+    ).rejects.toMatchObject({ code: 'indeterminate' });
+  });
+
+  it('fails closed on an HTML/proxy 404 without leaking its body', async () => {
+    const response = malformedJsonResponse(404);
+    response.json = async () => { throw new Error(SECRET_PASSWORD); };
+    const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: response });
+    await expect(
+      assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+    ).rejects.toSatisfy((error: unknown) => {
+      expect(error).toMatchObject({ code: 'indeterminate' });
+      expect((error as Error).message).not.toContain(SECRET_PASSWORD);
+      return true;
+    });
+  });
+
+  it('fails closed at the request deadline when an authenticated 404 body stalls', async () => {
+    let manifestRequests = 0;
+    let headersStatus: number | undefined;
+    let manifestSignal: AbortSignal | null | undefined;
+    const server = createServer((_request, response) => {
+      manifestRequests += 1;
+      response.writeHead(404, { 'content-type': 'application/json' });
+      response.write('{"errors":[{"code":"MANIFEST_UNKNOWN"}]');
+      // Deliberately never finish the JSON or end the response.
+    });
+    await new Promise<void>((resolve, reject) => {
+      server.once('error', reject);
+      server.listen(0, '127.0.0.1', resolve);
+    });
+    let watchdog: ReturnType<typeof setTimeout> | undefined;
+    try {
+      const address = server.address();
+      if (!address || typeof address === 'string') throw new Error('Missing loopback port');
+      const fetchImpl = async (url: string, init: RequestInit) => {
+        if (new URL(url).pathname === '/token') return okToken;
+        manifestSignal = init.signal;
+        const response = await fetch(`http://127.0.0.1:${address.port}/manifest`, init);
+        headersStatus = response.status;
+        return response;
+      };
+      watchdog = setTimeout(() => server.closeAllConnections(), 3_000);
+      await expect(
+        assertTagAbsent({
+          owner: 'o',
+          repo: 'r',
+          tag: 'v1.0.0',
+          username: 'u',
+          password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+          fetchImpl,
+          timeoutMs: 750,
+        })
+      ).rejects.toMatchObject({
+        code: 'timeout',
+        message: 'Timed out after 750ms while requesting the GHCR manifest',
+      });
+      expect(headersStatus).toBe(404);
+      expect(manifestSignal?.aborted).toBe(true);
+      expect(manifestRequests).toBe(1);
+    } finally {
+      clearTimeout(watchdog);
+      await new Promise<void>((resolve) => {
+        server.close(() => resolve());
+        server.closeAllConnections();
+      });
+    }
   });
 
   it('throws (fails closed) when the tag already exists, including the digest but never the password', async () => {
@@ -268,7 +364,7 @@ describe('describeManifest', () => {
   });
 
   it('fails when the tag unexpectedly does not exist after a publish', async () => {
-    const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, {}) });
+    const fetchImpl = fetchFor({ tokenResponse: okToken, manifestResponse: jsonResponse(404, { errors: [{ code: 'MANIFEST_UNKNOWN' }] }) });
     await expect(
       describeManifest({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toMatchObject({ code: 'missing-after-publish' });
@@ -316,7 +412,7 @@ describe('release artifact provenance inspection', () => {
     return async (url: string) => {
       if (url.includes('/token')) return token;
       if (url.endsWith('/manifests/main-0123456')) {
-        if (options.absent) return jsonResponse(404, {});
+        if (options.absent) return jsonResponse(404, { errors: [{ code: 'MANIFEST_UNKNOWN' }] });
         return jsonResponse(
           200,
           {
@@ -527,7 +623,7 @@ describe('release artifact provenance inspection', () => {
     const fetchImpl = async (url: string) => {
       if (url.includes('/token')) return token;
       if (url.includes('/manifests/4.2.0')) {
-        if (fault === 'missing') return jsonResponse(404, {});
+        if (fault === 'missing') return jsonResponse(404, { errors: [{ code: 'MANIFEST_UNKNOWN' }] });
         return jsonResponse(
           200,
           {
