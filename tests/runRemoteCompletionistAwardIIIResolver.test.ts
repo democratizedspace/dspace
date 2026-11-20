@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -114,7 +115,14 @@ describe('Node version preflight', () => {
     expect(isSupportedNodeVersion('v24.22.3')).toBe(true);
   });
 
-  it('fails before attempting Playwright launch on unsupported Node', () => {
+  it.each([
+    '18.18.0',
+    '24.22.2',
+    '25.0.0',
+    '24.22',
+    '24.22.3-rc.1',
+    'not-a-version',
+  ])('rejects %s before resolving or spawning Playwright', (nodeVersion) => {
     const spawnFn = vi.fn<SpawnFn>();
     const resolvePlaywrightCliFn = vi.fn();
     const errorLog = vi.fn();
@@ -122,7 +130,7 @@ describe('Node version preflight', () => {
 
     main({
       argv: ['--baseURL=https://staging.democratized.space'],
-      nodeVersion: '18.18.0',
+      nodeVersion,
       spawnFn,
       resolvePlaywrightCliFn,
       errorLog,
@@ -135,7 +143,30 @@ describe('Node version preflight', () => {
     expect(exitFn).toHaveBeenCalledWith(1);
     expect(errorLog).toHaveBeenCalledTimes(1);
     expect(errorLog.mock.calls[0][0]).toContain(
-      'Unsupported Node.js version 18.18.0'
+      `Unsupported Node.js version ${nodeVersion}`
+    );
+  });
+
+  it('fails closed when the CLI is missing on a supported runtime', () => {
+    const spawnFn = vi.fn<SpawnFn>();
+    const exitFn = vi.fn();
+    const errorLog = vi.fn();
+    const resolvePlaywrightCliFn = vi.fn(() => null);
+    main({
+      nodeVersion: '24.22.3',
+      argv: [],
+      spawnFn,
+      exitFn,
+      errorLog,
+      infoLog: vi.fn(),
+      resolvePlaywrightCliFn,
+    });
+    expect(resolvePlaywrightCliFn).toHaveBeenCalledOnce();
+    expect(spawnFn).not.toHaveBeenCalled();
+    expect(exitFn).toHaveBeenCalledTimes(1);
+    expect(exitFn).toHaveBeenCalledWith(1);
+    expect(errorLog.mock.calls[0][0]).toContain(
+      'Could not resolve @playwright/test/cli'
     );
   });
 
@@ -165,6 +196,22 @@ describe('Node version preflight', () => {
 
     expect(spawnFn).toHaveBeenCalledTimes(1);
     expect(spawnFn.mock.calls[0][0]).toBe(process.execPath);
+    expect(spawnFn.mock.calls[0][1]).toEqual([
+      '/repo/node_modules/@playwright/test/cli.js',
+      'test',
+      'e2e/remote-completionist-award-iii.spec.ts',
+      '--project=chromium',
+    ]);
+    expect(spawnFn.mock.calls[0][2]).toMatchObject({
+      cwd: path.resolve(__dirname, '../frontend'),
+      stdio: 'inherit',
+      env: {
+        BASE_URL: 'https://staging.democratized.space',
+        PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
+        REMOTE_COMPLETIONIST_AWARD_III: '1',
+        REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: '0',
+      },
+    });
 
     const exitHandler = events.get('exit');
     expect(exitHandler).toBeDefined();
@@ -173,5 +220,91 @@ describe('Node version preflight', () => {
       'test-results/remote-completionist-award-iii-harness-report.json'
     );
     expect(exitFn).toHaveBeenCalledWith(0);
+  });
+
+  it.each([7, null])(
+    'propagates child exit %s without reporting success',
+    (code) => {
+      const events = new Map<string, (...args: unknown[]) => void>();
+      const child: ChildProcessLike = {
+        on(event, handler) {
+          events.set(event, handler);
+          return child;
+        },
+      };
+      const exitFn = vi.fn();
+      const printChecklistSummaryFn = vi.fn();
+      main({
+        argv: [],
+        nodeVersion: 'v24.22.3',
+        spawnFn: () => child,
+        resolvePlaywrightCliFn: () => '/cli.js',
+        infoLog: vi.fn(),
+        exitFn,
+        printChecklistSummaryFn,
+      });
+      events.get('exit')?.(code, null);
+      expect(printChecklistSummaryFn).toHaveBeenCalledOnce();
+      expect(exitFn).toHaveBeenCalledTimes(1);
+      expect(exitFn).toHaveBeenCalledWith(code ?? 1);
+    }
+  );
+
+  it('forwards child signals without printing a success summary', () => {
+    const kill = vi.spyOn(process, 'kill').mockReturnValue(true);
+    try {
+      const events = new Map<string, (...args: unknown[]) => void>();
+      const child: ChildProcessLike = {
+        on(event, handler) {
+          events.set(event, handler);
+          return child;
+        },
+      };
+      const exitFn = vi.fn();
+      const printChecklistSummaryFn = vi.fn();
+      main({
+        argv: [],
+        nodeVersion: '24.22.3',
+        spawnFn: () => child,
+        resolvePlaywrightCliFn: () => '/cli.js',
+        infoLog: vi.fn(),
+        exitFn,
+        printChecklistSummaryFn,
+      });
+      events.get('exit')?.(null, 'SIGTERM');
+      expect(kill).toHaveBeenCalledTimes(1);
+      expect(kill).toHaveBeenCalledWith(process.pid, 'SIGTERM');
+      expect(printChecklistSummaryFn).not.toHaveBeenCalled();
+      expect(exitFn).not.toHaveBeenCalled();
+    } finally {
+      kill.mockRestore();
+    }
+  });
+
+  it('fails when the Playwright process cannot start', () => {
+    const events = new Map<string, (...args: unknown[]) => void>();
+    const child: ChildProcessLike = {
+      on(event, handler) {
+        events.set(event, handler);
+        return child;
+      },
+    };
+    const exitFn = vi.fn();
+    const errorLog = vi.fn();
+    main({
+      argv: [],
+      nodeVersion: '24.22.3',
+      spawnFn: () => child,
+      resolvePlaywrightCliFn: () => '/cli.js',
+      infoLog: vi.fn(),
+      exitFn,
+      errorLog,
+    });
+    events.get('error')?.(new Error('ENOENT'));
+    expect(errorLog.mock.calls[0][0]).toContain(
+      'Failed to start Playwright process: ENOENT'
+    );
+    expect(exitFn).toHaveBeenCalledTimes(1);
+    expect(exitFn).toHaveBeenCalledWith(1);
   });
 });
