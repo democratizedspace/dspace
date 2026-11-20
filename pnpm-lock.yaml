@@ -296,11 +296,11 @@ importers:
         specifier: ^4.0.7
         version: 4.0.9(postcss@8.5.6)
       prettier:
-        specifier: ^3.4.2
-        version: 3.6.2
+        specifier: 3.8.1
+        version: 3.8.1
       prettier-plugin-svelte:
         specifier: ^3.4.0
-        version: 3.4.0(prettier@3.6.2)(svelte@5.57.3(@typescript-eslint/types@8.39.0))
+        version: 3.4.0(prettier@3.8.1)(svelte@5.57.3(@typescript-eslint/types@8.39.0))
       prism-svelte:
         specifier: ^0.5.0
         version: 0.5.0
@@ -5137,11 +5137,6 @@ packages:
     peerDependencies:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
-
-  prettier@3.6.2:
-    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
-    engines: {node: '>=14'}
-    hasBin: true
 
   prettier@3.8.1:
     resolution: {integrity: sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==}
@@ -12208,12 +12203,10 @@ snapshots:
       prettier: 3.8.1
       svelte: 5.57.3(@typescript-eslint/types@8.39.0)
 
-  prettier-plugin-svelte@3.4.0(prettier@3.6.2)(svelte@5.57.3(@typescript-eslint/types@8.39.0)):
+  prettier-plugin-svelte@3.4.0(prettier@3.8.1)(svelte@5.57.3(@typescript-eslint/types@8.39.0)):
     dependencies:
-      prettier: 3.6.2
+      prettier: 3.8.1
       svelte: 5.57.3(@typescript-eslint/types@8.39.0)
-
-  prettier@3.6.2: {}
 
   prettier@3.8.1: {}
 
