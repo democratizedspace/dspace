@@ -37,6 +37,10 @@ jobs:
             ${{ runner.os }}-pnpm-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
+      - name: Verify changelog release lines and regressions
+        run: |
+          node scripts/check-changelog-release-lines.mjs
+          node --test scripts/check-changelog-release-lines.test.mjs
       - name: Run tests with coverage
         run: pnpm run coverage
       - name: Upload coverage to Codecov
