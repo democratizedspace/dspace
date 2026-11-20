@@ -1,3 +1,6 @@
+// @vitest-environment node
+
+import { createServer } from 'node:http';
 import { describe, expect, it } from 'vitest';
 import {
   GhcrGuardError,
@@ -237,10 +240,62 @@ describe('assertTagAbsent', () => {
     await expect(
       assertTagAbsent({ owner: 'o', repo: 'r', tag: 'v1.0.0', username: 'u', password: SECRET_PASSWORD, fetchImpl }) // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
     ).rejects.toSatisfy((error: unknown) => {
-      expect(error).toMatchObject({ code: 'malformed' });
+      expect(error).toMatchObject({ code: 'indeterminate' });
       expect((error as Error).message).not.toContain(SECRET_PASSWORD);
       return true;
     });
+  });
+
+  it('fails closed at the request deadline when an authenticated 404 body stalls', async () => {
+    let manifestRequests = 0;
+    let headersStatus: number | undefined;
+    let manifestSignal: AbortSignal | null | undefined;
+    const server = createServer((_request, response) => {
+      manifestRequests += 1;
+      response.writeHead(404, { 'content-type': 'application/json' });
+      response.write('{"errors":[{"code":"MANIFEST_UNKNOWN"}]');
+      // Deliberately never finish the JSON or end the response.
+    });
+    await new Promise<void>((resolve, reject) => {
+      server.once('error', reject);
+      server.listen(0, '127.0.0.1', resolve);
+    });
+    let watchdog: ReturnType<typeof setTimeout> | undefined;
+    try {
+      const address = server.address();
+      if (!address || typeof address === 'string') throw new Error('Missing loopback port');
+      const fetchImpl = async (url: string, init: RequestInit) => {
+        if (new URL(url).pathname === '/token') return okToken;
+        manifestSignal = init.signal;
+        const response = await fetch(`http://127.0.0.1:${address.port}/manifest`, init);
+        headersStatus = response.status;
+        return response;
+      };
+      watchdog = setTimeout(() => server.closeAllConnections(), 3_000);
+      await expect(
+        assertTagAbsent({
+          owner: 'o',
+          repo: 'r',
+          tag: 'v1.0.0',
+          username: 'u',
+          password: SECRET_PASSWORD, // scan-secrets: ignore (fixture/env credential plumbing; no real secret literal)
+          fetchImpl,
+          timeoutMs: 750,
+        })
+      ).rejects.toMatchObject({
+        code: 'timeout',
+        message: 'Timed out after 750ms while requesting the GHCR manifest',
+      });
+      expect(headersStatus).toBe(404);
+      expect(manifestSignal?.aborted).toBe(true);
+      expect(manifestRequests).toBe(1);
+    } finally {
+      clearTimeout(watchdog);
+      await new Promise<void>((resolve) => {
+        server.close(() => resolve());
+        server.closeAllConnections();
+      });
+    }
   });
 
   it('throws (fails closed) when the tag already exists, including the digest but never the password', async () => {
