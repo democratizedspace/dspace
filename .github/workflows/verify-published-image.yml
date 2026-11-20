@@ -39,7 +39,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - name: Offline fixtures only (no registry or candidate execution)
-        run: node --test scripts/verify-candidate-image.test.mjs scripts/verify-candidate-workflow.test.mjs
+        run: node --test scripts/verify-candidate-image.test.mjs scripts/verify-candidate-workflow.test.mjs scripts/prepare-staging-coordinates.test.mjs
 
   native-candidate:
     name: Verify candidate (${{ matrix.arch }})

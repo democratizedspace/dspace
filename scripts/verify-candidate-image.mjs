@@ -209,6 +209,45 @@ function labelsMatch(labels, sourceSha) {
   );
 }
 
+export async function verifyImageDescriptorGraph(input, meta, read) {
+  const platformDigests = selectPlatforms(
+    await read('manifests', input.indexDigest)
+  );
+  const platformDigest = platformDigests[input.arch];
+  const manifest = await read('manifests', platformDigest);
+  requireEqual(
+    manifest?.schemaVersion === 2 &&
+      manifests.includes(manifest.mediaType) &&
+      configs.includes(manifest.config?.mediaType) &&
+      digest.test(manifest.config.digest) &&
+      Array.isArray(manifest.layers) &&
+      manifest.layers.length > 0 &&
+      manifest.layers.every((layer) => digest.test(layer?.digest)),
+    'INVALID_CHILD_MANIFEST'
+  );
+  const configDigest = manifest.config.digest;
+  const config = await read('blobs', configDigest);
+  requireEqual(
+    config.os === 'linux' && config.architecture === input.arch,
+    'REGISTRY_PLATFORM_MISMATCH'
+  );
+  labelsMatch(config.config?.Labels, input.sourceSha);
+  const vars = config.config?.Env;
+  requireEqual(
+    Array.isArray(vars) &&
+      vars
+        .filter((v) => typeof v === 'string' && v.startsWith('NODE_VERSION='))
+        .join() === `NODE_VERSION=${meta.node}` &&
+      vars
+        .filter((v) => typeof v === 'string' && v.startsWith('DSPACE_VERSION='))
+        .join() === `DSPACE_VERSION=${meta.runtimeVersion}` &&
+      (!config.config.Volumes ||
+        Object.keys(config.config.Volumes).length === 0),
+    'REGISTRY_RUNTIME_CONFIG_MISMATCH'
+  );
+  return { platformDigests, platformDigest, configDigest };
+}
+
 export async function verifyRegistry(input, meta, request = fetch) {
   try {
     const get = async (url, headers = {}, redirect = 'error') => {
@@ -252,44 +291,7 @@ export async function verifyRegistry(input, meta, request = fetch) {
       );
       return JSON.parse(raw);
     };
-    const platformDigests = selectPlatforms(
-      await read('manifests', input.indexDigest)
-    );
-    const platformDigest = platformDigests[input.arch];
-    const manifest = await read('manifests', platformDigest);
-    requireEqual(
-      manifest?.schemaVersion === 2 &&
-        manifests.includes(manifest.mediaType) &&
-        configs.includes(manifest.config?.mediaType) &&
-        digest.test(manifest.config.digest) &&
-        Array.isArray(manifest.layers) &&
-        manifest.layers.length > 0 &&
-        manifest.layers.every((layer) => digest.test(layer?.digest)),
-      'INVALID_CHILD_MANIFEST'
-    );
-    const configDigest = manifest.config.digest;
-    const config = await read('blobs', configDigest);
-    requireEqual(
-      config.os === 'linux' && config.architecture === input.arch,
-      'REGISTRY_PLATFORM_MISMATCH'
-    );
-    labelsMatch(config.config?.Labels, input.sourceSha);
-    const vars = config.config?.Env;
-    requireEqual(
-      Array.isArray(vars) &&
-        vars
-          .filter((v) => typeof v === 'string' && v.startsWith('NODE_VERSION='))
-          .join() === `NODE_VERSION=${meta.node}` &&
-        vars
-          .filter(
-            (v) => typeof v === 'string' && v.startsWith('DSPACE_VERSION=')
-          )
-          .join() === `DSPACE_VERSION=${meta.runtimeVersion}` &&
-        (!config.config.Volumes ||
-          Object.keys(config.config.Volumes).length === 0),
-      'REGISTRY_RUNTIME_CONFIG_MISMATCH'
-    );
-    return { platformDigests, platformDigest, configDigest };
+    return await verifyImageDescriptorGraph(input, meta, read);
   } catch (error) {
     throw new VerificationError(
       safeError(error, 'REGISTRY_TRANSPORT_OR_PARSE_FAILURE')
