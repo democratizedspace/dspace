@@ -2114,9 +2114,8 @@ test('A01 restored legacy navigation remains clickable through QuestChatOption',
     const [quest] = await getQuests();
     expect(quest.dialogue[1].options[0].type).toBe('finish');
     const { render, fireEvent, cleanup } = await import('@testing-library/svelte');
-    const { default: QuestChatOption } = await import(
-        '../src/pages/quests/svelte/QuestChatOption.svelte'
-    );
+    const { default: QuestChatOption } =
+        await import('../src/pages/quests/svelte/QuestChatOption.svelte');
     try {
         const view = render(QuestChatOption, {
             quest,

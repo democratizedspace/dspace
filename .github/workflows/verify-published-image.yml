@@ -1,20 +1,36 @@
-name: Verify existing v3.0.2 image
+name: Verify immutable candidate image
 
 on:
+  pull_request:
+    branches: [main]
   workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Reviewed full source SHA already on main (40 lowercase hex)
+        required: true
+        type: string
+      image_digest:
+        description: Immutable ghcr.io/democratizedspace/dspace index digest (sha256:...)
+        required: true
+        type: string
 
 permissions:
   contents: read
-  packages: read
 
 jobs:
-  verify:
-    if: github.event_name == 'workflow_dispatch' && github.repository == 'democratizedspace/dspace' && github.ref == 'refs/heads/release/v3.0.x' && github.actor == 'futuroptimist' && github.triggering_actor == 'futuroptimist'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    concurrency:
-      group: dspace-v3.0.2-existing-image-verification
-      cancel-in-progress: false
+  offline-fixtures:
+    name: Candidate verifier fixtures (${{ matrix.arch }})
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,21 +38,77 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-      - name: Enforce owner, ref, and runner guards before emulation
-        run: node scripts/verify-published-image.mjs --guard-only
+      - name: Offline fixtures only (no registry or candidate execution)
+        run: node --test scripts/verify-candidate-image.test.mjs scripts/verify-candidate-workflow.test.mjs
+
+  native-candidate:
+    name: Verify candidate (${{ matrix.arch }})
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'democratizedspace/dspace' && github.ref == 'refs/heads/main' && github.actor == 'futuroptimist' && github.triggering_actor == 'futuroptimist'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    env:
+      DSPACE_SOURCE_SHA: ${{ inputs.source_sha }}
+      DSPACE_IMAGE_DIGEST: ${{ inputs.image_digest }}
+      DSPACE_ARCH: ${{ matrix.arch }}
+    steps:
       - uses: actions/checkout@v4
         with:
-          ref: 47900748f61e1ef38c6289fc697f7a070f7fa3c9
-          path: source
+          ref: ${{ github.sha }}
+          fetch-depth: 0
           persist-credentials: false
-      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
+      - uses: actions/setup-node@v4
         with:
-          platforms: arm64
-      - name: Verify registry content and smoke both immutable platform images
-        run: node scripts/verify-published-image.mjs
+          node-version-file: .nvmrc
+      - name: Validate owner, trusted main, inputs and source ancestry
+        run: node scripts/verify-candidate-image.mjs --guard-only
+      - name: Verify immutable registry content and isolated native runtime
+        run: node scripts/verify-candidate-image.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: published-image-verification-${{ github.run_id }}-${{ github.run_attempt }}
-          path: published-image-verification-receipt.json
-          if-no-files-found: warn
+          name: candidate-image-${{ matrix.arch }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: candidate-image-${{ matrix.arch }}.json
+          if-no-files-found: error
+          retention-days: 30
+
+  aggregate:
+    name: Candidate verification receipt
+    needs: native-candidate
+    if: always() && github.event_name == 'workflow_dispatch' && github.repository == 'democratizedspace/dspace' && github.ref == 'refs/heads/main' && github.actor == 'futuroptimist' && github.triggering_actor == 'futuroptimist'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      DSPACE_NATIVE_JOB_RESULT: ${{ needs.native-candidate.result }}
+      DSPACE_SOURCE_SHA: ${{ inputs.source_sha }}
+      DSPACE_IMAGE_DIGEST: ${{ inputs.image_digest }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: candidate-image-*-${{ github.run_id }}-${{ github.run_attempt }}
+          path: candidate-receipts
+      - name: Require both exact native receipts (missing or failed is failure)
+        if: always()
+        run: node scripts/verify-candidate-image.mjs --aggregate candidate-receipts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: candidate-image-summary-${{ github.run_id }}-${{ github.run_attempt }}
+          path: candidate-image-summary.json
+          if-no-files-found: error
+          retention-days: 30
