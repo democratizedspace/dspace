@@ -1200,9 +1200,8 @@ export const exportGameStateString = (options = {}) => {
 };
 
 export const importGameStateString = async (input) => {
-    const { prepareImport, assertRecoveryBudget, validateCustomImportReferences } = await import(
-        '../importPreparation.js'
-    );
+    const { prepareImport, assertRecoveryBudget, validateCustomImportReferences } =
+        await import('../importPreparation.js');
     // Structural/media preparation precedes readiness and preflight; destination
     // references are checked against the snapshot before either database writes.
     const plan = prepareImport(input, {
