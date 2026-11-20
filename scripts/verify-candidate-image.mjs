@@ -474,7 +474,8 @@ const get=(path)=>fetch('http://127.0.0.1:8080'+path,{redirect:'error',signal:Ab
         docker(['rm', '--force', name]);
         checks.cleanup = true;
       } catch {
-        failure = new VerificationError('CONTAINER_CLEANUP_FAILED');
+        checks.cleanup = false;
+        failure ??= new VerificationError('CONTAINER_CLEANUP_FAILED');
       }
     }
   }

@@ -492,6 +492,36 @@ test('native mismatches never execute, errors sanitize and clean up without fals
   }
 });
 
+for (const [earlierFailure, errorCode] of [
+  ['run', 'CONTAINER_START_FAILED'],
+  ['exec', 'RUNTIME_PROBE_FAILED'],
+  [null, 'CONTAINER_CLEANUP_FAILED'],
+]) {
+  test(`receipt reports ${errorCode} when cleanup fails`, async () => {
+    const d = mockDocker({
+      fail: (cmd) => cmd === 'rm' || cmd === earlierFailure,
+    });
+    let receipt;
+    await assert.rejects(
+      verifyCandidate(source, {
+        source: () => meta,
+        registry: () => proof,
+        native: (input, metadata, platform, checks) =>
+          verifyNativeImage(input, metadata, platform, checks, d.options),
+        save: (record) => {
+          receipt = record;
+        },
+      }),
+      new RegExp(`^Error: ${errorCode}$`)
+    );
+    assert.equal(receipt.verified, false);
+    assert.equal(receipt.errorCode, errorCode);
+    assert.equal(receipt.checks.cleanup, false);
+    assert.equal(receipt.checks.http, earlierFailure === null);
+    assert.equal(d.steps.at(-1).cmd, 'rm');
+  });
+}
+
 test('aggregate fails closed on incomplete, duplicate, mismatched and cross-attempt receipts', async () => {
   const save = () => {};
   const options = {
