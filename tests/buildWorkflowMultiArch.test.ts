@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { spawnSync } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -74,25 +75,151 @@ describe('build workflow multi-arch validation', () => {
   const workflowPath = join(repoRoot, '.github', 'workflows', 'build.yml');
   const contents = readFileSync(workflowPath, 'utf8');
   const workflow = parse(contents);
-  const steps = workflow.jobs.build.steps;
-  const builds = steps.filter((step) =>
+  const amd64 = workflow.jobs['native-amd64'];
+  const arm64 = workflow.jobs['native-arm64'];
+  const gate = workflow.jobs.build;
+  const nativeJobs = [amd64, arm64];
+  const steps = [...amd64.steps, ...arm64.steps, ...gate.steps];
+  const builds = steps.filter((step: Step) =>
     step.uses?.startsWith('docker/build-push-action@')
   );
 
-  it('builds linux/amd64 and linux/arm64 images', () => {
-    expect(builds).toHaveLength(1);
-    expect(builds[0].with.platforms).toBe('linux/amd64,linux/arm64');
-    expect(workflow.on.push.branches).toEqual(['main', 'codex/**']);
-    expect(workflow.on.push.tags).toEqual(['v*']);
-    expect(workflow.on).toHaveProperty('pull_request');
-    expect(workflow.on).toHaveProperty('workflow_dispatch');
+  it('validates both native architectures in parallel on every existing trigger', () => {
+    expect(workflow.name).toBe('Validate Container Build');
+    expect(workflow.on).toEqual({
+      push: { branches: ['main', 'codex/**'], tags: ['v*'] },
+      pull_request: null,
+      workflow_dispatch: null,
+    });
+    expect(workflow.concurrency).toBeUndefined();
+    expect(amd64['runs-on']).toBe('ubuntu-24.04');
+    expect(amd64.env).toEqual({ VALIDATION_PLATFORM: 'linux/amd64' });
+    expect(arm64['runs-on']).toBe('ubuntu-24.04-arm');
+    expect(arm64.env).toEqual({ VALIDATION_PLATFORM: 'linux/arm64' });
+    for (const job of nativeJobs) {
+      expect(job.needs).toBeUndefined();
+      expect(job.if).toBeUndefined();
+      expect(job.strategy).toBeUndefined();
+      expect(job['timeout-minutes']).toBe(45);
+      expect(job['continue-on-error']).toBeUndefined();
+      expect(
+        job.steps.filter((step: Step) =>
+          step.uses?.startsWith('docker/build-push-action@')
+        )
+      ).toHaveLength(1);
+      for (const step of job.steps) {
+        expect(step.if).toBeUndefined();
+        expect(step['continue-on-error']).toBeUndefined();
+      }
+    }
+    expect(builds).toHaveLength(2);
+    expect(
+      steps.some((step) => step.uses?.startsWith('docker/setup-qemu-action@'))
+    ).toBe(false);
+    for (const build of builds) {
+      expect(build.with.platforms).toBe('${{ env.VALIDATION_PLATFORM }}');
+      expect(build.with.file).toBe('Dockerfile');
+      expect(build.with.context).toBe('.');
+      expect(build.with['build-args']).toBe(
+        'GIT_SHA=${{ github.sha }}\nVITE_GIT_SHA=${{ github.sha }}\nENFORCE_VITE_GIT_SHA=1\n'
+      );
+    }
   });
+
+  it('preserves the required check identity and always evaluates both job results', () => {
+    expect(Object.keys(workflow.jobs).sort()).toEqual([
+      'build',
+      'native-amd64',
+      'native-arm64',
+    ]);
+    expect(gate.name).toBe('Build multi-arch image');
+    expect(gate.needs).toEqual(['native-amd64', 'native-arm64']);
+    expect(gate.if).toBe('${{ always() }}');
+    expect(gate['continue-on-error']).toBeUndefined();
+    expect(gate.steps).toHaveLength(1);
+    expect(gate.steps[0].if).toBeUndefined();
+    expect(gate.steps[0]['continue-on-error']).toBeUndefined();
+    expect(gate.steps[0].env).toEqual({
+      AMD64_RESULT: '${{ needs.native-amd64.result }}',
+      ARM64_RESULT: '${{ needs.native-arm64.result }}',
+    });
+  });
+
+  const possibleResults = ['success', 'failure', 'cancelled', 'skipped', ''];
+  it.each(
+    possibleResults.flatMap((amd64Result) =>
+      possibleResults.map((arm64Result) => [amd64Result, arm64Result])
+    )
+  )(
+    'aggregate fails closed for amd64=%j arm64=%j',
+    (amd64Result, arm64Result) => {
+      const result = spawnSync('bash', ['-c', gate.steps[0].run], {
+        env: {
+          ...process.env,
+          AMD64_RESULT: amd64Result,
+          ARM64_RESULT: arm64Result,
+        },
+        encoding: 'utf8',
+      });
+      expect(result.error).toBeUndefined();
+      expect(result.status).toBe(
+        amd64Result === 'success' && arm64Result === 'success' ? 0 : 1
+      );
+    }
+  );
+
+  it.each([
+    ['linux/amd64', 'X64', 'linux/amd64', 0],
+    ['linux/arm64', 'ARM64', 'linux/arm64', 0],
+    ['linux/arm64', 'X64', 'linux/arm64', 1],
+    ['linux/arm64', 'ARM64', 'linux/amd64', 1],
+  ])(
+    'asserts native runner and Docker engine for %s %s %s',
+    (platform, runnerArch, dockerPlatform, status) => {
+      const stepsForPlatform =
+        platform === 'linux/amd64' ? amd64.steps : arm64.steps;
+      const checkIndex = stepsForPlatform.findIndex(
+        (step: { name?: string }) =>
+          step.name === 'Confirm native runner and Docker engine'
+      );
+      const buildIndex = stepsForPlatform.findIndex((step: Step) =>
+        step.uses?.startsWith('docker/build-push-action@')
+      );
+      expect(checkIndex).toBeGreaterThanOrEqual(0);
+      expect(checkIndex).toBeLessThan(buildIndex);
+      const check = stepsForPlatform[checkIndex];
+      const result = spawnSync(
+        'bash',
+        [
+          '-c',
+          'docker() { printf "%s\\n" "$FIXTURE_DOCKER_PLATFORM"; }\n' +
+            check.run,
+        ],
+        {
+          env: {
+            ...process.env,
+            VALIDATION_PLATFORM: platform,
+            RUNNER_ARCH: runnerArch,
+            FIXTURE_DOCKER_PLATFORM: dockerPlatform,
+          },
+          encoding: 'utf8',
+        }
+      );
+      expect(result.error).toBeUndefined();
+      expect(result.status).toBe(status);
+    }
+  );
 
   it('cannot publish images or export registry cache on any trigger', () => {
     expect(workflow.permissions).toEqual({ contents: 'read' });
-    for (const job of Object.values(workflow.jobs) as any[]) {
+    for (const job of nativeJobs) {
       expect(job.permissions).toBeUndefined();
+      const checkout = job.steps.find((step: Step) =>
+        step.uses?.startsWith('actions/checkout@')
+      );
+      expect(checkout.with['persist-credentials']).toBe(false);
     }
+    expect(gate.permissions).toEqual({});
     expect(
       steps.some((step) => step.uses?.startsWith('docker/login-action@'))
     ).toBe(false);
@@ -100,6 +227,7 @@ describe('build workflow multi-arch validation', () => {
       expect(build.with.push).toBe(false);
       expect(build.with.outputs).toBeUndefined();
       expect(build.with['cache-to']).toBeUndefined();
+      expect(build.with['cache-from']).toBeUndefined();
     }
   });
 
