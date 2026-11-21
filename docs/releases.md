@@ -9,15 +9,15 @@ This is the canonical list of all historical DSPACE release tags.
 
 ## Tagged releases
 
-| Tag | Channel | GitHub release page |
-| --- | --- | --- |
-| `v1.0.0` | Stable release | [`v1.0.0`](https://github.com/democratizedspace/dspace/releases/tag/v1.0.0) |
-| `v2.1.0` | Stable release | [`v2.1.0`](https://github.com/democratizedspace/dspace/releases/tag/v2.1.0) |
+| Tag           | Channel           | GitHub release page                                                                   |
+| ------------- | ----------------- | ------------------------------------------------------------------------------------- |
+| `v1.0.0`      | Stable release    | [`v1.0.0`](https://github.com/democratizedspace/dspace/releases/tag/v1.0.0)           |
+| `v2.1.0`      | Stable release    | [`v2.1.0`](https://github.com/democratizedspace/dspace/releases/tag/v2.1.0)           |
 | `v3.0.0-rc.1` | Release candidate | [`v3.0.0-rc.1`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.1) |
 | `v3.0.0-rc.2` | Release candidate | [`v3.0.0-rc.2`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.2) |
 | `v3.0.0-rc.3` | Release candidate | [`v3.0.0-rc.3`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.3) |
 | `v3.0.0-rc.4` | Release candidate | [`v3.0.0-rc.4`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.4) |
-| `v3.0.0` | Stable release | [`v3.0.0`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0) |
+| `v3.0.0`      | Stable release    | [`v3.0.0`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0)           |
 | `v3.0.1-rc.1` | Release candidate | [`v3.0.1-rc.1`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.1) |
 | `v3.0.1-rc.2` | Release candidate | [`v3.0.1-rc.2`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.2) |
 | `v3.0.1-rc.3` | Release candidate | [`v3.0.1-rc.3`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.3) |
@@ -142,6 +142,28 @@ The chart default `v3.1.0` may resolve to the retained older image, so never use
 the November candidate. Staging must select the newly approved immutable branch-SHA image or
 digest and verified chart from the same full source SHA, record runtime identity and QA evidence,
 and pass before any separately authorized production promotion.
+
+### Native branch-image publication
+
+The ordinary branch publisher freezes the checked-out source once, builds AMD64 and ARM64
+on matching native runners, and verifies the served build identity on each image before
+uploading an OCI archive. The OCI assembler checks each image's content descriptors, source
+and platform and binds it to the config digest of the tested local image. Pull requests run
+this preparation and index validation only; the publisher cannot read artifacts from
+a different run and does not run for pull requests. Manual branch dispatch resolves only
+`refs/heads/main` or `refs/heads/v3`, never a similarly named tag.
+
+On a trusted main/v3 push (or an authorized ordinary branch dispatch from main/v3),
+the branch-serialized publisher revalidates the same index, requires an authoritative
+absence response for the immutable `<branch>-<short-sha>` tag, and invokes one index push.
+It independently verifies the remote index digest and both exact native child digests and
+revision labels before moving the mutable `<branch>-latest` tag. It skips that alias update
+if the branch has already advanced. A failed or uncertain push is not retried by the workflow
+(the registry client can retry individual requests). The branch lock does not cover out-of-band
+writes. Inspect the immutable coordinate and exact index before considering recovery. PR checks
+do not publish, and branch-image publication is not staging, semantic release, or deployment.
+Manual semantic recovery also requires a workflow dispatch from the canonical repository
+on `main` or `v3`; the normal published-release event and existing release safeguards are unchanged.
 
 ### Recording tags
 

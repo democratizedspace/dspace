@@ -39,6 +39,7 @@ function imagePublishers(filename: string, workflow: Workflow): string[] {
         .filter((line) => !line.trim().startsWith('#'))
         .join('\n');
       const shellPublish =
+        /crane\s+(?:push|tag|copy)\b/.test(shell) ||
         /docker\s+(?:(?:(?:image|manifest)\s+)?push\b|buildx\s+imagetools\s+create\b)/.test(
           shell
         ) ||
@@ -250,6 +251,8 @@ describe('build workflow multi-arch validation', () => {
 
   it.each<Step>([
     { run: 'docker push ghcr.io/example/image:tag' },
+    { run: 'crane push --index ./layout ghcr.io/example/image:tag' },
+    { run: 'crane tag ghcr.io/example/image@sha256:digest latest' },
     { run: 'docker image push ghcr.io/example/image:tag' },
     { run: 'docker manifest push ghcr.io/example/image:tag' },
     {

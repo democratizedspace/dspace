@@ -4,6 +4,7 @@ import {
   mkdtempSync,
   mkdirSync,
   readFileSync,
+  rmSync,
   writeFileSync,
 } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -108,6 +109,38 @@ exit 99
   };
 }
 
+// Interpret only the expected predicate language, not arbitrary workflow expressions.
+function enables(predicate: string, context: Record<string, string>) {
+  const expression = predicate.replace(/^\$\{\{\s*|\s*\}\}$/g, '');
+  const parts = expression.match(
+    /(?:github|needs)[.a-z_-]+|cancelled\(\)|'[^']*'|==|!=|&&|\|\||[()!]/gi
+  )!;
+  expect(parts.join('').replace(/ /g, '')).toBe(expression.replace(/\s/g, ''));
+  const condition = parts
+    .map((part) => {
+      if (part === 'cancelled()') return String(context.cancelled === 'true');
+      if (part.startsWith("'")) return part.toLowerCase();
+      if (!/^(github|needs)\./.test(part)) return part;
+      expect(context).toHaveProperty([part]);
+      return JSON.stringify(context[part].toLowerCase());
+    })
+    .join(' ');
+  return Function('"use strict"; return (' + condition + ');')();
+}
+
+const canonicalContext = {
+  'github.repository': 'democratizedspace/dspace',
+  'github.ref': 'refs/heads/main',
+  'github.event_name': 'workflow_dispatch',
+  'github.event.action': '',
+  'github.event.inputs.release_tag': '',
+  'github.event.inputs.branch': 'main',
+  'needs.manual-publisher-trust.result': 'success',
+  'needs.publisher-source.result': 'success',
+  'needs.publisher-native.result': 'success',
+  'needs.publisher-index.result': 'success',
+};
+
 describe('ci-image.yml triggers', () => {
   it('keeps ordinary branch coverage on main and v3, with no tag-push trigger', () => {
     expect(workflow.on.push.branches).toEqual(['v3', 'main']);
@@ -128,33 +161,143 @@ describe('ci-image.yml triggers', () => {
       required: false,
       default: '',
     });
-    expect(workflow.jobs.image.if).toBe(
-      "github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == '')"
+    const publisherCondition = workflow.jobs.image.if;
+    expect(publisherCondition).toContain(
+      "github.repository == 'democratizedspace/dspace'"
+    );
+    expect(publisherCondition).toContain("github.ref == 'refs/heads/main'");
+    expect(publisherCondition).toContain("github.ref == 'refs/heads/v3'");
+    expect(publisherCondition).not.toContain('pull_request');
+    expect(publisherCondition).toContain(
+      "github.event.inputs.release_tag == ''"
     );
     expect(workflow.jobs['local-build'].if).toBe(
       "github.event_name != 'release' && !(github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')"
     );
-    expect(workflow.jobs['semantic-release'].if).toBe(
-      "(github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')"
+    expect(enables(workflow.jobs.image.if, canonicalContext)).toBe(true);
+    expect(
+      enables(workflow.jobs['semantic-release'].if, canonicalContext)
+    ).toBe(false);
+  });
+
+  it('requires the exact-ref gate for manual semantic recovery but not normal published releases', () => {
+    const predicate = workflow.jobs['semantic-release'].if;
+    const recovery = {
+      ...canonicalContext,
+      'github.event.inputs.release_tag': 'v3.1.0',
+    };
+    expect(enables(predicate, recovery)).toBe(true);
+    for (const outcome of ['failure', 'skipped', 'cancelled']) {
+      expect(
+        enables(predicate, {
+          ...recovery,
+          'needs.manual-publisher-trust.result': outcome,
+        })
+      ).toBe(false);
+    }
+    expect(enables(predicate, { ...recovery, cancelled: 'true' })).toBe(false);
+    expect(
+      enables(predicate, { ...recovery, 'github.event_name': 'pull_request' })
+    ).toBe(false);
+    expect(
+      enables(predicate, {
+        ...canonicalContext,
+        'github.event_name': 'release',
+        'github.event.action': 'published',
+        'github.ref': 'refs/tags/v3.1.0',
+        'needs.manual-publisher-trust.result': 'skipped',
+      })
+    ).toBe(true);
+    expect(
+      enables(predicate, {
+        ...canonicalContext,
+        'github.event_name': 'release',
+        'github.event.action': 'created',
+      })
+    ).toBe(false);
+    expect(enables(workflow.jobs.image.if, recovery)).toBe(false);
+    expect(workflow.jobs['semantic-release'].needs).toBe(
+      'manual-publisher-trust'
     );
   });
 
-  it('routes empty dispatches to both branch jobs and valid recovery only to semantic release', () => {
-    const enabled = (releaseTag: string) => ({
-      localBuild: releaseTag === '',
-      image: releaseTag === '',
-      semanticRelease: releaseTag !== '',
-    });
-    expect(enabled('')).toEqual({
-      localBuild: true,
-      image: true,
-      semanticRelease: false,
-    });
-    expect(enabled('v3.1.1')).toEqual({
-      localBuild: false,
-      image: false,
-      semanticRelease: true,
-    });
+  it('checks exact manual refs and repository before any checkout, token or registry action', () => {
+    const trust = workflow.jobs['manual-publisher-trust'];
+    expect(trust.permissions).toEqual({});
+    expect(trust.if).toBe("github.event_name == 'workflow_dispatch'");
+    const [step] = findSteps(trust);
+    expect(trust.steps).toHaveLength(1);
+    expect(step.uses).toBeUndefined();
+    expect(JSON.stringify(step)).not.toMatch(/secrets|token|ghcr/i);
+    const status = (
+      ref: string,
+      branch: string,
+      tag = '',
+      repo = 'democratizedspace/dspace'
+    ) =>
+      spawnSync('bash', ['-c', step.run], {
+        env: {
+          ...process.env,
+          GITHUB_REPOSITORY: repo,
+          GITHUB_REF: ref,
+          TARGET_BRANCH: branch,
+          RELEASE_TAG: tag,
+        },
+      }).status;
+    for (const tag of ['', 'v3.1.0']) {
+      expect(status('refs/heads/main', 'main', tag)).toBe(0);
+      expect(status('refs/heads/v3', 'main', tag)).toBe(0);
+      for (const ref of [
+        'refs/heads/Main',
+        'refs/heads/V3',
+        'refs/heads/feature',
+        'refs/tags/main',
+      ]) {
+        expect(status(ref, 'main', tag)).not.toBe(0);
+      }
+      expect(status('refs/heads/main', 'main', tag, 'other/dspace')).not.toBe(
+        0
+      );
+      expect(
+        status('refs/heads/main', 'main', tag, 'Democratizedspace/dspace')
+      ).not.toBe(0);
+    }
+    for (const branch of ['main', 'v3', ''])
+      expect(status('refs/heads/main', branch)).toBe(0);
+    for (const branch of [
+      'feature',
+      'Main',
+      'refs/tags/main',
+      'refs/heads/main',
+    ]) {
+      expect(status('refs/heads/main', branch)).not.toBe(0);
+    }
+  });
+
+  it('resolves ordinary dispatch targets as branch refs only, not tag names or arbitrary input', () => {
+    const source = workflow.jobs['publisher-source'];
+    const [checkout] = findStepsUsing(source, 'actions/checkout');
+    expect(checkout.with.ref).toContain(
+      "format('refs/heads/{0}', github.event.inputs.branch || github.ref_name)"
+    );
+    expect(checkout.with.ref).toContain('|| github.sha');
+    expect(source.needs).toBe('manual-publisher-trust');
+    expect(enables(source.if, canonicalContext)).toBe(true);
+    expect(
+      enables(source.if, {
+        ...canonicalContext,
+        'needs.manual-publisher-trust.result': 'failure',
+      })
+    ).toBe(false);
+    for (const event of ['push', 'pull_request']) {
+      expect(
+        enables(source.if, {
+          ...canonicalContext,
+          'github.event_name': event,
+          'needs.manual-publisher-trust.result': 'skipped',
+        })
+      ).toBe(true);
+    }
   });
 });
 
@@ -166,6 +309,183 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(job.if).toContain("github.event_name == 'workflow_dispatch'");
     expect(job.if).not.toContain("github.event_name == 'release'");
   });
+
+  it('blocks PR, tag, foreign-repository, and feature-ref dispatch publication', () => {
+    const ordinary = (
+      event: string,
+      ref: string,
+      tag = '',
+      repository = 'democratizedspace/dspace'
+    ) =>
+      enables(job.if, {
+        ...canonicalContext,
+        'github.repository': repository,
+        'github.ref': ref,
+        'github.event_name': event,
+        'github.event.inputs.release_tag': tag,
+      });
+    expect(ordinary('pull_request', 'refs/heads/main')).toBe(false);
+    expect(ordinary('pull_request', 'refs/pull/7/merge')).toBe(false);
+    expect(ordinary('push', 'refs/tags/v3.1.0')).toBe(false);
+    expect(ordinary('workflow_dispatch', 'refs/heads/topic')).toBe(false);
+    expect(ordinary('workflow_dispatch', 'refs/heads/main', 'v3.1.0')).toBe(
+      false
+    );
+    expect(ordinary('push', 'refs/heads/main', '', 'my-fork/dspace')).toBe(
+      false
+    );
+    expect(ordinary('push', 'refs/heads/main')).toBe(true);
+    expect(ordinary('workflow_dispatch', 'refs/heads/v3')).toBe(true);
+
+    const source = findSteps(workflow.jobs['publisher-source']).find(
+      (step) => step.id === 'source'
+    );
+    expect(source.run).toContain(
+      '[[ "$SOURCE_BRANCH" == main || "$SOURCE_BRANCH" == v3 ]]'
+    );
+  });
+
+  it('continues after a skipped manual ancestor only when immediate dependencies succeed', () => {
+    const source = workflow.jobs['publisher-source'];
+    const native = workflow.jobs['publisher-native'];
+    const index = workflow.jobs['publisher-index'];
+    for (const event of ['pull_request', 'push']) {
+      const context = {
+        ...canonicalContext,
+        'github.event_name': event,
+        'github.ref':
+          event === 'push' ? 'refs/heads/main' : 'refs/pull/4904/merge',
+        'needs.manual-publisher-trust.result': 'skipped',
+      };
+      expect(enables(source.if, context)).toBe(true);
+      expect(enables(native.if, context)).toBe(true);
+      expect(enables(index.if, context)).toBe(true);
+      expect(enables(job.if, context)).toBe(event === 'push');
+      // Even an ordinary PR evaluated with an allowed base ref cannot publish.
+      expect(
+        enables(job.if, {
+          ...context,
+          'github.event_name': 'pull_request',
+          'github.ref': 'refs/heads/main',
+        })
+      ).toBe(false);
+      for (const target of [native, index, job]) {
+        expect(target.if).toContain('!cancelled()'); // Suppress implicit transitive success().
+        expect(enables(target.if, { ...context, cancelled: 'true' })).toBe(
+          false
+        );
+      }
+      for (const outcome of ['failure', 'skipped', 'cancelled']) {
+        const badSource = {
+          ...context,
+          'needs.publisher-source.result': outcome,
+        };
+        expect(enables(native.if, badSource)).toBe(false);
+        expect(enables(index.if, badSource)).toBe(false);
+        expect(enables(job.if, badSource)).toBe(false);
+        expect(
+          enables(index.if, {
+            ...context,
+            'needs.publisher-native.result': outcome,
+          })
+        ).toBe(false);
+        expect(
+          enables(job.if, {
+            ...context,
+            'needs.publisher-index.result': outcome,
+          })
+        ).toBe(false);
+      }
+    }
+  });
+
+  it.each([
+    '2026-11-20T01:41:58-08:00',
+    '2026-11-20T15:11:58+05:30',
+    '2026-11-20T09:41:58+00:00',
+  ])(
+    'freezes source time %s as the exact UTC instant accepted by production',
+    (offsetStamp) => {
+      const directory = mkdtempSync(join(tmpdir(), 'ci-image-timezone-'));
+      try {
+        const output = join(directory, 'output');
+        const meta = join(directory, 'build_meta.json');
+        const git = (...args: string[]) => {
+          const result = spawnSync('git', args, {
+            cwd: directory,
+            encoding: 'utf8',
+            env: {
+              ...process.env,
+              GIT_AUTHOR_DATE: offsetStamp,
+              GIT_COMMITTER_DATE: offsetStamp,
+            },
+          });
+          expect(result.status, result.stderr).toBe(0);
+          return result.stdout.trim();
+        };
+        git('init', '--quiet');
+        git(
+          '-c',
+          'user.name=Fixture',
+          '-c',
+          'user.email=fixture@example.invalid',
+          'commit',
+          '--allow-empty',
+          '--no-gpg-sign',
+          '--quiet',
+          '-m',
+          'Timestamp fixture'
+        );
+        const sha = git('rev-parse', 'HEAD');
+        expect(git('show', '-s', '--format=%cI', 'HEAD').slice(0, 19)).toBe(
+          offsetStamp.slice(0, 19)
+        );
+        const source = findSteps(workflow.jobs['publisher-source']).find(
+          (step) => step.id === 'source'
+        );
+        writeFileSync(join(directory, 'package.json'), '{"version":"3.1.0"}');
+        const result = spawnSync('bash', ['-c', source.run], {
+          cwd: directory,
+          encoding: 'utf8',
+          env: {
+            ...process.env,
+            SOURCE_BRANCH: 'main',
+            GITHUB_EVENT_NAME: 'push',
+            GITHUB_SHA: sha,
+            GITHUB_OUTPUT: output,
+            TZ: 'Pacific/Honolulu',
+          },
+        });
+        expect(result.status, result.stderr).toBe(0);
+        const stamp = readFileSync(output, 'utf8').match(/^stamp=(.+)$/m)?.[1];
+        expect(stamp).toBe('2026-11-20T09:41:58Z');
+        expect(Date.parse(stamp!)).toBe(Date.parse(offsetStamp));
+        const validator = spawnSync(
+          process.execPath,
+          [join(repoRoot, 'scripts', 'write-build-meta.mjs')],
+          {
+            cwd: directory,
+            encoding: 'utf8',
+            env: {
+              ...process.env,
+              GITHUB_SHA: sha,
+              BUILD_TIMESTAMP: stamp!,
+              DSPACE_PRODUCTION_BUILD: '1',
+              VERIFY_BUILD_META_PATH: meta,
+              DSPACE_IMAGE:
+                'ghcr.io/democratizedspace/dspace:main-' + sha.slice(0, 7),
+            },
+          }
+        );
+        expect(validator.status, validator.stderr).toBe(0);
+        expect(JSON.parse(readFileSync(meta, 'utf8')).buildTimestamp).toBe(
+          stamp
+        );
+      } finally {
+        rmSync(directory, { force: true, recursive: true });
+      }
+    }
+  );
 
   it('serializes ordinary publication by target branch without workflow SHA', () => {
     expect(job.concurrency.group).toBe(
@@ -185,172 +505,106 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     );
   });
 
-  it('still publishes the immutable branch-SHA tag and the mutable branch convenience tag', () => {
-    const checkout = findStepsUsing(job, 'actions/checkout')[0];
-    expect(checkout.with['persist-credentials']).toBe(false);
-    const tagsStep = findSteps(job).find((step) => step.id === 'tags');
-    expect(tagsStep.env.SOURCE_BRANCH).toBe(
-      '${{ github.event.inputs.branch || github.ref_name }}'
-    );
-    expect(tagsStep.run).toContain('branch="$SOURCE_BRANCH"');
-    expect(tagsStep.run).not.toContain('${{ github.event.inputs.branch');
-    expect(tagsStep.run).toContain('git rev-parse HEAD');
-    expect(tagsStep.run).toContain('git rev-parse --short=7 HEAD');
-    expect(tagsStep.run).toMatch(/sha_tag=/);
-    expect(tagsStep.run).toMatch(/latest_tag=/);
-
-    const pushSteps = findStepsUsing(job, 'docker/build-push-action');
-    const realPushSteps = pushSteps.filter((step) => step.with?.push === true);
-    expect(realPushSteps.length).toBeGreaterThan(0);
-    for (const step of realPushSteps) {
-      expect(step.with.tags).toContain('steps.tags.outputs.sha_tag');
-      expect(step.with.tags).toContain('steps.tags.outputs.latest_tag');
-      expect(step.with['build-args']).toContain(
-        'GIT_SHA=${{ steps.tags.outputs.full_sha }}'
+  it('validates both architectures natively, with no write token or registry export', () => {
+    const native = workflow.jobs['publisher-native'];
+    const source = workflow.jobs['publisher-source'];
+    const index = workflow.jobs['publisher-index'];
+    expect(native.strategy.matrix.include).toEqual([
+      { arch: 'amd64', runner: 'ubuntu-24.04' },
+      { arch: 'arm64', runner: 'ubuntu-24.04-arm' },
+    ]);
+    expect(native.needs).toBe('publisher-source');
+    expect(source.if).toContain("github.event_name == 'pull_request'");
+    expect(source.if).toContain("github.event.inputs.release_tag == ''");
+    for (const candidate of [source, native, index]) {
+      expect(candidate.permissions).toEqual({ contents: 'read' });
+      expect(JSON.stringify(candidate)).not.toMatch(
+        /--push|login-action|secrets\./
       );
-      expect(step.with['build-args']).toContain(
-        'VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}'
-      );
-      expect(step.with['build-args']).toContain(
-        'BUILD_TIMESTAMP=${{ steps.metadata.outputs.created }}'
-      );
-      expect(step.with['build-args']).toContain(
-        'DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}'
-      );
-      expect(step.with.labels).toContain(
-        'org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}'
-      );
+      for (const step of findStepsUsing(candidate, 'actions/checkout')) {
+        expect(step.with['persist-credentials']).toBe(false);
+      }
     }
-  });
-
-  it('compares runtime JSON and HTML identity with the OCI revision', () => {
-    const step = findSteps(job).find(
-      (candidate) =>
-        candidate.name === 'Compare runtime identity with OCI revision'
+    const build = findSteps(native).find((step) =>
+      step.name?.startsWith('Export OCI')
     );
-    expect(step.run).toContain('org.opencontainers.image.revision');
-    expect(step.run).toContain('/build-info.json');
-    expect(step.run).toContain('if [ ! -s /tmp/build-info.json ]; then');
-    expect(step.run).toContain('docker logs "$container"');
-    expect(step.run).toContain('dspace-build-revision');
-    expect(step.env.EXPECTED_SHA).toBe('${{ steps.tags.outputs.full_sha }}');
-    expect(step.run).toContain('test "$label_revision" = "$EXPECTED_SHA"');
-  });
-
-  it('invokes image verifiers from a repository-preserving mount, not a scripts-only mount', () => {
-    const serialized = JSON.stringify(job);
-    const shaStep = findSteps(job).find(
-      (step) => step.name === 'Assert build SHA is baked into frontend bundle'
+    expect(build.run).toContain('type=oci');
+    expect(build.run).toContain('type=docker');
+    expect(build.run).toContain('tested-config');
+    expect(build.run.match(/docker buildx build/g)).toHaveLength(1);
+    const smoke = findSteps(native).find((step) =>
+      step.name?.startsWith('Verify bundled')
     );
-    const chatStep = findSteps(job).find(
-      (step) => step.name === 'Verify chat build stamp inside image'
-    );
-
-    expect(shaStep.run).toContain('-v "$PWD:/verification-repo:ro"');
-    expect(shaStep.run).toContain(
-      'node /verification-repo/scripts/verify-build-sha.mjs /app/dist'
-    );
-    expect(chatStep.run).toContain('-v "$PWD:/verification-repo:ro"');
-    expect(chatStep.run).toContain('-e VERIFY_REPO_ROOT=/app');
-    expect(chatStep.run).toContain(
-      '-e VERIFY_BUILD_META_PATH=/app/build_meta.json'
-    );
-    expect(chatStep.run).toContain(
-      'node /verification-repo/scripts/verify-chat-build-stamp.mjs'
-    );
-    expect(serialized).not.toContain('$PWD/scripts:/scripts:ro');
-    expect(serialized).not.toContain(
-      'node /scripts/verify-chat-build-stamp.mjs'
-    );
-  });
-
-  it('builds and locally validates the runtime image before the first registry mutation', () => {
-    const steps = findSteps(job);
-    const firstPush = stepIndex(
-      job,
-      (step) => step.name === 'Build and push image (attempt 1)'
-    );
-    for (const name of [
-      'Build image for SHA verification',
-      'Assert build SHA is baked into frontend bundle',
-      'Verify chat build stamp inside image',
-      'Compare runtime identity with OCI revision',
+    for (const expected of [
+      'verify-build-sha.mjs',
+      'verify-chat-build-stamp.mjs',
+      '$PWD:/verification-repo:ro',
+      '/build-info.json',
+      'dspace-build-revision',
     ]) {
-      expect(stepIndex(job, (step) => step.name === name)).toBeGreaterThan(-1);
-      expect(stepIndex(job, (step) => step.name === name)).toBeLessThan(
-        firstPush
+      expect(smoke.run).toContain(expected);
+    }
+  });
+
+  it('uses only same-run immutable artifacts and re-verifies the identical index in the publisher', () => {
+    const index = workflow.jobs['publisher-index'];
+    expect(index.needs).toEqual(['publisher-source', 'publisher-native']);
+    expect(job.needs).toEqual(['publisher-source', 'publisher-index']);
+    for (const current of [index, job]) {
+      const [download] = findStepsUsing(current, 'actions/download-artifact');
+      expect(download.uses).toMatch(
+        /^actions\/download-artifact@[a-f0-9]{40}$/
       );
+      expect(download.with.pattern).toBe('publisher-native-*');
+      expect(download.with['run-id']).toBeUndefined();
+      expect(download.with['github-token']).toBeUndefined();
     }
-
-    const verifyBuild = steps.find(
-      (step) => step.name === 'Build image for SHA verification'
-    );
-    expect(verifyBuild.with.push).toBe(false);
-    expect(verifyBuild.with.tags).toBe('dspace-verify:latest');
-    expect(verifyBuild.with['cache-from']).toBe('type=gha');
-    expect(verifyBuild.with['cache-to']).toBe(
-      'type=gha,mode=max,ignore-error=true'
-    );
+    const tags = findSteps(job).find((step) => step.id === 'tags');
+    expect(tags.run).toContain('git rev-parse HEAD');
+    expect(tags.run).toContain('prepare-native-image-index.py');
+    expect(tags.run).toContain('test "$digest" = "$EXPECTED_INDEX"');
   });
 
-  it('guards the immutable SHA tag immediately before both push attempts', () => {
+  it('does not move latest after a failed write/verification or an advanced branch', () => {
     const steps = findSteps(job);
-    const guard1 = steps.find(
-      (step) =>
-        step.name === 'Ensure immutable SHA tag is absent before push attempt 1'
+    const publication = steps.find((step) => step.run?.includes('crane push'));
+    const aliasing = steps.find((step) => step.run?.includes('crane tag'));
+    expect(publication.run).toMatch(
+      /set -euo pipefail[\s\S]+check-absent[^\n]+\ncrane push/
     );
-    const guard2 = steps.find(
-      (step) =>
-        step.name === 'Ensure immutable SHA tag is absent before push attempt 2'
+    expect(aliasing.if).toBeUndefined(); // default success() requires preceding publication
+    expect(aliasing.run).toMatch(
+      /if \[\[ .*ref%%.* != "\$SHA" \]\]; then[\s\S]+exit 0[\s\S]+fi\ncrane tag/
     );
-    const push1 = steps.find(
-      (step) => step.name === 'Build and push image (attempt 1)'
-    );
-    const push2 = steps.find(
-      (step) => step.name === 'Build and push image (attempt 2)'
-    );
-
-    expect(steps.indexOf(guard1)).toBe(steps.indexOf(push1) - 1);
-    expect(steps.indexOf(guard2)).toBe(steps.indexOf(push2) - 1);
-    for (const guard of [guard1, guard2]) {
-      expect(guard.run).toContain('scripts/ghcr-manifest.mjs check-absent');
-      expect(guard.env.GHCR_GUARD_USERNAME).toBe('${{ github.actor }}');
-      expect(guard.env.GHCR_GUARD_PASSWORD).toBe('${{ secrets.GITHUB_TOKEN }}');
-      expect(guard.env.IMAGE_TAG).toBe('${{ steps.tags.outputs.sha_tag }}');
-      expect(guard.run).toContain('--tag "${IMAGE_TAG##*:}"');
-      expect(guard.run).not.toContain('${{ secrets.GITHUB_TOKEN }}');
-    }
-  });
-
-  it('requires a failed first push and successful retry guard before attempt 2', () => {
-    const guard2 = findSteps(job).find(
-      (step) =>
-        step.name === 'Ensure immutable SHA tag is absent before push attempt 2'
-    );
-    const push2 = findSteps(job).find(
-      (step) => step.name === 'Build and push image (attempt 2)'
-    );
-    expect(guard2.if).toBe("steps.build_push_1.outcome == 'failure'");
-    expect(push2.if).toBe(
-      "steps.build_push_1.outcome == 'failure' && steps.check_sha_absent_2.outcome == 'success'"
-    );
-  });
-  it('uses the checked-out commit rather than the dispatch event SHA', () => {
-    const serialized = JSON.stringify(job);
-    expect(serialized).not.toContain('GIT_SHA=${{ github.sha }}');
-    expect(serialized).not.toContain('VITE_GIT_SHA=${{ github.sha }}');
     expect(
-      findSteps(job).find((step) => step.id === 'metadata').env.GIT_SHA
-    ).toBe('${{ steps.tags.outputs.full_sha }}');
+      steps.filter((step) => /crane (?:push|tag|copy)/.test(step.run ?? ''))
+        .length
+    ).toBe(2);
   });
 
-  it('keeps multi-arch publication for both supported architectures', () => {
-    const pushSteps = findStepsUsing(job, 'docker/build-push-action').filter(
-      (step) => step.with?.push === true
+  it('checks absence then pushes exactly once, verifies the remote children before aliasing', () => {
+    const steps = findSteps(job);
+    const pushIndex = stepIndex(job, (step) =>
+      step.run?.includes('crane push')
     );
-    for (const step of pushSteps) {
-      expect(step.with.platforms).toBe('linux/amd64,linux/arm64');
-    }
+    const push = steps[pushIndex];
+    expect(push.run.indexOf('check-absent')).toBeLessThan(
+      push.run.indexOf('crane push')
+    );
+    expect(push.run).toContain('crane push --index');
+    expect(push['continue-on-error']).toBeUndefined();
+    expect(JSON.stringify(job).match(/crane push/g)).toHaveLength(1);
+    const verify = steps[pushIndex + 1].run;
+    const tag = verify.indexOf('crane tag');
+    expect(tag).toBeGreaterThan(0);
+    expect(verify.indexOf('await inspectImage(')).toBeLessThan(tag);
+    expect(
+      verify.indexOf(
+        'assert.deepEqual(remote, { indexDigest: EXPECTED_INDEX, amd64Digest: digests.amd64, arm64Digest: digests.arm64 })'
+      )
+    ).toBeLessThan(tag);
+    expect(verify.indexOf('git ls-remote')).toBeLessThan(tag);
+    expect(verify.indexOf('crane digest "$LATEST_TAG"')).toBeGreaterThan(tag);
   });
 });
 
@@ -378,10 +632,7 @@ describe('ci-image.yml "semantic-release" job (normal and recovery alias path)',
   const steps = findSteps(job);
   const named = (name: string) => steps.find((step) => step.name === name);
 
-  it('accepts published release events or explicit recovery dispatches and serializes by tag', () => {
-    expect(job.if).toBe(
-      "(github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')"
-    );
+  it('serializes semantic publication by release tag for both supported events', () => {
     expect(job.concurrency.group).toContain('github.event.release.tag_name');
     expect(job.concurrency.group).toContain('github.event.inputs.release_tag');
     expect(job.concurrency['cancel-in-progress']).toBe(false);
