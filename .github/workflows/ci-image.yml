@@ -30,8 +30,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
-  actions: write
 
 jobs:
   local-build:
@@ -270,289 +268,316 @@ jobs:
           docker rm dspace-smoke-test
           echo "Smoke test passed!"
 
-  image:
-    name: Build and push image
+  manual-publisher-trust:
+    name: Validate exact manual publisher ref
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
-    # Ordinary branch-build publish path. Must never run for release events — that is the
-    # exact class of bug that let branch builds move vX.Y.Z (see DSPACE #4727 and
-    # outages/2026-07-23-dspace-production-version-drift.md); semantic tags are published
-    # exclusively by the semantic-release job below.
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == '')
+    timeout-minutes: 3
+    permissions: {}
+    steps:
+      - name: Require exact canonical repository and branch
+        env:
+          TARGET_BRANCH: ${{ github.event.inputs.branch }}
+          RELEASE_TAG: ${{ github.event.inputs.release_tag }}
+        run: |
+          set -euo pipefail
+          # Actions expression equality ignores case. Bash case uses exact refs.
+          [[ "$GITHUB_REPOSITORY" == democratizedspace/dspace ]]
+          case "$GITHUB_REF" in refs/heads/main|refs/heads/v3) ;; *) exit 1 ;; esac
+          if [[ -z "$RELEASE_TAG" ]]; then
+            case "$TARGET_BRANCH" in ''|main|v3) ;; *) exit 1 ;; esac
+          fi
+
+  publisher-source:
+    name: Resolve native image source
+    needs: manual-publisher-trust
+    if: >-
+      ${{ !cancelled() &&
+      (github.event_name == 'pull_request' ||
+       github.event_name == 'push' ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.event.inputs.release_tag == '' &&
+        needs.manual-publisher-trust.result == 'success')) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      sha: ${{ steps.source.outputs.sha }}
+      tags_prefix: ${{ steps.source.outputs.tags_prefix }}
+      version: ${{ steps.source.outputs.version }}
+      stamp: ${{ steps.source.outputs.stamp }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ (github.event_name == 'workflow_dispatch' && format('refs/heads/{0}', github.event.inputs.branch || github.ref_name)) || github.sha }}
+          persist-credentials: false
+      - name: Freeze source and build coordinates
+        id: source
+        env:
+          SOURCE_BRANCH: ${{ github.event.inputs.branch || github.base_ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_BRANCH" == main || "$SOURCE_BRANCH" == v3 ]]
+          sha="$(git rev-parse HEAD)"
+          [[ "$sha" =~ ^[0-9a-f]{40}$ ]]
+          if [[ "$GITHUB_EVENT_NAME" != workflow_dispatch ]]; then
+            test "$sha" = "$GITHUB_SHA"
+          fi
+          version="$(jq -er '.version | select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))' package.json)"
+          {
+            echo "sha=$sha"
+            echo "tags_prefix=$SOURCE_BRANCH"
+            echo "version=v${version}+${sha:0:7}"
+            echo "stamp=$(git show -s --format=%cI HEAD)"
+          } >> "$GITHUB_OUTPUT"
+
+  publisher-native:
+    name: Prepare native publisher image (${{ matrix.arch }})
+    needs: publisher-source
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    env:
+      ARCH: ${{ matrix.arch }}
+      SHA: ${{ needs.publisher-source.outputs.sha }}
+      PREFIX: ${{ needs.publisher-source.outputs.tags_prefix }}
+      VERSION: ${{ needs.publisher-source.outputs.version }}
+      STAMP: ${{ needs.publisher-source.outputs.stamp }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.publisher-source.outputs.sha }}
+          persist-credentials: false
+      - name: Confirm native host and frozen source
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SHA"
+          case "$ARCH:$RUNNER_ARCH" in amd64:X64|arm64:ARM64) ;; *) exit 1 ;; esac
+          test "$(docker version --format '{{.Server.Os}}/{{.Server.Arch}}')" = "linux/$ARCH"
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+        with:
+          version: v0.39.0
+      - name: Export OCI and smoke-test image from one native build
+        env:
+          IMAGE_SOURCE: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/native-image"
+          docker buildx build --platform "linux/$ARCH" --provenance=false --sbom=false \
+            --build-arg "DSPACE_VERSION=$VERSION" --build-arg "GIT_SHA=$SHA" \
+            --build-arg "VITE_GIT_SHA=$SHA" --build-arg ENFORCE_VITE_GIT_SHA=1 \
+            --build-arg "BUILD_TIMESTAMP=$STAMP" \
+            --build-arg "DSPACE_IMAGE=ghcr.io/democratizedspace/dspace:$PREFIX-${SHA:0:7}" \
+            --label "org.opencontainers.image.source=$IMAGE_SOURCE" \
+            --label "org.opencontainers.image.revision=$SHA" \
+            --label "org.opencontainers.image.created=$STAMP" \
+            --tag dspace-verify:latest \
+            --output "type=oci,dest=$RUNNER_TEMP/native-image/image.tar" \
+            --output "type=docker,dest=$RUNNER_TEMP/runtime-test.tar" .
+          docker load --input "$RUNNER_TEMP/runtime-test.tar"
+          docker image inspect dspace-verify:latest --format '{{.Id}}' > "$RUNNER_TEMP/native-image/tested-config"
+      - name: Verify bundled and served runtime identity
+        run: |
+          set -euo pipefail
+          EXPECTED_SHA="$SHA" docker run --rm --network none -e EXPECTED_SHA \
+            -e VERIFY_BUILD_META_PATH=/app/build_meta.json -v "$PWD:/verification-repo:ro" \
+            dspace-verify:latest node /verification-repo/scripts/verify-build-sha.mjs /app/dist
+          docker run --rm --network none -e VERIFY_REPO_ROOT=/app \
+            -e VERIFY_BUILD_META_PATH=/app/build_meta.json -v "$PWD:/verification-repo:ro" \
+            -w /app dspace-verify:latest node /verification-repo/scripts/verify-chat-build-stamp.mjs
+          label_revision="$(docker image inspect dspace-verify:latest --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')"
+          test "$label_revision" = "$SHA"
+          container="$(docker run -d -p 127.0.0.1:18080:8080 dspace-verify:latest)"
+          trap 'docker rm -f "$container"' EXIT
+          info="$RUNNER_TEMP/build-info.json"
+          for attempt in $(seq 1 30); do
+            if curl -fsS --max-time 3 http://127.0.0.1:18080/build-info.json > "$info"; then break; fi
+            sleep 2
+          done
+          if [[ ! -s "$info" ]]; then
+            docker logs "$container" >&2 || true
+            exit 1
+          fi
+          jq -e --arg sha "$SHA" '.revision == $sha' "$info"
+          curl -fsS --max-time 10 http://127.0.0.1:18080/ > "$RUNNER_TEMP/home.html"
+          grep -F "name=\"dspace-build-revision\" content=\"${SHA}\"" "$RUNNER_TEMP/home.html"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: publisher-native-${{ matrix.arch }}
+          path: ${{ runner.temp }}/native-image/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 2
+
+  publisher-index:
+    name: Verify native publisher index without publishing
+    needs: [publisher-source, publisher-native]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      digest: ${{ steps.index.outputs.digest }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.publisher-source.outputs.sha }}
+          persist-credentials: false
+      # No cross-run ID/token: consume only this run's two named immutable artifacts.
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: publisher-native-*
+          path: ${{ runner.temp }}/native-inputs
+      - name: Assemble and verify native index
+        id: index
+        env:
+          SHA: ${{ needs.publisher-source.outputs.sha }}
+          VERSION: ${{ needs.publisher-source.outputs.version }}
+          IMAGE_SOURCE: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SHA"
+          python3 scripts/test-prepare-native-image-index.py
+          digest="$(python3 scripts/prepare-native-image-index.py "$RUNNER_TEMP/native-inputs" "$RUNNER_TEMP/native-index" "$SHA" "$IMAGE_SOURCE" "$VERSION")"
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+
+  image:
+    name: Publish verified native image
+    needs: [publisher-source, publisher-index]
+    if: >-
+      github.repository == 'democratizedspace/dspace' &&
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v3') &&
+      (github.event_name == 'push' ||
+       (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == ''))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      packages: write
     concurrency:
-      # Serialize the absence check plus push by target branch. workflow_dispatch can
-      # choose a checkout branch independently of github.sha, so branch-scoped locking
-      # keeps runs for the same published tag namespace from racing.
       group: dspace-image-${{ github.event.inputs.branch || github.ref_name }}
       cancel-in-progress: false
     outputs:
       image-tag: ${{ steps.tags.outputs.sha_tag }}
+    env:
+      SHA: ${{ needs.publisher-source.outputs.sha }}
+      PREFIX: ${{ needs.publisher-source.outputs.tags_prefix }}
+      VERSION: ${{ needs.publisher-source.outputs.version }}
+      EXPECTED_INDEX: ${{ needs.publisher-index.outputs.digest }}
+      IMAGE_SOURCE: ${{ github.server_url }}/${{ github.repository }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          ref: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.branch) || github.ref }}
+          ref: ${{ needs.publisher-source.outputs.sha }}
           persist-credentials: false
-
-      - name: Ensure build SHA is present
-        run: |
-          if [ -z "$GITHUB_SHA" ]; then
-            echo "GITHUB_SHA is empty; refusing to build." >&2
-            exit 1
-          fi
-
-      # Explicitly install the Node version from .nvmrc so version reads stay stable even if
-      # runner defaults change.
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          node-version-file: .nvmrc
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.0.0
-          run_install: false
-
-      - name: Verify pnpm is on PATH
-        run: |
-          command -v pnpm
-          pnpm --version
-
-      # Use Node to read the app version from package.json for image tagging.
-      - name: Read package version
-        id: version
-        run: |
-          version="$(node -p "require('./package.json').version")"
-          echo "version=${version}" >> "$GITHUB_OUTPUT"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --reporter=append-only
-
-      - name: Build and verify chat build stamp
-        run: |
-          pnpm run build
-          pnpm run verify:chat-build-stamp
-
-      - name: Define image tags
+          pattern: publisher-native-*
+          path: ${{ runner.temp }}/native-inputs
+      - name: Reverify exact inputs and publication coordinates
         id: tags
         env:
           SOURCE_BRANCH: ${{ github.event.inputs.branch || github.ref_name }}
         run: |
-          branch="$SOURCE_BRANCH"
-          full_sha="$(git rev-parse HEAD)"
-          short_sha="$(git rev-parse --short=7 HEAD)"
-          tag_prefix="${branch//\//-}"
-          sha_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-${short_sha}"
-          latest_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-latest"
-          echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
-          echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
-          echo "full_sha=${full_sha}" >> "$GITHUB_OUTPUT"
-          echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
-
-      - name: Set image build version
-        id: build_version
+          set -euo pipefail
+          [[ "$PREFIX" == main || "$PREFIX" == v3 ]]
+          test "$SOURCE_BRANCH" = "$PREFIX"
+          test "$(git rev-parse HEAD)" = "$SHA"
+          if [[ "$GITHUB_EVENT_NAME" == push ]]; then test "$GITHUB_SHA" = "$SHA"; fi
+          digest="$(python3 scripts/prepare-native-image-index.py "$RUNNER_TEMP/native-inputs" "$RUNNER_TEMP/native-index" "$SHA" "$IMAGE_SOURCE" "$VERSION")"
+          test "$digest" = "$EXPECTED_INDEX"
+          echo "sha_tag=ghcr.io/democratizedspace/dspace:$PREFIX-${SHA:0:7}" >> "$GITHUB_OUTPUT"
+          echo "latest_tag=ghcr.io/democratizedspace/dspace:$PREFIX-latest" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+      - name: Install checksum-pinned Crane
         run: |
-          build_version="v${{ steps.version.outputs.version }}+${{ steps.tags.outputs.short_sha }}"
-          echo "value=${build_version}" >> "$GITHUB_OUTPUT"
-
-      - name: Set image metadata
-        id: metadata
-        env:
-          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
-          GIT_SHA: ${{ steps.tags.outputs.full_sha }}
-        run: |
-          created="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-          echo "created=${created}" >> "$GITHUB_OUTPUT"
-          echo "source=${REPO_URL}" >> "$GITHUB_OUTPUT"
-          echo "revision=${GIT_SHA}" >> "$GITHUB_OUTPUT"
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/crane-bin"
+          archive="$RUNNER_TEMP/crane.tar.gz"
+          curl -fsSL --max-time 90 -o "$archive" \
+            https://github.com/google/go-containerregistry/releases/download/v0.20.7/go-containerregistry_Linux_x86_64.tar.gz
+          printf '%s  %s\n' 8ef3564d264e6b5ca93f7b7f5652704c4dd29d33935aff6947dd5adefd05953e "$archive" | sha256sum --check
+          tar -xzf "$archive" -C "$RUNNER_TEMP/crane-bin" crane
+          echo "$RUNNER_TEMP/crane-bin" >> "$GITHUB_PATH"
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
-        with:
-          platforms: arm64
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build image for SHA verification
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          platforms: linux/amd64
-          provenance: false
-          load: true
-          tags: dspace-verify:latest
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-            BUILD_TIMESTAMP=${{ steps.metadata.outputs.created }}
-            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
-          labels: |
-            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
-            org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
-            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max,ignore-error=true
-
-      - name: Assert build SHA is baked into frontend bundle
-        env:
-          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
-        run: |
-          docker run --rm \
-            -e EXPECTED_SHA \
-            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
-            -v "$PWD:/verification-repo:ro" \
-            dspace-verify:latest \
-            node /verification-repo/scripts/verify-build-sha.mjs /app/dist
-
-      - name: Verify chat build stamp inside image
-        run: |
-          docker run --rm \
-            -e VERIFY_REPO_ROOT=/app \
-            -e VERIFY_BUILD_META_PATH=/app/build_meta.json \
-            -v "$PWD:/verification-repo:ro" \
-            -w /app \
-            dspace-verify:latest \
-            node /verification-repo/scripts/verify-chat-build-stamp.mjs
-
-      - name: Compare runtime identity with OCI revision
-        env:
-          EXPECTED_SHA: ${{ steps.tags.outputs.full_sha }}
-        run: |
-          label_revision="$(docker image inspect dspace-verify:latest --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')"
-          test "$label_revision" = "$EXPECTED_SHA"
-          container="$(docker run -d -p 18080:8080 dspace-verify:latest)"
-          trap 'docker rm -f "$container"' EXIT
-          rm -f /tmp/build-info.json
-          for attempt in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:18080/build-info.json > /tmp/build-info.json; then
-              break
-            fi
-            sleep 2
-          done
-          if [ ! -s /tmp/build-info.json ]; then
-            echo "/build-info.json did not become reachable or returned an empty response" >&2
-            docker logs "$container" >&2 || true
-            exit 1
-          fi
-          test "$(node -p "JSON.parse(require('fs').readFileSync('/tmp/build-info.json')).revision")" = "$label_revision"
-          curl -fsS http://127.0.0.1:18080/ | grep -F "name=\"dspace-build-revision\" content=\"${label_revision}\""
-
-      - name: Ensure immutable SHA tag is absent before push attempt 1
-        id: check_sha_absent_1
+      - name: Require immutable absence and publish verified index once
         env:
           GHCR_GUARD_USERNAME: ${{ github.actor }}
           GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
           IMAGE_TAG: ${{ steps.tags.outputs.sha_tag }}
         run: |
-          node scripts/ghcr-manifest.mjs check-absent \
-            --owner democratizedspace \
-            --repo dspace \
-            --tag "${IMAGE_TAG##*:}"
-
-      - name: Build and push image (attempt 1)
-        id: build_push_1
-        continue-on-error: true
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
-          provenance: false
-          tags: |
-            ${{ steps.tags.outputs.sha_tag }}
-            ${{ steps.tags.outputs.latest_tag }}
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-            BUILD_TIMESTAMP=${{ steps.metadata.outputs.created }}
-            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
-          labels: |
-            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
-            org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
-            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max,ignore-error=true
-
-      - name: Ensure immutable SHA tag is absent before push attempt 2
-        id: check_sha_absent_2
-        if: steps.build_push_1.outcome == 'failure'
+          set -euo pipefail
+          node scripts/ghcr-manifest.mjs check-absent --owner democratizedspace --repo dspace --tag "${IMAGE_TAG##*:}"
+          crane push --index "$RUNNER_TEMP/native-index" "$IMAGE_TAG"
+      - name: Verify registry index and both native children before latest
         env:
+          IMAGE_TAG: ${{ steps.tags.outputs.sha_tag }}
+          LATEST_TAG: ${{ steps.tags.outputs.latest_tag }}
           GHCR_GUARD_USERNAME: ${{ github.actor }}
           GHCR_GUARD_PASSWORD: ${{ secrets.GITHUB_TOKEN }} # scan-secrets: ignore (workflow secret reference)
-          IMAGE_TAG: ${{ steps.tags.outputs.sha_tag }}
         run: |
-          node scripts/ghcr-manifest.mjs check-absent \
-            --owner democratizedspace \
-            --repo dspace \
-            --tag "${IMAGE_TAG##*:}"
-
-      - name: Build and push image (attempt 2)
-        id: build_push_2
-        if: steps.build_push_1.outcome == 'failure' && steps.check_sha_absent_2.outcome == 'success'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
-          provenance: false
-          tags: |
-            ${{ steps.tags.outputs.sha_tag }}
-            ${{ steps.tags.outputs.latest_tag }}
-          build-args: |
-            DSPACE_VERSION=${{ steps.build_version.outputs.value }}
-            GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            VITE_GIT_SHA=${{ steps.tags.outputs.full_sha }}
-            ENFORCE_VITE_GIT_SHA=1
-            BUILD_TIMESTAMP=${{ steps.metadata.outputs.created }}
-            DSPACE_IMAGE=${{ steps.tags.outputs.sha_tag }}
-          labels: |
-            org.opencontainers.image.source=${{ steps.metadata.outputs.source }}
-            org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
-            org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max,ignore-error=true
-
-      - name: Summarize published image tags
-        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
-        run: |
-          sha_tag="${{ steps.tags.outputs.sha_tag }}"
-          latest_tag="${{ steps.tags.outputs.latest_tag }}"
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { readFile } from 'node:fs/promises';
+          import { inspectImage } from './scripts/ghcr-manifest.mjs';
+          const { IMAGE_TAG, SHA, EXPECTED_INDEX, RUNNER_TEMP, GHCR_GUARD_USERNAME, GHCR_GUARD_PASSWORD } = process.env;
+          const local = JSON.parse(await readFile(RUNNER_TEMP + '/native-index/index.json', 'utf8'));
+          const digests = Object.fromEntries(local.manifests.map(({ platform, digest }) => [platform.architecture, digest]));
+          const remote = await inspectImage({
+            owner: 'democratizedspace', repo: 'dspace', tag: IMAGE_TAG.split(':').at(-1),
+            revision: SHA, username: GHCR_GUARD_USERNAME, password: GHCR_GUARD_PASSWORD,
+          });
+          assert.deepEqual(remote, { indexDigest: EXPECTED_INDEX, amd64Digest: digests.amd64, arm64Digest: digests.arm64 });
+          NODE
+          repo="${IMAGE_TAG%:*}"
+          # An older run can finish after a newer push; never move latest back.
+          ref="$(git ls-remote --exit-code origin "refs/heads/$PREFIX")"
           {
-            echo "## DSPACE image tags"
+            echo '## DSPACE image tags'
             echo
-            echo "Copy the tag-only values into Sugarkube \`tag=...\` commands; use the image refs for GHCR verification."
-            echo
-            echo "| Name | Tag-only value for Sugarkube | Published image ref |"
-            echo "| --- | --- | --- |"
-            echo "| Immutable image tag | \`${sha_tag##*:}\` | \`${sha_tag}\` |"
-            echo "| Mutable branch convenience tag | \`${latest_tag##*:}\` | \`${latest_tag}\` |"
-            echo "| Short SHA | \`${{ steps.tags.outputs.short_sha }}\` | n/a |"
+            echo "Immutable tag: \`${IMAGE_TAG##*:}\`"
+            echo "Verified image: \`$repo@$EXPECTED_INDEX\`"
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Fail if both image pushes failed
-        if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome == 'failure'
-        run: exit 1
+          if [[ "${ref%%$'\t'*}" != "$SHA" ]]; then
+            echo "Latest not moved: $PREFIX has advanced." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          crane tag "$repo@$EXPECTED_INDEX" "${LATEST_TAG##*:}"
+          test "$(crane digest "$LATEST_TAG")" = "$EXPECTED_INDEX"
+          echo "Verified mutable convenience tag: \`${LATEST_TAG##*:}\`" >> "$GITHUB_STEP_SUMMARY"
 
   semantic-release:
     name: Publish semantic release image alias and manifest
     runs-on: ubuntu-24.04
-    if: (github.event_name == 'release' && github.event.action == 'published') || (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '')
+    permissions:
+      contents: read
+      packages: write
+      actions: write
+    # Normal published releases do not depend on the manual-only trust check.
+    needs: manual-publisher-trust
+    if: >-
+      ${{ !cancelled() &&
+      ((github.event_name == 'release' && github.event.action == 'published') ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.event.inputs.release_tag != '' &&
+        needs.manual-publisher-trust.result == 'success')) }}
     concurrency:
       group: dspace-semantic-image-${{ github.event.release.tag_name || github.event.inputs.release_tag }}
       cancel-in-progress: false
