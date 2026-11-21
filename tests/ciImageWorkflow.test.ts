@@ -135,6 +135,9 @@ const canonicalContext = {
   'github.event.inputs.release_tag': '',
   'github.event.inputs.branch': 'main',
   'needs.manual-publisher-trust.result': 'success',
+  'needs.publisher-source.result': 'success',
+  'needs.publisher-native.result': 'success',
+  'needs.publisher-index.result': 'success',
 };
 
 describe('ci-image.yml triggers', () => {
@@ -339,6 +342,60 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
     expect(source.run).toContain(
       '[[ "$SOURCE_BRANCH" == main || "$SOURCE_BRANCH" == v3 ]]'
     );
+  });
+
+  it('continues after a skipped manual ancestor only when immediate dependencies succeed', () => {
+    const source = workflow.jobs['publisher-source'];
+    const native = workflow.jobs['publisher-native'];
+    const index = workflow.jobs['publisher-index'];
+    for (const event of ['pull_request', 'push']) {
+      const context = {
+        ...canonicalContext,
+        'github.event_name': event,
+        'github.ref':
+          event === 'push' ? 'refs/heads/main' : 'refs/pull/4904/merge',
+        'needs.manual-publisher-trust.result': 'skipped',
+      };
+      expect(enables(source.if, context)).toBe(true);
+      expect(enables(native.if, context)).toBe(true);
+      expect(enables(index.if, context)).toBe(true);
+      expect(enables(job.if, context)).toBe(event === 'push');
+      // Even an ordinary PR evaluated with an allowed base ref cannot publish.
+      expect(
+        enables(job.if, {
+          ...context,
+          'github.event_name': 'pull_request',
+          'github.ref': 'refs/heads/main',
+        })
+      ).toBe(false);
+      for (const target of [native, index, job]) {
+        expect(target.if).toContain('!cancelled()'); // Suppress implicit transitive success().
+        expect(enables(target.if, { ...context, cancelled: 'true' })).toBe(
+          false
+        );
+      }
+      for (const outcome of ['failure', 'skipped', 'cancelled']) {
+        const badSource = {
+          ...context,
+          'needs.publisher-source.result': outcome,
+        };
+        expect(enables(native.if, badSource)).toBe(false);
+        expect(enables(index.if, badSource)).toBe(false);
+        expect(enables(job.if, badSource)).toBe(false);
+        expect(
+          enables(index.if, {
+            ...context,
+            'needs.publisher-native.result': outcome,
+          })
+        ).toBe(false);
+        expect(
+          enables(job.if, {
+            ...context,
+            'needs.publisher-index.result': outcome,
+          })
+        ).toBe(false);
+      }
+    }
   });
 
   it('serializes ordinary publication by target branch without workflow SHA', () => {

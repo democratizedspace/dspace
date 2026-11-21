@@ -335,6 +335,8 @@ jobs:
   publisher-native:
     name: Prepare native publisher image (${{ matrix.arch }})
     needs: publisher-source
+    # A skipped manual-only ancestor on PRs/pushes must not imply failure.
+    if: ${{ !cancelled() && needs.publisher-source.result == 'success' }}
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 45
     permissions:
@@ -422,6 +424,10 @@ jobs:
   publisher-index:
     name: Verify native publisher index without publishing
     needs: [publisher-source, publisher-native]
+    if: >-
+      ${{ !cancelled() &&
+      needs.publisher-source.result == 'success' &&
+      needs.publisher-native.result == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
@@ -455,10 +461,13 @@ jobs:
     name: Publish verified native image
     needs: [publisher-source, publisher-index]
     if: >-
+      ${{ !cancelled() &&
+      needs.publisher-source.result == 'success' &&
+      needs.publisher-index.result == 'success' &&
       github.repository == 'democratizedspace/dspace' &&
       (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v3') &&
       (github.event_name == 'push' ||
-       (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == ''))
+       (github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag == '')) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     permissions:
