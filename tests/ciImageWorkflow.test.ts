@@ -4,6 +4,7 @@ import {
   mkdtempSync,
   mkdirSync,
   readFileSync,
+  rmSync,
   writeFileSync,
 } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -397,6 +398,94 @@ describe('ci-image.yml "image" job (ordinary branch publish path)', () => {
       }
     }
   });
+
+  it.each([
+    '2026-11-20T01:41:58-08:00',
+    '2026-11-20T15:11:58+05:30',
+    '2026-11-20T09:41:58+00:00',
+  ])(
+    'freezes source time %s as the exact UTC instant accepted by production',
+    (offsetStamp) => {
+      const directory = mkdtempSync(join(tmpdir(), 'ci-image-timezone-'));
+      try {
+        const output = join(directory, 'output');
+        const meta = join(directory, 'build_meta.json');
+        const git = (...args: string[]) => {
+          const result = spawnSync('git', args, {
+            cwd: directory,
+            encoding: 'utf8',
+            env: {
+              ...process.env,
+              GIT_AUTHOR_DATE: offsetStamp,
+              GIT_COMMITTER_DATE: offsetStamp,
+            },
+          });
+          expect(result.status, result.stderr).toBe(0);
+          return result.stdout.trim();
+        };
+        git('init', '--quiet');
+        git(
+          '-c',
+          'user.name=Fixture',
+          '-c',
+          'user.email=fixture@example.invalid',
+          'commit',
+          '--allow-empty',
+          '--no-gpg-sign',
+          '--quiet',
+          '-m',
+          'Timestamp fixture'
+        );
+        const sha = git('rev-parse', 'HEAD');
+        expect(git('show', '-s', '--format=%cI', 'HEAD').slice(0, 19)).toBe(
+          offsetStamp.slice(0, 19)
+        );
+        const source = findSteps(workflow.jobs['publisher-source']).find(
+          (step) => step.id === 'source'
+        );
+        writeFileSync(join(directory, 'package.json'), '{"version":"3.1.0"}');
+        const result = spawnSync('bash', ['-c', source.run], {
+          cwd: directory,
+          encoding: 'utf8',
+          env: {
+            ...process.env,
+            SOURCE_BRANCH: 'main',
+            GITHUB_EVENT_NAME: 'push',
+            GITHUB_SHA: sha,
+            GITHUB_OUTPUT: output,
+            TZ: 'Pacific/Honolulu',
+          },
+        });
+        expect(result.status, result.stderr).toBe(0);
+        const stamp = readFileSync(output, 'utf8').match(/^stamp=(.+)$/m)?.[1];
+        expect(stamp).toBe('2026-11-20T09:41:58Z');
+        expect(Date.parse(stamp!)).toBe(Date.parse(offsetStamp));
+        const validator = spawnSync(
+          process.execPath,
+          [join(repoRoot, 'scripts', 'write-build-meta.mjs')],
+          {
+            cwd: directory,
+            encoding: 'utf8',
+            env: {
+              ...process.env,
+              GITHUB_SHA: sha,
+              BUILD_TIMESTAMP: stamp!,
+              DSPACE_PRODUCTION_BUILD: '1',
+              VERIFY_BUILD_META_PATH: meta,
+              DSPACE_IMAGE:
+                'ghcr.io/democratizedspace/dspace:main-' + sha.slice(0, 7),
+            },
+          }
+        );
+        expect(validator.status, validator.stderr).toBe(0);
+        expect(JSON.parse(readFileSync(meta, 'utf8')).buildTimestamp).toBe(
+          stamp
+        );
+      } finally {
+        rmSync(directory, { force: true, recursive: true });
+      }
+    }
+  );
 
   it('serializes ordinary publication by target branch without workflow SHA', () => {
     expect(job.concurrency.group).toBe(
