@@ -207,4 +207,32 @@ describe('custom content backup', () => {
         expect(item?.name).toBe('Custom item with process');
         expect(process?.title).toBe('Fixture process');
     });
+
+    test('custom backups omit the chat provider and restore preserves the game snapshots', async () => {
+        const mainState = {
+            inventory: { safe: 1 },
+            settings: { chatProvider: 'openai' },
+            versionNumberString: '3.0',
+        };
+        const serialized = JSON.stringify(mainState);
+        localStorage.setItem('gameState', serialized);
+        localStorage.setItem('gameStateBackup', serialized);
+        const id = await db.items.add({
+            id: 'preference-qa-item',
+            name: 'Custom item',
+            description: 'Synthetic custom-content fixture',
+        });
+
+        const customExport = await buildCustomContentBackupData();
+        expect(customExport).not.toHaveProperty('settings');
+        expect(customExport).not.toHaveProperty('payload');
+        expect(customExport.items).toHaveLength(1);
+
+        await resetCustomContent();
+        await restoreCustomContentBackup(customExport);
+
+        expect((await db.items.get(id))?.name).toBe('Custom item');
+        expect(localStorage.getItem('gameState')).toBe(serialized);
+        expect(localStorage.getItem('gameStateBackup')).toBe(serialized);
+    });
 });

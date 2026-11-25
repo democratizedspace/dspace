@@ -60,4 +60,51 @@ test.describe('IndexedDB availability', () => {
         expect(indexedDbProbe.canOpenDatabase).toBe(true);
         expect(indexedDbProbe.hasLightweightSnapshot).toBe(true);
     });
+
+    test.describe('localStorage fallback', () => {
+        test.use({ serviceWorkers: 'block' });
+
+        test('keeps the selected chat provider across reload when IndexedDB is blocked', async ({
+            baseURL,
+            page,
+        }) => {
+            const localURL = new URL(baseURL || '');
+            expect(['127.0.0.1', 'localhost', '[::1]']).toContain(localURL.hostname);
+            await page.route('**/*', (route) =>
+                new URL(route.request().url()).origin === localURL.origin
+                    ? route.continue()
+                    : route.abort()
+            );
+            await page.addInitScript(() => {
+                Object.defineProperty(IDBFactory.prototype, 'open', {
+                    configurable: true,
+                    value: () => {
+                        throw new DOMException(
+                            'IndexedDB is blocked in this profile',
+                            'SecurityError'
+                        );
+                    },
+                });
+            });
+            page.on('dialog', (dialog) => dialog.dismiss());
+
+            await page.goto('/settings');
+            const panel = page.getByTestId('chat-provider-settings');
+            const tokenPlace = panel.locator('input[name="chat-provider"][value="token-place"]');
+            const openAI = panel.locator('input[name="chat-provider"][value="openai"]');
+            await expect(tokenPlace).toBeChecked();
+            await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+            await openAI.check();
+
+            await expect
+                .poll(() =>
+                    page.evaluate(() => JSON.parse(localStorage.getItem('gameState') || '{}'))
+                )
+                .toMatchObject({ settings: { chatProvider: 'openai' } });
+
+            await page.reload();
+            await expect(openAI).toBeChecked();
+            await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
+        });
+    });
 });

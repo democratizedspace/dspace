@@ -305,4 +305,34 @@ describe('gameState - common utilities', () => {
         expect(changed).toBe(true);
         expect(loadGameState().inventory['multi-tab-item']).toBe(7);
     });
+
+    test('a game save round-trip preserves the chosen chat provider without credentials', async () => {
+        const state = loadGameState();
+        state.settings.chatProvider = 'openai';
+        state._meta.chatProviderExplicit = true;
+        state.inventory['1'] = 5;
+        await saveGameState(state);
+
+        // This is inert fixture data; token.place does not have a supported credential field.
+        const stateOverride = {
+            ...loadGameState(),
+            tokenPlace: { apiKey: 'synthetic-token-place-fixture' },
+        };
+        const exported = exportGameStateString({ stateOverride });
+        const { payload } = decodeBase64Json(exported);
+        expect(payload.settings.chatProvider).toBe('openai');
+        expect(payload._meta.chatProviderExplicit).toBe(true);
+        expect(payload).not.toHaveProperty('tokenPlace');
+        expect(stateOverride.tokenPlace.apiKey).toBe('synthetic-token-place-fixture');
+
+        await resetGameState();
+        expect(hasExplicitChatProvider(loadGameState())).toBe(false);
+        await importGameStateString(exported);
+
+        const restored = loadGameState();
+        expect(restored.settings.chatProvider).toBe('openai');
+        expect(hasExplicitChatProvider(restored)).toBe(true);
+        expect(restored.inventory['1']).toBe(5);
+        expect(restored).not.toHaveProperty('tokenPlace');
+    });
 });
