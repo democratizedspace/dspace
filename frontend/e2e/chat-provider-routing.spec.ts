@@ -1,6 +1,9 @@
 import { constants, publicEncrypt, webcrypto } from 'node:crypto';
+import { createRequire } from 'node:module';
 
 import { expect, test, type Page } from '@playwright/test';
+
+import { npcPersonas } from '../src/data/npcPersonas';
 
 import { clearUserData, waitForHydration } from './test-helpers';
 
@@ -10,6 +13,11 @@ type CapturedRequest = {
     headers: Record<string, string>;
     body: Record<string, unknown>;
 };
+
+// Playwright runs this fixture in Node; the package's CJS export resolves there.
+const FixtureRSA = createRequire(import.meta.url)(
+    'jsencrypt'
+) as typeof import('jsencrypt').JSEncrypt;
 
 const encoder = new TextEncoder();
 const bytesToBase64 = (bytes: ArrayBuffer | Uint8Array) =>
@@ -30,7 +38,12 @@ async function generateRelayKeypair() {
     );
     const spki = await webcrypto.subtle.exportKey('spki', pair.publicKey);
     const publicPem = base64ToPem(bytesToBase64(spki));
-    return { publicPem, publicKeyBase64: bytesToBase64(encoder.encode(publicPem)) };
+    const privateKey = await webcrypto.subtle.exportKey('pkcs8', pair.privateKey);
+    const privatePem = base64ToPem(bytesToBase64(privateKey)).replaceAll(
+        'PUBLIC KEY',
+        'PRIVATE KEY'
+    );
+    return { publicKeyBase64: bytesToBase64(encoder.encode(publicPem)), privatePem };
 }
 
 async function encryptRelayEnvelope(envelope: Record<string, unknown>, publicPem: string) {
@@ -59,6 +72,37 @@ async function encryptRelayEnvelope(envelope: Record<string, unknown>, publicPem
     };
 }
 
+async function decryptFixtureRequest(body: Record<string, unknown>, privatePem: string) {
+    // The isolated compute fixture owns this disposable key pair; no application-private
+    // key is exported by the browser, and neither fixture can reach a provider.
+    const rsa = new FixtureRSA();
+    rsa.setPrivateKey(privatePem);
+    const rawKey = rsa.decrypt(String(body.cipherkey));
+    expect(rawKey).not.toBe(false);
+    const aesKey = await webcrypto.subtle.importKey(
+        'raw',
+        Buffer.from(String(rawKey), 'base64'),
+        { name: 'AES-CBC' },
+        false,
+        ['decrypt']
+    );
+    const plaintext = await webcrypto.subtle.decrypt(
+        { name: 'AES-CBC', iv: Buffer.from(String(body.iv), 'base64') },
+        aesKey,
+        Buffer.from(String(body.ciphertext), 'base64')
+    );
+    return JSON.parse(new TextDecoder().decode(plaintext)) as {
+        protocol: string;
+        version: number;
+        request_id: string;
+        client_public_key: string;
+        api_v1_request: {
+            messages: { role: string; content: string }[];
+            stream?: boolean;
+        };
+    };
+}
+
 const decodeClientPublicPem = (value: string) => Buffer.from(value, 'base64').toString('utf8');
 
 const tokenPlacePayload = (content = 'token.place assistant reply') => ({
@@ -78,7 +122,7 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
         requests.push({
             method: route.request().method(),
             url: route.request().url(),
-            headers: route.request().headers(),
+            headers: await route.request().allHeaders(),
             body: {},
         });
         const requestedTier =
@@ -99,7 +143,7 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
         requests.push({
             method: request.method(),
             url: request.url(),
-            headers: request.headers(),
+            headers: await request.allHeaders(),
             body: JSON.parse(request.postData() || '{}'),
         });
         await route.fulfill({
@@ -114,7 +158,7 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
         requests.push({
             method: request.method(),
             url: request.url(),
-            headers: request.headers(),
+            headers: await request.allHeaders(),
             body,
         });
         expect(body.retrieval_credential).toBe('e2e-retrieval-proof');
@@ -146,7 +190,16 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
             }),
         });
     });
-    return requests;
+    return Object.assign(requests, {
+        decryptDispatch: () => {
+            const dispatch = requests.find(
+                ({ method, url }) =>
+                    method === 'POST' && new URL(url).pathname === '/api/v1/relay/requests'
+            );
+            expect(dispatch).toBeDefined();
+            return decryptFixtureRequest(dispatch!.body, serverKey.privatePem);
+        },
+    });
 }
 
 async function blockLiveChatProviders(page: Page, allow: string[] = []) {
@@ -161,6 +214,36 @@ async function blockLiveChatProviders(page: Page, allow: string[] = []) {
             await route.abort('blockedbyclient');
         }
     );
+}
+
+async function isolateLocalChatBrowser(page: Page, baseURL: string | undefined) {
+    if (!baseURL) throw new Error('Browser relay fixture requires a Playwright baseURL.');
+    const local = new URL(baseURL);
+    test.skip(
+        !['127.0.0.1', 'localhost', '[::1]'].includes(local.hostname),
+        'Browser relay fixture runs only against a loopback DSPACE build.'
+    );
+    // Page-level fixture routes handle the exact mock relay paths first. Every
+    // cross-origin request that falls through is blocked, even on an unknown path.
+    await page
+        .context()
+        .route('**/*', (route) =>
+            new URL(route.request().url()).origin === local.origin
+                ? route.continue()
+                : route.abort('blockedbyclient')
+        );
+
+    const providerPaths: string[] = [];
+    page.on('request', (request) => {
+        const url = new URL(request.url());
+        if (
+            ['token.place', 'staging.token.place', 'api.openai.com'].includes(url.hostname) ||
+            url.pathname.startsWith('/api/v1/chat/')
+        ) {
+            providerPaths.push(`${url.origin}${url.pathname}`);
+        }
+    });
+    return providerPaths;
 }
 
 async function seedState(page: Page, state: Record<string, unknown>) {
@@ -265,7 +348,9 @@ test.describe('Chat provider routing', () => {
 
     test('fresh profile defaults to token.place API v1 without auth or OpenAI key UI', async ({
         page,
+        baseURL,
     }) => {
+        const providerPaths = await isolateLocalChatBrowser(page, baseURL);
         const requests = await routeTokenPlaceSuccess(page);
         await blockLiveChatProviders(page, ['https://token.place/api/v1/relay/']);
 
@@ -274,7 +359,9 @@ test.describe('Chat provider routing', () => {
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toHaveCount(0);
         await expect(page.getByText(/OpenAI API Key Settings/i)).toHaveCount(0);
 
-        await sendFromPanel(chatPanel, 'Route my fresh profile through token.place');
+        const question = 'How do I start my first quest?';
+        await expect(chatPanel.getByText(/token\.place.*(?:API key|credentials?)/i)).toHaveCount(0);
+        await sendFromPanel(chatPanel, question);
         await expect(chatPanel.getByText('token.place assistant reply')).toBeVisible();
 
         const requestUrls = requests.map((request) => new URL(request.url));
@@ -284,25 +371,57 @@ test.describe('Chat provider routing', () => {
             'https://token.place/api/v1/relay/responses/retrieve',
             'https://token.place/api/v1/relay/responses/retrieve',
         ]);
+        expect(providerPaths).toEqual(requestUrls.map((url) => `${url.origin}${url.pathname}`));
+        expect([...requestUrls[0].searchParams.keys()].sort()).toEqual(['context_tier', 'model']);
         expect(requestUrls[0].searchParams.get('context_tier')).toMatch(/^(8k-fast|64k-full)$/);
+        expect(requestUrls[0].searchParams.get('model')).toBe('qwen3-8b-instruct');
+        expect(requests[0].method).toBe('GET');
         const request = requests[1];
         expect(request.method).toBe('POST');
         expect(request.headers.authorization).toBeUndefined();
-        expect(request.body).toEqual(
-            expect.objectContaining({
-                protocol: 'tokenplace_api_v1_relay_e2ee',
-                version: 1,
-                ciphertext: expect.any(String),
-                cipherkey: expect.any(String),
-                iv: expect.any(String),
-                cancel_token: expect.any(String),
-            })
-        );
+        expect(request.body).toEqual({
+            protocol: 'tokenplace_api_v1_relay_e2ee',
+            version: 1,
+            server_public_key: expect.any(String),
+            client_public_key: expect.any(String),
+            request_id: expect.any(String),
+            ciphertext: expect.any(String),
+            cipherkey: expect.any(String),
+            iv: expect.any(String),
+            cancel_token: expect.any(String),
+        });
+        for (const exchange of requests) {
+            expect(exchange.headers).not.toHaveProperty('authorization');
+            expect(exchange.headers).not.toHaveProperty('cookie');
+        }
+        const polling = {
+            client_public_key: request.body.client_public_key,
+            request_id: request.body.request_id,
+            retrieval_credential: 'e2e-retrieval-proof',
+        };
+        expect(requests.slice(2).map(({ method }) => method)).toEqual(['POST', 'POST']);
+        expect(requests[2].body).toEqual(polling);
+        expect(requests[3].body).toEqual({
+            ...polling,
+            acknowledgement_token: 'e2e-acknowledgement-proof',
+        });
+        const decrypted = await requests.decryptDispatch();
+        expect(decrypted).toMatchObject({
+            protocol: request.body.protocol,
+            version: request.body.version,
+            request_id: request.body.request_id,
+            client_public_key: request.body.client_public_key,
+        });
+        expect([undefined, false]).toContain(decrypted.api_v1_request.stream);
+        expect(decrypted.api_v1_request.messages).toContainEqual({
+            role: 'user',
+            content: question,
+        });
         expect(Buffer.from(request.body.iv, 'base64')).toHaveLength(16);
         expect(request.body).not.toHaveProperty('mode');
         expect(request.body).not.toHaveProperty('tag');
         const serializedBody = JSON.stringify(request.body);
-        expect(serializedBody).not.toContain('Route my fresh profile through token.place');
+        expect(serializedBody).not.toContain(question);
         expect(serializedBody).not.toMatch(/apiKey|sk-/i);
         expect(serializedBody).not.toMatch(/raw save|inventory details/i);
         expect(JSON.stringify(request.headers)).not.toMatch(/authorization|apiKey|sk-/i);
@@ -428,29 +547,61 @@ test.describe('Chat provider routing', () => {
 
     test('default token.place flow supports persona switching and debug/RAG payload ordering', async ({
         page,
+        baseURL,
     }) => {
+        const providerPaths = await isolateLocalChatBrowser(page, baseURL);
         const requests = await routeTokenPlaceSuccess(page);
         await blockLiveChatProviders(page, ['https://token.place/api/v1/relay/']);
+        const localKey = 'e2e-private-openai-canary';
         await seedState(page, {
             settings: { chatProvider: 'token-place', showChatDebugPayload: true },
         });
 
-        const chatPanel = await openChat(page, 'token-place');
-        const personaSelect = chatPanel.locator('#chat-persona');
-        const options = await personaSelect.locator('option').evaluateAll((nodes) =>
-            nodes.map((node) => ({
-                value: node.getAttribute('value') || '',
-                text: node.textContent || '',
-            }))
+        await page.goto('/settings');
+        await waitForHydration(page);
+        await page.locator('input[name="chat-provider"][value="openai"]').check();
+        await page.getByLabel('OpenAI API key', { exact: true }).fill(localKey);
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await expect(page.getByTestId('openai-key-status')).toHaveText(
+            'OpenAI API key configured.'
         );
-        expect(options.length).toBeGreaterThan(1);
-        await personaSelect.selectOption(options[1].value);
-        await expect(personaSelect).toHaveValue(options[1].value);
+        await page.locator('input[name="chat-provider"][value="token-place"]').check();
+        await expect(page.getByRole('status')).toHaveText('Chat provider saved: token.place.');
 
-        await sendFromPanel(chatPanel, 'Show the debug payload with RAG context');
+        const chatPanel = await openChat(page, 'token-place');
+        const hydro = npcPersonas.find(({ id }) => id === 'hydro')!;
+        const personaSelect = chatPanel.getByRole('combobox', { name: 'Talk to' });
+        await personaSelect.selectOption(hydro.id);
+        await expect(personaSelect).toHaveValue(hydro.id);
+        await expect(chatPanel.locator('.persona-summary')).toHaveText(hydro.summary);
+        await expect(
+            chatPanel.locator('.persona-selector').getByAltText(`${hydro.name} portrait`)
+        ).toHaveAttribute('src', hydro.avatar);
+        await expect(chatPanel.locator('.assistant').first()).toContainText(hydro.welcomeMessage!);
+
+        const question = 'What are the current game routes?';
+        await sendFromPanel(chatPanel, question);
         await expect(chatPanel.getByText('token.place assistant reply')).toBeVisible();
-        expect(requests.some((request) => request.url.endsWith('/api/v1/relay/requests'))).toBe(
-            true
+        const decrypted = await requests.decryptDispatch();
+        expect(
+            decrypted.api_v1_request.messages.some(
+                ({ role, content }) => role === 'system' && content.includes(hydro.systemPrompt!)
+            )
+        ).toBe(true);
+        expect(
+            decrypted.api_v1_request.messages.some(
+                ({ role, content }) => role === 'system' && content.includes('Docs grounding')
+            )
+        ).toBe(true);
+        expect(JSON.stringify(decrypted)).not.toContain(localKey);
+        expect(JSON.stringify(requests)).not.toContain(localKey);
+        expect(providerPaths.some((url) => new URL(url).hostname === 'api.openai.com')).toBe(false);
+        const sources = chatPanel.getByTestId('sources-used').first();
+        await expect(sources).toBeVisible();
+        await sources.locator('summary').click();
+        await expect(sources.locator('[data-source-type="route"] a')).toHaveAttribute(
+            'href',
+            /\/docs\/routes/
         );
         await expect(page.getByTestId('debug-provider-row')).toContainText('token-place');
         await page.getByRole('button', { name: 'Show prompt' }).click();
@@ -460,7 +611,12 @@ test.describe('Chat provider routing', () => {
         await expect(debugMessages.first()).toBeVisible();
         const debugText = await debugMessages.allTextContents();
         expect(debugText.join('\n')).toMatch(/system|persona|PlayerState|RAG/i);
-        expect(debugText.at(-1)).toContain('Show the debug payload with RAG context');
+        expect(debugText.at(-1)).toContain(question);
+        await expect(
+            chatPanel.locator('[data-testid="chat-debug-message"][data-kind="rag"]').first()
+        ).toBeVisible();
+        expect(debugText.join('\n')).not.toContain(localKey);
+        expect(debugText.join('\n')).not.toMatch(/e2e-retrieval-proof|e2e-acknowledgement-proof/);
         expect(debugText.join('\n')).not.toMatch(
             /token\.place is deferred|chat uses OpenAI|OpenAI-only/i
         );
@@ -468,8 +624,6 @@ test.describe('Chat provider routing', () => {
             JSON.stringify(
                 requests.find((request) => request.url.endsWith('/api/v1/relay/requests'))?.body
             )
-        ).not.toMatch(
-            /token\.place is deferred|chat uses OpenAI|OpenAI-only|Show the debug payload/i
-        );
+        ).not.toContain(question);
     });
 });

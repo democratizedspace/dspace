@@ -11,6 +11,7 @@ const NETWORK_ERROR_MESSAGE = /could not reach openai/i;
 const RATE_LIMIT_MESSAGE = /openai rate limited/i;
 const QUOTA_MESSAGE = /out of credits/i;
 const AUTH_MESSAGE = /api key/i;
+const PRIVATE_DIAGNOSTIC = 'private-openai-diagnostic-e2e';
 const PERMISSION_MESSAGE = /denied access/i;
 const SERVER_MESSAGE = /unavailable right now/i;
 
@@ -77,10 +78,13 @@ type StubMode =
     | 'unknown'
     | 'abort';
 
-const installChatStub = async (page: Page, mode: StubMode) => {
+const installChatStub = async (page: Page, mode: StubMode, recoverAfterFailure = false) => {
     await page.addInitScript(
-        ({ reply, stubMode }) => {
+        ({ reply, initialMode, diagnostic, recover }) => {
+            let nextMode = initialMode;
             const createResponse = async () => {
+                const stubMode = nextMode;
+                if (recover) nextMode = 'success';
                 await new Promise((resolve) => setTimeout(resolve, 750));
 
                 if (stubMode === 'network-error') {
@@ -91,14 +95,14 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 }
 
                 if (stubMode === 'rate-limit') {
-                    const error = new Error('Rate limit exceeded');
+                    const error = new Error(`Rate limit exceeded: ${diagnostic}`);
                     // @ts-expect-error non-standard property for tests
                     error.status = 429;
                     throw error;
                 }
 
                 if (stubMode === 'quota') {
-                    const error = new Error('You exceeded your current quota');
+                    const error = new Error(`You exceeded your current quota: ${diagnostic}`);
                     // @ts-expect-error non-standard property for tests
                     error.status = 429;
                     // @ts-expect-error non-standard property for tests
@@ -109,7 +113,7 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 }
 
                 if (stubMode === 'auth') {
-                    const error = new Error('Incorrect API key provided');
+                    const error = new Error(`Incorrect API key provided: ${diagnostic}`);
                     // @ts-expect-error non-standard property for tests
                     error.status = 401;
                     throw error;
@@ -154,7 +158,12 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 };
             };
         },
-        { reply: LONG_REPLY, stubMode: mode }
+        {
+            reply: LONG_REPLY,
+            initialMode: mode,
+            diagnostic: PRIVATE_DIAGNOSTIC,
+            recover: recoverAfterFailure,
+        }
     );
 };
 
@@ -183,6 +192,16 @@ const sendMessage = async (page: Page, text: string) => {
 
     return { chatPanel, spinner };
 };
+
+async function expectOpenAISubmissionRecovers(chatPanel: ReturnType<Page['locator']>) {
+    await chatPanel.getByRole('textbox').fill('Try the OpenAI request again');
+    await chatPanel.getByRole('button', { name: 'Send' }).click();
+    await expect(
+        chatPanel.locator('.message-bubble.assistant').getByText(LONG_REPLY, { exact: true })
+    ).toBeVisible();
+    await expect(chatPanel.locator('.chat-error')).toHaveCount(0);
+    await expect(chatPanel.locator('.spinner-container')).not.toBeVisible();
+}
 
 test.describe('Chat message flow', () => {
     test.beforeEach(async ({ page }) => {
@@ -215,7 +234,7 @@ test.describe('Chat message flow', () => {
     });
 
     test('surfaces rate limit errors without getting stuck', async ({ page }) => {
-        await installChatStub(page, 'rate-limit');
+        await installChatStub(page, 'rate-limit', true);
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger a rate limit');
 
         const banner = chatPanel.locator('.chat-error');
@@ -225,10 +244,12 @@ test.describe('Chat message flow', () => {
             chatPanel.locator('.message-bubble.assistant').getByText(RATE_LIMIT_MESSAGE)
         ).toBeVisible();
         await expect(spinner).not.toBeVisible();
+        await expect(chatPanel).not.toContainText(PRIVATE_DIAGNOSTIC);
+        await expectOpenAISubmissionRecovers(chatPanel);
     });
 
     test('surfaces quota errors without getting stuck', async ({ page }) => {
-        await installChatStub(page, 'quota');
+        await installChatStub(page, 'quota', true);
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger a quota error');
 
         const banner = chatPanel.locator('.chat-error');
@@ -238,10 +259,12 @@ test.describe('Chat message flow', () => {
             chatPanel.locator('.message-bubble.assistant').getByText(QUOTA_MESSAGE)
         ).toBeVisible();
         await expect(spinner).not.toBeVisible();
+        await expect(chatPanel).not.toContainText(PRIVATE_DIAGNOSTIC);
+        await expectOpenAISubmissionRecovers(chatPanel);
     });
 
     test('surfaces API key errors without getting stuck', async ({ page }) => {
-        await installChatStub(page, 'auth');
+        await installChatStub(page, 'auth', true);
         const { chatPanel, spinner } = await sendMessage(page, 'Trigger an auth error');
 
         const banner = chatPanel.locator('.chat-error');
@@ -251,6 +274,8 @@ test.describe('Chat message flow', () => {
             chatPanel.locator('.message-bubble.assistant').getByText(AUTH_MESSAGE)
         ).toBeVisible();
         await expect(spinner).not.toBeVisible();
+        await expect(chatPanel).not.toContainText(PRIVATE_DIAGNOSTIC);
+        await expectOpenAISubmissionRecovers(chatPanel);
     });
 
     test('surfaces model access errors without getting stuck', async ({ page }) => {
@@ -308,14 +333,30 @@ test.describe('Chat provider routing', () => {
         await clearUserData(page);
     });
 
-    test('OpenAI opt-in without a saved key shows settings guidance without making an OpenAI request', async ({
+    test('OpenAI missing-key guidance leads to a successful submission after configuring a key', async ({
+        baseURL,
+        context,
         page,
     }) => {
-        await page.addInitScript(() => {
-            localStorage.setItem(
-                'gameState',
-                JSON.stringify({ settings: { chatProvider: 'openai' }, openAI: { apiKey: '' } })
-            );
+        const appOrigin = baseURL && new URL(baseURL);
+        test.skip(
+            !appOrigin || !['127.0.0.1', 'localhost', '[::1]'].includes(appOrigin.hostname),
+            'requires an isolated local app for the synthetic OpenAI key'
+        );
+        await context.route('**/*', (route) => {
+            if (appOrigin && new URL(route.request().url()).origin === appOrigin.origin) {
+                return route.continue();
+            }
+            return route.abort('blockedbyclient');
+        });
+        await page.addInitScript((reply) => {
+            if (!sessionStorage.getItem('dspace-e2e-openai-missing-key-seeded')) {
+                localStorage.setItem(
+                    'gameState',
+                    JSON.stringify({ settings: { chatProvider: 'openai' }, openAI: { apiKey: '' } })
+                );
+                sessionStorage.setItem('dspace-e2e-openai-missing-key-seeded', '1');
+            }
             // @ts-expect-error test hook for OpenAI client
             window.__openAIRequests = 0;
             // @ts-expect-error test hook for OpenAI client
@@ -324,11 +365,11 @@ test.describe('Chat provider routing', () => {
                 window.__openAIRequests += 1;
                 return {
                     responses: {
-                        create: async () => ({ output_text: 'unexpected OpenAI reply' }),
+                        create: async () => ({ output_text: reply }),
                     },
                 };
             };
-        });
+        }, LONG_REPLY);
 
         await page.goto('/chat');
         await waitForHydration(page);
@@ -347,6 +388,20 @@ test.describe('Chat provider routing', () => {
         );
         await expect(chatPanel.getByText(/Add your key on \/settings/i)).toBeVisible();
         await expect.poll(() => page.evaluate(() => window.__openAIRequests)).toBe(0);
+
+        await banner.getByRole('link', { name: 'Open Settings' }).click();
+        await expect(page).toHaveURL(/\/settings$/);
+        await page
+            .getByLabel('OpenAI API key', { exact: true })
+            .fill('not-a-real-openai-key-dspace-qa');
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await expect(page.getByTestId('openai-key-status')).toHaveText(
+            'OpenAI API key configured.'
+        );
+        await page.goto('/chat');
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+        await expectOpenAISubmissionRecovers(chatPanel);
+        await expect.poll(() => page.evaluate(() => window.__openAIRequests)).toBe(1);
     });
 
     test('default token.place path sends shared prompt payload without OpenAI secrets or legacy endpoints', async ({

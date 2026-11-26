@@ -8,7 +8,8 @@
     let hydrated = false;
 
     onMount(() => {
-        const start = startTime || (window.dspaceStart ?? performance.timing.navigationStart);
+        // performance.now() is relative to the navigation time origin, not the Unix epoch.
+        const start = startTime || (window.dspaceStart ?? 0);
         hydration = calculateHydrationTime(start, performance.now());
         hydrated = true;
     });

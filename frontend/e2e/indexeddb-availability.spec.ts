@@ -60,4 +60,67 @@ test.describe('IndexedDB availability', () => {
         expect(indexedDbProbe.canOpenDatabase).toBe(true);
         expect(indexedDbProbe.hasLightweightSnapshot).toBe(true);
     });
+
+    test.describe('localStorage fallback', () => {
+        test.use({ serviceWorkers: 'block' });
+        test.skip(
+            ({ baseURL }) =>
+                !baseURL ||
+                !['127.0.0.1', 'localhost', '[::1]'].includes(new URL(baseURL).hostname),
+            'IndexedDB fault simulation is only run against a loopback app origin.'
+        );
+
+        test('keeps the selected chat provider across reload when IndexedDB is blocked', async ({
+            baseURL,
+            page,
+        }) => {
+            const localURL = new URL(baseURL || '');
+            await page.route('**/*', (route) =>
+                new URL(route.request().url()).origin === localURL.origin
+                    ? route.continue()
+                    : route.abort()
+            );
+            await page.addInitScript(() => {
+                Object.defineProperty(IDBFactory.prototype, 'open', {
+                    configurable: true,
+                    value: () => {
+                        throw new DOMException(
+                            'IndexedDB is blocked in this profile',
+                            'SecurityError'
+                        );
+                    },
+                });
+            });
+            page.on('dialog', (dialog) => dialog.dismiss());
+
+            await page.goto('/settings');
+            const panel = page.getByTestId('chat-provider-settings');
+            await expect(panel).toHaveAttribute('data-hydrated', 'true');
+            const selectedProvider = panel.locator('input[name="chat-provider"]:checked');
+            await expect(selectedProvider).toHaveValue(/^(token-place|openai)$/);
+            const nextProvider =
+                (await selectedProvider.inputValue()) === 'token-place' ? 'openai' : 'token-place';
+            const nextOption = panel.locator(
+                `input[name="chat-provider"][value="${nextProvider}"]`
+            );
+            await nextOption.check();
+
+            await expect
+                .poll(() =>
+                    page.evaluate(() => JSON.parse(localStorage.getItem('gameState') || '{}'))
+                )
+                .toMatchObject({
+                    settings: { chatProvider: nextProvider },
+                    _meta: { chatProviderExplicit: true },
+                });
+
+            await page.reload();
+            await expect(nextOption).toBeChecked();
+            if (nextProvider === 'openai') {
+                await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
+            } else {
+                await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+            }
+        });
+    });
 });

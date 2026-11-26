@@ -44,8 +44,26 @@ test.describe('Settings route', () => {
     });
 
     test('manages Chat provider and OpenAI key without token.place credentials', async ({
+        baseURL,
+        context,
         page,
     }) => {
+        const appOrigin = baseURL && new URL(baseURL);
+        test.skip(
+            !appOrigin || !['127.0.0.1', 'localhost', '[::1]'].includes(appOrigin.hostname),
+            'requires an isolated local app for the synthetic OpenAI key'
+        );
+        const providerAttempts: string[] = [];
+        await context.route('**/*', (route) => {
+            const url = new URL(route.request().url());
+            if (appOrigin && url.origin === appOrigin.origin) return route.continue();
+            if (/(?:^|\.)(?:token\.place|openai\.com)$/.test(url.hostname)) {
+                providerAttempts.push(url.origin);
+            }
+            return route.abort('blockedbyclient');
+        });
+        const testKey = 'not-a-real-openai-key-dspace-qa';
+
         await page.goto('/settings');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
@@ -108,7 +126,7 @@ test.describe('Settings route', () => {
         await page.goto('/settings');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await page.getByLabel('OpenAI API key', { exact: true }).fill('sk-settings-e2e-key');
+        await page.getByLabel('OpenAI API key', { exact: true }).fill(testKey);
         await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
         await expect(page.getByTestId('openai-key-status')).toHaveText(
             'OpenAI API key configured.'
@@ -120,7 +138,7 @@ test.describe('Settings route', () => {
                 const state = await readStoredGameState(page);
                 return state.openAI?.apiKey;
             })
-            .toBe('sk-settings-e2e-key');
+            .toBe(testKey);
 
         await page.reload();
         await page.waitForLoadState('networkidle');
@@ -162,13 +180,20 @@ test.describe('Settings route', () => {
             })
             .toEqual({ chatProvider: 'token-place', tokenPlaceApiKey: null });
 
-        await page.goto('/chat');
-        await page.waitForLoadState('networkidle');
+        await page.reload();
         await waitForHydration(page);
-        await expect(page.getByTestId('chat-panel')).toHaveAttribute(
-            'data-provider',
-            'token-place'
-        );
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="token-place"]')
+        ).toBeChecked();
+
+        await page.goto('/chat');
+        await waitForHydration(page);
+        const chat = page.getByTestId('chat-panel');
+        await expect(chat).toHaveAttribute('data-provider', 'token-place');
+        await page.reload();
+        await waitForHydration(page);
+        await expect(chat).toHaveAttribute('data-provider', 'token-place');
+        expect(providerAttempts).toEqual([]);
     });
 
     for (const viewport of SETTINGS_VIEWPORTS) {
