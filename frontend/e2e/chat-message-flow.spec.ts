@@ -498,3 +498,106 @@ test.describe('Chat provider routing', () => {
         await expect(sources).not.toContainText('provider source should not show');
     });
 });
+
+test.describe('Chat compose input methods', () => {
+    test.use({ hasTouch: true, serviceWorkers: 'block' });
+
+    test.beforeEach(async ({ baseURL, context, page }) => {
+        if (!baseURL) throw new Error('Expected an isolated local Playwright web server');
+        const appOrigin = new URL(baseURL);
+        if (!['127.0.0.1', 'localhost', '[::1]'].includes(appOrigin.hostname)) {
+            throw new Error('Chat compose input checks must run against loopback only');
+        }
+        await context.route('**/*', (route) => {
+            if (new URL(route.request().url()).origin === appOrigin.origin) {
+                return route.continue();
+            }
+            return route.abort('blockedbyclient');
+        });
+        await clearUserData(page);
+        await seedOpenAIChatState(page);
+        await installChatStub(page, 'success');
+    });
+
+    test('finds the Chat textarea by its accessible name', async ({ page }) => {
+        const { chatPanel } = await openChatPanel(page);
+        const composer = chatPanel.getByRole('textbox', { name: 'Chat message', exact: true });
+        await expect(composer).toBeVisible();
+        await expect(composer).toHaveJSProperty('tagName', 'TEXTAREA');
+    });
+
+    test('Shift+Enter inserts a newline and Enter sends exactly one message', async ({ page }) => {
+        const { chatPanel, messageBox } = await openChatPanel(page);
+        const firstLine = 'Where should I start?';
+        const secondLine = 'I want to explore the first quest.';
+        const userMessages = chatPanel.locator('.message-bubble.user');
+
+        await messageBox.fill(firstLine);
+        await messageBox.press('End');
+        await messageBox.press('Shift+Enter');
+        await expect(messageBox).toHaveValue(`${firstLine}\n`);
+        await expect(userMessages).toHaveCount(0);
+        await page.keyboard.insertText(secondLine);
+        await expect(messageBox).toHaveValue(`${firstLine}\n${secondLine}`);
+
+        await messageBox.press('Enter');
+
+        await expect(messageBox).toBeEmpty();
+        await expect(userMessages).toHaveCount(1);
+        await expect(userMessages).toContainText(firstLine);
+        await expect(userMessages).toContainText(secondLine);
+        await expect(
+            chatPanel.locator('.message-bubble.assistant').getByText(LONG_REPLY)
+        ).toBeVisible();
+    });
+
+    test('changes Chat persona and provider using the keyboard', async ({ page }) => {
+        const { chatPanel } = await openChatPanel(page);
+        const persona = chatPanel.getByRole('combobox', { name: 'Talk to' });
+        const first = await persona.locator('option').first().getAttribute('value');
+        const last = await persona.locator('option').last().getAttribute('value');
+        if (!first || !last || first === last) throw new Error('Expected distinct persona options');
+
+        const summary = chatPanel.locator('.persona-summary');
+        await persona.press('Home');
+        await expect(persona).toHaveValue(first);
+        await expect(summary).toBeVisible();
+        const firstSummary = await summary.innerText();
+        await persona.press('End');
+        await expect(persona).toHaveValue(last);
+        await expect(summary).not.toHaveText(firstSummary);
+
+        await page.goto('/settings');
+        const settings = page.getByTestId('chat-provider-settings');
+        await expect(settings).toHaveAttribute('data-hydrated', 'true');
+        const openAI = settings.getByRole('radio', { name: /OpenAI/ });
+        const tokenPlace = settings.getByRole('radio', { name: /token\.place/ });
+        await expect(openAI).toBeChecked();
+        await openAI.press('ArrowUp');
+        await expect(tokenPlace).toBeChecked();
+        await expect(settings.getByRole('status')).toHaveText('Chat provider saved: token.place.');
+
+        await tokenPlace.press('ArrowDown');
+        await expect(openAI).toBeChecked();
+        await expect(settings.getByRole('status')).toHaveText('Chat provider saved: OpenAI.');
+    });
+
+    for (const width of [360, 390]) {
+        test(`touch Send submits a message at ${width}px`, async ({ page }) => {
+            await page.setViewportSize({ width, height: 800 });
+            const { chatPanel, messageBox } = await openChatPanel(page);
+            const message = 'How do I start the first quest?';
+
+            await messageBox.fill(message);
+            await chatPanel.getByRole('button', { name: 'Send', exact: true }).tap();
+
+            await expect(messageBox).toBeEmpty();
+            await expect(
+                chatPanel.locator('.message-bubble.user').getByText(message)
+            ).toBeVisible();
+            await expect(
+                chatPanel.locator('.message-bubble.assistant').getByText(LONG_REPLY)
+            ).toBeVisible();
+        });
+    }
+});

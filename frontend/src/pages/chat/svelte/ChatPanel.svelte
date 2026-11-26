@@ -586,6 +586,7 @@
     <div class="vertical">
         <textarea
             class="message-textarea"
+            aria-label="Chat message"
             bind:value={$message}
             on:keydown={handleKeyDown}
             style="font-size: 18px;"

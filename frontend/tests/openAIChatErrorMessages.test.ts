@@ -88,6 +88,14 @@ describe('ChatPanel error messaging', () => {
         cleanup();
     });
 
+    it('gives the chat composer an accessible name', () => {
+        render(ChatPanel);
+
+        expect(screen.getByRole('textbox', { name: 'Chat message' })).toBeInstanceOf(
+            HTMLTextAreaElement
+        );
+    });
+
     it('surfaces actionable guidance when quota is exhausted', async () => {
         GPT5ChatV2.mockRejectedValueOnce(quotaError());
 
