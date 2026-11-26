@@ -196,6 +196,71 @@ test.describe('Settings route', () => {
         expect(providerAttempts).toEqual([]);
     });
 
+    test('restores the explicit Chat provider from IndexedDB without localStorage', async ({
+        baseURL,
+        context,
+        page,
+    }) => {
+        const origin = baseURL && new URL(baseURL);
+        test.skip(
+            !origin || !['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname),
+            'requires an isolated local app and disposable browser storage'
+        );
+        await context.route('**/*', (route) =>
+            new URL(route.request().url()).origin === origin?.origin
+                ? route.continue()
+                : route.abort('blockedbyclient')
+        );
+        await page.goto('/settings');
+        await waitForHydration(page, 'data-testid=chat-provider-settings');
+        const initial = await page
+            .locator('input[name="chat-provider"]:checked')
+            .getAttribute('value');
+        expect(['token-place', 'openai']).toContain(initial);
+        const provider = initial === 'openai' ? 'token-place' : 'openai';
+        const selection = page.locator(`input[name="chat-provider"][value="${provider}"]`);
+        await selection.check();
+        const displayName = provider === 'openai' ? 'OpenAI' : 'token.place';
+        await expect(page.getByRole('status')).toHaveText(`Chat provider saved: ${displayName}.`);
+
+        await expect
+            .poll(() =>
+                page.evaluate(async () => {
+                    const databases = await indexedDB.databases();
+                    if (!databases.some(({ name }) => name === 'dspaceGameState')) return null;
+                    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+                        const request = indexedDB.open('dspaceGameState');
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error);
+                    });
+                    try {
+                        return await new Promise<string | null>((resolve, reject) => {
+                            const request = db
+                                .transaction('state')
+                                .objectStore('state')
+                                .get('root');
+                            request.onsuccess = () =>
+                                resolve(request.result?.settings?.chatProvider ?? null);
+                            request.onerror = () => reject(request.error);
+                        });
+                    } finally {
+                        db.close();
+                    }
+                })
+            )
+            .toBe(provider);
+
+        await page.addInitScript((appOrigin) => {
+            if (location.origin === appOrigin) localStorage.clear();
+        }, origin?.origin);
+        await page.reload();
+        await waitForHydration(page, 'data-testid=chat-provider-settings');
+        await expect(selection).toBeChecked();
+        await page.goto('/chat');
+        await waitForHydration(page);
+        await expect(page.getByTestId('chat-panel')).toHaveAttribute('data-provider', provider);
+    });
+
     for (const viewport of SETTINGS_VIEWPORTS) {
         test(`keeps settings cards spaced without overlap at ${viewport.name} width`, async ({
             page,
