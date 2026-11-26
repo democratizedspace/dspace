@@ -32,6 +32,7 @@ describe('process and runtime metrics', () => {
     // These samples are emitted without labels supplied by clients.
     for (const name of [
       'process_cpu_seconds_total',
+      'process_start_time_seconds',
       'process_resident_memory_bytes',
       'nodejs_heap_size_used_bytes',
       'nodejs_eventloop_lag_seconds',
@@ -43,6 +44,13 @@ describe('process and runtime metrics', () => {
       const value = Number(sample?.slice(name.length + 1));
       expect(Number.isFinite(value), name).toBe(true);
       expect(value, name).toBeGreaterThanOrEqual(0);
+
+      if (name === 'process_start_time_seconds') {
+        const expectedStart = Date.now() / 1000 - process.uptime();
+        expect(value, name).toBeGreaterThan(0);
+        // The default collector rounds its epoch timestamp to seconds.
+        expect(Math.abs(value - expectedStart), name).toBeLessThan(5);
+      }
     }
   });
 });
