@@ -5,6 +5,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
 type TokenPlaceStubMode =
+    | 'success'
     | 'network-error'
     | 'content-policy'
     | 'rate-limit'
@@ -19,7 +20,13 @@ const bytesToBase64 = (bytes: ArrayBuffer | Uint8Array) =>
 const base64ToPem = (base64: string) =>
     `-----BEGIN PUBLIC KEY-----\n${base64.match(/.{1,64}/g)?.join('\n') || ''}\n-----END PUBLIC KEY-----`;
 
-const relayErrorResponse = (mode: TokenPlaceStubMode) => {
+const RECOVERY_REPLY = 'The relay responded after recovery.';
+
+const relayResponse = (mode: TokenPlaceStubMode) => {
+    if (mode === 'success') {
+        return { choices: [{ message: { role: 'assistant', content: RECOVERY_REPLY } }] };
+    }
+
     if (mode === 'content-policy') {
         return {
             status: 400,
@@ -96,7 +103,8 @@ async function encryptRelayEnvelope(
     };
 }
 
-const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
+const installTokenPlaceStub = async (page: Page, initialMode: TokenPlaceStubMode) => {
+    let mode = initialMode;
     const serverKey = await generateRelayKeypair();
 
     await page.route('https://token.place/api/v1/relay/servers/next**', async (route) => {
@@ -145,7 +153,7 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
                 version: 1,
                 request_id: body.request_id,
                 client_public_key: body.client_public_key,
-                api_v1_response: relayErrorResponse(mode),
+                api_v1_response: relayResponse(mode),
             },
             body.client_public_key
         );
@@ -160,8 +168,12 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
     });
 
     await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+        await route.abort('blockedbyclient');
         throw new Error(`Unexpected legacy token.place request: ${route.request().url()}`);
     });
+    return () => {
+        mode = 'success';
+    };
 };
 
 const seedTokenPlaceDefaultState = async (page: Page) => {
@@ -206,8 +218,23 @@ const sendMessage = async (page: Page, text: string) => {
 
 test.describe('Token.place chat error banners', () => {
     test.beforeEach(async ({ page }) => {
+        await page.route(/^https?:\/\/(?:[^/]+\.)?(?:token\.place|openai\.com)(?:\/|$)/, (route) =>
+            route.abort('blockedbyclient')
+        );
         await clearUserData(page);
     });
+
+    async function expectSuccessfulRetry(chatPanel: ReturnType<Page['locator']>) {
+        await chatPanel.getByRole('textbox').fill('Try again after the relay failure');
+        await chatPanel.getByRole('button', { name: 'Send' }).click();
+        await expect(
+            chatPanel
+                .locator('.message-bubble.assistant')
+                .getByText(RECOVERY_REPLY, { exact: true })
+        ).toBeVisible();
+        await expect(chatPanel.getByRole('alert')).toHaveCount(0);
+        await expect(chatPanel.locator('.spinner-container')).not.toBeVisible();
+    }
 
     const cases: Array<{
         name: string;
@@ -285,18 +312,13 @@ test.describe('Token.place chat error banners', () => {
         test(`handles a relay HTTP ${status} without exposing the upstream diagnostic`, async ({
             page,
         }) => {
-            await page.route(
-                /^https:\/\/(?:[^/]+\.)?(?:token\.place|openai\.com)(?:\/|$)/,
-                async (route) => {
-                    await route.abort('blockedbyclient');
-                }
-            );
-            await installTokenPlaceStub(page, 'malformed');
+            await installTokenPlaceStub(page, 'success');
             await seedTokenPlaceDefaultState(page);
             let dispatches = 0;
             await page.route('https://token.place/api/v1/relay/requests', async (route) => {
                 dispatches += 1;
-                await route.fulfill({ status, json: { error } });
+                if (dispatches === 1) await route.fulfill({ status, json: { error } });
+                else await route.fallback();
             });
 
             const { chatPanel, spinner } = await sendMessage(
@@ -308,13 +330,16 @@ test.describe('Token.place chat error banners', () => {
             await expect(banner).toContainText(message);
             await expect(chatPanel).not.toContainText(upstreamDiagnostic);
             await expect(spinner).not.toBeVisible();
-            await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
             expect(dispatches).toBe(1);
+            await expectSuccessfulRetry(chatPanel);
+            expect(dispatches).toBe(2);
         });
     }
 
     test('recovers when the token.place relay fetch is aborted', async ({ page }) => {
+        await installTokenPlaceStub(page, 'success');
         await page.addInitScript(() => {
+            let canceled = false;
             const fetch = window.fetch.bind(window);
             window.fetch = (input, init) => {
                 const url = new URL(
@@ -322,9 +347,11 @@ test.describe('Token.place chat error banners', () => {
                     window.location.origin
                 );
                 if (
+                    !canceled &&
                     url.origin === 'https://token.place' &&
                     url.pathname === '/api/v1/relay/servers/next'
                 ) {
+                    canceled = true;
                     return Promise.reject(new DOMException('Fixture cancellation', 'AbortError'));
                 }
                 return fetch(input, init);
@@ -338,12 +365,12 @@ test.describe('Token.place chat error banners', () => {
         await expect(banner).toContainText(/request was canceled.*try again/i);
         await expect(chatPanel).not.toContainText('Fixture cancellation');
         await expect(spinner).not.toBeVisible();
-        await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
+        await expectSuccessfulRetry(chatPanel);
     });
 
     for (const { name, mode, type, message } of cases) {
         test(name, async ({ page }) => {
-            await installTokenPlaceStub(page, mode);
+            const restoreRelay = await installTokenPlaceStub(page, mode);
             await seedTokenPlaceDefaultState(page);
 
             const { chatPanel, spinner } = await sendMessage(page, `Trigger ${mode}`);
@@ -353,7 +380,8 @@ test.describe('Token.place chat error banners', () => {
             await expect(banner).toContainText(message);
             await expect(banner).not.toContainText(/OpenAI/i);
             await expect(spinner).not.toBeVisible();
-            await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
+            restoreRelay();
+            await expectSuccessfulRetry(chatPanel);
         });
     }
 });
