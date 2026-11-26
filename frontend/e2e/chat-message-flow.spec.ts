@@ -11,6 +11,7 @@ const NETWORK_ERROR_MESSAGE = /could not reach openai/i;
 const RATE_LIMIT_MESSAGE = /openai rate limited/i;
 const QUOTA_MESSAGE = /out of credits/i;
 const AUTH_MESSAGE = /api key/i;
+const PRIVATE_DIAGNOSTIC = 'private-openai-diagnostic-e2e';
 const PERMISSION_MESSAGE = /denied access/i;
 const SERVER_MESSAGE = /unavailable right now/i;
 
@@ -79,7 +80,7 @@ type StubMode =
 
 const installChatStub = async (page: Page, mode: StubMode) => {
     await page.addInitScript(
-        ({ reply, stubMode }) => {
+        ({ reply, stubMode, diagnostic }) => {
             const createResponse = async () => {
                 await new Promise((resolve) => setTimeout(resolve, 750));
 
@@ -91,14 +92,14 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 }
 
                 if (stubMode === 'rate-limit') {
-                    const error = new Error('Rate limit exceeded');
+                    const error = new Error(`Rate limit exceeded: ${diagnostic}`);
                     // @ts-expect-error non-standard property for tests
                     error.status = 429;
                     throw error;
                 }
 
                 if (stubMode === 'quota') {
-                    const error = new Error('You exceeded your current quota');
+                    const error = new Error(`You exceeded your current quota: ${diagnostic}`);
                     // @ts-expect-error non-standard property for tests
                     error.status = 429;
                     // @ts-expect-error non-standard property for tests
@@ -109,7 +110,7 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 }
 
                 if (stubMode === 'auth') {
-                    const error = new Error('Incorrect API key provided');
+                    const error = new Error(`Incorrect API key provided: ${diagnostic}`);
                     // @ts-expect-error non-standard property for tests
                     error.status = 401;
                     throw error;
@@ -154,7 +155,7 @@ const installChatStub = async (page: Page, mode: StubMode) => {
                 };
             };
         },
-        { reply: LONG_REPLY, stubMode: mode }
+        { reply: LONG_REPLY, stubMode: mode, diagnostic: PRIVATE_DIAGNOSTIC }
     );
 };
 
@@ -225,6 +226,8 @@ test.describe('Chat message flow', () => {
             chatPanel.locator('.message-bubble.assistant').getByText(RATE_LIMIT_MESSAGE)
         ).toBeVisible();
         await expect(spinner).not.toBeVisible();
+        await expect(chatPanel).not.toContainText(PRIVATE_DIAGNOSTIC);
+        await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
     });
 
     test('surfaces quota errors without getting stuck', async ({ page }) => {
@@ -238,6 +241,8 @@ test.describe('Chat message flow', () => {
             chatPanel.locator('.message-bubble.assistant').getByText(QUOTA_MESSAGE)
         ).toBeVisible();
         await expect(spinner).not.toBeVisible();
+        await expect(chatPanel).not.toContainText(PRIVATE_DIAGNOSTIC);
+        await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
     });
 
     test('surfaces API key errors without getting stuck', async ({ page }) => {
@@ -251,6 +256,8 @@ test.describe('Chat message flow', () => {
             chatPanel.locator('.message-bubble.assistant').getByText(AUTH_MESSAGE)
         ).toBeVisible();
         await expect(spinner).not.toBeVisible();
+        await expect(chatPanel).not.toContainText(PRIVATE_DIAGNOSTIC);
+        await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
     });
 
     test('surfaces model access errors without getting stuck', async ({ page }) => {

@@ -184,7 +184,7 @@ const openTokenPlacePanel = async (page: Page) => {
     await waitForHydration(page);
 
     const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="token-place"]');
-    await expect(chatPanel).toBeVisible();
+    await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
     const messageBox = chatPanel.getByRole('textbox');
     await expect(messageBox).toBeEnabled();
 
@@ -259,6 +259,88 @@ test.describe('Token.place chat error banners', () => {
         },
     ];
 
+    const upstreamDiagnostic = 'private-provider-diagnostic-e2e';
+    const httpFailures = [
+        {
+            status: 400,
+            type: 'content_policy',
+            message: /blocked that request by policy/i,
+            error: { code: 'content_blocked', message: upstreamDiagnostic },
+        },
+        {
+            status: 429,
+            type: 'rate_limit',
+            message: /rate limited or out of daily quota/i,
+            error: { message: upstreamDiagnostic },
+        },
+        {
+            status: 503,
+            type: 'server',
+            message: /temporarily unavailable/i,
+            error: { message: upstreamDiagnostic },
+        },
+    ];
+
+    for (const { status, type, message, error } of httpFailures) {
+        test(`handles a relay HTTP ${status} without exposing the upstream diagnostic`, async ({
+            page,
+        }) => {
+            await page.route(
+                /^https:\/\/(?:[^/]+\.)?(?:token\.place|openai\.com)(?:\/|$)/,
+                async (route) => {
+                    await route.abort('blockedbyclient');
+                }
+            );
+            await installTokenPlaceStub(page, 'malformed');
+            await seedTokenPlaceDefaultState(page);
+            let dispatches = 0;
+            await page.route('https://token.place/api/v1/relay/requests', async (route) => {
+                dispatches += 1;
+                await route.fulfill({ status, json: { error } });
+            });
+
+            const { chatPanel, spinner } = await sendMessage(
+                page,
+                `Check relay response ${status}`
+            );
+            const banner = chatPanel.getByRole('alert');
+            await expect(banner).toHaveAttribute('data-error-type', type);
+            await expect(banner).toContainText(message);
+            await expect(chatPanel).not.toContainText(upstreamDiagnostic);
+            await expect(spinner).not.toBeVisible();
+            await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
+            expect(dispatches).toBe(1);
+        });
+    }
+
+    test('recovers when the token.place relay fetch is aborted', async ({ page }) => {
+        await page.addInitScript(() => {
+            const fetch = window.fetch.bind(window);
+            window.fetch = (input, init) => {
+                const url = new URL(
+                    typeof input === 'string' || input instanceof URL ? input : input.url,
+                    window.location.origin
+                );
+                if (
+                    url.origin === 'https://token.place' &&
+                    url.pathname === '/api/v1/relay/servers/next'
+                ) {
+                    return Promise.reject(new DOMException('Fixture cancellation', 'AbortError'));
+                }
+                return fetch(input, init);
+            };
+        });
+        await seedTokenPlaceDefaultState(page);
+
+        const { chatPanel, spinner } = await sendMessage(page, 'Check canceled relay request');
+        const banner = chatPanel.getByRole('alert');
+        await expect(banner).toHaveAttribute('data-error-type', 'abort');
+        await expect(banner).toContainText(/request was canceled.*try again/i);
+        await expect(chatPanel).not.toContainText('Fixture cancellation');
+        await expect(spinner).not.toBeVisible();
+        await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
+    });
+
     for (const { name, mode, type, message } of cases) {
         test(name, async ({ page }) => {
             await installTokenPlaceStub(page, mode);
@@ -271,6 +353,7 @@ test.describe('Token.place chat error banners', () => {
             await expect(banner).toContainText(message);
             await expect(banner).not.toContainText(/OpenAI/i);
             await expect(spinner).not.toBeVisible();
+            await expect(chatPanel.getByRole('button', { name: 'Send' })).toBeEnabled();
         });
     }
 });
