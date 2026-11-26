@@ -607,19 +607,32 @@ test.describe('Chat provider routing', () => {
         await page.getByRole('button', { name: 'Show prompt' }).click();
         await expect(page.getByRole('button', { name: 'Hide prompt' })).toBeVisible();
 
-        const debugMessages = page.getByTestId('chat-debug-message');
-        await expect(debugMessages.first()).toBeVisible();
-        const debugText = await debugMessages.allTextContents();
-        expect(debugText.join('\n')).toMatch(/system|persona|PlayerState|RAG/i);
-        expect(debugText.at(-1)).toContain(question);
-        await expect(
-            chatPanel.locator('[data-testid="chat-debug-message"][data-kind="rag"]').first()
-        ).toBeVisible();
-        expect(debugText.join('\n')).not.toContain(localKey);
-        expect(debugText.join('\n')).not.toMatch(/e2e-retrieval-proof|e2e-acknowledgement-proof/);
-        expect(debugText.join('\n')).not.toMatch(
-            /token\.place is deferred|chat uses OpenAI|OpenAI-only/i
+        const debugPanel = chatPanel.getByTestId('chat-debug-panel');
+        const debugMessages = debugPanel.getByTestId('chat-debug-message');
+        const dispatchedMessages = decrypted.api_v1_request.messages;
+        await expect(debugMessages).toHaveCount(dispatchedMessages.length);
+        const displayedMessages = await debugMessages.evaluateAll((rows) =>
+            rows.map((row) => ({
+                role: row.querySelector('.debug-role')?.textContent?.trim(),
+                content: row.querySelector('pre')?.textContent?.trim(),
+            }))
         );
+        expect(displayedMessages).toEqual(dispatchedMessages);
+        expect(displayedMessages.at(-1)).toEqual({ role: 'user', content: question });
+        await expect(debugMessages.filter({ hasText: 'Docs grounding' }).first()).toHaveAttribute(
+            'data-kind',
+            'rag'
+        );
+
+        const cancellationProof = requests.find(
+            ({ url }) => new URL(url).pathname === '/api/v1/relay/requests'
+        )?.body.cancel_token;
+        expect(typeof cancellationProof).toBe('string');
+        const debugText = await debugPanel.innerText();
+        expect(debugText).not.toContain(localKey);
+        expect(debugText).not.toContain(String(cancellationProof));
+        expect(debugText).not.toMatch(/e2e-retrieval-proof|e2e-acknowledgement-proof/);
+        expect(debugText).not.toMatch(/token\.place is deferred|chat uses OpenAI|OpenAI-only/i);
         expect(
             JSON.stringify(
                 requests.find((request) => request.url.endsWith('/api/v1/relay/requests'))?.body
