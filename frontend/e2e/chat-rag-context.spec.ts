@@ -6,9 +6,10 @@ const PROCESS_ID = 'outlet-dWatt-1e3';
 
 test.describe('chat RAG context', () => {
     test.beforeEach(async ({ page }) => {
+        const now = Date.now();
+        await page.clock.setFixedTime(now);
         await page.addInitScript(
-            ({ questId, processId, inventoryId }) => {
-                const now = Date.now();
+            ({ questId, processId, inventoryId, now }) => {
                 const gameState = {
                     versionNumberString: '3',
                     _meta: { lastUpdated: now },
@@ -21,7 +22,7 @@ test.describe('chat RAG context', () => {
                     },
                     processes: {
                         [processId]: {
-                            startedAt: now - 15000,
+                            startedAt: now - 15 * 60_000,
                             duration: 3600000,
                             elapsedBeforePause: 0,
                         },
@@ -45,7 +46,7 @@ test.describe('chat RAG context', () => {
                     };
                 };
             },
-            { questId: QUEST_ID, processId: PROCESS_ID, inventoryId: INVENTORY_ITEM_ID }
+            { questId: QUEST_ID, processId: PROCESS_ID, inventoryId: INVENTORY_ITEM_ID, now }
         );
         // The stubbed client still uses the real durable browser credential gate.
         await page.route('https://api.openai.com/**', (route) => route.abort());
@@ -98,7 +99,9 @@ test.describe('chat RAG context', () => {
         expect(messageTexts).toContain('Quest progress');
         expect(messageTexts).toContain('welcome/howtodoquests');
         expect(messageTexts).toContain('Processes in flight');
-        expect(messageTexts).toContain('Buy 1 kWh of electricity from a wall outlet');
+        expect(messageTexts).toContain(
+            'Buy 1 kWh of electricity from a wall outlet: in progress (25%)'
+        );
     });
 
     test('renders sources used and highlights rag content in debug payload', async ({ page }) => {
