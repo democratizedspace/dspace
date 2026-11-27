@@ -140,6 +140,7 @@ const TEST_GROUPS = [
             'chat-persona-switching.spec.ts',
             'chat-rag-context.spec.ts',
             'chat-message-flow.spec.ts',
+            'chat-accessibility.spec.ts',
             'chat-debug-build-info.spec.ts',
             'chat-debug-stamp.spec.ts',
             'chat-debug-navigation.spec.ts',
