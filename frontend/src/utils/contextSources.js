@@ -11,6 +11,24 @@
  * @property {string=} detail
  */
 
+// Source cards point to application routes, not arbitrary absolute URLs.
+const sourceLinkBase = new URL('https://dspace.invalid');
+
+export const getInternalSourceHref = (url) => {
+    if (typeof url !== 'string' || !url.startsWith('/') || url.startsWith('//')) {
+        return undefined;
+    }
+    if ([...url].some((character) => character.charCodeAt(0) <= 31 || character === '\\')) {
+        return undefined;
+    }
+
+    try {
+        return new URL(url, sourceLinkBase).origin === sourceLinkBase.origin ? url : undefined;
+    } catch {
+        return undefined;
+    }
+};
+
 const toSourceKey = (source) => `${source.type}::${source.id}::${source.url ?? ''}`;
 
 const normalizeSource = (source) => {

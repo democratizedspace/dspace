@@ -7,7 +7,7 @@
     import { formatRelative, format } from 'date-fns';
     import { fade } from 'svelte/transition';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
-    import { sortSources } from '../../../utils/contextSources.js';
+    import { getInternalSourceHref, sortSources } from '../../../utils/contextSources.js';
 
     export let messageMarkdown;
     export let className;
@@ -111,10 +111,11 @@
                 <summary>Sources used</summary>
                 <ul>
                     {#each sortedSources as source}
+                        {@const href = getInternalSourceHref(source.url)}
                         <li class="source-item" data-source-type={source.type}>
                             <span class="source-type">{source.type}</span>
-                            {#if source.url}
-                                <a href={source.url} class="source-link">{source.label}</a>
+                            {#if href}
+                                <a {href} class="source-link">{source.label}</a>
                             {:else}
                                 <span class="source-label">{source.label}</span>
                             {/if}

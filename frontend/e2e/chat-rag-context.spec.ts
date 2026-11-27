@@ -127,6 +127,10 @@ test.describe('chat RAG context', () => {
         await expect(
             chatPanel.locator('[data-testid="chat-debug-message"][data-kind="rag"]')
         ).toBeVisible();
+
+        await routeSourceLink.click();
+        await expect(page).toHaveURL(/\/docs\/routes(?:#.*)?$/);
+        await expect(page.getByRole('main')).toBeVisible();
     });
 
     test('shows docs env metadata in chat debug', async ({ page }) => {
