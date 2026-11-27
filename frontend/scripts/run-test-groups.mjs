@@ -139,6 +139,7 @@ const TEST_GROUPS = [
         files: [
             'chat-persona-switching.spec.ts',
             'chat-rag-context.spec.ts',
+            'chat-save-snapshot-hint.spec.ts',
             'chat-message-flow.spec.ts',
             'chat-accessibility.spec.ts',
             'chat-debug-build-info.spec.ts',
