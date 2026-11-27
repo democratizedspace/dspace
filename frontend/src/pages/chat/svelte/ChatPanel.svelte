@@ -608,9 +608,14 @@
     </div>
 
     <div class="chat-container">
-        <div class="spinner-container" style="display: {showSpinner ? 'flex' : 'none'}">
-            <Spinner />
-        </div>
+        {#if showSpinner}
+            <div class="spinner-container" aria-hidden="true">
+                <Spinner />
+            </div>
+        {/if}
+        <span class="chat-waiting-status" role="status">
+            {showSpinner ? 'Waiting for a reply…' : ''}
+        </span>
         {#if $messageHistory.length}
             {#each $messageHistory.slice().reverse() as message (message.id)}
                 <Message
@@ -877,6 +882,11 @@
         align-items: center;
         width: 100%;
         margin-top: 20px;
+    }
+
+    .chat-waiting-status {
+        align-self: center;
+        font-size: 0.9rem;
     }
 
     button {

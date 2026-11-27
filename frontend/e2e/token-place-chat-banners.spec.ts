@@ -103,7 +103,11 @@ async function encryptRelayEnvelope(
     };
 }
 
-const installTokenPlaceStub = async (page: Page, initialMode: TokenPlaceStubMode) => {
+const installTokenPlaceStub = async (
+    page: Page,
+    initialMode: TokenPlaceStubMode,
+    completion?: () => Promise<{ response: Record<string, unknown>; relayUsage?: unknown }>
+) => {
     let mode = initialMode;
     const serverKey = await generateRelayKeypair();
 
@@ -147,13 +151,16 @@ const installTokenPlaceStub = async (page: Page, initialMode: TokenPlaceStubMode
             });
             return;
         }
+        const { response, relayUsage } = completion
+            ? await completion()
+            : { response: relayResponse(mode), relayUsage: undefined };
         const encrypted = await encryptRelayEnvelope(
             {
                 protocol: 'tokenplace_api_v1_relay_e2ee',
                 version: 1,
                 request_id: body.request_id,
                 client_public_key: body.client_public_key,
-                api_v1_response: relayResponse(mode),
+                api_v1_response: response,
             },
             body.client_public_key
         );
@@ -162,6 +169,7 @@ const installTokenPlaceStub = async (page: Page, initialMode: TokenPlaceStubMode
             contentType: 'application/json',
             body: JSON.stringify({
                 ...encrypted,
+                ...(relayUsage === undefined ? {} : { usage: relayUsage }),
                 acknowledgement_token: 'e2e-acknowledgement-proof',
             }),
         });
@@ -176,19 +184,19 @@ const installTokenPlaceStub = async (page: Page, initialMode: TokenPlaceStubMode
     };
 };
 
-const seedTokenPlaceDefaultState = async (page: Page) => {
-    await page.addInitScript(() => {
+const seedTokenPlaceDefaultState = async (page: Page, tokenPlaceTokenLite = false) => {
+    await page.addInitScript((tokenLite) => {
         const state = {
             tokenPlace: { enabled: false },
             quests: {},
             inventory: {},
             processes: {},
-            settings: { chatProvider: 'token-place' },
+            settings: { chatProvider: 'token-place', tokenPlaceTokenLite: tokenLite },
             versionNumberString: '3',
             _meta: { lastUpdated: Date.now() },
         };
         localStorage.setItem('gameState', JSON.stringify(state));
-    });
+    }, tokenPlaceTokenLite);
 };
 
 const openTokenPlacePanel = async (page: Page) => {
@@ -384,4 +392,102 @@ test.describe('Token.place chat error banners', () => {
             await expectSuccessfulRetry(chatPanel);
         });
     }
+});
+
+test('waits for the complete relay reply and shows only decrypted usage', async ({
+    page,
+    context,
+    baseURL,
+}) => {
+    if (!baseURL) throw new Error('Expected an isolated local Playwright web server');
+    const appOrigin = new URL(baseURL);
+    if (!['127.0.0.1', 'localhost', '[::1]'].includes(appOrigin.hostname)) {
+        throw new Error('The completion evidence test must run against loopback only');
+    }
+    await context.route('**/*', (route) =>
+        new URL(route.request().url()).origin === appOrigin.origin
+            ? route.continue()
+            : route.abort('blockedbyclient')
+    );
+    await clearUserData(page);
+    await seedTokenPlaceDefaultState(page, true);
+
+    let allowFirstReply: () => void = () => {};
+    const heldReply = new Promise<void>((resolve) => {
+        allowFirstReply = resolve;
+    });
+    const decryptedUsage = { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 };
+    const untrustedRelayUsage = { prompt_tokens: 400, completion_tokens: 100, total_tokens: 500 };
+    const baselineReply = 'Complete fixture answer with usage.';
+    const followupReply = 'Followup fixture answer without usage.';
+    let completions = 0;
+    await installTokenPlaceStub(page, 'success', async () => {
+        const first = ++completions === 1;
+        if (first) await heldReply;
+        return {
+            response: {
+                choices: [
+                    {
+                        message: {
+                            role: 'assistant',
+                            content: first ? baselineReply : followupReply,
+                        },
+                    },
+                ],
+                ...(first ? { usage: decryptedUsage } : {}),
+            },
+            relayUsage: untrustedRelayUsage,
+        };
+    });
+    await page.goto('/chat#prompt-debug');
+    const panel = page.getByTestId('chat-panel');
+    await expect(panel).toHaveAttribute('data-hydrated', 'true');
+    await expect(panel).toHaveAttribute('data-provider', 'token-place');
+    const debug = panel.getByTestId('chat-debug-panel');
+    await expect(debug).toBeVisible();
+    const usage = debug.getByText('Provider usage', { exact: true });
+    const spinner = panel.locator('.spinner-container');
+    const waiting = panel.getByRole('status');
+    const composer = panel.getByRole('textbox', { name: 'Chat message' });
+    const send = panel.getByRole('button', { name: 'Send', exact: true });
+    const firstAnswer = panel
+        .locator('.message-bubble.assistant')
+        .filter({ hasText: baselineReply });
+    const followupAnswer = panel
+        .locator('.message-bubble.assistant')
+        .filter({ hasText: followupReply });
+
+    await expect(usage).toHaveCount(0);
+    await expect(spinner).not.toBeVisible();
+    await expect(waiting).toBeEmpty();
+    await composer.fill('A held synthetic fixture prompt');
+    try {
+        await send.click();
+        await expect.poll(() => completions).toBe(1);
+        await expect(spinner).toBeVisible();
+        await expect(waiting).toHaveText('Waiting for a reply…');
+        await expect(panel.getByRole('alert')).toHaveCount(0);
+        await expect(firstAnswer).toHaveCount(0);
+        await expect(usage).toHaveCount(0);
+    } finally {
+        allowFirstReply();
+    }
+
+    await expect(firstAnswer).toBeVisible();
+    await expect(spinner).not.toBeVisible();
+    await expect(waiting).toBeEmpty();
+    await expect(usage).toBeVisible();
+    await expect(debug).toContainText(JSON.stringify(decryptedUsage));
+    await expect(debug).not.toContainText(JSON.stringify(untrustedRelayUsage));
+    await expect(firstAnswer.getByTestId('sources-used')).toHaveCount(0);
+
+    await composer.fill('A second synthetic fixture prompt');
+    await send.click();
+    await expect(followupAnswer).toBeVisible();
+    await expect(spinner).not.toBeVisible();
+    await expect(waiting).toBeEmpty();
+    await expect(usage).toHaveCount(0);
+    await expect(debug).not.toContainText(JSON.stringify(untrustedRelayUsage));
+    await expect(followupAnswer.getByTestId('sources-used')).toHaveCount(0);
+    expect(completions).toBe(2);
 });
