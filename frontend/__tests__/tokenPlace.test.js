@@ -1088,28 +1088,44 @@ ${ragExcerpt.repeat(4000)}`,
         expect(getFetchCalls().filter((call) => call.body?.acknowledgement_token)).toHaveLength(1);
     });
 
-    test('richer helper returns text, DSPACE contextSources, usage, and metadata', async () => {
-        relayReply = {
-            choices: [{ message: { content: 'mocked reply' } }],
-            usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
-            metadata: { client: 'dspace', conversation_id: 'conv-42' },
-            contextSources: [{ title: 'provider field should not be used' }],
-        };
-        const dspaceSources = [{ title: 'DSPACE docs', url: '/docs/about' }];
-        const result = await TokenPlaceChatV2([], {
-            promptPayload: {
-                combinedMessages: [{ role: 'user', content: 'hello' }],
+    test.each([
+        ['absent', {}],
+        [
+            'unsolicited',
+            { metadata: { client: 'dspace', tokenPlaceContext: { requestedTier: 'unexpected' } } },
+        ],
+    ])(
+        'richer helper preserves reply and local diagnostics with %s response metadata',
+        async (_, fields) => {
+            relayReply = {
+                choices: [{ message: { content: 'mocked reply' } }],
+                usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+                contextSources: [{ title: 'provider field should not be used' }],
+                ...fields,
+            };
+            const dspaceSources = [{ title: 'DSPACE docs', url: '/docs/about' }];
+            const result = await TokenPlaceChatV2([], {
+                promptPayload: {
+                    combinedMessages: [{ role: 'user', content: 'hello' }],
+                    contextSources: dspaceSources,
+                    gameState: {},
+                },
+            });
+            expect(result).toMatchObject({
+                text: 'mocked reply',
                 contextSources: dspaceSources,
-                gameState: {},
-            },
-        });
-        expect(result).toMatchObject({
-            text: 'mocked reply',
-            contextSources: dspaceSources,
-            usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
-            metadata: { client: 'dspace', conversation_id: 'conv-42' },
-        });
-    });
+                usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+            });
+            expect(result.metadata).toEqual({
+                tokenPlaceContext: expect.objectContaining({
+                    requestedTier: expect.any(String),
+                    estimatorVersion: expect.any(String),
+                    estimatedPromptTokens: expect.any(Number),
+                }),
+            });
+            expect(result.metadata.tokenPlaceContext.requestedTier).not.toBe('unexpected');
+        }
+    );
 
     test('passes abort signal to fetch', async () => {
         const controller = new AbortController();
