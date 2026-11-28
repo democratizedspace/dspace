@@ -276,15 +276,18 @@ async function snapshotBrowserStores(page: Page) {
                     return [
                         name,
                         await Promise.all(
-                            Array.from(db.objectStoreNames, (store) => {
-                                return new Promise((resolve, reject) => {
-                                    const request = db
-                                        .transaction(store)
-                                        .objectStore(store)
-                                        .getAll();
-                                    request.onsuccess = () => resolve([store, request.result]);
-                                    request.onerror = () => reject(request.error);
-                                });
+                            Array.from(db.objectStoreNames, async (store) => {
+                                const records = db.transaction(store).objectStore(store);
+                                const read = <T>(request: IDBRequest<T>) =>
+                                    new Promise<T>((resolve, reject) => {
+                                        request.onsuccess = () => resolve(request.result);
+                                        request.onerror = () => reject(request.error);
+                                    });
+                                const [keys, values] = await Promise.all([
+                                    read(records.getAllKeys()),
+                                    read(records.getAll()),
+                                ]);
+                                return { store, keys, values };
                             })
                         ),
                     ];
