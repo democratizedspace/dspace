@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 const prohibitedValues = [
     'user-secret-123',
@@ -371,6 +371,8 @@ describe('DSPACE application metrics', () => {
             };
         };
 
+        // Keep every quota assertion within one deterministic rate-limit window.
+        const testClock = vi.spyOn(Date, 'now').mockReturnValue(1_700_000_030_000);
         try {
             const rejected = await endpoint.POST({
                 request: new Request('http://dspace.local/api/chat', {
@@ -995,11 +997,10 @@ describe('DSPACE application metrics', () => {
                 });
                 expect(nonDispatch.status).toBe(200);
             }
-            // select and retrieve hit :subop: keys; main :session: and :global: are untouched
-            expect([...rateLimitCounts.keys()].some((key) => key.includes(':subop:'))).toBe(true);
-            expect([...rateLimitCounts.keys()].some((key) => key.includes(':session:'))).toBe(
-                false
-            );
+            expect([...rateLimitCounts.entries()]).toEqual([
+                [expect.stringMatching(/^dspace:chat-proxy:subop:select:/), 1],
+                [expect.stringMatching(/^dspace:chat-proxy:subop:retrieve:/), 1],
+            ]);
             // complete (with a fresh dispatch to get a valid correlation token) consumes a
             // separate complete-attempt sub-budget before the single-use correlation token,
             // without touching the main dispatch/session quota.
@@ -1179,6 +1180,7 @@ describe('DSPACE application metrics', () => {
                     previousAuthorizationValue; // scan-secrets: ignore
             }
             global.fetch = previousFetch;
+            testClock.mockRestore();
         }
     });
 

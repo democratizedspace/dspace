@@ -168,32 +168,39 @@ describe('runtime endpoints', () => {
     });
   });
 
-  it('only advertises chat relay proxy when the complete shared boundary is configured', async () => {
-    process.env['DSPACE_CHAT_PROXY_TOKEN'] = 'test-chat-proxy-token'; // scan-secrets: ignore
+  const proxyFixture = {
+    DSPACE_CHAT_PROXY_TOKEN: 'fixture-session-signing-value', // scan-secrets: ignore
+    DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL: 'https://redis.example.test',
+    DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN: 'fixture-redis-value', // scan-secrets: ignore
+    DSPACE_CHAT_PROXY_PUBLIC_ACCESS: 'true',
+    DSPACE_CHAT_PROXY_AUTHORIZATION_TOKEN: 'fixture-upstream-only-value', // scan-secrets: ignore
+  };
 
-    let response = await getRuntimeConfig();
-    let body = await response.json();
-    expect(body.tokenPlace.relayProxyAvailable).toBe(false);
+  it.each(Object.keys(proxyFixture))(
+    'does not advertise the relay proxy when %s alone is absent',
+    async (missing) => {
+      for (const [name, value] of Object.entries(proxyFixture)) {
+        if (name !== missing) process.env[name] = value;
+      }
+      const response = await getRuntimeConfig();
+      expect(response.status).toBe(200);
+      expect((await response.json()).tokenPlace.relayProxyAvailable).toBe(
+        false
+      );
+    }
+  );
 
-    process.env.DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_URL =
-      'https://redis.example.test';
-    process.env['DSPACE_CHAT_PROXY_RATE_LIMIT_REDIS_TOKEN'] =
-      'test-rate-limit-token'; // scan-secrets: ignore
-
-    response = await getRuntimeConfig();
-    body = await response.json();
-    expect(body.tokenPlace.relayProxyAvailable).toBe(false);
-
-    process.env.DSPACE_CHAT_PROXY_PUBLIC_ACCESS = 'true';
-    response = await getRuntimeConfig();
-    body = await response.json();
-    expect(body.tokenPlace.relayProxyAvailable).toBe(false);
-
-    process.env['DSPACE_CHAT_PROXY_' + 'AUTHORIZATION_TOKEN'] =
-      'authorized-test-user'; // scan-secrets: ignore
-    response = await getRuntimeConfig();
-    body = await response.json();
-    expect(body.tokenPlace.relayProxyAvailable).toBe(true);
+  it('advertises the configured proxy without serializing private configuration', async () => {
+    Object.assign(process.env, proxyFixture);
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.text();
+    expect(JSON.parse(body).tokenPlace.relayProxyAvailable).toBe(true);
+    for (const [name, value] of Object.entries(proxyFixture)) {
+      expect(body).not.toContain(name);
+      if (name !== 'DSPACE_CHAT_PROXY_PUBLIC_ACCESS')
+        expect(body).not.toContain(value);
+    }
   });
 
   it('parses chat proxy sessions with the fixed identity and nonce format', () => {
