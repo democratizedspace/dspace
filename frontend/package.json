@@ -52,7 +52,7 @@
         "@astrojs/markdown-remark": "7.3.5",
         "@astrojs/svelte": "9.1.2",
         "@babel/core": "^7.26.9",
-        "@babel/eslint-parser": "^7.26.8",
+        "@babel/eslint-parser": "^8.1.2",
         "@babel/plugin-syntax-import-assertions": "^7.29.7",
         "@babel/plugin-transform-runtime": "^7.26.10",
         "@babel/preset-env": "^7.26.9",
