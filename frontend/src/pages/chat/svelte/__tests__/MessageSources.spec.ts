@@ -28,6 +28,14 @@ describe('Message context sources', () => {
                     label: 'Email reference',
                     url: 'mailto:docs@example.invalid',
                 },
+                { type: 'doc', id: 'bare', label: 'Incomplete path', url: '//' },
+                { type: 'doc', id: 'delimiter', label: 'Mixed delimiter', url: '/docs\\routes' },
+                {
+                    type: 'doc',
+                    id: 'whitespace',
+                    label: 'Control character',
+                    url: '/docs/rou\ttes',
+                },
                 { type: 'state', id: 'local', label: 'Local game state' },
             ],
         });
@@ -38,7 +46,14 @@ describe('Message context sources', () => {
         expect(getByRole('link', { name: 'Inventory item' }).getAttribute('href')).toBe(
             '/inventory/item/37'
         );
-        for (const label of ['External docs', 'Email reference', 'Local game state']) {
+        for (const label of [
+            'External docs',
+            'Email reference',
+            'Incomplete path',
+            'Mixed delimiter',
+            'Control character',
+            'Local game state',
+        ]) {
             expect(getByText(label).textContent).toBe(label);
             expect(queryByRole('link', { name: label })).toBeNull();
         }
