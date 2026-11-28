@@ -86,7 +86,7 @@
         "svelte-switch-case": "^2.0.0",
         "text-encoding": "^0.7.0",
         "ts-jest": "^29.2.6",
-        "typescript": "^5.9.2"
+        "typescript": "^7.0.2"
     },
     "dependencies": {
         "@algolia/client-search": "^4.13.1",
