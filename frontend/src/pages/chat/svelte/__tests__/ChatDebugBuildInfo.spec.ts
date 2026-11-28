@@ -28,12 +28,15 @@ const mockGetDocsRagComparison = vi.hoisted(() =>
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
+const tokenPlaceDiagnostics = vi.hoisted(() => ({
+    tokenPlaceContext: { requestedTier: '8k-fast', estimatedPromptTokens: 42 },
+}));
 const mockTokenPlaceChatV2 = vi.hoisted(() =>
     vi.fn(async () => ({
         text: 'token.place debug reply',
         contextSources: [{ type: 'doc', label: 'DSPACE docs', url: '/docs/about' }],
         usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },
-        metadata: { request_id: 'tp-123', provider: 'token.place' },
+        metadata: tokenPlaceDiagnostics,
     }))
 );
 let gameStateSubscriber: ((state: { settings: { showChatDebugPayload: boolean } }) => void) | null =
@@ -104,7 +107,7 @@ describe('ChatPanel build metadata', () => {
             text: 'token.place debug reply',
             contextSources: [{ type: 'doc', label: 'DSPACE docs', url: '/docs/about' }],
             usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },
-            metadata: { request_id: 'tp-123', provider: 'token.place' },
+            metadata: tokenPlaceDiagnostics,
         });
     });
 
@@ -367,7 +370,7 @@ describe('ChatPanel build metadata', () => {
         expect(comparisonRow?.textContent).toContain('✅ in sync');
     });
 
-    it('copies selected provider and token.place response metadata without stale provider wording', async () => {
+    it('shows and copies local token.place diagnostics without stale provider wording', async () => {
         const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
         const writeText = vi.fn().mockResolvedValue(undefined);
         Object.defineProperty(navigator, 'clipboard', {
@@ -385,6 +388,8 @@ describe('ChatPanel build metadata', () => {
             await fireEvent.click(screen.getByRole('button', { name: 'Send' }));
             await screen.findByText('token.place debug reply');
 
+            const diagnosticsJson = JSON.stringify(tokenPlaceDiagnostics);
+            expect(await screen.findByText(diagnosticsJson)).toBeVisible();
             const copyButton = await screen.findByRole('button', { name: 'Copy debug info' });
             await fireEvent.click(copyButton);
 
@@ -394,9 +399,7 @@ describe('ChatPanel build metadata', () => {
             expect(copiedText).toContain(
                 'Provider usage: {"prompt_tokens":7,"completion_tokens":3,"total_tokens":10}'
             );
-            expect(copiedText).toContain(
-                'Provider metadata: {"request_id":"tp-123","provider":"token.place"}'
-            );
+            expect(copiedText).toContain(`Provider metadata: ${diagnosticsJson}`);
             const staleProviderClaims = [
                 `token.place is ${'deferred'}`,
                 `AI chat ships ${'OpenAI-only'}`,

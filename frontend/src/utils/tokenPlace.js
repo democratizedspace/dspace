@@ -1351,7 +1351,7 @@ const runTokenPlaceChatV2 = async (messages, options = {}) => {
             contextSources,
             usage: data?.usage,
             metadata: {
-                ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
+                // DSPACE sends no application metadata, so there is nothing for the reply to echo.
                 tokenPlaceContext: {
                     requestedTier:
                         attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
