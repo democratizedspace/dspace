@@ -105,20 +105,21 @@ async function decryptFixtureRequest(body: Record<string, unknown>, privatePem: 
 
 const decodeClientPublicPem = (value: string) => Buffer.from(value, 'base64').toString('utf8');
 
-const tokenPlacePayload = (content = 'token.place assistant reply') => ({
+const tokenPlacePayload = (includeMetadata: boolean) => ({
     id: 'chatcmpl-e2e-token-place',
     object: 'chat.completion',
     created: 1780000000,
     model: 'qwen3-8b-instruct',
-    choices: [{ message: { role: 'assistant', content } }],
+    choices: [{ message: { role: 'assistant', content: 'token.place assistant reply' } }],
     usage: { prompt_tokens: 8, completion_tokens: 5, total_tokens: 13 },
-    metadata: { client: 'dspace', provider: 'token.place' },
+    ...(includeMetadata ? { metadata: { client: 'dspace', provider: 'token.place' } } : {}),
 });
 
 async function routeTokenPlaceSuccess(
     page: Page,
     origin = 'https://token.place',
-    serverKeyFormat: 'base64' | 'pem' = 'base64'
+    serverKeyFormat: 'base64' | 'pem' = 'base64',
+    includeMetadata = true
 ) {
     const requests: CapturedRequest[] = [];
     const serverKey = await generateRelayKeypair();
@@ -184,7 +185,7 @@ async function routeTokenPlaceSuccess(
                 version: 1,
                 request_id: body.request_id,
                 client_public_key: body.client_public_key,
-                api_v1_response: tokenPlacePayload(),
+                api_v1_response: tokenPlacePayload(includeMetadata),
             },
             decodeClientPublicPem(String(body.client_public_key))
         );
@@ -252,6 +253,52 @@ async function isolateLocalChatBrowser(page: Page, baseURL: string | undefined) 
         }
     });
     return providerPaths;
+}
+
+async function snapshotBrowserStores(page: Page) {
+    return page.evaluate(async () => {
+        const dump = (storage: Storage) =>
+            Object.fromEntries(
+                Array.from({ length: storage.length }, (_, i) => {
+                    const key = storage.key(i)!;
+                    return [key, storage.getItem(key)];
+                })
+            );
+        const indexed = await Promise.all(
+            (await indexedDB.databases()).map(async ({ name }) => {
+                if (!name) throw new Error('Unnamed IndexedDB database');
+                const db = await new Promise<IDBDatabase>((resolve, reject) => {
+                    const request = indexedDB.open(name);
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+                try {
+                    return [
+                        name,
+                        await Promise.all(
+                            Array.from(db.objectStoreNames, (store) => {
+                                return new Promise((resolve, reject) => {
+                                    const request = db
+                                        .transaction(store)
+                                        .objectStore(store)
+                                        .getAll();
+                                    request.onsuccess = () => resolve([store, request.result]);
+                                    request.onerror = () => reject(request.error);
+                                });
+                            })
+                        ),
+                    ];
+                } finally {
+                    db.close();
+                }
+            })
+        );
+        return JSON.stringify({
+            local: dump(localStorage),
+            session: dump(sessionStorage),
+            indexed,
+        });
+    });
 }
 
 async function seedState(page: Page, state: Record<string, unknown>) {
@@ -600,12 +647,15 @@ test.describe('Chat provider routing', () => {
         );
     });
 
-    test('default token.place flow supports persona switching and debug/RAG payload ordering', async ({
+    test('default token.place flow completes without response metadata and keeps relay proofs transient', async ({
         page,
         baseURL,
     }) => {
         const providerPaths = await isolateLocalChatBrowser(page, baseURL);
-        const requests = await routeTokenPlaceSuccess(page);
+        const requests = await routeTokenPlaceSuccess(page, 'https://token.place', 'base64', false);
+        const browserLogs: string[] = [];
+        page.on('console', (message) => browserLogs.push(message.text()));
+        page.on('pageerror', (error) => browserLogs.push(error.message));
         await blockLiveChatProviders(page, ['https://token.place/api/v1/relay/']);
         const localKey = 'e2e-private-openai-canary';
         await seedState(page, {
@@ -683,10 +733,30 @@ test.describe('Chat provider routing', () => {
             ({ url }) => new URL(url).pathname === '/api/v1/relay/requests'
         )?.body.cancel_token;
         expect(typeof cancellationProof).toBe('string');
+        expect(String(cancellationProof).length).toBeGreaterThan(0);
         const debugText = await debugPanel.innerText();
         expect(debugText).not.toContain(localKey);
-        expect(debugText).not.toContain(String(cancellationProof));
-        expect(debugText).not.toMatch(/e2e-retrieval-proof|e2e-acknowledgement-proof/);
+
+        const storesBeforeReload = await snapshotBrowserStores(page);
+        await page.reload();
+        await waitForHydration(page);
+        const storesAfterReload = await snapshotBrowserStores(page);
+        for (const stores of [storesBeforeReload, storesAfterReload]) {
+            expect(stores).toContain('dspaceGameState');
+            expect(stores).toContain('token-place');
+            expect(stores).toContain(localKey);
+        }
+        for (const proof of [
+            String(cancellationProof),
+            'e2e-retrieval-proof',
+            'e2e-acknowledgement-proof',
+        ]) {
+            expect(debugText).not.toContain(proof);
+            expect(browserLogs.join('\n')).not.toContain(proof);
+            expect(storesBeforeReload).not.toContain(proof);
+            expect(storesAfterReload).not.toContain(proof);
+        }
+        expect(browserLogs.join('\n')).not.toContain(localKey);
         expect(debugText).not.toMatch(/token\.place is deferred|chat uses OpenAI|OpenAI-only/i);
         expect(
             JSON.stringify(
