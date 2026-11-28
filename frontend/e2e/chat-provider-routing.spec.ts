@@ -115,7 +115,11 @@ const tokenPlacePayload = (content = 'token.place assistant reply') => ({
     metadata: { client: 'dspace', provider: 'token.place' },
 });
 
-async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place') {
+async function routeTokenPlaceSuccess(
+    page: Page,
+    origin = 'https://token.place',
+    serverKeyFormat: 'base64' | 'pem' = 'base64'
+) {
     const requests: CapturedRequest[] = [];
     const serverKey = await generateRelayKeypair();
     await page.route(`${origin}/api/v1/relay/servers/next**`, async (route) => {
@@ -131,7 +135,10 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
             status: 200,
             contentType: 'application/json',
             body: JSON.stringify({
-                server_public_key: serverKey.publicKeyBase64,
+                server_public_key:
+                    serverKeyFormat === 'pem'
+                        ? decodeClientPublicPem(serverKey.publicKeyBase64)
+                        : serverKey.publicKeyBase64,
                 context_tier: requestedTier,
                 selected_profile_id: `e2e-${requestedTier}`,
                 selected_model_support: ['qwen3-8b-instruct'],
@@ -191,6 +198,7 @@ async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place'
         });
     });
     return Object.assign(requests, {
+        serverPublicKeyBase64: serverKey.publicKeyBase64,
         decryptDispatch: () => {
             const dispatch = requests.find(
                 ({ method, url }) =>
@@ -351,7 +359,7 @@ test.describe('Chat provider routing', () => {
         baseURL,
     }) => {
         const providerPaths = await isolateLocalChatBrowser(page, baseURL);
-        const requests = await routeTokenPlaceSuccess(page);
+        const requests = await routeTokenPlaceSuccess(page, 'https://token.place', 'pem');
         await blockLiveChatProviders(page, ['https://token.place/api/v1/relay/']);
 
         const chatPanel = await openChat(page, 'token-place');
@@ -382,7 +390,7 @@ test.describe('Chat provider routing', () => {
         expect(request.body).toEqual({
             protocol: 'tokenplace_api_v1_relay_e2ee',
             version: 1,
-            server_public_key: expect.any(String),
+            server_public_key: requests.serverPublicKeyBase64,
             client_public_key: expect.any(String),
             request_id: expect.any(String),
             ciphertext: expect.any(String),
@@ -467,6 +475,53 @@ test.describe('Chat provider routing', () => {
 
         const chatPanel = await openChat(page, 'openai');
         await expect(chatPanel).toHaveAttribute('data-provider', 'openai');
+    });
+
+    test('can opt back into OpenAI without reentering a saved key', async ({ page, baseURL }) => {
+        const providerPaths = await isolateLocalChatBrowser(page, baseURL);
+        const fixtureKey = 'not-a-real-openai-key-existing-save';
+        const reply = 'Existing local key worked.';
+        await page.addInitScript(
+            ({ fixtureKey, reply }) => {
+                const browser = window as Window & { __DSpaceOpenAIClient?: unknown };
+                browser.__DSpaceOpenAIClient = function (options: { apiKey: string }) {
+                    return {
+                        responses: {
+                            create: async () => ({
+                                output_text:
+                                    options.apiKey === fixtureKey ? reply : 'Wrong fixture key.',
+                            }),
+                        },
+                    };
+                };
+            },
+            { fixtureKey, reply }
+        );
+
+        await page.goto('/settings');
+        await waitForHydration(page);
+        await page.locator('input[name="chat-provider"][value="openai"]').check();
+        await expect(page.getByRole('status')).toHaveText('Chat provider saved: OpenAI.');
+        await page.getByLabel('OpenAI API key', { exact: true }).fill(fixtureKey);
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await expect(page.getByText('OpenAI API key saved.', { exact: true })).toBeVisible();
+        await page.locator('input[name="chat-provider"][value="token-place"]').check();
+        await expect(page.getByRole('status')).toHaveText('Chat provider saved: token.place.');
+        await page.reload();
+        await waitForHydration(page);
+        await expect(
+            page.locator('input[name="chat-provider"][value="token-place"]')
+        ).toBeChecked();
+        await page.locator('input[name="chat-provider"][value="openai"]').check();
+        await expect(page.getByRole('status')).toHaveText('Chat provider saved: OpenAI.');
+        await expect(page.getByTestId('openai-key-status')).toHaveText(
+            'OpenAI API key configured.'
+        );
+
+        const chatPanel = await openChat(page, 'openai');
+        await sendFromPanel(chatPanel, 'Use the existing local key');
+        await expect(chatPanel.getByText(reply)).toBeVisible();
+        expect(providerPaths).toEqual([]);
     });
 
     test('OpenAI is optional and gated when selected without a key', async ({ page }) => {
