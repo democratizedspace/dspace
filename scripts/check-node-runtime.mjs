@@ -8,6 +8,10 @@ import { resolve } from 'node:path';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (file) => readFileSync(resolve(root, file), 'utf8');
 
+// Docker Official Images: linux/amd64 and linux/arm64/v8 share this index.
+const appNodeIndexDigest =
+  'sha256:873f586f3794f52281bd039bf02c048a0be08fde619338f9941bad1eb6b34530';
+
 export function checkNodeRuntime(files) {
   const version = files['.nvmrc'].trim();
   assert.equal(
@@ -15,9 +19,11 @@ export function checkNodeRuntime(files) {
     '24.22.3',
     'Use the reviewed November 2026 security release'
   );
-  assert.match(
-    files.Dockerfile,
-    /^FROM node:24\.22\.3-bookworm-slim AS base$/m
+  assert.ok(
+    files.Dockerfile.split(/\r?\n/).includes(
+      `FROM node:${version}-bookworm-slim@${appNodeIndexDigest} AS base`
+    ),
+    'Use the reviewed multi-architecture application Node base digest'
   );
   assert.match(files.Dockerfile, /^FROM base AS runtime$/m);
   assert.equal((files.Dockerfile.match(/^FROM node:/gm) || []).length, 1);
@@ -73,6 +79,8 @@ checkNodeRuntime(files);
 // Negative controls ensure stale runtime, CI and development pins cannot silently pass.
 for (const [file, from, to] of [
   ['Dockerfile', 'node:24.22.3', 'node:20'],
+  ['Dockerfile', `@${appNodeIndexDigest}`, ''],
+  ['Dockerfile', appNodeIndexDigest, `sha256:${'0'.repeat(64)}`],
   ['.nvmrc', '24.22.3', '24.22.2'],
   ['package-lock.json', '>=24.22.3 <25', '>=20 <22'],
   ['package.json', '>=24.22.3 <25', '>=24.22.1 <25'],
@@ -95,5 +103,5 @@ for (const [file, from, to] of [
   );
 }
 console.log(
-  'Node runtime/build/version pins and eight negative controls passed.'
+  'Node runtime/build/version pins and ten negative controls passed.'
 );
